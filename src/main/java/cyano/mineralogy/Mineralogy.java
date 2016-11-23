@@ -437,7 +437,6 @@ public class Mineralogy
 	    		igneousStones.add(rock);
 	    		break;
     	}
-		OreDictionary.registerOre("stone",rock);
 		GameRegistry.addSmelting(rock, new ItemStack(Blocks.STONE),0.1F);
 
 		rockStairs = registerBlock(new RockStairs(rock, (float)hardness,(float)blastResistance,toolHardnessLevel, SoundType.STONE),name+"_stairs");

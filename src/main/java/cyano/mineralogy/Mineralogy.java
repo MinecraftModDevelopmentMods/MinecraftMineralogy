@@ -1,9 +1,24 @@
 package cyano.mineralogy;
 
-// DON'T FORGET TO UPDATE mcmod.info FILE!!!
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import cyano.mineralogy.blocks.*;
-import cyano.mineralogy.items.*;
+// DON'T FORGET TO UPDATE mcmod.info FILE!!!
+import cyano.mineralogy.blocks.Chert;
+import cyano.mineralogy.blocks.DryWall;
+import cyano.mineralogy.blocks.Gypsum;
+import cyano.mineralogy.blocks.Ore;
+import cyano.mineralogy.blocks.Rock;
+import cyano.mineralogy.blocks.RockSlab;
+import cyano.mineralogy.blocks.RockStairs;
+import cyano.mineralogy.items.GypsumDust;
+import cyano.mineralogy.items.MineralFertilizer;
+import cyano.mineralogy.items.NitrateDust;
+import cyano.mineralogy.items.PhosphoriteDust;
+import cyano.mineralogy.items.SulfurDust;
 import cyano.mineralogy.patching.PatchHandler;
 import cyano.mineralogy.worldgen.OreSpawner;
 import cyano.mineralogy.worldgen.StoneReplacer;
@@ -29,8 +44,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-
-import java.util.*;
 
 
 
@@ -376,19 +389,6 @@ public class Mineralogy
     	return oreBlock;
     }
 
-
-	private static String formatName(String s){
-		StringBuilder sb = new StringBuilder();
-		String[] words = s.split("_");
-		boolean first = true;
-		//for(int i = 0; i < words.length; i++){
-		for(int i = words.length-1; i < words.length; i++){
-			if(!first) sb.append(" ");
-			first = false;
-			sb.append(words[i].substring(0,1).toUpperCase()).append(words[i].substring(1));
-		}
-		return sb.toString();
-	}
 
 	private static Block registerBlock(Block b, String name){
 		GameRegistry.register(b.setRegistryName(MODID,name));

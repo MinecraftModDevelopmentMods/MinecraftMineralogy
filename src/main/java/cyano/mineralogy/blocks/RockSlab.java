@@ -1,5 +1,7 @@
 package cyano.mineralogy.blocks;
 
+import java.util.List;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -14,8 +16,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import java.util.List;
 
 
 public class RockSlab extends net.minecraft.block.Block{
@@ -79,11 +79,9 @@ public class RockSlab extends net.minecraft.block.Block{
 	public boolean isFullCube(IBlockState bs) {
 		return false;
 	}
-
 	@Override
-	public IBlockState onBlockPlaced(final World w, final BlockPos coord, final EnumFacing face,
-									 final float partialX, final float partialY, final float partialZ,
-									 final int i, final EntityLivingBase placer) {
+	public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing face, float partialX, float partialY,
+			float partialZ, int meta, EntityLivingBase placer) {
 		IBlockState defaultState = this.getDefaultState().withProperty(FACING, face);
 		// redimension to face-local up and right dimensions
 		float up, right;
@@ -176,11 +174,10 @@ public class RockSlab extends net.minecraft.block.Block{
 		final EnumFacing orientation = (EnumFacing) bs.getValue(FACING);
 		return BOXES[orientation.ordinal()];
 	}
+	
 	@Override
-	public void addCollisionBoxToList(final IBlockState bs, final World world, final BlockPos coord,
-									  final AxisAlignedBB box, final List<AxisAlignedBB> collisionBoxList,
-									  final Entity entity) {
-
+	public void addCollisionBoxToList(IBlockState state, World world, BlockPos coord, AxisAlignedBB box,
+			List<AxisAlignedBB> collisionBoxList, Entity entityIn, boolean p_185477_7_) {
 		final EnumFacing orientation = (EnumFacing) world.getBlockState(coord).getValue(FACING);
 		super.addCollisionBoxToList(coord, box, collisionBoxList, BOXES[orientation.ordinal()]);
 	}

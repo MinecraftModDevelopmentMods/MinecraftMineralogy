@@ -20,15 +20,12 @@ public class OreSpawner implements IWorldGenerator {
 	private final int maxY;
 	private final long hash; // used to make prng's different
 	
-	private final Block ore;
-	
 	public OreSpawner(Block oreBlock, int minHeight, int maxHeight, float spawnFrequency, int spawnQuantity, long hash){
 	//	oreGen = new WorldGenMinable(oreBlock, 0, spawnQuantity, Blocks.stone);
 		oreGen = new WorldGenMinable(oreBlock.getDefaultState(),spawnQuantity);
 		frequency = spawnFrequency;
 		minY = minHeight;
 		maxY = maxHeight;
-		ore = oreBlock;
 		this.hash = hash;
 	}
 	

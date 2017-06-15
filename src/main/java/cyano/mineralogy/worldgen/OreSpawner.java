@@ -2,8 +2,8 @@ package cyano.mineralogy.worldgen;
 
 import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraftforge.event.terraingen.OreGenEvent;
@@ -31,7 +31,7 @@ public class OreSpawner implements IWorldGenerator {
 	
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world,
-						 IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
+						 net.minecraft.world.gen.IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
 
 		random.setSeed(random.nextLong() ^ hash);
 		random.nextInt();

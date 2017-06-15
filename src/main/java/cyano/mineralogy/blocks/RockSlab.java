@@ -12,6 +12,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -80,46 +81,46 @@ public class RockSlab extends net.minecraft.block.Block{
 		return false;
 	}
 	@Override
-	public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing face, float partialX, float partialY,
-			float partialZ, int meta, EntityLivingBase placer) {
-		IBlockState defaultState = this.getDefaultState().withProperty(FACING, face);
+	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY,
+			float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
+		IBlockState defaultState = this.getDefaultState().withProperty(FACING, facing);
 		// redimension to face-local up and right dimensions
 		float up, right;
 		EnumFacing.Axis upRotationAxis, rightRotationAxis;
-		switch(face){
+		switch(facing){
 			case UP: // works
-				up = partialZ - 0.5F;
-				right = partialX - 0.5F;
+				up = hitZ - 0.5F;
+				right = hitX - 0.5F;
 				upRotationAxis = EnumFacing.Axis.X;
 				rightRotationAxis = EnumFacing.Axis.Z;
 				break;
 			case EAST: // works
-				up = partialY - 0.5F;
-				right = partialZ - 0.5F;
+				up = hitY - 0.5F;
+				right = hitZ - 0.5F;
 				upRotationAxis = EnumFacing.Axis.Z;
 				rightRotationAxis = EnumFacing.Axis.Y;
 				break;
 			case SOUTH:
-				up = 0.5F - partialY;
-				right = 0.5F - partialX;
+				up = 0.5F - hitY;
+				right = 0.5F - hitX;
 				upRotationAxis = EnumFacing.Axis.X;
 				rightRotationAxis = EnumFacing.Axis.Y;
 				break;
 			case DOWN:
-				up = 0.5F - partialZ;
-				right = 0.5F - partialX;
+				up = 0.5F - hitZ;
+				right = 0.5F - hitX;
 				upRotationAxis = EnumFacing.Axis.X;
 				rightRotationAxis = EnumFacing.Axis.Z;
 				break;
 			case WEST:
-				up = 0.5F - partialY;
-				right = 0.5F - partialZ;
+				up = 0.5F - hitY;
+				right = 0.5F - hitZ;
 				upRotationAxis = EnumFacing.Axis.Z;
 				rightRotationAxis = EnumFacing.Axis.Y;
 				break;
 			case NORTH: // works
-				up = partialY - 0.5F;
-				right = partialX - 0.5F;
+				up = hitY - 0.5F;
+				right = hitX - 0.5F;
 				upRotationAxis = EnumFacing.Axis.X;
 				rightRotationAxis = EnumFacing.Axis.Y;
 				break;
@@ -135,19 +136,19 @@ public class RockSlab extends net.minecraft.block.Block{
 			// up or right
 			if(upOrLeft){
 				// up
-				return defaultState.withProperty(FACING,face.rotateAround(upRotationAxis));
+				return defaultState.withProperty(FACING,FACING.rotateAround(upRotationAxis));
 			} else {
 				// right
-				return defaultState.withProperty(FACING,face.rotateAround(rightRotationAxis).getOpposite());
+				return defaultState.withProperty(FACING,FACING.rotateAround(rightRotationAxis).getOpposite());
 			}
 		} else {
 			// down or left
 			if(upOrLeft){
 				// left
-				return defaultState.withProperty(FACING,face.rotateAround(rightRotationAxis));
+				return defaultState.withProperty(FACING,FACING.rotateAround(rightRotationAxis));
 			} else {
 				// down
-				return defaultState.withProperty(FACING,face.rotateAround(upRotationAxis).getOpposite());
+				return defaultState.withProperty(FACING,FACING.rotateAround(upRotationAxis).getOpposite());
 			}
 		}
 	}

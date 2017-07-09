@@ -197,11 +197,16 @@ public class Mineralogy
 		sedimentaryStones.add(Blocks.SANDSTONE);
 		blockChert = registerBlock(new Chert(),"chert");
 		sedimentaryStones.add(blockChert);
-		OreDictionary.registerOre("cobblestone",blockChert);
 		blockGypsum = registerBlock(new Gypsum(),"gypsum");
 		sedimentaryStones.add(blockGypsum);
 		blockPumice = registerBlock(new Rock(false,0.5F,5F,0, SoundType.GROUND),"pumice");
 		igneousStones.add(blockGypsum);
+	    
+	    	// register sedimentary stones in ore dictionary so that they can be used for stone tools recipes
+	    	for (int i = 0; i < sedimentaryStones.size(); i++)
+		{
+			OreDictionary.registerOre("cobblestone",sedimentaryStones.get(i));
+		}
 
 		// register ores
 		Block s = addOre("sulfur_ore","oreSulfur",sulphurPowder,1,4,0,

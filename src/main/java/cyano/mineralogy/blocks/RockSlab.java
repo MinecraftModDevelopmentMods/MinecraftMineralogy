@@ -9,6 +9,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -81,7 +82,7 @@ public class RockSlab extends net.minecraft.block.Block{
 	}
 
 	@Override
-	public IBlockState onBlockPlaced(final World w, final BlockPos coord, final EnumFacing face,
+	public IBlockState getStateForPlacement(final World w, final BlockPos coord, final EnumFacing face,
 									 final float partialX, final float partialY, final float partialZ,
 									 final int i, final EntityLivingBase placer) {
 		IBlockState defaultState = this.getDefaultState().withProperty(FACING, face);

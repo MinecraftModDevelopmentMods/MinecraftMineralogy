@@ -143,13 +143,13 @@ publishing {
             artifactId project.archivesBaseName
             version project.version
             from components.java
-            artifact sourcesJar {
+            artifact sourceJar {
                 classifier "sources"
             }
             artifact apiJar {
                 classifier "api"
             }
-            artifact devJar {
+            artifact deobfJar {
                 classifier "dev"
             }
             artifact javadocJar {

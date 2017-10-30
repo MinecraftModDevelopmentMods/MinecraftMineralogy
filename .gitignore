@@ -1,14 +1,29 @@
-/README.txt
-/.classpath
-/bin/*
-/.gradle/*
-/eclipse/.metadata/.plugins/org.eclipse.core.resources/.history/*
-/eclipse/.metadata/*.dat
-/eclipse/.metadata/*.tree
-/eclipse/.metadata/*.index
-*.index
-*~
+# eclipse
+bin
+*.launch
+.settings
+.settings/*
+.metadata
+.classpath
+.project
 
-/classes/*
-/.idea/*
-/build/*
+# idea
+out
+*.ipr
+*.iws
+*.iml
+.idea
+
+# gradle
+build
+.gradle
+
+# other
+eclipse
+run
+classes
+
+/README.txt
+/forge-*-changelog.txt
+
+secret.json

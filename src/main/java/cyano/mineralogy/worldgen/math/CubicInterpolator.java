@@ -6,8 +6,7 @@ package cyano.mineralogy.worldgen.math;
  * @author Cyanobacterium
  */
 public abstract class CubicInterpolator {
-	
-	
+
 	/**
 	 * Interpolate with cubic approximation for a point X on a grid. X 
 	 * must lie between the X values of the yn1 and yp1 control points.
@@ -18,10 +17,10 @@ public abstract class CubicInterpolator {
 	 * @param yp2 Y value at f(floor(x)+2)
 	 * @return A cubic-interpolated value from the given control points.
 	 */
-	public static double interpolate(double x, double yn2, double yn1, double yp1, double yp2){
+	public static double interpolate(double x, double yn2, double yn1, double yp1, double yp2) {
 		return interpolate1d( x,  yn2,  yn1,  yp1,  yp2);
 	}
-	
+
 	/**
 	 * Interpolate with cubic approximation for a point X on a grid. X 
 	 * must lie between the X values of the yn1 and yp1 control points.
@@ -32,11 +31,11 @@ public abstract class CubicInterpolator {
 	 * @param yp2 Y value at f(floor(x)+2)
 	 * @return A cubic-interpolated value from the given control points.
 	 */
-	public static double interpolate1d(double x, double yn2, double yn1, double yp1, double yp2){
+	public static double interpolate1d(double x, double yn2, double yn1, double yp1, double yp2) {
 		double w = x - Math.floor(x);
 		if(w == 0 && x != 0) return yp1; // w should be 1, but the way this is calcluated it doesn't work right
 		// prevent precision-loss artifacts
-		if(w < 0.000976563){
+		if(w < 0.000976563) {
 			return yn1;
 		}
 		if(w > 0.999023438) {
@@ -58,14 +57,14 @@ public abstract class CubicInterpolator {
 	 * @param local16 Array [x][y] of the 4x4 grid around the coordinate
 	 * @return Returns the bi-cubic interpolation of the (x,y) coordinate.
 	 */
-	public static double interpolate2d(double x, double y, double[][] local16){
+	public static double interpolate2d(double x, double y, double[][] local16) {
 		double[] section = new double[4];
 		for(int i = 0; i < 4; i++){
-			section[i] = interpolate1d(y,local16[i][0],local16[i][1],local16[i][2],local16[i][3]);
+			section[i] = interpolate1d(y, local16[i][0], local16[i][1], local16[i][2], local16[i][3]);
 		}
-		return interpolate1d(x,section[0],section[1],section[2],section[3]);
+		return interpolate1d(x, section[0], section[1], section[2], section[3]);
 	}
-	
+
 	/**
 	 * Performs a tri-cubic interpolation of the (x,y,z) coordinate near 
 	 * the center of the provided unit grid of surrounding control points.
@@ -75,15 +74,14 @@ public abstract class CubicInterpolator {
 	 * @param local64 Array [x][y][z] of the 4x4x4 grid around the coordinate
 	 * @return Returns the tri-cubic interpolation of the given coordinate.
 	 */
-	public static double interpolate3d(double x, double y, double z, double[][][] local64){
+	public static double interpolate3d(double x, double y, double z, double[][][] local64) {
 		double[] section = new double[4];
 		for(int i = 0; i < 4; i++){
-			section[i] = interpolate2d(y,z,local64[i]);
+			section[i] = interpolate2d(y, z, local64[i]);
 		}
-		return interpolate1d(x,section[0],section[1],section[2],section[3]);
+		return interpolate1d(x, section[0], section[1], section[2], section[3]);
 	}
-	
-	
+
 	/**
 	 * Interpolate with cubic approximation for a point X on a grid. X 
 	 * must lie between the X values of the yn1 and yp1 control points.
@@ -95,9 +93,9 @@ public abstract class CubicInterpolator {
 	 * @return A cubic-interpolated value from the given control points.
 	 */
 	public static float interpolate(double x, float yn2, float yn1, float yp1, float yp2){
-		return interpolate1d( x,  yn2,  yn1,  yp1,  yp2);
+		return interpolate1d(x,  yn2,  yn1,  yp1,  yp2);
 	}
-	
+
 	/**
 	 * Interpolate with cubic approximation for a point X on a grid. X 
 	 * must lie between the X values of the yn1 and yp1 control points.
@@ -112,7 +110,7 @@ public abstract class CubicInterpolator {
 		float w = (float)(x - floor(x));
 		if(w == 0 && x != 0) return yn1; // w should be 1, but the way this is calcluated it doesn't work right
 		// prevent precision-loss artifacts
-		if(w < 0.0001){
+		if(w < 0.0001) {
 			return yn1;
 		}
 		if(w > 0.999) {
@@ -125,8 +123,9 @@ public abstract class CubicInterpolator {
 		float D = yn1;
 		return A * w * w * w + B * w * w + C * w + D;
 	}
+
 	/**
-	 * Returns the bi-cubic interpolation of the (x,y) coordinate inide 
+	 * Returns the bi-cubic interpolation of the (x,y) coordinate inside 
 	 * the provided grid of control points. (x,y) is assumed to be in the 
 	 * center square of the unit grid.
 	 * @param x x coordinate between local16[1][y] and local16[2][y]
@@ -134,12 +133,12 @@ public abstract class CubicInterpolator {
 	 * @param local16 Array [x][y] of the 4x4 grid around the coordinate
 	 * @return Returns the bi-cubic interpolation of the (x,y) coordinate.
 	 */
-	public static float interpolate2d(double x, double y, float[][] local16){
+	public static float interpolate2d(double x, double y, float[][] local16) {
 		float[] section = new float[4];
-		for(int i = 0; i < 4; i++){
-			section[i] = interpolate1d(y,local16[i][0],local16[i][1],local16[i][2],local16[i][3]);
+		for(int i = 0; i < 4; i++) {
+			section[i] = interpolate1d(y, local16[i][0], local16[i][1], local16[i][2], local16[i][3]);
 		}
-		return interpolate1d(x,section[0],section[1],section[2],section[3]);
+		return interpolate1d(x, section[0], section[1], section[2], section[3]);
 	}
 	
 	/**
@@ -151,22 +150,19 @@ public abstract class CubicInterpolator {
 	 * @param local64 Array [x][y][z] of the 4x4x4 grid around the coordinate
 	 * @return Returns the tri-cubic interpolation of the given coordinate.
 	 */
-	public static float interpolate3d(double x, double y, double z, float[][][] local64){
+	public static float interpolate3d(double x, double y, double z, float[][][] local64) {
 		float[] section = new float[4];
-		for(int i = 0; i < 4; i++){
-			section[i] = interpolate2d(y,z,local64[i]);
+		for(int i = 0; i < 4; i++) {
+			section[i] = interpolate2d(y, z, local64[i]);
 		}
-		return interpolate1d(x,section[0],section[1],section[2],section[3]);
+		return interpolate1d(x, section[0], section[1], section[2], section[3]);
 	}
-	
-	
-	public static int floor(double x){
-    	if(x >= 0.0){
+
+	public static int floor(double x) {
+    	if(x >= 0.0) {
     		return (int)x;
     	} else {
     		return ((int)x) - 1;
     	}
     }
-	
-
 }

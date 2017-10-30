@@ -20,12 +20,15 @@ public class OreSpawner implements IWorldGenerator {
 	private final int maxY;
 	private final long hash; // used to make prng's different
 	
-	public OreSpawner(Block oreBlock, int minHeight, int maxHeight, float spawnFrequency, int spawnQuantity, long hash){
+//	private final Block ore;
+	
+	public OreSpawner(Block oreBlock, int minHeight, int maxHeight, float spawnFrequency, int spawnQuantity, long hash) {
 	//	oreGen = new WorldGenMinable(oreBlock, 0, spawnQuantity, Blocks.stone);
 		oreGen = new WorldGenMinable(oreBlock.getDefaultState(),spawnQuantity);
 		frequency = spawnFrequency;
 		minY = minHeight;
 		maxY = maxHeight;
+//		ore = oreBlock;
 		this.hash = hash;
 	}
 	
@@ -40,9 +43,9 @@ public class OreSpawner implements IWorldGenerator {
 			int x = (chunkX << 4) + random.nextInt(16);
             int y = random.nextInt(maxY - minY) + minY;
             int z = (chunkZ << 4) + random.nextInt(16);
-        //    System.out.println("Generating deposite of "+ore.getUnlocalizedName()+" at ("+x+","+y+","+z+")");
-			BlockPos pos = new BlockPos(x,y,z);
-			OreGenEvent oreEvent = new OreGenEvent(world,random,pos);
+        //    System.out.println("Generating deposit of " + ore.getUnlocalizedName() + " at ("+ x + "," + y + "," + z + ")");
+			BlockPos pos = new BlockPos(x, y, z);
+			OreGenEvent oreEvent = new OreGenEvent(world, random, pos);
 			net.minecraftforge.common.MinecraftForge.ORE_GEN_BUS.post(oreEvent);
 			if(oreEvent.getResult() == Event.Result.DENY) {
 				// canceled by other mod
@@ -51,6 +54,4 @@ public class OreSpawner implements IWorldGenerator {
 			oreGen.generate(world, random, pos);
 		}
 	}
-
-
 }

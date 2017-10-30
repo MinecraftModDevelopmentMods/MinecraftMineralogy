@@ -136,7 +136,6 @@ artifacts {
     archives javadocJar
 }
 
-/*
 publishing {
     publications {
         mavenJava(MavenPublication) {
@@ -168,7 +167,6 @@ publishing {
         }
     }
 }
-*/
 
 curseforge {
     apiKey = ""

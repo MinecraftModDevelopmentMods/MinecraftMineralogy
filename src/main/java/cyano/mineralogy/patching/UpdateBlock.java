@@ -19,8 +19,9 @@ public class UpdateBlock extends Block {
 		this.setTickRandomly(true);
 		this.updateTo = replacement;
 	}
+
 	@Override
-	public void updateTick(World w, BlockPos pos, IBlockState state, Random rand){
+	public void updateTick(World w, BlockPos pos, IBlockState state, Random rand) {
 		final int minX;
 		final int minY;
 		final int minZ;
@@ -35,7 +36,7 @@ public class UpdateBlock extends Block {
 				for (int x = minX; x <= maxX; x++) {
 					// replace blocks
 					BlockPos target = new BlockPos(x,y,z);
-					if(w.getBlockState(target).getBlock() == this){
+					if(w.getBlockState(target).getBlock() == this) {
 						w.setBlockState(target,updateTo);
 					}
 				}

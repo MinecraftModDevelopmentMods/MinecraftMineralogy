@@ -21,29 +21,29 @@ public class NoiseLayer2D {
     
     private final int precisionMask = 0x0FFFFF; 
     private final float intConversionMultiplier = 2.0f / (float)precisionMask; // 2.0 because we will be subtracting 1 to make it range from -1 to 1
-    
-    public NoiseLayer2D(long seed, float size, float magnitude){
+
+    public NoiseLayer2D(long seed, float size, float magnitude) {
     	this.seed = seed;
     	this.multiplier = 1.0f / size;
     	this.magnitude = magnitude;
     }
     
-    public float getValueAt(double x, double y){
+    public float getValueAt(double x, double y) {
     	x *= multiplier;
     	y *= multiplier;
     	int gridX = CubicInterpolator.floor(x);
     	int gridY = CubicInterpolator.floor(y);
     	float[][] local16 = new float[4][4];
-    	for(int dx = 0; dx < 4; dx++){
-    		for(int dy = 0; dy < 4; dy++){
+    	for(int dx = 0; dx < 4; dx++) {
+    		for(int dy = 0; dy < 4; dy++) {
     			local16[dx][dy] = randAt(gridX + dx, gridY + dy);
     		}
     	}
     	return CubicInterpolator.interpolate2d(x, y, local16);
     }
-    
+
     protected float randAt(int x, int y){
-    	long h = hash(x,y,seed);
+    	long h = hash(x, y, seed);
     	float value = magnitude * ((h & precisionMask) * intConversionMultiplier - 1.0f);
     	return value;
     }
@@ -55,7 +55,4 @@ public class NoiseLayer2D {
     	l = ((l * rand_multiplier) + rand_addend) & rand_mask;
     	return l;
     }
-
-    
-    
 }

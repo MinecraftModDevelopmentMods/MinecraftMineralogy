@@ -16,9 +16,7 @@ import java.util.List;
 
 public class Rock extends net.minecraft.block.Block {
 
-	
-	
-	public Rock(boolean isStoneEquivalent,float hardness,float blastResistance,int toolHardnessLevel,SoundType sound) {
+	public Rock(boolean isStoneEquivalent, float hardness, float blastResistance, int toolHardnessLevel, SoundType sound) {
 		super(Material.ROCK);
 		this.isStoneEquivalent = isStoneEquivalent;
 		this.setHardness((float)hardness); // dirt is 0.5, grass is 0.6, stone is 1.5,iron ore is 3, obsidian is 50
@@ -33,12 +31,11 @@ public class Rock extends net.minecraft.block.Block {
 	@Override public boolean isReplaceableOreGen(IBlockState state, IBlockAccess world, BlockPos pos, com.google.common.base.Predicate<IBlockState> target) { return isStoneEquivalent; }
 
 	@Override
-	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune){
-		if(Mineralogy.DROP_COBBLESTONE){
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+		if(Mineralogy.DROP_COBBLESTONE) {
 			return Arrays.asList(new ItemStack(Blocks.COBBLESTONE));
 		} else {
 			return Arrays.asList(new ItemStack(Item.getItemFromBlock(this)));
 		}
-	}
-    
+	}    
 }

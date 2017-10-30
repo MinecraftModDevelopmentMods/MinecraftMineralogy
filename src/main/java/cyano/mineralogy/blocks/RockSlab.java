@@ -9,7 +9,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -18,21 +17,18 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-
-public class RockSlab extends net.minecraft.block.Block{
+public class RockSlab extends net.minecraft.block.Block {
 
 	public static final PropertyDirection FACING = PropertyDirection.create("facing");
 
-
 	private static final float thickness = 0.5f;
 
-
 	private static final AxisAlignedBB[] BOXES = new AxisAlignedBB[EnumFacing.values().length];
-	static{
-		for(int i = 0; i < EnumFacing.values().length; i++){
+	static {
+		for(int i = 0; i < EnumFacing.values().length; i++) {
 			EnumFacing orientation = EnumFacing.values()[i];
 			float x1 = 0, x2 = 1, y1 = 0,y2 = 1, z1 = 0, z2 = 1;
-			switch(orientation){
+			switch(orientation) {
 				case DOWN:
 					y1 = 1f - thickness;
 					break;
@@ -57,8 +53,7 @@ public class RockSlab extends net.minecraft.block.Block{
 		}
 	}
 
-
-	public RockSlab(float hardness,float blastResistance,int toolHardnessLevel,SoundType sound) {
+	public RockSlab(float hardness, float blastResistance, int toolHardnessLevel, SoundType sound) {
 		super(Material.ROCK);
 		this.setHardness((float)hardness); // dirt is 0.5, grass is 0.6, stone is 1.5,iron ore is 3, obsidian is 50
 		this.setResistance((float)blastResistance); // dirt is 0, iron ore is 5, stone is 10, obsidian is 2000
@@ -134,23 +129,23 @@ public class RockSlab extends net.minecraft.block.Block{
 		}
 		boolean upOrRight = up + right > 0;
 		boolean upOrLeft = up - right > 0;
-		if(upOrRight){
+		if(upOrRight) {
 			// up or right
-			if(upOrLeft){
+			if(upOrLeft) {
 				// up
-				return defaultState.withProperty(FACING,face.rotateAround(upRotationAxis));
+				return defaultState.withProperty(FACING, face.rotateAround(upRotationAxis));
 			} else {
 				// right
-				return defaultState.withProperty(FACING,face.rotateAround(rightRotationAxis).getOpposite());
+				return defaultState.withProperty(FACING, face.rotateAround(rightRotationAxis).getOpposite());
 			}
 		} else {
 			// down or left
-			if(upOrLeft){
+			if(upOrLeft) {
 				// left
-				return defaultState.withProperty(FACING,face.rotateAround(rightRotationAxis));
+				return defaultState.withProperty(FACING, face.rotateAround(rightRotationAxis));
 			} else {
 				// down
-				return defaultState.withProperty(FACING,face.rotateAround(upRotationAxis).getOpposite());
+				return defaultState.withProperty(FACING, face.rotateAround(upRotationAxis).getOpposite());
 			}
 		}
 	}
@@ -171,12 +166,12 @@ public class RockSlab extends net.minecraft.block.Block{
 		return new BlockStateContainer(this, new IProperty[] { FACING });
 	}
 
-
 	@Override
 	public AxisAlignedBB getBoundingBox(final IBlockState bs, final IBlockAccess world, final BlockPos coord) {
 		final EnumFacing orientation = (EnumFacing) bs.getValue(FACING);
 		return BOXES[orientation.ordinal()];
 	}
+
 	@Override
 	public void addCollisionBoxToList(final IBlockState bs, final World world, final BlockPos coord,
 									  final AxisAlignedBB box, final List<AxisAlignedBB> collisionBoxList,

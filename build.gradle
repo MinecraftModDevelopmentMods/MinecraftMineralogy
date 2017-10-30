@@ -58,9 +58,9 @@ if (secretFile.exists()) {
 }
 
 minecraft {
-    version = "1.12-14.21.0.2327"
+    version = "1.12-14.21.1.2387"
     runDir = "run"
-    mappings = "snapshot_20170615"
+    mappings = "snapshot_20171030"
 //    coreMod = ""
 }
 
@@ -136,7 +136,6 @@ artifacts {
     archives javadocJar
 }
 
-/*
 publishing {
     publications {
         mavenJava(MavenPublication) {
@@ -168,7 +167,6 @@ publishing {
         }
     }
 }
-*/
 
 curseforge {
     apiKey = ""

@@ -12,35 +12,31 @@ import static cyano.mineralogy.Mineralogy.MODID;
  */
 public class PatchHandler {
 	private static PatchHandler instance = null;
-	private PatchHandler(){
+	private PatchHandler() {
 		//
 	}
 
 	Block saprolite;
 	Block pummice; // note the mispelling
 
-	public static PatchHandler getInstance(){
-		if(instance == null){
+	public static PatchHandler getInstance() {
+		if(instance == null) {
 			instance = new PatchHandler();
 		}
 		return instance;
 	}
 
-	public void init(boolean enabled){
-		if(enabled){
+	public void init(boolean enabled) {
+		if(enabled) {
 			saprolite = legacyBlock("saprolite", Mineralogy.mineralogyBlockRegistry.get("limestone").getDefaultState());
 			pummice = legacyBlock("pummice", Mineralogy.blockPumice.getDefaultState());
 		}
 	}
 
-
-
-
-
-	private static Block legacyBlock(String name, IBlockState replacement){
+	private static Block legacyBlock(String name, IBlockState replacement) {
 		Block b = new UpdateBlock(replacement);
 		GameRegistry.register(b.setRegistryName(MODID,name));
-		b.setUnlocalizedName(MODID+"."+name);
+		b.setUnlocalizedName(MODID + "." + name);
 		return b;
 	}
 }

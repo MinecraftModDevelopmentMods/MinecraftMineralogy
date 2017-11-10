@@ -36,15 +36,14 @@ import java.util.*;
 @Mod(modid = Mineralogy.MODID, name=Mineralogy.NAME, version = Mineralogy.VERSION,
 		acceptedMinecraftVersions = "[1.10.2,)")
 public class Mineralogy {
-
 	public static final String MODID = "mineralogy";
     public static final String NAME ="Mineralogy";
     public static final String VERSION = "3.2.0";
     /** stone block replacements that are Sedimentary */
     public static final List<Block> sedimentaryStones = new ArrayList<Block>();
-    /** stone block replacesments that are Metamorphic */
+    /** stone block replacements that are Metamorphic */
     public static final List<Block> metamorphicStones = new ArrayList<Block>();
-    /** stone block replacesments that are Igneous */
+    /** stone block replacements that are Igneous */
     public static final List<Block> igneousStones = new ArrayList<Block>();
 	/** all blocks used in this mod (blockID, block)*/
 	public static final Map<String,Block> mineralogyBlockRegistry = new HashMap<String, Block>();
@@ -59,27 +58,29 @@ public class Mineralogy {
     public static int GEOM_LAYER_THICKNESS = 8;
 
 	public static boolean SMELTABLE_GRAVEL = true;
-
 	public static boolean DROP_COBBLESTONE = false;
-
 	public static boolean PATCH_UPDATE = true;
     
  //   public static OrePlacer orePlacementGenerator = null;
-
-    public static Block blockChert;
-
+	public static boolean GENERATE_ROCKSTAIRS = true;
+	public static boolean GENERATE_ROCKSLAB = true;
+	public static boolean GENERATE_BRICK = true;
+	public static boolean GENERATE_BRICKSTAIRS = true;
+	public static boolean GENERATE_BRICKSLAB = true;
+	public static boolean GENERATE_SMOOTH = true;
+	public static boolean GENERATE_SMOOTHSTAIRS = true;
+	public static boolean GENERATE_SMOOTHSLAB = true;
+	public static boolean GENERATE_SMOOTHBRICK = true;
+	public static boolean GENERATE_SMOOTHBRICKSTAIRS = true;
+	public static boolean GENERATE_SMOOTHBRICKSLAB = true;
+    
+	public static Block blockChert;
     public static Block blockGypsum;
-
-    public static Block blockPumice;
-    
+    public static Block blockPumice;   
     public static Item gypsumPowder;
-    
     public static Item sulphurPowder;
-    
     public static Item phosphorousPowder;
-    
     public static Item nitratePowder; // aka "saltpeter"
-    
     public static Item mineralFertilizer;
     
     public static Block[] drywall = new Block[16];
@@ -118,7 +119,6 @@ public class Mineralogy {
 	private static final String dustNitrate = "dustNitrate";
 	private static final String oreNitrate = "oreNitrate";
 
-
 	@EventHandler
     public void preInit(FMLPreInitializationEvent event) {
 
@@ -143,6 +143,18 @@ public class Mineralogy {
     	GEOM_LAYER_THICKNESS = config.getInt("ROCK_LAYER_THICKNESS", "world-gen",GEOM_LAYER_THICKNESS, 1, 255, 
    "Changing this value will change the height of individual layers.");
 
+    	GENERATE_ROCKSTAIRS = config.getBoolean("GENERATE_ROCKSTAIRS", "options", GENERATE_ROCKSTAIRS, "If true, then rock stairs will be generated");
+        GENERATE_ROCKSLAB = config.getBoolean("GENERATE_ROCKSLAB", "options", GENERATE_ROCKSLAB, "If true, then rock slabs will be generated");
+        GENERATE_BRICK = config.getBoolean("GENERATE_BRICK", "options", GENERATE_BRICK, "If true, then rock brick blocks will be generated");
+        GENERATE_BRICKSTAIRS = config.getBoolean("GENERATE_BRICKSTAIRS", "options", GENERATE_BRICKSTAIRS, "If true, then brick stairs will be generated");
+        GENERATE_BRICKSLAB = config.getBoolean("GENERATE_BRICKSLAB", "options", GENERATE_BRICKSLAB, "If true, then brick slabs will be generated");
+        GENERATE_SMOOTH = config.getBoolean("GENERATE_SMOOTH", "options", GENERATE_SMOOTH, "If true, then polished rock will be generated");
+        GENERATE_SMOOTHSTAIRS = config.getBoolean("GENERATE_SMOOTHSTAIRS", "options", GENERATE_SMOOTHSTAIRS, "If true, then polished rock stairs will be generated");
+        GENERATE_SMOOTHSLAB = config.getBoolean("GENERATE_SMOOTHSLAB", "options", GENERATE_SMOOTHSLAB, "If true, then polished rock slabs will be generated");
+        GENERATE_SMOOTHBRICK = config.getBoolean("GENERATE_SMOOTHBRICK", "options", GENERATE_SMOOTHBRICK, "If true, then polished brick blocks will be generated");
+        GENERATE_SMOOTHBRICKSTAIRS = config.getBoolean("GENERATE_SMOOTHBRICKSTAIRS", "options", GENERATE_SMOOTHBRICKSTAIRS, "If true, then polished brick stairs will be generated");
+        GENERATE_SMOOTHBRICKSLAB = config.getBoolean("GENERATE_SMOOTHBRICKSLAB", "options", GENERATE_SMOOTHBRICKSLAB, "If true, then polished brick slabs will be generated");
+    	
     	igneousBlacklist.addAll(asList(config.getString("igneous_blacklist", "world-gen", "", "Ban blocks from spawning in rock layers (format is mod:block as a semicolin (;) delimited list)"),";"));
     	sedimentaryBlacklist.addAll(asList(config.getString("sedimentary_blacklist", "world-gen", "", "Ban blocks from spawning in rock layers (format is mod:block as a semicolin (;) delimited list)"),";"));
     	metamorphicBlacklist.addAll(asList(config.getString("metamorphic_blacklist", "world-gen", "", "Ban blocks from spawning in rock layers (format is mod:block as a semicolin (;) delimited list)"),";"));
@@ -453,30 +465,59 @@ public class Mineralogy {
     	//OreDictionary.registerOre("stone",rock);
 		GameRegistry.addSmelting(rock, new ItemStack(Blocks.STONE), 0.1F);
 
-		rockStairs = registerBlock(new RockStairs(rock, (float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_stairs");
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(rockStairs, 4), "x  ", "xx ", "xxx", 'x', rock));
-		rockSlab = registerBlock(new RockSlab((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_slab");
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(rockSlab, 6), "xxx", 'x', rock));
+		if (GENERATE_ROCKSTAIRS) {
+			rockStairs = registerBlock(new RockStairs(rock, (float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_stairs");
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(rockStairs, 4), "x  ", "xx ", "xxx", 'x', rock));
+		}
+		
+		if (GENERATE_ROCKSLAB) {
+			rockSlab = registerBlock(new RockSlab((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_slab");
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(rockSlab, 6), "xxx", 'x', rock));
+		}
+		
+		if (GENERATE_BRICK) {
+			brick = registerBlock(new Rock(false, (float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_brick");
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(brick, 4), "xx", "xx", 'x', rock));
+			
+			if (GENERATE_BRICKSTAIRS) {
+				brickStairs = registerBlock(new RockStairs(rock, (float)hardness, (float)blastResistance,toolHardnessLevel, SoundType.STONE),name + "_brick_stairs");
+				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(brickStairs, 4), "x  ", "xx ", "xxx", 'x', brick));
+			}
+			
+			if (GENERATE_BRICKSLAB) {
+				brickSlab = registerBlock(new RockSlab((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_brick_slab");
+				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(brickSlab, 6), "xxx", 'x', brick));
+			}
+		}
 
-		brick = registerBlock(new Rock(false, (float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_brick");
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(brick, 4), "xx", "xx", 'x', rock));
-		brickStairs = registerBlock(new RockStairs(rock, (float)hardness, (float)blastResistance,toolHardnessLevel, SoundType.STONE),name + "_brick_stairs");
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(brickStairs, 4), "x  ", "xx ", "xxx", 'x', brick));
-		brickSlab = registerBlock(new RockSlab((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_brick_slab");
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(brickSlab, 6), "xxx", 'x', brick));
-
-		smooth = registerBlock(new Rock(false, (float)hardness,(float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_smooth");
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(smooth, 1), rock, "sand"));
-		smoothStairs = registerBlock(new RockStairs(rock, (float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE),name + "_smooth_stairs");
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(smoothStairs, 4), "x  ","xx ", "xxx", 'x', smooth));
-		smoothSlab = registerBlock(new RockSlab((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE),name + "_smooth_slab");
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(smoothSlab, 6), "xxx", 'x', smooth));
-
-		smoothBrick = registerBlock(new Rock(false, (float)hardness,(float)blastResistance,toolHardnessLevel, SoundType.STONE), name + "_smooth_brick");
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(smoothBrick, 4), "xx", "xx", 'x', smooth));
-		smoothBrickStairs = registerBlock(new RockStairs(rock, (float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_smooth_brick_stairs");
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(smoothBrickStairs, 4), "x  ","xx ", "xxx", 'x', smoothBrick));
-		smoothBrickSlab = registerBlock(new RockSlab((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_smooth_brick_slab");
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(smoothBrickSlab, 6), "xxx", 'x', smoothBrick));
+		if (GENERATE_SMOOTH) {
+			smooth = registerBlock(new Rock(false, (float)hardness,(float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_smooth");
+			GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(smooth, 1), rock, "sand"));
+		
+			if (GENERATE_SMOOTHSTAIRS) {
+				smoothStairs = registerBlock(new RockStairs(rock, (float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE),name + "_smooth_stairs");
+				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(smoothStairs, 4), "x  ","xx ", "xxx", 'x', smooth));
+			}
+			
+			if (GENERATE_SMOOTHSLAB) {
+				smoothSlab = registerBlock(new RockSlab((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE),name + "_smooth_slab");
+				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(smoothSlab, 6), "xxx", 'x', smooth));
+			}
+			
+			if (GENERATE_SMOOTHBRICK) {
+				smoothBrick = registerBlock(new Rock(false, (float)hardness,(float)blastResistance,toolHardnessLevel, SoundType.STONE), name + "_smooth_brick");
+				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(smoothBrick, 4), "xx", "xx", 'x', smooth));
+			
+				if (GENERATE_SMOOTHBRICKSTAIRS) {
+					smoothBrickStairs = registerBlock(new RockStairs(rock, (float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_smooth_brick_stairs");
+					GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(smoothBrickStairs, 4), "x  ","xx ", "xxx", 'x', smoothBrick));
+				}
+				
+				if (GENERATE_SMOOTHBRICKSLAB) {
+					smoothBrickSlab = registerBlock(new RockSlab((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_smooth_brick_slab");
+					GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(smoothBrickSlab, 6), "xxx", 'x', smoothBrick));
+				}
+			}
+		}
     }
 }

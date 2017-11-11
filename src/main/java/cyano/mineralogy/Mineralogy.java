@@ -20,6 +20,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
@@ -43,9 +44,9 @@ public class Mineralogy {
     public static final String VERSION = "3.2.0";
     /** stone block replacements that are Sedimentary */
     public static final List<Block> sedimentaryStones = new ArrayList<Block>();
-    /** stone block replacesments that are Metamorphic */
+    /** stone block replacements that are Metamorphic */
     public static final List<Block> metamorphicStones = new ArrayList<Block>();
-    /** stone block replacesments that are Igneous */
+    /** stone block replacements that are Igneous */
     public static final List<Block> igneousStones = new ArrayList<Block>();
 	/** all blocks used in this mod (blockID, block)*/
 	public static final Map<String,Block> mineralogyBlockRegistry = new HashMap<String, Block>();
@@ -176,17 +177,16 @@ public class Mineralogy {
 
 		// add items
 		gypsumPowder = addDust("gypsum_dust", "Gypsum");
-
 		sulphurPowder = addDust("sulfur_dust", "Sulfur");
+		phosphorousPowder = addDust("phosphorous_dust", "Phosphorous");
+		nitratePowder = addDust("nitrate_dust", "Nitrate");
+		
 		OreDictionary.registerOre(sulfur, sulphurPowder);
 		OreDictionary.registerOre(dustSulphur, sulphurPowder);
-		OreDictionary.registerOre(sulphur, sulphurPowder);
-
-		phosphorousPowder = addDust("phosphorous_dust", "Phosphorous");
-
-		nitratePowder = addDust("nitrate_dust", "Nitrate");
+		OreDictionary.registerOre(sulphur, sulphurPowder);	
 
 		mineralFertilizer = registerItem(new MineralFertilizer(), "mineral_fertilizer").setUnlocalizedName(Mineralogy.MODID + "." + "mineral_fertilizer").setCreativeTab(CreativeTabs.MATERIALS);
+		
 		OreDictionary.registerOre(fertilizer, mineralFertilizer);
 
 		// other blocks
@@ -197,8 +197,8 @@ public class Mineralogy {
 		sedimentaryStones.add(blockGypsum);
 		blockPumice = registerBlock(new Rock(false, 0.5F, 5F, 0, SoundType.GROUND), "pumice");
 		igneousStones.add(blockPumice);
-
-		GameRegistry.addShapelessRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(gypsumPowder, 4), blockGypsum);
+		
+		GameRegistry.addShapelessRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(blockGypsum), Ingredient.fromStacks(new ItemStack(gypsumPowder, 4))); 
 		GameRegistry.addShapedRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(blockGypsum), "xx", "xx", 'x', dustGypsum);
 
 		// TODO: This should probably go in postinit
@@ -208,23 +208,30 @@ public class Mineralogy {
 		}
 
 		// register ores
-		Block s = addOre("sulfur_ore", oreSulfur, sulphurPowder,1, 4, 0,
+		Block sulphurBlock = addOre("sulfur_ore", oreSulfur, sulphurPowder,1, 4, 0,
 				config.getInt("sulphur_ore.minY", "ores", 16, 1, 255, "Minimum ore spawn height"),
 				config.getInt("sulphur_ore.maxY", "ores", 64, 1, 255, "Maximum ore spawn height"),
 				config.getFloat("sulphur_ore.frequency", "ores", 1, 0, 63, "Number of ore deposits per chunk"),
 				config.getInt("sulphur_ore.quantity", "ores", 16, 0, 63, "Size of ore deposit"));
-		OreDictionary.registerOre(oreSulphur, s); // Damn English and its multiple spellings. There better not be people out there spelling is "sulphre"
-		Block p = addOre("phosphorous_ore", orePhosphorous, phosphorousPowder, 1, 4, 0,
+		
+		OreDictionary.registerOre(oreSulphur, sulphurBlock); // Damn English and its multiple spellings. There better not be people out there spelling is "sulphre"
+		
+		Block phosphorousBlock = addOre("phosphorous_ore", orePhosphorous, phosphorousPowder, 1, 4, 0,
 				config.getInt("phosphorous_ore.minY", "ores", 16, 1, 255, "Minimum ore spawn height"),
 				config.getInt("phosphorous_ore.maxY", "ores", 64, 1, 255, "Maximum ore spawn height"),
 				config.getFloat("phosphorous_ore.frequency", "ores", 1, 0, 63, "Number of ore deposits per chunk"),
 				config.getInt("phosphorous_ore.quantity", "ores", 16, 0, 63, "Size of ore deposit"));
-		Block n = addOre("nitrate_ore", oreNitrate, nitratePowder, 1, 4, 0,
+		
+		OreDictionary.registerOre(orePhosphorous, phosphorousBlock);
+		
+		Block nitrateBlock = addOre("nitrate_ore", oreNitrate, nitratePowder, 1, 4, 0,
 				config.getInt("nitrate_ore.minY", "ores", 16, 1, 255, "Minimum ore spawn height"),
 				config.getInt("nitrate_ore.maxY", "ores", 64, 1, 255, "Maximum ore spawn height"),
 				config.getFloat("nitrate_ore.frequency", "ores", 1, 0, 63, "Number of ore deposits per chunk"),
 				config.getInt("nitrate_ore.quantity", "ores", 16, 0, 63, "Size of ore deposit"));
 
+		OreDictionary.registerOre(oreNitrate, nitrateBlock);
+		
 		// TODO: Finish This
 		addBlock("sulfur_block", "Sulfur", 0);
 		addBlock("phosphorous_block", "Phosphorous", 0);
@@ -247,16 +254,16 @@ public class Mineralogy {
     
     @EventHandler
     public void init(FMLInitializationEvent event) {
-    	
+    	//GameRegistry.addShapelessRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(blockGypsum), Ingredient.fromStacks(new ItemStack(gypsumPowder, 4)));
     	// recipes
 		for(int i = 0; i < 16; i++) {
-			GameRegistry.addShapelessRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(drywall[ i] , 1), "drywall", "dye" + colorSuffixesTwo[i]);
+			GameRegistry.addShapelessRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(drywall[ i] , 1), Ingredient.fromStacks(new ItemStack(drywall[i])), Ingredient.fromStacks(new ItemStack(Items.DYE, 1, i)));
 		}
 
-		GameRegistry.addShapelessRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(Items.GUNPOWDER, 4), new ItemStack(Items.COAL,1,1), dustNitrate, dustSulfur);
-		GameRegistry.addShapelessRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(Items.GUNPOWDER, 4), dustCarbon, dustNitrate, dustSulfur);
-		GameRegistry.addShapelessRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(Items.GUNPOWDER, 4), Items.SUGAR, dustNitrate, dustSulfur);
-		GameRegistry.addShapelessRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(mineralFertilizer, 1), dustNitrate, dustPhosphorous);
+		GameRegistry.addShapelessRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(Items.GUNPOWDER, 4), Ingredient.fromStacks(new ItemStack(Items.COAL,1,1)),Ingredient.fromStacks(new ItemStack(nitratePowder)), Ingredient.fromStacks(new ItemStack(sulphurPowder)));
+		GameRegistry.addShapelessRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(Items.GUNPOWDER, 4), Ingredient.fromStacks(new ItemStack(carbonPowder)), Ingredient.fromStacks(new ItemStack(nitratePowder)), Ingredient.fromStacks(new ItemStack(sulphurPowder)));
+		GameRegistry.addShapelessRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(Items.GUNPOWDER, 4), Ingredient.fromStacks(new ItemStack(Items.SUGAR)), Ingredient.fromStacks(new ItemStack(nitratePowder)), Ingredient.fromStacks(new ItemStack(sulphurPowder)));
+		GameRegistry.addShapelessRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(mineralFertilizer, 1), Ingredient.fromStacks(new ItemStack(nitratePowder)), Ingredient.fromStacks(new ItemStack(phosphorousPowder)));
 
 		// recipe modifications
 		GameRegistry.addShapedRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(Items.STONE_AXE), "xx", "xy", " y", 'x', stone, 'y', stickWood);
@@ -265,12 +272,12 @@ public class Mineralogy {
 		GameRegistry.addShapedRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(Items.STONE_SHOVEL), "x", "y", "y", 'x', stone, 'y', stickWood);
 		GameRegistry.addShapedRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(Items.STONE_SWORD), "x", "x", "y", 'x', stone, 'y', stickWood);
 		GameRegistry.addShapedRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(Blocks.FURNACE), "xxx", "x x", "xxx", 'x', stone);
-		GameRegistry.addShapelessRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(Blocks.COBBLESTONE, 4), stone, stone, Blocks.GRAVEL, Blocks.GRAVEL);
+		GameRegistry.addShapelessRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(Blocks.COBBLESTONE, 4), Ingredient.fromStacks(new ItemStack(Blocks.STONE)), Ingredient.fromStacks(new ItemStack(Blocks.STONE)), Ingredient.fromStacks(new ItemStack(Blocks.GRAVEL)), Ingredient.fromStacks(new ItemStack(Blocks.GRAVEL)));
 
 		if(SMELTABLE_GRAVEL) GameRegistry.addSmelting(Blocks.GRAVEL, new ItemStack(Blocks.STONE), 0.1F);
 
 		// remove default stone slab recipe (interferes with rock slab recipes)
-		List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList();
+		List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList(); //CraftingManager.findMatchingRecipe ?
 		List<IRecipe> removeList = new ArrayList<>();
 		for(IRecipe r : recipes) {
 			ItemStack item = r.getRecipeOutput();
@@ -467,7 +474,7 @@ public class Mineralogy {
 		GameRegistry.addShapedRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(brickSlab, 6), "xxx", 'x', brick);
 
 		smooth = registerBlock(new Rock(false, (float)hardness,(float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_smooth");
-		GameRegistry.addShapelessRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(smooth, 1), rock, "sand");
+		GameRegistry.addShapelessRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(smooth, 1), Ingredient.fromStacks(new ItemStack(brick, 1), new ItemStack(Blocks.SAND, 1)));
 		smoothStairs = registerBlock(new RockStairs(rock, (float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE),name + "_smooth_stairs");
 		GameRegistry.addShapedRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(smoothStairs, 4), "x  ","xx ", "xxx", 'x', smooth);
 		smoothSlab = registerBlock(new RockSlab((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE),name + "_smooth_slab");

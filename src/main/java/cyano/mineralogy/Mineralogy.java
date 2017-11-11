@@ -44,9 +44,9 @@ public class Mineralogy {
     public static final String VERSION = "3.2.0";
     /** stone block replacements that are Sedimentary */
     public static final List<Block> sedimentaryStones = new ArrayList<Block>();
-    /** stone block replacesments that are Metamorphic */
+    /** stone block replacements that are Metamorphic */
     public static final List<Block> metamorphicStones = new ArrayList<Block>();
-    /** stone block replacesments that are Igneous */
+    /** stone block replacements that are Igneous */
     public static final List<Block> igneousStones = new ArrayList<Block>();
 	/** all blocks used in this mod (blockID, block)*/
 	public static final Map<String,Block> mineralogyBlockRegistry = new HashMap<String, Block>();
@@ -263,7 +263,7 @@ public class Mineralogy {
 		GameRegistry.addShapelessRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(Items.GUNPOWDER, 4), Ingredient.fromStacks(new ItemStack(Items.COAL,1,1)),Ingredient.fromStacks(new ItemStack(nitratePowder)), Ingredient.fromStacks(new ItemStack(sulphurPowder)));
 		GameRegistry.addShapelessRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(Items.GUNPOWDER, 4), Ingredient.fromStacks(new ItemStack(carbonPowder)), Ingredient.fromStacks(new ItemStack(nitratePowder)), Ingredient.fromStacks(new ItemStack(sulphurPowder)));
 		GameRegistry.addShapelessRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(Items.GUNPOWDER, 4), Ingredient.fromStacks(new ItemStack(Items.SUGAR)), Ingredient.fromStacks(new ItemStack(nitratePowder)), Ingredient.fromStacks(new ItemStack(sulphurPowder)));
-		GameRegistry.addShapelessRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(mineralFertilizer, 1), dustNitrate, dustPhosphorous);
+		GameRegistry.addShapelessRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(mineralFertilizer, 1), Ingredient.fromStacks(new ItemStack(nitratePowder)), Ingredient.fromStacks(new ItemStack(phosphorousPowder)));
 
 		// recipe modifications
 		GameRegistry.addShapedRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(Items.STONE_AXE), "xx", "xy", " y", 'x', stone, 'y', stickWood);
@@ -272,12 +272,12 @@ public class Mineralogy {
 		GameRegistry.addShapedRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(Items.STONE_SHOVEL), "x", "y", "y", 'x', stone, 'y', stickWood);
 		GameRegistry.addShapedRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(Items.STONE_SWORD), "x", "x", "y", 'x', stone, 'y', stickWood);
 		GameRegistry.addShapedRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(Blocks.FURNACE), "xxx", "x x", "xxx", 'x', stone);
-		GameRegistry.addShapelessRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(Blocks.COBBLESTONE, 4), stone, stone, Blocks.GRAVEL, Blocks.GRAVEL);
+		GameRegistry.addShapelessRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(Blocks.COBBLESTONE, 4), Ingredient.fromStacks(new ItemStack(Blocks.STONE)), Ingredient.fromStacks(new ItemStack(Blocks.STONE)), Ingredient.fromStacks(new ItemStack(Blocks.GRAVEL)), Ingredient.fromStacks(new ItemStack(Blocks.GRAVEL)));
 
 		if(SMELTABLE_GRAVEL) GameRegistry.addSmelting(Blocks.GRAVEL, new ItemStack(Blocks.STONE), 0.1F);
 
 		// remove default stone slab recipe (interferes with rock slab recipes)
-		List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList();
+		List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList(); //CraftingManager.findMatchingRecipe ?
 		List<IRecipe> removeList = new ArrayList<>();
 		for(IRecipe r : recipes) {
 			ItemStack item = r.getRecipeOutput();

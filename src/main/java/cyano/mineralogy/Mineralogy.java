@@ -28,10 +28,13 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+import net.minecraftforge.registries.GameData;
+import net.minecraftforge.registries.RegistryManager;
 
 import java.util.*;
 
@@ -275,19 +278,10 @@ public class Mineralogy {
 		GameRegistry.addShapelessRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(Blocks.COBBLESTONE, 4), Ingredient.fromStacks(new ItemStack(Blocks.STONE)), Ingredient.fromStacks(new ItemStack(Blocks.STONE)), Ingredient.fromStacks(new ItemStack(Blocks.GRAVEL)), Ingredient.fromStacks(new ItemStack(Blocks.GRAVEL)));
 
 		if(SMELTABLE_GRAVEL) GameRegistry.addSmelting(Blocks.GRAVEL, new ItemStack(Blocks.STONE), 0.1F);
-
+		
 		// remove default stone slab recipe (interferes with rock slab recipes)
-		List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList(); //CraftingManager.findMatchingRecipe ?
-		List<IRecipe> removeList = new ArrayList<>();
-		for(IRecipe r : recipes) {
-			ItemStack item = r.getRecipeOutput();
-			if(item == null || item.getItem() == null) continue;
-			if(item.getItem() == Item.getItemFromBlock(Blocks.STONE_SLAB) && item.getItemDamage() == 0) {
-				// is recipe for stone slab, bookmark for removal
-				removeList.add(r);
-			}
-		}
-		CraftingManager.getInstance().getRecipeList().removeAll(removeList);
+		removeRecipeByName(Blocks.STONE_SLAB.getRegistryName().toString());
+		
 		// less generic stone slab recipe
 		GameRegistry.addShapedRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(Blocks.STONE_SLAB, 6, 0), "xxx", 'x', Blocks.STONE);
 
@@ -304,6 +298,15 @@ public class Mineralogy {
     	if(event.getSide().isClient()) {
     		registerItemRenders();
     	}
+    }
+    
+    private void removeRecipeByName(String recipeName)
+    {
+    	for(Map.Entry<ResourceLocation, IRecipe> recipe : ForgeRegistries.RECIPES.getEntries()) {
+            if(recipe.getKey().toString().equals(recipeName)) {
+                RegistryManager.ACTIVE.getRegistry(GameData.RECIPES).remove(recipe.getKey());
+            }
+        }
     }
     
     private void registerItemRenders() {

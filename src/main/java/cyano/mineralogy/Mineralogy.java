@@ -21,13 +21,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
@@ -201,8 +204,8 @@ public class Mineralogy {
 		blockPumice = registerBlock(new Rock(false, 0.5F, 5F, 0, SoundType.GROUND), "pumice");
 		igneousStones.add(blockPumice);
 		
-		GameRegistry.addShapelessRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(blockGypsum), Ingredient.fromStacks(new ItemStack(gypsumPowder, 4))); 
-		GameRegistry.addShapedRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(blockGypsum), "xx", "xx", 'x', dustGypsum);
+		GameRegistry.addShapelessRecipe(new ResourceLocation("GypsumBlock"), new ResourceLocation("mineralogy"), new ItemStack(blockGypsum), Ingredient.fromStacks(new ItemStack(gypsumPowder, 4))); 
+		GameRegistry.addShapedRecipe(new ResourceLocation("GypsumBlock"), new ResourceLocation("mineralogy"), new ItemStack(blockGypsum), "xx", "xx", 'x', dustGypsum);
 
 		// TODO: This should probably go in postinit
 		// register sedimentary stones in ore dictionary so that they can be used for stone tools recipes 
@@ -247,7 +250,7 @@ public class Mineralogy {
 			OreDictionary.registerOre("drywall", drywall[i]);
 		}
 
-		GameRegistry.addShapedRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(drywall[7], 3), "pgp", "pgp", "pgp", 'p', Items.PAPER, 'g', dustGypsum);
+		GameRegistry.addShapedRecipe(new ResourceLocation("DryWall"), new ResourceLocation("mineralogy"), new ItemStack(drywall[7], 3), "pgp", "pgp", "pgp", 'p', Items.PAPER, 'g', dustGypsum);
     }
     
     private static List<String> asList(String list, String delimiter) {
@@ -260,30 +263,33 @@ public class Mineralogy {
     	//GameRegistry.addShapelessRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(blockGypsum), Ingredient.fromStacks(new ItemStack(gypsumPowder, 4)));
     	// recipes
 		for(int i = 0; i < 16; i++) {
-			GameRegistry.addShapelessRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(drywall[ i] , 1), Ingredient.fromStacks(new ItemStack(drywall[i])), Ingredient.fromStacks(new ItemStack(Items.DYE, 1, i)));
+			GameRegistry.addShapelessRecipe(new ResourceLocation("DryWall" + i), new ResourceLocation("mineralogy"), new ItemStack(drywall[ i] , 1), Ingredient.fromStacks(new ItemStack(drywall[i])), Ingredient.fromStacks(new ItemStack(Items.DYE, 1, i)));
 		}
 
-		GameRegistry.addShapelessRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(Items.GUNPOWDER, 4), Ingredient.fromStacks(new ItemStack(Items.COAL,1,1)),Ingredient.fromStacks(new ItemStack(nitratePowder)), Ingredient.fromStacks(new ItemStack(sulphurPowder)));
-		GameRegistry.addShapelessRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(Items.GUNPOWDER, 4), Ingredient.fromStacks(new ItemStack(carbonPowder)), Ingredient.fromStacks(new ItemStack(nitratePowder)), Ingredient.fromStacks(new ItemStack(sulphurPowder)));
-		GameRegistry.addShapelessRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(Items.GUNPOWDER, 4), Ingredient.fromStacks(new ItemStack(Items.SUGAR)), Ingredient.fromStacks(new ItemStack(nitratePowder)), Ingredient.fromStacks(new ItemStack(sulphurPowder)));
-		GameRegistry.addShapelessRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(mineralFertilizer, 1), Ingredient.fromStacks(new ItemStack(nitratePowder)), Ingredient.fromStacks(new ItemStack(phosphorousPowder)));
+		GameRegistry.addShapelessRecipe(new ResourceLocation("GUNPOWDER"), new ResourceLocation("mineralogy"), new ItemStack(Items.GUNPOWDER, 4), Ingredient.fromStacks(new ItemStack(Items.COAL,1,1)),Ingredient.fromStacks(new ItemStack(nitratePowder)), Ingredient.fromStacks(new ItemStack(sulphurPowder)));
+		
+		// TODO: Fix this recipe
+		//GameRegistry.addShapelessRecipe(new ResourceLocation(""), new ResourceLocation("mineralogy"), new ItemStack(Items.GUNPOWDER, 4), Ingredient.fromStacks(new ItemStack(carbonPowder)), Ingredient.fromStacks(new ItemStack(nitratePowder)), Ingredient.fromStacks(new ItemStack(sulphurPowder)));
+		
+		GameRegistry.addShapelessRecipe(new ResourceLocation("GUNPOWDER"), new ResourceLocation("mineralogy"), new ItemStack(Items.GUNPOWDER, 4), Ingredient.fromStacks(new ItemStack(Items.SUGAR)), Ingredient.fromStacks(new ItemStack(nitratePowder)), Ingredient.fromStacks(new ItemStack(sulphurPowder)));
+		GameRegistry.addShapelessRecipe(new ResourceLocation("mineralFertilizer"), new ResourceLocation("mineralogy"), new ItemStack(mineralFertilizer, 1), Ingredient.fromStacks(new ItemStack(nitratePowder)), Ingredient.fromStacks(new ItemStack(phosphorousPowder)));
 
 		// recipe modifications
-		GameRegistry.addShapedRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(Items.STONE_AXE), "xx", "xy", " y", 'x', stone, 'y', stickWood);
-		GameRegistry.addShapedRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(Items.STONE_HOE), "xx", " y", " y", 'x', stone, 'y', stickWood);
-		GameRegistry.addShapedRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(Items.STONE_PICKAXE), "xxx", " y "," y ", 'x', stone, 'y',stickWood);
-		GameRegistry.addShapedRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(Items.STONE_SHOVEL), "x", "y", "y", 'x', stone, 'y', stickWood);
-		GameRegistry.addShapedRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(Items.STONE_SWORD), "x", "x", "y", 'x', stone, 'y', stickWood);
-		GameRegistry.addShapedRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(Blocks.FURNACE), "xxx", "x x", "xxx", 'x', stone);
-		GameRegistry.addShapelessRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(Blocks.COBBLESTONE, 4), Ingredient.fromStacks(new ItemStack(Blocks.STONE)), Ingredient.fromStacks(new ItemStack(Blocks.STONE)), Ingredient.fromStacks(new ItemStack(Blocks.GRAVEL)), Ingredient.fromStacks(new ItemStack(Blocks.GRAVEL)));
+		GameRegistry.addShapedRecipe(new ResourceLocation("STONE_AXE"), new ResourceLocation("mineralogy"), new ItemStack(Items.STONE_AXE), "xx", "xy", " y", 'x', stone, 'y', stickWood);
+		GameRegistry.addShapedRecipe(new ResourceLocation("STONE_HOE"), new ResourceLocation("mineralogy"), new ItemStack(Items.STONE_HOE), "xx", " y", " y", 'x', stone, 'y', stickWood);
+		GameRegistry.addShapedRecipe(new ResourceLocation("STONE_PICKAXE"), new ResourceLocation("mineralogy"), new ItemStack(Items.STONE_PICKAXE), "xxx", " y "," y ", 'x', stone, 'y',stickWood);
+		GameRegistry.addShapedRecipe(new ResourceLocation("STONE_PICKAXE"), new ResourceLocation("mineralogy"), new ItemStack(Items.STONE_SHOVEL), "x", "y", "y", 'x', stone, 'y', stickWood);
+		GameRegistry.addShapedRecipe(new ResourceLocation("STONE_PICKAXE"), new ResourceLocation("mineralogy"), new ItemStack(Items.STONE_SWORD), "x", "x", "y", 'x', stone, 'y', stickWood);
+		GameRegistry.addShapedRecipe(new ResourceLocation("FURNACE"), new ResourceLocation("mineralogy"), new ItemStack(Blocks.FURNACE), "xxx", "x x", "xxx", 'x', stone);
+		GameRegistry.addShapelessRecipe(new ResourceLocation("COBBLESTONE"), new ResourceLocation("mineralogy"), new ItemStack(Blocks.COBBLESTONE, 4), Ingredient.fromStacks(new ItemStack(Blocks.STONE)), Ingredient.fromStacks(new ItemStack(Blocks.STONE)), Ingredient.fromStacks(new ItemStack(Blocks.GRAVEL)), Ingredient.fromStacks(new ItemStack(Blocks.GRAVEL)));
 
 		if(SMELTABLE_GRAVEL) GameRegistry.addSmelting(Blocks.GRAVEL, new ItemStack(Blocks.STONE), 0.1F);
 		
 		// remove default stone slab recipe (interferes with rock slab recipes)
-		removeRecipeByName(Blocks.STONE_SLAB.getRegistryName().toString());
+		removeRecipeByName(Arrays.asList(Blocks.STONE_SLAB.getRegistryName().toString()));
 		
 		// less generic stone slab recipe
-		GameRegistry.addShapedRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(Blocks.STONE_SLAB, 6, 0), "xxx", 'x', Blocks.STONE);
+		GameRegistry.addShapedRecipe(new ResourceLocation("STONE_SLAB"), new ResourceLocation("mineralogy"), new ItemStack(Blocks.STONE_SLAB, 6, 0), "xxx", 'x', Blocks.STONE);
 
 		// initialize legacy updater
 		PatchHandler.getInstance().init(PATCH_UPDATE);
@@ -300,12 +306,14 @@ public class Mineralogy {
     	}
     }
     
-    private void removeRecipeByName(String recipeName)
+    private void removeRecipeByName(List<String> recipeNames)
     {
     	for(Map.Entry<ResourceLocation, IRecipe> recipe : ForgeRegistries.RECIPES.getEntries()) {
-            if(recipe.getKey().toString().equals(recipeName)) {
-                RegistryManager.ACTIVE.getRegistry(GameData.RECIPES).remove(recipe.getKey());
-            }
+    		for(String recipeName : recipeNames) {
+	            if(recipe.getKey().toString().equals(recipeName)) {
+	                RegistryManager.ACTIVE.getRegistry(GameData.RECIPES).remove(recipe.getKey());
+	            }
+    		}
         }
     }
     
@@ -376,7 +384,14 @@ public class Mineralogy {
     private static Item addDust(String dustName, String oreDictionaryName) {
     	Item item = registerItem(new Item(), dustName).setUnlocalizedName(Mineralogy.MODID + "." + dustName).setCreativeTab(CreativeTabs.MATERIALS);
 		OreDictionary.registerOre("dust" + oreDictionaryName, item);
-		GameRegistry.addShapelessRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(item, 9), "block" + oreDictionaryName);
+		GameRegistry.addShapelessRecipe(new ResourceLocation("COBBLESTONE"), new ResourceLocation("mineralogy"), new ItemStack(Blocks.COBBLESTONE, 4), Ingredient.fromStacks(new ItemStack(Blocks.STONE)), Ingredient.fromStacks(new ItemStack(Blocks.STONE)), Ingredient.fromStacks(new ItemStack(Blocks.GRAVEL)), Ingredient.fromStacks(new ItemStack(Blocks.GRAVEL)));
+		
+		NonNullList<ItemStack> blocks = OreDictionary.getOres("block" + oreDictionaryName);
+		
+		if (blocks.size() > 0) {
+				GameRegistry.addShapelessRecipe(new ResourceLocation("block" + oreDictionaryName), new ResourceLocation("mineralogy"), new ItemStack(item, 9), Ingredient.fromStacks(blocks.get(0)));	
+		}
+		
 		return item;
     }
 
@@ -386,7 +401,7 @@ public class Mineralogy {
     	Block block = new Block(Material.ROCK).setUnlocalizedName(blockName);
     	registerBlock(block, name);
     	OreDictionary.registerOre("block" + oreDictionaryName, block);
-		GameRegistry.addShapedRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(block), "xxx", "xxx", "xxx", 'x', "dust" + oreDictionaryName);
+		GameRegistry.addShapedRecipe(new ResourceLocation(name + "Block"), new ResourceLocation("mineralogy"), new ItemStack(block), "xxx", "xxx", "xxx", 'x', "dust" + oreDictionaryName);
     	return block;
     }
 
@@ -415,7 +430,7 @@ public class Mineralogy {
 	*/
 
 	private static Block registerBlock(Block b, String name) {
-		GameRegistry.register(b.setRegistryName(MODID, name));
+		//GameRegistry.register(b.setRegistryName(MODID, name));
 		b.setUnlocalizedName(MODID + "." + name);
 		registerItem(new ItemBlock(b), name);
 		mineralogyBlockRegistry.put(name, b);
@@ -423,12 +438,22 @@ public class Mineralogy {
 	}
 
 	private static Item registerItem(Item i, String name) {
-		GameRegistry.register(i.setRegistryName(MODID, name));
+		//GameRegistry.register(i.setRegistryName(MODID, name));
 		mineralogyItemRegistry.put(name, i);
 		i.setUnlocalizedName(MODID + "." + name);
 		return i;
 	}
 
+	@SubscribeEvent
+	public void registerBlocks(RegistryEvent.Register<Block> event) {
+	    event.getRegistry().registerAll(mineralogyBlockRegistry.values().toArray(new Block[mineralogyBlockRegistry.size()]));
+	}
+	
+	@SubscribeEvent
+	public void registerItems(RegistryEvent.Register<Item> event) {
+	    event.getRegistry().registerAll(mineralogyItemRegistry.values().toArray(new Item[mineralogyItemRegistry.size()]));
+	}
+	
 	/**
      * 
      * @param type Igneous, sedimentary, or metamorphic
@@ -465,29 +490,29 @@ public class Mineralogy {
 		GameRegistry.addSmelting(rock, new ItemStack(Blocks.STONE), 0.1F);
 
 		rockStairs = registerBlock(new RockStairs(rock, (float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_stairs");
-		GameRegistry.addShapedRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(rockStairs, 4), "x  ", "xx ", "xxx", 'x', rock);
+		GameRegistry.addShapedRecipe(new ResourceLocation(name + "Stairs"), new ResourceLocation("mineralogy"), new ItemStack(rockStairs, 4), "x  ", "xx ", "xxx", 'x', rock);
 		rockSlab = registerBlock(new RockSlab((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_slab");
-		GameRegistry.addShapedRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(rockSlab, 6), "xxx", 'x', rock);
+		GameRegistry.addShapedRecipe(new ResourceLocation(name + "Slab"), new ResourceLocation("mineralogy"), new ItemStack(rockSlab, 6), "xxx", 'x', rock);
 
 		brick = registerBlock(new Rock(false, (float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_brick");
-		GameRegistry.addShapedRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(brick, 4), "xx", "xx", 'x', rock);
+		GameRegistry.addShapedRecipe(new ResourceLocation(name + "Brick"), new ResourceLocation("mineralogy"), new ItemStack(brick, 4), "xx", "xx", 'x', rock);
 		brickStairs = registerBlock(new RockStairs(rock, (float)hardness, (float)blastResistance,toolHardnessLevel, SoundType.STONE),name + "_brick_stairs");
-		GameRegistry.addShapedRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(brickStairs, 4), "x  ", "xx ", "xxx", 'x', brick);
+		GameRegistry.addShapedRecipe(new ResourceLocation(name + "BrickStairs"), new ResourceLocation("mineralogy"), new ItemStack(brickStairs, 4), "x  ", "xx ", "xxx", 'x', brick);
 		brickSlab = registerBlock(new RockSlab((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_brick_slab");
-		GameRegistry.addShapedRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(brickSlab, 6), "xxx", 'x', brick);
+		GameRegistry.addShapedRecipe(new ResourceLocation(name + "BrickSlab"), new ResourceLocation("mineralogy"), new ItemStack(brickSlab, 6), "xxx", 'x', brick);
 
 		smooth = registerBlock(new Rock(false, (float)hardness,(float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_smooth");
-		GameRegistry.addShapelessRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(smooth, 1), Ingredient.fromStacks(new ItemStack(brick, 1), new ItemStack(Blocks.SAND, 1)));
+		GameRegistry.addShapelessRecipe(new ResourceLocation("Polished" + name), new ResourceLocation("mineralogy"), new ItemStack(smooth, 1), Ingredient.fromStacks(new ItemStack(brick, 1), new ItemStack(Blocks.SAND, 1)));
 		smoothStairs = registerBlock(new RockStairs(rock, (float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE),name + "_smooth_stairs");
-		GameRegistry.addShapedRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(smoothStairs, 4), "x  ","xx ", "xxx", 'x', smooth);
+		GameRegistry.addShapedRecipe(new ResourceLocation("Polished" + name + "Stairs"), new ResourceLocation("mineralogy"), new ItemStack(smoothStairs, 4), "x  ","xx ", "xxx", 'x', smooth);
 		smoothSlab = registerBlock(new RockSlab((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE),name + "_smooth_slab");
-		GameRegistry.addShapedRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(smoothSlab, 6), "xxx", 'x', smooth);
+		GameRegistry.addShapedRecipe(new ResourceLocation("Polished" + name + "Slab"), new ResourceLocation("mineralogy"), new ItemStack(smoothSlab, 6), "xxx", 'x', smooth);
 
 		smoothBrick = registerBlock(new Rock(false, (float)hardness,(float)blastResistance,toolHardnessLevel, SoundType.STONE), name + "_smooth_brick");
-		GameRegistry.addShapedRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(smoothBrick, 4), "xx", "xx", 'x', smooth);
+		GameRegistry.addShapedRecipe(new ResourceLocation(""), new ResourceLocation("mineralogy"), new ItemStack(smoothBrick, 4), "xx", "xx", 'x', smooth);
 		smoothBrickStairs = registerBlock(new RockStairs(rock, (float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_smooth_brick_stairs");
-		GameRegistry.addShapedRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(smoothBrickStairs, 4), "x  ","xx ", "xxx", 'x', smoothBrick);
+		GameRegistry.addShapedRecipe(new ResourceLocation(""), new ResourceLocation("mineralogy"), new ItemStack(smoothBrickStairs, 4), "x  ","xx ", "xxx", 'x', smoothBrick);
 		smoothBrickSlab = registerBlock(new RockSlab((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_smooth_brick_slab");
-		GameRegistry.addShapedRecipe(new ResourceLocation(""), new ResourceLocation(""), new ItemStack(smoothBrickSlab, 6), "xxx", 'x', smoothBrick);
+		GameRegistry.addShapedRecipe(new ResourceLocation(""), new ResourceLocation("mineralogy"), new ItemStack(smoothBrickSlab, 6), "xxx", 'x', smoothBrick);
     }
 }

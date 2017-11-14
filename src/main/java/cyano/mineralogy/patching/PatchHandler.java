@@ -17,7 +17,7 @@ public class PatchHandler {
 	}
 
 	Block saprolite;
-	Block pummice; // note the mispelling
+	Block pummice; // note the misspelling
 
 	public static PatchHandler getInstance() {
 		if(instance == null) {
@@ -35,7 +35,8 @@ public class PatchHandler {
 
 	private static Block legacyBlock(String name, IBlockState replacement) {
 		Block b = new UpdateBlock(replacement);
-		GameRegistry.register(b.setRegistryName(MODID,name));
+		// TODO: Fix the patch handler
+		//GameRegistry.register(b.setRegistryName(MODID,name));
 		b.setUnlocalizedName(MODID + "." + name);
 		return b;
 	}

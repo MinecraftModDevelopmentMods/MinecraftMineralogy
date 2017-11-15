@@ -383,7 +383,7 @@ public class Mineralogy {
 	private static Block registerBlock(Block block, String name) {
 		String blockName = MODID + "." + name;
 		block.setUnlocalizedName(blockName);
-		block.setRegistryName(blockName);
+		block.setRegistryName(name);
 		registerItem(new ItemBlock(block), name);
 		MineralogyBlockRegistry.put(name, block);
 		return block;
@@ -393,7 +393,7 @@ public class Mineralogy {
 		String itemName = MODID + "." + name;
 		
 		item.setUnlocalizedName(itemName);
-		item.setRegistryName(itemName);
+		item.setRegistryName(name);
 		
 		MineralogyItemRegistry.put(name, item);
 		return item;

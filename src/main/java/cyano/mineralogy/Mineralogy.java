@@ -22,12 +22,15 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
@@ -36,6 +39,9 @@ import net.minecraftforge.registries.RegistryManager;
 
 import java.util.*;
 
+
+
+//@Mod.EventBusSubscriber(modid = Mineralogy.MODID)
 @Mod(modid = Mineralogy.MODID, name=Mineralogy.NAME, version = Mineralogy.VERSION, acceptedMinecraftVersions = "[1.12,)")
 public class Mineralogy {
 
@@ -106,6 +112,8 @@ public class Mineralogy {
 	@EventHandler
     public void preInit(FMLPreInitializationEvent event) {
 	
+		MinecraftForge.EVENT_BUS.register(new MineralogyEventBusSubscriber());
+		
     	// load config
     	Configuration config = new Configuration(event.getSuggestedConfigurationFile());
     	config.load();
@@ -373,15 +381,21 @@ public class Mineralogy {
     }
 
 	private static Block registerBlock(Block block, String name) {
-		block.setUnlocalizedName(MODID + "." + name);
+		String blockName = MODID + "." + name;
+		block.setUnlocalizedName(blockName);
+		block.setRegistryName(blockName);
 		registerItem(new ItemBlock(block), name);
 		MineralogyBlockRegistry.put(name, block);
 		return block;
 	}
 
 	private static Item registerItem(Item item, String name) {
+		String itemName = MODID + "." + name;
+		
+		item.setUnlocalizedName(itemName);
+		item.setRegistryName(itemName);
+		
 		MineralogyItemRegistry.put(name, item);
-		item.setUnlocalizedName(MODID + "." + name);
 		return item;
 	}
 

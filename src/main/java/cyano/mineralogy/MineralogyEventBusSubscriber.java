@@ -10,12 +10,12 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 @Mod.EventBusSubscriber(modid = Mineralogy.MODID)
 public class MineralogyEventBusSubscriber {
 	@SubscribeEvent
-	public void registerBlocks(RegistryEvent.Register<Block> event) {
+	public static void registerBlocks(RegistryEvent.Register<Block> event) {
 	    event.getRegistry().registerAll(Mineralogy.MineralogyBlockRegistry.values().toArray(new Block[Mineralogy.MineralogyBlockRegistry.size()]));
 	}
 	
 	@SubscribeEvent
-	public void registerItems(RegistryEvent.Register<Item> event) {
+	public static void registerItems(RegistryEvent.Register<Item> event) {
 	    event.getRegistry().registerAll(Mineralogy.MineralogyItemRegistry.values().toArray(new Item[Mineralogy.MineralogyItemRegistry.size()]));
 	}
 }

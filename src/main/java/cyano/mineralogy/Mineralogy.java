@@ -23,6 +23,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -55,9 +56,9 @@ public class Mineralogy {
     /** stone block replacements that are Igneous */
     public static final List<Block> igneousStones = new ArrayList<Block>();
 	/** all blocks used in this mod (blockID, block)*/
-	public static final Map<String,Block> mineralogyBlockRegistry = new HashMap<String, Block>();
+	public static final Map<String,Block> MineralogyBlockRegistry = new HashMap<String, Block>();
 	/** all items used in this mod (blockID, block)*/
-	public static final Map<String,Item> mineralogyItemRegistry = new HashMap<String, Item>();
+	public static final Map<String,Item> MineralogyItemRegistry = new HashMap<String, Item>();
     
     /** size of rock layers */
     public static double ROCK_LAYER_NOISE = 32; 
@@ -126,10 +127,9 @@ public class Mineralogy {
 	private static final String dustNitrate = "dustNitrate";
 	private static final String oreNitrate = "oreNitrate";
 
-
 	@EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-
+	
     	// load config
     	Configuration config = new Configuration(event.getSuggestedConfigurationFile());
     	config.load();
@@ -319,8 +319,8 @@ public class Mineralogy {
     
     private void registerItemRenders() {
 
-		for(String name : mineralogyItemRegistry.keySet()){
-			Item i = Mineralogy.mineralogyItemRegistry.get(name);
+		for(String name : MineralogyItemRegistry.keySet()){
+			Item i = Mineralogy.MineralogyItemRegistry.get(name);
     		Minecraft.getMinecraft().getRenderItem().getItemModelMesher()
     				.register(i, 0, new ModelResourceLocation(Mineralogy.MODID + ":" + name, "inventory"));
     	}
@@ -433,27 +433,17 @@ public class Mineralogy {
 		//GameRegistry.register(b.setRegistryName(MODID, name));
 		b.setUnlocalizedName(MODID + "." + name);
 		registerItem(new ItemBlock(b), name);
-		mineralogyBlockRegistry.put(name, b);
+		MineralogyBlockRegistry.put(name, b);
 		return b;
 	}
 
 	private static Item registerItem(Item i, String name) {
 		//GameRegistry.register(i.setRegistryName(MODID, name));
-		mineralogyItemRegistry.put(name, i);
+		MineralogyItemRegistry.put(name, i);
 		i.setUnlocalizedName(MODID + "." + name);
 		return i;
 	}
 
-	@SubscribeEvent
-	public void registerBlocks(RegistryEvent.Register<Block> event) {
-	    event.getRegistry().registerAll(mineralogyBlockRegistry.values().toArray(new Block[mineralogyBlockRegistry.size()]));
-	}
-	
-	@SubscribeEvent
-	public void registerItems(RegistryEvent.Register<Item> event) {
-	    event.getRegistry().registerAll(mineralogyItemRegistry.values().toArray(new Item[mineralogyItemRegistry.size()]));
-	}
-	
 	/**
      * 
      * @param type Igneous, sedimentary, or metamorphic

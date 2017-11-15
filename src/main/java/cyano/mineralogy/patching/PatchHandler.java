@@ -28,7 +28,7 @@ public class PatchHandler {
 
 	public void init(boolean enabled) {
 		if(enabled) {
-			saprolite = legacyBlock("saprolite", Mineralogy.mineralogyBlockRegistry.get("limestone").getDefaultState());
+			saprolite = legacyBlock("saprolite", Mineralogy.MineralogyBlockRegistry.get("limestone").getDefaultState());
 			pummice = legacyBlock("pummice", Mineralogy.blockPumice.getDefaultState());
 		}
 	}

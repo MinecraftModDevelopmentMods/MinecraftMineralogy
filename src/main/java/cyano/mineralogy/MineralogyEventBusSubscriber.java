@@ -25,6 +25,6 @@ public class MineralogyEventBusSubscriber {
 	
 	@SubscribeEvent
 	public static void registerRecipes(RegistryEvent.Register<IRecipe> event) {
-		event.getRegistry().registerAll(Mineralogy.MineralogyRecipeRegistry.values().toArray(new ShapedOreRecipe[Mineralogy.MineralogyRecipeRegistry.size()]));
+		event.getRegistry().registerAll(Mineralogy.MineralogyRecipeRegistry.values().toArray(new IRecipe[Mineralogy.MineralogyRecipeRegistry.size()]));
 	}
 }

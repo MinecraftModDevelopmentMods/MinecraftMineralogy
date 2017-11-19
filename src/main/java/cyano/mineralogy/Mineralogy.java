@@ -243,28 +243,19 @@ public class Mineralogy {
 		ShapedOreRecipe newRecipe = new ShapedOreRecipe( new ResourceLocation("mineralogy:" + name), output, args);
 		newRecipe.setRegistryName(name);
 		MineralogyRecipeRegistry.put(name, newRecipe);
+		//GameData.register_impl(newRecipe);
 		return newRecipe;
 	}
 	
-//	public static ResourceLocation getNameForRecipe(ItemStack output) {
-//		ModContainer activeContainer = Loader.instance().activeModContainer();
-//		ResourceLocation baseLoc = new ResourceLocation(activeContainer.getModId(), output.getItem().getRegistryName().getResourcePath());
-//		ResourceLocation recipeLoc = baseLoc;
-//		int index = 0;
-//		while (CraftingManager.REGISTRY.containsKey(recipeLoc)) {
-//			index++;
-//			recipeLoc = new ResourceLocation(activeContainer.getModId(), baseLoc.getResourcePath() + "_" + index);
-//		}
-//		return recipeLoc;
-//	}
-//	
-//	public static void addShapedRecipe(ItemStack output, Object... params) {
-//		ResourceLocation location = getNameForRecipe(output);
-//		CraftingHelper.ShapedPrimer primer = CraftingHelper.parseShaped(params);
-//		ShapedRecipes recipe = new ShapedRecipes(output.getItem().getRegistryName().toString(), primer.width, primer.height, primer.input, output);
-//		recipe.setRegistryName(location);
-//		GameData.register_impl(recipe);
-//	}
+	public static ShapedRecipes addShapedRecipe(String name, ItemStack output, Object... params) {
+		ResourceLocation location = new ResourceLocation("mineralogy:" + name);
+		CraftingHelper.ShapedPrimer primer = CraftingHelper.parseShaped(params);
+		ShapedRecipes recipe = new ShapedRecipes(output.getItem().getRegistryName().toString(), primer.width, primer.height, primer.input, output);
+		recipe.setRegistryName(location);
+		//GameData.register_impl(recipe);
+		MineralogyRecipeRegistry.put(name, recipe);
+		return recipe;
+	}
 	
     private static List<String> asList(String list, String delimiter) {
     	String[] a = list.split(delimiter);
@@ -478,7 +469,8 @@ public class Mineralogy {
 		GameRegistry.addShapedRecipe(new ResourceLocation("mineralogy:" + name + "Slab"), new ResourceLocation("mineralogy"), new ItemStack(rockSlab, 6), "xxx", 'x', rock);
 
 		brick = registerBlock(new Rock(false, (float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_brick");
-		GameRegistry.addShapedRecipe(new ResourceLocation("mineralogy:" + name + "Brick"), new ResourceLocation("mineralogy"), new ItemStack(brick, 4), "xx", "xx", 'x', rock);
+		addShapedOreRecipe(name + "_brick", new ItemStack(brick, 4),"xx", "xx", 'x', rock);
+		//GameRegistry.addShapedRecipe(new ResourceLocation("mineralogy:" + name + "Brick"), new ResourceLocation("mineralogy"), new ItemStack(brick, 4), "xx", "xx", 'x', rock);
 		
 		brickStairs = registerBlock(new RockStairs(rock, (float)hardness, (float)blastResistance,toolHardnessLevel, SoundType.STONE),name + "_brick_stairs");
 		GameRegistry.addShapedRecipe(new ResourceLocation("mineralogy:" + name + "BrickStairs"), new ResourceLocation("mineralogy"), new ItemStack(brickStairs, 4), "x  ", "xx ", "xxx", 'x', brick);

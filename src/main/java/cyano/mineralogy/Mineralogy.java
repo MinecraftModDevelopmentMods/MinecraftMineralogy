@@ -18,14 +18,19 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -233,14 +238,34 @@ public class Mineralogy {
 
 		GameRegistry.addShapedRecipe(new ResourceLocation("mineralogy:DryWall"), new ResourceLocation("mineralogy"), new ItemStack(drywall[7], 3), "pgp", "pgp", "pgp", 'p', Items.PAPER, 'g', dustGypsum);
     }
-
+	
 	private static ShapedOreRecipe addShapedOreRecipe(String name, ItemStack output, Object...args) {
 		ShapedOreRecipe newRecipe = new ShapedOreRecipe( new ResourceLocation("mineralogy:" + name), output, args);
 		newRecipe.setRegistryName(name);
 		MineralogyRecipeRegistry.put(name, newRecipe);
 		return newRecipe;
 	}
-    
+	
+//	public static ResourceLocation getNameForRecipe(ItemStack output) {
+//		ModContainer activeContainer = Loader.instance().activeModContainer();
+//		ResourceLocation baseLoc = new ResourceLocation(activeContainer.getModId(), output.getItem().getRegistryName().getResourcePath());
+//		ResourceLocation recipeLoc = baseLoc;
+//		int index = 0;
+//		while (CraftingManager.REGISTRY.containsKey(recipeLoc)) {
+//			index++;
+//			recipeLoc = new ResourceLocation(activeContainer.getModId(), baseLoc.getResourcePath() + "_" + index);
+//		}
+//		return recipeLoc;
+//	}
+//	
+//	public static void addShapedRecipe(ItemStack output, Object... params) {
+//		ResourceLocation location = getNameForRecipe(output);
+//		CraftingHelper.ShapedPrimer primer = CraftingHelper.parseShaped(params);
+//		ShapedRecipes recipe = new ShapedRecipes(output.getItem().getRegistryName().toString(), primer.width, primer.height, primer.input, output);
+//		recipe.setRegistryName(location);
+//		GameData.register_impl(recipe);
+//	}
+	
     private static List<String> asList(String list, String delimiter) {
     	String[] a = list.split(delimiter);
     	return Arrays.asList(a);
@@ -446,7 +471,8 @@ public class Mineralogy {
 
 		rockStairs = registerBlock(new RockStairs(rock, (float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_stairs");
 		//GameRegistry.addShapedRecipe(new ResourceLocation("mineralogy:" + name + "Stairs"), new ResourceLocation("mineralogy"), new ItemStack(rockStairs, 4), "x  ", "xx ", "xxx", 'x', rock);
-		addShapedOreRecipe(name + "_stairs", new ItemStack(rockStairs, 4),"x  ", "xx ", "xxx", 'x', rock);
+		//addShapedRecipe(new ItemStack(rockStairs, 4), "x  ", "xx ", "xxx", 'x', new ItemStack(rock));
+		addShapedOreRecipe(name + "_stairs", new ItemStack(rockStairs, 4),"x  ", "xx ", "xxx", 'x', new ItemStack(rock));
 		
 		rockSlab = registerBlock(new RockSlab((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_slab");
 		GameRegistry.addShapedRecipe(new ResourceLocation("mineralogy:" + name + "Slab"), new ResourceLocation("mineralogy"), new ItemStack(rockSlab, 6), "xxx", 'x', rock);

@@ -32,6 +32,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.registries.GameData;
 import net.minecraftforge.registries.RegistryManager;
 
@@ -52,7 +53,8 @@ public class Mineralogy {
     public static final List<Block> igneousStones = new ArrayList<Block>(); //stone block replacements that are Igneous
 	public static final Map<String,Block> MineralogyBlockRegistry = new HashMap<String, Block>(); //all blocks used in this mod (blockID, block)
 	public static final Map<String,Item> MineralogyItemRegistry = new HashMap<String, Item>(); // all items used in this mod (blockID, block)
-    
+	public static final Map<String,IRecipe> MineralogyRecipeRegistry = new HashMap<String, IRecipe>(); // all recipes used in this mod (blockID, block)
+	
     public static double ROCK_LAYER_NOISE = 32; // size of rock layers 
     public static int GEOME_SIZE = 100; //size of mineral biomes
     public static int GEOM_LAYER_THICKNESS = 8; //thickness of rock layers
@@ -180,8 +182,11 @@ public class Mineralogy {
 		blockPumice = registerBlock(new Rock(false, 0.5F, 5F, 0, SoundType.GROUND), "pumice");
 		igneousStones.add(blockPumice);
 		
+		//GameRegistry.addShapedRecipe(new ResourceLocation("mineralogy:GypsumBlock"), new ResourceLocation("mineralogy"), new ItemStack(blockGypsum), "xx", "xx", 'x', dustGypsum);
+		addShapedOreRecipe("gypsum", new ItemStack(blockGypsum),"xx", "xx", 'x', dustGypsum);
+		
 		GameRegistry.addShapelessRecipe(new ResourceLocation("mineralogy:GypsumBlock"), new ResourceLocation("mineralogy"), new ItemStack(blockGypsum), Ingredient.fromStacks(new ItemStack(gypsumPowder, 4))); 
-		GameRegistry.addShapedRecipe(new ResourceLocation("mineralogy:GypsumBlock"), new ResourceLocation("mineralogy"), new ItemStack(blockGypsum), "xx", "xx", 'x', dustGypsum);
+		
 
 		// TODO: This should probably go in postinit
 		// register sedimentary stones in ore dictionary so that they can be used for stone tools recipes 
@@ -228,6 +233,13 @@ public class Mineralogy {
 
 		GameRegistry.addShapedRecipe(new ResourceLocation("mineralogy:DryWall"), new ResourceLocation("mineralogy"), new ItemStack(drywall[7], 3), "pgp", "pgp", "pgp", 'p', Items.PAPER, 'g', dustGypsum);
     }
+
+	private static ShapedOreRecipe addShapedOreRecipe(String name, ItemStack output, Object...args) {
+		ShapedOreRecipe newRecipe = new ShapedOreRecipe( new ResourceLocation("mineralogy:" + name), output, args);
+		newRecipe.setRegistryName(name);
+		MineralogyRecipeRegistry.put(name, newRecipe);
+		return newRecipe;
+	}
     
     private static List<String> asList(String list, String delimiter) {
     	String[] a = list.split(delimiter);
@@ -433,7 +445,8 @@ public class Mineralogy {
 		GameRegistry.addSmelting(rock, new ItemStack(Blocks.STONE), 0.1F);
 
 		rockStairs = registerBlock(new RockStairs(rock, (float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_stairs");
-		GameRegistry.addShapedRecipe(new ResourceLocation("mineralogy:" + name + "Stairs"), new ResourceLocation("mineralogy"), new ItemStack(rockStairs, 4), "x  ", "xx ", "xxx", 'x', rock);
+		//GameRegistry.addShapedRecipe(new ResourceLocation("mineralogy:" + name + "Stairs"), new ResourceLocation("mineralogy"), new ItemStack(rockStairs, 4), "x  ", "xx ", "xxx", 'x', rock);
+		addShapedOreRecipe(name + "_stairs", new ItemStack(rockStairs, 4),"x  ", "xx ", "xxx", 'x', rock);
 		
 		rockSlab = registerBlock(new RockSlab((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_slab");
 		GameRegistry.addShapedRecipe(new ResourceLocation("mineralogy:" + name + "Slab"), new ResourceLocation("mineralogy"), new ItemStack(rockSlab, 6), "xxx", 'x', rock);

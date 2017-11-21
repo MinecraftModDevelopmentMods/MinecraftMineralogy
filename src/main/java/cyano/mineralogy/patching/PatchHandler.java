@@ -31,8 +31,8 @@ public class PatchHandler {
 
 	public void init(boolean enabled) {
 		if(enabled) {
-			saprolite = legacyBlock("saprolite", Mineralogy.MineralogyBlockRegistry.get("limestone").getDefaultState());
-			pummice = legacyBlock("pummice", Mineralogy.blockPumice.getDefaultState());
+			saprolite = legacyBlock("saprolite", Mineralogy.MineralogyBlockRegistry.get("limestone").PairedBlock.getDefaultState());
+			pummice = legacyBlock("pummice", Mineralogy.blockPumice.PairedBlock.getDefaultState());
 			
 			MineralogyPatchRegistry.put("saprolite", saprolite);
 			MineralogyPatchRegistry.put("pummice", pummice);

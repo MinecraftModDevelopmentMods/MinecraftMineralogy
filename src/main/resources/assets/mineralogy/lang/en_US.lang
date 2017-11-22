@@ -221,3 +221,4 @@ tile.mineralogy.drywall_light_blue.name=Light-Blue Drywall
 tile.mineralogy.drywall_magenta.name=Magenta Drywall
 tile.mineralogy.drywall_orange.name=Orange Drywall
 tile.mineralogy.drywall_white.name=White Drywall
+itemGroup.tabMineralogy=Mineralogy

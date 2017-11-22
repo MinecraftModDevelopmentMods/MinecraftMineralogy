@@ -223,3 +223,4 @@ tile.mineralogy.drywall_light_blue.name=Placas de Yeso
 tile.mineralogy.drywall_magenta.name=Placas de Yeso
 tile.mineralogy.drywall_orange.name=Placas de Yeso
 tile.mineralogy.drywall_white.name=Placas de Yeso
+itemGroup.tabMineralogy=Mineralogy

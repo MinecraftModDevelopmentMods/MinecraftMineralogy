@@ -223,3 +223,4 @@ tile.mineralogy.drywall_light_blue.name=Wand
 tile.mineralogy.drywall_magenta.name=Wand
 tile.mineralogy.drywall_orange.name=Wand
 tile.mineralogy.drywall_white.name=Wand
+itemGroup.tabMineralogy=Mineralogy

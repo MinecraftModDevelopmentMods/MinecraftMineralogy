@@ -223,3 +223,4 @@ tile.mineralogy.drywall_light_blue.name=Sheetrock
 tile.mineralogy.drywall_magenta.name=Sheetrock
 tile.mineralogy.drywall_orange.name=Sheetrock
 tile.mineralogy.drywall_white.name=Sheetrock
+itemGroup.tabMineralogy=Mineralogy

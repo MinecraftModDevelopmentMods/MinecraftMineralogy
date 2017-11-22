@@ -479,10 +479,10 @@ public class Mineralogy {
 			addShapedOreRecipe(name + "_" + SLAB, new ItemStack(rockSlabPair.PairedItem, 6),"xxx", 'x', rockPair.PairedItem);
 		}
 		
-		if (GENERATE_ROCKWALL) {
-			rockWallPair = registerBlock(new RockSlab((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_" + SLAB, SLAB + oreDictName);
-			addShapedOreRecipe(name + "_" + SLAB, new ItemStack(rockWallPair.PairedItem, 6),"xxx", 'x', rockPair.PairedItem);
-		}
+//		if (GENERATE_ROCKWALL) {
+//			rockWallPair = registerBlock(new RockSlab((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_" + SLAB, SLAB + oreDictName);
+//			addShapedOreRecipe(name + "_" + SLAB, new ItemStack(rockWallPair.PairedItem, 6),"xxx", 'x', rockPair.PairedItem);
+//		}
 		
 		if (GENERATE_BRICK) {
 			brickPair = registerBlock(new Rock(false, (float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_" + BRICK, BRICK + oreDictName);

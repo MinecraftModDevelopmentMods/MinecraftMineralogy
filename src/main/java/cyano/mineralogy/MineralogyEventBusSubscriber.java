@@ -24,6 +24,16 @@ public class MineralogyEventBusSubscriber {
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> event) {
 	    event.getRegistry().registerAll(Mineralogy.MineralogyItemRegistry.values().toArray(new Item[Mineralogy.MineralogyItemRegistry.size()]));
+	    
+	    for (Map.Entry<String, Block> map : Mineralogy.BlocksToRegister.entrySet()) {
+			OreDictionary.registerOre(map.getKey(), map.getValue());			
+		}
+	    for (Map.Entry<String, Item> map : Mineralogy.ItemsToRegister.entrySet()) {
+			OreDictionary.registerOre(map.getKey(), map.getValue());			
+		}
+ 		for (int i = 0; i < Mineralogy.sedimentaryStones.size(); i++) {
+ 			OreDictionary.registerOre("cobblestone", Mineralogy.sedimentaryStones.get(i)); 
+ 		}
 	}
 	
 	@SubscribeEvent

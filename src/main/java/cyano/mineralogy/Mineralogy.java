@@ -310,16 +310,6 @@ public class Mineralogy {
     		if(b == null) continue;
     		sedimentaryStones.remove(b);
     	}
-    	
-    	for (Map.Entry<String, Block> map : Mineralogy.BlocksToRegister.entrySet()) {
-			OreDictionary.registerOre(map.getKey(), map.getValue());			
-		}
-	    for (Map.Entry<String, Item> map : Mineralogy.ItemsToRegister.entrySet()) {
-			OreDictionary.registerOre(map.getKey(), map.getValue());			
-		}
- 		for (int i = 0; i < sedimentaryStones.size(); i++) {
- 			OreDictionary.registerOre(COBBLESTONE, sedimentaryStones.get(i)); 
- 		}
     }
 
     private static Block getBlock(String id) {

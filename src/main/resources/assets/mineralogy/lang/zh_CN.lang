@@ -223,3 +223,4 @@ tile.mineralogy.drywall_light_blue.name=壁
 tile.mineralogy.drywall_magenta.name=壁
 tile.mineralogy.drywall_orange.name=壁
 tile.mineralogy.drywall_white.name=壁
+itemGroup.tabMineralogy=矿物学

@@ -10,7 +10,6 @@ import cyano.mineralogy.worldgen.OreSpawner;
 import cyano.mineralogy.worldgen.StoneReplacer;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
@@ -103,10 +102,9 @@ public class Mineralogy {
 	private static final String CHERT = "chert";
 	private static final String SMOOTH = "smooth";
 	private static final String BRICK = "brick";
-	
+		
 	public static boolean GENERATE_ROCKSTAIRS = true;
 	public static boolean GENERATE_ROCKSLAB = true;
-	public static boolean GENERATE_ROCKWALL = true;
 	public static boolean GENERATE_BRICK = true;
 	public static boolean GENERATE_BRICKSTAIRS = true;
 	public static boolean GENERATE_BRICKSLAB = true;
@@ -151,7 +149,6 @@ public class Mineralogy {
 
     	GENERATE_ROCKSTAIRS = config.getBoolean("GENERATE_ROCKSTAIRS", "options", GENERATE_ROCKSTAIRS, "If true, then rock stairs will be generated");
         GENERATE_ROCKSLAB = config.getBoolean("GENERATE_ROCKSLAB", "options", GENERATE_ROCKSLAB, "If true, then rock slabs will be generated");
-        GENERATE_ROCKWALL = config.getBoolean("GENERATE_ROCKWALL", "options", GENERATE_ROCKWALL, "If true, then rock walls will be generated");
         GENERATE_BRICK = config.getBoolean("GENERATE_BRICK", "options", GENERATE_BRICK, "If true, then rock brick blocks will be generated");
         GENERATE_BRICKSTAIRS = config.getBoolean("GENERATE_BRICKSTAIRS", "options", GENERATE_BRICKSTAIRS, "If true, then brick stairs will be generated");
         GENERATE_BRICKSLAB = config.getBoolean("GENERATE_BRICKSLAB", "options", GENERATE_BRICKSLAB, "If true, then brick slabs will be generated");
@@ -434,7 +431,7 @@ public class Mineralogy {
     private static void addStoneType(RockType type, String oreDictName, double hardness, double blastResistance, int toolHardnessLevel) {
     	String name = oreDictName.toLowerCase();
     	
-    	final BlockItemPair rockPair, rockStairPair, rockSlabPair, rockWallPair, brickPair, brickStairPair, brickSlabPair, smoothPair, smoothStairPair, smoothSlabPair, smoothBrickPair, smoothBrickStairPair, smoothBrickSlabPair;
+    	final BlockItemPair rockPair, rockStairPair, rockSlabPair, brickPair, brickStairPair, brickSlabPair, smoothPair, smoothStairPair, smoothSlabPair, smoothBrickPair, smoothBrickStairPair, smoothBrickSlabPair;
 		
     	rockPair = registerBlock(new Rock(true, (float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name, name);
     	
@@ -478,11 +475,6 @@ public class Mineralogy {
 			rockSlabPair = registerBlock(new RockSlab((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_" + SLAB, SLAB + oreDictName);
 			addShapedOreRecipe(name + "_" + SLAB, new ItemStack(rockSlabPair.PairedItem, 6),"xxx", 'x', rockPair.PairedItem);
 		}
-		
-//		if (GENERATE_ROCKWALL) {
-//			rockWallPair = registerBlock(new RockSlab((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_" + SLAB, SLAB + oreDictName);
-//			addShapedOreRecipe(name + "_" + SLAB, new ItemStack(rockWallPair.PairedItem, 6),"xxx", 'x', rockPair.PairedItem);
-//		}
 		
 		if (GENERATE_BRICK) {
 			brickPair = registerBlock(new Rock(false, (float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_" + BRICK, BRICK + oreDictName);

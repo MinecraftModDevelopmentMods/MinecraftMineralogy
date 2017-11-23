@@ -13,12 +13,40 @@ buildscript {
     dependencies {
         classpath "net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT"
         classpath "com.matthewprenger:CurseGradle:1.0-SNAPSHOT"
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.2'
     }
 }
 
 apply plugin: "net.minecraftforge.gradle.forge"
 apply plugin: "com.matthewprenger.cursegradle"
 apply plugin: "maven-publish"
+apply plugin: 'org.junit.platform.gradle.plugin'
+
+repositories {
+	mavenLocal()
+    mavenCentral()
+}
+ 
+dependencies {
+	compile(
+            'org.junit.jupiter:junit-jupiter-api:5.0.2'
+    )
+    testCompile(
+            'org.junit.jupiter:junit-jupiter-api:5.0.2'
+    )
+    testRuntime(
+            'org.junit.jupiter:junit-jupiter-engine:5.0.2'
+    )
+}
+
+junitPlatform {
+    platformVersion '1.0.2' // optional, defaults to plugin version
+    //logManager 'org.apache.logging.log4j.jul.LogManager'
+    reportsDir file('build/test-results/junit-platform') // this is the default
+    // enableStandardTestTask true
+    // selectors (optional)
+    // filters (optional)
+}
 
 javadoc {
     failOnError = false
@@ -58,7 +86,7 @@ if (secretFile.exists()) {
 }
 
 minecraft {
-    version = "1.12-14.21.1.2387"
+    version = "1.12.2-14.23.0.2552"
     runDir = "run"
     mappings = "snapshot_20171030"
 //    coreMod = ""
@@ -174,7 +202,7 @@ curseforge {
         id = "240974"
         changelog = file("CHANGELOG.txt")
         releaseType = "release"
-        addGameVersion("1.10.2")
+        addGameVersion("1.12.0")
         def projName = "Minecraft Mineralogy"
         def displayVersion = getVersion("VERSION", mod_file)
         if (System.getenv().BUILD_NUMBER) {

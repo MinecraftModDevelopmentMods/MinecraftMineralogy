@@ -28,6 +28,6 @@ class MineralogyTests {
 
 	@Test
 	void testAddStoneType() {
-		assertEquals(1, 1);
+		assertEquals(1, 2);
 	}
 }

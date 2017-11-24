@@ -428,7 +428,7 @@ public class Mineralogy {
      * @param blastResistance how resistant the block is to explosions. For reference, dirt is 0, stone is 10, and blast-proof materials are 2000
      * @param toolHardnessLevel 0 for wood tools, 1 for stone, 2 for iron, 3 for diamond
      */
-    private static void addStoneType(RockType type, String oreDictName, double hardness, double blastResistance, int toolHardnessLevel) {
+    protected static void addStoneType(RockType type, String oreDictName, double hardness, double blastResistance, int toolHardnessLevel) {
     	String name = oreDictName.toLowerCase();
     	
     	final BlockItemPair rockPair, rockStairPair, rockSlabPair, brickPair, brickStairPair, brickSlabPair, smoothPair, smoothStairPair, smoothSlabPair, smoothBrickPair, smoothBrickStairPair, smoothBrickSlabPair;

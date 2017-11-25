@@ -28,9 +28,6 @@ repositories {
 }
  
 dependencies {
-	compile(
-            'org.junit.jupiter:junit-jupiter-api:5.0.2'
-    )
     testCompile(
             'org.junit.jupiter:junit-jupiter-api:5.0.2'
     )
@@ -202,7 +199,7 @@ curseforge {
         id = "240974"
         changelog = file("CHANGELOG.txt")
         releaseType = "release"
-        addGameVersion("1.12.0")
+        addGameVersion("1.12.2")
         def projName = "Minecraft Mineralogy"
         def displayVersion = getVersion("VERSION", mod_file)
         if (System.getenv().BUILD_NUMBER) {

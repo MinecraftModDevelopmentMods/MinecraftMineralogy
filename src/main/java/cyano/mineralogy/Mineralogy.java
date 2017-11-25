@@ -442,7 +442,8 @@ public class Mineralogy {
 		addShapedOreRecipe(name + "_STONE_SHOVEL", new ItemStack(Items.STONE_SHOVEL), "x", "y", "y", 'x', rockPair.PairedItem, 'y', Items.STICK);
 		addShapedOreRecipe(name + "_STONE_SWORD", new ItemStack(Items.STONE_SWORD), "x", "x", "y", 'x', rockPair.PairedItem, 'y', Items.STICK);
 		addShapedOreRecipe(name + "_FURNACE", new ItemStack(Blocks.FURNACE), "xxx", "x x", "xxx", 'x', rockPair.PairedItem);
-    	
+		addShapelessOreRecipe(name + "_" + COBBLESTONE.toUpperCase(), new ItemStack(Blocks.COBBLESTONE, 4), Ingredient.fromStacks(new ItemStack(rockPair.PairedItem)),Ingredient.fromStacks(new ItemStack(rockPair.PairedItem)),  Ingredient.fromStacks(new ItemStack(Blocks.GRAVEL)), Ingredient.fromStacks(new ItemStack(Blocks.GRAVEL)));
+		
     	BlocksToRegister.put(COBBLESTONE, rockPair.PairedBlock);// register so it can be used in cobblestone recipes
     	
     	switch(type) {

@@ -396,7 +396,7 @@ public class Mineralogy {
     	return oreBlock;
     }
 
-	private static BlockItemPair registerBlock(Block block, String name, String oreDictionaryName) {
+	protected static BlockItemPair registerBlock(Block block, String name, String oreDictionaryName) {
 		block.setUnlocalizedName(MODID + "." + name);
 		block.setRegistryName(name);
 		
@@ -409,7 +409,7 @@ public class Mineralogy {
 		return pair;
 	}
 
-	private static Item registerItem(Item item, String name) {
+	protected static Item registerItem(Item item, String name) {
 		String itemName = MODID + "." + name;
 		
 		item.setUnlocalizedName(itemName);

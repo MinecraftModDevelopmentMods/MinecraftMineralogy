@@ -17,6 +17,10 @@ buildscript {
     }
 }
 
+plugins {
+    id 'jacoco'
+}
+
 apply plugin: "net.minecraftforge.gradle.forge"
 apply plugin: "com.matthewprenger.cursegradle"
 apply plugin: "maven-publish"
@@ -30,8 +34,30 @@ repositories {
 dependencies {
     testCompile('org.junit.jupiter:junit-jupiter-api:5.0.2')
     testCompile('org.mockito:mockito-core:2.12.0')
+    testCompile('org.junit.platform:junit-platform-launcher:1.0.2')
     testRuntime('org.junit.jupiter:junit-jupiter-engine:5.0.2')
 }
+
+project.afterEvaluate {
+    def junitPlatformTestTask = project.tasks.getByName('junitPlatformTest')
+
+    // configure jacoco to analyze the junitPlatformTest task
+    jacoco {
+        // this tool version is compatible with
+        toolVersion = "0.7.6.201602180812"
+        applyTo junitPlatformTestTask
+    }
+
+    // create junit platform jacoco task
+    project.task(type: JacocoReport, "junitPlatformJacocoReport",
+            {
+                sourceDirectories = files("./src/main")
+                classDirectories = files("$buildDir/classes/main")
+                executionData junitPlatformTestTask
+            })
+}
+
+
 
 junitPlatform {
     platformVersion '1.0.2' // optional, defaults to plugin version

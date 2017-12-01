@@ -1,12 +1,12 @@
 package cyano.mineralogy.patching;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import java.util.Random;
 
 /**
  * Created by Chris on 5/26/2016.

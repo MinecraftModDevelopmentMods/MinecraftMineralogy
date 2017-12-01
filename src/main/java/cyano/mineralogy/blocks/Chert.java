@@ -1,5 +1,9 @@
 package cyano.mineralogy.blocks;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+
 import cyano.mineralogy.Mineralogy;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -8,10 +12,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
 
 public class Chert extends Rock {
 

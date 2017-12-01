@@ -1,5 +1,7 @@
 package cyano.mineralogy.blocks;
 
+import java.util.Random;
+
 import cyano.mineralogy.Mineralogy;
 import net.minecraft.block.BlockOre;
 import net.minecraft.block.SoundType;
@@ -8,8 +10,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-
-import java.util.Random;
 
 public class Ore extends BlockOre {
 

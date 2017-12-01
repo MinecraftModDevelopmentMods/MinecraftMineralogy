@@ -1,11 +1,11 @@
 package cyano.mineralogy.blocks;
 
+import java.util.Random;
+
 import cyano.mineralogy.Mineralogy;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
-
-import java.util.Random;
 
 public class DryWall extends net.minecraft.block.BlockPane {
 

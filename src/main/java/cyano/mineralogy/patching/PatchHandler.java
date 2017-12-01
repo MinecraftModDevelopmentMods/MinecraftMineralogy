@@ -1,12 +1,13 @@
 package cyano.mineralogy.patching;
 
-import cyano.mineralogy.Mineralogy;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import static cyano.mineralogy.Mineralogy.MODID;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import cyano.mineralogy.Mineralogy;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 
 /**
  * Created by Chris on 5/10/2016.

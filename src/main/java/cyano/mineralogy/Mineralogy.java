@@ -2,6 +2,9 @@ package cyano.mineralogy;
 
 // DON'T FORGET TO UPDATE mcmod.info FILE!!!
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import cyano.mineralogy.blocks.*;
 import cyano.mineralogy.items.*;
 import cyano.mineralogy.patching.PatchHandler;
@@ -26,6 +29,8 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.event.FMLFingerprintViolationEvent; 
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -35,11 +40,31 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import java.util.*;
 
-@Mod(modid = Mineralogy.MODID, name=Mineralogy.NAME, version = Mineralogy.VERSION, acceptedMinecraftVersions = "[1.12,)")
+@Mod(
+		modid = Mineralogy.MODID,
+		name = Mineralogy.NAME,
+		version = Mineralogy.VERSION,
+		acceptedMinecraftVersions = "[1.12,)",
+		certificateFingerprint = "@FINGERPRINT@")
 public class Mineralogy {
+
+	@Instance
+	public static Mineralogy instance;
+
+	/** ID of this Mod */
 	public static final String MODID = "mineralogy";
+
+	/** Display name of this Mod */
     public static final String NAME ="Mineralogy";
+
+	/**
+	 * Version number, in Major.Minor.Patch format. The minor number is
+	 * increased whenever a change is made that has the potential to break
+	 * compatibility with other mods that depend on this one.
+	 */
     public static final String VERSION = "3.3.0";
+
+	public static final Logger logger = LogManager.getFormatterLogger(Mineralogy.MODID);
     
     public static CreativeTabs mineralogyTab = new CreativeTabs("tabMineralogy"){
     	@Override
@@ -127,7 +152,12 @@ public class Mineralogy {
 
 	private static final String COBBLESTONE = "cobblestone";
 	private static final String fertilizer = "fertilizer";
-	
+
+	@Mod.EventHandler
+	public void onFingerprintViolation(FMLFingerprintViolationEvent event) {
+		logger.warn("Invalid fingerprint detected!");
+	}
+
 	@EventHandler
     public void preInit(FMLPreInitializationEvent event) {
 		MinecraftForge.EVENT_BUS.register(new MineralogyEventBusSubscriber());

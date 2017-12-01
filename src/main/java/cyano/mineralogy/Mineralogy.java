@@ -1,12 +1,24 @@
 package cyano.mineralogy;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 // DON'T FORGET TO UPDATE mcmod.info FILE!!!
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import cyano.mineralogy.blocks.*;
-import cyano.mineralogy.items.*;
+import cyano.mineralogy.blocks.Chert;
+import cyano.mineralogy.blocks.DryWall;
+import cyano.mineralogy.blocks.Gypsum;
+import cyano.mineralogy.blocks.Ore;
+import cyano.mineralogy.blocks.Rock;
+import cyano.mineralogy.blocks.RockSlab;
+import cyano.mineralogy.blocks.RockStairs;
+import cyano.mineralogy.items.MineralFertilizer;
 import cyano.mineralogy.patching.PatchHandler;
 import cyano.mineralogy.util.BlockItemPair;
 import cyano.mineralogy.worldgen.OreSpawner;
@@ -30,7 +42,7 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
-import net.minecraftforge.fml.common.event.FMLFingerprintViolationEvent; 
+import net.minecraftforge.fml.common.event.FMLFingerprintViolationEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -38,7 +50,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-import java.util.*;
 
 @Mod(
 		modid = Mineralogy.MODID,

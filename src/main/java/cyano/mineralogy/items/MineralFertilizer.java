@@ -11,7 +11,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class MineralFertilizer extends Item{
+public class MineralFertilizer extends Item {
 
 	public MineralFertilizer() {
 		super();
@@ -19,14 +19,17 @@ public class MineralFertilizer extends Item{
 
 	private final ItemStack phantomBonemeal = new ItemStack(Items.DYE, 1, 15);
 
-	@Override public EnumActionResult onItemUse(EntityPlayer playerEntity, World world, BlockPos target, EnumHand hand, EnumFacing face, float par8, float par9, float par10){
+	@Override
+	public EnumActionResult onItemUse(EntityPlayer playerEntity, World world, BlockPos target, EnumHand hand,
+			EnumFacing face, float par8, float par9, float par10) {
 		boolean canUse = ItemDye.applyBonemeal(playerEntity.getHeldItemMainhand(), world, target, playerEntity, hand);
-		if(canUse) {
+		if (canUse) {
 			phantomBonemeal.setCount(27);
-			for(int dx = -2; dx <= 2; dx++) {
-				for(int dy = -2; dy <= 2; dy++) {
-					for(int dz = -1; dz <= 1; dz++) {
-						if((dx | dy | dz) == 0) continue;
+			for (int dx = -2; dx <= 2; dx++) {
+				for (int dy = -2; dy <= 2; dy++) {
+					for (int dz = -1; dz <= 1; dz++) {
+						if ((dx | dy | dz) == 0)
+							continue;
 						BlockPos t = target.add(dx, dy, dz);
 						ItemDye.applyBonemeal(phantomBonemeal, world, t, playerEntity, hand);
 					}

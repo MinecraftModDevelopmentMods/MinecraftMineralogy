@@ -17,15 +17,16 @@ public class Chert extends Rock {
 
 	private final Random prng = new Random();
 	private final String itemName = "chert";
-	public Chert(){
-		super(false, (float)1.5, (float)10, 1, SoundType.STONE);
+
+	public Chert() {
+		super(false, (float) 1.5, (float) 10, 1, SoundType.STONE);
 		this.setUnlocalizedName(Mineralogy.MODID + "_" + itemName);
 		this.setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
 	}
 
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		if(prng.nextInt(10) == 0) {
+		if (prng.nextInt(10) == 0) {
 			return Arrays.asList(new ItemStack(Items.FLINT, 1 + Math.max(0, fortune)));
 		} else {
 			return super.getDrops(world, pos, state, fortune);

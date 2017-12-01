@@ -25,10 +25,10 @@ public class RockSlab extends net.minecraft.block.Block {
 
 	private static final AxisAlignedBB[] BOXES = new AxisAlignedBB[EnumFacing.values().length];
 	static {
-		for(int i = 0; i < EnumFacing.values().length; i++) {
+		for (int i = 0; i < EnumFacing.values().length; i++) {
 			EnumFacing orientation = EnumFacing.values()[i];
-			float x1 = 0, x2 = 1, y1 = 0,y2 = 1, z1 = 0, z2 = 1;
-			switch(orientation) {
+			float x1 = 0, x2 = 1, y1 = 0, y2 = 1, z1 = 0, z2 = 1;
+			switch (orientation) {
 				case DOWN:
 					y1 = 1f - thickness;
 					break;
@@ -55,13 +55,12 @@ public class RockSlab extends net.minecraft.block.Block {
 
 	public RockSlab(float hardness, float blastResistance, int toolHardnessLevel, SoundType sound) {
 		super(Material.ROCK);
-		this.setHardness((float)hardness); // dirt is 0.5, grass is 0.6, stone is 1.5,iron ore is 3, obsidian is 50
-		this.setResistance((float)blastResistance); // dirt is 0, iron ore is 5, stone is 10, obsidian is 2000
+		this.setHardness((float) hardness); // dirt is 0.5, grass is 0.6, stone is 1.5,iron ore is 3, obsidian is 50
+		this.setResistance((float) blastResistance); // dirt is 0, iron ore is 5, stone is 10, obsidian is 2000
 		this.setSoundType(sound); // sound for stone
 		this.setHarvestLevel("pickaxe", toolHardnessLevel);
 		this.setCreativeTab(CreativeTabs.DECORATIONS);
-		this.setDefaultState(this.blockState.getBaseState()
-				.withProperty(FACING,EnumFacing.UP));
+		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.UP));
 		this.useNeighborBrightness = true;
 	}
 
@@ -70,20 +69,19 @@ public class RockSlab extends net.minecraft.block.Block {
 		return false;
 	}
 
-
 	@Override
 	public boolean isFullCube(IBlockState bs) {
 		return false;
 	}
 
 	@Override
-	public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing face, float partialX, float partialY,
-			float partialZ, int meta, EntityLivingBase placer) {
+	public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing face, float partialX,
+			float partialY, float partialZ, int meta, EntityLivingBase placer) {
 		IBlockState defaultState = this.getDefaultState().withProperty(FACING, face);
 		// redimension to face-local up and right dimensions
 		float up, right;
 		EnumFacing.Axis upRotationAxis, rightRotationAxis;
-		switch(face){
+		switch (face) {
 			case UP: // works
 				up = partialZ - 0.5F;
 				right = partialX - 0.5F;
@@ -120,17 +118,18 @@ public class RockSlab extends net.minecraft.block.Block {
 				upRotationAxis = EnumFacing.Axis.X;
 				rightRotationAxis = EnumFacing.Axis.Y;
 				break;
-			default: return defaultState;
+			default:
+				return defaultState;
 		}
-		if(Math.abs(up) < 0.25F && Math.abs(right) < 0.25F) {
+		if (Math.abs(up) < 0.25F && Math.abs(right) < 0.25F) {
 			// no rotation
 			return defaultState;
 		}
 		boolean upOrRight = up + right > 0;
 		boolean upOrLeft = up - right > 0;
-		if(upOrRight) {
+		if (upOrRight) {
 			// up or right
-			if(upOrLeft) {
+			if (upOrLeft) {
 				// up
 				return defaultState.withProperty(FACING, face.rotateAround(upRotationAxis));
 			} else {
@@ -139,7 +138,7 @@ public class RockSlab extends net.minecraft.block.Block {
 			}
 		} else {
 			// down or left
-			if(upOrLeft) {
+			if (upOrLeft) {
 				// left
 				return defaultState.withProperty(FACING, face.rotateAround(rightRotationAxis));
 			} else {
@@ -156,7 +155,7 @@ public class RockSlab extends net.minecraft.block.Block {
 
 	@Override
 	public int getMetaFromState(final IBlockState bs) {
-		int i = ((EnumFacing)bs.getValue(FACING)).getIndex();
+		int i = ((EnumFacing) bs.getValue(FACING)).getIndex();
 		return i;
 	}
 

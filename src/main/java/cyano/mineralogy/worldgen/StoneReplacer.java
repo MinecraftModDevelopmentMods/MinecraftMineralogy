@@ -18,13 +18,14 @@ public class StoneReplacer implements IWorldGenerator {
 		//
 	}
 
-	private final Lock glock = new ReentrantLock(); 
+	private final Lock glock = new ReentrantLock();
+
 	/** is thread-safe */
 	final Geology getGeology(World w) {
-		if(geom == null) {
+		if (geom == null) {
 			glock.lock();
 			try {
-				if(geom == null) {
+				if (geom == null) {
 					geom = new Geology(w.getSeed(), Mineralogy.GEOME_SIZE, Mineralogy.ROCK_LAYER_NOISE);
 				}
 			} finally {
@@ -33,11 +34,11 @@ public class StoneReplacer implements IWorldGenerator {
 		}
 		return geom;
 	}
-	
+
 	@Override
-	public void generate(Random random, int chunkX, int chunkZ, World world,
-						 IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
-		if(world.provider.getDimension() == 0) {
+	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator,
+			IChunkProvider chunkProvider) {
+		if (world.provider.getDimension() == 0) {
 			getGeology(world).replaceStoneInChunk(chunkX, chunkZ, world);
 		}
 	}

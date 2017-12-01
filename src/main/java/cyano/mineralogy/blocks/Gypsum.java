@@ -16,8 +16,9 @@ public class Gypsum extends Rock {
 
 	private final Random prng = new Random();
 	private final String itemName = "gypsum";
+
 	public Gypsum() {
-		super(false,(float)0.75, (float)1, 0, SoundType.GROUND);
+		super(false, (float) 0.75, (float) 1, 0, SoundType.GROUND);
 		this.setUnlocalizedName(Mineralogy.MODID + "_" + itemName);
 		this.setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
 	}

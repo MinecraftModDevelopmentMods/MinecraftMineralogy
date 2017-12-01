@@ -5,15 +5,15 @@ public class PerlinNoise2D {
 	private final NoiseLayer2D[] layers;
 
 	/** from java.util.Random implementation */
-    private static final long rand_multiplier = 0x5DEECE66DL;
-    /** from java.util.Random implementation */
-    private static final long rand_addend = 0xBL;
-    /** from java.util.Random implementation */
-    private static final long rand_mask = (1L << 48) - 1;
+	private static final long rand_multiplier = 0x5DEECE66DL;
+	/** from java.util.Random implementation */
+	private static final long rand_addend = 0xBL;
+	/** from java.util.Random implementation */
+	private static final long rand_mask = (1L << 48) - 1;
 
 	public PerlinNoise2D(long seed, float initialRange, float initialSize, int numOvertoneLayers) {
 		layers = new NoiseLayer2D[numOvertoneLayers];
-		for(int i = 0; i < layers.length; i++) {
+		for (int i = 0; i < layers.length; i++) {
 			seed = scramble(seed);
 			layers[i] = new NoiseLayer2D(seed, initialSize, initialRange);
 			initialSize *= 0.5;
@@ -23,7 +23,7 @@ public class PerlinNoise2D {
 
 	public float valueAt(double x, double y) {
 		float sum = 0;
-		for(int i = 0; i < layers.length; i++) {
+		for (int i = 0; i < layers.length; i++) {
 			sum += layers[i].getValueAt(x, y);
 		}
 		return sum;

@@ -13,9 +13,11 @@ import net.minecraft.block.state.IBlockState;
  * Created by Chris on 5/10/2016.
  */
 public class PatchHandler {
-	public static final Map<String,Block> MineralogyPatchRegistry = new HashMap<String, Block>();
-	
+
+	public static final Map<String, Block> MineralogyPatchRegistry = new HashMap<String, Block>();
+
 	private static PatchHandler instance = null;
+
 	private PatchHandler() {
 		//
 	}
@@ -24,17 +26,18 @@ public class PatchHandler {
 	Block pummice; // note the misspelling
 
 	public static PatchHandler getInstance() {
-		if(instance == null) {
+		if (instance == null) {
 			instance = new PatchHandler();
 		}
 		return instance;
 	}
 
 	public void init(boolean enabled) {
-		if(enabled) {
-			saprolite = legacyBlock("saprolite", Mineralogy.MineralogyBlockRegistry.get("limestone").PairedBlock.getDefaultState());
+		if (enabled) {
+			saprolite = legacyBlock("saprolite",
+					Mineralogy.MineralogyBlockRegistry.get("limestone").PairedBlock.getDefaultState());
 			pummice = legacyBlock("pummice", Mineralogy.blockPumice.PairedBlock.getDefaultState());
-			
+
 			MineralogyPatchRegistry.put("saprolite", saprolite);
 			MineralogyPatchRegistry.put("pummice", pummice);
 		}

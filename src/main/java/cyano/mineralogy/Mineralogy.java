@@ -77,18 +77,7 @@ public class Mineralogy {
 
 	public static final Logger logger = LogManager.getFormatterLogger(Mineralogy.MODID);
 
-	public static CreativeTabs mineralogyTab = new CreativeTabs("tabMineralogy") {
-
-		@Override
-		public ItemStack getTabIconItem() {
-			return new ItemStack(Blocks.STONE);
-		}
-
-		@Override
-		public boolean hasSearchBar() {
-			return true;
-		}
-	}.setBackgroundImageName("item_search.png");
+	public static CreativeTabs mineralogyTab = new MineralogyCreativeTab("tabMineralogy");
 
 	public static final List<Block> sedimentaryStones = new ArrayList<Block>(); // stone block replacements that are Sedimentary
 	public static final List<Block> metamorphicStones = new ArrayList<Block>(); // stone block replacements that are Metamorphic

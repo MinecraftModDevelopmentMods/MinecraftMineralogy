@@ -9,11 +9,11 @@ import net.minecraft.item.Item;
 
 public class DryWall extends net.minecraft.block.BlockPane {
 
-	final static String itemName = "drywall";
+	private static final String ITEM_NAME = "drywall";
 
 	public DryWall(String color) {
 		super(Material.ROCK, true);
-		this.setUnlocalizedName(Mineralogy.MODID + "_" + itemName + " _" + color);
+		this.setUnlocalizedName(Mineralogy.MODID + "_" + ITEM_NAME + " _" + color);
 		this.useNeighborBrightness = true;
 	}
 

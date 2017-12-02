@@ -14,7 +14,7 @@ import net.minecraft.block.state.IBlockState;
  */
 public class PatchHandler {
 
-	public static final Map<String, Block> MineralogyPatchRegistry = new HashMap<String, Block>();
+	public static final Map<String, Block> MineralogyPatchRegistry = new HashMap<>();
 
 	private static PatchHandler instance = null;
 

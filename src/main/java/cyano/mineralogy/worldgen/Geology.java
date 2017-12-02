@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import cyano.mineralogy.Mineralogy;
+import cyano.mineralogy.MineralogyConfig;
 import cyano.mineralogy.worldgen.math.PerlinNoise2D;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -156,6 +157,6 @@ public class Geology {
 	 * @return
 	 */
 	private Block pickBlockFromList(int value, List<Block> list) {
-		return list.get(whiteNoiseArray[(value / Mineralogy.GEOM_LAYER_THICKNESS) & 0xFF] % list.size());
+		return list.get(whiteNoiseArray[(value / MineralogyConfig.geomLayerThickness()) & 0xFF] % list.size());
 	}
 }

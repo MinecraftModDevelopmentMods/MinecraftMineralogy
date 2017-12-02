@@ -2,6 +2,8 @@ package cyano.mineralogy.blocks;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -21,32 +23,37 @@ public class RockSlab extends net.minecraft.block.Block {
 
 	public static final PropertyDirection FACING = PropertyDirection.create("facing");
 
-	private static final float thickness = 0.5f;
+	private static final float THICKNESS = 0.5f;
 
 	private static final AxisAlignedBB[] BOXES = new AxisAlignedBB[EnumFacing.values().length];
 	static {
 		for (int i = 0; i < EnumFacing.values().length; i++) {
 			EnumFacing orientation = EnumFacing.values()[i];
-			float x1 = 0, x2 = 1, y1 = 0, y2 = 1, z1 = 0, z2 = 1;
+			float x1 = 0;
+			float x2 = 1;
+			float y1 = 0;
+			float y2 = 1;
+			float z1 = 0;
+			float z2 = 1;
 			switch (orientation) {
 				case DOWN:
-					y1 = 1f - thickness;
+					y1 = 1f - THICKNESS;
 					break;
 				case SOUTH:
-					z2 = thickness;
+					z2 = THICKNESS;
 					break;
 				case NORTH:
-					z1 = 1f - thickness;
+					z1 = 1f - THICKNESS;
 					break;
 				case EAST:
-					x2 = thickness;
+					x2 = THICKNESS;
 					break;
 				case WEST:
-					x1 = 1f - thickness;
+					x1 = 1f - THICKNESS;
 					break;
 				case UP:
 				default:
-					y2 = thickness;
+					y2 = THICKNESS;
 					break;
 			}
 			BOXES[orientation.ordinal()] = new AxisAlignedBB(x1, y1, z1, x2, y2, z2);
@@ -64,23 +71,28 @@ public class RockSlab extends net.minecraft.block.Block {
 		this.useNeighborBrightness = true;
 	}
 
+	@Deprecated
 	@Override
 	public boolean isOpaqueCube(IBlockState bs) {
 		return false;
 	}
 
+	@Deprecated
 	@Override
 	public boolean isFullCube(IBlockState bs) {
 		return false;
 	}
 
+	@Deprecated
 	@Override
 	public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing face, float partialX,
 			float partialY, float partialZ, int meta, EntityLivingBase placer) {
 		IBlockState defaultState = this.getDefaultState().withProperty(FACING, face);
 		// redimension to face-local up and right dimensions
-		float up, right;
-		EnumFacing.Axis upRotationAxis, rightRotationAxis;
+		float up;
+		float right;
+		EnumFacing.Axis upRotationAxis;
+		EnumFacing.Axis rightRotationAxis;
 		switch (face) {
 			case UP: // works
 				up = partialZ - 0.5F;
@@ -148,6 +160,7 @@ public class RockSlab extends net.minecraft.block.Block {
 		}
 	}
 
+	@Deprecated
 	@Override
 	public IBlockState getStateFromMeta(final int meta) {
 		return this.getDefaultState().withProperty(FACING, EnumFacing.getFront(meta));
@@ -155,8 +168,7 @@ public class RockSlab extends net.minecraft.block.Block {
 
 	@Override
 	public int getMetaFromState(final IBlockState bs) {
-		int i = ((EnumFacing) bs.getValue(FACING)).getIndex();
-		return i;
+		return ((EnumFacing) bs.getValue(FACING)).getIndex();
 	}
 
 	@Override
@@ -164,16 +176,18 @@ public class RockSlab extends net.minecraft.block.Block {
 		return new BlockStateContainer(this, new IProperty[] { FACING });
 	}
 
+	@Deprecated
 	@Override
 	public AxisAlignedBB getBoundingBox(final IBlockState bs, final IBlockAccess world, final BlockPos coord) {
-		final EnumFacing orientation = (EnumFacing) bs.getValue(FACING);
+		final EnumFacing orientation = bs.getValue(FACING);
 		return BOXES[orientation.ordinal()];
 	}
 
+	@Deprecated
 	@Override
-	public void addCollisionBoxToList(IBlockState state, World world, BlockPos coord, AxisAlignedBB box,
-			List<AxisAlignedBB> collisionBoxList, Entity entityIn, boolean p_185477_7_) {
-		final EnumFacing orientation = (EnumFacing) world.getBlockState(coord).getValue(FACING);
-		super.addCollisionBoxToList(coord, box, collisionBoxList, BOXES[orientation.ordinal()]);
+    public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox,
+    		List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean isActualState) {
+		final EnumFacing orientation = worldIn.getBlockState(pos).getValue(FACING);
+		super.addCollisionBoxToList(pos, entityBox, collidingBoxes, BOXES[orientation.ordinal()]);
 	}
 }

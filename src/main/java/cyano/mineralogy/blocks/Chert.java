@@ -16,14 +16,15 @@ import net.minecraft.world.IBlockAccess;
 public class Chert extends Rock {
 
 	private final Random prng = new Random();
-	private final String itemName = "chert";
+	private static final String ITEM_NAME = "chert";
 
 	public Chert() {
 		super(false, (float) 1.5, (float) 10, 1, SoundType.STONE);
-		this.setUnlocalizedName(Mineralogy.MODID + "_" + itemName);
+		this.setUnlocalizedName(Mineralogy.MODID + "_" + ITEM_NAME);
 		this.setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
 	}
 
+	@Deprecated
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		if (prng.nextInt(10) == 0) {

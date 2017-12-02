@@ -3,7 +3,7 @@ package cyano.mineralogy.blocks;
 import java.util.Arrays;
 import java.util.List;
 
-import cyano.mineralogy.Mineralogy;
+import cyano.mineralogy.MineralogyConfig;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -35,9 +35,10 @@ public class Rock extends net.minecraft.block.Block {
 		return isStoneEquivalent;
 	}
 
+	@Deprecated
 	@Override
 	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		if (Mineralogy.DROP_COBBLESTONE) {
+		if (MineralogyConfig.dropCobblestone()) {
 			return Arrays.asList(new ItemStack(Blocks.COBBLESTONE));
 		} else {
 			return Arrays.asList(new ItemStack(Item.getItemFromBlock(this)));

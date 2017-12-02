@@ -4,7 +4,7 @@ import java.util.Random;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import cyano.mineralogy.Mineralogy;
+import cyano.mineralogy.MineralogyConfig;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
@@ -26,7 +26,7 @@ public class StoneReplacer implements IWorldGenerator {
 			glock.lock();
 			try {
 				if (geom == null) {
-					geom = new Geology(w.getSeed(), Mineralogy.GEOME_SIZE, Mineralogy.ROCK_LAYER_NOISE);
+					geom = new Geology(w.getSeed(), MineralogyConfig.geomeSize(), MineralogyConfig.rockLayerNoise());
 				}
 			} finally {
 				glock.unlock();

@@ -85,7 +85,7 @@ version = mc_version + "-" + short_version
 if (System.getenv().BUILD_NUMBER) {
     version += '.' + System.getenv().BUILD_NUMBER
 }
-group= 'cyano.mineralogy'
+group= 'com.mcmoddev'
 archivesBaseName = 'Mineralogy'
 sourceCompatibility = targetCompatibility = '1.8'
 

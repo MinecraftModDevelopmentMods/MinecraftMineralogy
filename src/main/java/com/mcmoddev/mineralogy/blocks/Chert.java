@@ -19,10 +19,9 @@ public class Chert extends Rock {
 	private final Random prng = new Random();
 	private static final String ITEM_NAME = "chert";
 
-	public Chert() {
-		super(false, (float) 1.5, (float) 10, 1, SoundType.STONE);
+	public Chert(CreativeTabs tab) {
+		super(false, (float) 1.5, (float) 10, 1, SoundType.STONE, tab);
 		this.setUnlocalizedName(Mineralogy.MODID + "_" + ITEM_NAME);
-		this.setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
 	}
 
 	@Deprecated

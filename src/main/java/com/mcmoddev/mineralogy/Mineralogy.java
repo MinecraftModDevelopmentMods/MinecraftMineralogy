@@ -76,7 +76,7 @@ public class Mineralogy {
 
 	public static final Logger logger = LogManager.getFormatterLogger(Mineralogy.MODID);
 
-	public static final CreativeTabs mineralogyTab = new MineralogyCreativeTab("tabMineralogy");
+	public static final CreativeTabs mineralogyTab = MineralogyCreativeTab.instance("tabMineralogy");
 
 	public static final List<Block> sedimentaryStones = new ArrayList<>(); // stone block replacements that are Sedimentary
 	public static final List<Block> metamorphicStones = new ArrayList<>(); // stone block replacements that are Metamorphic

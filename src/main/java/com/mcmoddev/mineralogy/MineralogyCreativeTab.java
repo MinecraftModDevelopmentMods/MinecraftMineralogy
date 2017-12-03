@@ -6,7 +6,16 @@ import net.minecraft.item.ItemStack;
 
 public class MineralogyCreativeTab extends CreativeTabs {
 
-	public MineralogyCreativeTab(String label) {
+	private static MineralogyCreativeTab _instance; 
+	
+	public static MineralogyCreativeTab instance(String label) {
+		if (_instance == null)
+			_instance = new MineralogyCreativeTab(label);
+		
+		return _instance;
+	}
+	
+	private MineralogyCreativeTab(String label) {
 		super(label);
 		setBackgroundImageName("item_search.png");
 	}

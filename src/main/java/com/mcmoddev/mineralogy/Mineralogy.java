@@ -17,6 +17,7 @@ import com.mcmoddev.mineralogy.blocks.Ore;
 import com.mcmoddev.mineralogy.blocks.Rock;
 import com.mcmoddev.mineralogy.blocks.RockSlab;
 import com.mcmoddev.mineralogy.blocks.RockStairs;
+import com.mcmoddev.mineralogy.data.MaterialType;
 import com.mcmoddev.mineralogy.items.MineralFertilizer;
 import com.mcmoddev.mineralogy.patching.PatchHandler;
 import com.mcmoddev.mineralogy.util.BlockItemPair;
@@ -76,17 +77,7 @@ public class Mineralogy {
 
 	public static final Logger logger = LogManager.getFormatterLogger(Mineralogy.MODID);
 
-	public static final CreativeTabs mineralogyTab = MineralogyCreativeTab.instance("tabMineralogy");
-
-	public static final List<Block> sedimentaryStones = new ArrayList<>(); // stone block replacements that are Sedimentary
-	public static final List<Block> metamorphicStones = new ArrayList<>(); // stone block replacements that are Metamorphic
-	public static final List<Block> igneousStones = new ArrayList<>(); // stone block replacements that are Igneous
-	public static final Map<String, BlockItemPair> MineralogyBlockRegistry = new HashMap<>(); // all blocks used in this mod (blockID, BlockItemPair)
-	protected static final Map<String, Item> MineralogyItemRegistry = new HashMap<>(); // all items used in this mod (itemID, item)
-	protected static final Map<String, IRecipe> MineralogyRecipeRegistry = new HashMap<>(); // all recipes used in this mod (recipeID, IRecipe)
-
-	protected static final Map<String, Block> BlocksToRegister = new HashMap<>(); // all blocks used in this mod (blockID, BlockItemPair)
-	protected static final Map<String, Item> ItemsToRegister = new HashMap<>(); // all items used in this mod (itemID, item)
+	//public static final CreativeTabs mineralogyTab = MineralogyCreativeTab.instance("tabMineralogy");
 
 	protected static BlockItemPair blockChert;
 	protected static BlockItemPair blockGypsum;
@@ -100,62 +91,7 @@ public class Mineralogy {
 
 	protected static BlockItemPair[] drywalls = new BlockItemPair[16];
 
-	// add other blocks and recipes
-	private static final String[] colorSuffixes = { 
-													"black",
-													"red",
-													"green",
-													"brown",
-													"blue",
-													"purple",
-													"cyan",
-													"silver",
-													"gray",
-													"pink",
-													"lime",
-													"yellow",
-													"light_blue",
-													"magenta",
-													"orange",
-													"white"
-													};
-	private static final String[] colorSuffixesTwo = {
-													"Black",
-													"Red",
-													"Green",
-													"Brown",
-													"Blue",
-													"Purple",
-													"Cyan",
-													"LightGray",
-													"Gray",
-													"Pink",
-													"Lime",
-													"Yellow",
-													"LightBlue",
-													"Magenta",
-													"Orange",
-													"White"
-													};
 
-	private static final String GYPSUM = "Gypsum";
-	private static final String PHOSPHOROUS = "Phosphorous";
-	private static final String NITRATE = "Nitrate";
-	private static final String SULFUR = "Sulfur";
-	private static final String STAIRS = "stairs";
-	private static final String SLAB = "slab";
-	private static final String ORE = "ore";
-	private static final String BLOCK = "Block";
-	private static final String DUST = "dust";
-	private static final String GUNPOWDER = "GUNPOWDER";
-	private static final String DRYWALL = "drywall";
-	private static final String PUMICE = "pumice";
-	private static final String CHERT = "chert";
-	private static final String SMOOTH = "smooth";
-	private static final String BRICK = "brick";
-
-	private static final String COBBLESTONE = "cobblestone";
-	private static final String FERTILIZER = "fertilizer";
 
 	@Mod.EventHandler
 	public void onFingerprintViolation(FMLFingerprintViolationEvent event) {
@@ -165,7 +101,9 @@ public class Mineralogy {
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		MinecraftForge.EVENT_BUS.register(new MineralogyEventBusSubscriber());
-
+		MinecraftForge.EVENT_BUS.register(com.mcmoddev.mineralogy.init.Blocks.class);
+		MinecraftForge.EVENT_BUS.register(com.mcmoddev.mineralogy.init.Items.class);
+		
 		MineralogyConfig.preInit(event);
 
 		// Blocks, Items, World-gen
@@ -278,27 +216,7 @@ public class Mineralogy {
 				Ingredient.fromStacks(new ItemStack(Blocks.GRAVEL)));
 	}
 
-	private static ShapedOreRecipe addShapedOreRecipe(String name, ItemStack output, Object... args) {
-		return addShapedOreRecipe(MODID, name, output, args);
-	}
-
-	private static ShapedOreRecipe addShapedOreRecipe(String domain, String name, ItemStack output, Object... args) {
-		ShapedOreRecipe newRecipe = new ShapedOreRecipe(new ResourceLocation(domain, name), output, args);
-		newRecipe.setRegistryName(name);
-		MineralogyRecipeRegistry.put(name, newRecipe);
-		return newRecipe;
-	}
-
-	private static ShapelessOreRecipe addShapelessOreRecipe(String name, ItemStack output, Object... args) {
-		return addShapelessOreRecipe(MODID, name, output, args);
-	}
-
-	private static ShapelessOreRecipe addShapelessOreRecipe(String domain, String name, ItemStack output, Object... args) {
-		ShapelessOreRecipe newRecipe = new ShapelessOreRecipe(new ResourceLocation(domain, name), output, args);
-		newRecipe.setRegistryName(name);
-		MineralogyRecipeRegistry.put(name, newRecipe);
-		return newRecipe;
-	}
+	
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
@@ -444,166 +362,6 @@ public class Mineralogy {
 		return item;
 	}
 
-	/**
-	 * 
-	 * @param type
-	 *            Igneous, sedimentary, or metamorphic
-	 * @param name
-	 *            id-name of the block
-	 * @param hardness
-	 *            How hard (time duration) the block is to pick. For reference, dirt
-	 *            is 0.5, stone is 1.5, ores are 3, and obsidian is 50
-	 * @param blastResistance
-	 *            how resistant the block is to explosions. For reference, dirt is
-	 *            0, stone is 10, and blast-proof materials are 2000
-	 * @param toolHardnessLevel
-	 *            0 for wood tools, 1 for stone, 2 for iron, 3 for diamond
-	 */
-	protected static void addStoneType(RockType type, String oreDictName, double hardness, double blastResistance, int toolHardnessLevel) {
-		String name = oreDictName.toLowerCase();
-
-		final BlockItemPair rockPair;
-		final BlockItemPair rockStairPair;
-		final BlockItemPair rockSlabPair;
-		final BlockItemPair brickPair;
-		final BlockItemPair brickStairPair;
-		final BlockItemPair brickSlabPair;
-		final BlockItemPair smoothPair;
-		final BlockItemPair smoothStairPair;
-		final BlockItemPair smoothSlabPair;
-		final BlockItemPair smoothBrickPair;
-		final BlockItemPair smoothBrickStairPair;
-		final BlockItemPair smoothBrickSlabPair;
-
-		rockPair = registerBlock(new Rock(true, (float) hardness, (float) blastResistance, toolHardnessLevel, SoundType.STONE, mineralogyTab), name, name);
-
-		// TODO: see why this is necessary, the ore dictionary should make this unnecessary?
-		addShapedOreRecipe(name + "_STONE_AXE", new ItemStack(Items.STONE_AXE), "xx", "xy", " y", 'x', rockPair.PairedItem, 'y', Items.STICK);
-		addShapedOreRecipe(name + "_STONE_HOE", new ItemStack(Items.STONE_HOE), "xx", " y", " y", 'x', rockPair.PairedItem, 'y', Items.STICK);
-		addShapedOreRecipe(name + "_STONE_PICKAXE", new ItemStack(Items.STONE_PICKAXE), "xxx", " y ", " y ", 'x', rockPair.PairedItem, 'y', Items.STICK);
-		addShapedOreRecipe(name + "_STONE_SHOVEL", new ItemStack(Items.STONE_SHOVEL), "x", "y", "y", 'x', rockPair.PairedItem, 'y', Items.STICK);
-		addShapedOreRecipe(name + "_STONE_SWORD", new ItemStack(Items.STONE_SWORD), "x", "x", "y", 'x', rockPair.PairedItem, 'y', Items.STICK);
-		addShapedOreRecipe(name + "_FURNACE", new ItemStack(Blocks.FURNACE), "xxx", "x x", "xxx", 'x', rockPair.PairedItem);
-		addShapelessOreRecipe(name + "_" + COBBLESTONE.toUpperCase(), new ItemStack(Blocks.COBBLESTONE, 4),
-				Ingredient.fromStacks(new ItemStack(rockPair.PairedItem)),
-				Ingredient.fromStacks(new ItemStack(rockPair.PairedItem)),
-				Ingredient.fromStacks(new ItemStack(Blocks.GRAVEL)),
-				Ingredient.fromStacks(new ItemStack(Blocks.GRAVEL)));
-
-		BlocksToRegister.put(COBBLESTONE, rockPair.PairedBlock); // register so it can be used in cobblestone recipes
-
-		switch (type) {
-			case IGNEOUS:
-				igneousStones.add(rockPair.PairedBlock);
-				break;
-			case METAMORPHIC:
-				metamorphicStones.add(rockPair.PairedBlock);
-				break;
-			case SEDIMENTARY:
-				sedimentaryStones.add(rockPair.PairedBlock);
-				break;
-			case ANY:
-				sedimentaryStones.add(rockPair.PairedBlock);
-				metamorphicStones.add(rockPair.PairedBlock);
-				igneousStones.add(rockPair.PairedBlock);
-				break;
-		}
-
-		// TODO: See why this doesn't work (recipes still wont work with 'stone')
-		// OreDictionary.registerOre("stone", rock);
-		GameRegistry.addSmelting(rockPair.PairedBlock, new ItemStack(Blocks.STONE), 0.1F);
-
-		if (MineralogyConfig.generateRockStairs()) {
-			rockStairPair = registerBlock(new RockStairs(rockPair.PairedBlock, (float) hardness,
-					(float) blastResistance, toolHardnessLevel, SoundType.STONE, mineralogyTab), name + "_" + STAIRS,
-					STAIRS + oreDictName);
-			addShapedOreRecipe(name + "_" + STAIRS, new ItemStack(rockStairPair.PairedItem, 4), "x  ", "xx ", "xxx",
-					'x', rockPair.PairedItem);
-		}
-
-		if (MineralogyConfig.generateRockSlab()) {
-			rockSlabPair = registerBlock(
-					new RockSlab((float) hardness, (float) blastResistance, toolHardnessLevel, SoundType.STONE, mineralogyTab),
-					name + "_" + SLAB, SLAB + oreDictName);
-			addShapedOreRecipe(name + "_" + SLAB, new ItemStack(rockSlabPair.PairedItem, 6), "xxx", 'x',
-					rockPair.PairedItem);
-		}
-
-		if (MineralogyConfig.generateBrick()) {
-			brickPair = registerBlock(
-					new Rock(false, (float) hardness, (float) blastResistance, toolHardnessLevel, SoundType.STONE, mineralogyTab),
-					name + "_" + BRICK, BRICK + oreDictName);
-			addShapedOreRecipe(name + "_" + BRICK, new ItemStack(brickPair.PairedItem, 4), "xx", "xx", 'x',
-					rockPair.PairedItem);
-
-			if (MineralogyConfig.generateBrickStairs()) {
-				brickStairPair = registerBlock(
-						new RockStairs(rockPair.PairedBlock, (float) hardness, (float) blastResistance,
-								toolHardnessLevel, SoundType.STONE, mineralogyTab),
-						name + "_" + BRICK + "_" + STAIRS, STAIRS + oreDictName + "Brick");
-				addShapedOreRecipe(name + "_" + BRICK + "_" + STAIRS, new ItemStack(brickStairPair.PairedItem, 4),
-						"x  ", "xx ", "xxx", 'x', brickPair.PairedItem);
-			}
-
-			if (MineralogyConfig.generateBrickSlab()) {
-				brickSlabPair = registerBlock(
-						new RockSlab((float) hardness, (float) blastResistance, toolHardnessLevel, SoundType.STONE, mineralogyTab),
-						name + "_" + BRICK + "_" + SLAB, SLAB + oreDictName + "Brick");
-				addShapedOreRecipe(name + "_" + BRICK + "_" + SLAB, new ItemStack(brickSlabPair.PairedItem, 6), "xxx",
-						'x', brickPair.PairedItem);
-			}
-		}
-
-		if (MineralogyConfig.generateSmooth()) {
-			smoothPair = registerBlock(
-					new Rock(false, (float) hardness, (float) blastResistance, toolHardnessLevel, SoundType.STONE, mineralogyTab),
-					name + "_" + SMOOTH, SMOOTH + oreDictName);
-			addShapelessOreRecipe(name + "_" + SMOOTH, new ItemStack(smoothPair.PairedItem, 1),
-					Ingredient.fromStacks(new ItemStack(rockPair.PairedItem, 1)),
-					Ingredient.fromStacks(new ItemStack(Blocks.SAND, 1)));
-
-			if (MineralogyConfig.generateSmoothStairs()) {
-				smoothStairPair = registerBlock(
-						new RockStairs(rockPair.PairedBlock, (float) hardness, (float) blastResistance,
-								toolHardnessLevel, SoundType.STONE, mineralogyTab),
-						name + "_" + SMOOTH + "_" + STAIRS, STAIRS + oreDictName + "Smooth");
-				addShapedOreRecipe(name + "_" + SMOOTH + "_" + STAIRS, new ItemStack(smoothStairPair.PairedItem, 4),
-						"x  ", "xx ", "xxx", 'x', smoothPair.PairedItem);
-			}
-
-			if (MineralogyConfig.generateSmoothSlab()) {
-				smoothSlabPair = registerBlock(
-						new RockSlab((float) hardness, (float) blastResistance, toolHardnessLevel, SoundType.STONE, mineralogyTab),
-						name + "_" + SMOOTH + "_" + SLAB, SLAB + oreDictName + "Smooth");
-				addShapedOreRecipe(name + "_" + SMOOTH + "_" + SLAB, new ItemStack(smoothSlabPair.PairedItem, 6), "xxx",
-						'x', smoothPair.PairedItem);
-			}
-
-			if (MineralogyConfig.generateSmoothBrick()) {
-				smoothBrickPair = registerBlock(
-						new Rock(false, (float) hardness, (float) blastResistance, toolHardnessLevel, SoundType.STONE, mineralogyTab),
-						name + "_" + SMOOTH + "_" + BRICK, BRICK + oreDictName + "Smooth");
-				addShapedOreRecipe(name + "_" + SMOOTH + "_" + BRICK, new ItemStack(smoothBrickPair.PairedItem, 4),
-						"xx", "xx", 'x', smoothPair.PairedItem);
-
-				if (MineralogyConfig.generateSmoothBrickStairs()) {
-					smoothBrickStairPair = registerBlock(
-							new RockStairs(rockPair.PairedBlock, (float) hardness, (float) blastResistance,
-									toolHardnessLevel, SoundType.STONE, mineralogyTab),
-							name + "_" + SMOOTH + "_" + BRICK + "_" + STAIRS, STAIRS + oreDictName + "SmoothBrick");
-					addShapedOreRecipe(name + "_" + SMOOTH + "_" + BRICK + "_" + STAIRS,
-							new ItemStack(smoothBrickStairPair.PairedItem, 4), "x  ", "xx ", "xxx", 'x',
-							smoothBrickPair.PairedItem);
-				}
-
-				if (MineralogyConfig.generateSmoothBrickSlab()) {
-					smoothBrickSlabPair = registerBlock(
-							new RockSlab((float) hardness, (float) blastResistance, toolHardnessLevel, SoundType.STONE, mineralogyTab),
-							name + "_" + SMOOTH + "_" + BRICK + "_" + SLAB, SLAB + oreDictName + "SmoothBrick");
-					addShapedOreRecipe(name + "_" + SMOOTH + "_" + BRICK + "_" + SLAB,
-							new ItemStack(smoothBrickSlabPair.PairedItem, 6), "xxx", 'x', smoothBrickPair.PairedItem);
-				}
-			}
-		}
-	}
+	
+	
 }

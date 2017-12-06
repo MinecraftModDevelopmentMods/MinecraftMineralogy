@@ -10,9 +10,9 @@ import com.mcmoddev.mineralogy.data.MaterialType;
 import com.mcmoddev.mineralogy.data.MaterialTypes;
 import com.mcmoddev.mineralogy.util.BlockItemPair;
 import com.mcmoddev.mineralogy.util.RecipeHelper;
+import com.mcmoddev.mineralogy.util.RegistrationHelper;
 
 import net.minecraft.block.SoundType;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -80,7 +80,7 @@ public class Blocks {
 		final BlockItemPair smoothBrickStairPair;
 		final BlockItemPair smoothBrickSlabPair;
 
-		rockPair = registerBlock(new Rock(true, (float) materialType.hardness, (float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE, mineralogyTab), name, name);
+		rockPair = RegistrationHelper.registerBlock(new Rock(true, (float) materialType.hardness, (float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE, mineralogyTab), name, name);
 
 		// TODO: see why this is necessary, the ore dictionary should make this unnecessary?
 		 
@@ -117,96 +117,96 @@ public class Blocks {
 
 		// TODO: See why this doesn't work (recipes still wont work with 'stone')
 		// OreDictionary.registerOre("stone", rock);
-		GameRegistry.addSmelting(rockPair.PairedBlock, new ItemStack(Blocks.STONE), 0.1F);
+		GameRegistry.addSmelting(rockPair.PairedBlock, new ItemStack(net.minecraft.init.Blocks.STONE), 0.1F);
 
 		if (MineralogyConfig.generateRockStairs()) {
-			rockStairPair = registerBlock(new RockStairs(rockPair.PairedBlock, (float) materialType.hardness,
-					(float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE, mineralogyTab), name + "_" + STAIRS,
-					STAIRS + materialType.materialName);
-			addShapedOreRecipe(name + "_" + STAIRS, new ItemStack(rockStairPair.PairedItem, 4), "x  ", "xx ", "xxx",
+			rockStairPair = RegistrationHelper.registerBlock(new RockStairs(rockPair.PairedBlock, (float) materialType.hardness,
+					(float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE, mineralogyTab), name + "_" + Constants.STAIRS,
+					Constants.STAIRS + materialType.materialName);
+			RecipeHelper.addShapedOreRecipe(name + "_" + Constants.STAIRS, new ItemStack(rockStairPair.PairedItem, 4), "x  ", "xx ", "xxx",
 					'x', rockPair.PairedItem);
 		}
 
 		if (MineralogyConfig.generateRockSlab()) {
-			rockSlabPair = registerBlock(
+			rockSlabPair = RegistrationHelper.registerBlock(
 					new RockSlab((float) materialType.hardness, (float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE, mineralogyTab),
-					name + "_" + SLAB, SLAB + materialType.materialName);
-			addShapedOreRecipe(name + "_" + SLAB, new ItemStack(rockSlabPair.PairedItem, 6), "xxx", 'x',
+					name + "_" + Constants.SLAB, Constants.SLAB + materialType.materialName);
+			RecipeHelper.addShapedOreRecipe(name + "_" + Constants.SLAB, new ItemStack(rockSlabPair.PairedItem, 6), "xxx", 'x',
 					rockPair.PairedItem);
 		}
 
 		if (MineralogyConfig.generateBrick()) {
-			brickPair = registerBlock(
+			brickPair = RegistrationHelper.registerBlock(
 					new Rock(false, (float) materialType.hardness, (float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE, mineralogyTab),
-					name + "_" + BRICK, BRICK + materialType.materialName);
-			addShapedOreRecipe(name + "_" + BRICK, new ItemStack(brickPair.PairedItem, 4), "xx", "xx", 'x',
+					name + "_" + Constants.BRICK, Constants.BRICK + materialType.materialName);
+			RecipeHelper.addShapedOreRecipe(name + "_" + Constants.BRICK, new ItemStack(brickPair.PairedItem, 4), "xx", "xx", 'x',
 					rockPair.PairedItem);
 
 			if (MineralogyConfig.generateBrickStairs()) {
-				brickStairPair = registerBlock(
+				brickStairPair = RegistrationHelper.registerBlock(
 						new RockStairs(rockPair.PairedBlock, (float) materialType.hardness, (float) materialType.blastResistance,
 								materialType.toolHardnessLevel, SoundType.STONE, mineralogyTab),
-						name + "_" + BRICK + "_" + STAIRS, STAIRS + materialType.materialName + "Brick");
-				addShapedOreRecipe(name + "_" + BRICK + "_" + STAIRS, new ItemStack(brickStairPair.PairedItem, 4),
+						name + "_" + Constants.BRICK + "_" + Constants.STAIRS, Constants.STAIRS + materialType.materialName + "Brick");
+				RecipeHelper.addShapedOreRecipe(name + "_" + Constants.BRICK + "_" + Constants.STAIRS, new ItemStack(brickStairPair.PairedItem, 4),
 						"x  ", "xx ", "xxx", 'x', brickPair.PairedItem);
 			}
 
 			if (MineralogyConfig.generateBrickSlab()) {
-				brickSlabPair = registerBlock(
+				brickSlabPair = RegistrationHelper.registerBlock(
 						new RockSlab((float) materialType.hardness, (float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE, mineralogyTab),
-						name + "_" + BRICK + "_" + SLAB, SLAB + materialType.materialName + "Brick");
-				addShapedOreRecipe(name + "_" + BRICK + "_" + SLAB, new ItemStack(brickSlabPair.PairedItem, 6), "xxx",
+						name + "_" + Constants.BRICK + "_" + Constants.SLAB, Constants.SLAB + materialType.materialName + "Brick");
+				RecipeHelper.addShapedOreRecipe(name + "_" + Constants.BRICK + "_" + Constants.SLAB, new ItemStack(brickSlabPair.PairedItem, 6), "xxx",
 						'x', brickPair.PairedItem);
 			}
 		}
 
 		if (MineralogyConfig.generateSmooth()) {
-			smoothPair = registerBlock(
+			smoothPair = RegistrationHelper.registerBlock(
 					new Rock(false, (float) materialType.hardness, (float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE, mineralogyTab),
-					name + "_" + SMOOTH, SMOOTH + materialType.materialName);
-			addShapelessOreRecipe(name + "_" + SMOOTH, new ItemStack(smoothPair.PairedItem, 1),
+					name + "_" + Constants.SMOOTH, Constants.SMOOTH + materialType.materialName);
+			RecipeHelper.addShapelessOreRecipe(name + "_" + Constants.SMOOTH, new ItemStack(smoothPair.PairedItem, 1),
 					Ingredient.fromStacks(new ItemStack(rockPair.PairedItem, 1)),
-					Ingredient.fromStacks(new ItemStack(Blocks.SAND, 1)));
+					Ingredient.fromStacks(new ItemStack(net.minecraft.init.Blocks.SAND, 1)));
 
 			if (MineralogyConfig.generateSmoothStairs()) {
-				smoothStairPair = registerBlock(
+				smoothStairPair = RegistrationHelper.registerBlock(
 						new RockStairs(rockPair.PairedBlock, (float) materialType.hardness, (float) materialType.blastResistance,
 								materialType.toolHardnessLevel, SoundType.STONE, mineralogyTab),
-						name + "_" + SMOOTH + "_" + STAIRS, STAIRS + materialType.materialName + "Smooth");
-				addShapedOreRecipe(name + "_" + SMOOTH + "_" + STAIRS, new ItemStack(smoothStairPair.PairedItem, 4),
+						name + "_" + Constants.SMOOTH + "_" + Constants.STAIRS, Constants.STAIRS + materialType.materialName + "Smooth");
+				RecipeHelper.addShapedOreRecipe(name + "_" + Constants.SMOOTH + "_" + Constants.STAIRS, new ItemStack(smoothStairPair.PairedItem, 4),
 						"x  ", "xx ", "xxx", 'x', smoothPair.PairedItem);
 			}
 
 			if (MineralogyConfig.generateSmoothSlab()) {
-				smoothSlabPair = registerBlock(
+				smoothSlabPair = RegistrationHelper.registerBlock(
 						new RockSlab((float) materialType.hardness, (float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE, mineralogyTab),
-						name + "_" + SMOOTH + "_" + SLAB, SLAB + materialType.materialName + "Smooth");
-				addShapedOreRecipe(name + "_" + SMOOTH + "_" + SLAB, new ItemStack(smoothSlabPair.PairedItem, 6), "xxx",
+						name + "_" + Constants.SMOOTH + "_" + Constants.SLAB, Constants.SLAB + materialType.materialName + "Smooth");
+				RecipeHelper.addShapedOreRecipe(name + "_" + Constants.SMOOTH + "_" + Constants.SLAB, new ItemStack(smoothSlabPair.PairedItem, 6), "xxx",
 						'x', smoothPair.PairedItem);
 			}
 
 			if (MineralogyConfig.generateSmoothBrick()) {
-				smoothBrickPair = registerBlock(
+				smoothBrickPair = RegistrationHelper.registerBlock(
 						new Rock(false, (float) materialType.hardness, (float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE, mineralogyTab),
-						name + "_" + SMOOTH + "_" + BRICK, BRICK + materialType.materialName + "Smooth");
-				addShapedOreRecipe(name + "_" + SMOOTH + "_" + BRICK, new ItemStack(smoothBrickPair.PairedItem, 4),
+						name + "_" + Constants.SMOOTH + "_" + Constants.BRICK, Constants.BRICK + materialType.materialName + "Smooth");
+				RecipeHelper.addShapedOreRecipe(name + "_" + Constants.SMOOTH + "_" + Constants.BRICK, new ItemStack(smoothBrickPair.PairedItem, 4),
 						"xx", "xx", 'x', smoothPair.PairedItem);
 
 				if (MineralogyConfig.generateSmoothBrickStairs()) {
-					smoothBrickStairPair = registerBlock(
+					smoothBrickStairPair = RegistrationHelper.registerBlock(
 							new RockStairs(rockPair.PairedBlock, (float) materialType.hardness, (float) materialType.blastResistance,
 									materialType.toolHardnessLevel, SoundType.STONE, mineralogyTab),
-							name + "_" + SMOOTH + "_" + BRICK + "_" + STAIRS, STAIRS + materialType.materialName + "SmoothBrick");
-					addShapedOreRecipe(name + "_" + SMOOTH + "_" + BRICK + "_" + STAIRS,
+							name + "_" + Constants.SMOOTH + "_" + Constants.BRICK + "_" + Constants.STAIRS, Constants.STAIRS + materialType.materialName + "SmoothBrick");
+					RecipeHelper.addShapedOreRecipe(name + "_" + Constants.SMOOTH + "_" + Constants.BRICK + "_" + Constants.STAIRS,
 							new ItemStack(smoothBrickStairPair.PairedItem, 4), "x  ", "xx ", "xxx", 'x',
 							smoothBrickPair.PairedItem);
 				}
 
 				if (MineralogyConfig.generateSmoothBrickSlab()) {
-					smoothBrickSlabPair = registerBlock(
+					smoothBrickSlabPair = RegistrationHelper.registerBlock(
 							new RockSlab((float) materialType.hardness, (float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE, mineralogyTab),
-							name + "_" + SMOOTH + "_" + BRICK + "_" + SLAB, SLAB + materialType.materialName + "SmoothBrick");
-					addShapedOreRecipe(name + "_" + SMOOTH + "_" + BRICK + "_" + SLAB,
+							name + "_" + Constants.SMOOTH + "_" + Constants.BRICK + "_" + Constants.SLAB, Constants.SLAB + materialType.materialName + "SmoothBrick");
+					RecipeHelper.addShapedOreRecipe(name + "_" + Constants.SMOOTH + "_" + Constants.BRICK + "_" + Constants.SLAB,
 							new ItemStack(smoothBrickSlabPair.PairedItem, 6), "xxx", 'x', smoothBrickPair.PairedItem);
 				}
 			}

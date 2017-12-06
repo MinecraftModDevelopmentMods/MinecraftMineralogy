@@ -5,6 +5,7 @@ import java.util.Random;
 
 import com.mcmoddev.mineralogy.Mineralogy;
 import com.mcmoddev.mineralogy.MineralogyConfig;
+import com.mcmoddev.mineralogy.init.MineralogyRegistry;
 import com.mcmoddev.mineralogy.worldgen.math.PerlinNoise2D;
 
 import net.minecraft.block.Block;
@@ -75,13 +76,13 @@ public class Geology {
 		int rv = (int) rockNoiseLayer.valueAt(x, z) + y;
 		if (geome < -64) {
 			// RockType.IGNEOUS;
-			return pickBlockFromList(rv, Mineralogy.igneousStones);
+			return pickBlockFromList(rv, MineralogyRegistry.igneousStones);
 		} else if (geome < 64) {
 			// RockType.METAMORPHIC;
-			return pickBlockFromList(rv, Mineralogy.metamorphicStones);
+			return pickBlockFromList(rv, MineralogyRegistry.metamorphicStones);
 		} else {
 			// RockType.SEDIMENTARY;
-			return pickBlockFromList(rv, Mineralogy.sedimentaryStones);
+			return pickBlockFromList(rv, MineralogyRegistry.sedimentaryStones);
 		}
 	}
 
@@ -111,15 +112,15 @@ public class Geology {
 						if (geome < -32) {
 							// RockType.IGNEOUS;
 							chunk.setBlockState(coord,
-									pickBlockFromList(baseRockVal + y, Mineralogy.igneousStones).getDefaultState());
+									pickBlockFromList(baseRockVal + y, MineralogyRegistry.igneousStones).getDefaultState());
 						} else if (geome < 32) {
 							// RockType.METAMORPHIC;
 							chunk.setBlockState(coord,
-									pickBlockFromList(baseRockVal + y, Mineralogy.metamorphicStones).getDefaultState());
+									pickBlockFromList(baseRockVal + y, MineralogyRegistry.metamorphicStones).getDefaultState());
 						} else {
 							// RockType.SEDIMENTARY;
 							chunk.setBlockState(coord,
-									pickBlockFromList(baseRockVal + y, Mineralogy.sedimentaryStones).getDefaultState());
+									pickBlockFromList(baseRockVal + y, MineralogyRegistry.sedimentaryStones).getDefaultState());
 						}
 					}
 				}
@@ -136,13 +137,13 @@ public class Geology {
 			double geome = gbase + y;
 			if (geome < -32) {
 				// RockType.IGNEOUS;
-				col[y] = pickBlockFromList(baseRockVal + y, Mineralogy.igneousStones);
+				col[y] = pickBlockFromList(baseRockVal + y, MineralogyRegistry.igneousStones);
 			} else if (geome < 32) {
 				// RockType.METAMORPHIC;
-				col[y] = pickBlockFromList(baseRockVal + y + 3, Mineralogy.metamorphicStones);
+				col[y] = pickBlockFromList(baseRockVal + y + 3, MineralogyRegistry.metamorphicStones);
 			} else {
 				// RockType.SEDIMENTARY;
-				col[y] = pickBlockFromList(baseRockVal + y + 5, Mineralogy.sedimentaryStones);
+				col[y] = pickBlockFromList(baseRockVal + y + 5, MineralogyRegistry.sedimentaryStones);
 			}
 		}
 		return col;

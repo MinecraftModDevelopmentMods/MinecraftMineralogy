@@ -18,9 +18,12 @@ import com.mcmoddev.mineralogy.blocks.Rock;
 import com.mcmoddev.mineralogy.blocks.RockSlab;
 import com.mcmoddev.mineralogy.blocks.RockStairs;
 import com.mcmoddev.mineralogy.data.MaterialType;
+import com.mcmoddev.mineralogy.init.MineralogyRegistry;
 import com.mcmoddev.mineralogy.items.MineralFertilizer;
 import com.mcmoddev.mineralogy.patching.PatchHandler;
 import com.mcmoddev.mineralogy.util.BlockItemPair;
+import com.mcmoddev.mineralogy.util.RecipeHelper;
+import com.mcmoddev.mineralogy.util.RegistrationHelper;
 import com.mcmoddev.mineralogy.worldgen.OreSpawner;
 import com.mcmoddev.mineralogy.worldgen.StoneReplacer;
 
@@ -83,15 +86,9 @@ public class Mineralogy {
 	protected static BlockItemPair blockGypsum;
 	public static BlockItemPair blockPumice;
 
-	public static Item gypsumPowder;
-	protected static Item sulphurPowder;
-	protected static Item phosphorousPowder;
-	protected static Item nitratePowder; // aka "saltpeter"
-	protected static Item mineralFertilizer;
+	
 
 	protected static BlockItemPair[] drywalls = new BlockItemPair[16];
-
-
 
 	@Mod.EventHandler
 	public void onFingerprintViolation(FMLFingerprintViolationEvent event) {
@@ -108,70 +105,40 @@ public class Mineralogy {
 
 		// Blocks, Items, World-gen
 
-		// Rocks
-		addStoneType(RockType.IGNEOUS, "Andesite", 1.5, 10, 0);
-		addStoneType(RockType.IGNEOUS, "Basalt", 5, 100, 2);
-		addStoneType(RockType.IGNEOUS, "Diorite", 1.5, 10, 0);
-		addStoneType(RockType.IGNEOUS, "Granite", 3, 15, 1);
-		addStoneType(RockType.IGNEOUS, "Rhyolite", 1.5, 10, 0);
-		addStoneType(RockType.IGNEOUS, "Pegmatite", 1.5, 10, 0);
-
-		addStoneType(RockType.SEDIMENTARY, "Shale", 1.5, 10, 0);
-		addStoneType(RockType.SEDIMENTARY, "Conglomerate", 1.5, 10, 0);
-		addStoneType(RockType.SEDIMENTARY, "Dolomite", 3, 15, 1);
-		addStoneType(RockType.SEDIMENTARY, "Limestone", 1.5, 10, 0);
-
-		addStoneType(RockType.METAMORPHIC, "Slate", 1.5, 10, 0);
-		addStoneType(RockType.METAMORPHIC, "Schist", 3, 15, 1);
-		addStoneType(RockType.METAMORPHIC, "Gneiss", 3, 15, 1);
-		addStoneType(RockType.SEDIMENTARY, "Marble", 1.5, 10, 0);
-		addStoneType(RockType.METAMORPHIC, "Phyllite", 1.5, 10, 0);
-		addStoneType(RockType.METAMORPHIC, "Amphibolite", 3, 15, 1);
-
-		// add items
-		gypsumPowder = addDust(GYPSUM);
-		sulphurPowder = addDust(SULFUR);
-		phosphorousPowder = addDust(PHOSPHOROUS);
-		nitratePowder = addDust(NITRATE);
-
-		mineralFertilizer = registerItem(new MineralFertilizer(), "mineral_fertilizer")
-				.setUnlocalizedName(Mineralogy.MODID + "." + "mineral_fertilizer");
-
-		ItemsToRegister.put(FERTILIZER, mineralFertilizer);
 
 		// other blocks
-		sedimentaryStones.add(Blocks.SANDSTONE);
+		MineralogyRegistry.sedimentaryStones.add(Blocks.SANDSTONE);
 
-		blockChert = registerBlock(new Chert(mineralogyTab), CHERT, "blockChert");
-		sedimentaryStones.add(blockChert.PairedBlock);
+		blockChert = RegistrationHelper.registerBlock(new Chert(mineralogyTab), Constants.CHERT, "blockChert");
+		MineralogyRegistry.sedimentaryStones.add(blockChert.PairedBlock);
 
-		blockGypsum = registerBlock(new Gypsum(mineralogyTab), GYPSUM.toLowerCase(), "blockGypsum");
-		sedimentaryStones.add(blockGypsum.PairedBlock);
+		blockGypsum = RegistrationHelper.registerBlock(new Gypsum(mineralogyTab), Constants.GYPSUM.toLowerCase(), "blockGypsum");
+		MineralogyRegistry.sedimentaryStones.add(blockGypsum.PairedBlock);
 
-		addShapedOreRecipe(GYPSUM.toLowerCase(), new ItemStack(blockGypsum.PairedItem, 1), "xxx", "xxx", "xxx", 'x',
+		RecipeHelper.addShapedOreRecipe(Constants.GYPSUM.toLowerCase(), new ItemStack(blockGypsum.PairedItem, 1), "xxx", "xxx", "xxx", 'x',
 				gypsumPowder);
-		addShapelessOreRecipe(GYPSUM.toLowerCase() + "_dust", new ItemStack(gypsumPowder, 9),
+		RecipeHelper.addShapelessOreRecipe(Constants.GYPSUM.toLowerCase() + "_dust", new ItemStack(gypsumPowder, 9),
 				Ingredient.fromStacks(new ItemStack(blockGypsum.PairedItem)));
 
-		blockPumice = registerBlock(new Rock(false, 0.5F, 5F, 0, SoundType.GROUND, mineralogyTab), PUMICE, "blockPumice");
-		igneousStones.add(blockPumice.PairedBlock);
+		blockPumice = RegistrationHelper.registerBlock(new Rock(false, 0.5F, 5F, 0, SoundType.GROUND, mineralogyTab), Constants.PUMICE, "blockPumice");
+		MineralogyRegistry.igneousStones.add(blockPumice.PairedBlock);
 
 		final String ORES = "ores";
 
 		// register ores
-		addOre(SULFUR, sulphurPowder, 1, 4, 0,
+		addOre(Constants.SULFUR, sulphurPowder, 1, 4, 0,
 				MineralogyConfig.config().getInt("sulphur_ore.minY", ORES, 16, 1, 255, "Minimum ore spawn height"),
 				MineralogyConfig.config().getInt("sulphur_ore.maxY", ORES, 64, 1, 255, "Maximum ore spawn height"),
 				MineralogyConfig.config().getFloat("sulphur_ore.frequency", ORES, 1, 0, 63, "Number of ore deposits per chunk"),
 				MineralogyConfig.config().getInt("sulphur_ore.quantity", ORES, 16, 0, 63, "Size of ore deposit"));
 
-		addOre(PHOSPHOROUS, phosphorousPowder, 1, 4, 0,
+		addOre(Constants.PHOSPHOROUS, phosphorousPowder, 1, 4, 0,
 				MineralogyConfig.config().getInt("phosphorous_ore.minY", ORES, 16, 1, 255, "Minimum ore spawn height"),
 				MineralogyConfig.config().getInt("phosphorous_ore.maxY", ORES, 64, 1, 255, "Maximum ore spawn height"),
 				MineralogyConfig.config().getFloat("phosphorous_ore.frequency", ORES, 1, 0, 63, "Number of ore deposits per chunk"),
 				MineralogyConfig.config().getInt("phosphorous_ore.quantity", ORES, 16, 0, 63, "Size of ore deposit"));
 
-		addOre(NITRATE, nitratePowder, 1, 4, 0,
+		addOre(Constants.NITRATE, nitratePowder, 1, 4, 0,
 				MineralogyConfig.config().getInt("nitrate_ore.minY", ORES, 16, 1, 255, "Minimum ore spawn height"),
 				MineralogyConfig.config().getInt("nitrate_ore.maxY", ORES, 64, 1, 255, "Maximum ore spawn height"),
 				MineralogyConfig.config().getFloat("nitrate_ore.frequency", ORES, 1, 0, 63, "Number of ore deposits per chunk"),
@@ -180,20 +147,20 @@ public class Mineralogy {
 		MineralogyConfig.config().save();
 
 		for (int i = 0; i < 16; i++) {
-			drywalls[i] = registerBlock(new DryWall(colorSuffixes[i]), DRYWALL + "_" + colorSuffixes[i],
-					DRYWALL + colorSuffixesTwo[i]);
+			drywalls[i] = RegistrationHelper.registerBlock(new DryWall(Constants.colorSuffixes[i]), Constants.DRYWALL + "_" + Constants.colorSuffixes[i],
+					Constants.DRYWALL + Constants.colorSuffixesTwo[i]);
 		}
 
-		addShapedOreRecipe(DRYWALL, new ItemStack(drywalls[15].PairedItem, 3), "pgp", "pgp", "pgp", 'p', Items.PAPER,
+		RecipeHelper.addShapedOreRecipe(Constants.DRYWALL, new ItemStack(drywalls[15].PairedItem, 3), "pgp", "pgp", "pgp", 'p', Items.PAPER,
 				'g', gypsumPowder);
 
 		for (int i = 0; i < 16; i++) {
-			addShapelessOreRecipe(DRYWALL + "_" + colorSuffixes[i], new ItemStack(drywalls[i].PairedItem, 1),
+			RecipeHelper.addShapelessOreRecipe(Constants.DRYWALL + "_" + Constants.colorSuffixes[i], new ItemStack(drywalls[i].PairedItem, 1),
 					Ingredient.fromStacks(new ItemStack(drywalls[15].PairedItem)),
 					Ingredient.fromStacks(new ItemStack(Items.DYE, 1, i)));
 		}
 
-		addShapelessOreRecipe(GUNPOWDER + "_FROM_COAL", new ItemStack(Items.GUNPOWDER, 4),
+		RecipeHelper.addShapelessOreRecipe(Constants.GUNPOWDER + "_FROM_COAL", new ItemStack(Items.GUNPOWDER, 4),
 				Ingredient.fromStacks(new ItemStack(Items.COAL)), Ingredient.fromStacks(new ItemStack(nitratePowder)),
 				Ingredient.fromStacks(new ItemStack(sulphurPowder)));
 
@@ -203,20 +170,18 @@ public class Mineralogy {
 		// ItemStack(carbonDust)), Ingredient.fromStacks(new ItemStack(nitratePowder)),
 		// Ingredient.fromStacks(new ItemStack(sulphurPowder)));
 
-		addShapelessOreRecipe(GUNPOWDER + "_FROM_SUGAR", new ItemStack(Items.GUNPOWDER, 4),
+		RecipeHelper.addShapelessOreRecipe(Constants.GUNPOWDER + "_FROM_SUGAR", new ItemStack(Items.GUNPOWDER, 4),
 				Ingredient.fromStacks(new ItemStack(Items.SUGAR)), Ingredient.fromStacks(new ItemStack(nitratePowder)),
 				Ingredient.fromStacks(new ItemStack(sulphurPowder)));
-		addShapelessOreRecipe("mineralFertilizer", new ItemStack(mineralFertilizer, 1),
+		RecipeHelper.addShapelessOreRecipe("mineralFertilizer", new ItemStack(mineralFertilizer, 1),
 				Ingredient.fromStacks(new ItemStack(nitratePowder)),
 				Ingredient.fromStacks(new ItemStack(phosphorousPowder)));
 
-		addShapelessOreRecipe(COBBLESTONE.toUpperCase(), new ItemStack(Blocks.COBBLESTONE, 4),
+		RecipeHelper.addShapelessOreRecipe(Constants.COBBLESTONE.toUpperCase(), new ItemStack(Blocks.COBBLESTONE, 4),
 				Ingredient.fromStacks(new ItemStack(Blocks.STONE)), Ingredient.fromStacks(new ItemStack(Blocks.STONE)),
 				Ingredient.fromStacks(new ItemStack(Blocks.GRAVEL)),
 				Ingredient.fromStacks(new ItemStack(Blocks.GRAVEL)));
 	}
-
-	
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
@@ -235,8 +200,8 @@ public class Mineralogy {
 
 	private void registerItemRenders() {
 
-		for (String name : MineralogyItemRegistry.keySet()) {
-			Item i = Mineralogy.MineralogyItemRegistry.get(name);
+		for (String name : MineralogyRegistry.MineralogyItemRegistry.keySet()) {
+			Item i = MineralogyRegistry.MineralogyItemRegistry.get(name);
 			Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(i, 0,
 					new ModelResourceLocation(Mineralogy.MODID + ":" + name, "inventory"));
 		}
@@ -251,37 +216,37 @@ public class Mineralogy {
 			Block b = getBlock(id);
 			if (b == null)
 				continue;
-			igneousStones.add(b);
+			MineralogyRegistry.igneousStones.add(b);
 		}
 		for (String id : MineralogyConfig.metamorphicWhitelist()) {
 			Block b = getBlock(id);
 			if (b == null)
 				continue;
-			metamorphicStones.add(b);
+			MineralogyRegistry.metamorphicStones.add(b);
 		}
 		for (String id : MineralogyConfig.sedimentaryWhitelist()) {
 			Block b = getBlock(id);
 			if (b == null)
 				continue;
-			sedimentaryStones.add(b);
+			MineralogyRegistry.sedimentaryStones.add(b);
 		}
 		for (String id : MineralogyConfig.igneousBlacklist()) {
 			Block b = getBlock(id);
 			if (b == null)
 				continue;
-			igneousStones.remove(b);
+			MineralogyRegistry.igneousStones.remove(b);
 		}
 		for (String id : MineralogyConfig.metamorphicBlacklist()) {
 			Block b = getBlock(id);
 			if (b == null)
 				continue;
-			metamorphicStones.remove(b);
+			MineralogyRegistry.metamorphicStones.remove(b);
 		}
 		for (String id : MineralogyConfig.sedimentaryBlacklist()) {
 			Block b = getBlock(id);
 			if (b == null)
 				continue;
-			sedimentaryStones.remove(b);
+			MineralogyRegistry.sedimentaryStones.remove(b);
 		}
 	}
 
@@ -291,44 +256,26 @@ public class Mineralogy {
 
 	private static int oreWeightCount = 20;
 
-	private static Item addDust(String oreDictionaryName) {
-		String dustName = oreDictionaryName.toLowerCase() + "_" + DUST;
-
-		Item item = registerItem(new Item(), dustName).setUnlocalizedName(Mineralogy.MODID + "." + dustName)
-				.setCreativeTab(mineralogyTab);
-
-		ItemsToRegister.put(DUST + oreDictionaryName, item);
-
-		NonNullList<ItemStack> blocks = OreDictionary.getOres(BLOCK.toLowerCase() + oreDictionaryName);
-
-		if (!blocks.isEmpty()) {
-			addShapelessOreRecipe(BLOCK.toLowerCase() + oreDictionaryName, new ItemStack(item, 9),
-					Ingredient.fromStacks(blocks.get(0)));
-		}
-
-		return item;
-	}
-
 	private static Block addBlock(String oreDictionaryName, int pickLevel, Item dust) {
 		String name = oreDictionaryName.toLowerCase() + "_block";
 
-		BlockItemPair pair = registerBlock(new Rock(false, (float) 1.5, (float) 10, 0, SoundType.STONE, mineralogyTab), name,
-				BLOCK.toLowerCase() + oreDictionaryName);
+		BlockItemPair pair = RegistrationHelper.registerBlock(new Rock(false, (float) 1.5, (float) 10, 0, SoundType.STONE, mineralogyTab), name,
+				Constants.BLOCK.toLowerCase() + oreDictionaryName);
 
-		addShapedOreRecipe(name, new ItemStack(pair.PairedItem), "xxx", "xxx", "xxx", 'x', dust);
-		addShapelessOreRecipe(oreDictionaryName.toLowerCase() + "_dust", new ItemStack(dust, 9),
+		RecipeHelper.addShapedOreRecipe(name, new ItemStack(pair.PairedItem), "xxx", "xxx", "xxx", 'x', dust);
+		RecipeHelper.addShapelessOreRecipe(oreDictionaryName.toLowerCase() + "_dust", new ItemStack(dust, 9),
 				Ingredient.fromStacks(new ItemStack(pair.PairedItem)));
 
 		return pair.PairedBlock;
 	}
 
 	private static Block addOre(String oreDictionaryName, Item oreDropItem, int numMin, int numMax, int pickLevel, int minY, int maxY, float spawnFrequency, int spawnQuantity) {
-		String oreName = oreDictionaryName.toLowerCase() + "_" + ORE;
+		String oreName = oreDictionaryName.toLowerCase() + "_" + Constants.ORE;
 
 		Block oreBlock = new Ore(oreName, oreDropItem, numMin, numMax, pickLevel, mineralogyTab)
 				.setUnlocalizedName(Mineralogy.MODID + "." + oreName);
 
-		registerBlock(oreBlock, oreName, ORE + oreDictionaryName);
+		RegistrationHelper.registerBlock(oreBlock, oreName, Constants.ORE + oreDictionaryName);
 
 		GameRegistry.registerWorldGenerator(new OreSpawner(oreBlock, minY, maxY, spawnFrequency, spawnQuantity,
 				(oreWeightCount * 25214903917L) + 11L), oreWeightCount++);
@@ -337,31 +284,4 @@ public class Mineralogy {
 
 		return oreBlock;
 	}
-
-	protected static BlockItemPair registerBlock(Block block, String name, String oreDictionaryName) {
-		block.setUnlocalizedName(MODID + "." + name);
-		block.setRegistryName(name);
-
-		Item item = registerItem(new ItemBlock(block), name);
-		
-		BlockItemPair pair = new BlockItemPair(block, item);
-
-		BlocksToRegister.put(oreDictionaryName, block);
-		MineralogyBlockRegistry.put(name, pair);
-
-		return pair;
-	}
-
-	protected static Item registerItem(Item item, String name) {
-		String itemName = MODID + "." + name;
-
-		item.setUnlocalizedName(itemName);
-		item.setRegistryName(name);
-		
-		MineralogyItemRegistry.put(name, item);
-		return item;
-	}
-
-	
-	
 }

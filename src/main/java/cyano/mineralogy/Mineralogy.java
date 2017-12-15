@@ -2,6 +2,9 @@ package cyano.mineralogy;
 
 // DON'T FORGET TO UPDATE mcmod.info FILE!!!
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import cyano.mineralogy.blocks.*;
 import cyano.mineralogy.items.*;
 import cyano.mineralogy.patching.PatchHandler;
@@ -129,6 +132,7 @@ public class Mineralogy {
 	private static final String dustNitrate = "dustNitrate";
 	private static final String oreNitrate = "oreNitrate";
 
+	public static final Logger logger = LogManager.getFormatterLogger(Mineralogy.MODID);
 
 	@EventHandler
     public void preInit(FMLPreInitializationEvent event) {

@@ -62,6 +62,8 @@ minecraft {
     runDir = "run"
     mappings = "stable_29"
 //    coreMod = ""
+
+	replace '@FINGERPRINT@', project.findProperty('signSHA1')
 }
 
 repositories {

@@ -26,6 +26,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.event.FMLFingerprintViolationEvent; 
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -37,7 +38,8 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import java.util.*;
 
 @Mod(modid = Mineralogy.MODID, name=Mineralogy.NAME, version = Mineralogy.VERSION,
-		acceptedMinecraftVersions = "[1.11.2,)")
+		acceptedMinecraftVersions = "[1.11.2,)",
+		certificateFingerprint = "@FINGERPRINT@")
 public class Mineralogy {
 
 	public static final String MODID = "mineralogy";
@@ -133,6 +135,11 @@ public class Mineralogy {
 	private static final String oreNitrate = "oreNitrate";
 
 	public static final Logger logger = LogManager.getFormatterLogger(Mineralogy.MODID);
+
+	@EventHandler
+	public void onFingerprintViolation(FMLFingerprintViolationEvent event) {
+		logger.warn("Invalid fingerprint detected!");
+	}
 
 	@EventHandler
     public void preInit(FMLPreInitializationEvent event) {

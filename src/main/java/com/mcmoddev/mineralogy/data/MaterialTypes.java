@@ -1,11 +1,7 @@
 package com.mcmoddev.mineralogy.data;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import com.mcmoddev.mineralogy.RockType;
-
-import scala.actors.threadpool.Arrays;
 
 public class MaterialTypes {
 	public static final MaterialType ANDESITE = new MaterialType("Andesite", RockType.IGNEOUS, 1.5, 10, 0);

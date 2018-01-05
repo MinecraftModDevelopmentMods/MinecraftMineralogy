@@ -2,17 +2,18 @@ package com.mcmoddev.mineralogy.init;
 
 import com.mcmoddev.mineralogy.Constants;
 import com.mcmoddev.mineralogy.MineralogyConfig;
-import com.mcmoddev.mineralogy.MineralogyCreativeTab;
 import com.mcmoddev.mineralogy.blocks.Rock;
 import com.mcmoddev.mineralogy.blocks.RockSlab;
 import com.mcmoddev.mineralogy.blocks.RockStairs;
 import com.mcmoddev.mineralogy.data.MaterialType;
 import com.mcmoddev.mineralogy.data.MaterialTypes;
+import com.mcmoddev.mineralogy.ioc.MinIoC;
 import com.mcmoddev.mineralogy.util.BlockItemPair;
 import com.mcmoddev.mineralogy.util.RecipeHelper;
 import com.mcmoddev.mineralogy.util.RegistrationHelper;
 
 import net.minecraft.block.SoundType;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -21,7 +22,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class Blocks {
 
 	private static boolean initDone = false;
-	private static MineralogyCreativeTab mineralogyTab = MineralogyCreativeTab.instance("tabMineralogy");
+	private static CreativeTabs mineralogyTab;
 	
 	protected Blocks() {
 		throw new IllegalAccessError("Not a instantiable class");
@@ -35,6 +36,7 @@ public class Blocks {
 			return;
 		}
 		
+		mineralogyTab = MinIoC.getInstance().resolve(CreativeTabs.class);
 		MaterialTypes.toArray().forEach(material -> addStoneType(material));
 		
 //		com.mcmoddev.basemetals.util.Config.init();

@@ -3,7 +3,6 @@ package com.mcmoddev.mineralogy.worldgen;
 import java.util.List;
 import java.util.Random;
 
-import com.mcmoddev.mineralogy.Mineralogy;
 import com.mcmoddev.mineralogy.MineralogyConfig;
 import com.mcmoddev.mineralogy.init.MineralogyRegistry;
 import com.mcmoddev.mineralogy.worldgen.math.PerlinNoise2D;

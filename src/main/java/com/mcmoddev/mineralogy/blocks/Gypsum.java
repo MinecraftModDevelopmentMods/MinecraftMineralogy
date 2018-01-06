@@ -3,15 +3,16 @@ package com.mcmoddev.mineralogy.blocks;
 import java.util.Random;
 
 import com.mcmoddev.mineralogy.Mineralogy;
+import com.mcmoddev.mineralogy.ioc.MinIoC;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.oredict.OreDictionary;
 
 public class Gypsum extends Rock {
 
@@ -26,11 +27,9 @@ public class Gypsum extends Rock {
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state,
 			int fortune) {
-		NonNullList<ItemStack> dustGypsums = OreDictionary.getOres("dustGypsum");
-
-		if (!dustGypsums.isEmpty()) 			
-			drops.add(new ItemStack(dustGypsums.get(0).getItem(), prng.nextInt(3) + 1));
-		
+		Item dustGypsum = MinIoC.getInstance().resolve(Item.class, "dustGypsum", Mineralogy.MODID);
+	
+		drops.add(new ItemStack(dustGypsum, prng.nextInt(3) + 1));
 		
 		super.getDrops(drops, world, pos, state, fortune);
 	}

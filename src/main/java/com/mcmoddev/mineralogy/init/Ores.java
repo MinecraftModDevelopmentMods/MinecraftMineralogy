@@ -18,7 +18,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.OreDictionary;
 
 public class Ores {
 	private static boolean initDone = false;
@@ -34,6 +33,7 @@ public class Ores {
 		if (initDone) {
 			return;
 		}
+		
 		MinIoC IoC = MinIoC.getInstance();
 		
 		mineralogyTab = IoC.resolve(CreativeTabs.class);
@@ -64,6 +64,8 @@ public class Ores {
 				MineralogyConfig.config().getInt("nitrate_ore.quantity", ORES, 16, 0, 63, "Size of ore deposit"));
 
 		MineralogyConfig.config().save();
+		
+		initDone = true;
 	}
 	
 	private static Block addOre(String oreDictionaryName, Item oreDropItem, int numMin, int numMax, int pickLevel, int minY, int maxY, float spawnFrequency, int spawnQuantity) {
@@ -90,7 +92,7 @@ public class Ores {
 
 		RecipeHelper.addShapedOreRecipe(name, new ItemStack(pair.PairedItem), "xxx", "xxx", "xxx", 'x', dust);
 		RecipeHelper.addShapelessOreRecipe(oreDictionaryName.toLowerCase() + "_dust", new ItemStack(dust, 9),
-				Ingredient.fromStacks(new ItemStack(pair.PairedItem)));
+				"dustNitrate");
 
 		return pair.PairedBlock;
 	}

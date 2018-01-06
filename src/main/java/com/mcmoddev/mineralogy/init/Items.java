@@ -41,6 +41,7 @@ public class Items {
 		mineralogyTab = MinIoC.getInstance().resolve(CreativeTabs.class);
 		
 		gypsumPowder = addDust(Constants.GYPSUM);
+		IoC.register(Item.class, gypsumPowder, "dustGypsum", Mineralogy.MODID);
 		
 		RecipeHelper.addShapelessOreRecipe(Constants.GYPSUM.toLowerCase() + "_dust", new ItemStack(gypsumPowder, 9), "blockGypsum");
 		
@@ -53,6 +54,8 @@ public class Items {
 		
 		MineralogyRegistry.ItemsToRegister.put(Constants.FERTILIZER, mineralFertilizer);
 		IoC.register(Item.class, mineralFertilizer, "fertilizer", Mineralogy.MODID);
+		
+		initDone = true;
 	}
 	
 	private static Item addDust(String oreDictionaryName) {
@@ -64,12 +67,8 @@ public class Items {
 		MineralogyRegistry.ItemsToRegister.put(Constants.DUST + oreDictionaryName, item);
 		MinIoC.getInstance().register(Item.class, item, Constants.DUST + oreDictionaryName, Mineralogy.MODID);
 		
-		NonNullList<ItemStack> blocks = OreDictionary.getOres(Constants.BLOCK.toLowerCase() + oreDictionaryName);
-
-		if (!blocks.isEmpty()) {
-			RecipeHelper.addShapelessOreRecipe(Constants.BLOCK.toLowerCase() + oreDictionaryName, new ItemStack(item, 9),
-					Ingredient.fromStacks(blocks.get(0)));
-		}
+		RecipeHelper.addShapelessOreRecipe(Constants.BLOCK.toLowerCase() + oreDictionaryName, new ItemStack(item, 9),
+				Constants.BLOCK.toLowerCase() + oreDictionaryName);
 
 		return item;
 	}

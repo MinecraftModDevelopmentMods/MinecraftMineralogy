@@ -7,28 +7,15 @@ package com.mcmoddev.mineralogy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.mcmoddev.mineralogy.blocks.Chert;
-import com.mcmoddev.mineralogy.blocks.DryWall;
-import com.mcmoddev.mineralogy.blocks.Gypsum;
-import com.mcmoddev.mineralogy.blocks.Rock;
 import com.mcmoddev.mineralogy.init.MineralogyRegistry;
-import com.mcmoddev.mineralogy.ioc.MinIoC;
-import com.mcmoddev.mineralogy.patching.PatchHandler;
-import com.mcmoddev.mineralogy.util.BlockItemPair;
-import com.mcmoddev.mineralogy.util.RecipeHelper;
-import com.mcmoddev.mineralogy.util.RegistrationHelper;
 import com.mcmoddev.mineralogy.worldgen.StoneReplacer;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -65,14 +52,6 @@ public class Mineralogy {
 
 	public static final Logger logger = LogManager.getFormatterLogger(Mineralogy.MODID);
 
-	protected static BlockItemPair blockChert;
-	protected static BlockItemPair blockGypsum;
-	public static BlockItemPair blockPumice;
-
-	private static CreativeTabs mineralogyTab;
-
-	protected static BlockItemPair[] drywalls = new BlockItemPair[16];
-
 	@Mod.EventHandler
 	public void onFingerprintViolation(FMLFingerprintViolationEvent event) {
 		logger.warn("Invalid fingerprint detected!");
@@ -92,51 +71,6 @@ public class Mineralogy {
 		com.mcmoddev.mineralogy.init.Items.init();
 		com.mcmoddev.mineralogy.init.Ores.Init();
 		com.mcmoddev.mineralogy.init.Recipes.Init();
-		
-		mineralogyTab = MinIoC.getInstance().resolve(CreativeTabs.class);
-		
-		// Blocks, Items, World-gen
-
-
-		// other blocks
-		MineralogyRegistry.sedimentaryStones.add(Blocks.SANDSTONE);
-
-		blockChert = RegistrationHelper.registerBlock(new Chert(mineralogyTab), Constants.CHERT, "blockChert");
-		MineralogyRegistry.sedimentaryStones.add(blockChert.PairedBlock);
-
-		blockGypsum = RegistrationHelper.registerBlock(new Gypsum(mineralogyTab), Constants.GYPSUM.toLowerCase(), "blockGypsum");
-		MineralogyRegistry.sedimentaryStones.add(blockGypsum.PairedBlock);
-
-		RecipeHelper.addShapedOreRecipe(Constants.GYPSUM.toLowerCase(), new ItemStack(blockGypsum.PairedItem, 1), "xxx", "xxx", "xxx", 'x', "dustGypsum");
-		
-		blockPumice = RegistrationHelper.registerBlock(new Rock(false, 0.5F, 5F, 0, SoundType.GROUND, mineralogyTab), Constants.PUMICE, "blockPumice");
-		MineralogyRegistry.igneousStones.add(blockPumice.PairedBlock);
-
-		
-
-		for (int i = 0; i < 16; i++) {
-			drywalls[i] = RegistrationHelper.registerBlock(new DryWall(Constants.colorSuffixes[i]), Constants.DRYWALL + "_" + Constants.colorSuffixes[i],
-					Constants.DRYWALL + Constants.colorSuffixesTwo[i]);
-		}
-
-		RecipeHelper.addShapedOreRecipe(Constants.DRYWALL, new ItemStack(drywalls[15].PairedItem, 3), "pgp", "pgp", "pgp", 'p', "paper",
-				'g', "dustGypsum");
-
-		for (int i = 0; i < 16; i++) {
-			RecipeHelper.addShapelessOreRecipe(Constants.DRYWALL + "_" + Constants.colorSuffixes[i], new ItemStack(drywalls[i].PairedItem, 1),
-					Ingredient.fromStacks(new ItemStack(drywalls[15].PairedItem)),
-					Ingredient.fromStacks(new ItemStack(Items.DYE, 1, i)));
-		}
-
-		RecipeHelper.addShapelessOreRecipe(Constants.GUNPOWDER + "_FROM_COAL", new ItemStack(Items.GUNPOWDER, 4),
-				Ingredient.fromStacks(new ItemStack(Items.COAL)), "dustNitrate",
-				"dustSulfur");
-
-		// TODO: Fix this recipe
-		// addShapelessOreRecipe(GUNPOWDER + "_FROM_CARBON", new
-		// ItemStack(Items.GUNPOWDER, 4), Ingredient.fromStacks(new
-		// ItemStack(carbonDust)), Ingredient.fromStacks(new ItemStack(nitratePowder)),
-		// Ingredient.fromStacks(new ItemStack(sulphurPowder)));
 
 		
 	}
@@ -210,9 +144,5 @@ public class Mineralogy {
 
 	private static Block getBlock(String id) {
 		return Block.getBlockFromName(id);
-	}
-
-	
-
-	
+	}	
 }

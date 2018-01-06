@@ -6,7 +6,7 @@ import com.mcmoddev.mineralogy.RockType;
 public class MaterialTypes {
 	public static final MaterialType ANDESITE = new MaterialType("Andesite", RockType.IGNEOUS, 1.5, 10, 0);
 	public static final MaterialType BASALT = new MaterialType("Basalt", RockType.IGNEOUS, 5, 100, 2);
-	public static final MaterialType DIORITE = new MaterialType("Basalt", RockType.IGNEOUS, 1.5, 10, 0);
+	public static final MaterialType DIORITE = new MaterialType("Diorite", RockType.IGNEOUS, 1.5, 10, 0);
 	public static final MaterialType GRANITE = new MaterialType("Granite", RockType.IGNEOUS, 3, 15, 1);
 	public static final MaterialType RHYOLITE = new MaterialType("Rhyolite", RockType.IGNEOUS, 1.5, 10, 0);
 	public static final MaterialType PEGMATITE = new MaterialType("Pegmatite", RockType.IGNEOUS, 1.5, 10, 0);

@@ -3,8 +3,8 @@ package com.mcmoddev.mineralogy.init;
 import com.mcmoddev.mineralogy.Constants;
 import com.mcmoddev.mineralogy.Mineralogy;
 import com.mcmoddev.mineralogy.ioc.MinIoC;
+import com.mcmoddev.mineralogy.util.BlockItemPair;
 import com.mcmoddev.mineralogy.util.RecipeHelper;
-
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -25,22 +25,43 @@ public class Recipes {
 		
 		MinIoC IoC = MinIoC.getInstance();
 
-		Item sulfurPowder = IoC.resolve(Item.class, "dustSulfur", Mineralogy.MODID);
-		Item phosphorousPowder = IoC.resolve(Item.class, "dustPhosphorous", Mineralogy.MODID);
-		Item nitratePowder = IoC.resolve(Item.class, "dustNitrate", Mineralogy.MODID); 
 		Item mineralFertilizer = IoC.resolve(Item.class, "fertilizer", Mineralogy.MODID);
+		Item blockGypsum = IoC.resolve(BlockItemPair.class, "blockGypsum", Mineralogy.MODID).PairedItem;
 		
 		RecipeHelper.addShapelessOreRecipe(Constants.GUNPOWDER + "_FROM_SUGAR", new ItemStack(Items.GUNPOWDER, 4),
-				Ingredient.fromStacks(new ItemStack(Items.SUGAR)), Ingredient.fromStacks(new ItemStack(nitratePowder)),
-				Ingredient.fromStacks(new ItemStack(sulfurPowder)));
+				new Object[] {  Ingredient.fromStacks(new ItemStack(Items.SUGAR)), "dustNitrate",
+						"dustSulfur" });
 		
-		RecipeHelper.addShapelessOreRecipe("mineralFertilizer", new ItemStack(mineralFertilizer, 1),
-				Ingredient.fromStacks(new ItemStack(nitratePowder)),
-				Ingredient.fromStacks(new ItemStack(phosphorousPowder)));
+		RecipeHelper.addShapelessOreRecipe(Constants.MINERALFERTILIZER, new ItemStack(mineralFertilizer, 1),
+				new Object[] { "dustNitrate", "dustPhosphorous" } );
 
 		RecipeHelper.addShapelessOreRecipe(Constants.COBBLESTONE.toUpperCase(), new ItemStack(Blocks.COBBLESTONE, 4),
 				Ingredient.fromStacks(new ItemStack(Blocks.STONE)), Ingredient.fromStacks(new ItemStack(Blocks.STONE)),
 				Ingredient.fromStacks(new ItemStack(Blocks.GRAVEL)),
 				Ingredient.fromStacks(new ItemStack(Blocks.GRAVEL)));
+		
+		RecipeHelper.addShapedOreRecipe(Constants.GYPSUM.toLowerCase(), new ItemStack(blockGypsum, 1), "xxx", "xxx", "xxx", 'x', "dustGypsum");
+		
+		Item dryWallWhite = IoC.resolve(BlockItemPair.class, "drywall15", Mineralogy.MODID).PairedItem;
+		
+		RecipeHelper.addShapedOreRecipe(Constants.DRYWALL, new ItemStack(dryWallWhite, 3), "pgp", "pgp", "pgp", 'p', "paper",
+				'g', "dustGypsum");
+
+		for (int i = 0; i < 16; i++) {
+			Item dryWall = IoC.resolve(BlockItemPair.class, "drywall" + i, Mineralogy.MODID).PairedItem;
+			
+			RecipeHelper.addShapelessOreRecipe(Constants.DRYWALL + "_" + Constants.colorSuffixes[i], new ItemStack(dryWall, 1),
+					 new Object[] { "drywallWhite",
+					Ingredient.fromStacks(new ItemStack(Items.DYE, 1, i)) } );
+		}
+
+		RecipeHelper.addShapelessOreRecipe(Constants.GUNPOWDER + "_FROM_COAL", new ItemStack(Items.GUNPOWDER, 4),
+				new Object[] {  Ingredient.fromStacks(new ItemStack(Items.COAL)), "dustNitrate",
+				"dustSulfur" });
+		
+		RecipeHelper.addShapelessOreRecipe(Constants.GUNPOWDER + "_FROM_CARBON", new
+					ItemStack(Items.GUNPOWDER, 4), new Object[] { "dustCarbon", "dustNitrate", "dustSulfur" });
+		
+		initDone = true;
 	}
 }

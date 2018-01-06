@@ -54,7 +54,7 @@ public class Constants {
 	public static final String CHERT = "chert";
 	public static final String SMOOTH = "smooth";
 	public static final String BRICK = "brick";
-
+	public static final String MINERALFERTILIZER =  "mineralFertilizer";
 	public static final String COBBLESTONE = "cobblestone";
 	public static final String FERTILIZER = "fertilizer";
 }

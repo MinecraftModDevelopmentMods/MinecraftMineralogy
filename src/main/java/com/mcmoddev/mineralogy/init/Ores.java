@@ -16,7 +16,6 @@ import net.minecraft.block.SoundType;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class Ores {
@@ -92,7 +91,7 @@ public class Ores {
 
 		RecipeHelper.addShapedOreRecipe(name, new ItemStack(pair.PairedItem), "xxx", "xxx", "xxx", 'x', dust);
 		RecipeHelper.addShapelessOreRecipe(oreDictionaryName.toLowerCase() + "_dust", new ItemStack(dust, 9),
-				"dustNitrate");
+				"block" + oreDictionaryName);
 
 		return pair.PairedBlock;
 	}

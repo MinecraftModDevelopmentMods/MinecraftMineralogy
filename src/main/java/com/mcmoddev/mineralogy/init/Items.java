@@ -10,20 +10,11 @@ import com.mcmoddev.mineralogy.util.RegistrationHelper;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.NonNullList;
-import net.minecraftforge.oredict.OreDictionary;
 
 public class Items {
 	private static boolean initDone = false;
 	private static CreativeTabs mineralogyTab;
-	
-	public static Item gypsumPowder;
-	protected static Item sulfurPowder;
-	protected static Item phosphorousPowder;
-	protected static Item nitratePowder; // aka "saltpeter"
-	protected static Item mineralFertilizer;
-	
+		
 	protected Items() {
 		throw new IllegalAccessError("Not a instantiable class");
 	}
@@ -37,23 +28,23 @@ public class Items {
 		}
 		
 		MinIoC IoC = MinIoC.getInstance();
-		
 		mineralogyTab = MinIoC.getInstance().resolve(CreativeTabs.class);
 		
-		gypsumPowder = addDust(Constants.GYPSUM);
-		IoC.register(Item.class, gypsumPowder, "dustGypsum", Mineralogy.MODID);
+		Item gypsumPowder = addDust(Constants.GYPSUM);;
+		Item sulphurPowder = addDust(Constants.SULFUR);;
+		Item phosphorousPowder = addDust(Constants.PHOSPHOROUS);;
+		Item nitratePowder = addDust(Constants.NITRATE);
 		
-		RecipeHelper.addShapelessOreRecipe(Constants.GYPSUM.toLowerCase() + "_dust", new ItemStack(gypsumPowder, 9), "blockGypsum");
+		Item mineralFertilizer = RegistrationHelper.registerItem(new MineralFertilizer(), "mineral_fertilizer")
+				.setUnlocalizedName(Mineralogy.MODID + "." + "mineral_fertilizer");
 		
-		sulfurPowder = addDust(Constants.SULFUR);
-		phosphorousPowder = addDust(Constants.PHOSPHOROUS);
-		nitratePowder = addDust(Constants.NITRATE);
-	
-		mineralFertilizer = RegistrationHelper.registerItem(new MineralFertilizer(), "mineral_fertilizer")
-			.setUnlocalizedName(Mineralogy.MODID + "." + "mineral_fertilizer");
+		IoC.register(Item.class, gypsumPowder, Constants.DUST_GYPSUM, Mineralogy.MODID);
+		IoC.register(Item.class, sulphurPowder, Constants.SULFUR, Mineralogy.MODID);
+		IoC.register(Item.class, phosphorousPowder, Constants.PHOSPHOROUS, Mineralogy.MODID);
+		IoC.register(Item.class, nitratePowder, Constants.NITRATE, Mineralogy.MODID);
+		IoC.register(Item.class, mineralFertilizer, Constants.FERTILIZER, Mineralogy.MODID);
 		
 		MineralogyRegistry.ItemsToRegister.put(Constants.FERTILIZER, mineralFertilizer);
-		IoC.register(Item.class, mineralFertilizer, "fertilizer", Mineralogy.MODID);
 		
 		initDone = true;
 	}

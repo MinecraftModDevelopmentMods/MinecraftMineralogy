@@ -18,12 +18,12 @@ import com.mcmoddev.mineralogy.util.RegistrationHelper;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class Blocks {
-
 	private static boolean initDone = false;
 	private static CreativeTabs mineralogyTab;
 	
@@ -51,24 +51,28 @@ public class Blocks {
 		
 		MineralogyRegistry.sedimentaryStones.add(net.minecraft.init.Blocks.SANDSTONE);
 
-		blockChert = RegistrationHelper.registerBlock(new Chert(mineralogyTab), Constants.CHERT, "blockChert");
+		blockChert = RegistrationHelper.registerBlock(new Chert(mineralogyTab), Constants.CHERT, Constants.BLOCK_CHERT);
 		MineralogyRegistry.sedimentaryStones.add(blockChert.PairedBlock);
 
-		blockGypsum = RegistrationHelper.registerBlock(new Gypsum(mineralogyTab), Constants.GYPSUM.toLowerCase(), "blockGypsum");
+		blockGypsum = RegistrationHelper.registerBlock(new Gypsum(mineralogyTab), Constants.GYPSUM.toLowerCase(), Constants.BLOCK_GYPSUM);
 		MineralogyRegistry.sedimentaryStones.add(blockGypsum.PairedBlock);
 		
-		IoC.register(BlockItemPair.class, blockGypsum, "blockGypsum", Mineralogy.MODID);
+		IoC.register(BlockItemPair.class, blockGypsum, Constants.BLOCK_GYPSUM, Mineralogy.MODID);
 		
-		blockPumice = RegistrationHelper.registerBlock(new Rock(false, 0.5F, 5F, 0, SoundType.GROUND, mineralogyTab), Constants.PUMICE, "blockPumice");
+		blockPumice = RegistrationHelper.registerBlock(new Rock(false, 0.5F, 5F, 0, SoundType.GROUND, mineralogyTab), Constants.PUMICE, Constants.BLOCK_PUMICE);
 		MineralogyRegistry.igneousStones.add(blockPumice.PairedBlock);
 		
-		IoC.register(BlockItemPair.class, blockPumice, "blockPumice", Mineralogy.MODID);
+		IoC.register(BlockItemPair.class, blockPumice, Constants.BLOCK_PUMICE, Mineralogy.MODID);
 		
 		for (int i = 0; i < 16; i++) {
 			drywalls[i] = RegistrationHelper.registerBlock(new DryWall(Constants.colorSuffixes[i]), Constants.DRYWALL + "_" + Constants.colorSuffixes[i],
 					Constants.DRYWALL + Constants.colorSuffixesTwo[i]);
 			
-			IoC.register(BlockItemPair.class, drywalls[i], "drywall" + i, Mineralogy.MODID);
+			IoC.register(BlockItemPair.class, drywalls[i], Constants.DRYWALL + Constants.colorSuffixesTwo[i], Mineralogy.MODID);
+			
+			RecipeHelper.addShapelessOreRecipe(Constants.DRYWALL + "_" + Constants.colorSuffixes[i], new ItemStack(drywalls[i].PairedItem, 1),
+					Constants.DRYWALL_WHITE,
+					Ingredient.fromStacks(new ItemStack(Items.DYE, 1, i)));
 		}
 		
 		initDone = true;
@@ -117,6 +121,7 @@ public class Blocks {
 
 		GameRegistry.addSmelting(rockPair.PairedBlock, new ItemStack(net.minecraft.init.Blocks.STONE), 0.1F);
 
+		// no point in ore dicting these recipes I think
 		if (MineralogyConfig.generateRockStairs()) {
 			rockStairPair = RegistrationHelper.registerBlock(new RockStairs(rockPair.PairedBlock, (float) materialType.hardness,
 					(float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE, mineralogyTab), name + "_" + Constants.STAIRS,

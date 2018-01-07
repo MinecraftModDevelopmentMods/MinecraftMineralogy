@@ -57,4 +57,13 @@ public class Constants {
 	public static final String MINERALFERTILIZER =  "mineralFertilizer";
 	public static final String COBBLESTONE = "cobblestone";
 	public static final String FERTILIZER = "fertilizer";
+	public static final String BLOCK_GYPSUM = "blockGypsum";
+	public static final String DUST_SULFUR = "dustSulfur";
+	public static final String DUST_NITRATE = "dustNitrate";
+	public static final String DUST_CARBON = "dustCarbon";
+	public static final String DRYWALL_WHITE = "drywallWhite";
+	public static final String BLOCK_PUMICE = "blockPumice";
+	public static final String BLOCK_CHERT = "blockChert";
+	public static final String DUST_GYPSUM = "dustGypsum";
+	public static final String PAPER = "paper";
 }

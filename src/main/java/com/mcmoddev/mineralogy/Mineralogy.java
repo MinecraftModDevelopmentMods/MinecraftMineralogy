@@ -1,7 +1,5 @@
 package com.mcmoddev.mineralogy;
 
-
-
 // DON'T FORGET TO UPDATE mcmod.info FILE!!!
 
 import org.apache.logging.log4j.LogManager;

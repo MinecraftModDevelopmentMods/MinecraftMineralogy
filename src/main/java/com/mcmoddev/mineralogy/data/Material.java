@@ -2,7 +2,7 @@ package com.mcmoddev.mineralogy.data;
 
 import com.mcmoddev.mineralogy.RockType;
 
-public class MaterialType {
+public class Material {
 	public String materialName;
 	public RockType rockType;
 	public double hardness;
@@ -25,7 +25,7 @@ public class MaterialType {
 	 * @param toolHardnessLevel
 	 *            0 for wood tools, 1 for stone, 2 for iron, 3 for diamond
 	 */
-	public MaterialType(String materialName, RockType rockType, 
+	public Material(String materialName, RockType rockType, 
 			double hardness, double blastResistance, int toolHardnessLevel) {
 		this.materialName = materialName;
 		this.rockType = rockType;

@@ -1,7 +1,7 @@
-package com.mcmoddev.mineralogy.interfaces;
+package com.mcmoddev.lib.interfaces;
 
-import com.mcmoddev.mineralogy.exceptions.MaterialNotFoundException;
-import com.mcmoddev.mineralogy.exceptions.TabNotFoundException;
+import com.mcmoddev.lib.exceptions.MaterialNotFoundException;
+import com.mcmoddev.lib.exceptions.TabNotFoundException;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -32,6 +32,20 @@ public interface ITabProvider {
 	void addItemToTab(String tabName, Item item) throws TabNotFoundException;
 	
 	/**
+	 * adds a block to a tab, determines the tab to be used
+	 * @param block Block to add to the tab
+	 * @throws TabNotFoundException If the tab doesn't exist
+	 */
+	void addBlockToTab(Block block) throws TabNotFoundException;
+	
+	/**
+	 * adds an item to a tab, determines the tab to be used
+	 * @param item Item to add to the tab
+	 * @throws TabNotFoundException If the tab doesn't exist
+	 */
+	void addItemToTab(Item item) throws TabNotFoundException;
+	
+	/**
 	 * sets an icon to a tab
 	 * @param tabName The name of the tab to set the icon for
 	 * @param materialName The name of the material to use the icon from for the tab
@@ -55,6 +69,11 @@ public interface ITabProvider {
 	 */
 	String getTab(String itemName);
 
+	/**
+	 * Gets a list of all tabs
+	 * @return Returns a list of all tabs
+	 */
+	String[] getTabs();
 	
 	/**
 	 * tells the tabprovider which tabs should be provided for which type items/blocks

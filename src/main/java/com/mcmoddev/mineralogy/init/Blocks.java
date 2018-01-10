@@ -9,8 +9,8 @@ import com.mcmoddev.mineralogy.blocks.Gypsum;
 import com.mcmoddev.mineralogy.blocks.Rock;
 import com.mcmoddev.mineralogy.blocks.RockSlab;
 import com.mcmoddev.mineralogy.blocks.RockStairs;
-import com.mcmoddev.mineralogy.data.MaterialType;
-import com.mcmoddev.mineralogy.data.MaterialTypes;
+import com.mcmoddev.mineralogy.data.Material;
+import com.mcmoddev.mineralogy.data.MaterialData;
 import com.mcmoddev.mineralogy.ioc.MinIoC;
 import com.mcmoddev.mineralogy.util.BlockItemPair;
 import com.mcmoddev.mineralogy.util.RecipeHelper;
@@ -47,7 +47,7 @@ public class Blocks {
 		BlockItemPair[] drywalls = new BlockItemPair[16];
 		
 		mineralogyTab = MinIoC.getInstance().resolve(CreativeTabs.class);
-		MaterialTypes.toArray().forEach(material -> addStoneType(material));
+		MaterialData.toArray().forEach(material -> addStoneType(material));
 		
 		MineralogyRegistry.sedimentaryStones.add(net.minecraft.init.Blocks.SANDSTONE);
 
@@ -78,7 +78,7 @@ public class Blocks {
 		initDone = true;
 	}
 
-	protected static void addStoneType(MaterialType materialType) {
+	protected static void addStoneType(Material materialType) {
 		String name = materialType.materialName.toLowerCase();
 
 		final BlockItemPair rockPair;

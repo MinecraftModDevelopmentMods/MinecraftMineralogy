@@ -2,22 +2,20 @@ package com.mcmoddev.lib.util;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.annotation.Nonnull;
-
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import com.mcmoddev.lib.exceptions.ItemNotFoundException;
 import com.mcmoddev.lib.exceptions.MaterialNotFoundException;
 import com.mcmoddev.lib.exceptions.TabNotFoundException;
 import com.mcmoddev.lib.interfaces.IDynamicTabProvider;
-import com.mcmoddev.lib.interfaces.IMMDCreativeTab;
-
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 
 public final class DynamicTabProvider implements IDynamicTabProvider {
 	private Map<String, MMDCreativeTab> tabs = new HashMap<>();
-
+	private Map<String, String> tabsByMod =new HashMap<>();
+	
 	private Multimap<String, String> tabItemMapping = ArrayListMultimap.create();
 		
 	private MMDCreativeTab getTabByName(String tabName) throws TabNotFoundException {
@@ -30,7 +28,7 @@ public final class DynamicTabProvider implements IDynamicTabProvider {
 	}
 
 	@Override
-	public void addBlockToTab(String tabName, Block block) throws TabNotFoundException {		
+	public void addBlockToTab(String tabName, Block block) throws TabNotFoundException {
 		block.setCreativeTab(getTabByName(tabName));
 	}
 	
@@ -55,36 +53,30 @@ public final class DynamicTabProvider implements IDynamicTabProvider {
 //		blocksTab.setTabIconItem(blocksTabIconItem);
 	}
 
-	@Override
-	public String getTab(String itemName, String modID) {
-		return getTab(itemName);
+	private String getTab(String itemName, String modID)  {
+		for (String tab : tabItemMapping.get(itemName))
+			if (modID.equals(tabsByMod.get(tab))) 
+				return tab;
+		
+		return "";
 	}
 
-	@Override
+
 	public void setTabItemMapping(String tabName, String itemName) {
 		tabItemMapping.put(itemName, tabName);
 	}
 
-	@Override
-	public String getTab(String itemName) {
-		return tabItemMapping.get(itemName).stream().findFirst().orElse(""); // TODO: default tab
+	private String getTab(String itemName)   {
+		return tabItemMapping.get(itemName).stream().findFirst().orElse("");
 	}
 
 	@Override
 	public void addTab(String tabName, boolean searchable, String modID) {
-		// TODO Auto-generated method stub
 		String internalTabName = String.format("%s.%s", modID, tabName);
-		IMMDCreativeTab tab = new MMDCreativeTab(internalTabName, searchable);
+		MMDCreativeTab tab = new MMDCreativeTab(internalTabName, searchable);
 		
-//		if (itemGroupsByModID.containsKey(modName)) {
-//			itemGroupsByModID.get(modName).add(tab);
-//		} else {
-//			List<MMDCreativeTab> nl = new ArrayList<>();
-//			nl.add(tab);
-//			itemGroupsByModID.put(modName, nl);
-//		}
-//
-//		return itemGroupsByModID.get(modName).size() - 1;		
+		tabs.put(tabName, tab);
+		tabsByMod.put(tabName, modID);
 	}
 
 	@Override
@@ -101,8 +93,7 @@ public final class DynamicTabProvider implements IDynamicTabProvider {
 
 	@Override
 	public String[] getTabs() {
-		// TODO Auto-generated method stub
-		return null;
+		return (String[]) tabs.keySet().toArray();
 	}
 
 	@Override
@@ -115,5 +106,29 @@ public final class DynamicTabProvider implements IDynamicTabProvider {
 	public void executePostemptiveTabGeneration() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	@Override
+	public String getTab(Item item) throws ItemNotFoundException {
+		String tab;
+		ResourceLocation resourceLocation = item.getRegistryName();
+		
+		// 1) Try to get a tab mapping based on item name and mod id
+		tab = getTab(resourceLocation.getResourcePath(), resourceLocation.getResourceDomain());
+		if (!tab.equals("")) return tab;
+		
+		//2) Try to get a tab mapping based on item name
+		tab = getTab(resourceLocation.getResourcePath());
+		if (!tab.equals("")) return tab;
+		
+		//3) Try to get a tab mapping based on item class name and mod id
+		tab = getTab(item.getClass().getSimpleName(), resourceLocation.getResourceDomain());
+		if (!tab.equals("")) return tab;
+		
+		//4) Try to get a tab mapping based on item class name only
+		tab = getTab(item.getClass().getSimpleName());
+		if (!tab.equals("")) return tab;
+		
+		throw new ItemNotFoundException(resourceLocation.getResourcePath());
 	}
 }

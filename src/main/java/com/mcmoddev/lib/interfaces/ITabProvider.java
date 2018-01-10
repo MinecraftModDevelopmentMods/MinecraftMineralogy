@@ -1,5 +1,6 @@
 package com.mcmoddev.lib.interfaces;
 
+import com.mcmoddev.lib.exceptions.ItemNotFoundException;
 import com.mcmoddev.lib.exceptions.MaterialNotFoundException;
 import com.mcmoddev.lib.exceptions.TabNotFoundException;
 
@@ -15,6 +16,14 @@ import net.minecraft.item.Item;
  *
  */
 public interface ITabProvider {
+	/**
+	 * Gets a recommended tab for an item
+	 * @param item The item to match against a tab
+	 * @return Returns the name of the recommended tab
+	 * @throws ItemNotFoundException There was an error finding a tab mapping for the item
+	 */
+	String getTab(Item item) throws ItemNotFoundException;
+	
 	/**
 	 * adds a block to a tab
 	 * @param block Block to add to the tab
@@ -53,21 +62,6 @@ public interface ITabProvider {
 	 * @throws MaterialNotFoundException There was an error finding the material
 	 */
 	void setIcon(String tabName, String materialName) throws TabNotFoundException, MaterialNotFoundException;
-	
-	/**
-	 * Gets a recommended tab for an item (block or item)
-	 * @param itemName The name of the type of block or item to match against a tab
-	 * @param modID The preferred modID of the tab to be selected
-	 * @return Returns the name of the recommended tab
-	 */
-	String getTab(String itemName, String modID);
-
-	/**
-	 * Gets a recommended tab for an item (block or item)
-	 * @param itemName The name of the type of block or item to match against a tab
-	 * @return Returns the name of the recommended tab
-	 */
-	String getTab(String itemName);
 
 	/**
 	 * Gets a list of all tabs

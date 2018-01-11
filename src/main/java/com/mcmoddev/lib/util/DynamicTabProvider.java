@@ -1,6 +1,8 @@
 package com.mcmoddev.lib.util;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
@@ -21,6 +23,11 @@ public final class DynamicTabProvider implements IDynamicTabProvider {
 	private Multimap<String, String> tabItemMapping = ArrayListMultimap.create();
 		
 	private boolean retrospectiveTabGeneration = false;
+	
+	private List<Block> retrospectiveBlocks = new ArrayList<>();
+	private List<Item> retrospectiveItems = new ArrayList<>();
+	
+	private int optimalTabSize = 50;
 	
 	private MMDCreativeTab getTabByName(String tabName) throws TabNotFoundException {
 		MMDCreativeTab tab = tabs.get(tabName);
@@ -93,7 +100,29 @@ public final class DynamicTabProvider implements IDynamicTabProvider {
 
 	@Override
 	public void executeRetrospectiveTabGeneration() {
-		// TODO implement tab auto generation
+		distributeToTabs(retrospectiveBlocks, retrospectiveItems);
+	}
+	
+	private void distributeToTabs (List<Block> blocks, List<Item> items) {
+		List<Block> cascadeBlocks = new ArrayList<>();
+		List<Item> cascadeItems = new ArrayList<>();
+		
+		if (blocks.size() <= optimalTabSize) {
+			
+		} else {
+			// TODO: splitting down 
+		}
+		
+		if (items.size() <= optimalTabSize) {
+			
+		} else {
+			// TODO: splitting down 
+		}
+		
+		if(cascadeBlocks.isEmpty() && cascadeItems.isEmpty())
+			return;
+		else
+			distributeToTabs(cascadeBlocks, cascadeItems);
 	}
 	
 	@Override
@@ -133,7 +162,7 @@ public final class DynamicTabProvider implements IDynamicTabProvider {
 	@Override
 	public void addToTab(Block block, boolean retrospectiveTabGeneration) throws ItemNotFoundException, TabNotFoundException {
 		if (retrospectiveTabGeneration) {
-			
+			retrospectiveBlocks.add(block);
 		} else {
 			addToTab(getTab(block), block);
 		}
@@ -142,9 +171,14 @@ public final class DynamicTabProvider implements IDynamicTabProvider {
 	@Override
 	public void addToTab(Item item, boolean retrospectiveTabGeneration) throws ItemNotFoundException, TabNotFoundException {
 		if (retrospectiveTabGeneration) {
-			// TODO implement tab auto generation
+			retrospectiveItems.add(item);
 		} else {
 			addToTab(getTab(item), item);
 		}
+	}
+
+	@Override
+	public void setOptimalTabSize(int value) {
+		optimalTabSize = value;
 	}
 }

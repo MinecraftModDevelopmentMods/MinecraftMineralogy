@@ -46,4 +46,5 @@ public interface IDynamicTabProvider extends ITabProvider {
 	/**
 	 * when retrospectively generating tabs, the amount of items/blocks ideally desired per tab
 	 */
-	int optimalTabSize = 50; }
+	void setOptimalTabSize(int value); 
+}

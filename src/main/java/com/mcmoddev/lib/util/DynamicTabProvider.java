@@ -10,11 +10,10 @@ import com.mcmoddev.lib.exceptions.TabNotFoundException;
 import com.mcmoddev.lib.interfaces.IDynamicTabProvider;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
 
 public final class DynamicTabProvider implements IDynamicTabProvider {
 	private Map<String, MMDCreativeTab> tabs = new HashMap<>();
-	private Map<String, String> tabsByMod =new HashMap<>();
+	private Map<String, String> tabsByMod = new HashMap<>();
 	
 	private Multimap<String, String> tabItemMapping = ArrayListMultimap.create();
 		
@@ -28,12 +27,12 @@ public final class DynamicTabProvider implements IDynamicTabProvider {
 	}
 
 	@Override
-	public void addBlockToTab(String tabName, Block block) throws TabNotFoundException {
+	public void addToTab(String tabName, Block block) throws TabNotFoundException {
 		block.setCreativeTab(getTabByName(tabName));
 	}
 	
 	@Override
-	public void addItemToTab(String tabName, Item item) throws TabNotFoundException {	
+	public void addToTab(String tabName, Item item) throws TabNotFoundException {	
 		item.setCreativeTab(getTabByName(tabName));
 	}
 
@@ -61,7 +60,6 @@ public final class DynamicTabProvider implements IDynamicTabProvider {
 		return "";
 	}
 
-
 	public void setTabItemMapping(String tabName, String itemName) {
 		tabItemMapping.put(itemName, tabName);
 	}
@@ -80,55 +78,63 @@ public final class DynamicTabProvider implements IDynamicTabProvider {
 	}
 
 	@Override
-	public void addBlockToTab(Block block) throws TabNotFoundException {
-		// TODO Auto-generated method stub
-		
+	public void addToTab(Block block) throws TabNotFoundException, ItemNotFoundException {
+		addToTab(getTab(block), block);
 	}
 
 	@Override
-	public void addItemToTab(Item item) throws TabNotFoundException {
-		// TODO Auto-generated method stub
-		
+	public void addToTab(Item item) throws TabNotFoundException, ItemNotFoundException {
+		addToTab(getTab(item), item);
 	}
 
 	@Override
 	public String[] getTabs() {
-		return (String[]) tabs.keySet().toArray();
+		return tabs.keySet().toArray(new String[0]);
 	}
 
 	@Override
-	public void initialisePostemptiveTabGeneration() {
+	public void initialiseRetrospectiveTabGeneration() {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void executePostemptiveTabGeneration() {
+	public void executeRetrospectiveTabGeneration() {
 		// TODO Auto-generated method stub
 		
 	}
 	
 	@Override
 	public String getTab(Item item) throws ItemNotFoundException {
+		return getTabBySequence(item.getRegistryName().getResourcePath(), 
+				item.getRegistryName().getResourceDomain(), item.getClass().getSimpleName());
+	}
+
+	@Override
+	public String getTab(Block block) throws ItemNotFoundException {	
+		return getTabBySequence(block.getRegistryName().getResourcePath(), 
+				block.getRegistryName().getResourceDomain(), block.getClass().getSimpleName());
+	}
+
+	private String getTabBySequence(String path, String domain, String simpleName) throws ItemNotFoundException {
 		String tab;
-		ResourceLocation resourceLocation = item.getRegistryName();
 		
 		// 1) Try to get a tab mapping based on item name and mod id
-		tab = getTab(resourceLocation.getResourcePath(), resourceLocation.getResourceDomain());
-		if (!tab.equals("")) return tab;
+		tab = getTab(path, domain);
+		if (!tab.isEmpty()) return tab;
 		
 		//2) Try to get a tab mapping based on item name
-		tab = getTab(resourceLocation.getResourcePath());
-		if (!tab.equals("")) return tab;
+		tab = getTab(path);
+		if (!tab.isEmpty()) return tab;
 		
 		//3) Try to get a tab mapping based on item class name and mod id
-		tab = getTab(item.getClass().getSimpleName(), resourceLocation.getResourceDomain());
-		if (!tab.equals("")) return tab;
+		tab = getTab(simpleName, domain);
+		if (!tab.isEmpty()) return tab;
 		
 		//4) Try to get a tab mapping based on item class name only
-		tab = getTab(item.getClass().getSimpleName());
-		if (!tab.equals("")) return tab;
+		tab = getTab(simpleName);
+		if (!tab.isEmpty()) return tab;
 		
-		throw new ItemNotFoundException(resourceLocation.getResourcePath());
+		throw new ItemNotFoundException(path);
 	}
 }

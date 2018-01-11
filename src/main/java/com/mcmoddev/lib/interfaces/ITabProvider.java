@@ -25,12 +25,20 @@ public interface ITabProvider {
 	String getTab(Item item) throws ItemNotFoundException;
 	
 	/**
+	 * Gets a recommended tab for a block
+	 * @param block The block to match against a tab
+	 * @return Returns the name of the recommended tab
+	 * @throws ItemNotFoundException There was an error finding a tab mapping for the block
+	 */
+	String getTab(Block block) throws ItemNotFoundException;
+	
+	/**
 	 * adds a block to a tab
 	 * @param block Block to add to the tab
 	 * @param tabName Name of the tab to add the block to
 	 * @throws TabNotFoundException If the tab doesn't exist
 	 */
-	void addBlockToTab(String tabName, Block block) throws TabNotFoundException;
+	void addToTab(String tabName, Block block) throws TabNotFoundException;
 	
 	/**
 	 * adds an item to a tab
@@ -38,21 +46,23 @@ public interface ITabProvider {
 	 * @param tabName Name of the tab to add the item to
 	 * @throws TabNotFoundException If the tab doesn't exist
 	 */
-	void addItemToTab(String tabName, Item item) throws TabNotFoundException;
+	void addToTab(String tabName, Item item) throws TabNotFoundException;
 	
 	/**
 	 * adds a block to a tab, determines the tab to be used
 	 * @param block Block to add to the tab
 	 * @throws TabNotFoundException If the tab doesn't exist
+	 * @throws ItemNotFoundException If the block can't be mapped to a tab
 	 */
-	void addBlockToTab(Block block) throws TabNotFoundException;
+	void addToTab(Block block) throws TabNotFoundException, ItemNotFoundException;
 	
 	/**
 	 * adds an item to a tab, determines the tab to be used
 	 * @param item Item to add to the tab
 	 * @throws TabNotFoundException If the tab doesn't exist
+	 * @throws ItemNotFoundException If the block can't be mapped to a tab
 	 */
-	void addItemToTab(Item item) throws TabNotFoundException;
+	void addToTab(Item item) throws TabNotFoundException, ItemNotFoundException;
 	
 	/**
 	 * sets an icon to a tab

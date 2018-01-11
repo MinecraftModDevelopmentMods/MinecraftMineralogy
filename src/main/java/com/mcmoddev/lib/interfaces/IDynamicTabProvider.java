@@ -12,10 +12,10 @@ public interface IDynamicTabProvider extends ITabProvider {
 	/**
 	 * instructs the tab provider that tabs will be created in a batch process
 	 */
-	void initialisePostemptiveTabGeneration();
+	void initialiseRetrospectiveTabGeneration();
 	
 	/**
 	 * instructs the tab provider to assign and create tabs in a batch process
 	 */
-	void executePostemptiveTabGeneration();
+	void executeRetrospectiveTabGeneration();
 }

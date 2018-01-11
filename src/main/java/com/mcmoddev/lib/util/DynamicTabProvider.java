@@ -4,12 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import com.mcmoddev.lib.data.Names;
 import com.mcmoddev.lib.exceptions.ItemNotFoundException;
-import com.mcmoddev.lib.exceptions.MaterialNotFoundException;
 import com.mcmoddev.lib.exceptions.TabNotFoundException;
 import com.mcmoddev.lib.interfaces.IDynamicTabProvider;
+import com.mcmoddev.lib.interfaces.IMMDMaterial;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 public final class DynamicTabProvider implements IDynamicTabProvider {
 	private Map<String, MMDCreativeTab> tabs = new HashMap<>();
@@ -17,6 +20,8 @@ public final class DynamicTabProvider implements IDynamicTabProvider {
 	
 	private Multimap<String, String> tabItemMapping = ArrayListMultimap.create();
 		
+	private boolean retrospectiveTabGeneration = false;
+	
 	private MMDCreativeTab getTabByName(String tabName) throws TabNotFoundException {
 		MMDCreativeTab tab = tabs.get(tabName);
 		
@@ -37,19 +42,8 @@ public final class DynamicTabProvider implements IDynamicTabProvider {
 	}
 
 	@Override
-	public void setIcon(String tabName, String materialName) throws TabNotFoundException, MaterialNotFoundException {
-//		Block temp;
-//		ItemStack blocksTabIconItem;
-//
-//		MMDMaterial material = Materials.getMaterialByName(materialName);
-//		
-//		if (material.getName().equals(materialName) && (material.hasBlock(Names.BLOCK)))
-//			temp = material.getBlock(Names.BLOCK);
-//		else
-//			temp = net.minecraft.init.Blocks.IRON_BLOCK;
-//		
-//		blocksTabIconItem = new ItemStack(Item.getItemFromBlock(temp));
-//		blocksTab.setTabIconItem(blocksTabIconItem);
+	public void setIcon(String tabName, IMMDMaterial material) throws TabNotFoundException {
+		tabs.get(tabName).setTabIconItem(new ItemStack(Item.getItemFromBlock(material.hasBlock(Names.BLOCK) ?  material.getBlock(Names.BLOCK) : net.minecraft.init.Blocks.IRON_BLOCK)));
 	}
 
 	private String getTab(String itemName, String modID)  {
@@ -79,12 +73,12 @@ public final class DynamicTabProvider implements IDynamicTabProvider {
 
 	@Override
 	public void addToTab(Block block) throws TabNotFoundException, ItemNotFoundException {
-		addToTab(getTab(block), block);
+		addToTab(block, retrospectiveTabGeneration);
 	}
 
 	@Override
 	public void addToTab(Item item) throws TabNotFoundException, ItemNotFoundException {
-		addToTab(getTab(item), item);
+		addToTab(item, retrospectiveTabGeneration);
 	}
 
 	@Override
@@ -94,14 +88,12 @@ public final class DynamicTabProvider implements IDynamicTabProvider {
 
 	@Override
 	public void initialiseRetrospectiveTabGeneration() {
-		// TODO Auto-generated method stub
-		
+		retrospectiveTabGeneration = true;	
 	}
 
 	@Override
 	public void executeRetrospectiveTabGeneration() {
-		// TODO Auto-generated method stub
-		
+		// TODO implement tab auto generation
 	}
 	
 	@Override
@@ -136,5 +128,23 @@ public final class DynamicTabProvider implements IDynamicTabProvider {
 		if (!tab.isEmpty()) return tab;
 		
 		throw new ItemNotFoundException(path);
+	}
+
+	@Override
+	public void addToTab(Block block, boolean retrospectiveTabGeneration) throws ItemNotFoundException, TabNotFoundException {
+		if (retrospectiveTabGeneration) {
+			
+		} else {
+			addToTab(getTab(block), block);
+		}
+	}
+
+	@Override
+	public void addToTab(Item item, boolean retrospectiveTabGeneration) throws ItemNotFoundException, TabNotFoundException {
+		if (retrospectiveTabGeneration) {
+			// TODO implement tab auto generation
+		} else {
+			addToTab(getTab(item), item);
+		}
 	}
 }

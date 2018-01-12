@@ -2,6 +2,8 @@ package com.mcmoddev.lib.interfaces;
 
 import java.util.Comparator;
 
+import com.mcmoddev.lib.util.MMDCreativeTab;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -22,5 +24,6 @@ public interface IMMDCreativeTab {
 	void setTabIconItem(Item iconItem);
 
 	void setTabIconItem(ItemStack iconItem);
-
+	
+	MMDCreativeTab Initialise();
 }

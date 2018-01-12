@@ -28,15 +28,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  *
  */
 public class MMDCreativeTab extends CreativeTabs implements IMMDCreativeTab {
-
 	private ItemStack iconItem;
 
-	private final boolean searchable;
+	private boolean searchable;
 	private Comparator<ItemStack> comparator;
 	
 	private static Map<Class<?>, Integer> classSortingValues = new HashMap<>();
 	private static Map<IMMDMaterial, Integer> materialSortingValues = new HashMap<>();
-	
+
 	private static final Comparator<ItemStack> DEFAULT = new Comparator<ItemStack>() {
 
 		@Override
@@ -82,6 +81,8 @@ public class MMDCreativeTab extends CreativeTabs implements IMMDCreativeTab {
 		return classVal + materialVal + (itemStack.getMetadata() % 100);
 	}
 
+	
+	
 	public MMDCreativeTab(@Nonnull final String unlocalizedName, @Nonnull final boolean searchable) {
 		this(unlocalizedName, searchable, (ItemStack) null);
 	}
@@ -93,18 +94,28 @@ public class MMDCreativeTab extends CreativeTabs implements IMMDCreativeTab {
 	public MMDCreativeTab(@Nonnull final String unlocalizedName, @Nonnull final boolean searchable, @Nullable final Item iconItem) {
 		this(unlocalizedName, searchable, new ItemStack(iconItem));
 	}
-
-	public MMDCreativeTab(@Nonnull final String unlocalizedName, @Nonnull final boolean searchable, @Nullable final ItemStack iconItem) {
-		super(unlocalizedName);
-		if (iconItem == null) {
+	
+	@Override
+	public MMDCreativeTab Initialise() {
+		
+		if (iconItem == null) 
 			this.iconItem = new ItemStack(net.minecraft.init.Items.IRON_PICKAXE);
-		} else {
-			this.iconItem = iconItem;
-		}
-		this.searchable = searchable;
+		
 		this.setSortingAlgorithm(DEFAULT);
+		
 		if (searchable)
 			setBackgroundImageName("item_search.png");
+		
+		return this;
+	}
+	
+	public MMDCreativeTab(@Nonnull final String unlocalizedName, @Nonnull final boolean searchable, @Nullable final ItemStack iconItem) {
+		super(unlocalizedName);
+		
+		if (iconItem != null) 
+			this.iconItem = iconItem;
+		
+		this.searchable = searchable;
 	}
 
 	/* (non-Javadoc)

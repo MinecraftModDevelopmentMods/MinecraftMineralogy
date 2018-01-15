@@ -11,6 +11,8 @@ import javax.annotation.Nullable;
 import com.mcmoddev.lib.interfaces.IMMDCreativeTab;
 import com.mcmoddev.lib.interfaces.IMMDMaterial;
 import com.mcmoddev.lib.interfaces.IMMDObject;
+import com.mcmoddev.mineralogy.Mineralogy;
+import com.mcmoddev.mineralogy.ioc.MinIoC;
 
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
@@ -80,8 +82,6 @@ public class MMDCreativeTab extends CreativeTabs implements IMMDCreativeTab {
 		}
 		return classVal + materialVal + (itemStack.getMetadata() % 100);
 	}
-
-	
 	
 	public MMDCreativeTab(@Nonnull final String unlocalizedName, @Nonnull final boolean searchable) {
 		this(unlocalizedName, searchable, (ItemStack) null);
@@ -97,9 +97,8 @@ public class MMDCreativeTab extends CreativeTabs implements IMMDCreativeTab {
 	
 	@Override
 	public MMDCreativeTab Initialise() {
-		
-		if (iconItem == null) 
-			this.iconItem = new ItemStack(net.minecraft.init.Items.IRON_PICKAXE);
+		if (iconItem == null && MinIoC.getInstance().resolve(ItemStack.class, "defaultIcon", Mineralogy.MODID) != null)
+			this.iconItem = MinIoC.getInstance().resolve(ItemStack.class, "defaultIcon", Mineralogy.MODID);
 		
 		this.setSortingAlgorithm(DEFAULT);
 		
@@ -155,6 +154,17 @@ public class MMDCreativeTab extends CreativeTabs implements IMMDCreativeTab {
 		this.comparator = comparator;
 	}
 
+
+	public MMDCreativeTab setIconItem(@Nonnull final Block iconBlock) {
+		this.iconItem = new ItemStack(Item.getItemFromBlock(iconBlock));
+		return this;
+	}
+
+	public MMDCreativeTab setIconItem(@Nonnull final Item iconItem) {
+		this.iconItem = new ItemStack(iconItem);
+		return this;
+	}
+	
 	/* (non-Javadoc)
 	 * @see com.mcmoddev.lib.util.IMMDCreativeTab#setTabIconItem(net.minecraft.block.Block)
 	 */

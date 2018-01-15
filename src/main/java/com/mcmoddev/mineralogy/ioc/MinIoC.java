@@ -2,9 +2,15 @@ package com.mcmoddev.mineralogy.ioc;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.omg.CORBA.DynamicImplementation;
+
+import com.mcmoddev.lib.interfaces.IDynamicTabProvider;
+import com.mcmoddev.lib.util.DynamicTabProvider;
+import com.mcmoddev.mineralogy.Mineralogy;
 import com.mcmoddev.mineralogy.MineralogyCreativeTab;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 /**
@@ -134,6 +140,11 @@ public class MinIoC {
 	 */
 	public void wireup() {
 		this.register(CreativeTabs.class, MineralogyCreativeTab.instance("Mineralogy"));
+		
+		this.register(ItemStack.class, new ItemStack(net.minecraft.init.Items.IRON_PICKAXE), "defaultIcon", Mineralogy.MODID);
+		
+		this.register(IDynamicTabProvider.class, new DynamicTabProvider());
+		
 	}
 	
 	public static MinIoC getInstance() {

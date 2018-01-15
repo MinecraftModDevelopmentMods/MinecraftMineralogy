@@ -74,6 +74,8 @@ public final class DynamicTabProvider implements IDynamicTabProvider {
 		String internalTabName = String.format("%s.%s", modID, tabName);
 		MMDCreativeTab tab = new MMDCreativeTab(internalTabName, searchable);
 		
+		tab.Initialise();
+		
 		tabs.put(tabName, tab);
 		tabsByMod.put(tabName, modID);
 	}

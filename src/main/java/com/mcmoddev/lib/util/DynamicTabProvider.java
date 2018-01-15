@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.mcmoddev.lib.data.Names;
@@ -61,6 +63,14 @@ public final class DynamicTabProvider implements IDynamicTabProvider {
 		return "";
 	}
 
+	private List<String> getTabsByMod(String modID)  {
+		List<String> returnTabs = new ArrayList<>();
+		
+		tabsByMod.entrySet().stream().filter(m -> m.getValue() == modID).forEach(action -> returnTabs.add(action.getKey()));
+		
+		return returnTabs;
+	}
+	
 	public void setTabItemMapping(String tabName, String itemName) {
 		tabItemMapping.put(itemName, tabName);
 	}
@@ -157,6 +167,12 @@ public final class DynamicTabProvider implements IDynamicTabProvider {
 		//4) Try to get a tab mapping based on item class name only
 		tab = getTab(simpleName);
 		if (!tab.isEmpty()) return tab;
+		
+		if (tabs.size() > 0 ) {
+			//5) Give up and assign it to the first tab
+			tab = tabs.entrySet().iterator().next().getKey();
+			if (!tab.isEmpty()) return tab;
+		}
 		
 		throw new ItemNotFoundException(path);
 	}

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Optional;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
@@ -55,12 +55,12 @@ public final class DynamicTabProvider implements IDynamicTabProvider {
 		tabs.get(tabName).setTabIconItem(new ItemStack(Item.getItemFromBlock(material.hasBlock(Names.BLOCK) ?  material.getBlock(Names.BLOCK) : net.minecraft.init.Blocks.IRON_BLOCK)));
 	}
 
-	private String getTab(String itemName, String modID)  {
+	private Optional<String> getTab(String itemName, String modID)  {
 		for (String tab : tabItemMapping.get(itemName))
 			if (modID.equals(tabsByMod.get(tab))) 
-				return tab;
+				return Optional.of(tab) ;
 		
-		return "";
+		return Optional.empty();
 	}
 
 	private List<String> getTabsByMod(String modID)  {
@@ -75,14 +75,13 @@ public final class DynamicTabProvider implements IDynamicTabProvider {
 		tabItemMapping.put(itemName, tabName);
 	}
 
-	private String getTab(String itemName)   {
-		return tabItemMapping.get(itemName).stream().findFirst().orElse("");
+	private Optional<String> getTab(String itemName)   {
+		return tabItemMapping.get(itemName).stream().findFirst();
 	}
 
 	@Override
 	public void addTab(String tabName, boolean searchable, String modID) {
-		String internalTabName = String.format("%s.%s", modID, tabName);
-		MMDCreativeTab tab = new MMDCreativeTab(internalTabName, searchable);
+		MMDCreativeTab tab = new MMDCreativeTab(String.format("%s.%s", modID, tabName), searchable);
 		
 		tab.Initialise();
 		
@@ -150,31 +149,15 @@ public final class DynamicTabProvider implements IDynamicTabProvider {
 	}
 
 	private String getTabBySequence(String path, String domain, String simpleName) throws ItemNotFoundException {
-		String tab;
+		if (tabs.size() == 0 )
+			throw new ItemNotFoundException(path);
 		
-		// 1) Try to get a tab mapping based on item name and mod id
-		tab = getTab(path, domain);
-		if (!tab.isEmpty()) return tab;
-		
-		//2) Try to get a tab mapping based on item name
-		tab = getTab(path);
-		if (!tab.isEmpty()) return tab;
-		
-		//3) Try to get a tab mapping based on item class name and mod id
-		tab = getTab(simpleName, domain);
-		if (!tab.isEmpty()) return tab;
-		
-		//4) Try to get a tab mapping based on item class name only
-		tab = getTab(simpleName);
-		if (!tab.isEmpty()) return tab;
-		
-		if (tabs.size() > 0 ) {
-			//5) Give up and assign it to the first tab
-			tab = tabs.entrySet().iterator().next().getKey();
-			if (!tab.isEmpty()) return tab;
-		}
-		
-		throw new ItemNotFoundException(path);
+		return getTab(path, domain) // try getting a tab mapping
+				.orElse(getTab(path) // try a tab mapping without the mod id
+				.orElse(getTab(simpleName, domain) // try and map on class name and mod id
+				.orElse(getTab(simpleName) // try and map just on class name
+				.orElse(getTabsByMod(domain).stream().findFirst() // get the first tab for this mod
+				.orElse(tabs.entrySet().iterator().next().getKey()))))); // just return the first tab
 	}
 
 	@Override

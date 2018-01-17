@@ -1,5 +1,8 @@
 package com.mcmoddev.mineralogy.init;
 
+import com.mcmoddev.lib.exceptions.ItemNotFoundException;
+import com.mcmoddev.lib.exceptions.TabNotFoundException;
+import com.mcmoddev.lib.interfaces.IDynamicTabProvider;
 import com.mcmoddev.mineralogy.Constants;
 import com.mcmoddev.mineralogy.Mineralogy;
 import com.mcmoddev.mineralogy.MineralogyConfig;
@@ -20,7 +23,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class Ores {
 	private static boolean initDone = false;
-	private static CreativeTabs mineralogyTab;
 	
 	private static int oreWeightCount = 20;
 	
@@ -34,8 +36,6 @@ public class Ores {
 		}
 		
 		MinIoC IoC = MinIoC.getInstance();
-		
-		mineralogyTab = IoC.resolve(CreativeTabs.class);
 		
 		final String ORES = "ores";
 
@@ -70,9 +70,16 @@ public class Ores {
 	private static Block addOre(String oreDictionaryName, Item oreDropItem, int numMin, int numMax, int pickLevel, int minY, int maxY, float spawnFrequency, int spawnQuantity) {
 		String oreName = oreDictionaryName.toLowerCase() + "_" + Constants.ORE;
 
-		Block oreBlock = new Ore(oreName, oreDropItem, numMin, numMax, pickLevel, mineralogyTab)
+		Block oreBlock = new Ore(oreName, oreDropItem, numMin, numMax, pickLevel)
 				.setUnlocalizedName(Mineralogy.MODID + "." + oreName);
 
+		try {
+			MinIoC.getInstance().resolve(IDynamicTabProvider.class).addToTab(oreBlock);
+		} catch (TabNotFoundException | ItemNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		RegistrationHelper.registerBlock(oreBlock, oreName, Constants.ORE + oreDictionaryName);
 
 		GameRegistry.registerWorldGenerator(new OreSpawner(oreBlock, minY, maxY, spawnFrequency, spawnQuantity,
@@ -86,7 +93,7 @@ public class Ores {
 	private static Block addBlock(String oreDictionaryName, int pickLevel, Item dust) {
 		String name = oreDictionaryName.toLowerCase() + "_block";
 
-		BlockItemPair pair = RegistrationHelper.registerBlock(new Rock(false, (float) 1.5, (float) 10, 0, SoundType.STONE, mineralogyTab), name,
+		BlockItemPair pair = RegistrationHelper.registerBlock(new Rock(false, (float) 1.5, (float) 10, 0, SoundType.STONE), name,
 				Constants.BLOCK.toLowerCase() + oreDictionaryName);
 
 		RecipeHelper.addShapedOreRecipe(name, new ItemStack(pair.PairedItem), "xxx", "xxx", "xxx", 'x', dust);

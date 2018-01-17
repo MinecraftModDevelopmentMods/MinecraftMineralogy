@@ -18,14 +18,13 @@ public class Ore extends BlockOre {
 	private final int dropAdduct;
 	private final int dropRange;
 
-	public Ore(String name, Item oreDrop, int minNumberDropped, int maxNumberDropped, int pickLevel, CreativeTabs tab) {
+	public Ore(String name, Item oreDrop, int minNumberDropped, int maxNumberDropped, int pickLevel) {
 		super();
 		this.setSoundType(SoundType.STONE); // sound for stone
 		this.setUnlocalizedName(Mineralogy.MODID + "_" + name);
 		this.setHardness((float) 1.5); // dirt is 0.5, grass is 0.6, stone is 1.5,iron ore is 3, obsidian is 50
 		this.setResistance((float) 5); // dirt is 0, iron ore is 5, stone is 10, obsidian is 2000
 		this.setHarvestLevel("pickaxe", pickLevel);
-		this.setCreativeTab(tab);
 		
 		dropItem = oreDrop;
 		dropAdduct = minNumberDropped;

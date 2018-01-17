@@ -8,7 +8,6 @@ import com.mcmoddev.mineralogy.Mineralogy;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -19,8 +18,8 @@ public class Chert extends Rock {
 	private final Random prng = new Random();
 	private static final String ITEM_NAME = "chert";
 
-	public Chert(CreativeTabs tab) {
-		super(false, (float) 1.5, (float) 10, 1, SoundType.STONE, tab);
+	public Chert() {
+		super(false, (float) 1.5, (float) 10, 1, SoundType.STONE);
 		this.setUnlocalizedName(Mineralogy.MODID + "_" + ITEM_NAME);
 	}
 

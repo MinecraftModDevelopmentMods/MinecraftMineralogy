@@ -1,5 +1,8 @@
 package com.mcmoddev.mineralogy.init;
 
+import com.mcmoddev.lib.exceptions.ItemNotFoundException;
+import com.mcmoddev.lib.exceptions.TabNotFoundException;
+import com.mcmoddev.lib.interfaces.IDynamicTabProvider;
 import com.mcmoddev.mineralogy.Constants;
 import com.mcmoddev.mineralogy.Mineralogy;
 import com.mcmoddev.mineralogy.ioc.MinIoC;
@@ -7,13 +10,11 @@ import com.mcmoddev.mineralogy.items.MineralFertilizer;
 import com.mcmoddev.mineralogy.util.RecipeHelper;
 import com.mcmoddev.mineralogy.util.RegistrationHelper;
 
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class Items {
 	private static boolean initDone = false;
-	private static CreativeTabs mineralogyTab;
 		
 	protected Items() {
 		throw new IllegalAccessError("Not a instantiable class");
@@ -28,7 +29,6 @@ public class Items {
 		}
 		
 		MinIoC IoC = MinIoC.getInstance();
-		mineralogyTab = MinIoC.getInstance().resolve(CreativeTabs.class);
 		
 		Item gypsumPowder = addDust(Constants.GYPSUM);;
 		Item sulphurPowder = addDust(Constants.SULFUR);;
@@ -52,9 +52,15 @@ public class Items {
 	private static Item addDust(String oreDictionaryName) {
 		String dustName = oreDictionaryName.toLowerCase() + "_" + Constants.DUST;
 
-		Item item = RegistrationHelper.registerItem(new Item(), dustName).setUnlocalizedName(Mineralogy.MODID + "." + dustName)
-				.setCreativeTab(mineralogyTab);
+		Item item = RegistrationHelper.registerItem(new Item(), dustName).setUnlocalizedName(Mineralogy.MODID + "." + dustName);
 
+		try {
+			MinIoC.getInstance().resolve(IDynamicTabProvider.class).addToTab(item);
+		} catch (TabNotFoundException | ItemNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		MineralogyRegistry.ItemsToRegister.put(Constants.DUST + oreDictionaryName, item);
 		MinIoC.getInstance().register(Item.class, item, Constants.DUST + oreDictionaryName, Mineralogy.MODID);
 		

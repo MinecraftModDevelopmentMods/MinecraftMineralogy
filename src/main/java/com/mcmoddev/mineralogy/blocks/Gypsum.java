@@ -7,7 +7,6 @@ import com.mcmoddev.mineralogy.ioc.MinIoC;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -19,8 +18,8 @@ public class Gypsum extends Rock {
 	private final Random prng = new Random();
 	private static final String ITEM_NAME = "gypsum";
 
-	public Gypsum(CreativeTabs tab) {
-		super(false, (float) 0.75, (float) 1, 0, SoundType.GROUND, tab);
+	public Gypsum() {
+		super(false, (float) 0.75, (float) 1, 0, SoundType.GROUND);
 		this.setUnlocalizedName(Mineralogy.MODID + "_" + ITEM_NAME);
 	}
 

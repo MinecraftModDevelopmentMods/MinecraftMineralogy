@@ -1,7 +1,11 @@
 package com.mcmoddev.mineralogy.util;
 
+import com.mcmoddev.lib.exceptions.ItemNotFoundException;
+import com.mcmoddev.lib.exceptions.TabNotFoundException;
+import com.mcmoddev.lib.interfaces.IDynamicTabProvider;
 import com.mcmoddev.mineralogy.Mineralogy;
 import com.mcmoddev.mineralogy.init.MineralogyRegistry;
+import com.mcmoddev.mineralogy.ioc.MinIoC;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -16,6 +20,13 @@ public class RegistrationHelper {
 		
 		BlockItemPair pair = new BlockItemPair(block, item);
 
+		try {
+			MinIoC.getInstance().resolve(IDynamicTabProvider.class).addToTab(block);
+		} catch (TabNotFoundException | ItemNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		MineralogyRegistry.BlocksToRegister.put(oreDictionaryName, block);
 		MineralogyRegistry.MineralogyBlockRegistry.put(name, pair);
 

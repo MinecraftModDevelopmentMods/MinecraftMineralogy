@@ -10,7 +10,6 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.EnumFacing;
@@ -60,7 +59,7 @@ public class RockSlab extends net.minecraft.block.Block {
 		}
 	}
 
-	public RockSlab(float hardness, float blastResistance, int toolHardnessLevel, SoundType sound, CreativeTabs tab) {
+	public RockSlab(float hardness, float blastResistance, int toolHardnessLevel, SoundType sound) {
 		super(Material.ROCK);
 		this.setHardness((float) hardness); // dirt is 0.5, grass is 0.6, stone is 1.5,iron ore is 3, obsidian is 50
 		this.setResistance((float) blastResistance); // dirt is 0, iron ore is 5, stone is 10, obsidian is 2000
@@ -68,7 +67,6 @@ public class RockSlab extends net.minecraft.block.Block {
 		this.setHarvestLevel("pickaxe", toolHardnessLevel);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.UP));
 		this.useNeighborBrightness = true;
-		this.setCreativeTab(tab);
 	}
 
 	@Deprecated

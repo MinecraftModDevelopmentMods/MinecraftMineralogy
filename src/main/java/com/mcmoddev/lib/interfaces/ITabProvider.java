@@ -21,7 +21,7 @@ public interface ITabProvider {
 	 * @return Returns the name of the recommended tab
 	 * @throws ItemNotFoundException There was an error finding a tab mapping for the item
 	 */
-	String getTab(Item item) throws ItemNotFoundException;
+	String getTab(Item item);
 	
 	/**
 	 * Gets a recommended tab for a block
@@ -36,8 +36,9 @@ public interface ITabProvider {
 	 * @param block Block to add to the tab
 	 * @param tabName Name of the tab to add the block to
 	 * @throws TabNotFoundException If the tab doesn't exist
+	 * @return this
 	 */
-	void addToTab(String tabName, Block block) throws TabNotFoundException;
+	ITabProvider addToTab(String tabName, Block block) throws TabNotFoundException;
 	
 	/**
 	 * adds an item to a tab
@@ -45,31 +46,34 @@ public interface ITabProvider {
 	 * @param tabName Name of the tab to add the item to
 	 * @throws TabNotFoundException If the tab doesn't exist
 	 */
-	void addToTab(String tabName, Item item) throws TabNotFoundException;
+	ITabProvider addToTab(String tabName, Item item) throws TabNotFoundException;
 	
 	/**
 	 * adds a block to a tab, determines the tab to be used
 	 * @param block Block to add to the tab
 	 * @throws TabNotFoundException If the tab doesn't exist
 	 * @throws ItemNotFoundException If the block can't be mapped to a tab
+	 * @return this
 	 */
-	void addToTab(Block block) throws TabNotFoundException, ItemNotFoundException;
+	ITabProvider addToTab(Block block) throws TabNotFoundException, ItemNotFoundException;
 	
 	/**
 	 * adds an item to a tab, determines the tab to be used
 	 * @param item Item to add to the tab
 	 * @throws TabNotFoundException If the tab doesn't exist
 	 * @throws ItemNotFoundException If the block can't be mapped to a tab
+	 * @return this
 	 */
-	void addToTab(Item item) throws TabNotFoundException, ItemNotFoundException;
+	ITabProvider addToTab(Item item) throws TabNotFoundException, ItemNotFoundException;
 	
 	/**
 	 * sets an icon to a tab
 	 * @param tabName The name of the tab to set the icon for
 	 * @param materia The material to use the icon from for the tab
 	 * @throws TabNotFoundException There was an error setting the tab icon
+	 * @return this
 	 */
-	void setIcon(String tabName, IMMDMaterial material) throws TabNotFoundException;
+	ITabProvider setIcon(String tabName, IMMDMaterial material) throws TabNotFoundException;
 
 	/**
 	 * Gets a list of all tabs
@@ -81,6 +85,7 @@ public interface ITabProvider {
 	 * tells the tabprovider which tabs should be provided for which type items/blocks
 	 * @param tabName name of tab to be mapped
 	 * @param itemName item or block type to map to tab
+	 * @return this
 	 */
-	void setTabItemMapping(String tabName, String itemName);
+	ITabProvider setTabItemMapping(String tabName, String itemName);
 }

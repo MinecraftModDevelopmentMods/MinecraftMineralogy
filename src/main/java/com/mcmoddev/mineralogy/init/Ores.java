@@ -16,7 +16,6 @@ import com.mcmoddev.mineralogy.worldgen.OreSpawner;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -73,13 +72,6 @@ public class Ores {
 		Block oreBlock = new Ore(oreName, oreDropItem, numMin, numMax, pickLevel)
 				.setUnlocalizedName(Mineralogy.MODID + "." + oreName);
 
-		try {
-			MinIoC.getInstance().resolve(IDynamicTabProvider.class).addToTab(oreBlock);
-		} catch (TabNotFoundException | ItemNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		RegistrationHelper.registerBlock(oreBlock, oreName, Constants.ORE + oreDictionaryName);
 
 		GameRegistry.registerWorldGenerator(new OreSpawner(oreBlock, minY, maxY, spawnFrequency, spawnQuantity,
@@ -87,6 +79,13 @@ public class Ores {
 
 		addBlock(oreDictionaryName, 0, oreDropItem);
 
+		try {
+			MinIoC.getInstance().resolve(IDynamicTabProvider.class).addToTab(oreBlock);
+		} catch (TabNotFoundException | ItemNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return oreBlock;
 	}
 	

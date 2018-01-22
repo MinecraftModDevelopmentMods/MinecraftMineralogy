@@ -3,9 +3,9 @@ package com.mcmoddev.mineralogy.ioc;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.mcmoddev.lib.interfaces.IDynamicTabProvider;
+import com.mcmoddev.lib.interfaces.IDynamicTabProvider.DefaultTabGenerationMode;
+import com.mcmoddev.lib.util.DynamicTabProvider;
 import com.mcmoddev.mineralogy.Mineralogy;
-import com.mcmoddev.mineralogy.factory.TabProviderFactory;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -137,7 +137,7 @@ public class MinIoC {
 	public void wireup() {
 		this.register(ItemStack.class, new ItemStack(net.minecraft.init.Items.IRON_PICKAXE), "defaultIcon", Mineralogy.MODID);
 		
-		this.register(IDynamicTabProvider.class, TabProviderFactory.getTabProvider());
+		this.register(IDynamicTabProvider.class, new DynamicTabProvider().setDefaultTabCreationLogic(DefaultTabGenerationMode.ByMod)); //.addTab("Rock", true, Mineralogy.MODID).addTab("Item", true, Mineralogy.MODID)
 	}
 	
 	public static MinIoC getInstance() {

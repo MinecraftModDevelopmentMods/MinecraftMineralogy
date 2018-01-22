@@ -1,8 +1,6 @@
 package com.mcmoddev.lib.util;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -23,13 +21,7 @@ public final class DynamicTabProvider implements IDynamicTabProvider {
 	private Map<String, String> tabsByMod = new HashMap<>();
 	
 	private Multimap<String, String> tabItemMapping = ArrayListMultimap.create();
-		
-	private boolean retrospectiveTabGeneration = false;
-	
-	private List<Block> retrospectiveBlocks = new ArrayList<>();
-	private List<Item> retrospectiveItems = new ArrayList<>();
-	
-	private int optimalTabSize = 50;
+	private IDynamicTabProvider.DefaultTabGenerationMode generationMode = DefaultTabGenerationMode.ByClass;
 	
 	private MMDCreativeTab getTabByName(String tabName) throws TabNotFoundException {
 		MMDCreativeTab tab = tabs.get(tabName);
@@ -41,18 +33,21 @@ public final class DynamicTabProvider implements IDynamicTabProvider {
 	}
 
 	@Override
-	public void addToTab(String tabName, Block block) throws TabNotFoundException {
+	public DynamicTabProvider addToTab(String tabName, Block block) throws TabNotFoundException {
 		block.setCreativeTab(getTabByName(tabName));
+		return this;
 	}
 	
 	@Override
-	public void addToTab(String tabName, Item item) throws TabNotFoundException {	
+	public DynamicTabProvider addToTab(String tabName, Item item) throws TabNotFoundException {	
 		item.setCreativeTab(getTabByName(tabName));
+		return this;
 	}
 
 	@Override
-	public void setIcon(String tabName, IMMDMaterial material) throws TabNotFoundException {
+	public DynamicTabProvider setIcon(String tabName, IMMDMaterial material) throws TabNotFoundException {
 		tabs.get(tabName).setTabIconItem(new ItemStack(Item.getItemFromBlock(material.hasBlock(Names.BLOCK) ?  material.getBlock(Names.BLOCK) : net.minecraft.init.Blocks.IRON_BLOCK)));
+		return this;
 	}
 
 	private Optional<String> getTab(String itemName, String modID)  {
@@ -63,16 +58,17 @@ public final class DynamicTabProvider implements IDynamicTabProvider {
 		return Optional.empty();
 	}
 
-	private List<String> getTabsByMod(String modID)  {
-		List<String> returnTabs = new ArrayList<>();
-		
-		tabsByMod.entrySet().stream().filter(m -> m.getValue() == modID).forEach(action -> returnTabs.add(action.getKey()));
-		
-		return returnTabs;
-	}
+//	private List<String> getTabsByMod(String modID)  {
+//		List<String> returnTabs = new ArrayList<>();
+//		
+//		tabsByMod.entrySet().stream().filter(m -> m.getValue() == modID).forEach(action -> returnTabs.add(action.getKey()));
+//		
+//		return returnTabs;
+//	}
 	
-	public void setTabItemMapping(String tabName, String itemName) {
+	public DynamicTabProvider setTabItemMapping(String tabName, String itemName) {
 		tabItemMapping.put(itemName, tabName);
+		return this;
 	}
 
 	private Optional<String> getTab(String itemName)   {
@@ -80,106 +76,70 @@ public final class DynamicTabProvider implements IDynamicTabProvider {
 	}
 
 	@Override
-	public void addTab(String tabName, boolean searchable, String modID) {
+	public DynamicTabProvider addTab(String tabName, boolean searchable, String modID) {
+		if (tabs.get(tabName) != null)
+			return this;
+		
 		MMDCreativeTab tab = new MMDCreativeTab(String.format("%s.%s", modID, tabName), searchable);
 		
 		tab.Initialise();
 		
 		tabs.put(tabName, tab);
 		tabsByMod.put(tabName, modID);
+		setTabItemMapping(tabName, tabName); // add a like to like mapping
+		
+		return this;
 	}
 
 	@Override
-	public void addToTab(Block block) throws TabNotFoundException, ItemNotFoundException {
-		addToTab(block, retrospectiveTabGeneration);
+	public DynamicTabProvider addToTab(Block block) throws TabNotFoundException, ItemNotFoundException {
+		addToTab(getTab(block), block);
+		return this;
 	}
 
 	@Override
-	public void addToTab(Item item) throws TabNotFoundException, ItemNotFoundException {
-		addToTab(item, retrospectiveTabGeneration);
+	public DynamicTabProvider addToTab(Item item) throws TabNotFoundException, ItemNotFoundException {
+		addToTab(getTab(item), item);
+		return this;
 	}
 
 	@Override
 	public String[] getTabs() {
 		return tabs.keySet().toArray(new String[0]);
 	}
-
-	@Override
-	public void initialiseRetrospectiveTabGeneration() {
-		retrospectiveTabGeneration = true;	
-	}
-
-	@Override
-	public void executeRetrospectiveTabGeneration() {
-		distributeToTabs(retrospectiveBlocks, retrospectiveItems);
-	}
-	
-	private void distributeToTabs (List<Block> blocks, List<Item> items) {
-		List<Block> cascadeBlocks = new ArrayList<>();
-		List<Item> cascadeItems = new ArrayList<>();
-		
-		if (blocks.size() <= optimalTabSize) {
-			
-		} else {
-			// TODO: splitting down 
-		}
-		
-		if (items.size() <= optimalTabSize) {
-			
-		} else {
-			// TODO: splitting down 
-		}
-		
-		if(cascadeBlocks.isEmpty() && cascadeItems.isEmpty())
-			return;
-		else
-			distributeToTabs(cascadeBlocks, cascadeItems);
-	}
 	
 	@Override
-	public String getTab(Item item) throws ItemNotFoundException {
+	public String getTab(Item item) {
 		return getTabBySequence(item.getRegistryName().getResourcePath(), 
 				item.getRegistryName().getResourceDomain(), item.getClass().getSimpleName());
 	}
 
 	@Override
-	public String getTab(Block block) throws ItemNotFoundException {	
+	public String getTab(Block block) {	
 		return getTabBySequence(block.getRegistryName().getResourcePath(), 
 				block.getRegistryName().getResourceDomain(), block.getClass().getSimpleName());
 	}
 
-	private String getTabBySequence(String path, String domain, String simpleName) throws ItemNotFoundException {
-		if (tabs.size() == 0 )
-			throw new ItemNotFoundException(path);
-		
+	private String getTabBySequence(String path, String domain, String simpleName) {
 		return getTab(path, domain) // try getting a tab mapping
 				.orElse(getTab(path) // try a tab mapping without the mod id
+				.orElse(getTab(domain, domain) // try a tab mapping without just mod id
 				.orElse(getTab(simpleName, domain) // try and map on class name and mod id
 				.orElse(getTab(simpleName) // try and map just on class name
-				.orElse(getTabsByMod(domain).stream().findFirst() // get the first tab for this mod
-				.orElse(tabs.entrySet().iterator().next().getKey()))))); // just return the first tab
+				.orElseGet( () -> { // add a tab to match the classname 
+					if (generationMode == DefaultTabGenerationMode.ByClass) {
+						addTab(simpleName, true, domain); 
+						return simpleName;
+					} else {
+						addTab(domain, true, domain); 
+						return domain;
+					}
+					} ))))); 
 	}
 
 	@Override
-	public void addToTab(Block block, boolean retrospectiveTabGeneration) throws ItemNotFoundException, TabNotFoundException {
-		if (retrospectiveTabGeneration) {
-			retrospectiveBlocks.add(block);
-		} else {
-			addToTab(getTab(block), block);
-		}
-	}
-
-	@Override
-	public void addToTab(Item item, boolean retrospectiveTabGeneration) throws ItemNotFoundException, TabNotFoundException {
-		if (retrospectiveTabGeneration) {
-			retrospectiveItems.add(item);
-		} else {
-			addToTab(getTab(item), item);
-		}
-	}
-
-	@Override
-	public void setOptimalTabSize(int value) {
-		optimalTabSize = value;
+	public IDynamicTabProvider setDefaultTabCreationLogic(DefaultTabGenerationMode generationMode) {
+		this.generationMode = generationMode;
+		return this;
 	}
 }

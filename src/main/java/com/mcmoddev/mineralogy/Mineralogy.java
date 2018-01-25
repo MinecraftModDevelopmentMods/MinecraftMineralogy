@@ -5,7 +5,9 @@ package com.mcmoddev.mineralogy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.mcmoddev.lib.interfaces.IDynamicTabProvider;
 import com.mcmoddev.mineralogy.init.MineralogyRegistry;
+import com.mcmoddev.mineralogy.ioc.MinIoC;
 import com.mcmoddev.mineralogy.worldgen.StoneReplacer;
 
 import net.minecraft.block.Block;
@@ -138,6 +140,8 @@ public class Mineralogy {
 				continue;
 			MineralogyRegistry.sedimentaryStones.remove(b);
 		}
+		
+		MinIoC.getInstance().resolve(IDynamicTabProvider.class).setTabIcons();
 	}
 
 	private static Block getBlock(String id) {

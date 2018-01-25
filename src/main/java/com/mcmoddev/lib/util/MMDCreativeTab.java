@@ -31,7 +31,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public class MMDCreativeTab extends CreativeTabs implements IMMDCreativeTab {
 	private ItemStack iconItem;
-
+	private Block iconBlock;
+	
 	private boolean searchable;
 	private Comparator<ItemStack> comparator;
 	
@@ -156,6 +157,7 @@ public class MMDCreativeTab extends CreativeTabs implements IMMDCreativeTab {
 
 
 	public MMDCreativeTab setIconItem(@Nonnull final Block iconBlock) {
+		this.iconBlock = iconBlock;
 		this.iconItem = new ItemStack(Item.getItemFromBlock(iconBlock));
 		return this;
 	}
@@ -187,5 +189,11 @@ public class MMDCreativeTab extends CreativeTabs implements IMMDCreativeTab {
 	@Override
 	public void setTabIconItem(@Nonnull final ItemStack iconItem) {
 		this.iconItem = iconItem;
+	}
+
+	@Override
+	public void setTabIconItem() {
+		if (this.iconBlock != null)
+			this.setTabIconItem(this.iconBlock);
 	}
 }

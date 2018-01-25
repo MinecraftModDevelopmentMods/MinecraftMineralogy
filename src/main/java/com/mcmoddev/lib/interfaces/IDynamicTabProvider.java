@@ -31,4 +31,10 @@ public interface IDynamicTabProvider extends ITabProvider {
 		ByClass,
 		ByMod
 	}
+	
+	/**
+	 * causes the tab icons to be reset/set
+	 * @return this
+	 */
+	public IDynamicTabProvider setTabIcons();
 }

@@ -2,6 +2,7 @@ package com.mcmoddev.lib.util;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 
 import com.google.common.collect.ArrayListMultimap;
@@ -11,6 +12,8 @@ import com.mcmoddev.lib.exceptions.ItemNotFoundException;
 import com.mcmoddev.lib.exceptions.TabNotFoundException;
 import com.mcmoddev.lib.interfaces.IDynamicTabProvider;
 import com.mcmoddev.lib.interfaces.IMMDMaterial;
+import com.mcmoddev.mineralogy.Mineralogy;
+import com.mcmoddev.mineralogy.ioc.MinIoC;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -23,6 +26,14 @@ public final class DynamicTabProvider implements IDynamicTabProvider {
 	private Multimap<String, String> tabItemMapping = ArrayListMultimap.create();
 	private IDynamicTabProvider.DefaultTabGenerationMode generationMode = DefaultTabGenerationMode.ByClass;
 	
+	private MinIoC IoC;
+	private ItemStack defaultIcon;
+	
+	public DynamicTabProvider() {
+		IoC = MinIoC.getInstance();
+		defaultIcon = IoC.resolve(ItemStack.class, "defaultIcon", Mineralogy.MODID);
+	}
+	
 	private MMDCreativeTab getTabByName(String tabName) throws TabNotFoundException {
 		MMDCreativeTab tab = tabs.get(tabName);
 		
@@ -34,13 +45,27 @@ public final class DynamicTabProvider implements IDynamicTabProvider {
 
 	@Override
 	public DynamicTabProvider addToTab(String tabName, Block block) throws TabNotFoundException {
-		block.setCreativeTab(getTabByName(tabName));
+		MMDCreativeTab tab = getTabByName(tabName);
+		
+		MinIoC.getInstance().resolve(ItemStack.class, "defaultIcon", Mineralogy.MODID);
+		
+		if (tab.getTabIconItem().getItem().getRegistryName().equals(defaultIcon.getItem().getRegistryName()))
+			tab.setIconItem(block);
+		
+		block.setCreativeTab(tab);
 		return this;
 	}
 	
+	
+	
 	@Override
 	public DynamicTabProvider addToTab(String tabName, Item item) throws TabNotFoundException {	
-		item.setCreativeTab(getTabByName(tabName));
+		MMDCreativeTab tab = getTabByName(tabName);
+		
+		if (tab.getTabIconItem().getItem().getRegistryName().equals(defaultIcon.getItem().getRegistryName()))
+			tab.setIconItem(item);
+			
+		item.setCreativeTab(tab);
 		return this;
 	}
 
@@ -132,6 +157,14 @@ public final class DynamicTabProvider implements IDynamicTabProvider {
 	@Override
 	public IDynamicTabProvider setDefaultTabCreationLogic(DefaultTabGenerationMode generationMode) {
 		this.generationMode = generationMode;
+		return this;
+	}
+
+	@Override
+	public IDynamicTabProvider setTabIcons() {
+		for (Entry<String, MMDCreativeTab> tabEntry : tabs.entrySet())
+			tabEntry.getValue().setTabIconItem();
+		
 		return this;
 	}
 }

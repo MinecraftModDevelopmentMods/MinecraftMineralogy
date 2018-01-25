@@ -19,6 +19,7 @@ public interface IMMDCreativeTab {
 
 	void setSortingAlgorithm(Comparator<ItemStack> comparator);
 
+	void setTabIconItem();
 	void setTabIconItem(Block iconBlock);
 
 	void setTabIconItem(Item iconItem);

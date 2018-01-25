@@ -1,5 +1,6 @@
 package com.mcmoddev.mineralogy.init;
 
+import com.mcmoddev.lib.interfaces.IDynamicTabProvider;
 import com.mcmoddev.mineralogy.Constants;
 import com.mcmoddev.mineralogy.Mineralogy;
 import com.mcmoddev.mineralogy.MineralogyConfig;
@@ -61,7 +62,11 @@ public class Blocks {
 		
 		IoC.register(BlockItemPair.class, blockPumice, Constants.BLOCK_PUMICE, Mineralogy.MODID);
 		
+		IDynamicTabProvider tabProvider = IoC.resolve(IDynamicTabProvider.class);
+		
 		for (int i = 0; i < 16; i++) {
+			tabProvider.setTabItemMapping("Item", Constants.DRYWALL + "_" + Constants.colorSuffixes[i]);
+			
 			drywalls[i] = RegistrationHelper.registerBlock(new DryWall(Constants.colorSuffixes[i]), Constants.DRYWALL + "_" + Constants.colorSuffixes[i],
 					Constants.DRYWALL + Constants.colorSuffixesTwo[i]);
 			

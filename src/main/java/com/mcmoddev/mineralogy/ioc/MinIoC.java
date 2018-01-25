@@ -137,7 +137,11 @@ public class MinIoC {
 	public void wireup() {
 		this.register(ItemStack.class, new ItemStack(net.minecraft.init.Items.IRON_PICKAXE), "defaultIcon", Mineralogy.MODID);
 		
-		this.register(IDynamicTabProvider.class, new DynamicTabProvider().setDefaultTabCreationLogic(DefaultTabGenerationMode.ByMod)); //.addTab("Rock", true, Mineralogy.MODID).addTab("Item", true, Mineralogy.MODID)
+		this.register(IDynamicTabProvider.class, new DynamicTabProvider()
+				.setTabItemMapping("Rock", "Chert")
+				.setTabItemMapping("Rock", "Gypsum")
+				.setTabItemMapping("Rock", "Ore")
+				.addTab("Item", true, Mineralogy.MODID)); 
 	}
 	
 	public static MinIoC getInstance() {

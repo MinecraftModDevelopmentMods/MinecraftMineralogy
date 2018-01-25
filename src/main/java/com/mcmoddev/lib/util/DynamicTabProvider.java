@@ -53,18 +53,10 @@ public final class DynamicTabProvider implements IDynamicTabProvider {
 	private Optional<String> getTab(String itemName, String modID)  {
 		for (String tab : tabItemMapping.get(itemName))
 			if (modID.equals(tabsByMod.get(tab))) 
-				return Optional.of(tab) ;
+				return Optional.of(tab);
 		
 		return Optional.empty();
 	}
-
-//	private List<String> getTabsByMod(String modID)  {
-//		List<String> returnTabs = new ArrayList<>();
-//		
-//		tabsByMod.entrySet().stream().filter(m -> m.getValue() == modID).forEach(action -> returnTabs.add(action.getKey()));
-//		
-//		return returnTabs;
-//	}
 	
 	public DynamicTabProvider setTabItemMapping(String tabName, String itemName) {
 		tabItemMapping.put(itemName, tabName);
@@ -122,10 +114,10 @@ public final class DynamicTabProvider implements IDynamicTabProvider {
 
 	private String getTabBySequence(String path, String domain, String simpleName) {
 		return getTab(path, domain) // try getting a tab mapping
-				.orElse(getTab(path) // try a tab mapping without the mod id
-				.orElse(getTab(domain, domain) // try a tab mapping without just mod id
-				.orElse(getTab(simpleName, domain) // try and map on class name and mod id
-				.orElse(getTab(simpleName) // try and map just on class name
+				.orElseGet(() -> getTab(path) // try a tab mapping without the mod id
+				.orElseGet(() -> getTab(domain, domain) // try a tab mapping without just mod id
+				.orElseGet(() -> getTab(simpleName, domain) // try and map on class name and mod id
+				.orElseGet(() -> getTab(simpleName) // try and map just on class name
 				.orElseGet( () -> { // add a tab to match the classname 
 					if (generationMode == DefaultTabGenerationMode.ByClass) {
 						addTab(simpleName, true, domain); 

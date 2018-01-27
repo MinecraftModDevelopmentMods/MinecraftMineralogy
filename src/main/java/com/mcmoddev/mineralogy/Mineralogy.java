@@ -5,6 +5,7 @@ package com.mcmoddev.mineralogy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.mcmoddev.lib.exceptions.TabNotFoundException;
 import com.mcmoddev.lib.interfaces.IDynamicTabProvider;
 import com.mcmoddev.mineralogy.init.MineralogyRegistry;
 import com.mcmoddev.mineralogy.ioc.MinIoC;
@@ -141,7 +142,16 @@ public class Mineralogy {
 			MineralogyRegistry.sedimentaryStones.remove(b);
 		}
 		
-		MinIoC.getInstance().resolve(IDynamicTabProvider.class).setTabIcons();
+		MinIoC IoC = MinIoC.getInstance();
+		ItemStack sulphurStack = new ItemStack(IoC.resolve(Item.class, Constants.SULFUR, Mineralogy.MODID));
+		
+		try {
+			IoC.resolve(IDynamicTabProvider.class)
+				.setTabIcons()
+				.setIcon("Item", sulphurStack);
+		} catch (TabNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private static Block getBlock(String id) {

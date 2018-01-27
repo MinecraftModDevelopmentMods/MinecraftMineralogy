@@ -12,6 +12,7 @@ import com.mcmoddev.lib.exceptions.ItemNotFoundException;
 import com.mcmoddev.lib.exceptions.TabNotFoundException;
 import com.mcmoddev.lib.interfaces.IDynamicTabProvider;
 import com.mcmoddev.lib.interfaces.IMMDMaterial;
+import com.mcmoddev.lib.interfaces.ITabProvider;
 import com.mcmoddev.mineralogy.Mineralogy;
 import com.mcmoddev.mineralogy.ioc.MinIoC;
 
@@ -165,6 +166,12 @@ public final class DynamicTabProvider implements IDynamicTabProvider {
 		for (Entry<String, MMDCreativeTab> tabEntry : tabs.entrySet())
 			tabEntry.getValue().setTabIconItem();
 		
+		return this;
+	}
+
+	@Override
+	public ITabProvider setIcon(String tabName, ItemStack iconItem) throws TabNotFoundException {
+		tabs.get(tabName).setTabIconItem(iconItem);
 		return this;
 	}
 }

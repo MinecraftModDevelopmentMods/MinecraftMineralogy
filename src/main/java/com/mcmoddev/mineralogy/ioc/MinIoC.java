@@ -141,7 +141,11 @@ public class MinIoC {
 				.setTabItemMapping("Rock", "Chert")
 				.setTabItemMapping("Rock", "Gypsum")
 				.setTabItemMapping("Rock", "Ore")
-				.addTab("Item", true, Mineralogy.MODID)); 
+				.addTab("Item", true, Mineralogy.MODID)
+				.addTab("Stair", true, Mineralogy.MODID)
+				.addTab("Slab", true, Mineralogy.MODID)
+				.setTabItemMapping("Stair", "RockStairs")
+				.setTabItemMapping("Slab", "RockSlab")); 
 	}
 	
 	public static MinIoC getInstance() {

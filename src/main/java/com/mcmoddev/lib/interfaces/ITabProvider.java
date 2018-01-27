@@ -5,6 +5,7 @@ import com.mcmoddev.lib.exceptions.TabNotFoundException;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 
 /**
@@ -69,11 +70,20 @@ public interface ITabProvider {
 	/**
 	 * sets an icon to a tab
 	 * @param tabName The name of the tab to set the icon for
-	 * @param materia The material to use the icon from for the tab
+	 * @param material The material to use the icon from for the tab
 	 * @throws TabNotFoundException There was an error setting the tab icon
 	 * @return this
 	 */
 	ITabProvider setIcon(String tabName, IMMDMaterial material) throws TabNotFoundException;
+	
+	/**
+	 * sets an icon to a tab
+	 * @param tabName The name of the tab to set the icon for
+	 * @param iconItem The icon for the tab
+	 * @throws TabNotFoundException There was an error setting the tab icon
+	 * @return this
+	 */
+	ITabProvider setIcon(String tabName, ItemStack iconItem) throws TabNotFoundException;
 
 	/**
 	 * Gets a list of all tabs

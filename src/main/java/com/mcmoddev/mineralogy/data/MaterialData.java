@@ -18,7 +18,7 @@ public class MaterialData {
 	public static final Material MARBLE = new Material("Marble", RockType.SEDIMENTARY, 1.5, 10, 0);
 	
 	public static final Material SLATE = new Material("Slate", RockType.METAMORPHIC, 1.5, 10, 0);
-	public static final Material SCHIST = new Material("Slate", RockType.METAMORPHIC, 3, 15, 1);
+	public static final Material SCHIST = new Material("Schist", RockType.METAMORPHIC, 3, 15, 1);
 	public static final Material GNEISS = new Material("Gneiss", RockType.METAMORPHIC, 3, 15, 1);
 	public static final Material PHYLLITE = new Material("Phyllite", RockType.METAMORPHIC, 1.5, 10, 0);
 	public static final Material AMPHIBOLITE = new Material("Amphibolite", RockType.METAMORPHIC, 3, 15, 1);

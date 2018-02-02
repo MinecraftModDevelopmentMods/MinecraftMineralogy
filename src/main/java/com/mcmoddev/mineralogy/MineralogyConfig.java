@@ -19,6 +19,7 @@ public class MineralogyConfig {
 
 	private static boolean generateRockStairs = true;
 	private static boolean generateRockSlab = true;
+	private static boolean generateRockWall = true;
 	private static boolean generateBrick = true;
 	private static boolean generateBrickStairs = true;
 	private static boolean generateBrickSlab = true;
@@ -69,6 +70,8 @@ public class MineralogyConfig {
 				"If true, then rock stairs will be generated");
 		generateRockSlab = config.getBoolean("GENERATE_ROCKSLAB", OPTIONS, generateRockSlab,
 				"If true, then rock slabs will be generated");
+		generateRockWall = config.getBoolean("GENERATE_ROCKWALL", OPTIONS, generateRockWall,
+				"If true, then rock walls will be generated");
 		generateBrick = config.getBoolean("GENERATE_BRICK", OPTIONS, generateBrick,
 				"If true, then rock brick blocks will be generated");
 		generateBrickStairs = config.getBoolean("GENERATE_BRICKSTAIRS", OPTIONS, generateBrickStairs,
@@ -148,6 +151,10 @@ public class MineralogyConfig {
 		return generateRockSlab;
 	}
 
+	public static boolean generateRockWall() {
+		return generateRockWall;
+	}
+	
 	public static boolean generateBrick() {
 		return generateBrick;
 	}

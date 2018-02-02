@@ -66,4 +66,5 @@ public class Constants {
 	public static final String BLOCK_CHERT = "blockChert";
 	public static final String DUST_GYPSUM = "dustGypsum";
 	public static final String PAPER = "paper";
+	public static final String WALL = "wall";
 }

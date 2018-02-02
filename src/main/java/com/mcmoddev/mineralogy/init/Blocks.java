@@ -10,6 +10,7 @@ import com.mcmoddev.mineralogy.blocks.Gypsum;
 import com.mcmoddev.mineralogy.blocks.Rock;
 import com.mcmoddev.mineralogy.blocks.RockSlab;
 import com.mcmoddev.mineralogy.blocks.RockStairs;
+import com.mcmoddev.mineralogy.blocks.RockWall;
 import com.mcmoddev.mineralogy.data.Material;
 import com.mcmoddev.mineralogy.data.MaterialData;
 import com.mcmoddev.mineralogy.ioc.MinIoC;
@@ -86,15 +87,19 @@ public class Blocks {
 		final BlockItemPair rockPair;
 		final BlockItemPair rockStairPair;
 		final BlockItemPair rockSlabPair;
+		final BlockItemPair rockWallPair;
 		final BlockItemPair brickPair;
 		final BlockItemPair brickStairPair;
 		final BlockItemPair brickSlabPair;
+		final BlockItemPair brickWallPair;
 		final BlockItemPair smoothPair;
 		final BlockItemPair smoothStairPair;
 		final BlockItemPair smoothSlabPair;
+		final BlockItemPair smoothWallPair;
 		final BlockItemPair smoothBrickPair;
 		final BlockItemPair smoothBrickStairPair;
 		final BlockItemPair smoothBrickSlabPair;
+		final BlockItemPair smoothBrickWallPair;
 
 		rockPair = RegistrationHelper.registerBlock(new Rock(true, (float) materialType.hardness, (float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE), name, name);
 
@@ -139,6 +144,14 @@ public class Blocks {
 			RecipeHelper.addShapedOreRecipe(name + "_" + Constants.SLAB, new ItemStack(rockSlabPair.PairedItem, 6), "xxx", 'x',
 					rockPair.PairedItem);
 		}
+		
+		if (MineralogyConfig.generateRockWall()) {
+			rockWallPair = RegistrationHelper.registerBlock(
+					new RockWall(rockPair.PairedBlock, (float) materialType.hardness, (float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE),
+					name + "_" + Constants.WALL, Constants.WALL + materialType.materialName);
+			RecipeHelper.addShapedOreRecipe(name + "_" + Constants.WALL, new ItemStack(rockWallPair.PairedItem, 6), "xxx", "xxx", 'x',
+					rockPair.PairedItem);
+		}
 
 		if (MineralogyConfig.generateBrick()) {
 			brickPair = RegistrationHelper.registerBlock(
@@ -162,6 +175,14 @@ public class Blocks {
 						name + "_" + Constants.BRICK + "_" + Constants.SLAB, Constants.SLAB + materialType.materialName + "Brick");
 				RecipeHelper.addShapedOreRecipe(name + "_" + Constants.BRICK + "_" + Constants.SLAB, new ItemStack(brickSlabPair.PairedItem, 6), "xxx",
 						'x', brickPair.PairedItem);
+			}
+			
+			if (MineralogyConfig.generateBrickWall()) {
+				brickWallPair = RegistrationHelper.registerBlock(
+						new RockWall(rockPair.PairedBlock, (float) materialType.hardness, (float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE),
+						name + "_" + Constants.BRICK + "_" + Constants.WALL, Constants.WALL + materialType.materialName);
+				RecipeHelper.addShapedOreRecipe(name + "_" + Constants.BRICK + "_" + Constants.WALL, new ItemStack(brickWallPair.PairedItem, 6), "xxx", "xxx", 'x',
+						brickPair.PairedItem);
 			}
 		}
 
@@ -190,6 +211,14 @@ public class Blocks {
 						'x', smoothPair.PairedItem);
 			}
 
+			if (MineralogyConfig.generateSmoothWall()) {
+				smoothWallPair = RegistrationHelper.registerBlock(
+						new RockWall(rockPair.PairedBlock, (float) materialType.hardness, (float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE),
+						name + "_" + Constants.SMOOTH + "_" + Constants.WALL, Constants.WALL + materialType.materialName);
+				RecipeHelper.addShapedOreRecipe(name + "_" + Constants.SMOOTH + "_" + Constants.WALL, new ItemStack(smoothWallPair.PairedItem, 6), "xxx", "xxx", 'x',
+						smoothPair.PairedItem);
+			}
+			
 			if (MineralogyConfig.generateSmoothBrick()) {
 				smoothBrickPair = RegistrationHelper.registerBlock(
 						new Rock(false, (float) materialType.hardness, (float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE),
@@ -213,6 +242,14 @@ public class Blocks {
 							name + "_" + Constants.SMOOTH + "_" + Constants.BRICK + "_" + Constants.SLAB, Constants.SLAB + materialType.materialName + "SmoothBrick");
 					RecipeHelper.addShapedOreRecipe(name + "_" + Constants.SMOOTH + "_" + Constants.BRICK + "_" + Constants.SLAB,
 							new ItemStack(smoothBrickSlabPair.PairedItem, 6), "xxx", 'x', smoothBrickPair.PairedItem);
+				}
+				
+				if (MineralogyConfig.generateSmoothBrickWall()) {
+					smoothBrickWallPair = RegistrationHelper.registerBlock(
+							new RockWall(rockPair.PairedBlock, (float) materialType.hardness, (float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE),
+							name + "_" + Constants.SMOOTH + "_" + Constants.BRICK + "_" + Constants.WALL, Constants.WALL + materialType.materialName);
+					RecipeHelper.addShapedOreRecipe(name + "_" + Constants.SMOOTH + "_" + Constants.BRICK + "_" + Constants.WALL, new ItemStack(smoothBrickWallPair.PairedItem, 6), "xxx", "xxx", 'x',
+							smoothBrickPair.PairedItem);
 				}
 			}
 		}

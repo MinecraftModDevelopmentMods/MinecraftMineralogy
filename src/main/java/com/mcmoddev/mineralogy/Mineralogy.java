@@ -72,8 +72,6 @@ public class Mineralogy {
 		com.mcmoddev.mineralogy.init.Items.init();
 		com.mcmoddev.mineralogy.init.Ores.Init();
 		com.mcmoddev.mineralogy.init.Recipes.Init();
-
-		
 	}
 
 	@EventHandler
@@ -92,7 +90,6 @@ public class Mineralogy {
 	}
 
 	private void registerItemRenders() {
-
 		for (String name : MineralogyRegistry.MineralogyItemRegistry.keySet()) {
 			Item i = MineralogyRegistry.MineralogyItemRegistry.get(name);
 			Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(i, 0,

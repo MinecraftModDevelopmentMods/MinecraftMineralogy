@@ -1,0 +1,6 @@
+{
+    "parent": "block/wall_post",
+    "textures": {
+        "wall": "mineralogy:blocks/conglomerate_brick_side"
+    }
+}

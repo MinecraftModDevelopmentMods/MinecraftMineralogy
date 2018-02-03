@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.mcmoddev.mineralogy.Mineralogy;
+import com.mcmoddev.mineralogy.init.MineralogyRegistry;
+import com.mcmoddev.mineralogy.ioc.MinIoC;
+import com.mcmoddev.mineralogy.util.BlockItemPair;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -36,8 +39,11 @@ public class PatchHandler {
 	public void init(boolean enabled) {
 		if (enabled) {
 			saprolite = legacyBlock("saprolite",
-					Mineralogy.MineralogyBlockRegistry.get("limestone").PairedBlock.getDefaultState());
-			pummice = legacyBlock("pummice", Mineralogy.blockPumice.PairedBlock.getDefaultState());
+					MineralogyRegistry.MineralogyBlockRegistry.get("limestone").PairedBlock.getDefaultState());
+			
+			Block blockPumice = MinIoC.getInstance().resolve(BlockItemPair.class, "blockPumice", Mineralogy.MODID).PairedBlock;
+			
+			pummice = legacyBlock("pummice", blockPumice.getDefaultState());
 
 			MineralogyPatchRegistry.put("saprolite", saprolite);
 			MineralogyPatchRegistry.put("pummice", pummice);

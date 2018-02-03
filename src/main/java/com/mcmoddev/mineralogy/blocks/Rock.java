@@ -4,11 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.mcmoddev.mineralogy.MineralogyConfig;
-
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -25,7 +23,6 @@ public class Rock extends net.minecraft.block.Block {
 		this.setResistance((float) blastResistance); // dirt is 0, iron ore is 5, stone is 10, obsidian is 2000
 		this.setSoundType(sound); // sound for stone
 		this.setHarvestLevel("pickaxe", toolHardnessLevel);
-		this.setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
 	}
 
 	public final boolean isStoneEquivalent;

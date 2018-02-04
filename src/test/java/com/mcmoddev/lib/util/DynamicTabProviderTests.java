@@ -27,12 +27,12 @@ class DynamicTabProviderTests {
 	void tearDown() throws Exception {
 	}
 
-	@Test
-	void testProviderCanBeInstansiated() {
-		IDynamicTabProvider dynamicTabProvider = new DynamicTabProvider();
-		
-		assertNotNull(dynamicTabProvider);
-	}
+//	@Test
+//	void testProviderCanBeInstansiated() {
+//		IDynamicTabProvider dynamicTabProvider = new DynamicTabProvider();
+//		
+//		assertNotNull(dynamicTabProvider);
+//	}
 
 //	@Test
 //	void testProviderCanAddTabAndItem() {

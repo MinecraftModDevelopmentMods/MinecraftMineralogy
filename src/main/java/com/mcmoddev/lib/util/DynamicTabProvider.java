@@ -19,6 +19,8 @@ import com.mcmoddev.mineralogy.ioc.MinIoC;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
 
 public final class DynamicTabProvider implements IDynamicTabProvider {
 	private Map<String, MMDCreativeTab> tabs = new HashMap<>();
@@ -46,12 +48,14 @@ public final class DynamicTabProvider implements IDynamicTabProvider {
 
 	@Override
 	public DynamicTabProvider addToTab(String tabName, Block block) throws TabNotFoundException {
+		
 		MMDCreativeTab tab = getTabByName(tabName);
 		
 		MinIoC.getInstance().resolve(ItemStack.class, "defaultIcon", Mineralogy.MODID);
 		
-		if (tab.getTabIconItem().getItem().getRegistryName().equals(defaultIcon.getItem().getRegistryName()))
-			tab.setIconItem(block);
+		if(FMLCommonHandler.instance().getEffectiveSide()==Side.CLIENT)
+			if (tab.getTabIconItem().getItem().getRegistryName().equals(defaultIcon.getItem().getRegistryName()))
+				tab.setIconItem(block);
 		
 		block.setCreativeTab(tab);
 		return this;
@@ -63,8 +67,9 @@ public final class DynamicTabProvider implements IDynamicTabProvider {
 	public DynamicTabProvider addToTab(String tabName, Item item) throws TabNotFoundException {	
 		MMDCreativeTab tab = getTabByName(tabName);
 		
-		if (tab.getTabIconItem().getItem().getRegistryName().equals(defaultIcon.getItem().getRegistryName()))
-			tab.setIconItem(item);
+		if(FMLCommonHandler.instance().getEffectiveSide()==Side.CLIENT)
+			if (tab.getTabIconItem().getItem().getRegistryName().equals(defaultIcon.getItem().getRegistryName()))
+				tab.setIconItem(item);
 			
 		item.setCreativeTab(tab);
 		return this;

@@ -6,6 +6,8 @@ import com.mcmoddev.lib.interfaces.IDynamicTabProvider;
 import com.mcmoddev.lib.interfaces.IDynamicTabProvider.DefaultTabGenerationMode;
 import com.mcmoddev.lib.util.DynamicTabProvider;
 import com.mcmoddev.mineralogy.Mineralogy;
+import com.mcmoddev.mineralogy.MineralogyConfig;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -137,17 +139,22 @@ public class MinIoC {
 	public void wireup() {
 		this.register(ItemStack.class, new ItemStack(net.minecraft.init.Items.IRON_PICKAXE), "defaultIcon", Mineralogy.MODID);
 		
-		this.register(IDynamicTabProvider.class, new DynamicTabProvider()
-				.setTabItemMapping("Rock", "Chert")
-				.setTabItemMapping("Rock", "Gypsum")
-				.setTabItemMapping("Rock", "Ore")
-				.addTab("Item", true, Mineralogy.MODID)
-				.addTab("Stair", true, Mineralogy.MODID)
-				.addTab("Slab", true, Mineralogy.MODID)
-				.addTab("Wall", true, Mineralogy.MODID)
-				.setTabItemMapping("Stair", "RockStairs")
-				.setTabItemMapping("Slab", "RockSlab")
-				.setTabItemMapping("Wall", "RockWall")); 
+		if (MineralogyConfig.groupCreativeTabItemsByType())
+			this.register(IDynamicTabProvider.class, new DynamicTabProvider()
+					.setTabItemMapping("Rock", "Chert")
+					.setTabItemMapping("Rock", "Gypsum")
+					.setTabItemMapping("Rock", "Ore")
+					.addTab("Item", true, Mineralogy.MODID)
+					.addTab("Stair", true, Mineralogy.MODID)
+					.addTab("Slab", true, Mineralogy.MODID)
+					.addTab("Wall", true, Mineralogy.MODID)
+					.setTabItemMapping("Stair", "RockStairs")
+					.setTabItemMapping("Slab", "RockSlab")
+					.setTabItemMapping("Wall", "RockWall"));
+		else
+			this.register(IDynamicTabProvider.class, new DynamicTabProvider()
+					.setDefaultTabCreationLogic(DefaultTabGenerationMode.ByMod));
+			
 	}
 	
 	public static MinIoC getInstance() {

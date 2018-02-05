@@ -33,6 +33,8 @@ public class MineralogyConfig {
 	private static boolean generateSmoothBrickSlab = true;
 	private static boolean generateSmoothBrickWall = true;
 
+	private static boolean groupCreativeTabItemsByType = false;
+	
 	private static List<String> igneousWhitelist = new ArrayList<>();
 	private static List<String> igneousBlacklist = new ArrayList<>();
 	private static List<String> sedimentaryWhitelist = new ArrayList<>();
@@ -96,6 +98,9 @@ public class MineralogyConfig {
 				"If true, then polished brick slabs will be generated");
 		generateSmoothBrickWall = config.getBoolean("GENERATE_SMOOTHBRICKWALL", OPTIONS, generateSmoothBrickWall,
 				"If true, then polished brick walls will be generated");
+		
+		groupCreativeTabItemsByType = config.getBoolean("GROUP_TABS_BY_TYPE", OPTIONS, groupCreativeTabItemsByType,
+				"If true, then the creative tabs will be split by item type");
 
 		final String FORMAT_LIST_MESSAGE = "(format is mod:block as a semicolon (;) delimited list)";
 
@@ -112,6 +117,8 @@ public class MineralogyConfig {
 				"Adds blocks to rock layers " + FORMAT_LIST_MESSAGE), ";"));
 		metamorphicWhitelist.addAll(asList(config.getString("metamorphic_whitelist", WORLD_GEN, "",
 				"Adds blocks to rock layers " + FORMAT_LIST_MESSAGE), ";"));
+		
+		
 	}
 
 	private static List<String> asList(String list, String delimiter) {
@@ -225,6 +232,10 @@ public class MineralogyConfig {
 
 	public static List<String> metamorphicBlacklist() {
 		return metamorphicBlacklist;
+	}
+	
+	public static boolean groupCreativeTabItemsByType() {
+		return groupCreativeTabItemsByType;
 	}
 	public static Configuration config() {
 		return config;

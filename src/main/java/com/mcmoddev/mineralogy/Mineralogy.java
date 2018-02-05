@@ -143,9 +143,13 @@ public class Mineralogy {
 		ItemStack sulphurStack = new ItemStack(IoC.resolve(Item.class, Constants.SULFUR, Mineralogy.MODID));
 		
 		try {
-			IoC.resolve(IDynamicTabProvider.class)
-				.setTabIcons()
-				.setIcon("Item", sulphurStack);
+			IDynamicTabProvider tabProvider = IoC.resolve(IDynamicTabProvider.class);
+			
+			tabProvider.setTabIcons();
+			
+			if (MineralogyConfig.groupCreativeTabItemsByType())
+				tabProvider.setIcon("Item", sulphurStack);
+			
 		} catch (TabNotFoundException e) {
 			e.printStackTrace();
 		}

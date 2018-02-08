@@ -292,3 +292,4 @@ tile.mineralogy.amphibolite_wall.name=Amphibolite Wall
 tile.mineralogy.amphibolite_brick_wall.name=Amphibolite Brick Wall
 tile.mineralogy.amphibolite_smooth_wall.name=Amphibolite Polished Wall
 tile.mineralogy.amphibolite_smooth_brick_wall.name=Amphibolite Polished Brick Wall
+itemGroup.mineralogy.mineralogy=Mineralogy

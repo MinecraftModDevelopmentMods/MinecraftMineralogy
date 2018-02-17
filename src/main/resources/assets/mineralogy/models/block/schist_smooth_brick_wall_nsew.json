@@ -1,6 +1,0 @@
-{
-    "parent": "block/wall_nsew",
-    "textures": {
-        "wall": "mineralogy:blocks/schist_smooth_brick"
-    }
-}

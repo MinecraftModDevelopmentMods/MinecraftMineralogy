@@ -1,6 +1,0 @@
-{
-    "parent": "block/wall_ne",
-    "textures": {
-        "wall": "mineralogy:blocks/gneiss_smooth"
-    }
-}

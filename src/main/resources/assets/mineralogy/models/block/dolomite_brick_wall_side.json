@@ -1,0 +1,6 @@
+{
+    "parent": "block/wall_side",
+    "textures": {
+        "wall": "mineralogy:blocks/dolomite_brick_side"
+    }
+}

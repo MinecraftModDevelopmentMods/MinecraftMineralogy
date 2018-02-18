@@ -3,7 +3,6 @@ package cyano.mineralogy.blocks;
 import cyano.mineralogy.Mineralogy;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -20,7 +19,7 @@ public class Chert extends Rock {
 	public Chert(){
 		super(false, (float)1.5, (float)10, 1, SoundType.STONE);
 		this.setUnlocalizedName(Mineralogy.MODID + "_" + itemName);
-		this.setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
+		this.setCreativeTab(Mineralogy.mineralogyTab);
 	}
 
 	@Override

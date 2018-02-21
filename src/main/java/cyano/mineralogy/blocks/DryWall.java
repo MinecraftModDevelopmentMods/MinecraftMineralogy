@@ -15,6 +15,7 @@ public class DryWall extends net.minecraft.block.BlockPane {
 		super( Material.ROCK, true);
 		this.setUnlocalizedName(Mineralogy.MODID + "_" + itemName + " _" + color);
 		this.useNeighborBrightness = true;
+		this.setCreativeTab(Mineralogy.mineralogyTab);
 	}
 
 	@Override public Item getItemDropped(IBlockState bs, Random prng, int enchantmentLevel) {

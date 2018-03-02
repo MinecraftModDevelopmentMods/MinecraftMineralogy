@@ -66,7 +66,8 @@ public class Blocks {
 		IDynamicTabProvider tabProvider = IoC.resolve(IDynamicTabProvider.class);
 		
 		for (int i = 0; i < 16; i++) {
-			tabProvider.setTabItemMapping("Item", Constants.DRYWALL + "_" + Constants.colorSuffixes[i]);
+			if (MineralogyConfig.groupCreativeTabItemsByType())
+				tabProvider.setTabItemMapping("Item", Constants.DRYWALL + "_" + Constants.colorSuffixes[i]);
 			
 			drywalls[i] = RegistrationHelper.registerBlock(new DryWall(Constants.colorSuffixes[i]), Constants.DRYWALL + "_" + Constants.colorSuffixes[i],
 					Constants.DRYWALL + Constants.colorSuffixesTwo[i]);

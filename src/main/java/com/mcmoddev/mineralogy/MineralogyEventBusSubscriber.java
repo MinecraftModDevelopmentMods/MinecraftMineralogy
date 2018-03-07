@@ -38,16 +38,17 @@ public class MineralogyEventBusSubscriber {
 		}
 		
 		// make all of the rock types equivalent to cobblestone
-		for (int i = 0; i < MineralogyRegistry.sedimentaryStones.size(); i++) {
-			OreDictionary.registerOre(Constants.COBBLESTONE, MineralogyRegistry.sedimentaryStones.get(i));
+		if (MineralogyConfig.makeRockCobblestoneEquivilent()) {
+			for (int i = 0; i < MineralogyRegistry.sedimentaryStones.size(); i++) {
+				OreDictionary.registerOre(Constants.COBBLESTONE, MineralogyRegistry.sedimentaryStones.get(i));
+			}
+			for (int i = 0; i < MineralogyRegistry.metamorphicStones.size(); i++) {
+				OreDictionary.registerOre(Constants.COBBLESTONE, MineralogyRegistry.metamorphicStones.get(i));
+			}
+			for (int i = 0; i < MineralogyRegistry.igneousStones.size(); i++) {
+				OreDictionary.registerOre(Constants.COBBLESTONE, MineralogyRegistry.igneousStones.get(i));
+			}
 		}
-		for (int i = 0; i < MineralogyRegistry.metamorphicStones.size(); i++) {
-			OreDictionary.registerOre(Constants.COBBLESTONE, MineralogyRegistry.metamorphicStones.get(i));
-		}
-		for (int i = 0; i < MineralogyRegistry.igneousStones.size(); i++) {
-			OreDictionary.registerOre(Constants.COBBLESTONE, MineralogyRegistry.igneousStones.get(i));
-		}
-
 	}
 
 	@SubscribeEvent

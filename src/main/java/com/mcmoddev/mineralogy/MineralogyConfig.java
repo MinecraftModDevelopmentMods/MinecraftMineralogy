@@ -16,6 +16,7 @@ public class MineralogyConfig {
 	private static boolean smeltableGravel = true;
 	private static boolean dropCobblestone = false;
 	private static boolean patchUpdate = true;
+	private static boolean makeRockCobblestoneEquivilent = true;
 
 	private static boolean generateRockStairs = true;
 	private static boolean generateRockSlab = true;
@@ -61,6 +62,10 @@ public class MineralogyConfig {
 				"If true, then gravel can be smelted into generic stone");
 		dropCobblestone = config.getBoolean("DROP_COBBLESTONE", OPTIONS, dropCobblestone,
 				"If true, then rock blocks will drop cobblestone instead of themselves");
+		
+		makeRockCobblestoneEquivilent = config.getBoolean("COBBLESTONE_EQUIVILENT", OPTIONS, makeRockCobblestoneEquivilent,
+				"If true, then rock blocks will be equivilent of cobblestone for recipes (cobblestone ore dict entry)");
+		
 		geomeSize = config.getInt("GEOME_SIZE", WORLD_GEN, geomeSize, 4, Short.MAX_VALUE,
 				"Making this value larger increases the size of regions of igneous, sedimentary, and metamorphic rocks");
 		rockLayerNoise = (double) config.getFloat("ROCK_LAYER_NOISE", WORLD_GEN, (float) rockLayerNoise, 1.0f,
@@ -146,6 +151,10 @@ public class MineralogyConfig {
 		return dropCobblestone;
 	}
 
+	public static boolean makeRockCobblestoneEquivilent() {
+		return makeRockCobblestoneEquivilent;
+	}
+	
 	public static boolean patchUpdate() {
 		return patchUpdate;
 	}

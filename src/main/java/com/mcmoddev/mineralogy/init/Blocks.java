@@ -102,7 +102,7 @@ public class Blocks {
 		final BlockItemPair smoothBrickSlabPair;
 		final BlockItemPair smoothBrickWallPair;
 
-		rockPair = RegistrationHelper.registerBlock(new Rock(true, (float) materialType.hardness, (float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE), name, name);
+		rockPair = RegistrationHelper.registerBlock(new Rock(true, (float) materialType.hardness, (float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE), name, "stone" + materialType.materialName);
 
 		RecipeHelper.addShapelessOreRecipe(name + "_" + Constants.COBBLESTONE.toUpperCase(), new ItemStack(net.minecraft.init.Blocks.COBBLESTONE, 4),
 				Ingredient.fromStacks(new ItemStack(rockPair.PairedItem)),
@@ -157,7 +157,7 @@ public class Blocks {
 		if (MineralogyConfig.generateBrick()) {
 			brickPair = RegistrationHelper.registerBlock(
 					new Rock(false, (float) materialType.hardness, (float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE),
-					name + "_" + Constants.BRICK, Constants.BRICK + materialType.materialName);
+					name + "_" + Constants.BRICK, "stone" + materialType.materialName + "Brick");
 			RecipeHelper.addShapedOreRecipe(name + "_" + Constants.BRICK, new ItemStack(brickPair.PairedItem, 4), "xx", "xx", 'x',
 					rockPair.PairedItem);
 
@@ -190,7 +190,7 @@ public class Blocks {
 		if (MineralogyConfig.generateSmooth()) {
 			smoothPair = RegistrationHelper.registerBlock(
 					new Rock(false, (float) materialType.hardness, (float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE),
-					name + "_" + Constants.SMOOTH, Constants.SMOOTH + materialType.materialName);
+					name + "_" + Constants.SMOOTH, "stone" + materialType.materialName + "Smooth");
 			RecipeHelper.addShapelessOreRecipe(name + "_" + Constants.SMOOTH, new ItemStack(smoothPair.PairedItem, 1),
 					Ingredient.fromStacks(new ItemStack(rockPair.PairedItem, 1)),
 					Ingredient.fromStacks(new ItemStack(net.minecraft.init.Blocks.SAND, 1)));
@@ -223,7 +223,7 @@ public class Blocks {
 			if (MineralogyConfig.generateSmoothBrick()) {
 				smoothBrickPair = RegistrationHelper.registerBlock(
 						new Rock(false, (float) materialType.hardness, (float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE),
-						name + "_" + Constants.SMOOTH + "_" + Constants.BRICK, Constants.BRICK + materialType.materialName + "Smooth");
+						name + "_" + Constants.SMOOTH + "_" + Constants.BRICK, "stone" + materialType.materialName + "SmoothBrick");
 				RecipeHelper.addShapedOreRecipe(name + "_" + Constants.SMOOTH + "_" + Constants.BRICK, new ItemStack(smoothBrickPair.PairedItem, 4),
 						"xx", "xx", 'x', smoothPair.PairedItem);
 

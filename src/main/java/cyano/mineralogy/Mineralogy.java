@@ -243,7 +243,7 @@ public class Mineralogy {
 		blockGypsum = registerBlock(new Gypsum(), "gypsum");
 		sedimentaryStones.add(blockGypsum);
 		
-		blockPumice = registerBlock(new Rock(false, 0.5F, 5F, 0, SoundType.GROUND), "pumice");
+		blockPumice = registerBlock(new Rock(false, 0.5F, 5F, 0, SoundType.STONE), "pumice");
 		igneousStones.add(blockPumice);
 		OreDictionary.registerOre(cobblestone, blockPumice);
 		

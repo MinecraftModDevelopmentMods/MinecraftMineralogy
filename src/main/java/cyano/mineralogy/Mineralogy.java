@@ -1,5 +1,7 @@
 package cyano.mineralogy;
 
+import org.apache.commons.lang3.text.WordUtils;
+
 // DON'T FORGET TO UPDATE mcmod.info FILE!!!
 
 import org.apache.logging.log4j.LogManager;
@@ -243,21 +245,20 @@ public class Mineralogy {
 
 		// other blocks
 		sedimentaryStones.add(Blocks.SANDSTONE);
+		
 		blockChert = registerBlock(new Chert(), "chert");
 		sedimentaryStones.add(blockChert);
+		OreDictionary.registerOre(cobblestone, blockChert);
+		
 		blockGypsum = registerBlock(new Gypsum(), "gypsum");
 		sedimentaryStones.add(blockGypsum);
-		blockPumice = registerBlock(new Rock(false, 0.5F, 5F, 0, SoundType.GROUND), "pumice");
+		
+		blockPumice = registerBlock(new Rock(false, 0.5F, 5F, 0, SoundType.STONE), "pumice");
 		igneousStones.add(blockPumice);
+		OreDictionary.registerOre(cobblestone, blockPumice);
 
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(gypsumPowder, 4), blockGypsum));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockGypsum), "xx", "xx", 'x', dustGypsum));
-
-		// TODO: This should probably go in postinit
-		// register sedimentary stones in ore dictionary so that they can be used for stone tools recipes 
-		for (int i = 0; i < sedimentaryStones.size(); i++) {
-			OreDictionary.registerOre(cobblestone, sedimentaryStones.get(i)); 
-		}
 
 		// register ores
 		Block s = addOre("sulfur_ore", oreSulfur, sulphurPowder,1, 4, 0,
@@ -396,17 +397,6 @@ public class Mineralogy {
     		if(b == null) continue;
     		sedimentaryStones.remove(b);
     	}
-
-    	/*
-    	System.out.println("Ore Dictionary Registry:");
-    	for(String s : OreDictionary.getOreNames()){
-    		System.out.print(s+":");
-    		for(ItemStack o : OreDictionary.getOres(s)){
-    			System.out.print(" "+o.getItem().getUnlocalizedName()+"#"+o.getItemDamage());
-    		}
-    		System.out.println();
-    	}
-    	//*/
     }
 
     private static Block getBlock(String id) {
@@ -444,20 +434,6 @@ public class Mineralogy {
     	GameRegistry.registerWorldGenerator(new OreSpawner(oreBlock, minY, maxY, spawnFrequency, spawnQuantity, (oreWeightCount * 25214903917L)+11L), oreWeightCount++);
     	return oreBlock;
     }
-
-    /*
-	private static String formatName(String s) {
-		StringBuilder sb = new StringBuilder();
-		String[] words = s.split("_");
-		boolean first = true;
-		for(int i = words.length - 1; i < words.length; i++) {
-			if(!first) sb.append(" ");
-			first = false;
-			sb.append(words[i].substring(0,1).toUpperCase()).append(words[i].substring(1));
-		}
-		return sb.toString();
-	}
-	*/
 
 	private static Block registerBlock(Block b, String name) {
 		GameRegistry.register(b.setRegistryName(MODID, name));
@@ -505,9 +481,11 @@ public class Mineralogy {
 	    		break;
     	}
     	
-    	// TODO: See if this is needed
-    	//OreDictionary.registerOre("stone",rock);
-		GameRegistry.addSmelting(rock, new ItemStack(Blocks.STONE), 0.1F);
+    	String oreDictName = WordUtils.capitalize(name);
+    	    	
+    	OreDictionary.registerOre("stone", rock);
+    	OreDictionary.registerOre("stone" + oreDictName, rock);
+    	GameRegistry.addSmelting(rock, new ItemStack(Blocks.STONE), 0.1F);
 
 		if (GENERATE_ROCKSTAIRS) {
 			rockStairs = registerBlock(new RockStairs(rock, (float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_stairs");

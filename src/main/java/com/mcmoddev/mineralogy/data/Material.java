@@ -8,6 +8,7 @@ public class Material {
 	public double hardness;
 	public double blastResistance;
 	public int toolHardnessLevel;
+	public boolean cobbleEquivilent;
 	
 	/**
 	 * @param materialName
@@ -24,14 +25,18 @@ public class Material {
 	 *            0, stone is 10, and blast-proof materials are 2000
 	 * @param toolHardnessLevel
 	 *            0 for wood tools, 1 for stone, 2 for iron, 3 for diamond
+	 * @param cobbleEquivilent
+	 *            is material equivalent to cobblestone
 	 */
 	public Material(String materialName, RockType rockType, 
-			double hardness, double blastResistance, int toolHardnessLevel) {
+			double hardness, double blastResistance, int toolHardnessLevel,
+			boolean cobbleEquivilent) {
 		this.materialName = materialName;
 		this.rockType = rockType;
 		this.hardness = hardness;
 		this.blastResistance = blastResistance;
-		this.toolHardnessLevel = toolHardnessLevel;		
+		this.toolHardnessLevel = toolHardnessLevel;
+		this.cobbleEquivilent = cobbleEquivilent;
 	}
 
 	@Override

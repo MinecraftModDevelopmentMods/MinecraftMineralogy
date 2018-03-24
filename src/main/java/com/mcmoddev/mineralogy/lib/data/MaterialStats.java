@@ -1,4 +1,4 @@
-package com.mcmoddev.lib.data;
+package com.mcmoddev.mineralogy.lib.data;
 
 import java.util.TreeMap;
 

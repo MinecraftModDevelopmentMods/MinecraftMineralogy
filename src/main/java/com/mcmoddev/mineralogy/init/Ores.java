@@ -1,14 +1,14 @@
 package com.mcmoddev.mineralogy.init;
 
-import com.mcmoddev.lib.exceptions.ItemNotFoundException;
-import com.mcmoddev.lib.exceptions.TabNotFoundException;
-import com.mcmoddev.lib.interfaces.IDynamicTabProvider;
 import com.mcmoddev.mineralogy.Constants;
 import com.mcmoddev.mineralogy.Mineralogy;
 import com.mcmoddev.mineralogy.MineralogyConfig;
 import com.mcmoddev.mineralogy.blocks.Ore;
 import com.mcmoddev.mineralogy.blocks.Rock;
 import com.mcmoddev.mineralogy.ioc.MinIoC;
+import com.mcmoddev.mineralogy.lib.exceptions.ItemNotFoundException;
+import com.mcmoddev.mineralogy.lib.exceptions.TabNotFoundException;
+import com.mcmoddev.mineralogy.lib.interfaces.IDynamicTabProvider;
 import com.mcmoddev.mineralogy.util.BlockItemPair;
 import com.mcmoddev.mineralogy.util.RecipeHelper;
 import com.mcmoddev.mineralogy.util.RegistrationHelper;

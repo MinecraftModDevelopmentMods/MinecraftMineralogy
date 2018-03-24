@@ -1,11 +1,11 @@
 package com.mcmoddev.mineralogy.util;
 
-import com.mcmoddev.lib.exceptions.ItemNotFoundException;
-import com.mcmoddev.lib.exceptions.TabNotFoundException;
-import com.mcmoddev.lib.interfaces.IDynamicTabProvider;
 import com.mcmoddev.mineralogy.Mineralogy;
 import com.mcmoddev.mineralogy.init.MineralogyRegistry;
 import com.mcmoddev.mineralogy.ioc.MinIoC;
+import com.mcmoddev.mineralogy.lib.exceptions.ItemNotFoundException;
+import com.mcmoddev.mineralogy.lib.exceptions.TabNotFoundException;
+import com.mcmoddev.mineralogy.lib.interfaces.IDynamicTabProvider;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;

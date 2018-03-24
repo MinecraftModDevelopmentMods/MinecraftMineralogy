@@ -1,4 +1,4 @@
-package com.mcmoddev.lib.exceptions;
+package com.mcmoddev.mineralogy.lib.exceptions;
 
 public class MaterialNotFoundException extends Exception {
 	

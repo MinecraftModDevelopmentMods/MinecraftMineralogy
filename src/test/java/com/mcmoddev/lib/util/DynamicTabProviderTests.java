@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.mcmoddev.lib.interfaces.IDynamicTabProvider;
+import com.mcmoddev.mineralogy.lib.interfaces.IDynamicTabProvider;
 
 class DynamicTabProviderTests {
 

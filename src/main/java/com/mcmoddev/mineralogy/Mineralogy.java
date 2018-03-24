@@ -5,10 +5,10 @@ package com.mcmoddev.mineralogy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.mcmoddev.lib.exceptions.TabNotFoundException;
-import com.mcmoddev.lib.interfaces.IDynamicTabProvider;
 import com.mcmoddev.mineralogy.init.MineralogyRegistry;
 import com.mcmoddev.mineralogy.ioc.MinIoC;
+import com.mcmoddev.mineralogy.lib.exceptions.TabNotFoundException;
+import com.mcmoddev.mineralogy.lib.interfaces.IDynamicTabProvider;
 import com.mcmoddev.mineralogy.worldgen.StoneReplacer;
 
 import net.minecraft.block.Block;

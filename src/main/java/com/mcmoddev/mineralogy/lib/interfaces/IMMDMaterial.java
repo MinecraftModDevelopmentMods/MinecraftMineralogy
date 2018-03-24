@@ -1,9 +1,9 @@
-package com.mcmoddev.lib.interfaces;
+package com.mcmoddev.mineralogy.lib.interfaces;
 
 import com.google.common.collect.ImmutableList;
-import com.mcmoddev.lib.data.MaterialStats;
-import com.mcmoddev.lib.data.MaterialType;
-import com.mcmoddev.lib.data.Names;
+import com.mcmoddev.mineralogy.lib.data.MaterialStats;
+import com.mcmoddev.mineralogy.lib.data.MaterialType;
+import com.mcmoddev.mineralogy.lib.data.Names;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;

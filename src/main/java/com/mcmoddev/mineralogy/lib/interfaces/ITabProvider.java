@@ -1,7 +1,7 @@
-package com.mcmoddev.lib.interfaces;
+package com.mcmoddev.mineralogy.lib.interfaces;
 
-import com.mcmoddev.lib.exceptions.ItemNotFoundException;
-import com.mcmoddev.lib.exceptions.TabNotFoundException;
+import com.mcmoddev.mineralogy.lib.exceptions.ItemNotFoundException;
+import com.mcmoddev.mineralogy.lib.exceptions.TabNotFoundException;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;

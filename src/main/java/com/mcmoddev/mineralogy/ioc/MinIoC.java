@@ -2,11 +2,11 @@ package com.mcmoddev.mineralogy.ioc;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.mcmoddev.lib.interfaces.IDynamicTabProvider;
-import com.mcmoddev.lib.interfaces.IDynamicTabProvider.DefaultTabGenerationMode;
-import com.mcmoddev.lib.util.DynamicTabProvider;
 import com.mcmoddev.mineralogy.Mineralogy;
 import com.mcmoddev.mineralogy.MineralogyConfig;
+import com.mcmoddev.mineralogy.lib.interfaces.IDynamicTabProvider;
+import com.mcmoddev.mineralogy.lib.interfaces.IDynamicTabProvider.DefaultTabGenerationMode;
+import com.mcmoddev.mineralogy.lib.util.DynamicTabProvider;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;

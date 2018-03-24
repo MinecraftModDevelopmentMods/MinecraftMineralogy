@@ -1,4 +1,4 @@
-package com.mcmoddev.lib.util;
+package com.mcmoddev.mineralogy.lib.util;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -8,11 +8,11 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.mcmoddev.lib.interfaces.IMMDCreativeTab;
-import com.mcmoddev.lib.interfaces.IMMDMaterial;
-import com.mcmoddev.lib.interfaces.IMMDObject;
 import com.mcmoddev.mineralogy.Mineralogy;
 import com.mcmoddev.mineralogy.ioc.MinIoC;
+import com.mcmoddev.mineralogy.lib.interfaces.IMMDCreativeTab;
+import com.mcmoddev.mineralogy.lib.interfaces.IMMDMaterial;
+import com.mcmoddev.mineralogy.lib.interfaces.IMMDObject;
 
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;

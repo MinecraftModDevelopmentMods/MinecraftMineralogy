@@ -1,4 +1,4 @@
-package com.mcmoddev.lib.util;
+package com.mcmoddev.mineralogy.lib.util;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,14 +7,14 @@ import java.util.Optional;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import com.mcmoddev.lib.data.Names;
-import com.mcmoddev.lib.exceptions.ItemNotFoundException;
-import com.mcmoddev.lib.exceptions.TabNotFoundException;
-import com.mcmoddev.lib.interfaces.IDynamicTabProvider;
-import com.mcmoddev.lib.interfaces.IMMDMaterial;
-import com.mcmoddev.lib.interfaces.ITabProvider;
 import com.mcmoddev.mineralogy.Mineralogy;
 import com.mcmoddev.mineralogy.ioc.MinIoC;
+import com.mcmoddev.mineralogy.lib.data.Names;
+import com.mcmoddev.mineralogy.lib.exceptions.ItemNotFoundException;
+import com.mcmoddev.mineralogy.lib.exceptions.TabNotFoundException;
+import com.mcmoddev.mineralogy.lib.interfaces.IDynamicTabProvider;
+import com.mcmoddev.mineralogy.lib.interfaces.IMMDMaterial;
+import com.mcmoddev.mineralogy.lib.interfaces.ITabProvider;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;

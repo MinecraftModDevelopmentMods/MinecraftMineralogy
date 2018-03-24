@@ -1,6 +1,5 @@
 package com.mcmoddev.mineralogy.init;
 
-import com.mcmoddev.lib.interfaces.IDynamicTabProvider;
 import com.mcmoddev.mineralogy.Constants;
 import com.mcmoddev.mineralogy.Mineralogy;
 import com.mcmoddev.mineralogy.MineralogyConfig;
@@ -14,6 +13,7 @@ import com.mcmoddev.mineralogy.blocks.RockWall;
 import com.mcmoddev.mineralogy.data.Material;
 import com.mcmoddev.mineralogy.data.MaterialData;
 import com.mcmoddev.mineralogy.ioc.MinIoC;
+import com.mcmoddev.mineralogy.lib.interfaces.IDynamicTabProvider;
 import com.mcmoddev.mineralogy.util.BlockItemPair;
 import com.mcmoddev.mineralogy.util.RecipeHelper;
 import com.mcmoddev.mineralogy.util.RegistrationHelper;
@@ -46,20 +46,22 @@ public class Blocks {
 		BlockItemPair blockPumice;
 		BlockItemPair[] drywalls = new BlockItemPair[16];
 		
-		MaterialData.toArray().forEach(material -> addStoneType(material));
+		MaterialData.toArray().forEach(material -> addStoneType(material));		
 		
 		MineralogyRegistry.sedimentaryStones.add(net.minecraft.init.Blocks.SANDSTONE);
 
 		blockChert = RegistrationHelper.registerBlock(new Chert(), Constants.CHERT, Constants.BLOCK_CHERT);
 		MineralogyRegistry.sedimentaryStones.add(blockChert.PairedBlock);
-
+		MineralogyRegistry.BlocksToRegister.put(Constants.COBBLESTONE, blockChert.PairedBlock);
+		
 		blockGypsum = RegistrationHelper.registerBlock(new Gypsum(), Constants.GYPSUM.toLowerCase(), Constants.BLOCK_GYPSUM);
 		MineralogyRegistry.sedimentaryStones.add(blockGypsum.PairedBlock);
 		
 		IoC.register(BlockItemPair.class, blockGypsum, Constants.BLOCK_GYPSUM, Mineralogy.MODID);
 		
-		blockPumice = RegistrationHelper.registerBlock(new Rock(false, 0.5F, 5F, 0, SoundType.GROUND), Constants.PUMICE, Constants.BLOCK_PUMICE);
+		blockPumice = RegistrationHelper.registerBlock(new Rock(false, 0.5F, 5F, 0, SoundType.STONE), Constants.PUMICE, Constants.BLOCK_PUMICE);
 		MineralogyRegistry.igneousStones.add(blockPumice.PairedBlock);
+		MineralogyRegistry.BlocksToRegister.put(Constants.COBBLESTONE, blockPumice.PairedBlock);
 		
 		IoC.register(BlockItemPair.class, blockPumice, Constants.BLOCK_PUMICE, Mineralogy.MODID);
 		
@@ -104,6 +106,9 @@ public class Blocks {
 
 		rockPair = RegistrationHelper.registerBlock(new Rock(true, (float) materialType.hardness, (float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE), name, "stone" + materialType.materialName);
 
+		if (materialType.cobbleEquivilent)
+			MineralogyRegistry.BlocksToRegister.put(Constants.COBBLESTONE, rockPair.PairedBlock);
+		
 		RecipeHelper.addShapelessOreRecipe(name + "_" + Constants.COBBLESTONE.toUpperCase(), new ItemStack(net.minecraft.init.Blocks.COBBLESTONE, 4),
 				Ingredient.fromStacks(new ItemStack(rockPair.PairedItem)),
 				Ingredient.fromStacks(new ItemStack(rockPair.PairedItem)),

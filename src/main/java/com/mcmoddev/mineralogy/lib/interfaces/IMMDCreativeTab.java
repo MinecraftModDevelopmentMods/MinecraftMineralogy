@@ -1,8 +1,8 @@
-package com.mcmoddev.lib.interfaces;
+package com.mcmoddev.mineralogy.lib.interfaces;
 
 import java.util.Comparator;
 
-import com.mcmoddev.lib.util.MMDCreativeTab;
+import com.mcmoddev.mineralogy.lib.util.MMDCreativeTab;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;

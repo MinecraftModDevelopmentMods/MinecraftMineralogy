@@ -1,4 +1,4 @@
-package com.mcmoddev.lib.interfaces;
+package com.mcmoddev.mineralogy.lib.interfaces;
 
 /**
  *

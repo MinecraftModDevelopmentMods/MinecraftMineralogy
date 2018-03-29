@@ -33,6 +33,16 @@ public class MineralogyEventBusSubscriber {
 		for (Map.Entry<String, Block> map : MineralogyRegistry.BlocksToRegister.entrySet()) 
 			OreDictionary.registerOre(map.getKey(), map.getValue());
 		
+		// make all of the rock types equivalent to cobblestone
+		if (MineralogyConfig.makeRockCobblestoneEquivilent()) {
+			for (int i = 0; i < MineralogyRegistry.metamorphicStones.size(); i++) {
+				OreDictionary.registerOre(Constants.COBBLESTONE, MineralogyRegistry.metamorphicStones.get(i));
+				}
+			for (int i = 0; i < MineralogyRegistry.igneousStones.size(); i++) {
+				OreDictionary.registerOre(Constants.COBBLESTONE, MineralogyRegistry.igneousStones.get(i));
+				}
+			}
+		
 		for (Map.Entry<String, Item> map : MineralogyRegistry.ItemsToRegister.entrySet())
 			OreDictionary.registerOre(map.getKey(), map.getValue());
 	}

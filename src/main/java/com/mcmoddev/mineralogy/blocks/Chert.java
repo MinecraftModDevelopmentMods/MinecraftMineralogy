@@ -1,7 +1,5 @@
 package com.mcmoddev.mineralogy.blocks;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 
 import com.mcmoddev.mineralogy.Mineralogy;
@@ -10,6 +8,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
@@ -23,13 +22,13 @@ public class Chert extends Rock {
 		this.setUnlocalizedName(Mineralogy.MODID + "_" + ITEM_NAME);
 	}
 
-	@Deprecated
 	@Override
-	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		if (prng.nextInt(10) == 0) {
-			return Arrays.asList(new ItemStack(Items.FLINT, 1 + Math.max(0, fortune)));
-		} else {
-			return super.getDrops(world, pos, state, fortune);
+	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state,
+			int fortune) {
+	
+		super.getDrops(drops, world, pos, state, fortune);
+		
+		if (prng.nextInt(10) == 0)
+			drops.add(new ItemStack(Items.FLINT, 1 + Math.max(0, fortune)));
 		}
-	}
 }

@@ -37,10 +37,8 @@ public class Rock extends net.minecraft.block.Block {
 		
 		super.getDrops(drops, world, pos, state, fortune);
 		
-		if (MineralogyConfig.dropCobblestone()) {
+		if (MineralogyConfig.dropCobblestone())
 			drops.add(new ItemStack(Blocks.COBBLESTONE));
-		} else {
-			drops.add(new ItemStack(Item.getItemFromBlock(this)));
-		}
+		
 	}
 }

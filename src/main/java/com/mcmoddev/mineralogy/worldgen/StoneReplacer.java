@@ -39,7 +39,7 @@ public class StoneReplacer implements IWorldGenerator {
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator,
 			IChunkProvider chunkProvider) {
-		if (world.provider.getDimension() == 0) {
+		if (world.provider.getDimension() == 0 && MineralogyConfig.placeMineralogyRock()) {
 			getGeology(world).replaceStoneInChunk(chunkX, chunkZ, world);
 		}
 	}

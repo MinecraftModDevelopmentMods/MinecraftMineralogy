@@ -13,6 +13,7 @@ public class MineralogyConfig {
 	private static int geomeSize = 100; // size of mineral biomes
 	private static int geomLayerThickness = 8; // thickness of rock layers
 
+	private static boolean placeMineralogyRock = true;
 	private static boolean smeltableGravel = true;
 	private static boolean dropCobblestone = false;
 	private static boolean patchUpdate = true;
@@ -53,6 +54,9 @@ public class MineralogyConfig {
 		final String OPTIONS = "options";
 		final String WORLD_GEN = "world-gen";
 
+		placeMineralogyRock = config.getBoolean("PLACE_MINERALOGY_ROCK", OPTIONS, placeMineralogyRock,
+				"If true, then generic stone is replace for mineralogy rocks");
+		
 		patchUpdate = config.getBoolean("patch_world", OPTIONS, patchUpdate,
 				"If true, then the world will be patched to fix compatibility-breaking "
 						+ "changes to this mod by adding-back mock-ups of old obsolete blocks and "
@@ -60,6 +64,7 @@ public class MineralogyConfig {
 
 		smeltableGravel = config.getBoolean("SMELTABLE_GRAVEL", OPTIONS, smeltableGravel,
 				"If true, then gravel can be smelted into generic stone");
+		
 		dropCobblestone = config.getBoolean("DROP_COBBLESTONE", OPTIONS, dropCobblestone,
 				"If true, then rock blocks will drop cobblestone instead of themselves");
 		
@@ -139,6 +144,10 @@ public class MineralogyConfig {
 		return geomeSize;
 	}
 
+	public static boolean placeMineralogyRock() {
+		return placeMineralogyRock;
+	}
+	
 	public static int geomLayerThickness() {
 		return geomLayerThickness;
 	}

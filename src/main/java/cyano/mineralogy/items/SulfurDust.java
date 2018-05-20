@@ -11,6 +11,7 @@ public class SulfurDust extends net.minecraft.item.Item {
 	public SulfurDust(){
 		super();
 		this.setUnlocalizedName(Mineralogy.MODID +"_"+ itemName);
+		this.setTextureName(Mineralogy.MODID +":"+ itemName);
 		this.setCreativeTab(CreativeTabs.tabMaterials);
 	}
 	

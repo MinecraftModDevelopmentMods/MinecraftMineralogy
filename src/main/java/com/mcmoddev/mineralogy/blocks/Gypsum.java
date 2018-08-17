@@ -20,7 +20,7 @@ public class Gypsum extends Rock {
 
 	public Gypsum() {
 		super(false, (float) 0.75, (float) 1, 0, SoundType.GROUND);
-		this.setUnlocalizedName(Mineralogy.MODID + "_" + ITEM_NAME);
+		this.setTranslationKey(Mineralogy.MODID + "_" + ITEM_NAME);
 	}
 
 	@Override

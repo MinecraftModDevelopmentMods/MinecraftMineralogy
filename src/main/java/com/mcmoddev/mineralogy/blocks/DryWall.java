@@ -14,7 +14,7 @@ public class DryWall extends net.minecraft.block.BlockPane {
 
 	public DryWall(String color) {
 		super(Material.ROCK, true);
-		this.setUnlocalizedName(Mineralogy.MODID + "_" + ITEM_NAME + " _" + color);
+		this.setTranslationKey(Mineralogy.MODID + "_" + ITEM_NAME + " _" + color);
 		this.useNeighborBrightness = true;
 	}
 

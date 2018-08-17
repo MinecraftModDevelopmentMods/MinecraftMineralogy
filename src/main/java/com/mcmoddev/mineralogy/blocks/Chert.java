@@ -19,7 +19,7 @@ public class Chert extends Rock {
 
 	public Chert() {
 		super(false, (float) 1.5, (float) 10, 1, SoundType.STONE);
-		this.setUnlocalizedName(Mineralogy.MODID + "_" + ITEM_NAME);
+		this.setTranslationKey(Mineralogy.MODID + "_" + ITEM_NAME);
 	}
 
 	@Override

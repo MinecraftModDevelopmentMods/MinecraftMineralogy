@@ -36,7 +36,7 @@ public class Items {
 		Item nitratePowder = addDust(Constants.NITRATE);
 		
 		Item mineralFertilizer = RegistrationHelper.registerItem(new MineralFertilizer(), "mineral_fertilizer")
-				.setUnlocalizedName(Mineralogy.MODID + "." + "mineral_fertilizer");
+				.setTranslationKey(Mineralogy.MODID + "." + "mineral_fertilizer");
 		
 		IoC.register(Item.class, gypsumPowder, Constants.DUST_GYPSUM, Mineralogy.MODID);
 		IoC.register(Item.class, sulphurPowder, Constants.SULFUR, Mineralogy.MODID);
@@ -52,7 +52,7 @@ public class Items {
 	private static Item addDust(String oreDictionaryName) {
 		String dustName = oreDictionaryName.toLowerCase() + "_" + Constants.DUST;
 
-		Item item = RegistrationHelper.registerItem(new Item(), dustName).setUnlocalizedName(Mineralogy.MODID + "." + dustName);
+		Item item = RegistrationHelper.registerItem(new Item(), dustName).setTranslationKey(Mineralogy.MODID + "." + dustName);
 
 		try {
 			MinIoC.getInstance().resolve(IDynamicTabProvider.class).addToTab(item);

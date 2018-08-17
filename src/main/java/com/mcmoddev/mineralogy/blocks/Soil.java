@@ -11,9 +11,9 @@ import net.minecraft.world.IBlockAccess;
 
 public class Soil extends Block {
 
-	public Soil(String unlocalizedName) {
+	public Soil(String translationKey) {
 		super(Material.GROUND);
-		this.setUnlocalizedName(unlocalizedName);
+		this.setTranslationKey(translationKey);
 		this.setSoundType(SoundType.GROUND);
 		this.setHarvestLevel("shovel", 0);
 		this.setHardness(0.5f); // dirt is 0.5, grass is 0.6, stone is 1.5,iron ore is 3, obsidian is 50

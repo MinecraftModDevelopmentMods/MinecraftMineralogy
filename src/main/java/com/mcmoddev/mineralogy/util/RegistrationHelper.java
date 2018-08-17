@@ -13,7 +13,7 @@ import net.minecraft.item.ItemBlock;
 
 public class RegistrationHelper {
 	public static BlockItemPair registerBlock(Block block, String name, String oreDictionaryName) {
-		block.setUnlocalizedName(Mineralogy.MODID + "." + name);
+		block.setTranslationKey(Mineralogy.MODID + "." + name);
 		block.setRegistryName(name);
 
 		Item item = registerItem(new ItemBlock(block), name);
@@ -36,7 +36,7 @@ public class RegistrationHelper {
 	public static Item registerItem(Item item, String name) {
 		String itemName = Mineralogy.MODID + "." + name;
 
-		item.setUnlocalizedName(itemName);
+		item.setTranslationKey(itemName);
 		item.setRegistryName(name);
 		
 		MineralogyRegistry.MineralogyItemRegistry.put(name, item);

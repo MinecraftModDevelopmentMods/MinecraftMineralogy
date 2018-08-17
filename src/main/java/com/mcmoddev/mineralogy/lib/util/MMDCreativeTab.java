@@ -44,7 +44,7 @@ public class MMDCreativeTab extends CreativeTabs implements IMMDCreativeTab {
 		@Override
 		public int compare(ItemStack first, ItemStack second) {
 			final int delta = getSortingValue(first) - getSortingValue(second);
-			return (delta == 0) ? first.getUnlocalizedName().compareToIgnoreCase(second.getUnlocalizedName()) : delta;
+			return (delta == 0) ? first.getTranslationKey().compareToIgnoreCase(second.getTranslationKey()) : delta;
 		}
 	};
 
@@ -139,11 +139,11 @@ public class MMDCreativeTab extends CreativeTabs implements IMMDCreativeTab {
 	}
 
 	/* (non-Javadoc)
-	 * @see com.mcmoddev.lib.util.IMMDCreativeTab#getTabIconItem()
+	 * @see com.mcmoddev.lib.util.IMMDCreativeTab#createIcon()
 	 */
 	@Override
 	@SideOnly(Side.CLIENT)
-	public ItemStack getTabIconItem() {
+	public ItemStack createIcon() {
 		return this.iconItem;
 	}
 

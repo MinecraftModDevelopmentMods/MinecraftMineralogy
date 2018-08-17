@@ -59,7 +59,7 @@ public class MinIoC {
 	 * @return was the registration successful
 	 */
 	public <K, V extends K> boolean register(Class<K> key, V value, MMDResourceLocation resourceLocation) {
-	    return _instance.container.put(new HashTuple2<Class<?>, String>(key, resourceLocation.getResourcePath()), value) == null;
+	    return _instance.container.put(new HashTuple2<Class<?>, String>(key, resourceLocation.getPath()), value) == null;
 	}
 	
 	/**
@@ -111,7 +111,7 @@ public class MinIoC {
 	 */
 	@SuppressWarnings("unchecked")
 	public <K, V extends K> V resolve(Class<K> keyObject, MMDResourceLocation resourceLocation) {
-		return (V) this.resolve(keyObject, resourceLocation.getResourcePath());
+		return (V) this.resolve(keyObject, resourceLocation.getPath());
 	}
 	
 	/**

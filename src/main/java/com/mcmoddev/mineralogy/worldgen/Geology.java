@@ -86,7 +86,7 @@ public class Geology {
 	}
 
 	public void replaceStoneInChunk(int chunkX, int chunkZ, World world) {
-		Chunk chunk = world.getChunkFromChunkCoords(chunkX, chunkZ);
+		Chunk chunk = world.getChunk(chunkX, chunkZ);
 		int xOffset = chunkX << 4;
 		int zOffset = chunkZ << 4;
 		for (int dx = 0; dx < 16; dx++) {

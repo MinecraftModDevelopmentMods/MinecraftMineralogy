@@ -52,7 +52,7 @@ public class PatchHandler {
 
 	private static Block legacyBlock(String name, IBlockState replacement) {
 		Block b = new UpdateBlock(replacement);
-		b.setUnlocalizedName(MODID + "." + name);
+		b.setTranslationKey(MODID + "." + name);
 		return b;
 	}
 }

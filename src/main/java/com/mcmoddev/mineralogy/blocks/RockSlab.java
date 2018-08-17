@@ -161,7 +161,7 @@ public class RockSlab extends net.minecraft.block.Block {
 	@Deprecated
 	@Override
 	public IBlockState getStateFromMeta(final int meta) {
-		return this.getDefaultState().withProperty(FACING, EnumFacing.getFront(meta));
+		return this.getDefaultState().withProperty(FACING, EnumFacing.byIndex(meta));
 	}
 
 	@Override

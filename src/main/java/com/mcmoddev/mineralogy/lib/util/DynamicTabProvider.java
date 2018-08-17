@@ -54,7 +54,7 @@ public final class DynamicTabProvider implements IDynamicTabProvider {
 		MinIoC.getInstance().resolve(ItemStack.class, "defaultIcon", Mineralogy.MODID);
 		
 		if(FMLCommonHandler.instance().getEffectiveSide()==Side.CLIENT)
-			if (tab.getTabIconItem().getItem().getRegistryName().equals(defaultIcon.getItem().getRegistryName()))
+			if (tab.createIcon().getItem().getRegistryName().equals(defaultIcon.getItem().getRegistryName()))
 				tab.setIconItem(block);
 		
 		block.setCreativeTab(tab);
@@ -68,7 +68,7 @@ public final class DynamicTabProvider implements IDynamicTabProvider {
 		MMDCreativeTab tab = getTabByName(tabName);
 		
 		if(FMLCommonHandler.instance().getEffectiveSide()==Side.CLIENT)
-			if (tab.getTabIconItem().getItem().getRegistryName().equals(defaultIcon.getItem().getRegistryName()))
+			if (tab.createIcon().getItem().getRegistryName().equals(defaultIcon.getItem().getRegistryName()))
 				tab.setIconItem(item);
 			
 		item.setCreativeTab(tab);
@@ -133,14 +133,14 @@ public final class DynamicTabProvider implements IDynamicTabProvider {
 	
 	@Override
 	public String getTab(Item item) {
-		return getTabBySequence(item.getRegistryName().getResourcePath(), 
-				item.getRegistryName().getResourceDomain(), item.getClass().getSimpleName());
+		return getTabBySequence(item.getRegistryName().getPath(), 
+				item.getRegistryName().getNamespace(), item.getClass().getSimpleName());
 	}
 
 	@Override
 	public String getTab(Block block) {	
-		return getTabBySequence(block.getRegistryName().getResourcePath(), 
-				block.getRegistryName().getResourceDomain(), block.getClass().getSimpleName());
+		return getTabBySequence(block.getRegistryName().getPath(), 
+				block.getRegistryName().getNamespace(), block.getClass().getSimpleName());
 	}
 
 	private String getTabBySequence(String path, String domain, String simpleName) {

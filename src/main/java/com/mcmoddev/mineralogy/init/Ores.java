@@ -70,7 +70,7 @@ public class Ores {
 		String oreName = oreDictionaryName.toLowerCase() + "_" + Constants.ORE;
 
 		Block oreBlock = new Ore(oreName, oreDropItem, numMin, numMax, pickLevel)
-				.setUnlocalizedName(Mineralogy.MODID + "." + oreName);
+				.setTranslationKey(Mineralogy.MODID + "." + oreName);
 
 		RegistrationHelper.registerBlock(oreBlock, oreName, Constants.ORE + oreDictionaryName);
 

@@ -196,8 +196,8 @@ public class Mineralogy
    	/*
     	final String blockName = "derp";
     	testBlock = new Block(Material.leaves){};// super-lame anonymous class
-    	testBlock.setBlockName(Mineralogy.MODID +"_"+ blockName);
-    	testBlock.setBlockTextureName(Mineralogy.MODID +":"+ blockName);
+    	testBlock.setUnlocalizedName(Mineralogy.MODID +"_"+ blockName);
+    	testBlock.setTextureName(Mineralogy.MODID +":"+ blockName);
     	testBlock.setCreativeTab(CreativeTabs.tabMisc);
     	GameRegistry.registerBlock(testBlock, blockName);
     	
@@ -267,8 +267,8 @@ public class Mineralogy
      */
     private static void addStoneType(RockType type, String name,double hardness,double blastResistance,int toolHardnessLevel, boolean isStoneEquivalent, boolean isCobblestoneEquivalent, boolean hasSmooth, boolean hasBricks){
     	Block b = new Rock();
-    	b.setBlockName(Mineralogy.MODID +"_"+ name);
-    	b.setBlockTextureName(Mineralogy.MODID +":"+ name);
+    	b.setUnlocalizedName(Mineralogy.MODID +"_"+ name);
+    	b.setTextureName(Mineralogy.MODID +":"+ name);
     	b.setCreativeTab(CreativeTabs.tabBlock);
     	b.setHardness((float)hardness); // dirt is 0.5, grass is 0.6, stone is 1.5,iron ore is 3, obsidian is 50
     	b.setResistance((float)blastResistance); // dirt is 0, iron ore is 5, stone is 10, obsidian is 2000
@@ -301,8 +301,8 @@ public class Mineralogy
     	if(hasSmooth){
     		String smoothName = name + "_smooth";
     		Block b2 = new Rock();
-        	b2.setBlockName(Mineralogy.MODID +"_"+ smoothName);
-        	b2.setBlockTextureName(Mineralogy.MODID +":"+ smoothName);
+        	b2.setUnlocalizedName(Mineralogy.MODID +"_"+ smoothName);
+        	b2.setTextureName(Mineralogy.MODID +":"+ smoothName);
         	b2.setCreativeTab(CreativeTabs.tabBlock);
         	b2.setHardness((float)hardness); 
         	b2.setResistance((float)blastResistance); 
@@ -315,8 +315,8 @@ public class Mineralogy
         	if(hasBricks){
         		String brickName = name + "_brick";
         		Block b3 = new Rock();
-            	b3.setBlockName(Mineralogy.MODID +"_"+ brickName);
-            	b3.setBlockTextureName(Mineralogy.MODID +":"+ brickName);
+            	b3.setUnlocalizedName(Mineralogy.MODID +"_"+ brickName);
+            	b3.setTextureName(Mineralogy.MODID +":"+ brickName);
             	b3.setCreativeTab(CreativeTabs.tabBlock);
             	b3.setHardness((float)hardness*2f); 
             	b3.setResistance((float)blastResistance*1.5f); 

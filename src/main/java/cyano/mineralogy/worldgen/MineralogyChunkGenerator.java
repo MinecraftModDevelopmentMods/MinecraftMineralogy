@@ -95,17 +95,17 @@ public class MineralogyChunkGenerator extends ChunkProviderGenerate{
         this.func_147424_a(chunkX, chunkY, ablock);
         this.biomesForGeneration = this.worldObj.getWorldChunkManager().loadBlockGeneratorData(this.biomesForGeneration, chunkX * 16, chunkY * 16, 16, 16);
         this.replaceBlocksForBiome(chunkX, chunkY, ablock, abyte, this.biomesForGeneration);
-        this.caveGenerator.func_151539_a(this, this.worldObj, chunkX, chunkY, ablock);
-        this.ravineGenerator.func_151539_a(this, this.worldObj, chunkX, chunkY, ablock);
+        this.caveGenerator.generate(this, this.worldObj, chunkX, chunkY, ablock);
+        this.ravineGenerator.generate(this, this.worldObj, chunkX, chunkY, ablock);
         
         geome.replaceStoneInChunk(chunkX,chunkY,ablock);
 
         if (this.mapFeaturesEnabled)
         {
-            this.mineshaftGenerator.func_151539_a(this, this.worldObj, chunkX, chunkY, ablock);
-            this.villageGenerator.func_151539_a(this, this.worldObj, chunkX, chunkY, ablock);
-            this.strongholdGenerator.func_151539_a(this, this.worldObj, chunkX, chunkY, ablock);
-            this.scatteredFeatureGenerator.func_151539_a(this, this.worldObj, chunkX, chunkY, ablock);
+            this.mineshaftGenerator.generate(this, this.worldObj, chunkX, chunkY, ablock);
+            this.villageGenerator.generate(this, this.worldObj, chunkX, chunkY, ablock);
+            this.strongholdGenerator.generate(this, this.worldObj, chunkX, chunkY, ablock);
+            this.scatteredFeatureGenerator.generate(this, this.worldObj, chunkX, chunkY, ablock);
         }
 
         Chunk chunk = new Chunk(this.worldObj, ablock, abyte, chunkX, chunkY);

@@ -26,10 +26,10 @@ group= "cyano.mineralogy"
 archivesBaseName = "mineralogy"
 
 minecraft {
-    version = "1.8.9-11.15.0.1705"
+    version = "1.8.9-11.15.1.1722"
     runDir = "run"
 
-    mappings = "stable_20"
+    mappings = "stable_22"
 }
 
 dependencies {

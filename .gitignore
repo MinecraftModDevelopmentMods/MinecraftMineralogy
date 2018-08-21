@@ -11,3 +11,4 @@
 /eclipse/.metadata/*.index
 *.index
 *~
+build

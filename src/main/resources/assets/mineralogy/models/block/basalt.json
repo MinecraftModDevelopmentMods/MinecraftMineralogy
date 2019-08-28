@@ -1,6 +1,6 @@
 {
-    "parent": "mineralogy:block/block",
+    "parent": "block/cube_all", 
     "textures": {
-        "face": "mineralogy:blocks/basalt"
+        "all": "mineralogy:blocks/basalt"
     }
 }

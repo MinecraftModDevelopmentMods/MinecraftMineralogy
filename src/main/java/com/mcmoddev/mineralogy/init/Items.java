@@ -7,6 +7,7 @@ import com.mcmoddev.mineralogy.data.MaterialData;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.BlockItem;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -21,8 +22,8 @@ public class Items {
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event) {
     	event.getRegistry().registerAll(
-
-                new BlockItem(Blocks.basalt, new BlockItem.Properties()).setRegistryName(Mineralogy.MODID, "basalt")
+// TODO: make a mineralogy tab
+                new BlockItem(Blocks.basalt, new BlockItem.Properties().group(ItemGroup.BUILDING_BLOCKS)).setRegistryName(Mineralogy.MODID, MaterialData.BASALT.materialName.toLowerCase())
 
         );
     }

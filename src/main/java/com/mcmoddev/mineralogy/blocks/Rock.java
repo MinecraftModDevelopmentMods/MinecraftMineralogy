@@ -16,10 +16,11 @@ import net.minecraftforge.common.ToolType;
 public class Rock extends Block {
 
 	public Rock(boolean isStoneEquivalent, float hardness, float blastResistance, int toolHardnessLevel,
-			SoundType sound) {
+			SoundType sound, String name) {
 		super(Block.Properties.create(Material.ROCK).harvestTool(ToolType.PICKAXE)
 				.hardnessAndResistance(hardness, blastResistance).sound(sound));
 		
+		this.setRegistryName(name);
 		this.isStoneEquivalent = isStoneEquivalent;
 	}
 

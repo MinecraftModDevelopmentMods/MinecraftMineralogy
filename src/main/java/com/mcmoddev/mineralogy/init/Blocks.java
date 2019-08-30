@@ -2,6 +2,7 @@ package com.mcmoddev.mineralogy.init;
 
 import com.mcmoddev.mineralogy.data.*;
 import com.mcmoddev.mineralogy.Mineralogy;
+import com.mcmoddev.mineralogy.RockType;
 //import com.mcmoddev.mineralogy.data.Material;
 //import com.mcmoddev.mineralogy.init.MineralogyRegistry;
 //import com.mcmoddev.mineralogy.ioc.MinIoC;
@@ -27,6 +28,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 //import net.minecraft.block.Blocks;
 import net.minecraftforge.common.MinecraftForge;
@@ -76,17 +78,34 @@ import com.mcmoddev.mineralogy.blocks.Rock;
 @ObjectHolder(Mineralogy.MODID)
 public class Blocks {
 
+//	public static final Material ANDESITE = new Material("Andesite", RockType.IGNEOUS, 1.5, 10, 0, true);
+//	public static final Material BASALT = new Material("Basalt", RockType.IGNEOUS, 5, 100, 2, true);
+//	public static final Material DIORITE = new Material("Diorite", RockType.IGNEOUS, 1.5, 10, 0, true);
+//	public static final Material GRANITE = new Material("Granite", RockType.IGNEOUS, 3, 15, 1, true);
+//	public static final Material RHYOLITE = new Material("Rhyolite", RockType.IGNEOUS, 1.5, 10, 0, true);
+//	public static final Material PEGMATITE = new Material("Pegmatite", RockType.IGNEOUS, 1.5, 10, 0, true);
+//
+//	public static final Material SHALE = new Material("Shale", RockType.SEDIMENTARY, 1.5, 10, 0, true);
+//	public static final Material CONGLOMERATE = new Material("Conglomerate", RockType.SEDIMENTARY, 1.5, 10, 0, true);
+//	public static final Material DOLOMITE = new Material("Dolomite", RockType.SEDIMENTARY, 3, 15, 1, true);
+//	public static final Material LIMESTONE = new Material("Limestone", RockType.SEDIMENTARY, 1.5, 10, 0, true);
+//	public static final Material MARBLE = new Material("Marble", RockType.SEDIMENTARY, 1.5, 10, 0, true);
+//	
+//	public static final Material SLATE = new Material("Slate", RockType.METAMORPHIC, 1.5, 10, 0, true);
+//	public static final Material SCHIST = new Material("Schist", RockType.METAMORPHIC, 3, 15, 1, true);
+//	public static final Material GNEISS = new Material("Gneiss", RockType.METAMORPHIC, 3, 15, 1, true);
+//	public static final Material PHYLLITE = new Material("Phyllite", RockType.METAMORPHIC, 1.5, 10, 0, true);
+//	public static final Material AMPHIBOLITE = new Material("Amphibolite", RockType.METAMORPHIC, 3, 15, 1, true);
+//	
     public static final Rock basalt = null;
-
+    
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
         event.getRegistry().registerAll(
-
-              new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance((float)MaterialData.BASALT.hardness, (float)MaterialData.BASALT.blastResistance)).setRegistryName(Mineralogy.MODID, "basalt")
-
+              new Rock(true, (float)MaterialData.BASALT.hardness, (float)MaterialData.BASALT.blastResistance, (int)MaterialData.BASALT.toolHardnessLevel, SoundType.STONE, MaterialData.BASALT.materialName.toLowerCase())//,
+              //new Block(Block.Properties.create(Material.ROCK).hardnessAndResistance(3.0f, 3.0f)).setRegistryName(Mineralogy.MODID, "basalt")
         );
     }
-
 }
 
 //public class Blocks {

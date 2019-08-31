@@ -21,9 +21,30 @@ public class Items {
     
     @SubscribeEvent
     public static void registerItems(RegistryEvent.Register<Item> event) {
+    	    	
     	event.getRegistry().registerAll(
 // TODO: make a mineralogy tab
-                new BlockItem(Blocks.basalt, new BlockItem.Properties().group(ItemGroup.BUILDING_BLOCKS)).setRegistryName(Mineralogy.MODID, MaterialData.BASALT.materialName.toLowerCase())
+//            	ANDESITE
+    			MaterialData.ANDESITE.getBlockItem(Blocks.andesite),
+    			MaterialData.BASALT.getBlockItem(Blocks.basalt),
+    			MaterialData.DIORITE.getBlockItem(Blocks.diorite),		
+    			MaterialData.GRANITE.getBlockItem(Blocks.granite),
+    			MaterialData.RHYOLITE.getBlockItem(Blocks.rhyolite),
+    			MaterialData.PEGMATITE.getBlockItem(Blocks.pegmatite),
+    			MaterialData.SHALE.getBlockItem(Blocks.shale),
+    			MaterialData.CONGLOMERATE.getBlockItem(Blocks.conglomerate),
+    			MaterialData.DOLOMITE.getBlockItem(Blocks.dolomite),
+    			MaterialData.LIMESTONE.getBlockItem(Blocks.limestone),
+    			MaterialData.MARBLE.getBlockItem(Blocks.marble),
+    			MaterialData.SLATE.getBlockItem(Blocks.slate),
+    			MaterialData.SCHIST.getBlockItem(Blocks.schist),
+    			MaterialData.GNEISS.getBlockItem(Blocks.gneiss),
+    			MaterialData.PHYLLITE.getBlockItem(Blocks.phyllite),
+    			MaterialData.AMPHIBOLITE.getBlockItem(Blocks.amphibolite)
+    			
+    			//new BlockItem(Blocks.andesite, new BlockItem.Properties().group(ItemGroup.BUILDING_BLOCKS)).setRegistryName(Mineralogy.MODID, MaterialData.ANDESITE.materialName.toLowerCase()),
+                //new BlockItem(Blocks.basalt, new BlockItem.Properties().group(ItemGroup.BUILDING_BLOCKS)).setRegistryName(Mineralogy.MODID, MaterialData.BASALT.materialName.toLowerCase()),
+                //new BlockItem(Blocks.diorite, new BlockItem.Properties().group(ItemGroup.BUILDING_BLOCKS)).setRegistryName(Mineralogy.MODID, MaterialData.DIORITE.materialName.toLowerCase())
 
         );
     }

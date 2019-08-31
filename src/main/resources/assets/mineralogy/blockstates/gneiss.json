@@ -1,5 +1,7 @@
 {
     "variants": {
-        "normal": { "model": "mineralogy:gneiss" }
+        "": [
+            { "model": "mineralogy:block/gneiss" }
+        ]
     }
-}
+        }

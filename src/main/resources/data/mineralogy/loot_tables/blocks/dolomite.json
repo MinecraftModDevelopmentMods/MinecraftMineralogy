@@ -2,12 +2,12 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "name": "basalt",
+      "name": "dolomite",
       "rolls": 1,
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "mineralogy:basalt"
+          "name": "mineralogy:dolomite"
         }
       ],
       "conditions": [

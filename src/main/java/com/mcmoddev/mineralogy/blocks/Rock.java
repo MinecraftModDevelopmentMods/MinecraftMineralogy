@@ -1,46 +1,43 @@
 package com.mcmoddev.mineralogy.blocks;
 
-import java.util.List;
-import java.util.function.Predicate;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
+import com.mcmoddev.mineralogy.MineralogyConfig;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.storage.loot.LootContext.Builder;
-import net.minecraftforge.common.ToolType;
+import net.minecraft.world.IBlockAccess;
 
-public class Rock extends Block {
+public class Rock extends net.minecraft.block.Block {
 
 	public Rock(boolean isStoneEquivalent, float hardness, float blastResistance, int toolHardnessLevel,
-			SoundType sound, String name) {
-		super(Block.Properties.create(Material.ROCK).harvestTool(ToolType.PICKAXE)
-				.hardnessAndResistance(hardness, blastResistance).sound(sound));
-		
-		this.setRegistryName(name);
+			SoundType sound) {
+		super(Material.ROCK);
 		this.isStoneEquivalent = isStoneEquivalent;
+		this.setHardness((float) hardness); // dirt is 0.5, grass is 0.6, stone is 1.5,iron ore is 3, obsidian is 50
+		this.setResistance((float) blastResistance); // dirt is 0, iron ore is 5, stone is 10, obsidian is 2000
+		this.setSoundType(sound); // sound for stone
+		this.setHarvestLevel("pickaxe", toolHardnessLevel);
 	}
 
 	public final boolean isStoneEquivalent;
 
 	@Override
-	public boolean isReplaceableOreGen(BlockState state, IWorldReader world, BlockPos pos,
-			Predicate<BlockState> target) {
+	public boolean isReplaceableOreGen(IBlockState state, IBlockAccess world, BlockPos pos,
+			com.google.common.base.Predicate<IBlockState> target) {
 		return isStoneEquivalent;
 	}
-	
-	
+
 	@Override
-	public List<ItemStack> getDrops(BlockState state, Builder builder) {
-		// TODO Auto-generated method stub
-		return super.getDrops(state, builder);
+	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state,
+			int fortune) {
 		
-//super.getDrops(drops, world, pos, state, fortune);
-//		
-//		if (MineralogyConfig.dropCobblestone())
-//			drops.add(new ItemStack(Blocks.COBBLESTONE));
+		super.getDrops(drops, world, pos, state, fortune);
+		
+		if (MineralogyConfig.dropCobblestone())
+			drops.add(new ItemStack(Blocks.COBBLESTONE));
+		
 	}
 }

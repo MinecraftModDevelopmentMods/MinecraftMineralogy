@@ -1,7 +1,5 @@
 {
     "variants": {
-        "": [
-            { "model": "mineralogy:block/schist" }
-        ]
+        "normal": { "model": "mineralogy:schist" }
     }
-        }
+}

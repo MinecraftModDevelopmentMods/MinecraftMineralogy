@@ -1,7 +1,5 @@
 {
     "variants": {
-        "": [
-            { "model": "mineralogy:block/rhyolite" }
-        ]
+        "normal": { "model": "mineralogy:rhyolite" }
     }
-        }
+}

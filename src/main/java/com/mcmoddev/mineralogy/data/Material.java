@@ -1,13 +1,6 @@
 package com.mcmoddev.mineralogy.data;
 
-import com.mcmoddev.mineralogy.Mineralogy;
 import com.mcmoddev.mineralogy.RockType;
-import com.mcmoddev.mineralogy.blocks.Rock;
-import com.mcmoddev.mineralogy.init.Blocks;
-
-import net.minecraft.block.SoundType;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemGroup;
 
 public class Material {
 	public String materialName;
@@ -46,18 +39,6 @@ public class Material {
 		this.cobbleEquivilent = cobbleEquivilent;
 	}
 
-	public Rock toRock() {
-		return new Rock(true, (float)this.hardness, (float)this.blastResistance, (int)this.toolHardnessLevel, SoundType.STONE, this.materialName.toLowerCase());
-	}
-	
-	public BlockItem getBlockItem(Rock blockHandle) {
-		BlockItem blockItem = new BlockItem(blockHandle, new BlockItem.Properties().group(ItemGroup.BUILDING_BLOCKS));
-		
-		blockItem.setRegistryName(Mineralogy.MODID, this.materialName.toLowerCase());
-		
-		return blockItem;
-	}
-	
 	@Override
 	public String toString() {
 		return materialName;

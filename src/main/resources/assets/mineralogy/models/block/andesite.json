@@ -1,6 +1,6 @@
 {
-    "parent": "block/cube_all", 
+    "parent": "mineralogy:block/block",
     "textures": {
-        "all": "mineralogy:blocks/andesite"
+        "face": "mineralogy:blocks/andesite"
     }
 }

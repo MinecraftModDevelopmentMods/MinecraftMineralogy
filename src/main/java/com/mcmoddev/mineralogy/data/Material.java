@@ -8,6 +8,7 @@ import com.mcmoddev.mineralogy.init.Blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemGroup;
+import net.minecraft.util.ResourceLocation;
 
 public class Material {
 	public String materialName;
@@ -47,13 +48,22 @@ public class Material {
 	}
 
 	public Rock toRock() {
-		return new Rock(true, (float)this.hardness, (float)this.blastResistance, (int)this.toolHardnessLevel, SoundType.STONE, this.materialName.toLowerCase());
+		return toRock(false);
+	}
+	
+	public Rock toRock(boolean isSmooth) {
+		String name = this.materialName.toLowerCase();
+		
+		if (isSmooth)
+			name = name + "_smooth";
+			
+		return new Rock(true, (float)this.hardness, (float)this.blastResistance, (int)this.toolHardnessLevel, SoundType.STONE, name);
 	}
 	
 	public BlockItem getBlockItem(Rock blockHandle) {
 		BlockItem blockItem = new BlockItem(blockHandle, new BlockItem.Properties().group(ItemGroup.BUILDING_BLOCKS));
 		
-		blockItem.setRegistryName(Mineralogy.MODID, this.materialName.toLowerCase());
+		blockItem.setRegistryName(Mineralogy.MODID, blockHandle.getRegistryName().getPath());
 		
 		return blockItem;
 	}

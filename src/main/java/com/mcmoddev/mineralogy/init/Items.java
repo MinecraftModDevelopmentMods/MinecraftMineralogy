@@ -24,7 +24,6 @@ public class Items {
     	    	
     	event.getRegistry().registerAll(
 // TODO: make a mineralogy tab
-//            	ANDESITE
     			MaterialData.ANDESITE.getBlockItem(Blocks.andesite),
     			MaterialData.BASALT.getBlockItem(Blocks.basalt),
     			MaterialData.DIORITE.getBlockItem(Blocks.diorite),		
@@ -40,12 +39,23 @@ public class Items {
     			MaterialData.SCHIST.getBlockItem(Blocks.schist),
     			MaterialData.GNEISS.getBlockItem(Blocks.gneiss),
     			MaterialData.PHYLLITE.getBlockItem(Blocks.phyllite),
-    			MaterialData.AMPHIBOLITE.getBlockItem(Blocks.amphibolite)
-    			
-    			//new BlockItem(Blocks.andesite, new BlockItem.Properties().group(ItemGroup.BUILDING_BLOCKS)).setRegistryName(Mineralogy.MODID, MaterialData.ANDESITE.materialName.toLowerCase()),
-                //new BlockItem(Blocks.basalt, new BlockItem.Properties().group(ItemGroup.BUILDING_BLOCKS)).setRegistryName(Mineralogy.MODID, MaterialData.BASALT.materialName.toLowerCase()),
-                //new BlockItem(Blocks.diorite, new BlockItem.Properties().group(ItemGroup.BUILDING_BLOCKS)).setRegistryName(Mineralogy.MODID, MaterialData.DIORITE.materialName.toLowerCase())
-
+    			MaterialData.AMPHIBOLITE.getBlockItem(Blocks.amphibolite),    			
+    			MaterialData.ANDESITE.getBlockItem(Blocks.andesite_smooth),
+    			MaterialData.BASALT.getBlockItem(Blocks.basalt_smooth),
+    			MaterialData.DIORITE.getBlockItem(Blocks.diorite_smooth),		
+    			MaterialData.GRANITE.getBlockItem(Blocks.granite_smooth),
+    			MaterialData.RHYOLITE.getBlockItem(Blocks.rhyolite_smooth),
+    			MaterialData.PEGMATITE.getBlockItem(Blocks.pegmatite_smooth),
+    			MaterialData.SHALE.getBlockItem(Blocks.shale_smooth),
+    			MaterialData.CONGLOMERATE.getBlockItem(Blocks.conglomerate_smooth),
+    			MaterialData.DOLOMITE.getBlockItem(Blocks.dolomite_smooth),
+    			MaterialData.LIMESTONE.getBlockItem(Blocks.limestone_smooth),
+    			MaterialData.MARBLE.getBlockItem(Blocks.marble_smooth),
+    			MaterialData.SLATE.getBlockItem(Blocks.slate_smooth),
+    			MaterialData.SCHIST.getBlockItem(Blocks.schist_smooth),
+    			MaterialData.GNEISS.getBlockItem(Blocks.gneiss_smooth),
+    			MaterialData.PHYLLITE.getBlockItem(Blocks.phyllite_smooth),
+    			MaterialData.AMPHIBOLITE.getBlockItem(Blocks.amphibolite_smooth)
         );
     }
 }

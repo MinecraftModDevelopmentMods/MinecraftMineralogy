@@ -1,5 +1,7 @@
 {
     "variants": {
-        "normal": { "model": "mineralogy:basalt_smooth" }
+        "": [
+            { "model": "mineralogy:block/basalt_smooth" }
+        ]
     }
-}
+        }

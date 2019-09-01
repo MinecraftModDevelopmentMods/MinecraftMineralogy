@@ -95,10 +95,31 @@ public class Blocks {
     public static final Rock phyllite = null;
     public static final Rock amphibolite = null;
     
+    public static final Rock andesite_smooth = null;
+    public static final Rock basalt_smooth = null;
+    public static final Rock diorite_smooth = null;
+    public static final Rock granite_smooth = null;
+    public static final Rock rhyolite_smooth = null;
+    public static final Rock pegmatite_smooth = null;
+    public static final Rock shale_smooth = null;
+    public static final Rock conglomerate_smooth = null;
+    public static final Rock dolomite_smooth = null;
+    public static final Rock limestone_smooth = null;
+    public static final Rock marble_smooth = null;
+    public static final Rock slate_smooth = null;
+    public static final Rock schist_smooth = null;
+    public static final Rock gneiss_smooth = null;
+    public static final Rock phyllite_smooth = null;
+    public static final Rock amphibolite_smooth = null;
+    
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
     	for (com.mcmoddev.mineralogy.data.Material material : MaterialData.toArray()) {
 			event.getRegistry().register(material.toRock()); 
+		}
+    	
+    	for (com.mcmoddev.mineralogy.data.Material material : MaterialData.toArray()) {
+			event.getRegistry().register(material.toRock(true)); 
 		}
     }
 }

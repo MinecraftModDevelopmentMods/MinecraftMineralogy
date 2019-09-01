@@ -2,12 +2,12 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "name": "basalt",
+      "name": "andesite_smooth",
       "rolls": 1,
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "mineralogy:basalt"
+          "name": "mineralogy:andesite_smooth"
         }
       ],
       "conditions": [

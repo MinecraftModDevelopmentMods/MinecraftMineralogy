@@ -1,5 +1,7 @@
 {
     "variants": {
-        "normal": { "model": "mineralogy:andesite" }
+        "": [
+            { "model": "mineralogy:block/andesite" }
+        ]
     }
-}
+        }

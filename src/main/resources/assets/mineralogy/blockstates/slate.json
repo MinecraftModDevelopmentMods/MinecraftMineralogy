@@ -1,7 +1,5 @@
 {
     "variants": {
-        "": [
-            { "model": "mineralogy:block/slate" }
-        ]
+        "normal": { "model": "mineralogy:slate" }
     }
-        }
+}

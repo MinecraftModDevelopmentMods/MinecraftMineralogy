@@ -1,7 +1,5 @@
 {
     "variants": {
-        "": [
-            { "model": "mineralogy:block/conglomerate" }
-        ]
+        "normal": { "model": "mineralogy:conglomerate" }
     }
-        }
+}

@@ -1,20 +1,20 @@
 # eclipse
 bin
-* .launch
+*.launch
 .settings
-.settings / *
+.settings/*
 .metadata
 .classpath
 .project
 
 # idea
 out
-* .ipr
-* .iws
-* .iml
+*.ipr
+*.iws
+*.iml
 .idea
 
-#graded
+# gradle
 build
 .gradle
 
@@ -27,8 +27,6 @@ classes
 /forge-*-changelog.txt
 
 secret.json
-libs / *
-! /libs/README.txt
+libs/*
 
 .DS_Store
-.okhttpcache / *

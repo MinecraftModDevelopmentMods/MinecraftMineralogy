@@ -1,7 +1,5 @@
 {
     "variants": {
-        "": [
-            { "model": "mineralogy:block/dolomite" }
-        ]
+        "normal": { "model": "mineralogy:dolomite" }
     }
-        }
+}

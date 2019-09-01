@@ -1,7 +1,5 @@
 {
     "variants": {
-        "": [
-            { "model": "mineralogy:block/diorite" }
-        ]
+        "normal": { "model": "mineralogy:diorite" }
     }
-        }
+}

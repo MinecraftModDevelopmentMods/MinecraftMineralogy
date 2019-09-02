@@ -1,5 +1,7 @@
 {
     "variants": {
-        "normal": { "model": "mineralogy:pegmatite" }
+        "": [
+            { "model": "mineralogy:block/pegmatite" }
+        ]
     }
-}
+        }

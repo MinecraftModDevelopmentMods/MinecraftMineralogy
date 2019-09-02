@@ -1,6 +1,14 @@
 package com.mcmoddev.mineralogy.data;
 
+import com.mcmoddev.mineralogy.Mineralogy;
 import com.mcmoddev.mineralogy.RockType;
+import com.mcmoddev.mineralogy.blocks.Rock;
+import com.mcmoddev.mineralogy.init.Blocks;
+
+import net.minecraft.block.SoundType;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.util.ResourceLocation;
 
 public class Material {
 	public String materialName;
@@ -39,6 +47,27 @@ public class Material {
 		this.cobbleEquivilent = cobbleEquivilent;
 	}
 
+	public Rock toRock() {
+		return toRock(false);
+	}
+	
+	public Rock toRock(boolean isSmooth) {
+		String name = this.materialName.toLowerCase();
+		
+		if (isSmooth)
+			name = name + "_smooth";
+			
+		return new Rock(true, (float)this.hardness, (float)this.blastResistance, (int)this.toolHardnessLevel, SoundType.STONE, name);
+	}
+	
+	public BlockItem getBlockItem(Rock blockHandle) {
+		BlockItem blockItem = new BlockItem(blockHandle, new BlockItem.Properties().group(ItemGroup.BUILDING_BLOCKS));
+		
+		blockItem.setRegistryName(Mineralogy.MODID, blockHandle.getRegistryName().getPath());
+		
+		return blockItem;
+	}
+	
 	@Override
 	public String toString() {
 		return materialName;

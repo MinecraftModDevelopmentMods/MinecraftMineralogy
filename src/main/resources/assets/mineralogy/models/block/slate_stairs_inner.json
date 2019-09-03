@@ -1,7 +1,8 @@
 {
-    "parent": "mineralogy:block/stairs_inner",
-    "textures": {
-      "face": "mineralogy:blocks/slate",
-      "side": "mineralogy:blocks/slate"
-    }
-}
+                                "parent": "block/inner_stairs",
+                                "textures": {
+                                    "bottom": "mineralogy:blocks/slate",
+                                    "top": "mineralogy:blocks/slate",
+                                    "side": "mineralogy:blocks/slate"
+                                }
+                            }

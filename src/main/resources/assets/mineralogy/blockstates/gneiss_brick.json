@@ -1,5 +1,9 @@
 {
-    "variants": {
-        "normal": { "model": "mineralogy:gneiss_brick" }
-    }
+  "variants": {
+    "": [
+      {
+        "model": "mineralogy:block/gneiss_brick"
+      }
+    ]
+  }
 }

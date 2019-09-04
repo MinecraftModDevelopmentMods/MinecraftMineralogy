@@ -49,26 +49,28 @@ public class Material {
 		this.cobbleEquivilent = cobbleEquivilent;
 	}
 
-	public Rock toRock() {
-		return toRock(false);
-	}
-	
-	public Rock toRock(boolean isSmooth) {
+	public Rock toRock(boolean isSmooth, boolean isBrick) {
 		String name = this.materialName.toLowerCase();
 		
 		if (isSmooth)
 			name = name + "_smooth";
-			
+		
+		if (isBrick)
+			name = name + "_brick";
+		
 		rock = new Rock(true, (float)this.hardness, (float)this.blastResistance, (int)this.toolHardnessLevel, SoundType.STONE, name);
 		
 		return rock;
 	}
 	
-	public RockStairs toRockStairs(boolean isSmooth) {
+	public RockStairs toRockStairs(boolean isSmooth, boolean isBrick) {
 		String name = this.materialName.toLowerCase();
 		
 		if (isSmooth)
 			name = name + "_smooth";
+		
+		if (isBrick)
+			name = name + "_brick";
 			
 		return new RockStairs(rock, (float)this.hardness, (float)this.blastResistance, (int)this.toolHardnessLevel, SoundType.STONE, name + "_stairs");
 	}

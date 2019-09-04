@@ -1,5 +1,9 @@
 {
-    "variants": {
-        "normal": { "model": "mineralogy:dolomite_smooth_brick" }
-    }
+  "variants": {
+    "": [
+      {
+        "model": "mineralogy:block/dolomite_smooth_brick"
+      }
+    ]
+  }
 }

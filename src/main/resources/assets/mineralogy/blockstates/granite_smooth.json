@@ -1,7 +1,9 @@
 {
-    "variants": {
-        "": [
-            { "model": "mineralogy:block/granite_smooth" }
-        ]
-    }
-        }
+  "variants": {
+    "": [
+      {
+        "model": "mineralogy:block/granite_smooth"
+      }
+    ]
+  }
+}

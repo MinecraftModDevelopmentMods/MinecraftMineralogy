@@ -1,7 +1,9 @@
 {
-    "variants": {
-        "": [
-            { "model": "mineralogy:block/pegmatite_smooth" }
-        ]
-    }
-        }
+  "variants": {
+    "": [
+      {
+        "model": "mineralogy:block/pegmatite_smooth"
+      }
+    ]
+  }
+}

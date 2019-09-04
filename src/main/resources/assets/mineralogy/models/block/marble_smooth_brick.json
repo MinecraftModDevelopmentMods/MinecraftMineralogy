@@ -1,6 +1,6 @@
 {
-    "parent": "mineralogy:block/block",
-    "textures": {
-        "face": "mineralogy:blocks/marble_smooth_brick"
-    }
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "mineralogy:blocks/marble_smooth_brick"
+  }
 }

@@ -1,8 +1,6 @@
 {
-    "parent": "mineralogy:block/brick",
-    "textures": {
-      "top": "mineralogy:blocks/gneiss_brick_top",
-      "bottom": "mineralogy:blocks/gneiss_brick_top",
-        "side": "mineralogy:blocks/gneiss_brick_side"
-    }
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "mineralogy:blocks/gneiss_brick"
+  }
 }

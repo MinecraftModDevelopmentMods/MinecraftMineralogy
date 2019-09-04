@@ -1,5 +1,9 @@
 {
-    "variants": {
-        "normal": { "model": "mineralogy:pegmatite_smooth_brick" }
-    }
+  "variants": {
+    "": [
+      {
+        "model": "mineralogy:block/pegmatite_smooth_brick"
+      }
+    ]
+  }
 }

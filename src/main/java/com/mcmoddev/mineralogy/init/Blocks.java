@@ -29,6 +29,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.StairsBlock;
 import net.minecraft.block.material.Material;
 //import net.minecraft.block.Blocks;
 import net.minecraftforge.common.MinecraftForge;
@@ -56,6 +57,7 @@ import java.util.stream.Collectors;
 //import com.mcmoddev.mineralogy.blocks.DryWall;
 //import com.mcmoddev.mineralogy.blocks.Gypsum;
 import com.mcmoddev.mineralogy.blocks.Rock;
+import com.mcmoddev.mineralogy.blocks.RockStairs;
 //import com.mcmoddev.mineralogy.blocks.RockSlab;
 //import com.mcmoddev.mineralogy.blocks.RockStairs;
 //import com.mcmoddev.mineralogy.blocks.RockWall;
@@ -112,14 +114,48 @@ public class Blocks {
     public static final Rock phyllite_smooth = null;
     public static final Rock amphibolite_smooth = null;
     
+    
+    public static final RockStairs andesite_stairs = null;
+    public static final RockStairs basalt_stairs = null;
+    public static final RockStairs diorite_stairs = null;
+    public static final RockStairs granite_stairs = null;
+    public static final RockStairs rhyolite_stairs = null;
+    public static final RockStairs pegmatite_stairs = null;
+    public static final RockStairs shale_stairs = null;
+    public static final RockStairs conglomerate_stairs = null;
+    public static final RockStairs dolomite_stairs = null;
+    public static final RockStairs limestone_stairs = null;
+    public static final RockStairs marble_stairs = null;
+    public static final RockStairs slate_stairs = null;
+    public static final RockStairs schist_stairs = null;
+    public static final RockStairs gneiss_stairs = null;
+    public static final RockStairs phyllite_stairs = null;
+    public static final RockStairs amphibolite_stairs = null;
+    
+    public static final RockStairs andesite_smooth_stairs = null;
+    public static final RockStairs basalt_smooth_stairs = null;
+    public static final RockStairs diorite_smooth_stairs = null;
+    public static final RockStairs granite_smooth_stairs = null;
+    public static final RockStairs rhyolite_smooth_stairs = null;
+    public static final RockStairs pegmatite_smooth_stairs = null;
+    public static final RockStairs shale_smooth_stairs = null;
+    public static final RockStairs conglomerate_smooth_stairs = null;
+    public static final RockStairs dolomite_smooth_stairs = null;
+    public static final RockStairs limestone_smooth_stairs = null;
+    public static final RockStairs marble_smooth_stairs = null;
+    public static final RockStairs slate_smooth_stairs = null;
+    public static final RockStairs schist_smooth_stairs = null;
+    public static final RockStairs gneiss_smooth_stairs = null;
+    public static final RockStairs phyllite_smooth_stairs = null;
+    public static final RockStairs amphibolite_smooth_stairs = null;
+    
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
     	for (com.mcmoddev.mineralogy.data.Material material : MaterialData.toArray()) {
-			event.getRegistry().register(material.toRock()); 
-		}
-    	
-    	for (com.mcmoddev.mineralogy.data.Material material : MaterialData.toArray()) {
-			event.getRegistry().register(material.toRock(true)); 
+			event.getRegistry().register(material.toRock());
+			event.getRegistry().register(material.toRock(true));
+			event.getRegistry().register(material.toRockStairs(false));
+			event.getRegistry().register(material.toRockStairs(true));
 		}
     }
 }

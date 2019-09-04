@@ -3,6 +3,7 @@ package com.mcmoddev.mineralogy.data;
 import com.mcmoddev.mineralogy.Mineralogy;
 import com.mcmoddev.mineralogy.RockType;
 import com.mcmoddev.mineralogy.blocks.Rock;
+import com.mcmoddev.mineralogy.blocks.RockStairs;
 import com.mcmoddev.mineralogy.init.Blocks;
 
 import net.minecraft.block.SoundType;
@@ -17,6 +18,7 @@ public class Material {
 	public double blastResistance;
 	public int toolHardnessLevel;
 	public boolean cobbleEquivilent;
+	private Rock rock;
 	
 	/**
 	 * @param materialName
@@ -57,10 +59,29 @@ public class Material {
 		if (isSmooth)
 			name = name + "_smooth";
 			
-		return new Rock(true, (float)this.hardness, (float)this.blastResistance, (int)this.toolHardnessLevel, SoundType.STONE, name);
+		rock = new Rock(true, (float)this.hardness, (float)this.blastResistance, (int)this.toolHardnessLevel, SoundType.STONE, name);
+		
+		return rock;
+	}
+	
+	public RockStairs toRockStairs(boolean isSmooth) {
+		String name = this.materialName.toLowerCase();
+		
+		if (isSmooth)
+			name = name + "_smooth";
+			
+		return new RockStairs(rock, (float)this.hardness, (float)this.blastResistance, (int)this.toolHardnessLevel, SoundType.STONE, name + "_stairs");
 	}
 	
 	public BlockItem getBlockItem(Rock blockHandle) {
+		BlockItem blockItem = new BlockItem(blockHandle, new BlockItem.Properties().group(ItemGroup.BUILDING_BLOCKS));
+		
+		blockItem.setRegistryName(Mineralogy.MODID, blockHandle.getRegistryName().getPath());
+		
+		return blockItem;
+	}
+	
+	public BlockItem getBlockItem(RockStairs blockHandle) {
 		BlockItem blockItem = new BlockItem(blockHandle, new BlockItem.Properties().group(ItemGroup.BUILDING_BLOCKS));
 		
 		blockItem.setRegistryName(Mineralogy.MODID, blockHandle.getRegistryName().getPath());

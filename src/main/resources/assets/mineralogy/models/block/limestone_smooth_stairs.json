@@ -1,7 +1,8 @@
 {
-    "parent": "mineralogy:block/stairs_normal",
-    "textures": {
-      "face": "mineralogy:blocks/limestone_smooth",
-      "side": "mineralogy:blocks/limestone_smooth"
-    }
-}
+                            "parent": "block/stairs",
+                            "textures": {
+                                "bottom": "mineralogy:blocks/limestone_smooth",
+                                "top": "mineralogy:blocks/limestone_smooth",
+                                "side": "mineralogy:blocks/limestone_smooth"
+                            }
+                        }

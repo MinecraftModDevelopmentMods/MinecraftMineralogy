@@ -1,6 +1,7 @@
 {
-  "parent": "block/cube_all",
+  "parent": "block/cube_column",
   "textures": {
-    "all": "mineralogy:blocks/gneiss_brick"
+    "end": "mineralogy:blocks/gneiss_brick_top",
+    "side": "mineralogy:blocks/gneiss_brick_side"
   }
 }

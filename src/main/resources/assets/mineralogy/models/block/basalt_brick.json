@@ -1,6 +1,7 @@
 {
-  "parent": "block/cube_all",
+  "parent": "block/cube_column",
   "textures": {
-    "all": "mineralogy:blocks/basalt_brick"
+    "end": "mineralogy:blocks/basalt_brick_top",
+    "side": "mineralogy:blocks/basalt_brick_side"
   }
 }

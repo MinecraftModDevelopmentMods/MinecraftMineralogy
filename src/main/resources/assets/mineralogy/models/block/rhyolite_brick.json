@@ -1,6 +1,7 @@
 {
-  "parent": "block/cube_all",
+  "parent": "block/cube_column",
   "textures": {
-    "all": "mineralogy:blocks/rhyolite_brick"
+    "end": "mineralogy:blocks/rhyolite_brick_top",
+    "side": "mineralogy:blocks/rhyolite_brick_side"
   }
 }

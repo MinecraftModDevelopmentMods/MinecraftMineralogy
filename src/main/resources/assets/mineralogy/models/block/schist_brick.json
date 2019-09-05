@@ -1,6 +1,7 @@
 {
-  "parent": "block/cube_all",
+  "parent": "block/cube_column",
   "textures": {
-    "all": "mineralogy:blocks/schist_brick"
+    "end": "mineralogy:blocks/schist_brick_top",
+    "side": "mineralogy:blocks/schist_brick_side"
   }
 }

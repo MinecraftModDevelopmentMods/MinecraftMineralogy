@@ -1,6 +1,7 @@
 {
-  "parent": "block/cube_all",
+  "parent": "block/cube_column",
   "textures": {
-    "all": "mineralogy:blocks/dolomite_brick"
+    "end": "mineralogy:blocks/dolomite_brick_top",
+    "side": "mineralogy:blocks/dolomite_brick_side"
   }
 }

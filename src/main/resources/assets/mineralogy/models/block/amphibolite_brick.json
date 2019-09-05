@@ -1,6 +1,7 @@
 {
-  "parent": "block/cube_all",
+  "parent": "block/cube_column",
   "textures": {
-    "all": "mineralogy:blocks/amphibolite_brick"
+    "end": "mineralogy:blocks/amphibolite_brick_top",
+    "side": "mineralogy:blocks/amphibolite_brick_side"
   }
 }

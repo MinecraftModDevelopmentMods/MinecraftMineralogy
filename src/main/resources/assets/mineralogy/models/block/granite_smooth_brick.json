@@ -1,6 +1,7 @@
 {
-  "parent": "block/cube_all",
+  "parent": "block/cube_column",
   "textures": {
-    "all": "mineralogy:blocks/granite_smooth_brick"
+    "end": "mineralogy:blocks/granite_smooth_brick",
+    "side": "mineralogy:blocks/granite_smooth_brick"
   }
 }

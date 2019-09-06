@@ -1,6 +1,6 @@
 {
-    "parent": "block/wall_side",
-    "textures": {
-        "wall": "mineralogy:blocks/slate_smooth_brick"
-    }
+  "parent": "block/template_wall_side",
+  "textures": {
+    "wall": "mineralogy:blocks/slate_smooth_brick"
+  }
 }

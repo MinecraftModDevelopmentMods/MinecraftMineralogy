@@ -4,6 +4,7 @@ import com.mcmoddev.mineralogy.Mineralogy;
 import com.mcmoddev.mineralogy.RockType;
 import com.mcmoddev.mineralogy.blocks.Rock;
 import com.mcmoddev.mineralogy.blocks.RockStairs;
+import com.mcmoddev.mineralogy.blocks.RockWall;
 import com.mcmoddev.mineralogy.init.Blocks;
 
 import net.minecraft.block.SoundType;
@@ -63,6 +64,18 @@ public class Material {
 		return rock;
 	}
 	
+	public RockWall toRockWall(boolean isSmooth, boolean isBrick) {
+		String name = this.materialName.toLowerCase();
+		
+		if (isSmooth)
+			name = name + "_smooth";
+		
+		if (isBrick)
+			name = name + "_brick";
+		
+		return new RockWall(rock, (float)this.hardness, (float)this.blastResistance, (int)this.toolHardnessLevel, SoundType.STONE, name + "_wall");
+	}
+	
 	public RockStairs toRockStairs(boolean isSmooth, boolean isBrick) {
 		String name = this.materialName.toLowerCase();
 		
@@ -84,6 +97,14 @@ public class Material {
 	}
 	
 	public BlockItem getBlockItem(RockStairs blockHandle) {
+		BlockItem blockItem = new BlockItem(blockHandle, new BlockItem.Properties().group(ItemGroup.BUILDING_BLOCKS));
+		
+		blockItem.setRegistryName(Mineralogy.MODID, blockHandle.getRegistryName().getPath());
+		
+		return blockItem;
+	}
+	
+	public BlockItem getBlockItem(RockWall blockHandle) {
 		BlockItem blockItem = new BlockItem(blockHandle, new BlockItem.Properties().group(ItemGroup.BUILDING_BLOCKS));
 		
 		blockItem.setRegistryName(Mineralogy.MODID, blockHandle.getRegistryName().getPath());

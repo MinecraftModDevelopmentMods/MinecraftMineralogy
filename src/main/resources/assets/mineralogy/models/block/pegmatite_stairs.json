@@ -1,8 +1,8 @@
 {
   "parent": "block/stairs",
   "textures": {
-    "bottom": "mineralogy:blocks/pegmatite_top",
-    "top": "mineralogy:blocks/pegmatite_top",
-    "side": "mineralogy:blocks/pegmatite_side"
+    "bottom": "mineralogy:blocks/pegmatite",
+    "top": "mineralogy:blocks/pegmatite",
+    "side": "mineralogy:blocks/pegmatite"
   }
 }

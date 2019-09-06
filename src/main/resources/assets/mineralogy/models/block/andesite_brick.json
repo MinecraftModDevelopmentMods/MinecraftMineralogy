@@ -1,8 +1,7 @@
 {
-    "parent": "mineralogy:block/brick",
-    "textures": {
-      "top": "mineralogy:blocks/andesite_brick_top",
-      "bottom": "mineralogy:blocks/andesite_brick_top",
-        "side": "mineralogy:blocks/andesite_brick_side"
-    }
+  "parent": "block/cube_column",
+  "textures": {
+    "end": "mineralogy:blocks/andesite_brick_top",
+    "side": "mineralogy:blocks/andesite_brick_side"
+  }
 }

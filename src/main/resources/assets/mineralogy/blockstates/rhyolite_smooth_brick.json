@@ -1,5 +1,9 @@
 {
-    "variants": {
-        "normal": { "model": "mineralogy:rhyolite_smooth_brick" }
-    }
+  "variants": {
+    "": [
+      {
+        "model": "mineralogy:block/rhyolite_smooth_brick"
+      }
+    ]
+  }
 }

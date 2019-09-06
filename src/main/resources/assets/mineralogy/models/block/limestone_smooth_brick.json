@@ -1,6 +1,7 @@
 {
-    "parent": "mineralogy:block/block",
-    "textures": {
-        "face": "mineralogy:blocks/limestone_smooth_brick"
-    }
+  "parent": "block/cube_column",
+  "textures": {
+    "end": "mineralogy:blocks/limestone_smooth_brick_top",
+    "side": "mineralogy:blocks/limestone_smooth_brick_side"
+  }
 }

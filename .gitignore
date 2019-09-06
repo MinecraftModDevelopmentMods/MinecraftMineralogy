@@ -32,3 +32,6 @@ libs / *
 
 .DS_Store
 .okhttpcache / *
+/build.gradle.old
+/minecraftmineralogy Client.launch
+/minecraftmineralogy Server.launch

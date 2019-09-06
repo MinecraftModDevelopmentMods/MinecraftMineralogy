@@ -114,7 +114,6 @@ public class Blocks {
     public static final Rock phyllite_smooth = null;
     public static final Rock amphibolite_smooth = null;
     
-    
     public static final RockStairs andesite_stairs = null;
     public static final RockStairs basalt_stairs = null;
     public static final RockStairs diorite_stairs = null;
@@ -149,13 +148,85 @@ public class Blocks {
     public static final RockStairs phyllite_smooth_stairs = null;
     public static final RockStairs amphibolite_smooth_stairs = null;
     
+    public static final Rock andesite_brick = null;
+    public static final Rock basalt_brick = null;
+    public static final Rock diorite_brick = null;
+    public static final Rock granite_brick = null;
+    public static final Rock rhyolite_brick = null;
+    public static final Rock pegmatite_brick = null;
+    public static final Rock shale_brick = null;
+    public static final Rock conglomerate_brick = null;
+    public static final Rock dolomite_brick = null;
+    public static final Rock limestone_brick = null;
+    public static final Rock marble_brick = null;
+    public static final Rock slate_brick = null;
+    public static final Rock schist_brick = null;
+    public static final Rock gneiss_brick = null;
+    public static final Rock phyllite_brick = null;
+    public static final Rock amphibolite_brick = null;
+    
+    public static final Rock andesite_smooth_brick = null;
+    public static final Rock basalt_smooth_brick = null;
+    public static final Rock diorite_smooth_brick = null;
+    public static final Rock granite_smooth_brick = null;
+    public static final Rock rhyolite_smooth_brick = null;
+    public static final Rock pegmatite_smooth_brick = null;
+    public static final Rock shale_smooth_brick = null;
+    public static final Rock conglomerate_smooth_brick = null;
+    public static final Rock dolomite_smooth_brick = null;
+    public static final Rock limestone_smooth_brick = null;
+    public static final Rock marble_smooth_brick = null;
+    public static final Rock slate_smooth_brick = null;
+    public static final Rock schist_smooth_brick = null;
+    public static final Rock gneiss_smooth_brick = null;
+    public static final Rock phyllite_smooth_brick = null;
+    public static final Rock amphibolite_smooth_brick = null;
+    
+    public static final RockStairs andesite_brick_stairs = null;
+    public static final RockStairs basalt_brick_stairs = null;
+    public static final RockStairs diorite_brick_stairs = null;
+    public static final RockStairs granite_brick_stairs = null;
+    public static final RockStairs rhyolite_brick_stairs = null;
+    public static final RockStairs pegmatite_brick_stairs = null;
+    public static final RockStairs shale_brick_stairs = null;
+    public static final RockStairs conglomerate_brick_stairs = null;
+    public static final RockStairs dolomite_brick_stairs = null;
+    public static final RockStairs limestone_brick_stairs = null;
+    public static final RockStairs marble_brick_stairs = null;
+    public static final RockStairs slate_brick_stairs = null;
+    public static final RockStairs schist_brick_stairs = null;
+    public static final RockStairs gneiss_brick_stairs = null;
+    public static final RockStairs phyllite_brick_stairs = null;
+    public static final RockStairs amphibolite_brick_stairs = null;
+    
+    public static final RockStairs andesite_smooth_brick_stairs = null;
+    public static final RockStairs basalt_smooth_brick_stairs = null;
+    public static final RockStairs diorite_smooth_brick_stairs = null;
+    public static final RockStairs granite_smooth_brick_stairs = null;
+    public static final RockStairs rhyolite_smooth_brick_stairs = null;
+    public static final RockStairs pegmatite_smooth_brick_stairs = null;
+    public static final RockStairs shale_smooth_brick_stairs = null;
+    public static final RockStairs conglomerate_smooth_brick_stairs = null;
+    public static final RockStairs dolomite_smooth_brick_stairs = null;
+    public static final RockStairs limestone_smooth_brick_stairs = null;
+    public static final RockStairs marble_smooth_brick_stairs = null;
+    public static final RockStairs slate_smooth_brick_stairs = null;
+    public static final RockStairs schist_smooth_brick_stairs = null;
+    public static final RockStairs gneiss_smooth_brick_stairs = null;
+    public static final RockStairs phyllite_smooth_brick_stairs = null;
+    public static final RockStairs amphibolite_smooth_brick_stairs = null;
+    
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
     	for (com.mcmoddev.mineralogy.data.Material material : MaterialData.toArray()) {
-			event.getRegistry().register(material.toRock());
-			event.getRegistry().register(material.toRock(true));
-			event.getRegistry().register(material.toRockStairs(false));
-			event.getRegistry().register(material.toRockStairs(true));
+			event.getRegistry().register(material.toRock(false, false));
+			event.getRegistry().register(material.toRock(true, false));
+			event.getRegistry().register(material.toRock(false, true));
+			event.getRegistry().register(material.toRock(true, true));
+			event.getRegistry().register(material.toRockStairs(false, false));
+			event.getRegistry().register(material.toRockStairs(true, false));
+			event.getRegistry().register(material.toRockStairs(false, true));
+			event.getRegistry().register(material.toRockStairs(true, true));
 		}
     }
 }

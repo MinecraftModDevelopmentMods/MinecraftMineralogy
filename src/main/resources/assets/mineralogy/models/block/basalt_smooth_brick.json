@@ -1,7 +1,7 @@
 {
   "parent": "block/cube_column",
   "textures": {
-    "end": "mineralogy:blocks/basalt_smooth_brick",
-    "side": "mineralogy:blocks/basalt_smooth_brick"
+    "end": "mineralogy:blocks/basalt_smooth_brick_top",
+    "side": "mineralogy:blocks/basalt_smooth_brick_side"
   }
 }

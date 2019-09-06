@@ -218,73 +218,73 @@ public class Blocks {
     public static final RockStairs phyllite_smooth_brick_stairs = null;
     public static final RockStairs amphibolite_smooth_brick_stairs = null;
     
-//    public static final Rock andesite_wall = null;
+    public static final RockWall andesite_wall = null;
     public static final RockWall basalt_wall = null;
-//    public static final Rock diorite_wall = null;
-//    public static final Rock granite_wall = null;
-//    public static final Rock rhyolite_wall = null;
-//    public static final Rock pegmatite_wall = null;
-//    public static final Rock shale_wall = null;
-//    public static final Rock conglomerate_wall = null;
-//    public static final Rock dolomite_wall = null;
-//    public static final Rock limestone_wall = null;
-//    public static final Rock marble_wall = null;
-//    public static final Rock slate_wall = null;
-//    public static final Rock schist_wall = null;
-//    public static final Rock gneiss_wall = null;
-//    public static final Rock phyllite_wall = null;
-//    public static final Rock amphibolite_wall = null;
-//	
-//	public static final Rock andesite_smooth_wall = null;
-//    public static final Rock basalt_smooth_wall = null;
-//    public static final Rock diorite_smooth_wall = null;
-//    public static final Rock granite_smooth_wall = null;
-//    public static final Rock rhyolite_smooth_wall = null;
-//    public static final Rock pegmatite_smooth_wall = null;
-//    public static final Rock shale_smooth_wall = null;
-//    public static final Rock conglomerate_smooth_wall = null;
-//    public static final Rock dolomite_smooth_wall = null;
-//    public static final Rock limestone_smooth_wall = null;
-//    public static final Rock marble_smooth_wall = null;
-//    public static final Rock slate_smooth_wall = null;
-//    public static final Rock schist_smooth_wall = null;
-//    public static final Rock gneiss_smooth_wall = null;
-//    public static final Rock phyllite_smooth_wall = null;
-//    public static final Rock amphibolite_smooth_wall = null;
-//	
-//	public static final Rock andesite_brick_wall = null;
-//    public static final Rock basalt_brick_wall = null;
-//    public static final Rock diorite_brick_wall = null;
-//    public static final Rock granite_brick_wall = null;
-//    public static final Rock rhyolite_brick_wall = null;
-//    public static final Rock pegmatite_brick_wall = null;
-//    public static final Rock shale_brick_wall = null;
-//    public static final Rock conglomerate_brick_wall = null;
-//    public static final Rock dolomite_brick_wall = null;
-//    public static final Rock limestone_brick_wall = null;
-//    public static final Rock marble_brick_wall = null;
-//    public static final Rock slate_brick_wall = null;
-//    public static final Rock schist_brick_wall = null;
-//    public static final Rock gneiss_brick_wall = null;
-//    public static final Rock phyllite_brick_wall = null;
-//    public static final Rock amphibolite_brick_wall = null;
-//	
-//	public static final Rock andesite_smooth_brick_wall = null;
-//    public static final Rock basalt_smooth_brick_wall = null;
-//    public static final Rock diorite_smooth_brick_wall = null;
-//    public static final Rock granite_smooth_brick_wall = null;
-//    public static final Rock rhyolite_smooth_brick_wall = null;
-//    public static final Rock pegmatite_smooth_brick_wall = null;
-//    public static final Rock shale_smooth_brick_wall = null;
-//    public static final Rock conglomerate_smooth_brick_wall = null;
-//    public static final Rock dolomite_smooth_brick_wall = null;
-//    public static final Rock limestone_smooth_brick_wall = null;
-//    public static final Rock marble_smooth_brick_wall = null;
-//    public static final Rock slate_smooth_brick_wall = null;
-//    public static final Rock schist_smooth_brick_wall = null;
-//    public static final Rock gneiss_smooth_brick_wall = null;
-//    public static final Rock phyllite_smooth_brick_wall = null;
-//    public static final Rock amphibolite_smooth_brick_wall = null;
+    public static final RockWall diorite_wall = null;
+    public static final RockWall granite_wall = null;
+    public static final RockWall rhyolite_wall = null;
+    public static final RockWall pegmatite_wall = null;
+    public static final RockWall shale_wall = null;
+    public static final RockWall conglomerate_wall = null;
+    public static final RockWall dolomite_wall = null;
+    public static final RockWall limestone_wall = null;
+    public static final RockWall marble_wall = null;
+    public static final RockWall slate_wall = null;
+    public static final RockWall schist_wall = null;
+    public static final RockWall gneiss_wall = null;
+    public static final RockWall phyllite_wall = null;
+    public static final RockWall amphibolite_wall = null;
+	
+	public static final RockWall andesite_smooth_wall = null;
+    public static final RockWall basalt_smooth_wall = null;
+    public static final RockWall diorite_smooth_wall = null;
+    public static final RockWall granite_smooth_wall = null;
+    public static final RockWall rhyolite_smooth_wall = null;
+    public static final RockWall pegmatite_smooth_wall = null;
+    public static final RockWall shale_smooth_wall = null;
+    public static final RockWall conglomerate_smooth_wall = null;
+    public static final RockWall dolomite_smooth_wall = null;
+    public static final RockWall limestone_smooth_wall = null;
+    public static final RockWall marble_smooth_wall = null;
+    public static final RockWall slate_smooth_wall = null;
+    public static final RockWall schist_smooth_wall = null;
+    public static final RockWall gneiss_smooth_wall = null;
+    public static final RockWall phyllite_smooth_wall = null;
+    public static final RockWall amphibolite_smooth_wall = null;
+	
+	public static final RockWall andesite_brick_wall = null;
+    public static final RockWall basalt_brick_wall = null;
+    public static final RockWall diorite_brick_wall = null;
+    public static final RockWall granite_brick_wall = null;
+    public static final RockWall rhyolite_brick_wall = null;
+    public static final RockWall pegmatite_brick_wall = null;
+    public static final RockWall shale_brick_wall = null;
+    public static final RockWall conglomerate_brick_wall = null;
+    public static final RockWall dolomite_brick_wall = null;
+    public static final RockWall limestone_brick_wall = null;
+    public static final RockWall marble_brick_wall = null;
+    public static final RockWall slate_brick_wall = null;
+    public static final RockWall schist_brick_wall = null;
+    public static final RockWall gneiss_brick_wall = null;
+    public static final RockWall phyllite_brick_wall = null;
+    public static final RockWall amphibolite_brick_wall = null;
+	
+	public static final RockWall andesite_smooth_brick_wall = null;
+    public static final RockWall basalt_smooth_brick_wall = null;
+    public static final RockWall diorite_smooth_brick_wall = null;
+    public static final RockWall granite_smooth_brick_wall = null;
+    public static final RockWall rhyolite_smooth_brick_wall = null;
+    public static final RockWall pegmatite_smooth_brick_wall = null;
+    public static final RockWall shale_smooth_brick_wall = null;
+    public static final RockWall conglomerate_smooth_brick_wall = null;
+    public static final RockWall dolomite_smooth_brick_wall = null;
+    public static final RockWall limestone_smooth_brick_wall = null;
+    public static final RockWall marble_smooth_brick_wall = null;
+    public static final RockWall slate_smooth_brick_wall = null;
+    public static final RockWall schist_smooth_brick_wall = null;
+    public static final RockWall gneiss_smooth_brick_wall = null;
+    public static final RockWall phyllite_smooth_brick_wall = null;
+    public static final RockWall amphibolite_smooth_brick_wall = null;
     
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
@@ -297,13 +297,15 @@ public class Blocks {
 			event.getRegistry().register(material.toRockStairs(true, false));
 			event.getRegistry().register(material.toRockStairs(false, true));
 			event.getRegistry().register(material.toRockStairs(true, true));
-			//event.getRegistry().register(material.toRockWall(false, false));
-//			event.getRegistry().register(material.toRockWall(true, false));
-//			event.getRegistry().register(material.toRockWall(false, true));
-//			event.getRegistry().register(material.toRockWall(true, true));
+			event.getRegistry().register(material.toRockWall(false, false));
+			event.getRegistry().register(material.toRockWall(true, false));
+			event.getRegistry().register(material.toRockWall(false, true));
+			event.getRegistry().register(material.toRockWall(true, true));
 		}
     	
-    	event.getRegistry().register(MaterialData.BASALT.toRockWall(false, false));
+    	//event.getRegistry().register(MaterialData.BASALT.toRockWall(false, false));
+    	
+    	
     }
 }
 

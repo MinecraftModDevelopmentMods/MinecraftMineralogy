@@ -1,5 +1,7 @@
 package com.mcmoddev.mineralogy.blocks;
 
+import java.util.Set;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SoundType;
@@ -7,6 +9,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraftforge.common.ToolType;
@@ -23,6 +26,8 @@ public class RockWall extends net.minecraft.block.WallBlock {
 				.hardnessAndResistance(hardness, blastResistance).sound(sound));
 		
 		this.setRegistryName(name);
+		
+		Set<ResourceLocation> tags =  this.getTags();
 	 }
 	
 //	@Override

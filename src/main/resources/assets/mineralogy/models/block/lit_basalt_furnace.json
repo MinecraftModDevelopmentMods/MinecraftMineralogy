@@ -2,7 +2,7 @@
   "parent": "block/orientable",
   "textures": {
     "top": "mineralogy:blocks/basalt_furnace_top",
-    "front": "mineralogy:blocks/basalt_furnace_front_off",
+    "front": "mineralogy:blocks/basalt_furnace_front_on",
     "side": "mineralogy:blocks/basalt_furnace_side"
   }
 }

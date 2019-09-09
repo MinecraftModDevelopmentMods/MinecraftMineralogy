@@ -2,7 +2,7 @@
   "parent": "block/orientable",
   "textures": {
     "top": "mineralogy:blocks/dolomite_furnace_top",
-    "front": "mineralogy:blocks/dolomite_furnace_off",
+    "front": "mineralogy:blocks/dolomite_furnace_front_off",
     "side": "mineralogy:blocks/dolomite_furnace_side"
   }
 }

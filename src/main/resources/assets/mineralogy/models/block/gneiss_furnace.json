@@ -2,7 +2,7 @@
   "parent": "block/orientable",
   "textures": {
     "top": "mineralogy:blocks/gneiss_furnace_top",
-    "front": "mineralogy:blocks/gneiss_furnace_off",
+    "front": "mineralogy:blocks/gneiss_furnace_front_off",
     "side": "mineralogy:blocks/gneiss_furnace_side"
   }
 }

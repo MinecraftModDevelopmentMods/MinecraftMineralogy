@@ -2,7 +2,7 @@
   "parent": "block/orientable",
   "textures": {
     "top": "mineralogy:blocks/phyllite_furnace_top",
-    "front": "mineralogy:blocks/phyllite_furnace_off",
+    "front": "mineralogy:blocks/phyllite_furnace_front_off",
     "side": "mineralogy:blocks/phyllite_furnace_side"
   }
 }

@@ -1,6 +1,9 @@
 package cyano.mineralogy.blocks;
 
 import java.util.List;
+import java.util.Random;
+
+import javax.annotation.Nullable;
 
 import cyano.mineralogy.Mineralogy;
 import cyano.mineralogy.tileentity.TileEntityRockFurnace;
@@ -9,6 +12,7 @@ import net.minecraft.block.BlockFurnace;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -32,6 +36,13 @@ public class RockFurnace extends BlockFurnace {
 	 	this.setHarvestLevel("pickaxe", toolHardnessLevel);
 	 	this.setCreativeTab(Mineralogy.mineralogyTab);
 	 }
+	
+	@Override
+	@Nullable
+    public Item getItemDropped(IBlockState state, Random rand, int fortune)
+    {
+        return Item.getItemFromBlock(state.getBlock());
+    }
 	
 	@Override
 	@SideOnly(Side.CLIENT)

@@ -2,7 +2,7 @@
   "parent": "block/orientable",
   "textures": {
     "top": "mineralogy:blocks/marble_furnace_top",
-    "front": "mineralogy:blocks/marble_furnace_off",
+    "front": "mineralogy:blocks/marble_furnace_front_off",
     "side": "mineralogy:blocks/marble_furnace_side"
   }
 }

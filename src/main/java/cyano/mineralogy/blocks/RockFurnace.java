@@ -12,7 +12,6 @@ import net.minecraft.block.BlockFurnace;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -34,7 +33,9 @@ public class RockFurnace extends BlockFurnace {
 	 	this.blockHardness = hardness;
 	 	this.blockResistance = blastResistance;
 	 	this.setHarvestLevel("pickaxe", toolHardnessLevel);
-	 	this.setCreativeTab(Mineralogy.mineralogyTab);
+	 	
+	 	if (!lit)
+	 		this.setCreativeTab(Mineralogy.mineralogyTab);
 	 }
 	
 	@Override

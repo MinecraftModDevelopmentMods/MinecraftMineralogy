@@ -6,6 +6,10 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.math.MathHelper;
 
+/**
+*
+* @author SkyBlade1978
+*/
 public class TileEntityRockFurnace extends TileEntityFurnace {
 	public TileEntityRockFurnace()
 	{

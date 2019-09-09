@@ -30,6 +30,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.StairsBlock;
+import net.minecraft.block.WallBlock;
 import net.minecraft.block.material.Material;
 //import net.minecraft.block.Blocks;
 import net.minecraftforge.common.MinecraftForge;
@@ -75,6 +76,7 @@ import com.mcmoddev.mineralogy.blocks.RockStairs;
 //import net.minecraft.item.crafting.Ingredient;
 //import net.minecraftforge.fml.common.registry.GameRegistry;
 //
+import com.mcmoddev.mineralogy.blocks.RockWall;
 
 @Mod.EventBusSubscriber(modid = Mineralogy.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 @ObjectHolder(Mineralogy.MODID)
@@ -216,6 +218,74 @@ public class Blocks {
     public static final RockStairs phyllite_smooth_brick_stairs = null;
     public static final RockStairs amphibolite_smooth_brick_stairs = null;
     
+    public static final RockWall andesite_wall = null;
+    public static final RockWall basalt_wall = null;
+    public static final RockWall diorite_wall = null;
+    public static final RockWall granite_wall = null;
+    public static final RockWall rhyolite_wall = null;
+    public static final RockWall pegmatite_wall = null;
+    public static final RockWall shale_wall = null;
+    public static final RockWall conglomerate_wall = null;
+    public static final RockWall dolomite_wall = null;
+    public static final RockWall limestone_wall = null;
+    public static final RockWall marble_wall = null;
+    public static final RockWall slate_wall = null;
+    public static final RockWall schist_wall = null;
+    public static final RockWall gneiss_wall = null;
+    public static final RockWall phyllite_wall = null;
+    public static final RockWall amphibolite_wall = null;
+	
+	public static final RockWall andesite_smooth_wall = null;
+    public static final RockWall basalt_smooth_wall = null;
+    public static final RockWall diorite_smooth_wall = null;
+    public static final RockWall granite_smooth_wall = null;
+    public static final RockWall rhyolite_smooth_wall = null;
+    public static final RockWall pegmatite_smooth_wall = null;
+    public static final RockWall shale_smooth_wall = null;
+    public static final RockWall conglomerate_smooth_wall = null;
+    public static final RockWall dolomite_smooth_wall = null;
+    public static final RockWall limestone_smooth_wall = null;
+    public static final RockWall marble_smooth_wall = null;
+    public static final RockWall slate_smooth_wall = null;
+    public static final RockWall schist_smooth_wall = null;
+    public static final RockWall gneiss_smooth_wall = null;
+    public static final RockWall phyllite_smooth_wall = null;
+    public static final RockWall amphibolite_smooth_wall = null;
+	
+	public static final RockWall andesite_brick_wall = null;
+    public static final RockWall basalt_brick_wall = null;
+    public static final RockWall diorite_brick_wall = null;
+    public static final RockWall granite_brick_wall = null;
+    public static final RockWall rhyolite_brick_wall = null;
+    public static final RockWall pegmatite_brick_wall = null;
+    public static final RockWall shale_brick_wall = null;
+    public static final RockWall conglomerate_brick_wall = null;
+    public static final RockWall dolomite_brick_wall = null;
+    public static final RockWall limestone_brick_wall = null;
+    public static final RockWall marble_brick_wall = null;
+    public static final RockWall slate_brick_wall = null;
+    public static final RockWall schist_brick_wall = null;
+    public static final RockWall gneiss_brick_wall = null;
+    public static final RockWall phyllite_brick_wall = null;
+    public static final RockWall amphibolite_brick_wall = null;
+	
+	public static final RockWall andesite_smooth_brick_wall = null;
+    public static final RockWall basalt_smooth_brick_wall = null;
+    public static final RockWall diorite_smooth_brick_wall = null;
+    public static final RockWall granite_smooth_brick_wall = null;
+    public static final RockWall rhyolite_smooth_brick_wall = null;
+    public static final RockWall pegmatite_smooth_brick_wall = null;
+    public static final RockWall shale_smooth_brick_wall = null;
+    public static final RockWall conglomerate_smooth_brick_wall = null;
+    public static final RockWall dolomite_smooth_brick_wall = null;
+    public static final RockWall limestone_smooth_brick_wall = null;
+    public static final RockWall marble_smooth_brick_wall = null;
+    public static final RockWall slate_smooth_brick_wall = null;
+    public static final RockWall schist_smooth_brick_wall = null;
+    public static final RockWall gneiss_smooth_brick_wall = null;
+    public static final RockWall phyllite_smooth_brick_wall = null;
+    public static final RockWall amphibolite_smooth_brick_wall = null;
+    
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
     	for (com.mcmoddev.mineralogy.data.Material material : MaterialData.toArray()) {
@@ -227,7 +297,15 @@ public class Blocks {
 			event.getRegistry().register(material.toRockStairs(true, false));
 			event.getRegistry().register(material.toRockStairs(false, true));
 			event.getRegistry().register(material.toRockStairs(true, true));
+			event.getRegistry().register(material.toRockWall(false, false));
+			event.getRegistry().register(material.toRockWall(true, false));
+			event.getRegistry().register(material.toRockWall(false, true));
+			event.getRegistry().register(material.toRockWall(true, true));
 		}
+    	
+    	//event.getRegistry().register(MaterialData.BASALT.toRockWall(false, false));
+    	
+    	
     }
 }
 

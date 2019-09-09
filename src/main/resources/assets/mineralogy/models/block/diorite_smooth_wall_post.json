@@ -1,6 +1,6 @@
 {
-    "parent": "block/wall_post",
-    "textures": {
-        "wall": "mineralogy:blocks/diorite_smooth"
-    }
+  "parent": "block/template_wall_post",
+  "textures": {
+    "wall": "mineralogy:blocks/diorite_smooth"
+  }
 }

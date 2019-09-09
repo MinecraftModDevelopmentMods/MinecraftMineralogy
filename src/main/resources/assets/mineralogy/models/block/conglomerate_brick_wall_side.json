@@ -1,6 +1,6 @@
 {
-    "parent": "block/wall_side",
-    "textures": {
-        "wall": "mineralogy:blocks/conglomerate_brick_side"
-    }
+  "parent": "block/template_wall_side",
+  "textures": {
+    "wall": "mineralogy:blocks/conglomerate_brick"
+  }
 }

@@ -104,8 +104,10 @@ public class Mineralogy {
 	
 	public static Block blockChert;
     public static Block blockGypsum;
+    public static Block blockChalk;
     public static Block blockPumice;   
     public static Item gypsumPowder;
+    public static Item chalkPowder;
     public static Item sulphurPowder;
     public static Item phosphorousPowder;
     public static Item nitratePowder; // aka "saltpeter"
@@ -143,6 +145,7 @@ public class Mineralogy {
 	private static final String oreSulphur = "oreSulphur";
 	private static final String sulphur = "sulphur";
 	private static final String dustGypsum = "dustGypsum";
+	private static final String dustChalk = "dustChalk";
 	private static final String blockNitrate = "blockNitrate";
 	private static final String dustNitrate = "dustNitrate";
 	private static final String oreNitrate = "oreNitrate";
@@ -231,8 +234,9 @@ public class Mineralogy {
 
 		// add items
 		gypsumPowder = addDust("gypsum_dust", "Gypsum");
-
+		chalkPowder = addDust("chalk_dust", "Chalk");	
 		sulphurPowder = addDust("sulfur_dust", "Sulfur");
+		
 		OreDictionary.registerOre(sulfur, sulphurPowder);
 		OreDictionary.registerOre(dustSulphur, sulphurPowder);
 		OreDictionary.registerOre(sulphur, sulphurPowder);
@@ -253,12 +257,17 @@ public class Mineralogy {
 		blockGypsum = registerBlock(new Gypsum(), "gypsum");
 		sedimentaryStones.add(blockGypsum);
 		
+		blockChalk = registerBlock(new Chalk(), "chalk");
+		sedimentaryStones.add(blockChalk);
+		
 		blockPumice = registerBlock(new Rock(false, 0.5F, 5F, 0, SoundType.STONE), "pumice");
 		igneousStones.add(blockPumice);
 		OreDictionary.registerOre(cobblestone, blockPumice);
 		
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(gypsumPowder, 4), blockGypsum));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(chalkPowder, 4), blockChalk));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockGypsum), "xx", "xx", 'x', dustGypsum));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockChalk), "xx", "xx", 'x', dustChalk));
 
 		// register ores
 		Block s = addOre("sulfur_ore", oreSulfur, sulphurPowder,1, 4, 0,

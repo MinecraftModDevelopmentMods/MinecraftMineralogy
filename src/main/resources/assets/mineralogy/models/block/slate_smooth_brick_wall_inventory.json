@@ -1,6 +1,6 @@
 {
-    "parent": "block/wall_inventory",
-    "textures": {
-    "wall": "mineralogy:blocks/slate_smooth_brick"
-    }
+  "parent": "block/wall_inventory",
+  "textures": {
+    "wall": "mineralogy:blocks/slate_smooth_brick_top"
+  }
 }

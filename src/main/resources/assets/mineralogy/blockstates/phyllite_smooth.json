@@ -1,5 +1,7 @@
 {
-    "variants": {
-        "normal": { "model": "mineralogy:phyllite_smooth" }
+  "variants": {
+    "normal": {
+      "model": "mineralogy:phyllite_smooth"
     }
+  }
 }

@@ -1,0 +1,8 @@
+{
+  "parent": "mineralogy:block/brick",
+  "textures": {
+    "top": "mineralogy:blocks/peridotite_brick_top",
+    "bottom": "mineralogy:blocks/peridotite_brick_top",
+    "side": "mineralogy:blocks/peridotite_brick_side"
+  }
+}

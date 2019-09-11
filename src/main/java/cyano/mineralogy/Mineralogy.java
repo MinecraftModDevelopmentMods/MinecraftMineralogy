@@ -46,7 +46,7 @@ import java.util.*;
 public class Mineralogy {
 	public static final String MODID = "mineralogy";
     public static final String NAME ="Mineralogy";
-    public static final String VERSION = "3.2.0";
+    public static final String VERSION = "3.3.0";
     
     public static CreativeTabs mineralogyTab = new CreativeTabs("mineralogyTab"){
 		@Override
@@ -76,7 +76,9 @@ public class Mineralogy {
     public static int GEOME_SIZE = 100; 
     /** thickness of rock layers */
     public static int GEOM_LAYER_THICKNESS = 8;
-
+    /** realistic coal placement */
+    public static boolean REALISTIC_COAL_LAYERS = false;
+    
 	public static boolean SMELTABLE_GRAVEL = true;
 	public static boolean DROP_COBBLESTONE = false;
 	public static boolean PATCH_UPDATE = true;
@@ -105,10 +107,12 @@ public class Mineralogy {
 	public static Block blockChert;
     public static Block blockGypsum;
     public static Block blockChalk;
+    public static Block blockSalt;
     public static Block blockPumice;   
     public static Item gypsumPowder;
     public static Item chalkPowder;
     public static Item sulphurPowder;
+    //public static Item saltPowder;
     public static Item phosphorousPowder;
     public static Item nitratePowder; // aka "saltpeter"
     public static Item mineralFertilizer;
@@ -132,6 +136,7 @@ public class Mineralogy {
 	private static final String stickWood = "stickWood";
 	private static final String cobblestone = "cobblestone";
 	private static final String fertilizer = "fertilizer";
+	//private static final String salt = "salt";
 	private static final String stone = "stone";
 	private static final String dustCarbon = "dustCarbon";
 	private static final String blockPhosphorous = "blockPhosphorous";
@@ -181,6 +186,9 @@ public class Mineralogy {
     	GEOM_LAYER_THICKNESS = config.getInt("ROCK_LAYER_THICKNESS", "world-gen",GEOM_LAYER_THICKNESS, 1, 255, 
    "Changing this value will change the height of individual layers.");
 
+    	REALISTIC_COAL_LAYERS = config.getBoolean("REALISTIC_COAL_LAYERS", "world-gen",REALISTIC_COAL_LAYERS, 
+    			   "Changing this value will make coal render in realistic sedimentary layers instead of the vanilla placement.");
+    	
     	GENERATE_ROCKSTAIRS = config.getBoolean("GENERATE_ROCKSTAIRS", "options", GENERATE_ROCKSTAIRS, "If true, then rock stairs will be generated");
         GENERATE_ROCKSLAB = config.getBoolean("GENERATE_ROCKSLAB", "options", GENERATE_ROCKSLAB, "If true, then rock slabs will be generated");
         GENERATE_ROCK_WALL = config.getBoolean("GENERATE_ROCK_WALL", "options", GENERATE_ROCK_WALL, "If true, then rock walls will be generated");
@@ -211,8 +219,16 @@ public class Mineralogy {
     	metamorphicWhitelist.addAll(asList(config.getString("metamorphic_whitelist", "world-gen", "", "Adds blocks to rock layers (format is mod:block as a semicolin (;) delimited list)"),";"));
 
 		// Blocks, Items, World-gen
-
+    	
 		// Rocks
+    	
+    	addStoneType(RockType.IGNEOUS, "diabase", 5, 100, 2); // new
+    	addStoneType(RockType.IGNEOUS, "gabbro", 5, 100, 2); // new
+    	addStoneType(RockType.IGNEOUS, "peridotite", 3, 15, 0); // new
+    	addStoneType(RockType.IGNEOUS, "basaltic_glass", 3, 15, 0); // new ?
+    	addStoneType(RockType.IGNEOUS, "scoria", 1, 7, 0);// new
+    	addStoneType(RockType.IGNEOUS, "tuff", 2, 10, 0);// new
+    	
 		addStoneType(RockType.IGNEOUS, "andesite", 1.5, 10, 0);
 		addStoneType(RockType.IGNEOUS, "basalt", 5, 100, 2);
 		addStoneType(RockType.IGNEOUS, "diorite", 1.5, 10, 0);
@@ -220,11 +236,23 @@ public class Mineralogy {
 		addStoneType(RockType.IGNEOUS, "rhyolite", 1.5, 10, 0);
 		addStoneType(RockType.IGNEOUS, "pegmatite", 1.5, 10, 0);
 
+
+		addStoneType(RockType.SEDIMENTARY, "siltstone", 1, 10, 0);// new // TODO it should crush to sand and clay
+		
+		//saltPowder = addDust("salt_dust", "Salt");
+		//OreDictionary.registerOre(salt, saltPowder);
+		
+		addStoneType(RockType.SEDIMENTARY, "rock_salt", 1.5, 10, 0);// new //, true, new ItemStack(saltPowder, 4) 
+		
 		addStoneType(RockType.SEDIMENTARY, "shale", 1.5, 10, 0);
 		addStoneType(RockType.SEDIMENTARY, "conglomerate" ,1.5, 10, 0);
 		addStoneType(RockType.SEDIMENTARY, "dolomite", 3, 15, 1);
 		addStoneType(RockType.SEDIMENTARY, "limestone", 1.5, 10, 0);
 
+		addStoneType(RockType.METAMORPHIC,"hornfels", 3, 15, 1);// new
+		addStoneType(RockType.METAMORPHIC,"quartzite", 4, 15, 1);// new
+		addStoneType(RockType.METAMORPHIC,"novaculite", 2.5, 10, 1);// new // TODO: this can be used like flint
+		
 		addStoneType(RockType.METAMORPHIC,"slate", 1.5, 10, 0);
 		addStoneType(RockType.METAMORPHIC,"schist", 3, 15, 1);
 		addStoneType(RockType.METAMORPHIC,"gneiss", 3, 15, 1);
@@ -240,16 +268,20 @@ public class Mineralogy {
 		OreDictionary.registerOre(sulfur, sulphurPowder);
 		OreDictionary.registerOre(dustSulphur, sulphurPowder);
 		OreDictionary.registerOre(sulphur, sulphurPowder);
-
+		
 		phosphorousPowder = addDust("phosphorous_dust", "Phosphorous");
 
 		nitratePowder = addDust("nitrate_dust", "Nitrate");
 
 		mineralFertilizer = registerItem(new MineralFertilizer(), "mineral_fertilizer").setUnlocalizedName(Mineralogy.MODID + "." + "mineral_fertilizer").setCreativeTab(CreativeTabs.MATERIALS);
 		OreDictionary.registerOre(fertilizer, mineralFertilizer);
-
+		
 		// other blocks
 		sedimentaryStones.add(Blocks.SANDSTONE);
+		
+		if (REALISTIC_COAL_LAYERS)
+			sedimentaryStones.add(Blocks.COAL_ORE);
+		
 		blockChert = registerBlock(new Chert(), "chert");
 		sedimentaryStones.add(blockChert);
 		OreDictionary.registerOre(cobblestone, blockChert);
@@ -266,9 +298,11 @@ public class Mineralogy {
 		
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(gypsumPowder, 4), blockGypsum));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(chalkPowder, 4), blockChalk));
+		
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockGypsum), "xx", "xx", 'x', dustGypsum));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockChalk), "xx", "xx", 'x', dustChalk));
-
+		//GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockSalt), "xx", "xx", 'x', salt));
+		
 		// register ores
 		Block s = addOre("sulfur_ore", oreSulfur, sulphurPowder,1, 4, 0,
 				config.getInt("sulphur_ore.minY", "ores", 16, 1, 255, "Minimum ore spawn height"),
@@ -469,6 +503,11 @@ public class Mineralogy {
 		return i;
 	}
 
+	private static Block addStoneType(RockType type, String name, double hardness, double blastResistance, int toolHardnessLevel) {
+		
+		return addStoneType(type, name, hardness, blastResistance, toolHardnessLevel, true);
+	}
+	
 	/**
      * 
      * @param type Igneous, sedimentary, or metamorphic
@@ -477,7 +516,7 @@ public class Mineralogy {
      * @param blastResistance how resistant the block is to explosions. For reference, dirt is 0, stone is 10, and blast-proof materials are 2000
      * @param toolHardnessLevel 0 for wood tools, 1 for stone, 2 for iron, 3 for diamond
      */
-    private static void addStoneType(RockType type, String name, double hardness, double blastResistance, int toolHardnessLevel) {
+    private static Block addStoneType(RockType type, String name, double hardness, double blastResistance, int toolHardnessLevel, Boolean canBePolished) { //, ItemStack drops
 		final Block rock, rockStairs, rockSlab, rockWall, rockFurnace;
 		final Block brick, brickStairs, brickSlab, brickWall, brickFurnace;
 		final Block smooth, smoothStairs, smoothSlab, smoothWall, smoothFurnace;
@@ -558,7 +597,7 @@ public class Mineralogy {
 			}
 		}
 
-		if (GENERATE_SMOOTH) {
+		if (GENERATE_SMOOTH && canBePolished) {
 			smooth = registerBlock(new Rock(false, (float)hardness,(float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_smooth");
 			GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(smooth, 1), rock, "sand"));
 	
@@ -611,5 +650,7 @@ public class Mineralogy {
 				}
 			}
 		}
+		
+		return rock;
     }
 }

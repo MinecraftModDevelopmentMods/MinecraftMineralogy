@@ -1,6 +1,6 @@
 {
-    "parent": "mineralogy:block/block",
-    "textures": {
-        "face": "mineralogy:blocks/diorite_smooth"
-    }
+  "parent": "mineralogy:block/block",
+  "textures": {
+    "face": "mineralogy:blocks/diorite_smooth"
+  }
 }

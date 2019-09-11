@@ -1,0 +1,7 @@
+{
+  "parent": "mineralogy:block/slab",
+  "textures": {
+    "face": "mineralogy:blocks/hornfels_brick_side",
+    "side": "mineralogy:blocks/hornfels_brick_top"
+  }
+}

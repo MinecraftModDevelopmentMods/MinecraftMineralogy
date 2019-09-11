@@ -14,6 +14,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Rock extends net.minecraft.block.Block {
+	public boolean isStoneEquivalent;
+
 
 	public Rock(boolean isStoneEquivalent, float hardness, float blastResistance, int toolHardnessLevel, SoundType sound) {
 		super(Material.ROCK);
@@ -25,7 +27,7 @@ public class Rock extends net.minecraft.block.Block {
 		this.setCreativeTab(Mineralogy.mineralogyTab);
 	}
 
-	public final boolean isStoneEquivalent;
+
 	
 	@Override public boolean isReplaceableOreGen(IBlockState state, IBlockAccess world, BlockPos pos, com.google.common.base.Predicate<IBlockState> target) { return isStoneEquivalent; }
 

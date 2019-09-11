@@ -583,5 +583,6 @@ tile.mineralogy.novaculite_smooth_brick_furnace.name=均密石英岩 抛光砖�
 
 tile.mineralogy.chalk.name=粉笔
 item.mineralogy.chalk_dust.name=粉笔粉
-
+item.mineralogy.salt_dust.name=盐
+item.mineralogy.rock_salt_dust.name=岩盐晶体
 itemGroup.mineralogy.mineralogy=我的地理

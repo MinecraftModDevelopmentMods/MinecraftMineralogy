@@ -575,5 +575,6 @@ tile.mineralogy.novaculite_smooth_brick_furnace.name=Novaculite Four à brique p
 
 tile.mineralogy.chalk.name=Craie
 item.mineralogy.chalk_dust.name=Poudre de craie
-
+item.mineralogy.salt_dust.name=Sel
+item.mineralogy.rock_salt_dust.name=Cristaux de sel gemme
 itemGroup.mineralogy.mineralogy=Minéralogie

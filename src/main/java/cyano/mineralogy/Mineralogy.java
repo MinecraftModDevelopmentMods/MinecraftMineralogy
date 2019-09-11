@@ -111,8 +111,9 @@ public class Mineralogy {
     public static Block blockPumice;   
     public static Item gypsumPowder;
     public static Item chalkPowder;
+    public static Item saltPowder;
+    public static Item rockSaltPowder;
     public static Item sulphurPowder;
-    //public static Item saltPowder;
     public static Item phosphorousPowder;
     public static Item nitratePowder; // aka "saltpeter"
     public static Item mineralFertilizer;
@@ -151,6 +152,8 @@ public class Mineralogy {
 	private static final String sulphur = "sulphur";
 	private static final String dustGypsum = "dustGypsum";
 	private static final String dustChalk = "dustChalk";
+	private static final String dustSalt = "dustSalt";
+	private static final String dustRocksalt = "dustRocksalt";
 	private static final String blockNitrate = "blockNitrate";
 	private static final String dustNitrate = "dustNitrate";
 	private static final String oreNitrate = "oreNitrate";
@@ -220,8 +223,7 @@ public class Mineralogy {
 
 		// Blocks, Items, World-gen
     	
-		// Rocks
-    	
+		// Rocks	
     	addStoneType(RockType.IGNEOUS, "diabase", 5, 100, 2); // new
     	addStoneType(RockType.IGNEOUS, "gabbro", 5, 100, 2); // new
     	addStoneType(RockType.IGNEOUS, "peridotite", 3, 15, 0); // new
@@ -238,11 +240,6 @@ public class Mineralogy {
 
 
 		addStoneType(RockType.SEDIMENTARY, "siltstone", 1, 10, 0);// new // TODO it should crush to sand and clay
-		
-		//saltPowder = addDust("salt_dust", "Salt");
-		//OreDictionary.registerOre(salt, saltPowder);
-		
-		addStoneType(RockType.SEDIMENTARY, "rock_salt", 1.5, 10, 0);// new //, true, new ItemStack(saltPowder, 4) 
 		
 		addStoneType(RockType.SEDIMENTARY, "shale", 1.5, 10, 0);
 		addStoneType(RockType.SEDIMENTARY, "conglomerate" ,1.5, 10, 0);
@@ -262,7 +259,12 @@ public class Mineralogy {
 
 		// add items
 		gypsumPowder = addDust("gypsum_dust", "Gypsum");
-		chalkPowder = addDust("chalk_dust", "Chalk");	
+		chalkPowder = addDust("chalk_dust", "Chalk");
+		saltPowder = addDust("salt_dust", "Salt");
+		rockSaltPowder = addDust("rock_salt_dust", "Rocksalt");
+		
+		OreDictionary.registerOre("salt", saltPowder);
+		
 		sulphurPowder = addDust("sulfur_dust", "Sulfur");
 		
 		OreDictionary.registerOre(sulfur, sulphurPowder);
@@ -292,16 +294,20 @@ public class Mineralogy {
 		blockChalk = registerBlock(new Chalk(), "chalk");
 		sedimentaryStones.add(blockChalk);
 		
+		blockSalt = registerBlock(new RockSalt(), "rock_salt");
+		
+		addStoneType(RockType.SEDIMENTARY, "rock_salt", 1.5, 10, 0, true, blockSalt);// new 
+		
 		blockPumice = registerBlock(new Rock(false, 0.5F, 5F, 0, SoundType.STONE), "pumice");
 		igneousStones.add(blockPumice);
 		OreDictionary.registerOre(cobblestone, blockPumice);
 		
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(gypsumPowder, 4), blockGypsum));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(chalkPowder, 4), blockChalk));
-		
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(saltPowder, 4), blockSalt));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockGypsum), "xx", "xx", 'x', dustGypsum));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockChalk), "xx", "xx", 'x', dustChalk));
-		//GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockSalt), "xx", "xx", 'x', salt));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockSalt), "xx", "xx", 'x', dustRocksalt));
 		
 		// register ores
 		Block s = addOre("sulfur_ore", oreSulfur, sulphurPowder,1, 4, 0,
@@ -505,7 +511,7 @@ public class Mineralogy {
 
 	private static Block addStoneType(RockType type, String name, double hardness, double blastResistance, int toolHardnessLevel) {
 		
-		return addStoneType(type, name, hardness, blastResistance, toolHardnessLevel, true);
+		return addStoneType(type, name, hardness, blastResistance, toolHardnessLevel, true, null);
 	}
 	
 	/**
@@ -516,14 +522,18 @@ public class Mineralogy {
      * @param blastResistance how resistant the block is to explosions. For reference, dirt is 0, stone is 10, and blast-proof materials are 2000
      * @param toolHardnessLevel 0 for wood tools, 1 for stone, 2 for iron, 3 for diamond
      */
-    private static Block addStoneType(RockType type, String name, double hardness, double blastResistance, int toolHardnessLevel, Boolean canBePolished) { //, ItemStack drops
+    private static Block addStoneType(RockType type, String name, double hardness, double blastResistance, int toolHardnessLevel, Boolean canBePolished, Block rockOverride) { //, ItemStack drops
 		final Block rock, rockStairs, rockSlab, rockWall, rockFurnace;
 		final Block brick, brickStairs, brickSlab, brickWall, brickFurnace;
 		final Block smooth, smoothStairs, smoothSlab, smoothWall, smoothFurnace;
 		final Block smoothBrick, smoothBrickStairs, smoothBrickSlab, smoothBrickWall, smoothBrickFurnace;
 		
-    	rock = registerBlock(new Rock(true, (float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name);
-    	switch(type) {
+		if (rockOverride != null)
+			rock = rockOverride;
+		else
+			rock = registerBlock(new Rock(true, (float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name);
+    	
+		switch(type) {
 	    	case IGNEOUS:
 	    		igneousStones.add(rock);
 	    		break;

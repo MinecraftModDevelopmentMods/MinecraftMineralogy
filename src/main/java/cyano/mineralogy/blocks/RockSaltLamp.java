@@ -31,7 +31,7 @@ public class RockSaltLamp extends Block
     {
         public boolean apply(@Nullable EnumFacing facing)
         {
-            return facing != EnumFacing.DOWN;
+            return true;
         }
     });
     protected static final AxisAlignedBB STANDING_AABB = new AxisAlignedBB(0.4000000059604645D, 0.0D, 0.4000000059604645D, 0.6000000238418579D, 0.6000000238418579D, 0.6000000238418579D);
@@ -116,8 +116,14 @@ public class RockSaltLamp extends Block
 
     private boolean canPlaceAt(World worldIn, BlockPos pos, EnumFacing facing)
     {
+    	IBlockState stateAbove = worldIn.getBlockState(pos.up());
+    
+    	if(stateAbove.getBlock().isBlockSolid(worldIn, pos.up(), facing))
+    		return true;
+    
         BlockPos blockpos = pos.offset(facing.getOpposite());
         boolean flag = facing.getAxis().isHorizontal();
+      
         return flag && worldIn.isSideSolid(blockpos, facing, true) || facing.equals(EnumFacing.UP) && this.canPlaceOn(worldIn, blockpos);
     }
 
@@ -261,6 +267,8 @@ public class RockSaltLamp extends Block
                 iblockstate = iblockstate.withProperty(FACING, EnumFacing.NORTH);
                 break;
             case 5:
+            	iblockstate = iblockstate.withProperty(FACING, EnumFacing.DOWN);
+                break;
             default:
                 iblockstate = iblockstate.withProperty(FACING, EnumFacing.UP);
         }
@@ -296,9 +304,11 @@ public class RockSaltLamp extends Block
                 i = i | 4;
                 break;
             case DOWN:
+            	i = i | 5;
+                break;
             case UP:
             default:
-                i = i | 5;
+                i = i | 6;
         }
 
         return i;

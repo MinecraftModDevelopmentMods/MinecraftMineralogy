@@ -1,5 +1,6 @@
 {
     "variants": {
+    	"facing=down": { "model": "mineralogy:rocksaltlamp_down" },
         "facing=up": { "model": "mineralogy:rocksaltlamp" },
         "facing=east": { "model": "mineralogy:rocksaltlamp_wall", "y": 90 },
         "facing=south": { "model": "mineralogy:rocksaltlamp_wall", "y": 180 },

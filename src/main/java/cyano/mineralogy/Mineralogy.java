@@ -46,7 +46,7 @@ import java.util.*;
 public class Mineralogy {
 	public static final String MODID = "mineralogy";
     public static final String NAME ="Mineralogy";
-    public static final String VERSION = "3.3.0";
+    public static final String VERSION = "3.3.2";
     
     public static CreativeTabs mineralogyTab = new CreativeTabs("mineralogyTab"){
 		@Override
@@ -108,7 +108,8 @@ public class Mineralogy {
     public static Block blockGypsum;
     public static Block blockChalk;
     public static Block blockSalt;
-    public static Block blockPumice;   
+    public static Block blockPumice;
+    public static Block blockRockSaltLamp;
     public static Item gypsumPowder;
     public static Item chalkPowder;
     public static Item saltPowder;
@@ -298,6 +299,8 @@ public class Mineralogy {
 		
 		addStoneType(RockType.SEDIMENTARY, "rock_salt", 1.5, 10, 0, true, blockSalt);// new 
 		
+		blockRockSaltLamp = registerBlock(new RockSaltLamp(), "rocksaltlamp");
+		
 		blockPumice = registerBlock(new Rock(false, 0.5F, 5F, 0, SoundType.STONE), "pumice");
 		igneousStones.add(blockPumice);
 		OreDictionary.registerOre(cobblestone, blockPumice);
@@ -305,6 +308,7 @@ public class Mineralogy {
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(gypsumPowder, 4), blockGypsum));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(chalkPowder, 4), blockChalk));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(saltPowder, 4), blockSalt));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(blockRockSaltLamp, 1), blockSalt, Blocks.TORCH));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockGypsum), "xx", "xx", 'x', dustGypsum));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockChalk), "xx", "xx", 'x', dustChalk));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockSalt), "xx", "xx", 'x', dustRocksalt));

@@ -14,7 +14,7 @@ import java.util.Random;
 public class RockSalt extends Rock {
 	private final String itemName = "rock_salt";
 	public RockSalt() {
-		super(false,(float)0.75, (float)1, 0, SoundType.STONE);
+		super(false,(float)1.5, (float)10, 0, SoundType.STONE);
 		this.setUnlocalizedName(Mineralogy.MODID + "_" + itemName);
 		this.setCreativeTab(Mineralogy.mineralogyTab);
 	}

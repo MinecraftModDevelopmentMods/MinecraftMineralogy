@@ -1,6 +1,7 @@
 package cyano.mineralogy.blocks;
 
 import cyano.mineralogy.Mineralogy;
+import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -13,7 +14,7 @@ import net.minecraft.world.IBlockAccess;
 import java.util.Arrays;
 import java.util.List;
 
-public class Rock extends net.minecraft.block.Block {
+public class Rock extends Block {
 	public boolean isStoneEquivalent;
 
 

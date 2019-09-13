@@ -586,4 +586,5 @@ tile.mineralogy.chalk.name=Kreide
 item.mineralogy.chalk_dust.name=Kreide Pulver
 item.mineralogy.salt_dust.name=Salz
 item.mineralogy.rock_salt_dust.name=Steinsalz-Kristalle
+tile.mineralogy.rocksaltlamp.name=Steinsalz-Lampe
 itemGroup.mineralogyTab=Mineralogie

@@ -586,4 +586,5 @@ tile.mineralogy.chalk.name=Tiza
 item.mineralogy.chalk_dust.name=Polvo de tiza
 item.mineralogy.salt_dust.name=Sal
 item.mineralogy.rock_salt_dust.name=Cristales de sal de roca
+tile.mineralogy.rocksaltlamp.name=Lámpara de sal de roca
 itemGroup.mineralogyTab=Mineralogía

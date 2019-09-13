@@ -2,9 +2,9 @@
     "variants": {
     	"facing=down": { "model": "mineralogy:rocksaltlamp_down" },
         "facing=up": { "model": "mineralogy:rocksaltlamp" },
-        "facing=east": { "model": "mineralogy:rocksaltlamp_wall", "y": 90 },
-        "facing=south": { "model": "mineralogy:rocksaltlamp_wall", "y": 180 },
-        "facing=west": { "model": "mineralogy:rocksaltlamp_wall" , "y": 270},
-        "facing=north": { "model": "mineralogy:rocksaltlamp_wall" }
+        "facing=east": { "model": "mineralogy:rocksaltlamp_wall"},
+        "facing=south": { "model": "mineralogy:rocksaltlamp_wall", "y": 90},
+        "facing=west": { "model": "mineralogy:rocksaltlamp_wall" , "y": 180 },
+        "facing=north": { "model": "mineralogy:rocksaltlamp_wall" , "y": 270 }
     }
 }

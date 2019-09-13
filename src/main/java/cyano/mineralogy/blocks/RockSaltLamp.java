@@ -1,6 +1,9 @@
 package cyano.mineralogy.blocks;
 
 import com.google.common.base.Predicate;
+
+import cyano.mineralogy.Mineralogy;
+
 import java.util.Random;
 import javax.annotation.Nullable;
 
@@ -34,18 +37,44 @@ public class RockSaltLamp extends Block
             return true;
         }
     });
-    protected static final AxisAlignedBB STANDING_AABB = new AxisAlignedBB(0.4000000059604645D, 0.0D, 0.4000000059604645D, 0.6000000238418579D, 0.6000000238418579D, 0.6000000238418579D);
-    protected static final AxisAlignedBB TORCH_NORTH_AABB = new AxisAlignedBB(0.3499999940395355D, 0.20000000298023224D, 0.699999988079071D, 0.6499999761581421D, 0.800000011920929D, 1.0D);
-    protected static final AxisAlignedBB TORCH_SOUTH_AABB = new AxisAlignedBB(0.3499999940395355D, 0.20000000298023224D, 0.0D, 0.6499999761581421D, 0.800000011920929D, 0.30000001192092896D);
-    protected static final AxisAlignedBB TORCH_WEST_AABB = new AxisAlignedBB(0.699999988079071D, 0.20000000298023224D, 0.3499999940395355D, 1.0D, 0.800000011920929D, 0.6499999761581421D);
-    protected static final AxisAlignedBB TORCH_EAST_AABB = new AxisAlignedBB(0.0D, 0.20000000298023224D, 0.3499999940395355D, 0.30000001192092896D, 0.800000011920929D, 0.6499999761581421D);
+    protected static AxisAlignedBB DOWN_AABB = getDownBB();
+    protected static AxisAlignedBB STANDING_AABB = getStandingBB();
+    protected static AxisAlignedBB TORCH_NORTH_AABB =getNorthBB( );
+    protected static AxisAlignedBB TORCH_SOUTH_AABB = getSouthBB();
+    protected static AxisAlignedBB TORCH_WEST_AABB = getWestBB();
+    protected static AxisAlignedBB TORCH_EAST_AABB = getEastBB();
 
+    
+    protected static AxisAlignedBB getDownBB( ) {
+    	return new AxisAlignedBB(0.4000000059604645D, 0.25D, 0.4000000059604645D, 0.8000000238418579D, 0.8000000238418579D, 0.6000000238418579D);
+    }
+    
+    protected static AxisAlignedBB getStandingBB( ) {
+    	return new AxisAlignedBB(0.4000000059604645D, 0.25D, 0.4000000059604645D, 0.6000000238418579D, 0.6000000238418579D, 0.6000000238418579D);
+    }
+    
+    protected static AxisAlignedBB getNorthBB( ) {
+    	return new AxisAlignedBB(0.3499999940395355D, 0.20000000298023224D, 0.699999988079071D, 0.6499999761581421D, 0.800000011920929D, 1.0D);
+    }
+    
+    protected static AxisAlignedBB getSouthBB( ) {
+    	return new AxisAlignedBB(0.3499999940395355D, 0.20000000298023224D, 0.0D, 0.6499999761581421D, 0.800000011920929D, 0.30000001192092896D);
+    }
+    
+    protected static AxisAlignedBB getWestBB( ) {
+    	return new AxisAlignedBB(0.699999988079071D, 0.20000000298023224D, 0.3499999940395355D, 1.0D, 0.800000011920929D, 0.6499999761581421D);
+    }
+    
+    protected static AxisAlignedBB getEastBB( ) {
+    	return new AxisAlignedBB(0.0D, 0.20000000298023224D, 0.3499999940395355D, 0.30000001192092896D, 0.800000011920929D, 0.6499999761581421D);
+    }
+    
     public RockSaltLamp()
     {
         super(Material.CIRCUITS);
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.UP));
         this.setTickRandomly(true);
-        this.setCreativeTab(CreativeTabs.DECORATIONS);
+        this.setCreativeTab(Mineralogy.mineralogyTab);
         this.setHardness(0.25F);
         this.setLightLevel(0.9375F);
         this.setSoundType(SoundType.STONE);
@@ -64,6 +93,8 @@ public class RockSaltLamp extends Block
                 return TORCH_SOUTH_AABB;
             case NORTH:
                 return TORCH_NORTH_AABB;
+            case DOWN:
+                return DOWN_AABB;
             default:
                 return STANDING_AABB;
         }

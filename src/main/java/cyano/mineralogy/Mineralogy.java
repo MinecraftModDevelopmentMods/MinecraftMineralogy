@@ -110,6 +110,7 @@ public class Mineralogy {
     public static Block blockSalt;
     public static Block blockPumice;
     public static Block blockRockSaltLamp;
+    public static Block blockRockSaltStreetLamp;
     public static Item gypsumPowder;
     public static Item chalkPowder;
     public static Item saltPowder;
@@ -300,6 +301,7 @@ public class Mineralogy {
 		addStoneType(RockType.SEDIMENTARY, "rock_salt", 1.5, 10, 0, true, blockSalt);// new 
 		
 		blockRockSaltLamp = registerBlock(new RockSaltLamp(), "rocksaltlamp");
+		blockRockSaltStreetLamp = registerBlock(new RockSaltStreetLamp(), "rocksaltstreetlamp");
 		
 		blockPumice = registerBlock(new Rock(false, 0.5F, 5F, 0, SoundType.STONE), "pumice");
 		igneousStones.add(blockPumice);
@@ -308,10 +310,12 @@ public class Mineralogy {
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(gypsumPowder, 4), blockGypsum));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(chalkPowder, 4), blockChalk));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(saltPowder, 4), blockSalt));
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(blockRockSaltLamp, 1), blockSalt, Blocks.TORCH));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(blockRockSaltLamp, 1), blockSalt, Blocks.TORCH, Items.IRON_INGOT));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockGypsum), "xx", "xx", 'x', dustGypsum));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockChalk), "xx", "xx", 'x', dustChalk));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockSalt), "xx", "xx", 'x', dustRocksalt));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRockSaltStreetLamp), "x", "y", "y", 'x', blockRockSaltLamp, 'y', Items.IRON_INGOT));
+
 		
 		// register ores
 		Block s = addOre("sulfur_ore", oreSulfur, sulphurPowder,1, 4, 0,

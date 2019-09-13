@@ -128,12 +128,12 @@ public class Mineralogy {
 	String[] colorSuffixesTwo = { "Black", "Red", "Green", "Brown", "Blue", "Purple", "Cyan",
 			"LightGray", "Gray", "Pink", "Lime", "Yellow", "LightBlue", "Magenta", "Orange", "White" };
 
-	private List<String> igneousWhitelist = new ArrayList<String>();
-	private List<String> igneousBlacklist = new ArrayList<String>();
-	private List<String> sedimentaryWhitelist = new ArrayList<String>();
-	private List<String> sedimentaryBlacklist = new ArrayList<String>();
-	private List<String> metamorphicWhitelist = new ArrayList<String>();
-	private List<String> metamorphicBlacklist = new ArrayList<String>();
+	public static List<String> igneousWhitelist = new ArrayList<String>();
+	public static List<String> igneousBlacklist = new ArrayList<String>();
+	public static List<String> sedimentaryWhitelist = new ArrayList<String>();
+	public static List<String> sedimentaryBlacklist = new ArrayList<String>();
+	public static List<String> metamorphicWhitelist = new ArrayList<String>();
+	public static List<String> metamorphicBlacklist = new ArrayList<String>();
 
 	private static final String stickWood = "stickWood";
 	private static final String cobblestone = "cobblestone";
@@ -421,32 +421,32 @@ public class Mineralogy {
     	
     	// process black-lists and white-lists
     	for(String id : igneousWhitelist) {
-    		Block b = getBlock(id);
+    		Block b = Block.getBlockFromName(id);
     		if(b == null) continue;
     		igneousStones.add(b);
     	}
     	for(String id : metamorphicWhitelist) {
-    		Block b = getBlock(id);
+    		Block b = Block.getBlockFromName(id);
     		if(b == null) continue;
     		metamorphicStones.add(b);
     	}
     	for(String id : sedimentaryWhitelist) {
-    		Block b = getBlock(id);
+    		Block b = Block.getBlockFromName(id);
     		if(b == null) continue;
     		sedimentaryStones.add(b);
     	}
     	for(String id : igneousBlacklist) {
-    		Block b = getBlock(id);
+    		Block b = Block.getBlockFromName(id);
     		if(b == null) continue;
     		igneousStones.remove(b);
     	}
     	for(String id : metamorphicBlacklist) {
-    		Block b = getBlock(id);
+    		Block b = Block.getBlockFromName(id);
     		if(b == null) continue;
     		metamorphicStones.remove(b);
     	}
     	for(String id : sedimentaryBlacklist) {
-    		Block b = getBlock(id);
+    		Block b = Block.getBlockFromName(id);
     		if(b == null) continue;
     		sedimentaryStones.remove(b);
     	}

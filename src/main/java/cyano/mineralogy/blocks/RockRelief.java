@@ -12,7 +12,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class RockRelief extends RockSlab {
-private static float thickness = 0.08f;
+private static float thickness = 0.07f;
 
 	
 	private static final AxisAlignedBB[] BOXES = new AxisAlignedBB[EnumFacing.values().length];

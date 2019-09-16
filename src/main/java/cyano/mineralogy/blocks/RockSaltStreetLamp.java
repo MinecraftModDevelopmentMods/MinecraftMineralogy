@@ -29,6 +29,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class RockSaltStreetLamp extends Block
 {
+
     public static final PropertyDirection FACING = PropertyDirection.create("facing", new Predicate<EnumFacing>()
     {
         public boolean apply(@Nullable EnumFacing facing)
@@ -45,26 +46,28 @@ public class RockSaltStreetLamp extends Block
     
     public RockSaltStreetLamp()
     {
-        super(Material.CIRCUITS);
+        super(Material.IRON);
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.UP));
         this.setTickRandomly(true);
         this.setCreativeTab(Mineralogy.mineralogyTab);
-        this.setHardness(0.25F);
+        this.setHardness(1F);
         this.setLightLevel(0.9375F);
-        this.setSoundType(SoundType.STONE);
+        this.setSoundType(SoundType.METAL);
         this.setUnlocalizedName("rocksaltstreetlamp");
     }
 
+    
+    
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     {
     	return STANDING_AABB;
     }
 
-    @Nullable
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos)
-    {
-        return NULL_AABB;
-    }
+//    @Nullable
+//    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos)
+//    {
+//        return NULL_AABB;
+//    }
 
     /**
      * Used to determine ambient occlusion and culling when rebuilding chunks for render
@@ -116,7 +119,7 @@ public class RockSaltStreetLamp extends Block
     {
         if (this.canPlaceAt(worldIn, pos, facing))
         {
-            return this.getDefaultState().withProperty(FACING, facing);
+            return this.getDefaultState().withProperty(FACING, EnumFacing.UP);
         }
         else
         {

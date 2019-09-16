@@ -578,4 +578,5 @@ item.mineralogy.chalk_dust.name=Poudre de craie
 item.mineralogy.salt_dust.name=Sel
 item.mineralogy.rock_salt_dust.name=Cristaux de sel gemme
 tile.mineralogy.rocksaltlamp.name=Lampe à sel
+tile.mineralogy.rocksaltstreetlamp.name=Lampadaire à sel
 itemGroup.mineralogy.mineralogy=Minéralogie

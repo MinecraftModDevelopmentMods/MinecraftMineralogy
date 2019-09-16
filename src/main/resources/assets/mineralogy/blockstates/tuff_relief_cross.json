@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "mineralogy:tuff_relief_cross",
+      "x": 180
+    },
+    "facing=up": {
+      "model": "mineralogy:tuff_relief_cross"
+    },
+    "facing=north": {
+      "model": "mineralogy:tuff_relief_cross",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "mineralogy:tuff_relief_cross",
+      "x": 90,
+      "y": 180
+    },
+    "facing=west": {
+      "model": "mineralogy:tuff_relief_cross",
+      "x": 90,
+      "y": 270
+    },
+    "facing=east": {
+      "model": "mineralogy:tuff_relief_cross",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

@@ -7,7 +7,6 @@ import javax.annotation.Nullable;
 
 import cyano.mineralogy.Mineralogy;
 import cyano.mineralogy.tileentity.TileEntityRockFurnace;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockFurnace;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -26,7 +25,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 * @author SkyBlade1978
 */
 public class RockFurnace extends BlockFurnace {	
-	public RockFurnace(Block materialBlock, float hardness, float blastResistance, int toolHardnessLevel,
+	public RockFurnace(float hardness, float blastResistance, int toolHardnessLevel,
 	 			SoundType sound, Boolean lit) {
 		super(lit);
 	 	this.setSoundType(sound);

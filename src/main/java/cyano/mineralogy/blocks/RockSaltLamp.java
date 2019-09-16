@@ -71,7 +71,7 @@ public class RockSaltLamp extends Block
     
     public RockSaltLamp()
     {
-        super(Material.CIRCUITS);
+        super(Material.ROCK);
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.UP));
         this.setTickRandomly(true);
         this.setCreativeTab(Mineralogy.mineralogyTab);

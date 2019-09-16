@@ -1,0 +1,7 @@
+{
+  "parent": "mineralogy:block/stairs_inner",
+  "textures": {
+    "face": "mineralogy:blocks/peridotite_smooth_brick_top",
+    "side": "mineralogy:blocks/peridotite_smooth_brick_side"
+  }
+}

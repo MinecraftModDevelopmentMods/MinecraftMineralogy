@@ -586,4 +586,5 @@ item.mineralogy.chalk_dust.name=粉笔粉
 item.mineralogy.salt_dust.name=盐
 item.mineralogy.rock_salt_dust.name=岩盐晶体
 tile.mineralogy.rocksaltlamp.name岩盐灯
+tile.mineralogy.rocksaltstreetlamp.name=岩盐路灯
 itemGroup.mineralogy.mineralogy=我的地理

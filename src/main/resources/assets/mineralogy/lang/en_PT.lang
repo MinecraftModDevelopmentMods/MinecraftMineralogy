@@ -587,4 +587,5 @@ item.mineralogy.chalk_dust.name=Chalk Powder
 item.mineralogy.salt_dust.name=Salt
 item.mineralogy.rock_salt_dust.name=Rock Salt Crystals
 tile.mineralogy.rocksaltlamp.name=Rock Salt Lamp
+tile.mineralogy.rocksaltstreetlamp.name=Rock Salt Street Lamp
 itemGroup.mineralogyTab=Mineralogy

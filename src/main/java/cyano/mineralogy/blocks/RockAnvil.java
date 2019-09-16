@@ -36,6 +36,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import cyano.mineralogy.Mineralogy;
+
 public class RockAnvil extends BlockFalling
 {
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
@@ -45,12 +47,15 @@ public class RockAnvil extends BlockFalling
     protected static final Logger LOGGER = LogManager.getLogger();
     private final String _name;
     
-    protected RockAnvil(String name)
+    public RockAnvil(String name, float hardness, float blastResistance, int toolHardnessLevel)
     {
         super(Material.ANVIL);
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(DAMAGE, Integer.valueOf(0)));
         this.setLightOpacity(0);
-        this.setCreativeTab(CreativeTabs.DECORATIONS);
+        this.setCreativeTab(Mineralogy.mineralogyTab);
+        this.blockHardness = hardness;
+        this.blockResistance = blastResistance;
+        this.setHarvestLevel("pickaxe", toolHardnessLevel);
         _name = name;
     }
 

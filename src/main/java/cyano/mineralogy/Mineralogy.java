@@ -143,10 +143,10 @@ public class Mineralogy {
 	//private static final String salt = "salt";
 	private static final String stone = "stone";
 	private static final String dustCarbon = "dustCarbon";
-	private static final String blockPhosphorous = "blockPhosphorous";
+	//private static final String blockPhosphorous = "blockPhosphorous";
 	private static final String dustPhosphorous = "dustPhosphorous";
 	private static final String orePhosphorous = "orePhosphorous";
-	private static final String blockSulfur = "blockSulfur";
+	//private static final String blockSulfur = "blockSulfur";
 	private static final String dustSulfur = "dustSulfur";
 	private static final String oreSulfur = "oreSulfur";
 	private static final String sulfur = "sulfur";
@@ -155,9 +155,9 @@ public class Mineralogy {
 	private static final String sulphur = "sulphur";
 	private static final String dustGypsum = "dustGypsum";
 	private static final String dustChalk = "dustChalk";
-	private static final String dustSalt = "dustSalt";
+	//private static final String dustSalt = "dustSalt";
 	private static final String dustRocksalt = "dustRocksalt";
-	private static final String blockNitrate = "blockNitrate";
+	//private static final String blockNitrate = "blockNitrate";
 	private static final String dustNitrate = "dustNitrate";
 	private static final String oreNitrate = "oreNitrate";
 
@@ -326,12 +326,14 @@ public class Mineralogy {
 				config.getFloat("sulphur_ore.frequency", "ores", 1, 0, 63, "Number of ore deposits per chunk"),
 				config.getInt("sulphur_ore.quantity", "ores", 16, 0, 63, "Size of ore deposit"));
 		OreDictionary.registerOre(oreSulphur, s); // Damn English and its multiple spellings. There better not be people out there spelling is "sulphre"
-		Block p = addOre("phosphorous_ore", orePhosphorous, phosphorousPowder, 1, 4, 0,
+		
+		addOre("phosphorous_ore", orePhosphorous, phosphorousPowder, 1, 4, 0,
 				config.getInt("phosphorous_ore.minY", "ores", 16, 1, 255, "Minimum ore spawn height"),
 				config.getInt("phosphorous_ore.maxY", "ores", 64, 1, 255, "Maximum ore spawn height"),
 				config.getFloat("phosphorous_ore.frequency", "ores", 1, 0, 63, "Number of ore deposits per chunk"),
 				config.getInt("phosphorous_ore.quantity", "ores", 16, 0, 63, "Size of ore deposit"));
-		Block n = addOre("nitrate_ore", oreNitrate, nitratePowder, 1, 4, 0,
+		
+		addOre("nitrate_ore", oreNitrate, nitratePowder, 1, 4, 0,
 				config.getInt("nitrate_ore.minY", "ores", 16, 1, 255, "Minimum ore spawn height"),
 				config.getInt("nitrate_ore.maxY", "ores", 64, 1, 255, "Maximum ore spawn height"),
 				config.getFloat("nitrate_ore.frequency", "ores", 1, 0, 63, "Number of ore deposits per chunk"),
@@ -537,10 +539,26 @@ public class Mineralogy {
      * @param toolHardnessLevel 0 for wood tools, 1 for stone, 2 for iron, 3 for diamond
      */
     private static Block addStoneType(RockType type, String name, double hardness, double blastResistance, int toolHardnessLevel, Boolean canBePolished, Block rockOverride) { //, ItemStack drops
-		final Block rock, rockStairs, rockSlab, rockWall, rockFurnace;
-		final Block brick, brickStairs, brickSlab, brickWall, brickFurnace;
-		final Block smooth, smoothStairs, smoothSlab, smoothWall, smoothFurnace, smoothAnvil;
-		final Block smoothBrick, smoothBrickStairs, smoothBrickSlab, smoothBrickWall, smoothBrickFurnace;
+		final Block rock;
+		final Block rockStairs;
+		final Block rockSlab;
+		final Block rockWall;
+		final Block rockFurnace;
+		final Block brick;
+		final Block brickStairs;
+		final Block brickSlab;
+		final Block brickWall;
+		final Block brickFurnace;
+		final Block smooth;
+		final Block smoothStairs;
+		final Block smoothSlab;
+		final Block smoothWall;
+		final Block smoothFurnace;
+		final Block smoothBrick;
+		final Block smoothBrickStairs;
+		final Block smoothBrickSlab;
+		final Block smoothBrickWall;
+		final Block smoothBrickFurnace;
 		
 		if (rockOverride != null)
 			rock = rockOverride;
@@ -572,44 +590,7 @@ public class Mineralogy {
 		GameRegistry.addSmelting(rock, new ItemStack(Blocks.STONE), 0.1F);
 
 		if(GENERATE_RELIEFS) {
-			final Block blankRelief = registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), name + "_relief_blank");
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blankRelief, 16), "xxx","xxx","xxx",'x', rock));
-			
-			final Block axeRelief = registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), name + "_relief_axe");
-			GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(axeRelief, 1), blankRelief, Items.STONE_AXE));
-			
-			final Block crossRelief = registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), name + "_relief_cross");
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(crossRelief, 1), "x x","   ","x x",'x', blankRelief));
-			
-			final Block hammerRelief = registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), name + "_relief_hammer");
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(hammerRelief, 1), " x "," y "," z ",'x', rock,'y', Items.STICK,'z', blankRelief));
-			
-			final Block hoeRelief = registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), name + "_relief_hoe");
-			GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(hoeRelief, 1), blankRelief, Items.STONE_HOE));
-			
-			final Block horizontalRelief = registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), name + "_relief_horizontal");
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(horizontalRelief, 1), "xxx",'x', blankRelief));
-			
-			final Block leftRelief = registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), name + "_relief_left");
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(leftRelief, 1), "x  "," x ","  x",'x', blankRelief));
-			
-			final Block pickaxeRelief = registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), name + "_relief_pickaxe");
-			GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(pickaxeRelief, 1), blankRelief, Items.STONE_PICKAXE));
-			
-			final Block plusRelief = registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), name + "_relief_plus");
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(plusRelief, 1), " x ","xxx"," x ",'x', blankRelief));
-			
-			final Block rightRelief = registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), name + "_relief_right");
-			GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(rightRelief, 2), leftRelief, leftRelief));
-			
-			final Block swordRelief = registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), name + "_relief_sword");
-			GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(swordRelief, 1), blankRelief, Items.STONE_SWORD));
-			
-			final Block iRelief = registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), name + "_relief_i");
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(iRelief, 1), "xxx"," x ","xxx",'x', blankRelief));
-			
-			final Block verticalRelief = registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), name + "_relief_vertical");
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(verticalRelief, 1), "x","x","x",'x', blankRelief));
+			generateReliefs(name, hardness, blastResistance, toolHardnessLevel, rock);
 		}
 		
 		if (GENERATE_ROCKFURNACES) {
@@ -722,4 +703,46 @@ public class Mineralogy {
 		
 		return rock;
     }
+
+	private static void generateReliefs(String materialName, double hardness, double blastResistance,
+			int toolHardnessLevel, final Block rock) {
+		final Block blankRelief = registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_blank");
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blankRelief, 16), "xxx","xxx","xxx",'x', rock));
+		
+		final Block axeRelief = registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_axe");
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(axeRelief, 1), blankRelief, Items.STONE_AXE));
+		
+		final Block crossRelief = registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_cross");
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(crossRelief, 1), "x x","   ","x x",'x', blankRelief));
+		
+		final Block hammerRelief = registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_hammer");
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(hammerRelief, 1), " x "," y "," z ",'x', rock,'y', Items.STICK,'z', blankRelief));
+		
+		final Block hoeRelief = registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_hoe");
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(hoeRelief, 1), blankRelief, Items.STONE_HOE));
+		
+		final Block horizontalRelief = registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_horizontal");
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(horizontalRelief, 1), "xxx",'x', blankRelief));
+		
+		final Block leftRelief = registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_left");
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(leftRelief, 1), "x  "," x ","  x",'x', blankRelief));
+		
+		final Block pickaxeRelief = registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_pickaxe");
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(pickaxeRelief, 1), blankRelief, Items.STONE_PICKAXE));
+		
+		final Block plusRelief = registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_plus");
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(plusRelief, 1), " x ","xxx"," x ",'x', blankRelief));
+		
+		final Block rightRelief = registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_right");
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(rightRelief, 2), leftRelief, leftRelief));
+		
+		final Block swordRelief = registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_sword");
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(swordRelief, 1), blankRelief, Items.STONE_SWORD));
+		
+		final Block iRelief = registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_i");
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(iRelief, 1), "xxx"," x ","xxx",'x', blankRelief));
+		
+		final Block verticalRelief = registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_vertical");
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(verticalRelief, 1), "x","x","x",'x', blankRelief));
+	}
 }

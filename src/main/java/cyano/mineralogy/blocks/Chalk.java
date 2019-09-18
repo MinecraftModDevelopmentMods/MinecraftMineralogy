@@ -9,7 +9,6 @@ import net.minecraft.world.IBlockAccess;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 public class Chalk extends Rock {
 	private final String itemName = "chalk";

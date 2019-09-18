@@ -14,7 +14,6 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
@@ -134,12 +133,8 @@ public class RockSaltLamp extends Block
 
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos)
     {
-        for (EnumFacing enumfacing : FACING.getAllowedValues())
-        {
-            if (this.canPlaceAt(worldIn, pos, enumfacing))
-            {
-                return true;
-            }
+        for (EnumFacing enumfacing : FACING.getAllowedValues()) {
+            return this.canPlaceAt(worldIn, pos, enumfacing);
         }
 
         return false;

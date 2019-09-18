@@ -46,7 +46,7 @@ import java.util.*;
 public class Mineralogy {
 	public static final String MODID = "mineralogy";
     public static final String NAME ="Mineralogy";
-    public static final String VERSION = "3.3.7";
+    public static final String VERSION = "3.3.8";
     
     public static CreativeTabs mineralogyTab = new CreativeTabs("mineralogyTab"){
 		@Override

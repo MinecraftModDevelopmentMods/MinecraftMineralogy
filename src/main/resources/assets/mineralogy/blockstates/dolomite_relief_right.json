@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "mineralogy:dolomite_relief_right",
+      "x": 180
+    },
+    "facing=up": {
+      "model": "mineralogy:dolomite_relief_right"
+    },
+    "facing=north": {
+      "model": "mineralogy:dolomite_relief_right",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "mineralogy:dolomite_relief_right",
+      "x": 90,
+      "y": 180
+    },
+    "facing=west": {
+      "model": "mineralogy:dolomite_relief_right",
+      "x": 90,
+      "y": 270
+    },
+    "facing=east": {
+      "model": "mineralogy:dolomite_relief_right",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

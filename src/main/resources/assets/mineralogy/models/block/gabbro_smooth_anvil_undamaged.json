@@ -1,0 +1,8 @@
+{
+    "parent": "mineralogy:block/anvil",
+    "textures": {
+        "particle": "mineralogy:blocks/gabbro_smooth",
+        "body": "mineralogy:blocks/gabbro_smooth",
+        "top": "mineralogy:blocks/gabbro_smooth"
+    }
+}

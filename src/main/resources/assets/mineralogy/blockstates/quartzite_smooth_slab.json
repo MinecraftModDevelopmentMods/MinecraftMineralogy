@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "mineralogy:quartzite_smooth_slab",
+      "x": 180
+    },
+    "facing=up": {
+      "model": "mineralogy:quartzite_smooth_slab"
+    },
+    "facing=north": {
+      "model": "mineralogy:quartzite_smooth_slab",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "mineralogy:quartzite_smooth_slab",
+      "x": 90,
+      "y": 180
+    },
+    "facing=west": {
+      "model": "mineralogy:quartzite_smooth_slab",
+      "x": 90,
+      "y": 270
+    },
+    "facing=east": {
+      "model": "mineralogy:quartzite_smooth_slab",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

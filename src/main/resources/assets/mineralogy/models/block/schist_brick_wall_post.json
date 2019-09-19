@@ -1,6 +1,6 @@
 {
-    "parent": "block/wall_post",
-    "textures": {
-        "wall": "mineralogy:blocks/schist_brick_side"
-    }
+  "parent": "block/wall_post",
+  "textures": {
+    "wall": "mineralogy:blocks/schist_brick_side"
+  }
 }

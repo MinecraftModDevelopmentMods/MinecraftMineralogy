@@ -1,5 +1,7 @@
 {
-    "variants": {
-        "normal": { "model": "mineralogy:schist_smooth" }
+  "variants": {
+    "normal": {
+      "model": "mineralogy:schist_smooth"
     }
+  }
 }

@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import cyano.mineralogy.blocks.*;
 import cyano.mineralogy.items.*;
 import cyano.mineralogy.patching.PatchHandler;
+import cyano.mineralogy.tileentity.TileEntityRockFurnace;
 import cyano.mineralogy.worldgen.OreSpawner;
 import cyano.mineralogy.worldgen.StoneReplacer;
 import net.minecraft.block.Block;
@@ -45,7 +46,7 @@ import java.util.*;
 public class Mineralogy {
 	public static final String MODID = "mineralogy";
     public static final String NAME ="Mineralogy";
-    public static final String VERSION = "3.2.0";
+    public static final String VERSION = "3.3.8";
     
     public static CreativeTabs mineralogyTab = new CreativeTabs("mineralogyTab"){
 		@Override
@@ -75,7 +76,9 @@ public class Mineralogy {
     public static int GEOME_SIZE = 100; 
     /** thickness of rock layers */
     public static int GEOM_LAYER_THICKNESS = 8;
-
+    /** realistic coal placement */
+    public static boolean REALISTIC_COAL_LAYERS = false;
+    
 	public static boolean SMELTABLE_GRAVEL = true;
 	public static boolean DROP_COBBLESTONE = false;
 	public static boolean PATCH_UPDATE = true;
@@ -96,11 +99,23 @@ public class Mineralogy {
 	public static boolean GENERATE_SMOOTHBRICKSTAIRS = true;
 	public static boolean GENERATE_SMOOTHBRICKSLAB = true;
 	public static boolean GENERATE_SMOOTHBRICK_WALL = true;
-    
+	public static boolean GENERATE_ROCKFURNACES = true;
+	public static boolean GENERATE_SMOOTHFURNACES = true;
+	public static boolean GENERATE_BRICKFURNACES = true;
+	public static boolean GENERATE_SMOOTHBRICKFURNACES = true;
+	public static boolean GENERATE_RELIEFS = true;
+	
 	public static Block blockChert;
     public static Block blockGypsum;
-    public static Block blockPumice;   
+    public static Block blockChalk;
+    public static Block blockSalt;
+    public static Block blockPumice;
+    public static Block blockRockSaltLamp;
+    public static Block blockRockSaltStreetLamp;
     public static Item gypsumPowder;
+    public static Item chalkPowder;
+    public static Item saltPowder;
+    public static Item rockSaltPowder;
     public static Item sulphurPowder;
     public static Item phosphorousPowder;
     public static Item nitratePowder; // aka "saltpeter"
@@ -115,22 +130,23 @@ public class Mineralogy {
 	String[] colorSuffixesTwo = { "Black", "Red", "Green", "Brown", "Blue", "Purple", "Cyan",
 			"LightGray", "Gray", "Pink", "Lime", "Yellow", "LightBlue", "Magenta", "Orange", "White" };
 
-	private List<String> igneousWhitelist = new ArrayList<String>();
-	private List<String> igneousBlacklist = new ArrayList<String>();
-	private List<String> sedimentaryWhitelist = new ArrayList<String>();
-	private List<String> sedimentaryBlacklist = new ArrayList<String>();
-	private List<String> metamorphicWhitelist = new ArrayList<String>();
-	private List<String> metamorphicBlacklist = new ArrayList<String>();
+	public static List<String> igneousWhitelist = new ArrayList<String>();
+	public static List<String> igneousBlacklist = new ArrayList<String>();
+	public static List<String> sedimentaryWhitelist = new ArrayList<String>();
+	public static List<String> sedimentaryBlacklist = new ArrayList<String>();
+	public static List<String> metamorphicWhitelist = new ArrayList<String>();
+	public static List<String> metamorphicBlacklist = new ArrayList<String>();
 
 	private static final String stickWood = "stickWood";
 	private static final String cobblestone = "cobblestone";
 	private static final String fertilizer = "fertilizer";
+	//private static final String salt = "salt";
 	private static final String stone = "stone";
 	private static final String dustCarbon = "dustCarbon";
-	private static final String blockPhosphorous = "blockPhosphorous";
+	//private static final String blockPhosphorous = "blockPhosphorous";
 	private static final String dustPhosphorous = "dustPhosphorous";
 	private static final String orePhosphorous = "orePhosphorous";
-	private static final String blockSulfur = "blockSulfur";
+	//private static final String blockSulfur = "blockSulfur";
 	private static final String dustSulfur = "dustSulfur";
 	private static final String oreSulfur = "oreSulfur";
 	private static final String sulfur = "sulfur";
@@ -138,7 +154,10 @@ public class Mineralogy {
 	private static final String oreSulphur = "oreSulphur";
 	private static final String sulphur = "sulphur";
 	private static final String dustGypsum = "dustGypsum";
-	private static final String blockNitrate = "blockNitrate";
+	private static final String dustChalk = "dustChalk";
+	//private static final String dustSalt = "dustSalt";
+	private static final String dustRocksalt = "dustRocksalt";
+	//private static final String blockNitrate = "blockNitrate";
 	private static final String dustNitrate = "dustNitrate";
 	private static final String oreNitrate = "oreNitrate";
 
@@ -173,6 +192,9 @@ public class Mineralogy {
     	GEOM_LAYER_THICKNESS = config.getInt("ROCK_LAYER_THICKNESS", "world-gen",GEOM_LAYER_THICKNESS, 1, 255, 
    "Changing this value will change the height of individual layers.");
 
+    	REALISTIC_COAL_LAYERS = config.getBoolean("REALISTIC_COAL_LAYERS", "world-gen",REALISTIC_COAL_LAYERS, 
+    			   "Changing this value will make coal render in realistic sedimentary layers instead of the vanilla placement.");
+    	
     	GENERATE_ROCKSTAIRS = config.getBoolean("GENERATE_ROCKSTAIRS", "options", GENERATE_ROCKSTAIRS, "If true, then rock stairs will be generated");
         GENERATE_ROCKSLAB = config.getBoolean("GENERATE_ROCKSLAB", "options", GENERATE_ROCKSLAB, "If true, then rock slabs will be generated");
         GENERATE_ROCK_WALL = config.getBoolean("GENERATE_ROCK_WALL", "options", GENERATE_ROCK_WALL, "If true, then rock walls will be generated");
@@ -189,6 +211,12 @@ public class Mineralogy {
         GENERATE_SMOOTHBRICKSLAB = config.getBoolean("GENERATE_SMOOTHBRICKSLAB", "options", GENERATE_SMOOTHBRICKSLAB, "If true, then polished brick slabs will be generated");
         GENERATE_SMOOTHBRICK_WALL = config.getBoolean("GENERATE_SMOOTHBRICK_WALL", "options", GENERATE_SMOOTHBRICK_WALL, "If true, then polished brick walls will be generated");
     	
+        GENERATE_ROCKFURNACES = config.getBoolean("GENERATE_ROCKFURNACES", "options", GENERATE_ROCKFURNACES, "If true, then rock furnaces will be generated");
+        GENERATE_SMOOTHFURNACES = config.getBoolean("GENERATE_SMOOTHFURNACES", "options", GENERATE_SMOOTHFURNACES, "If true, then polished rock furnaces will be generated");
+        GENERATE_BRICKFURNACES = config.getBoolean("GENERATE_BRICKFURNACES", "options", GENERATE_BRICKFURNACES, "If true, then brick furnaces will be generated");
+        GENERATE_SMOOTHBRICKFURNACES = config.getBoolean("GENERATE_SMOOTHBRICKFURNACES", "options", GENERATE_SMOOTHBRICKFURNACES, "If true, then polished brick furnaces will be generated");
+        GENERATE_RELIEFS = config.getBoolean("GENERATE_RELIEFS", "options", GENERATE_RELIEFS, "If true, then reliefs will be generated");
+        
     	igneousBlacklist.addAll(asList(config.getString("igneous_blacklist", "world-gen", "", "Ban blocks from spawning in rock layers (format is mod:block as a semicolin (;) delimited list)"),";"));
     	sedimentaryBlacklist.addAll(asList(config.getString("sedimentary_blacklist", "world-gen", "", "Ban blocks from spawning in rock layers (format is mod:block as a semicolin (;) delimited list)"),";"));
     	metamorphicBlacklist.addAll(asList(config.getString("metamorphic_blacklist", "world-gen", "", "Ban blocks from spawning in rock layers (format is mod:block as a semicolin (;) delimited list)"),";"));
@@ -198,8 +226,15 @@ public class Mineralogy {
     	metamorphicWhitelist.addAll(asList(config.getString("metamorphic_whitelist", "world-gen", "", "Adds blocks to rock layers (format is mod:block as a semicolin (;) delimited list)"),";"));
 
 		// Blocks, Items, World-gen
-
-		// Rocks
+    	
+		// Rocks	
+    	addStoneType(RockType.IGNEOUS, "diabase", 5, 100, 2); // new
+    	addStoneType(RockType.IGNEOUS, "gabbro", 5, 100, 2); // new
+    	addStoneType(RockType.IGNEOUS, "peridotite", 3, 15, 0); // new
+    	addStoneType(RockType.IGNEOUS, "basaltic_glass", 3, 15, 0); // new ?
+    	addStoneType(RockType.IGNEOUS, "scoria", 1, 7, 0);// new
+    	addStoneType(RockType.IGNEOUS, "tuff", 2, 10, 0);// new
+    	
 		addStoneType(RockType.IGNEOUS, "andesite", 1.5, 10, 0);
 		addStoneType(RockType.IGNEOUS, "basalt", 5, 100, 2);
 		addStoneType(RockType.IGNEOUS, "diorite", 1.5, 10, 0);
@@ -207,11 +242,18 @@ public class Mineralogy {
 		addStoneType(RockType.IGNEOUS, "rhyolite", 1.5, 10, 0);
 		addStoneType(RockType.IGNEOUS, "pegmatite", 1.5, 10, 0);
 
+
+		addStoneType(RockType.SEDIMENTARY, "siltstone", 1, 10, 0);// new // TODO it should crush to sand and clay
+		
 		addStoneType(RockType.SEDIMENTARY, "shale", 1.5, 10, 0);
 		addStoneType(RockType.SEDIMENTARY, "conglomerate" ,1.5, 10, 0);
 		addStoneType(RockType.SEDIMENTARY, "dolomite", 3, 15, 1);
 		addStoneType(RockType.SEDIMENTARY, "limestone", 1.5, 10, 0);
 
+		addStoneType(RockType.METAMORPHIC,"hornfels", 3, 15, 1);// new
+		addStoneType(RockType.METAMORPHIC,"quartzite", 4, 15, 1);// new
+		addStoneType(RockType.METAMORPHIC,"novaculite", 2.5, 10, 1);// new // TODO: this can be used like flint
+		
 		addStoneType(RockType.METAMORPHIC,"slate", 1.5, 10, 0);
 		addStoneType(RockType.METAMORPHIC,"schist", 3, 15, 1);
 		addStoneType(RockType.METAMORPHIC,"gneiss", 3, 15, 1);
@@ -221,21 +263,31 @@ public class Mineralogy {
 
 		// add items
 		gypsumPowder = addDust("gypsum_dust", "Gypsum");
-
+		chalkPowder = addDust("chalk_dust", "Chalk");
+		saltPowder = addDust("salt_dust", "Salt");
+		rockSaltPowder = addDust("rock_salt_dust", "Rocksalt");
+		
+		OreDictionary.registerOre("salt", saltPowder);
+		
 		sulphurPowder = addDust("sulfur_dust", "Sulfur");
+		
 		OreDictionary.registerOre(sulfur, sulphurPowder);
 		OreDictionary.registerOre(dustSulphur, sulphurPowder);
 		OreDictionary.registerOre(sulphur, sulphurPowder);
-
+		
 		phosphorousPowder = addDust("phosphorous_dust", "Phosphorous");
 
 		nitratePowder = addDust("nitrate_dust", "Nitrate");
 
 		mineralFertilizer = registerItem(new MineralFertilizer(), "mineral_fertilizer").setUnlocalizedName(Mineralogy.MODID + "." + "mineral_fertilizer").setCreativeTab(CreativeTabs.MATERIALS);
 		OreDictionary.registerOre(fertilizer, mineralFertilizer);
-
+		
 		// other blocks
 		sedimentaryStones.add(Blocks.SANDSTONE);
+		
+		if (REALISTIC_COAL_LAYERS)
+			sedimentaryStones.add(Blocks.COAL_ORE);
+		
 		blockChert = registerBlock(new Chert(), "chert");
 		sedimentaryStones.add(blockChert);
 		OreDictionary.registerOre(cobblestone, blockChert);
@@ -243,13 +295,30 @@ public class Mineralogy {
 		blockGypsum = registerBlock(new Gypsum(), "gypsum");
 		sedimentaryStones.add(blockGypsum);
 		
+		blockChalk = registerBlock(new Chalk(), "chalk");
+		sedimentaryStones.add(blockChalk);
+		
+		blockSalt = registerBlock(new RockSalt(), "rock_salt");
+		
+		addStoneType(RockType.SEDIMENTARY, "rock_salt", 1.5, 10, 0, true, blockSalt);// new 
+		
+		blockRockSaltLamp = registerBlock(new RockSaltLamp(), "rocksaltlamp");
+		blockRockSaltStreetLamp = registerBlock(new RockSaltStreetLamp(), "rocksaltstreetlamp", 16);
+		
 		blockPumice = registerBlock(new Rock(false, 0.5F, 5F, 0, SoundType.STONE), "pumice");
 		igneousStones.add(blockPumice);
 		OreDictionary.registerOre(cobblestone, blockPumice);
 		
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(gypsumPowder, 4), blockGypsum));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(chalkPowder, 4), blockChalk));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(saltPowder, 4), blockSalt));
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(blockRockSaltLamp, 1), blockSalt, Blocks.TORCH, Items.IRON_INGOT));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockGypsum), "xx", "xx", 'x', dustGypsum));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockChalk), "xx", "xx", 'x', dustChalk));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockSalt), "xx", "xx", 'x', dustRocksalt));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRockSaltStreetLamp), "x", "y", "y", 'x', blockRockSaltLamp, 'y', Items.IRON_INGOT));
 
+		
 		// register ores
 		Block s = addOre("sulfur_ore", oreSulfur, sulphurPowder,1, 4, 0,
 				config.getInt("sulphur_ore.minY", "ores", 16, 1, 255, "Minimum ore spawn height"),
@@ -257,12 +326,14 @@ public class Mineralogy {
 				config.getFloat("sulphur_ore.frequency", "ores", 1, 0, 63, "Number of ore deposits per chunk"),
 				config.getInt("sulphur_ore.quantity", "ores", 16, 0, 63, "Size of ore deposit"));
 		OreDictionary.registerOre(oreSulphur, s); // Damn English and its multiple spellings. There better not be people out there spelling is "sulphre"
-		Block p = addOre("phosphorous_ore", orePhosphorous, phosphorousPowder, 1, 4, 0,
+		
+		addOre("phosphorous_ore", orePhosphorous, phosphorousPowder, 1, 4, 0,
 				config.getInt("phosphorous_ore.minY", "ores", 16, 1, 255, "Minimum ore spawn height"),
 				config.getInt("phosphorous_ore.maxY", "ores", 64, 1, 255, "Maximum ore spawn height"),
 				config.getFloat("phosphorous_ore.frequency", "ores", 1, 0, 63, "Number of ore deposits per chunk"),
 				config.getInt("phosphorous_ore.quantity", "ores", 16, 0, 63, "Size of ore deposit"));
-		Block n = addOre("nitrate_ore", oreNitrate, nitratePowder, 1, 4, 0,
+		
+		addOre("nitrate_ore", oreNitrate, nitratePowder, 1, 4, 0,
 				config.getInt("nitrate_ore.minY", "ores", 16, 1, 255, "Minimum ore spawn height"),
 				config.getInt("nitrate_ore.maxY", "ores", 64, 1, 255, "Maximum ore spawn height"),
 				config.getFloat("nitrate_ore.frequency", "ores", 1, 0, 63, "Number of ore deposits per chunk"),
@@ -358,32 +429,32 @@ public class Mineralogy {
     	
     	// process black-lists and white-lists
     	for(String id : igneousWhitelist) {
-    		Block b = getBlock(id);
+    		Block b = Block.getBlockFromName(id);
     		if(b == null) continue;
     		igneousStones.add(b);
     	}
     	for(String id : metamorphicWhitelist) {
-    		Block b = getBlock(id);
+    		Block b = Block.getBlockFromName(id);
     		if(b == null) continue;
     		metamorphicStones.add(b);
     	}
     	for(String id : sedimentaryWhitelist) {
-    		Block b = getBlock(id);
+    		Block b = Block.getBlockFromName(id);
     		if(b == null) continue;
     		sedimentaryStones.add(b);
     	}
     	for(String id : igneousBlacklist) {
-    		Block b = getBlock(id);
+    		Block b = Block.getBlockFromName(id);
     		if(b == null) continue;
     		igneousStones.remove(b);
     	}
     	for(String id : metamorphicBlacklist) {
-    		Block b = getBlock(id);
+    		Block b = Block.getBlockFromName(id);
     		if(b == null) continue;
     		metamorphicStones.remove(b);
     	}
     	for(String id : sedimentaryBlacklist) {
-    		Block b = getBlock(id);
+    		Block b = Block.getBlockFromName(id);
     		if(b == null) continue;
     		sedimentaryStones.remove(b);
     	}
@@ -400,10 +471,6 @@ public class Mineralogy {
     	//*/
     }
 
-    private static Block getBlock(String id) {
-    	return Block.getBlockFromName(id);
-    }
-    
     private static int oreWeightCount = 20;
 
     private static Item addDust(String dustName, String oreDictionaryName) {
@@ -421,7 +488,6 @@ public class Mineralogy {
     	OreDictionary.registerOre("block" + oreDictionaryName, block);
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(block), "xxx", "xxx", "xxx", 'x', "dust" + oreDictionaryName));
     	
-		
 		return block;
     }
 
@@ -435,12 +501,21 @@ public class Mineralogy {
     	return oreBlock;
     }
 
-	private static Block registerBlock(Block b, String name) {
-		GameRegistry.register(b.setRegistryName(MODID, name));
+    private static Block registerBlock(Block b, String name, int maxStackSize) {
+    	GameRegistry.register(b.setRegistryName(MODID, name));
 		b.setUnlocalizedName(MODID + "." + name);
-		registerItem(new ItemBlock(b), name);
+		
+		ItemBlock itemBlock = new ItemBlock(b);
+		
+		itemBlock.setMaxStackSize(maxStackSize);
+		
+		registerItem(itemBlock, name);
 		mineralogyBlockRegistry.put(name, b);
 		return b;
+    }
+    
+	private static Block registerBlock(Block b, String name) {
+		return registerBlock(b, name, 64);
 	}
 
 	private static Item registerItem(Item i, String name) {
@@ -450,6 +525,11 @@ public class Mineralogy {
 		return i;
 	}
 
+	private static Block addStoneType(RockType type, String name, double hardness, double blastResistance, int toolHardnessLevel) {
+		
+		return addStoneType(type, name, hardness, blastResistance, toolHardnessLevel, true, null);
+	}
+	
 	/**
      * 
      * @param type Igneous, sedimentary, or metamorphic
@@ -458,13 +538,34 @@ public class Mineralogy {
      * @param blastResistance how resistant the block is to explosions. For reference, dirt is 0, stone is 10, and blast-proof materials are 2000
      * @param toolHardnessLevel 0 for wood tools, 1 for stone, 2 for iron, 3 for diamond
      */
-    private static void addStoneType(RockType type, String name, double hardness, double blastResistance, int toolHardnessLevel) {
-		final Block rock, rockStairs, rockSlab, rockWall;
-		final Block brick, brickStairs, brickSlab, brickWall;
-		final Block smooth, smoothStairs, smoothSlab, smoothWall;
-		final Block smoothBrick, smoothBrickStairs, smoothBrickSlab, smoothBrickWall;
-    	rock = registerBlock(new Rock(true, (float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name);
-    	switch(type) {
+    private static Block addStoneType(RockType type, String name, double hardness, double blastResistance, int toolHardnessLevel, Boolean canBePolished, Block rockOverride) { //, ItemStack drops
+		final Block rock;
+		final Block rockStairs;
+		final Block rockSlab;
+		final Block rockWall;
+		final Block rockFurnace;
+		final Block brick;
+		final Block brickStairs;
+		final Block brickSlab;
+		final Block brickWall;
+		final Block brickFurnace;
+		final Block smooth;
+		final Block smoothStairs;
+		final Block smoothSlab;
+		final Block smoothWall;
+		final Block smoothFurnace;
+		final Block smoothBrick;
+		final Block smoothBrickStairs;
+		final Block smoothBrickSlab;
+		final Block smoothBrickWall;
+		final Block smoothBrickFurnace;
+		
+		if (rockOverride != null)
+			rock = rockOverride;
+		else
+			rock = registerBlock(new Rock(true, (float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name);
+    	
+		switch(type) {
 	    	case IGNEOUS:
 	    		igneousStones.add(rock);
 	    		break;
@@ -488,6 +589,17 @@ public class Mineralogy {
     	
 		GameRegistry.addSmelting(rock, new ItemStack(Blocks.STONE), 0.1F);
 
+		if(GENERATE_RELIEFS) {
+			generateReliefs(name, hardness, blastResistance, toolHardnessLevel, rock);
+		}
+		
+		if (GENERATE_ROCKFURNACES) {
+			rockFurnace = registerBlock(new RockFurnace((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE, false), name + "_furnace");
+			registerBlock(new RockFurnace((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE, true).setLightLevel(0.875F), "lit_" + name + "_furnace");
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(rockFurnace, 1), "xxx", "x x", "xxx", 'x', rock));
+			GameRegistry.registerTileEntity(TileEntityRockFurnace.class, name + "_furnace");
+		}
+		
 		if (GENERATE_ROCKSTAIRS) {
 			rockStairs = registerBlock(new RockStairs(rock, (float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_stairs");
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(rockStairs, 4), "x  ", "xx ", "xxx", 'x', rock));
@@ -507,6 +619,13 @@ public class Mineralogy {
 			brick = registerBlock(new Rock(false, (float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_brick");
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(brick, 4), "xx", "xx", 'x', rock));
 			
+			if (GENERATE_BRICKFURNACES) {
+				brickFurnace = registerBlock(new RockFurnace((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE, false), name + "_brick_furnace");
+				registerBlock(new RockFurnace((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE, true).setLightLevel(0.875F), "lit_" + name + "_brick_furnace");
+				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(brickFurnace, 1), "xxx", "x x", "xxx", 'x', rock));
+				GameRegistry.registerTileEntity(TileEntityRockFurnace.class, name + "_brick_furnace");		
+			}
+			
 			if (GENERATE_BRICKSTAIRS) {
 				brickStairs = registerBlock(new RockStairs(rock, (float)hardness, (float)blastResistance,toolHardnessLevel, SoundType.STONE),name + "_brick_stairs");
 				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(brickStairs, 4), "x  ", "xx ", "xxx", 'x', brick));
@@ -523,10 +642,22 @@ public class Mineralogy {
 			}
 		}
 
-		if (GENERATE_SMOOTH) {
+		if (GENERATE_SMOOTH && canBePolished) {
 			smooth = registerBlock(new Rock(false, (float)hardness,(float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_smooth");
 			GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(smooth, 1), rock, "sand"));
-		
+	
+//			if (hardness >= 4) {
+//				smoothAnvil = registerBlock(new RockAnvil(name + "_smooth_anvil", (float)hardness, (float)blastResistance, toolHardnessLevel), name + "_smooth_anvil");
+//				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(smoothAnvil, 1), "xxx", "xxx", "xxx", 'x', smooth));
+//			}
+			
+			if (GENERATE_SMOOTHFURNACES) {
+				smoothFurnace = registerBlock(new RockFurnace((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE, false), name + "_smooth_furnace");
+				registerBlock(new RockFurnace((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE, true).setLightLevel(0.875F), "lit_" + name + "_smooth_furnace");
+				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(smoothFurnace, 1), "xxx", "x x", "xxx", 'x', rock));
+				GameRegistry.registerTileEntity(TileEntityRockFurnace.class, name + "_smooth_furnace");
+			}
+			
 			if (GENERATE_SMOOTHSTAIRS) {
 				smoothStairs = registerBlock(new RockStairs(rock, (float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE),name + "_smooth_stairs");
 				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(smoothStairs, 4), "x  ","xx ", "xxx", 'x', smooth));
@@ -546,6 +677,13 @@ public class Mineralogy {
 				smoothBrick = registerBlock(new Rock(false, (float)hardness,(float)blastResistance,toolHardnessLevel, SoundType.STONE), name + "_smooth_brick");
 				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(smoothBrick, 4), "xx", "xx", 'x', smooth));
 			
+				if (GENERATE_SMOOTHBRICKFURNACES) {
+					smoothBrickFurnace = registerBlock(new RockFurnace((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE, false), name + "_smooth_brick_furnace");
+					registerBlock(new RockFurnace((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE, true).setLightLevel(0.875F), "lit_" + name + "_smooth_brick_furnace");
+					GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(smoothBrickFurnace, 1), "xxx", "x x", "xxx", 'x', rock));
+					GameRegistry.registerTileEntity(TileEntityRockFurnace.class, name + "_smooth_brick_furnace");
+				}
+				
 				if (GENERATE_SMOOTHBRICKSTAIRS) {
 					smoothBrickStairs = registerBlock(new RockStairs(rock, (float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_smooth_brick_stairs");
 					GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(smoothBrickStairs, 4), "x  ","xx ", "xxx", 'x', smoothBrick));
@@ -562,5 +700,49 @@ public class Mineralogy {
 				}
 			}
 		}
+		
+		return rock;
     }
+
+	private static void generateReliefs(String materialName, double hardness, double blastResistance,
+			int toolHardnessLevel, final Block rock) {
+		final Block blankRelief = registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_blank");
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blankRelief, 16), "xxx","xxx","xxx",'x', rock));
+		
+		final Block axeRelief = registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_axe");
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(axeRelief, 1), blankRelief, Items.STONE_AXE));
+		
+		final Block crossRelief = registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_cross");
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(crossRelief, 1), "x x","   ","x x",'x', blankRelief));
+		
+		final Block hammerRelief = registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_hammer");
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(hammerRelief, 1), " x "," y "," z ",'x', rock,'y', Items.STICK,'z', blankRelief));
+		
+		final Block hoeRelief = registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_hoe");
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(hoeRelief, 1), blankRelief, Items.STONE_HOE));
+		
+		final Block horizontalRelief = registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_horizontal");
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(horizontalRelief, 1), "xxx",'x', blankRelief));
+		
+		final Block leftRelief = registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_left");
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(leftRelief, 1), "x  "," x ","  x",'x', blankRelief));
+		
+		final Block pickaxeRelief = registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_pickaxe");
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(pickaxeRelief, 1), blankRelief, Items.STONE_PICKAXE));
+		
+		final Block plusRelief = registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_plus");
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(plusRelief, 1), " x ","xxx"," x ",'x', blankRelief));
+		
+		final Block rightRelief = registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_right");
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(rightRelief, 2), leftRelief, leftRelief));
+		
+		final Block swordRelief = registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_sword");
+		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(swordRelief, 1), blankRelief, Items.STONE_SWORD));
+		
+		final Block iRelief = registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_i");
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(iRelief, 1), "xxx"," x ","xxx",'x', blankRelief));
+		
+		final Block verticalRelief = registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_vertical");
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(verticalRelief, 1), "x","x","x",'x', blankRelief));
+	}
 }

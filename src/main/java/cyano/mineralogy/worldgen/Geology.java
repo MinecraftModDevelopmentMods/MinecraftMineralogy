@@ -16,6 +16,7 @@ public class Geology {
 
 	private final PerlinNoise2D geomeNoiseLayer;
 	private final PerlinNoise2D rockNoiseLayer;
+	private final boolean _realisticCoalLayers;
 //	private final long seed;
 	
 //	private final double geomeSize;
@@ -35,12 +36,13 @@ public class Geology {
 	 * @param geomeSize Approximate size of rock type layers (should be much bigger than <code>rockLayerSize</code>
 	 * @param rockLayerSize Approximate diameter of layers in the X-Z plane
 	 */
-	public Geology(long seed, double geomeSize, double rockLayerSize) {
+	public Geology(long seed, double geomeSize, double rockLayerSize, boolean realisticCoalLayers) {
 //		this.seed = seed;
 		int rockLayerUndertones = 4;
 		int undertoneMultiplier = 1 << (rockLayerUndertones - 1);
 		geomeNoiseLayer = new PerlinNoise2D(~seed,128,(float)geomeSize,2);
 		rockNoiseLayer = new PerlinNoise2D(seed, (float)(4 * undertoneMultiplier), (float)(rockLayerSize * undertoneMultiplier), rockLayerUndertones);
+		_realisticCoalLayers = realisticCoalLayers;
 //		this.geomeSize = geomeSize;
 
 		Random r = new Random(seed);
@@ -95,7 +97,9 @@ public class Geology {
 				for(; y > 0; y--) {
 					BlockPos coord = new BlockPos(x, y, z);
 //					int i = indexBase + y;
-					if(chunk.getBlockState(coord).getBlock() == Blocks.STONE) {
+					Block block = chunk.getBlockState(coord).getBlock();
+					
+					if(block == Blocks.STONE || (_realisticCoalLayers && block == Blocks.COAL_ORE)) {
 						int geome = gbase + y;
 						if(geome < -32){
 							// RockType.IGNEOUS;

@@ -1,0 +1,8 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "top": "mineralogy:blocks/slate_furnace_top",
+    "front": "mineralogy:blocks/slate_furnace_front_on",
+    "side": "mineralogy:blocks/slate_furnace_side"
+  }
+}

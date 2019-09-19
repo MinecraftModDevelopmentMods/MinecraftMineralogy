@@ -4,6 +4,7 @@ import java.util.List;
 
 import cyano.mineralogy.Mineralogy;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockWall;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -19,7 +20,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 * @author Jasmine Iwanek
 *
 */
-public class RockWall extends net.minecraft.block.BlockWall {
+public class RockWall extends BlockWall {
 	public RockWall(Block materialBlock, float hardness, float blastResistance, int toolHardnessLevel,
 	 			SoundType sound) {
 		super(materialBlock);

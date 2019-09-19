@@ -22,8 +22,9 @@ public class RockSlab extends net.minecraft.block.Block {
 
 	public static final PropertyDirection FACING = PropertyDirection.create("facing");
 
-	private static final float thickness = 0.5f;
+	private static float thickness = 0.5f;
 
+	
 	private static final AxisAlignedBB[] BOXES = new AxisAlignedBB[EnumFacing.values().length];
 	static {
 		for(int i = 0; i < EnumFacing.values().length; i++) {
@@ -54,6 +55,7 @@ public class RockSlab extends net.minecraft.block.Block {
 		}
 	}
 
+	
 	public RockSlab(float hardness, float blastResistance, int toolHardnessLevel, SoundType sound) {
 		super(Material.ROCK);
 		this.setHardness((float)hardness); // dirt is 0.5, grass is 0.6, stone is 1.5,iron ore is 3, obsidian is 50

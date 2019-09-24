@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "mineralogy:quartzite_smooth_furnace"
+    },
+    "facing=south": {
+      "model": "mineralogy:quartzite_smooth_furnace",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "mineralogy:quartzite_smooth_furnace",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "mineralogy:quartzite_smooth_furnace",
+      "y": 90
+    }
+  }
+}

@@ -40,6 +40,8 @@ public class Constants {
 													};
 
 	public static final String GYPSUM = "Gypsum";
+	public static final String CHALK = "Chalk";
+	public static final String ROCKSALT = "Rocksalt";
 	public static final String PHOSPHOROUS = "Phosphorous";
 	public static final String NITRATE = "Nitrate";
 	public static final String SULFUR = "Sulfur";
@@ -58,6 +60,8 @@ public class Constants {
 	public static final String COBBLESTONE = "cobblestone";
 	public static final String FERTILIZER = "fertilizer";
 	public static final String BLOCK_GYPSUM = "blockGypsum";
+	public static final String BLOCK_CHALK = "blockChalk";
+	public static final String BLOCK_ROCKSALT = "blockRocksalt";
 	public static final String DUST_SULFUR = "dustSulfur";
 	public static final String DUST_NITRATE = "dustNitrate";
 	public static final String DUST_CARBON = "dustCarbon";
@@ -65,6 +69,8 @@ public class Constants {
 	public static final String BLOCK_PUMICE = "blockPumice";
 	public static final String BLOCK_CHERT = "blockChert";
 	public static final String DUST_GYPSUM = "dustGypsum";
+	public static final String DUST_CHALK = "dustChalk";
+	public static final String DUST_ROCKSALT = "dustRocksalt";
 	public static final String PAPER = "paper";
 	public static final String WALL = "wall";
 }

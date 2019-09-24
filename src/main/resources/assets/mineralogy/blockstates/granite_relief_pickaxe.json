@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "mineralogy:granite_relief_pickaxe",
+      "x": 180
+    },
+    "facing=up": {
+      "model": "mineralogy:granite_relief_pickaxe"
+    },
+    "facing=north": {
+      "model": "mineralogy:granite_relief_pickaxe",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "mineralogy:granite_relief_pickaxe",
+      "x": 90,
+      "y": 180
+    },
+    "facing=west": {
+      "model": "mineralogy:granite_relief_pickaxe",
+      "x": 90,
+      "y": 270
+    },
+    "facing=east": {
+      "model": "mineralogy:granite_relief_pickaxe",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "top": "mineralogy:blocks/rhyolite_furnace_top",
+    "front": "mineralogy:blocks/rhyolite_furnace_front_on",
+    "side": "mineralogy:blocks/rhyolite_furnace_side"
+  }
+}

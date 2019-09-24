@@ -1,7 +1,7 @@
 {
-    "parent": "mineralogy:block/slab",
-    "textures": {
-        "face": "mineralogy:blocks/diorite",
-        "side": "mineralogy:blocks/diorite"
-    }
+  "parent": "mineralogy:block/slab",
+  "textures": {
+    "face": "mineralogy:blocks/diorite",
+    "side": "mineralogy:blocks/diorite"
+  }
 }

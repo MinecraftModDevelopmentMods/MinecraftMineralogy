@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "mineralogy:amphibolite_relief_vertical",
+      "x": 180
+    },
+    "facing=up": {
+      "model": "mineralogy:amphibolite_relief_vertical"
+    },
+    "facing=north": {
+      "model": "mineralogy:amphibolite_relief_vertical",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "mineralogy:amphibolite_relief_vertical",
+      "x": 90,
+      "y": 180
+    },
+    "facing=west": {
+      "model": "mineralogy:amphibolite_relief_vertical",
+      "x": 90,
+      "y": 270
+    },
+    "facing=east": {
+      "model": "mineralogy:amphibolite_relief_vertical",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

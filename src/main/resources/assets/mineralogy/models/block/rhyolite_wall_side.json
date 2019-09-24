@@ -1,6 +1,6 @@
 {
-    "parent": "block/wall_side",
-    "textures": {
-        "wall": "mineralogy:blocks/rhyolite"
-    }
+  "parent": "block/wall_side",
+  "textures": {
+    "wall": "mineralogy:blocks/rhyolite"
+  }
 }

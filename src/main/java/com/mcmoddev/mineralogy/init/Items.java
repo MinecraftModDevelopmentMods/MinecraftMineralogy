@@ -31,6 +31,8 @@ public class Items {
 		MinIoC IoC = MinIoC.getInstance();
 		
 		Item gypsumPowder = addDust(Constants.GYPSUM);;
+		Item chalkPowder = addDust(Constants.CHALK);;
+		Item rocksaltPowder = addDust(Constants.ROCKSALT);;
 		Item sulphurPowder = addDust(Constants.SULFUR);;
 		Item phosphorousPowder = addDust(Constants.PHOSPHOROUS);;
 		Item nitratePowder = addDust(Constants.NITRATE);
@@ -39,6 +41,8 @@ public class Items {
 				.setTranslationKey(Mineralogy.MODID + "." + "mineral_fertilizer");
 		
 		IoC.register(Item.class, gypsumPowder, Constants.DUST_GYPSUM, Mineralogy.MODID);
+		IoC.register(Item.class, chalkPowder, Constants.DUST_CHALK, Mineralogy.MODID);
+		IoC.register(Item.class, rocksaltPowder, Constants.DUST_ROCKSALT, Mineralogy.MODID);
 		IoC.register(Item.class, sulphurPowder, Constants.SULFUR, Mineralogy.MODID);
 		IoC.register(Item.class, phosphorousPowder, Constants.PHOSPHOROUS, Mineralogy.MODID);
 		IoC.register(Item.class, nitratePowder, Constants.NITRATE, Mineralogy.MODID);

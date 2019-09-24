@@ -1,0 +1,7 @@
+{
+  "parent": "mineralogy:block/slab",
+  "textures": {
+    "face": "mineralogy:blocks/gabbro_smooth",
+    "side": "mineralogy:blocks/gabbro_smooth"
+  }
+}

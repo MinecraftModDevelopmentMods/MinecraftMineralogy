@@ -28,19 +28,17 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'com.matthewprenger.cursegradle'
 apply plugin: 'maven-publish'
 apply plugin: 'org.sonarqube'
-apply plugin: 'jacoco'
 
 repositories {
   mavenLocal()
   mavenCentral()
 }
 
+
 tasks.withType(JavaCompile) {
   options.encoding = 'UTF-8'
   options.compilerArgs = [
-    '-Xlint:deprecation', // deprecation, rawtypes, cast, unchecked, all
-//  '-Xdiags:verbose',
-//  '-Werror'
+    '-Xlint:deprecation', 
   ]
 }
 
@@ -190,12 +188,7 @@ repositories {
     name 'thiakil'
     url 'http://maven.thiakil.com/'
   }
-  ivy {
-    url "http://ae-mod.info/builds"
-    layout "pattern", {
-    artifact "[module]-[revision](-[classifier])(.[ext])"
-    }
-  }
+  
 }
 
 dependencies {
@@ -327,8 +320,6 @@ sonarqube {
     property 'sonar.login', secret.sonarToken
     property 'sonar.projectName', project.archivesBaseName
     property 'sonar.projectKey', "$project.group:$project.archivesBaseName"
-    property 'sonar.junit.reportPaths', "${project.buildDir}/test-results/junit-platform/*.xml"
-    property 'sonar.jacoco.reportPaths', "${project.buildDir}/jacoco/junitPlatformTest.exec"
   }
 }
 

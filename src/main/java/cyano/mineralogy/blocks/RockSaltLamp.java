@@ -1,6 +1,9 @@
 package cyano.mineralogy.blocks;
 
 import com.google.common.base.Predicate;
+
+import cyano.mineralogy.Mineralogy;
+
 import java.util.Random;
 import javax.annotation.Nullable;
 
@@ -45,7 +48,7 @@ public class RockSaltLamp extends Block
         super(Material.ROCK);
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.UP));
         this.setTickRandomly(true);
-        this.setCreativeTab(CreativeTabs.DECORATIONS);
+        this.setCreativeTab(Mineralogy.mineralogyTab);
         this.setHardness(0.25F);
         this.setLightLevel(0.9375F);
         this.setSoundType(SoundType.STONE);

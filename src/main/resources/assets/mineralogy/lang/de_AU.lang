@@ -941,4 +941,4 @@ tile.mineralogy.novaculite_relief_right.name=Novaculite Rechte Erleichterung
 tile.mineralogy.novaculite_relief_sword.name=Novaculite Schwert Relief
 tile.mineralogy.novaculite_relief_vertical.name=Novaculite Vertikales Relief
 
-itemGroup.mineralogyTab=Mineralogie
+itemGroup.mineralogy.mineralogy=Mineralogie

@@ -31,6 +31,8 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 		modid = Mineralogy.MODID,
 		name = Mineralogy.NAME,
 		version = Mineralogy.VERSION,
+		//TODO pick a master or docs branch to upload an updates.json folder and keep it up to date, then link the raw file here.
+		updateJSON = "",
 		acceptedMinecraftVersions = "[1.12,)",
 		certificateFingerprint = "@FINGERPRINT@")
 public class Mineralogy {

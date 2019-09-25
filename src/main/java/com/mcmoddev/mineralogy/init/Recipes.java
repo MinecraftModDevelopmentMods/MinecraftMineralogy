@@ -45,8 +45,8 @@ public class Recipes {
 				Ingredient.fromStacks(new ItemStack(Blocks.GRAVEL)));
 		
 		RecipeHelper.addShapedOreRecipe(Constants.GYPSUM.toLowerCase(), new ItemStack(blockGypsum, 1), "xxx", "xxx", "xxx", 'x', "dustGypsum");
-		RecipeHelper.addShapedOreRecipe(Constants.GYPSUM.toLowerCase(), new ItemStack(blockChalk, 1), "xx", "xx", 'x', "dustChalk");
-		RecipeHelper.addShapedOreRecipe(Constants.GYPSUM.toLowerCase(), new ItemStack(blockRocksalt, 1), "xx", "xx", 'x', "dustRocksalt");
+		RecipeHelper.addShapedOreRecipe(Constants.CHALK.toLowerCase(), new ItemStack(blockChalk, 1), "xx", "xx", 'x', "dustChalk");
+		RecipeHelper.addShapedOreRecipe(Constants.ROCKSALT.toLowerCase(), new ItemStack(blockRocksalt, 1), "xx", "xx", 'x', "dustRock_salt");
 		RecipeHelper.addShapelessOreRecipe(Constants.GYPSUM.toLowerCase() + "_dust", new ItemStack(dustGypsum, 9), Constants.BLOCK_GYPSUM);
 		RecipeHelper.addShapelessOreRecipe(Constants.CHALK.toLowerCase() + "_dust", new ItemStack(dustChalk, 4), Constants.BLOCK_CHALK);
 		RecipeHelper.addShapelessOreRecipe(Constants.ROCKSALT.toLowerCase() + "_dust", new ItemStack(dustRocksalt, 4), Constants.BLOCK_ROCKSALT);

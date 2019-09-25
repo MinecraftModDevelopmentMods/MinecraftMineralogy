@@ -61,11 +61,13 @@ public class Blocks {
 		blockGypsum = RegistrationHelper.registerBlock(new Gypsum(), Constants.GYPSUM.toLowerCase(), Constants.BLOCK_GYPSUM);
 		MineralogyRegistry.sedimentaryStones.add(blockGypsum.PairedBlock);
 		
-		blockChalk = RegistrationHelper.registerBlock(new Chalk(), Constants.GYPSUM.toLowerCase(), Constants.BLOCK_CHALK);
+		blockChalk = RegistrationHelper.registerBlock(new Chalk(), Constants.CHALK.toLowerCase(), Constants.BLOCK_CHALK);
 		MineralogyRegistry.sedimentaryStones.add(blockChalk.PairedBlock);
 		
 		blockRocksalt = RegistrationHelper.registerBlock(new RockSalt(), Constants.ROCKSALT.toLowerCase(), Constants.BLOCK_ROCKSALT);
 		MineralogyRegistry.sedimentaryStones.add(blockRocksalt.PairedBlock);
+		
+		addStoneType(MaterialData.ROCK_SALT, blockRocksalt);
 		
 		IoC.register(BlockItemPair.class, blockGypsum, Constants.BLOCK_GYPSUM, Mineralogy.MODID);
 		IoC.register(BlockItemPair.class, blockChalk, Constants.BLOCK_CHALK, Mineralogy.MODID);
@@ -96,10 +98,10 @@ public class Blocks {
 		initDone = true;
 	}
 
-	protected static void addStoneType(Material materialType) {
+	protected static void addStoneType(Material materialType, BlockItemPair rockPair) {
+
 		String name = materialType.materialName.toLowerCase();
 
-		final BlockItemPair rockPair;
 		final BlockItemPair rockStairPair;
 		final BlockItemPair rockSlabPair;
 		final BlockItemPair rockWallPair;
@@ -116,11 +118,6 @@ public class Blocks {
 		final BlockItemPair smoothBrickSlabPair;
 		final BlockItemPair smoothBrickWallPair;
 
-		rockPair = RegistrationHelper.registerBlock(new Rock(true, (float) materialType.hardness, (float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE), name, "stone" + materialType.materialName);
-
-		if (materialType.cobbleEquivilent)
-			MineralogyRegistry.BlocksToRegister.put(Constants.COBBLESTONE, rockPair.PairedBlock);
-		
 		RecipeHelper.addShapelessOreRecipe(name + "_" + Constants.COBBLESTONE.toUpperCase(), new ItemStack(net.minecraft.init.Blocks.COBBLESTONE, 4),
 				Ingredient.fromStacks(new ItemStack(rockPair.PairedItem)),
 				Ingredient.fromStacks(new ItemStack(rockPair.PairedItem)),
@@ -271,5 +268,16 @@ public class Blocks {
 				}
 			}
 		}
+	
+	}
+	
+	protected static void addStoneType(Material materialType) {
+		String name = materialType.materialName.toLowerCase();
+		final BlockItemPair rockPair = RegistrationHelper.registerBlock(new Rock(true, (float) materialType.hardness, (float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE), name, "stone" + materialType.materialName);
+
+		if (materialType.cobbleEquivilent)
+			MineralogyRegistry.BlocksToRegister.put(Constants.COBBLESTONE, rockPair.PairedBlock);
+		
+		addStoneType(materialType, rockPair);
 	}
 }

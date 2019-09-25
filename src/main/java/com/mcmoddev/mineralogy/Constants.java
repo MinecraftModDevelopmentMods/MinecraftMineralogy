@@ -41,7 +41,7 @@ public class Constants {
 
 	public static final String GYPSUM = "Gypsum";
 	public static final String CHALK = "Chalk";
-	public static final String ROCKSALT = "Rocksalt";
+	public static final String ROCKSALT = "Rock_salt";
 	public static final String PHOSPHOROUS = "Phosphorous";
 	public static final String NITRATE = "Nitrate";
 	public static final String SULFUR = "Sulfur";
@@ -70,7 +70,7 @@ public class Constants {
 	public static final String BLOCK_CHERT = "blockChert";
 	public static final String DUST_GYPSUM = "dustGypsum";
 	public static final String DUST_CHALK = "dustChalk";
-	public static final String DUST_ROCKSALT = "dustRocksalt";
+	public static final String DUST_ROCKSALT = "dustRock_salt";
 	public static final String PAPER = "paper";
 	public static final String WALL = "wall";
 }

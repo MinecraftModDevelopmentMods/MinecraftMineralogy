@@ -18,7 +18,8 @@ public class MineralogyConfig {
 	private static boolean dropCobblestone = false;
 	private static boolean patchUpdate = true;
 	private static boolean makeRockCobblestoneEquivilent = true;
-
+	
+	private static boolean generateReliefs = true;
 	private static boolean generateRockStairs = true;
 	private static boolean generateRockSlab = true;
 	private static boolean generateRockWall = true;
@@ -78,6 +79,8 @@ public class MineralogyConfig {
 		geomLayerThickness = config.getInt("ROCK_LAYER_THICKNESS", WORLD_GEN, geomLayerThickness, 1, 255,
 				"Changing this value will change the height of individual layers.");
 
+		generateReliefs = config.getBoolean("GENERATE_RELIEFS", OPTIONS, generateReliefs,
+				"If true, then rock reliefs will be generated");
 		generateRockStairs = config.getBoolean("GENERATE_ROCKSTAIRS", OPTIONS, generateRockStairs,
 				"If true, then rock stairs will be generated");
 		generateRockSlab = config.getBoolean("GENERATE_ROCKSLAB", OPTIONS, generateRockSlab,
@@ -172,6 +175,10 @@ public class MineralogyConfig {
 		return generateRockStairs;
 	}
 
+	public static boolean generateReliefs() {
+		return generateRockStairs;
+	}
+	
 	public static boolean generateRockSlab() {
 		return generateRockSlab;
 	}

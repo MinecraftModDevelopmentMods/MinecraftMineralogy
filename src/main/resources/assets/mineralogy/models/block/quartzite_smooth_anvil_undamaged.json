@@ -1,8 +1,0 @@
-{
-    "parent": "mineralogy:block/anvil",
-    "textures": {
-        "particle": "mineralogy:blocks/quartzite_smooth",
-        "body": "mineralogy:blocks/quartzite_smooth",
-        "top": "mineralogy:blocks/quartzite_smooth"
-    }
-}

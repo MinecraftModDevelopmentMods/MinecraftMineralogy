@@ -1,8 +1,0 @@
-{
-  "parent": "mineralogy:block/brick",
-  "textures": {
-    "top": "mineralogy:blocks/quartzite_brick_top",
-    "bottom": "mineralogy:blocks/quartzite_brick_top",
-    "side": "mineralogy:blocks/quartzite_brick_side"
-  }
-}

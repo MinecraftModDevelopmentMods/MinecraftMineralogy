@@ -1,7 +1,7 @@
 {
-  "parent": "mineralogy:block/slab",
-  "textures": {
-    "face": "mineralogy:blocks/conglomerate",
-    "side": "mineralogy:blocks/conglomerate"
-  }
+    "parent": "mineralogy:block/slab",
+    "textures": {
+        "face": "mineralogy:blocks/conglomerate",
+        "side": "mineralogy:blocks/conglomerate"
+    }
 }

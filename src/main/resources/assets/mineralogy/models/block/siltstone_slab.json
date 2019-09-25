@@ -1,7 +1,0 @@
-{
-  "parent": "mineralogy:block/slab",
-  "textures": {
-    "face": "mineralogy:blocks/siltstone",
-    "side": "mineralogy:blocks/siltstone"
-  }
-}

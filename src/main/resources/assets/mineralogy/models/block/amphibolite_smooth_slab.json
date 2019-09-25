@@ -1,7 +1,7 @@
 {
-  "parent": "mineralogy:block/slab",
-  "textures": {
-    "face": "mineralogy:blocks/amphibolite_smooth",
-    "side": "mineralogy:blocks/amphibolite_smooth"
-  }
+    "parent": "mineralogy:block/slab",
+    "textures": {
+        "face": "mineralogy:blocks/amphibolite_smooth",
+        "side": "mineralogy:blocks/amphibolite_smooth"
+    }
 }

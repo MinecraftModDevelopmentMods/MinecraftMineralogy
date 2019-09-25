@@ -1,7 +1,0 @@
-{
-  "parent": "mineralogy:block/stairs_inner",
-  "textures": {
-    "face": "mineralogy:blocks/novaculite_smooth_brick_top",
-    "side": "mineralogy:blocks/novaculite_smooth_brick_side"
-  }
-}

@@ -1,7 +1,7 @@
 {
-  "parent": "mineralogy:block/stairs_inner",
-  "textures": {
-    "face": "mineralogy:blocks/limestone",
-    "side": "mineralogy:blocks/limestone"
-  }
+    "parent": "mineralogy:block/stairs_inner",
+    "textures": {
+      "face": "mineralogy:blocks/limestone",
+      "side": "mineralogy:blocks/limestone"
+    }
 }

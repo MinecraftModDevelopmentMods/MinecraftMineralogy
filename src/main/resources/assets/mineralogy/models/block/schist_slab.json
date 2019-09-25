@@ -1,7 +1,7 @@
 {
-  "parent": "mineralogy:block/slab",
-  "textures": {
-    "face": "mineralogy:blocks/schist",
-    "side": "mineralogy:blocks/schist"
-  }
+    "parent": "mineralogy:block/slab",
+    "textures": {
+        "face": "mineralogy:blocks/schist",
+        "side": "mineralogy:blocks/schist"
+    }
 }

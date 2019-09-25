@@ -1,8 +1,8 @@
 {
-  "parent": "mineralogy:block/brick",
-  "textures": {
-    "top": "mineralogy:blocks/schist_brick_top",
-    "bottom": "mineralogy:blocks/schist_brick_top",
-    "side": "mineralogy:blocks/schist_brick_side"
-  }
+    "parent": "mineralogy:block/brick",
+    "textures": {
+      "top": "mineralogy:blocks/schist_brick_top",
+      "bottom": "mineralogy:blocks/schist_brick_top",
+        "side": "mineralogy:blocks/schist_brick_side"
+    }
 }

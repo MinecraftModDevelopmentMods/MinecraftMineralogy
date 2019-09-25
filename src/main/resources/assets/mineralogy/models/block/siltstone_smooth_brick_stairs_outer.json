@@ -1,7 +1,0 @@
-{
-  "parent": "mineralogy:block/stairs_outer",
-  "textures": {
-    "face": "mineralogy:blocks/siltstone_smooth_brick_top",
-    "side": "mineralogy:blocks/siltstone_smooth_brick_side"
-  }
-}

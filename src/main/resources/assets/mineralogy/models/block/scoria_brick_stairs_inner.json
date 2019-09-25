@@ -1,7 +1,0 @@
-{
-  "parent": "mineralogy:block/stairs_inner",
-  "textures": {
-    "face": "mineralogy:blocks/scoria_brick_top",
-    "side": "mineralogy:blocks/scoria_brick_side"
-  }
-}

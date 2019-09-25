@@ -1,7 +1,0 @@
-{
-  "parent": "mineralogy:block/stairs_inner",
-  "textures": {
-    "face": "mineralogy:blocks/hornfels_brick_top",
-    "side": "mineralogy:blocks/hornfels_brick_side"
-  }
-}

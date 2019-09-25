@@ -1,7 +1,0 @@
-{
-  "parent": "mineralogy:block/stairs_normal",
-  "textures": {
-    "face": "mineralogy:blocks/quartzite",
-    "side": "mineralogy:blocks/quartzite"
-  }
-}

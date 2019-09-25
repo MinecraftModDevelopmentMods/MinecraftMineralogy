@@ -1,8 +1,0 @@
-{
-  "parent": "block/orientable",
-  "textures": {
-    "top": "mineralogy:blocks/amphibolite_furnace_top",
-    "front": "mineralogy:blocks/amphibolite_furnace_front_off",
-    "side": "mineralogy:blocks/amphibolite_furnace_side"
-  }
-}

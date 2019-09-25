@@ -1,7 +1,0 @@
-{
-  "parent": "mineralogy:block/stairs_outer",
-  "textures": {
-    "face": "mineralogy:blocks/peridotite",
-    "side": "mineralogy:blocks/peridotite"
-  }
-}

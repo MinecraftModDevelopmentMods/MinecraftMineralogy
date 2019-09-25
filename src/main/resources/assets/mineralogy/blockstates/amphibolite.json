@@ -1,7 +1,5 @@
 {
-  "variants": {
-    "normal": {
-      "model": "mineralogy:amphibolite"
+    "variants": {
+        "normal": { "model": "mineralogy:amphibolite" }
     }
-  }
 }

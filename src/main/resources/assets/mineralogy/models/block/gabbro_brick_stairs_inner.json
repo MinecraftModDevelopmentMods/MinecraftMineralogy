@@ -1,7 +1,0 @@
-{
-  "parent": "mineralogy:block/stairs_inner",
-  "textures": {
-    "face": "mineralogy:blocks/gabbro_brick_top",
-    "side": "mineralogy:blocks/gabbro_brick_side"
-  }
-}

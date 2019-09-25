@@ -1,6 +1,6 @@
 {
-  "parent": "block/wall_side",
-  "textures": {
-    "wall": "mineralogy:blocks/marble_brick_side"
-  }
+    "parent": "block/wall_side",
+    "textures": {
+        "wall": "mineralogy:blocks/marble_brick_side"
+    }
 }

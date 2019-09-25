@@ -1,6 +1,6 @@
 {
-  "parent": "block/wall_inventory",
-  "textures": {
+    "parent": "block/wall_inventory",
+    "textures": {
     "wall": "mineralogy:blocks/andesite"
-  }
+    }
 }

@@ -3,12 +3,10 @@ package com.mcmoddev.mineralogy.init;
 import com.mcmoddev.mineralogy.Constants;
 import com.mcmoddev.mineralogy.Mineralogy;
 import com.mcmoddev.mineralogy.MineralogyConfig;
-import com.mcmoddev.mineralogy.blocks.Chalk;
 import com.mcmoddev.mineralogy.blocks.Chert;
 import com.mcmoddev.mineralogy.blocks.DryWall;
 import com.mcmoddev.mineralogy.blocks.Gypsum;
 import com.mcmoddev.mineralogy.blocks.Rock;
-import com.mcmoddev.mineralogy.blocks.RockSalt;
 import com.mcmoddev.mineralogy.blocks.RockSlab;
 import com.mcmoddev.mineralogy.blocks.RockStairs;
 import com.mcmoddev.mineralogy.blocks.RockWall;
@@ -45,8 +43,6 @@ public class Blocks {
 		
 		BlockItemPair blockChert;
 		BlockItemPair blockGypsum;
-		BlockItemPair blockChalk;
-		BlockItemPair blockRocksalt;
 		BlockItemPair blockPumice;
 		BlockItemPair[] drywalls = new BlockItemPair[16];
 		
@@ -61,15 +57,7 @@ public class Blocks {
 		blockGypsum = RegistrationHelper.registerBlock(new Gypsum(), Constants.GYPSUM.toLowerCase(), Constants.BLOCK_GYPSUM);
 		MineralogyRegistry.sedimentaryStones.add(blockGypsum.PairedBlock);
 		
-		blockChalk = RegistrationHelper.registerBlock(new Chalk(), Constants.GYPSUM.toLowerCase(), Constants.BLOCK_CHALK);
-		MineralogyRegistry.sedimentaryStones.add(blockChalk.PairedBlock);
-		
-		blockRocksalt = RegistrationHelper.registerBlock(new RockSalt(), Constants.ROCKSALT.toLowerCase(), Constants.BLOCK_ROCKSALT);
-		MineralogyRegistry.sedimentaryStones.add(blockRocksalt.PairedBlock);
-		
 		IoC.register(BlockItemPair.class, blockGypsum, Constants.BLOCK_GYPSUM, Mineralogy.MODID);
-		IoC.register(BlockItemPair.class, blockChalk, Constants.BLOCK_CHALK, Mineralogy.MODID);
-		IoC.register(BlockItemPair.class, blockRocksalt, Constants.BLOCK_ROCKSALT, Mineralogy.MODID);
 		
 		blockPumice = RegistrationHelper.registerBlock(new Rock(false, 0.5F, 5F, 0, SoundType.STONE), Constants.PUMICE, Constants.BLOCK_PUMICE);
 		MineralogyRegistry.igneousStones.add(blockPumice.PairedBlock);

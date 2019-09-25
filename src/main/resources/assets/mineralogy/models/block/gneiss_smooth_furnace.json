@@ -1,8 +1,0 @@
-{
-  "parent": "block/orientable",
-  "textures": {
-    "top": "mineralogy:blocks/gneiss_smooth_furnace_top",
-    "front": "mineralogy:blocks/gneiss_smooth_furnace_front_off",
-    "side": "mineralogy:blocks/gneiss_smooth_furnace_side"
-  }
-}

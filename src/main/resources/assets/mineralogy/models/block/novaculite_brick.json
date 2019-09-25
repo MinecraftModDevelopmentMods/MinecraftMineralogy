@@ -1,8 +1,0 @@
-{
-  "parent": "mineralogy:block/brick",
-  "textures": {
-    "top": "mineralogy:blocks/novaculite_brick_top",
-    "bottom": "mineralogy:blocks/novaculite_brick_top",
-    "side": "mineralogy:blocks/novaculite_brick_side"
-  }
-}

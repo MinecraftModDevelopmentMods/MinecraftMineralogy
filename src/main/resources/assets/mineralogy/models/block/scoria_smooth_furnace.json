@@ -1,8 +1,0 @@
-{
-  "parent": "block/orientable",
-  "textures": {
-    "top": "mineralogy:blocks/scoria_smooth_furnace_top",
-    "front": "mineralogy:blocks/scoria_smooth_furnace_front_off",
-    "side": "mineralogy:blocks/scoria_smooth_furnace_side"
-  }
-}

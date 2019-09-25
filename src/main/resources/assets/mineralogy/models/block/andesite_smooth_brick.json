@@ -1,8 +1,6 @@
 {
-  "parent": "mineralogy:block/brick",
-  "textures": {
-    "top": "mineralogy:blocks/andesite_smooth_brick_top",
-    "bottom": "mineralogy:blocks/andesite_smooth_brick_top",
-    "side": "mineralogy:blocks/andesite_smooth_brick_side"
-  }
+    "parent": "mineralogy:block/block",
+    "textures": {
+        "face": "mineralogy:blocks/andesite_smooth_brick"
+    }
 }

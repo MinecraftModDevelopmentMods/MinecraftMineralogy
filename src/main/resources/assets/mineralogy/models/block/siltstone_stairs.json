@@ -1,7 +1,0 @@
-{
-  "parent": "mineralogy:block/stairs_normal",
-  "textures": {
-    "face": "mineralogy:blocks/siltstone",
-    "side": "mineralogy:blocks/siltstone"
-  }
-}

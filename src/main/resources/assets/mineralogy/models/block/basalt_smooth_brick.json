@@ -1,8 +1,6 @@
 {
-  "parent": "mineralogy:block/brick",
-  "textures": {
-    "top": "mineralogy:blocks/basalt_smooth_brick_top",
-    "bottom": "mineralogy:blocks/basalt_smooth_brick_top",
-    "side": "mineralogy:blocks/basalt_smooth_brick_side"
-  }
+    "parent": "mineralogy:block/block",
+    "textures": {
+        "face": "mineralogy:blocks/basalt_smooth_brick"
+    }
 }

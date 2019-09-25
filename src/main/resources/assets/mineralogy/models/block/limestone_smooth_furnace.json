@@ -1,8 +1,0 @@
-{
-  "parent": "block/orientable",
-  "textures": {
-    "top": "mineralogy:blocks/limestone_smooth_furnace_top",
-    "front": "mineralogy:blocks/limestone_smooth_furnace_front_off",
-    "side": "mineralogy:blocks/limestone_smooth_furnace_side"
-  }
-}

@@ -1,6 +1,0 @@
-{
-  "parent": "block/wall_side",
-  "textures": {
-    "wall": "mineralogy:blocks/rock_salt_brick_side"
-  }
-}

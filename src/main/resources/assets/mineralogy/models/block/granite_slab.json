@@ -1,7 +1,7 @@
 {
-  "parent": "mineralogy:block/slab",
-  "textures": {
-    "face": "mineralogy:blocks/granite",
-    "side": "mineralogy:blocks/granite"
-  }
+    "parent": "mineralogy:block/slab",
+    "textures": {
+        "face": "mineralogy:blocks/granite",
+        "side": "mineralogy:blocks/granite"
+    }
 }

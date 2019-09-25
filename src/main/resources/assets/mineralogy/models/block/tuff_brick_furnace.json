@@ -1,8 +1,0 @@
-{
-  "parent": "block/orientable",
-  "textures": {
-    "top": "mineralogy:blocks/tuff_brick_furnace_top",
-    "front": "mineralogy:blocks/tuff_brick_furnace_front_off",
-    "side": "mineralogy:blocks/tuff_brick_furnace_side"
-  }
-}

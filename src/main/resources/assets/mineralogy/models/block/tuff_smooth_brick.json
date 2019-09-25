@@ -1,8 +1,0 @@
-{
-  "parent": "mineralogy:block/brick",
-  "textures": {
-    "top": "mineralogy:blocks/tuff_smooth_brick_top",
-    "bottom": "mineralogy:blocks/tuff_smooth_brick_top",
-    "side": "mineralogy:blocks/tuff_smooth_brick_side"
-  }
-}

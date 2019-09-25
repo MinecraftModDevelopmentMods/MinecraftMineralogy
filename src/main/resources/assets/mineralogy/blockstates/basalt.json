@@ -1,7 +1,5 @@
 {
-  "variants": {
-    "normal": {
-      "model": "mineralogy:basalt"
+    "variants": {
+        "normal": { "model": "mineralogy:basalt" }
     }
-  }
 }

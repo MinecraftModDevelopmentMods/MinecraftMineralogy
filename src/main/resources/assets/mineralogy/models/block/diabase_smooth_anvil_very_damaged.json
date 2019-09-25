@@ -1,0 +1,8 @@
+{
+    "parent": "mineralogy:block/anvil",
+    "textures": {
+        "particle": "mineralogy:blocks/diabase_smooth",
+        "body": "mineralogy:blocks/diabase_smooth",
+        "top": "mineralogy:blocks/diabase_smooth"
+    }
+}

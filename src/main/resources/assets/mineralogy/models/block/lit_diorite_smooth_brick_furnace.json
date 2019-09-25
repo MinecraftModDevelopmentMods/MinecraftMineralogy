@@ -1,0 +1,8 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "top": "mineralogy:blocks/diorite_smooth_brick_furnace_top",
+    "front": "mineralogy:blocks/diorite_smooth_brick_furnace_front_on",
+    "side": "mineralogy:blocks/diorite_smooth_brick_furnace_side"
+  }
+}

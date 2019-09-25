@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "mineralogy:phyllite_furnace"
+    },
+    "facing=south": {
+      "model": "mineralogy:phyllite_furnace",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "mineralogy:phyllite_furnace",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "mineralogy:phyllite_furnace",
+      "y": 90
+    }
+  }
+}

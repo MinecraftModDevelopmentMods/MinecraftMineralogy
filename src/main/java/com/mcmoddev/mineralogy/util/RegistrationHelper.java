@@ -1,5 +1,6 @@
 package com.mcmoddev.mineralogy.util;
 
+import com.mcmoddev.mineralogy.Constants;
 import com.mcmoddev.mineralogy.Mineralogy;
 import com.mcmoddev.mineralogy.init.MineralogyRegistry;
 import com.mcmoddev.mineralogy.ioc.MinIoC;
@@ -18,8 +19,12 @@ public class RegistrationHelper {
 
 		Item item = registerItem(new ItemBlock(block), name);
 		
+		MinIoC IoC = MinIoC.getInstance();
+		
 		BlockItemPair pair = new BlockItemPair(block, item);
 
+		IoC.register(BlockItemPair.class, pair, name, Mineralogy.MODID);
+		
 		try {
 			MinIoC.getInstance().resolve(IDynamicTabProvider.class).addToTab(block);
 		} catch (TabNotFoundException | ItemNotFoundException e) {

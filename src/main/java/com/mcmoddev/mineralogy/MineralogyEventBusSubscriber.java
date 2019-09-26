@@ -16,7 +16,6 @@ import net.minecraftforge.oredict.OreDictionary;
 // This seems really not nice design, it'll do til we refactor the whole thing..
 @Mod.EventBusSubscriber(modid = Mineralogy.MODID)
 public class MineralogyEventBusSubscriber {
-
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> event) {
 		MineralogyRegistry.MineralogyBlockRegistry.values().forEach(block -> event.getRegistry().register(block.PairedBlock));

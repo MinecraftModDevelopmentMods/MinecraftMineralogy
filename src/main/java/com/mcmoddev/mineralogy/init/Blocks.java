@@ -8,6 +8,7 @@ import com.mcmoddev.mineralogy.blocks.Chert;
 import com.mcmoddev.mineralogy.blocks.DryWall;
 import com.mcmoddev.mineralogy.blocks.Gypsum;
 import com.mcmoddev.mineralogy.blocks.Rock;
+import com.mcmoddev.mineralogy.blocks.RockFurnace;
 import com.mcmoddev.mineralogy.blocks.RockRelief;
 import com.mcmoddev.mineralogy.blocks.RockSalt;
 import com.mcmoddev.mineralogy.blocks.RockSlab;
@@ -17,6 +18,7 @@ import com.mcmoddev.mineralogy.data.Material;
 import com.mcmoddev.mineralogy.data.MaterialData;
 import com.mcmoddev.mineralogy.ioc.MinIoC;
 import com.mcmoddev.mineralogy.lib.interfaces.IDynamicTabProvider;
+import com.mcmoddev.mineralogy.tileentity.TileEntityRockFurnace;
 import com.mcmoddev.mineralogy.util.BlockItemPair;
 import com.mcmoddev.mineralogy.util.RecipeHelper;
 import com.mcmoddev.mineralogy.util.RegistrationHelper;
@@ -53,6 +55,8 @@ public class Blocks {
 		BlockItemPair blockRocksalt;
 		BlockItemPair blockPumice;
 		BlockItemPair[] drywalls = new BlockItemPair[16];
+		
+		GameRegistry.registerTileEntity(TileEntityRockFurnace.class, "rockfurnace");
 		
 		MaterialData.toArray().forEach(material -> addStoneType(material));		
 		
@@ -148,18 +152,22 @@ public class Blocks {
 
 		String name = materialType.materialName.toLowerCase();
 
+		final BlockItemPair rockFurnacePair;
 		final BlockItemPair rockStairPair;
 		final BlockItemPair rockSlabPair;
 		final BlockItemPair rockWallPair;
 		final BlockItemPair brickPair;
+		final BlockItemPair brickFurnacePair;
 		final BlockItemPair brickStairPair;
 		final BlockItemPair brickSlabPair;
 		final BlockItemPair brickWallPair;
 		final BlockItemPair smoothPair;
+		final BlockItemPair smoothFurnacePair;
 		final BlockItemPair smoothStairPair;
 		final BlockItemPair smoothSlabPair;
 		final BlockItemPair smoothWallPair;
 		final BlockItemPair smoothBrickPair;
+		final BlockItemPair smoothBrickFurnacePair;
 		final BlockItemPair smoothBrickStairPair;
 		final BlockItemPair smoothBrickSlabPair;
 		final BlockItemPair smoothBrickWallPair;
@@ -191,6 +199,18 @@ public class Blocks {
 
 		if(MineralogyConfig.generateReliefs()) {
 			generateReliefs(name, materialType.hardness, materialType.blastResistance, materialType.toolHardnessLevel, rockPair);
+		}
+		
+		if (MineralogyConfig.generateRockFurnace()) {
+			rockFurnacePair = RegistrationHelper.registerBlock(new RockFurnace((float) materialType.hardness,
+					(float) materialType.blastResistance, materialType.toolHardnessLevel, false), name + "_" + Constants.FURNACE,
+					Constants.FURNACE + materialType.materialName);
+			RegistrationHelper.registerBlock(new RockFurnace((float) materialType.hardness,
+					(float) materialType.blastResistance, materialType.toolHardnessLevel, true).setLightLevel(0.875F), "lit_" + name + "_" + Constants.FURNACE,
+					Constants.FURNACE + materialType.materialName);
+			
+			RecipeHelper.addShapedOreRecipe(name + "_" + Constants.FURNACE, new ItemStack(rockFurnacePair.PairedItem, 1), "xxx", "x x", "xxx",
+					'x', rockPair.PairedItem);
 		}
 		
 		// no point in ore dicting these recipes I think

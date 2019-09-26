@@ -21,6 +21,7 @@ public class MineralogyConfig {
 	
 	private static boolean generateReliefs = true;
 	private static boolean generateRockStairs = true;
+	private static boolean generateRockFurnace = true;
 	private static boolean generateRockSlab = true;
 	private static boolean generateRockWall = true;
 	private static boolean generateBrick = true;
@@ -83,6 +84,8 @@ public class MineralogyConfig {
 				"If true, then rock reliefs will be generated");
 		generateRockStairs = config.getBoolean("GENERATE_ROCKSTAIRS", OPTIONS, generateRockStairs,
 				"If true, then rock stairs will be generated");
+		generateRockFurnace = config.getBoolean("GENERATE_ROCKFURNACE", OPTIONS, generateRockFurnace,
+				"If true, then rock furnaces will be generated");
 		generateRockSlab = config.getBoolean("GENERATE_ROCKSLAB", OPTIONS, generateRockSlab,
 				"If true, then rock slabs will be generated");
 		generateRockWall = config.getBoolean("GENERATE_ROCKWALL", OPTIONS, generateRockWall,
@@ -171,10 +174,14 @@ public class MineralogyConfig {
 		return patchUpdate;
 	}
 
+	public static boolean generateRockFurnace() {
+		return generateRockFurnace;
+	}
+
 	public static boolean generateRockStairs() {
 		return generateRockStairs;
 	}
-
+	
 	public static boolean generateReliefs() {
 		return generateRockStairs;
 	}

@@ -46,6 +46,7 @@ public class Constants {
 	public static final String NITRATE = "Nitrate";
 	public static final String SULFUR = "Sulfur";
 	public static final String STAIRS = "stairs";
+	public static final String FURNACE = "furnace";
 	public static final String RELIEF = "relief";
 	public static final String SLAB = "slab";
 	public static final String ORE = "ore";

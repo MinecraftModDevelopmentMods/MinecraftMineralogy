@@ -1,0 +1,6 @@
+{
+  "parent": "block/wall_inventory",
+  "textures": {
+    "wall": "mineralogy:blocks/rock_salt_smooth_brick_top"
+  }
+}

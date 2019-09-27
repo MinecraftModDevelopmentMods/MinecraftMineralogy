@@ -1,5 +1,7 @@
 {
-    "variants": {
-        "normal": { "model": "mineralogy:shale_smooth" }
+  "variants": {
+    "normal": {
+      "model": "mineralogy:shale_smooth"
     }
+  }
 }

@@ -44,16 +44,16 @@ public class Mineralogy {
 	public static final String MODID = "mineralogy";
 
 	/** Display name of this Mod */
-	public static final String NAME = "Mineralogy";
+	static final String NAME = "Mineralogy";
 
 	/**
 	 * Version number, in Major.Minor.Patch format. The minor number is
 	 * increased whenever a change is made that has the potential to break
 	 * compatibility with other mods that depend on this one.
 	 */
-	public static final String VERSION = "3.4.0";
+	static final String VERSION = "3.4.0";
 
-	public static final Logger logger = LogManager.getFormatterLogger(Mineralogy.MODID);
+	private static final Logger logger = LogManager.getFormatterLogger(Mineralogy.MODID);
 
 	@Mod.EventHandler
 	public void onFingerprintViolation(FMLFingerprintViolationEvent event) {
@@ -105,37 +105,37 @@ public class Mineralogy {
 
 		// process black-lists and white-lists
 		for (String id : MineralogyConfig.igneousWhitelist()) {
-			Block b = getBlock(id);
+			Block b = Block.getBlockFromName(id);
 			if (b == null)
 				continue;
 			MineralogyRegistry.igneousStones.add(b);
 		}
 		for (String id : MineralogyConfig.metamorphicWhitelist()) {
-			Block b = getBlock(id);
+			Block b = Block.getBlockFromName(id);
 			if (b == null)
 				continue;
 			MineralogyRegistry.metamorphicStones.add(b);
 		}
 		for (String id : MineralogyConfig.sedimentaryWhitelist()) {
-			Block b = getBlock(id);
+			Block b = Block.getBlockFromName(id);
 			if (b == null)
 				continue;
 			MineralogyRegistry.sedimentaryStones.add(b);
 		}
 		for (String id : MineralogyConfig.igneousBlacklist()) {
-			Block b = getBlock(id);
+			Block b = Block.getBlockFromName(id);
 			if (b == null)
 				continue;
 			MineralogyRegistry.igneousStones.remove(b);
 		}
 		for (String id : MineralogyConfig.metamorphicBlacklist()) {
-			Block b = getBlock(id);
+			Block b = Block.getBlockFromName(id);
 			if (b == null)
 				continue;
 			MineralogyRegistry.metamorphicStones.remove(b);
 		}
 		for (String id : MineralogyConfig.sedimentaryBlacklist()) {
-			Block b = getBlock(id);
+			Block b = Block.getBlockFromName(id);
 			if (b == null)
 				continue;
 			MineralogyRegistry.sedimentaryStones.remove(b);
@@ -156,8 +156,4 @@ public class Mineralogy {
 			e.printStackTrace();
 		}
 	}
-
-	private static Block getBlock(String id) {
-		return Block.getBlockFromName(id);
-	}	
 }

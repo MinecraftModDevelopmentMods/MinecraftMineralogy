@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "mineralogy:dolomite_relief_hoe",
+      "x": 180
+    },
+    "facing=up": {
+      "model": "mineralogy:dolomite_relief_hoe"
+    },
+    "facing=north": {
+      "model": "mineralogy:dolomite_relief_hoe",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "mineralogy:dolomite_relief_hoe",
+      "x": 90,
+      "y": 180
+    },
+    "facing=west": {
+      "model": "mineralogy:dolomite_relief_hoe",
+      "x": 90,
+      "y": 270
+    },
+    "facing=east": {
+      "model": "mineralogy:dolomite_relief_hoe",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

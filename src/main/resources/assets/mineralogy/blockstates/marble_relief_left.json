@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "mineralogy:marble_relief_left",
+      "x": 180
+    },
+    "facing=up": {
+      "model": "mineralogy:marble_relief_left"
+    },
+    "facing=north": {
+      "model": "mineralogy:marble_relief_left",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "mineralogy:marble_relief_left",
+      "x": 90,
+      "y": 180
+    },
+    "facing=west": {
+      "model": "mineralogy:marble_relief_left",
+      "x": 90,
+      "y": 270
+    },
+    "facing=east": {
+      "model": "mineralogy:marble_relief_left",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

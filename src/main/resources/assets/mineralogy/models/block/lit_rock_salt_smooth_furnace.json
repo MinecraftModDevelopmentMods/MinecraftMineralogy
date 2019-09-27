@@ -1,0 +1,8 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "top": "mineralogy:blocks/rock_salt_smooth_furnace_top",
+    "front": "mineralogy:blocks/rock_salt_smooth_furnace_front_on",
+    "side": "mineralogy:blocks/rock_salt_smooth_furnace_side"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "mineralogy:rock_salt_relief",
+      "x": 180
+    },
+    "facing=up": {
+      "model": "mineralogy:rock_salt_relief"
+    },
+    "facing=north": {
+      "model": "mineralogy:rock_salt_relief",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "mineralogy:rock_salt_relief",
+      "x": 90,
+      "y": 180
+    },
+    "facing=west": {
+      "model": "mineralogy:rock_salt_relief",
+      "x": 90,
+      "y": 270
+    },
+    "facing=east": {
+      "model": "mineralogy:rock_salt_relief",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

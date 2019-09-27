@@ -9,6 +9,7 @@ public class Material {
 	public double blastResistance;
 	public int toolHardnessLevel;
 	public boolean cobbleEquivilent;
+	public boolean standardRockType;
 	
 	/**
 	 * @param materialName
@@ -31,14 +32,21 @@ public class Material {
 	public Material(String materialName, RockType rockType, 
 			double hardness, double blastResistance, int toolHardnessLevel,
 			boolean cobbleEquivilent) {
+		this(materialName, rockType, hardness, blastResistance, toolHardnessLevel,cobbleEquivilent, true);
+	}
+
+	public Material(String materialName, RockType rockType, 
+			double hardness, double blastResistance, int toolHardnessLevel,
+			boolean cobbleEquivilent, boolean standardRockType) {
 		this.materialName = materialName;
 		this.rockType = rockType;
 		this.hardness = hardness;
 		this.blastResistance = blastResistance;
 		this.toolHardnessLevel = toolHardnessLevel;
 		this.cobbleEquivilent = cobbleEquivilent;
+		this.standardRockType = standardRockType;
 	}
-
+	
 	@Override
 	public String toString() {
 		return materialName;

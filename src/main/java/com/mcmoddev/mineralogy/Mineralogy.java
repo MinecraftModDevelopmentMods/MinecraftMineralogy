@@ -105,37 +105,37 @@ public class Mineralogy {
 
 		// process black-lists and white-lists
 		for (String id : MineralogyConfig.igneousWhitelist()) {
-			Block b = getBlock(id);
+			Block b = Block.getBlockFromName(id);
 			if (b == null)
 				continue;
 			MineralogyRegistry.igneousStones.add(b);
 		}
 		for (String id : MineralogyConfig.metamorphicWhitelist()) {
-			Block b = getBlock(id);
+			Block b = Block.getBlockFromName(id);
 			if (b == null)
 				continue;
 			MineralogyRegistry.metamorphicStones.add(b);
 		}
 		for (String id : MineralogyConfig.sedimentaryWhitelist()) {
-			Block b = getBlock(id);
+			Block b = Block.getBlockFromName(id);
 			if (b == null)
 				continue;
 			MineralogyRegistry.sedimentaryStones.add(b);
 		}
 		for (String id : MineralogyConfig.igneousBlacklist()) {
-			Block b = getBlock(id);
+			Block b = Block.getBlockFromName(id);
 			if (b == null)
 				continue;
 			MineralogyRegistry.igneousStones.remove(b);
 		}
 		for (String id : MineralogyConfig.metamorphicBlacklist()) {
-			Block b = getBlock(id);
+			Block b = Block.getBlockFromName(id);
 			if (b == null)
 				continue;
 			MineralogyRegistry.metamorphicStones.remove(b);
 		}
 		for (String id : MineralogyConfig.sedimentaryBlacklist()) {
-			Block b = getBlock(id);
+			Block b = Block.getBlockFromName(id);
 			if (b == null)
 				continue;
 			MineralogyRegistry.sedimentaryStones.remove(b);
@@ -156,8 +156,4 @@ public class Mineralogy {
 			e.printStackTrace();
 		}
 	}
-
-	private static Block getBlock(String id) {
-		return Block.getBlockFromName(id);
-	}	
 }

@@ -20,7 +20,7 @@ import net.minecraft.world.World;
 
 public class RockSlab extends net.minecraft.block.Block {
 
-	public static final PropertyDirection FACING = PropertyDirection.create("facing");
+	static final PropertyDirection FACING = PropertyDirection.create("facing");
 
 	private static final float THICKNESS = 0.5f;
 

@@ -12,10 +12,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
 public class Chalk extends Rock {
-	private final String itemName = "chalk";
 	public Chalk() {
 		super(false,(float)0.75, (float)1, 0, SoundType.STONE);
-		this.setTranslationKey(Mineralogy.MODID + "_" + itemName);
+		this.setTranslationKey(Mineralogy.MODID + "_chalk");
 	}
 
 	@Override

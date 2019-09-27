@@ -44,16 +44,16 @@ public class Mineralogy {
 	public static final String MODID = "mineralogy";
 
 	/** Display name of this Mod */
-	public static final String NAME = "Mineralogy";
+	static final String NAME = "Mineralogy";
 
 	/**
 	 * Version number, in Major.Minor.Patch format. The minor number is
 	 * increased whenever a change is made that has the potential to break
 	 * compatibility with other mods that depend on this one.
 	 */
-	public static final String VERSION = "3.4.0";
+	static final String VERSION = "3.4.0";
 
-	public static final Logger logger = LogManager.getFormatterLogger(Mineralogy.MODID);
+	private static final Logger logger = LogManager.getFormatterLogger(Mineralogy.MODID);
 
 	@Mod.EventHandler
 	public void onFingerprintViolation(FMLFingerprintViolationEvent event) {

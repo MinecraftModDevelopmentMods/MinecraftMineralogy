@@ -14,14 +14,12 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class RockRelief extends RockSlab {
-private static float thickness = 0.07f;
-
-	
 	private static final AxisAlignedBB[] BOXES = new AxisAlignedBB[EnumFacing.values().length];
 	static {
 		for(int i = 0; i < EnumFacing.values().length; i++) {
 			EnumFacing orientation = EnumFacing.values()[i];
 			float x1 = 0, x2 = 1, y1 = 0,y2 = 1, z1 = 0, z2 = 1;
+			float thickness = 0.07f;
 			switch(orientation) {
 				case DOWN:
 					y1 = 1f - thickness;
@@ -54,7 +52,7 @@ private static float thickness = 0.07f;
 	
 	@Override
 	public AxisAlignedBB getBoundingBox(final IBlockState bs, final IBlockAccess world, final BlockPos coord) {
-		final EnumFacing orientation = (EnumFacing) bs.getValue(FACING);
+		final EnumFacing orientation = bs.getValue(FACING);
 		return BOXES[orientation.ordinal()];
 	}
 

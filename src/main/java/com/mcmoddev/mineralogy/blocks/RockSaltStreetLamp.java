@@ -60,12 +60,6 @@ public class RockSaltStreetLamp extends Block
     	return STANDING_AABB;
     }
 
-//    @Nullable
-//    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos)
-//    {
-//        return NULL_AABB;
-//    }
-
     /**
      * Used to determine ambient occlusion and culling when rebuilding chunks for render
      */
@@ -153,24 +147,18 @@ public class RockSaltStreetLamp extends Block
     protected boolean onNeighborChangeInternal(World worldIn, BlockPos pos, IBlockState state)
     {
         if (!this.checkForDrop(worldIn, pos, state))
-        {
             return true;
-        }
         else
         {
-            EnumFacing enumfacing = (EnumFacing)state.getValue(FACING);
+            EnumFacing enumfacing = state.getValue(FACING);
             EnumFacing.Axis enumfacing$axis = enumfacing.getAxis();
             EnumFacing enumfacing1 = enumfacing.getOpposite();
             boolean flag = false;
 
             if (enumfacing$axis.isHorizontal() && !worldIn.isSideSolid(pos.offset(enumfacing1), enumfacing, true))
-            {
                 flag = true;
-            }
             else if (enumfacing$axis.isVertical() && !this.canPlaceOn(worldIn, pos.offset(enumfacing1)))
-            {
                 flag = true;
-            }
 
             if (flag)
             {
@@ -179,18 +167,14 @@ public class RockSaltStreetLamp extends Block
                 return true;
             }
             else
-            {
                 return false;
-            }
         }
     }
 
     protected boolean checkForDrop(World worldIn, BlockPos pos, IBlockState state)
     {
         if (state.getBlock() == this && this.canPlaceAt(worldIn, pos, (EnumFacing)state.getValue(FACING)))
-        {
             return true;
-        }
         else
         {
             if (worldIn.getBlockState(pos).getBlock() == this)
@@ -206,7 +190,7 @@ public class RockSaltStreetLamp extends Block
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand)
     {
-        EnumFacing enumfacing = (EnumFacing)stateIn.getValue(FACING);
+        EnumFacing enumfacing = stateIn.getValue(FACING);
         double d0 = (double)pos.getX() + 0.5D;
         double d1 = (double)pos.getY() + 1.7D;
         double d2 = (double)pos.getZ() + 0.5D;

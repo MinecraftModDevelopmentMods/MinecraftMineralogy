@@ -25,14 +25,11 @@ import com.mcmoddev.mineralogy.util.BlockItemPair;
 import com.mcmoddev.mineralogy.util.RecipeHelper;
 import com.mcmoddev.mineralogy.util.RegistrationHelper;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 public class Blocks {
 	private static boolean initDone = false;
@@ -57,8 +54,6 @@ public class Blocks {
 		BlockItemPair blockRocksalt;
 		BlockItemPair blockPumice;
 		BlockItemPair[] drywalls = new BlockItemPair[16];
-		BlockItemPair blockRockSaltLamp;
-		BlockItemPair blockRockSaltStreetLamp;
 	    
 		GameRegistry.registerTileEntity(TileEntityRockFurnace.class, "rockfurnace");
 		
@@ -91,8 +86,8 @@ public class Blocks {
 		
 		IoC.register(BlockItemPair.class, blockPumice, Constants.BLOCK_PUMICE, Mineralogy.MODID);
 		
-		blockRockSaltLamp = RegistrationHelper.registerBlock(new RockSaltLamp(), "rocksaltlamp", Mineralogy.MODID);
-		blockRockSaltStreetLamp = RegistrationHelper.registerBlock(new RockSaltStreetLamp(), "rocksaltstreetlamp", Mineralogy.MODID, 16);
+		RegistrationHelper.registerBlock(new RockSaltLamp(), "rocksaltlamp", Mineralogy.MODID);
+		RegistrationHelper.registerBlock(new RockSaltStreetLamp(), "rocksaltstreetlamp", Mineralogy.MODID, 16);
 		
 		IDynamicTabProvider tabProvider = IoC.resolve(IDynamicTabProvider.class);
 		
@@ -252,6 +247,18 @@ public class Blocks {
 			RecipeHelper.addShapedOreRecipe(name + "_" + Constants.BRICK, new ItemStack(brickPair.PairedItem, 4), "xx", "xx", 'x',
 					rockPair.PairedItem);
 
+			if (MineralogyConfig.generateBrickFurnace()) {
+				brickFurnacePair = RegistrationHelper.registerBlock(new RockFurnace((float) materialType.hardness,
+								(float) materialType.blastResistance, materialType.toolHardnessLevel, false), name + "_" + Constants.BRICK + "_" + Constants.FURNACE,
+						Constants.FURNACE + materialType.materialName, true, 1);
+				RegistrationHelper.registerBlock(new RockFurnace((float) materialType.hardness,
+								(float) materialType.blastResistance, materialType.toolHardnessLevel, true).setLightLevel(0.875F), "lit_" + name + "_" + Constants.BRICK + "_" + Constants.FURNACE,
+						Constants.FURNACE + materialType.materialName, false, 1);
+
+				RecipeHelper.addShapedOreRecipe(name + "_" + Constants.BRICK + "_" + Constants.FURNACE, new ItemStack(brickFurnacePair.PairedItem, 1), "xxx", "x x", "xxx",
+						'x', brickPair.PairedItem);
+			}
+
 			if (MineralogyConfig.generateBrickStairs()) {
 				brickStairPair = RegistrationHelper.registerBlock(
 						new RockStairs(rockPair.PairedBlock, (float) materialType.hardness, (float) materialType.blastResistance,
@@ -286,6 +293,18 @@ public class Blocks {
 					Ingredient.fromStacks(new ItemStack(rockPair.PairedItem, 1)),
 					Ingredient.fromStacks(new ItemStack(net.minecraft.init.Blocks.SAND, 1)));
 
+			if (MineralogyConfig.generateSmoothFurnace()) {
+				smoothFurnacePair = RegistrationHelper.registerBlock(new RockFurnace((float) materialType.hardness,
+								(float) materialType.blastResistance, materialType.toolHardnessLevel, false), name + "_" + Constants.SMOOTH + "_" + Constants.FURNACE,
+						Constants.FURNACE + materialType.materialName, true, 1);
+				RegistrationHelper.registerBlock(new RockFurnace((float) materialType.hardness,
+								(float) materialType.blastResistance, materialType.toolHardnessLevel, true).setLightLevel(0.875F), "lit_" + name + "_" + Constants.SMOOTH + "_" + Constants.FURNACE,
+						Constants.FURNACE + materialType.materialName, false, 1);
+
+				RecipeHelper.addShapedOreRecipe(name + "_" + Constants.SMOOTH + "_" + Constants.FURNACE, new ItemStack(smoothFurnacePair.PairedItem, 1), "xxx", "x x", "xxx",
+						'x', smoothPair.PairedItem);
+			}
+			
 			if (MineralogyConfig.generateSmoothStairs()) {
 				smoothStairPair = RegistrationHelper.registerBlock(
 						new RockStairs(rockPair.PairedBlock, (float) materialType.hardness, (float) materialType.blastResistance,
@@ -318,6 +337,18 @@ public class Blocks {
 				RecipeHelper.addShapedOreRecipe(name + "_" + Constants.SMOOTH + "_" + Constants.BRICK, new ItemStack(smoothBrickPair.PairedItem, 4),
 						"xx", "xx", 'x', smoothPair.PairedItem);
 
+				if (MineralogyConfig.generateSmoothBrickFurnace()) {
+					smoothBrickFurnacePair = RegistrationHelper.registerBlock(new RockFurnace((float) materialType.hardness,
+									(float) materialType.blastResistance, materialType.toolHardnessLevel, false), name + "_" + Constants.SMOOTH + "_" + Constants.BRICK + "_" + Constants.FURNACE,
+							Constants.FURNACE + materialType.materialName, true, 1);
+					RegistrationHelper.registerBlock(new RockFurnace((float) materialType.hardness,
+									(float) materialType.blastResistance, materialType.toolHardnessLevel, true).setLightLevel(0.875F), "lit_" + name + "_" + Constants.SMOOTH + "_" + Constants.BRICK + "_" + Constants.FURNACE,
+							Constants.FURNACE + materialType.materialName, false, 1);
+
+					RecipeHelper.addShapedOreRecipe(name + "_" + Constants.SMOOTH + "_" + Constants.BRICK + "_" + Constants.FURNACE, new ItemStack(smoothBrickFurnacePair.PairedItem, 1), "xxx", "x x", "xxx",
+							'x', smoothBrickPair.PairedItem);
+				}
+				
 				if (MineralogyConfig.generateSmoothBrickStairs()) {
 					smoothBrickStairPair = RegistrationHelper.registerBlock(
 							new RockStairs(rockPair.PairedBlock, (float) materialType.hardness, (float) materialType.blastResistance,

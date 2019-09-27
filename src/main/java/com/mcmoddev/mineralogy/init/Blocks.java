@@ -11,6 +11,8 @@ import com.mcmoddev.mineralogy.blocks.Rock;
 import com.mcmoddev.mineralogy.blocks.RockFurnace;
 import com.mcmoddev.mineralogy.blocks.RockRelief;
 import com.mcmoddev.mineralogy.blocks.RockSalt;
+import com.mcmoddev.mineralogy.blocks.RockSaltLamp;
+import com.mcmoddev.mineralogy.blocks.RockSaltStreetLamp;
 import com.mcmoddev.mineralogy.blocks.RockSlab;
 import com.mcmoddev.mineralogy.blocks.RockStairs;
 import com.mcmoddev.mineralogy.blocks.RockWall;
@@ -55,7 +57,9 @@ public class Blocks {
 		BlockItemPair blockRocksalt;
 		BlockItemPair blockPumice;
 		BlockItemPair[] drywalls = new BlockItemPair[16];
-		
+		BlockItemPair blockRockSaltLamp;
+		BlockItemPair blockRockSaltStreetLamp;
+	    
 		GameRegistry.registerTileEntity(TileEntityRockFurnace.class, "rockfurnace");
 		
 		MaterialData.toArray().forEach(material -> addStoneType(material));		
@@ -86,6 +90,9 @@ public class Blocks {
 		MineralogyRegistry.BlocksToRegister.put(Constants.COBBLESTONE, blockPumice.PairedBlock);
 		
 		IoC.register(BlockItemPair.class, blockPumice, Constants.BLOCK_PUMICE, Mineralogy.MODID);
+		
+		blockRockSaltLamp = RegistrationHelper.registerBlock(new RockSaltLamp(), "rocksaltlamp", Mineralogy.MODID);
+		blockRockSaltStreetLamp = RegistrationHelper.registerBlock(new RockSaltStreetLamp(), "rocksaltstreetlamp", Mineralogy.MODID, 16);
 		
 		IDynamicTabProvider tabProvider = IoC.resolve(IDynamicTabProvider.class);
 		
@@ -204,10 +211,10 @@ public class Blocks {
 		if (MineralogyConfig.generateRockFurnace()) {
 			rockFurnacePair = RegistrationHelper.registerBlock(new RockFurnace((float) materialType.hardness,
 					(float) materialType.blastResistance, materialType.toolHardnessLevel, false), name + "_" + Constants.FURNACE,
-					Constants.FURNACE + materialType.materialName);
+					Constants.FURNACE + materialType.materialName, true, 1);
 			RegistrationHelper.registerBlock(new RockFurnace((float) materialType.hardness,
 					(float) materialType.blastResistance, materialType.toolHardnessLevel, true).setLightLevel(0.875F), "lit_" + name + "_" + Constants.FURNACE,
-					Constants.FURNACE + materialType.materialName, false);
+					Constants.FURNACE + materialType.materialName, false, 1);
 			
 			RecipeHelper.addShapedOreRecipe(name + "_" + Constants.FURNACE, new ItemStack(rockFurnacePair.PairedItem, 1), "xxx", "x x", "xxx",
 					'x', rockPair.PairedItem);

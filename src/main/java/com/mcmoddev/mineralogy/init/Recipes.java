@@ -33,6 +33,9 @@ public class Recipes {
 		Item dustChalk = IoC.resolve(Item.class, Constants.DUST_CHALK, Mineralogy.MODID);
 		Item dustRocksalt = IoC.resolve(Item.class, Constants.DUST_ROCKSALT, Mineralogy.MODID);
 		
+		Item blockRockSaltLamp = IoC.resolve(BlockItemPair.class, "rocksaltlamp", Mineralogy.MODID).PairedItem;
+		Item blockRockSaltStreetLamp = IoC.resolve(BlockItemPair.class, "rocksaltstreetlamp", Mineralogy.MODID).PairedItem;
+		
 		RecipeHelper.addShapelessOreRecipe(Constants.GUNPOWDER + "_FROM_SUGAR", new ItemStack(Items.GUNPOWDER, 4),
 				Ingredient.fromStacks(new ItemStack(Items.SUGAR)), Constants.DUST_NITRATE, Constants.DUST_SULFUR );
 		
@@ -62,8 +65,12 @@ public class Recipes {
 		RecipeHelper.addShapelessOreRecipe(Constants.GUNPOWDER + "_FROM_CARBON", new
 					ItemStack(Items.GUNPOWDER, 4), Constants.DUST_CARBON, Constants.DUST_NITRATE, Constants.DUST_SULFUR);
 		
+		RecipeHelper.addShapelessOreRecipe("rocksaltlamp", new
+				ItemStack(blockRockSaltLamp, 1), Ingredient.fromStacks(new ItemStack(blockRocksalt)) , 
+				Ingredient.fromStacks(new ItemStack(Blocks.TORCH)), Ingredient.fromStacks(new ItemStack(Items.IRON_INGOT)));
 		
-		
+		RecipeHelper.addShapedOreRecipe("rocksaltstreetlamp", new ItemStack(blockRockSaltStreetLamp, 1), "x", "y", "y", 'x', blockRockSaltLamp, 'y', Items.IRON_INGOT);
+	
 		initDone = true;
 	}
 }

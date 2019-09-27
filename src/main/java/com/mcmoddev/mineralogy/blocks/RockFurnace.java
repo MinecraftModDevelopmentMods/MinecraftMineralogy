@@ -7,6 +7,7 @@ import com.mcmoddev.mineralogy.ioc.MinIoC;
 import com.mcmoddev.mineralogy.tileentity.TileEntityRockFurnace;
 import com.mcmoddev.mineralogy.util.BlockItemPair;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
@@ -29,6 +30,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.Mirror;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
@@ -56,7 +58,14 @@ public class RockFurnace extends BlockContainer
      */
     public Item getItemDropped(IBlockState state, Random rand, int fortune)
     {
-        return Item.getItemFromBlock(Blocks.FURNACE);
+    	Block drop = state.getBlock();
+		ResourceLocation resource = drop.getRegistryName();
+		String path = resource.getPath();
+		
+		if (path.startsWith("lit_"))
+			drop = Block.getBlockFromName(resource.getNamespace() + ":" + path.substring(4, path.length()));
+		
+        return Item.getItemFromBlock(drop);
     }
 
     /**
@@ -113,7 +122,6 @@ public class RockFurnace extends BlockContainer
             double d0 = (double)pos.getX() + 0.5D;
             double d1 = (double)pos.getY() + rand.nextDouble() * 6.0D / 16.0D;
             double d2 = (double)pos.getZ() + 0.5D;
-            double d3 = 0.52D;
             double d4 = rand.nextDouble() * 0.6D - 0.3D;
 
             if (rand.nextDouble() < 0.1D)
@@ -167,43 +175,6 @@ public class RockFurnace extends BlockContainer
 
     public static void setState(boolean active, World worldIn, BlockPos pos)
     {
-//    	IBlockState iblockstate = worldIn.getBlockState(pos);
-//        TileEntityRockFurnace tileentity = (TileEntityRockFurnace)worldIn.getTileEntity(pos);
-//        
-//        ItemStack input = tileentity.getStackInSlot(0);
-//        ItemStack fuel = tileentity.getStackInSlot(1);
-//        ItemStack output = tileentity.getStackInSlot(2);
-//        
-//        String name = iblockstate.getBlock().getRegistryName().getNamespace();
-//        
-//        if (active && !name.startsWith("lit_"))
-//        	name = "lit_" + name;
-//        
-//        if (!active && name.startsWith("lit_"))
-//        	name = name.substring(4, name.length());
-//        
-//        MinIoC IoC =  MinIoC.getInstance();
-//        
-//        RockFurnace thisFurnace = (RockFurnace)IoC.resolve(BlockItemPair.class, name, Mineralogy.MODID).PairedBlock;   
-//      
-//        tileentity.clear();
-//        
-//        worldIn.setBlockState(pos, thisFurnace.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
-//        worldIn.setBlockState(pos, thisFurnace.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
-//
-//        if (tileentity != null)
-//        {
-//            tileentity.validate();
-//            
-//            tileentity.setInventorySlotContents(0, input);
-//            tileentity.setInventorySlotContents(1, fuel);
-//            tileentity.setInventorySlotContents(2, output);
-//            
-//            worldIn.setTileEntity(pos, tileentity);
-//        }
-//    	
-//    	
-//    	
         IBlockState iblockstate = worldIn.getBlockState(pos);
         TileEntity tileentity = worldIn.getTileEntity(pos);
         

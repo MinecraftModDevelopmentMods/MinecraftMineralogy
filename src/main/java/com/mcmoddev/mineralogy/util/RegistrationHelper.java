@@ -1,6 +1,5 @@
 package com.mcmoddev.mineralogy.util;
 
-import com.mcmoddev.mineralogy.Constants;
 import com.mcmoddev.mineralogy.Mineralogy;
 import com.mcmoddev.mineralogy.init.MineralogyRegistry;
 import com.mcmoddev.mineralogy.ioc.MinIoC;
@@ -14,6 +13,10 @@ import net.minecraft.item.ItemBlock;
 
 public class RegistrationHelper {
 	public static BlockItemPair registerBlock(Block block, String name, String oreDictionaryName) {
+		return registerBlock(block, name, oreDictionaryName, true);
+	}
+	
+	public static BlockItemPair registerBlock(Block block, String name, String oreDictionaryName, boolean addToTab) {
 		block.setTranslationKey(Mineralogy.MODID + "." + name);
 		block.setRegistryName(name);
 
@@ -26,7 +29,8 @@ public class RegistrationHelper {
 		IoC.register(BlockItemPair.class, pair, name, Mineralogy.MODID);
 		
 		try {
-			MinIoC.getInstance().resolve(IDynamicTabProvider.class).addToTab(block);
+			if (addToTab)
+				MinIoC.getInstance().resolve(IDynamicTabProvider.class).addToTab(block);
 		} catch (TabNotFoundException | ItemNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -207,7 +207,7 @@ public class Blocks {
 					Constants.FURNACE + materialType.materialName);
 			RegistrationHelper.registerBlock(new RockFurnace((float) materialType.hardness,
 					(float) materialType.blastResistance, materialType.toolHardnessLevel, true).setLightLevel(0.875F), "lit_" + name + "_" + Constants.FURNACE,
-					Constants.FURNACE + materialType.materialName);
+					Constants.FURNACE + materialType.materialName, false);
 			
 			RecipeHelper.addShapedOreRecipe(name + "_" + Constants.FURNACE, new ItemStack(rockFurnacePair.PairedItem, 1), "xxx", "x x", "xxx",
 					'x', rockPair.PairedItem);

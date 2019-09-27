@@ -9,9 +9,8 @@
   "updateUrl": "",
   "authorList": ["Cyanobacterium",
 				"SkyBlade1978",
-				"JRIwanek",
-				"FoxNekitsune"],
-  "credits": "The Forge and FML guys, for making the Forge modding API geologists everywhere, and mod authors",
+				"JRIwanek"],
+  "credits": "FoxNekitsune for her models and artwork, Proxy for his help, the MMD Team, The Forge and FML guys, for making the Forge modding API geologists everywhere, and the mod authors",
   "logoFile": "",
   "screenshots": [],
   "dependencies": []

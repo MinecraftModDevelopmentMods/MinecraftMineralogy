@@ -25,9 +25,7 @@ import com.mcmoddev.mineralogy.util.BlockItemPair;
 import com.mcmoddev.mineralogy.util.RecipeHelper;
 import com.mcmoddev.mineralogy.util.RegistrationHelper;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
-import net.minecraft.client.Minecraft;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -88,8 +86,8 @@ public class Blocks {
 		
 		IoC.register(BlockItemPair.class, blockPumice, Constants.BLOCK_PUMICE, Mineralogy.MODID);
 		
-		RegistrationHelper.registerBlock(new RockSaltLamp(), "rocksaltlamp", Mineralogy.MODID);
-		RegistrationHelper.registerBlock(new RockSaltStreetLamp(), "rocksaltstreetlamp", Mineralogy.MODID, 16);
+		RegistrationHelper.registerBlock(new RockSaltLamp(), "rocksaltlamp", "lampRocksalt");
+		RegistrationHelper.registerBlock(new RockSaltStreetLamp(), "rocksaltstreetlamp", "lampRocksaltStreet", 16);
 		
 		IDynamicTabProvider tabProvider = IoC.resolve(IDynamicTabProvider.class);
 		

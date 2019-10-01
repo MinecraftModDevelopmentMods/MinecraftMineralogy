@@ -3,7 +3,6 @@ package com.mcmoddev.mineralogy.tileentity;
 import com.mcmoddev.mineralogy.blocks.RockFurnace;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockFurnace;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;

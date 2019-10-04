@@ -2,7 +2,7 @@
   "credit": "Made with Blockbench",
   "textures": {
     "0": "mineralogy:blocks/diabase_smooth",
-    "particle": "mineralogy:blocks/diabase"
+    "particle": "mineralogy:blocks/diabase_smooth"
   },
   "elements": [
     {

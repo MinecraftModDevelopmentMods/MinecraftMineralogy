@@ -2,7 +2,7 @@
   "credit": "Made with Blockbench",
   "textures": {
     "0": "mineralogy:blocks/basaltic_glass_smooth",
-    "particle": "mineralogy:blocks/basaltic_glass"
+    "particle": "mineralogy:blocks/basaltic_glass_smooth"
   },
   "elements": [
     {

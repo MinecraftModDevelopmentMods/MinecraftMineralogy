@@ -111,7 +111,7 @@ public class Blocks {
 	private static void generateReliefs(String materialName, double hardness, double blastResistance,
 			int toolHardnessLevel, final BlockItemPair rock) {
 		
-		String oreDictName = "stone" + materialName.substring(0, 1).toUpperCase() + materialName.substring(1);
+		String oreDictName = "stone" + materialName.substring(0, 1).toUpperCase() + materialName.substring(1) + "Smooth";
 		
 		final BlockItemPair  blankRelief = RegistrationHelper.registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_blank", Constants.RELIEF + "Blank" + materialName);		
 		RecipeHelper.addShapedOreRecipe(materialName + "_relief_blank", new ItemStack(blankRelief.PairedItem, 16), "xxx", "xxx", "xxx", 'x', oreDictName);
@@ -203,10 +203,6 @@ public class Blocks {
 
 		GameRegistry.addSmelting(rockPair.PairedBlock, new ItemStack(net.minecraft.init.Blocks.STONE), 0.1F);
 
-		if(MineralogyConfig.generateReliefs()) {
-			generateReliefs(name, materialType.hardness, materialType.blastResistance, materialType.toolHardnessLevel, rockPair);
-		}
-		
 		// no point in ore dicting these recipes I think
 		if (MineralogyConfig.generateRockStairs()) {
 			rockStairPair = RegistrationHelper.registerBlock(new RockStairs(rockPair.PairedBlock, (float) materialType.hardness,
@@ -298,6 +294,10 @@ public class Blocks {
 					oreDictName,
 					Ingredient.fromStacks(new ItemStack(net.minecraft.init.Blocks.SAND, 1)));
 	
+			if(MineralogyConfig.generateReliefs()) {
+				generateReliefs(name, materialType.hardness, materialType.blastResistance, materialType.toolHardnessLevel, smoothPair);
+			}
+			
 			if (MineralogyConfig.generateSmoothStairs()) {
 				smoothStairPair = RegistrationHelper.registerBlock(
 						new RockStairs(rockPair.PairedBlock, (float) materialType.hardness, (float) materialType.blastResistance,

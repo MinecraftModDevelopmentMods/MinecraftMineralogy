@@ -2,8 +2,8 @@
   "credit": "Made with Blockbench",
   "textures": {
     "0": "mineralogy:blocks/gabbro_smooth",
-    "2": "mineralogy:blocks/gabbro",
-    "particle": "mineralogy:blocks/gabbro"
+    "2": "mineralogy:blocks/gabbro_smooth",
+    "particle": "mineralogy:blocks/gabbro_smooth"
   },
   "elements": [
     {

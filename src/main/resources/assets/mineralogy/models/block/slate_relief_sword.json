@@ -2,8 +2,8 @@
   "credit": "Made with Blockbench",
   "textures": {
     "0": "mineralogy:blocks/slate_smooth",
-    "2": "mineralogy:blocks/slate",
-    "particle": "mineralogy:blocks/slate"
+    "2": "mineralogy:blocks/slate_smooth",
+    "particle": "mineralogy:blocks/slate_smooth"
   },
   "elements": [
     {

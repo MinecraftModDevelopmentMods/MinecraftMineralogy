@@ -1,5 +1,7 @@
 package com.mcmoddev.mineralogy;
 
+
+
 // DON'T FORGET TO UPDATE mcmod.info FILE!!!
 
 import org.apache.logging.log4j.LogManager;
@@ -80,8 +82,6 @@ public class Mineralogy {
 	public void init(FMLInitializationEvent event) {
 		if (MineralogyConfig.smeltableGravel())
 			GameRegistry.addSmelting(Blocks.GRAVEL, new ItemStack(Blocks.STONE), 0.1F);
-
-		//PatchHandler.getInstance().init(MineralogyConfig.patchUpdate()); // initialize legacy updater
 
 		GameRegistry.registerWorldGenerator(new StoneReplacer(), 10); // register custom chunk generation
 

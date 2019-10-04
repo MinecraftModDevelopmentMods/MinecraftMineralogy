@@ -1,0 +1,8 @@
+{
+  "parent": "block/half_slab",
+  "textures": {
+    "bottom": "mineralogy:blocks/hornfels",
+    "top": "mineralogy:blocks/hornfels",
+    "side": "mineralogy:blocks/hornfels"
+  }
+}

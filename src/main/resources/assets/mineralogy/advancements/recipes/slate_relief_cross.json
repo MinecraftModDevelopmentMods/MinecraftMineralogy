@@ -1,14 +1,14 @@
 {
   "rewards": {
     "recipes": [
-      "mineralogy:slate_relief"
+      "mineralogy:slate_relief_cross"
     ]
   },
   "criteria": {
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:slate_relief"
+        "recipe": "mineralogy:slate_relief_cross"
       }
     },
     "has_rock": {
@@ -16,7 +16,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:slate"
+            "item": "mineralogy:slate_smooth"
           }
         ]
       }

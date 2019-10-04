@@ -1,14 +1,14 @@
 {
   "rewards": {
     "recipes": [
-      "mineralogy:phyllite_relief"
+      "mineralogy:phyllite_relief_cross"
     ]
   },
   "criteria": {
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:phyllite_relief"
+        "recipe": "mineralogy:phyllite_relief_cross"
       }
     },
     "has_rock": {
@@ -16,7 +16,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:phyllite"
+            "item": "mineralogy:phyllite_smooth"
           }
         ]
       }

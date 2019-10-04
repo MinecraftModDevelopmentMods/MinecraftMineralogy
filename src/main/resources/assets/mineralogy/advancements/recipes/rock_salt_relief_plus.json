@@ -1,14 +1,14 @@
 {
   "rewards": {
     "recipes": [
-      "mineralogy:rock_salt_relief"
+      "mineralogy:rock_salt_relief_plus"
     ]
   },
   "criteria": {
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:rock_salt_relief"
+        "recipe": "mineralogy:rock_salt_relief_plus"
       }
     },
     "has_rock": {
@@ -16,7 +16,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:rock_salt"
+            "item": "mineralogy:rock_salt_smooth"
           }
         ]
       }

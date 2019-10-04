@@ -1,14 +1,14 @@
 {
   "rewards": {
     "recipes": [
-      "mineralogy:rhyolite_relief"
+      "mineralogy:rhyolite_relief_horizontal"
     ]
   },
   "criteria": {
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:rhyolite_relief"
+        "recipe": "mineralogy:rhyolite_relief_horizontal"
       }
     },
     "has_rock": {
@@ -16,7 +16,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:rhyolite"
+            "item": "mineralogy:rhyolite_smooth"
           }
         ]
       }

@@ -1,14 +1,14 @@
 {
   "rewards": {
     "recipes": [
-      "mineralogy:hornfels_relief"
+      "mineralogy:hornfels_relief_cross"
     ]
   },
   "criteria": {
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:hornfels_relief"
+        "recipe": "mineralogy:hornfels_relief_cross"
       }
     },
     "has_rock": {
@@ -16,7 +16,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:hornfels"
+            "item": "mineralogy:hornfels_smooth"
           }
         ]
       }

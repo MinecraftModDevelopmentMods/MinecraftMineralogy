@@ -1,14 +1,14 @@
 {
   "rewards": {
     "recipes": [
-      "mineralogy:basalt_relief"
+      "mineralogy:basalt_relief_plus"
     ]
   },
   "criteria": {
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:basalt_relief"
+        "recipe": "mineralogy:basalt_relief_plus"
       }
     },
     "has_rock": {
@@ -16,7 +16,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:basalt"
+            "item": "mineralogy:basalt_smooth"
           }
         ]
       }

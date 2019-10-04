@@ -939,4 +939,8 @@ tile.mineralogy.novaculite_relief_plus.name=Novaculite Plus Relief
 tile.mineralogy.novaculite_relief_right.name=Novaculite Right Relief
 tile.mineralogy.novaculite_relief_sword.name=Novaculite Sword Relief
 tile.mineralogy.novaculite_relief_vertical.name=Novaculite Vertical Relief
+
+advancements.mineralogy.all_the_rocks.title=Call the rocks Ludo!
+advancements.mineralogy.all_the_rocks.description=Wow, you've found all the standard rock types in Mineralogy!
+
 itemGroup.mineralogy.mineralogy=Mineralogy

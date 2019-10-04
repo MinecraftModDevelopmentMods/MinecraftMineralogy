@@ -1,14 +1,14 @@
 {
   "rewards": {
     "recipes": [
-      "mineralogy:marble_relief"
+      "mineralogy:marble_relief_blank"
     ]
   },
   "criteria": {
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:marble_relief"
+        "recipe": "mineralogy:marble_relief_blank"
       }
     },
     "has_rock": {
@@ -16,7 +16,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:marble"
+            "item": "mineralogy:marble_smooth"
           }
         ]
       }

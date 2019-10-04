@@ -1,14 +1,14 @@
 {
   "rewards": {
     "recipes": [
-      "mineralogy:diorite_relief"
+      "mineralogy:diorite_relief_i"
     ]
   },
   "criteria": {
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:diorite_relief"
+        "recipe": "mineralogy:diorite_relief_i"
       }
     },
     "has_rock": {
@@ -16,7 +16,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:diorite"
+            "item": "mineralogy:diorite_smooth"
           }
         ]
       }

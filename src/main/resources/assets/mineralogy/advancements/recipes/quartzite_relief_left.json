@@ -1,14 +1,14 @@
 {
   "rewards": {
     "recipes": [
-      "mineralogy:quartzite_relief"
+      "mineralogy:quartzite_relief_left"
     ]
   },
   "criteria": {
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:quartzite_relief"
+        "recipe": "mineralogy:quartzite_relief_left"
       }
     },
     "has_rock": {
@@ -16,7 +16,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:quartzite"
+            "item": "mineralogy:quartzite_smooth"
           }
         ]
       }

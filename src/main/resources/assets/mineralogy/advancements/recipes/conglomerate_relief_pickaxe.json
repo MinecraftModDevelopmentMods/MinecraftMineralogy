@@ -1,14 +1,14 @@
 {
   "rewards": {
     "recipes": [
-      "mineralogy:conglomerate_relief"
+      "mineralogy:conglomerate_relief_pickaxe"
     ]
   },
   "criteria": {
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:conglomerate_relief"
+        "recipe": "mineralogy:conglomerate_relief_pickaxe"
       }
     },
     "has_rock": {
@@ -16,7 +16,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:conglomerate"
+            "item": "mineralogy:conglomerate_smooth"
           }
         ]
       }

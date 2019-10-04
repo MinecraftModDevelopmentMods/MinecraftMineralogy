@@ -1,14 +1,14 @@
 {
   "rewards": {
     "recipes": [
-      "mineralogy:siltstone_relief"
+      "mineralogy:siltstone_relief_hoe"
     ]
   },
   "criteria": {
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:siltstone_relief"
+        "recipe": "mineralogy:siltstone_relief_hoe"
       }
     },
     "has_rock": {
@@ -16,7 +16,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:siltstone"
+            "item": "mineralogy:siltstone_smooth"
           }
         ]
       }

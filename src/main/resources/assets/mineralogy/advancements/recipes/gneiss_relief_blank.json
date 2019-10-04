@@ -1,14 +1,14 @@
 {
   "rewards": {
     "recipes": [
-      "mineralogy:gneiss_relief"
+      "mineralogy:gneiss_relief_blank"
     ]
   },
   "criteria": {
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:gneiss_relief"
+        "recipe": "mineralogy:gneiss_relief_blank"
       }
     },
     "has_rock": {
@@ -16,7 +16,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:gneiss"
+            "item": "mineralogy:gneiss_smooth"
           }
         ]
       }

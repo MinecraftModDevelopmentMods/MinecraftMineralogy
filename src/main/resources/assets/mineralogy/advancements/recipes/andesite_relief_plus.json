@@ -1,14 +1,14 @@
 {
   "rewards": {
     "recipes": [
-      "mineralogy:andesite_relief"
+      "mineralogy:andesite_relief_plus"
     ]
   },
   "criteria": {
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:andesite_relief"
+        "recipe": "mineralogy:andesite_relief_plus"
       }
     },
     "has_rock": {
@@ -16,7 +16,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:andesite"
+            "item": "mineralogy:andesite_smooth"
           }
         ]
       }

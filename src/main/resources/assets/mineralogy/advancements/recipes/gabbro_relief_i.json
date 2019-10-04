@@ -1,14 +1,14 @@
 {
   "rewards": {
     "recipes": [
-      "mineralogy:gabbro_relief"
+      "mineralogy:gabbro_relief_i"
     ]
   },
   "criteria": {
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:gabbro_relief"
+        "recipe": "mineralogy:gabbro_relief_i"
       }
     },
     "has_rock": {
@@ -16,7 +16,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:gabbro"
+            "item": "mineralogy:gabbro_smooth"
           }
         ]
       }

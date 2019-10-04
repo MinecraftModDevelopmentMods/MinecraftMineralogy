@@ -1,14 +1,14 @@
 {
   "rewards": {
     "recipes": [
-      "mineralogy:tuff_relief"
+      "mineralogy:tuff_relief_plus"
     ]
   },
   "criteria": {
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:tuff_relief"
+        "recipe": "mineralogy:tuff_relief_plus"
       }
     },
     "has_rock": {
@@ -16,7 +16,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:tuff"
+            "item": "mineralogy:tuff_smooth"
           }
         ]
       }

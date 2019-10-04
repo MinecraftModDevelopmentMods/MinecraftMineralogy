@@ -1,14 +1,14 @@
 {
   "rewards": {
     "recipes": [
-      "mineralogy:schist_relief"
+      "mineralogy:schist_relief_sword"
     ]
   },
   "criteria": {
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:schist_relief"
+        "recipe": "mineralogy:schist_relief_sword"
       }
     },
     "has_rock": {
@@ -16,7 +16,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:schist"
+            "item": "mineralogy:schist_smooth"
           }
         ]
       }

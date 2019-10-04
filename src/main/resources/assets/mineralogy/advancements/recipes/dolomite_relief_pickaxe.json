@@ -1,14 +1,14 @@
 {
   "rewards": {
     "recipes": [
-      "mineralogy:dolomite_relief"
+      "mineralogy:dolomite_relief_pickaxe"
     ]
   },
   "criteria": {
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:dolomite_relief"
+        "recipe": "mineralogy:dolomite_relief_pickaxe"
       }
     },
     "has_rock": {
@@ -16,7 +16,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:dolomite"
+            "item": "mineralogy:dolomite_smooth"
           }
         ]
       }

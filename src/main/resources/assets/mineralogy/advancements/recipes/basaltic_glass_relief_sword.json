@@ -1,14 +1,14 @@
 {
   "rewards": {
     "recipes": [
-      "mineralogy:basaltic_glass_relief"
+      "mineralogy:basaltic_glass_relief_sword"
     ]
   },
   "criteria": {
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:basaltic_glass_relief"
+        "recipe": "mineralogy:basaltic_glass_relief_sword"
       }
     },
     "has_rock": {
@@ -16,7 +16,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:basaltic_glass"
+            "item": "mineralogy:basaltic_glass_smooth"
           }
         ]
       }

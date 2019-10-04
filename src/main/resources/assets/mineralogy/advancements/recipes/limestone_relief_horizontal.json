@@ -1,14 +1,14 @@
 {
   "rewards": {
     "recipes": [
-      "mineralogy:limestone_relief"
+      "mineralogy:limestone_relief_horizontal"
     ]
   },
   "criteria": {
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:limestone_relief"
+        "recipe": "mineralogy:limestone_relief_horizontal"
       }
     },
     "has_rock": {
@@ -16,7 +16,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:limestone"
+            "item": "mineralogy:limestone_smooth"
           }
         ]
       }

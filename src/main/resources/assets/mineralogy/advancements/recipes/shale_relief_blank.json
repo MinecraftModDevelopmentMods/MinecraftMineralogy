@@ -1,14 +1,14 @@
 {
   "rewards": {
     "recipes": [
-      "mineralogy:shale_relief"
+      "mineralogy:shale_relief_blank"
     ]
   },
   "criteria": {
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:shale_relief"
+        "recipe": "mineralogy:shale_relief_blank"
       }
     },
     "has_rock": {
@@ -16,7 +16,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:shale"
+            "item": "mineralogy:shale_smooth"
           }
         ]
       }

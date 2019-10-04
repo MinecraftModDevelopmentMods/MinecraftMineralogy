@@ -1,14 +1,14 @@
 {
   "rewards": {
     "recipes": [
-      "mineralogy:diabase_relief"
+      "mineralogy:diabase_relief_sword"
     ]
   },
   "criteria": {
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:diabase_relief"
+        "recipe": "mineralogy:diabase_relief_sword"
       }
     },
     "has_rock": {
@@ -16,7 +16,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:diabase"
+            "item": "mineralogy:diabase_smooth"
           }
         ]
       }

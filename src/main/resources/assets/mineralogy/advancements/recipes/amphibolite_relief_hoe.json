@@ -1,14 +1,14 @@
 {
   "rewards": {
     "recipes": [
-      "mineralogy:amphibolite_relief"
+      "mineralogy:amphibolite_relief_hoe"
     ]
   },
   "criteria": {
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:amphibolite_relief"
+        "recipe": "mineralogy:amphibolite_relief_hoe"
       }
     },
     "has_rock": {
@@ -16,7 +16,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:amphibolite"
+            "item": "mineralogy:amphibolite_smooth"
           }
         ]
       }

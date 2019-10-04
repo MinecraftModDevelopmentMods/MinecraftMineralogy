@@ -1,14 +1,14 @@
 {
   "rewards": {
     "recipes": [
-      "mineralogy:novaculite_relief"
+      "mineralogy:novaculite_relief_right"
     ]
   },
   "criteria": {
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:novaculite_relief"
+        "recipe": "mineralogy:novaculite_relief_right"
       }
     },
     "has_rock": {
@@ -16,7 +16,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:novaculite"
+            "item": "mineralogy:novaculite_smooth"
           }
         ]
       }

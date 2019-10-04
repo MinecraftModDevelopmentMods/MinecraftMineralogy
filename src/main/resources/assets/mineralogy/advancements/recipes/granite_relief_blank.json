@@ -1,14 +1,14 @@
 {
   "rewards": {
     "recipes": [
-      "mineralogy:granite_relief"
+      "mineralogy:granite_relief_blank"
     ]
   },
   "criteria": {
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:granite_relief"
+        "recipe": "mineralogy:granite_relief_blank"
       }
     },
     "has_rock": {
@@ -16,7 +16,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:granite"
+            "item": "mineralogy:granite_smooth"
           }
         ]
       }

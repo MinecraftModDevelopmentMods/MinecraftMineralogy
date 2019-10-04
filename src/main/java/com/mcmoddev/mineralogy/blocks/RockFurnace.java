@@ -17,7 +17,6 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.InventoryHelper;
@@ -242,8 +241,16 @@ public class RockFurnace extends BlockContainer
 
     public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state)
     {
-        return new ItemStack(Blocks.FURNACE);
+        Block furnaceBlock = state.getBlock();
+		ResourceLocation resource = furnaceBlock.getRegistryName();
+		String path = resource.getPath();
+		
+		if (path.startsWith("lit_"))
+			furnaceBlock = Block.getBlockFromName(resource.getNamespace() + ":" + path.substring(4, path.length()));
+		
+		return new ItemStack(furnaceBlock);
     }
+    
     public EnumBlockRenderType getRenderType(IBlockState state)
     {
         return EnumBlockRenderType.MODEL;

@@ -2,8 +2,8 @@
   "credit": "Made with Blockbench",
   "textures": {
     "0": "mineralogy:blocks/andesite_smooth",
-    "2": "mineralogy:blocks/andesite",
-    "particle": "mineralogy:blocks/andesite"
+    "2": "mineralogy:blocks/andesite_smooth",
+    "particle": "mineralogy:blocks/andesite_smooth"
   },
   "elements": [
     {

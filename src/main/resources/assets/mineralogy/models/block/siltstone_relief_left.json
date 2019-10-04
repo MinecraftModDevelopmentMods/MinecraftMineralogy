@@ -2,8 +2,8 @@
   "credit": "Made with Blockbench",
   "textures": {
     "0": "mineralogy:blocks/siltstone_smooth",
-    "2": "mineralogy:blocks/siltstone",
-    "particle": "mineralogy:blocks/siltstone"
+    "2": "mineralogy:blocks/siltstone_smooth",
+    "particle": "mineralogy:blocks/siltstone_smooth"
   },
   "elements": [
     {

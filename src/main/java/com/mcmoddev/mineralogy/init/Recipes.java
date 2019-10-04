@@ -69,7 +69,7 @@ public class Recipes {
 				ItemStack(blockRockSaltLamp, 1), Ingredient.fromStacks(new ItemStack(blockRocksalt)) , 
 				Ingredient.fromStacks(new ItemStack(Blocks.TORCH)), Ingredient.fromStacks(new ItemStack(Items.IRON_INGOT)));
 		
-		RecipeHelper.addShapedOreRecipe("rocksaltstreetlamp", new ItemStack(blockRockSaltStreetLamp, 1), "x", "y", "y", 'x', blockRockSaltLamp, 'y', Items.IRON_INGOT);
+		RecipeHelper.addShapedOreRecipe("rocksaltstreetlamp", new ItemStack(blockRockSaltStreetLamp, 1), "x", "y", "y", 'x', "lampRocksalt", 'y', Items.IRON_INGOT);
 	
 		initDone = true;
 	}

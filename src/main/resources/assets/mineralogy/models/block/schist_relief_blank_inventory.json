@@ -2,7 +2,8 @@
   "credit": "Made with Blockbench",
   "textures": {
     "0": "mineralogy:blocks/schist_smooth",
-    "particle": "mineralogy:blocks/schist"
+    "1": "mineralogy:blocks/marble_smooth",
+    "particle": "mineralogy:blocks/schist_smooth"
   },
   "elements": [
     {
@@ -304,7 +305,7 @@
             16,
             16
           ],
-          "texture": "#0"
+          "texture": "#1"
         },
         "east": {
           "uv": [
@@ -313,7 +314,7 @@
             1,
             16
           ],
-          "texture": "#0"
+          "texture": "#1"
         },
         "south": {
           "uv": [
@@ -322,7 +323,7 @@
             16,
             16
           ],
-          "texture": "#0"
+          "texture": "#1"
         },
         "west": {
           "uv": [
@@ -331,7 +332,7 @@
             1,
             16
           ],
-          "texture": "#0"
+          "texture": "#1"
         },
         "up": {
           "uv": [
@@ -341,7 +342,7 @@
             1
           ],
           "rotation": 180,
-          "texture": "#0"
+          "texture": "#1"
         },
         "down": {
           "uv": [
@@ -351,7 +352,7 @@
             1
           ],
           "rotation": 180,
-          "texture": "#0"
+          "texture": "#1"
         }
       }
     }

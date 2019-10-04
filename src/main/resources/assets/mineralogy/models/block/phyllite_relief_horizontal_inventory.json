@@ -1,9 +1,9 @@
 {
   "credit": "Made with Blockbench",
   "textures": {
-    "0": "mineralogy:blocks/phyllite_smooth",
-    "2": "mineralogy:blocks/phyllite",
-    "particle": "mineralogy:blocks/phyllite"
+    "0": "mineralogy:blocks/marble_smooth",
+    "2": "mineralogy:blocks/phyllite_smooth",
+    "particle": "mineralogy:blocks/marble_smooth"
   },
   "elements": [
     {

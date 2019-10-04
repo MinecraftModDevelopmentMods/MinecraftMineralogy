@@ -1,9 +1,9 @@
 {
   "credit": "Made with Blockbench",
   "textures": {
-    "0": "mineralogy:blocks/peridotite_smooth",
-    "2": "mineralogy:blocks/peridotite",
-    "particle": "mineralogy:blocks/peridotite"
+    "0": "mineralogy:blocks/marble_smooth",
+    "2": "mineralogy:blocks/peridotite_smooth",
+    "particle": "mineralogy:blocks/marble_smooth"
   },
   "elements": [
     {

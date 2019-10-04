@@ -2,8 +2,8 @@
   "credit": "Made with Blockbench",
   "textures": {
     "0": "mineralogy:blocks/hornfels_smooth",
-    "2": "mineralogy:blocks/hornfels",
-    "particle": "mineralogy:blocks/hornfels"
+    "2": "mineralogy:blocks/hornfels_smooth",
+    "particle": "mineralogy:blocks/hornfels_smooth"
   },
   "elements": [
     {

@@ -2,8 +2,8 @@
   "credit": "Made with Blockbench",
   "textures": {
     "0": "mineralogy:blocks/novaculite_smooth",
-    "2": "mineralogy:blocks/novaculite",
-    "particle": "mineralogy:blocks/novaculite"
+    "2": "mineralogy:blocks/novaculite_smooth",
+    "particle": "mineralogy:blocks/novaculite_smooth"
   },
   "elements": [
     {

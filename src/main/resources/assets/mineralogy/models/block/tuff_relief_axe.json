@@ -2,8 +2,8 @@
   "credit": "Made with Blockbench",
   "textures": {
     "0": "mineralogy:blocks/tuff_smooth",
-    "2": "mineralogy:blocks/tuff",
-    "particle": "mineralogy:blocks/tuff"
+    "2": "mineralogy:blocks/tuff_smooth",
+    "particle": "mineralogy:blocks/tuff_smooth"
   },
   "elements": [
     {

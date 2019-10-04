@@ -2,8 +2,8 @@
   "credit": "Made with Blockbench",
   "textures": {
     "0": "mineralogy:blocks/shale_smooth",
-    "2": "mineralogy:blocks/shale",
-    "particle": "mineralogy:blocks/shale"
+    "2": "mineralogy:blocks/shale_smooth",
+    "particle": "mineralogy:blocks/shale_smooth"
   },
   "elements": [
     {

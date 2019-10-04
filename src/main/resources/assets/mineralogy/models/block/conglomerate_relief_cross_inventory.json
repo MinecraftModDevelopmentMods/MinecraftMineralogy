@@ -1,9 +1,9 @@
 {
   "credit": "Made with Blockbench",
   "textures": {
-    "0": "mineralogy:blocks/conglomerate_smooth",
-    "2": "mineralogy:blocks/conglomerate",
-    "particle": "mineralogy:blocks/conglomerate"
+    "0": "mineralogy:blocks/marble_smooth",
+    "2": "mineralogy:blocks/conglomerate_smooth",
+    "particle": "mineralogy:blocks/marble_smooth"
   },
   "elements": [
     {

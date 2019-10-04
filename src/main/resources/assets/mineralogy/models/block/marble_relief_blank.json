@@ -2,7 +2,7 @@
   "credit": "Made with Blockbench",
   "textures": {
     "0": "mineralogy:blocks/marble_smooth",
-    "particle": "mineralogy:blocks/marble"
+    "particle": "mineralogy:blocks/marble_smooth"
   },
   "elements": [
     {

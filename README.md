@@ -1,12 +1,11 @@
+[![](https://img.shields.io/badge/Discord-MMD-green.svg?style=flat&logo=Discord)](https://discord.mcmoddev.com)
+[![](http://cf.way2muchnoise.eu/full_minecraft-mineralogy_downloads.svg)](http://minecraft.curseforge.com/projects/minecraft-mineralogy)
+[![](http://cf.way2muchnoise.eu/versions/Minecraft_minecraft-mineralogy_all.svg)](http://minecraft.curseforge.com/projects/minecraft-mineralogy)
+[![Build Status](https://ci.mcmoddev.com/job/Minecraft%20Mineralogy/job/Minecraft%20Mineralogy%201.12/badge/icon)](https://ci.mcmoddev.com/job/Minecraft%20Mineralogy/job/Minecraft%20Mineralogy%201.12/)
+
 # Mineralogy
 ## Cyano's Minecraft Mineralogy Mod
 This mod replaces the generic "stone" in Minecraft with real-world rock types.
-
-## Requirements
-This mod requires that you install Minecraft Forge version 1.7.10-10.13.1.1219 or later (ealier versions of Forge for Minecraft 1.7.10 may work, but no guarentees).
-
-## Installing
-After you have successfully installed Forge, simply place the file *mineralogy-#.#.jar* in your *mods* folder. You can get the mineralogy-#.#.jar file (as well as the texture packs) from the Releases tab of this repository page.
 
 ## Texture Packs
 There are three levels of texture resolution available. The default textures are low-resolution (16x16 pixels, same as Minecraft), but I recommend trying the high-resolution (64x64 pixels) textures via the high-res texture pack (available on the Release page).

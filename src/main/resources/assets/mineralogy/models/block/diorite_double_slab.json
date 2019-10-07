@@ -1,0 +1,8 @@
+{
+  "parent": "mineralogy:block/brick",
+  "textures": {
+    "top": "mineralogy:blocks/diorite",
+    "bottom": "mineralogy:blocks/diorite",
+    "side": "mineralogy:blocks/diorite"
+  }
+}

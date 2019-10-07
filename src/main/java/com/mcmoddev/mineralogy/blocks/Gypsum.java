@@ -7,11 +7,13 @@ import com.mcmoddev.mineralogy.ioc.MinIoC;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
 public class Gypsum extends Rock {
 
@@ -28,8 +30,12 @@ public class Gypsum extends Rock {
 			int fortune) {
 		Item dustGypsum = MinIoC.getInstance().resolve(Item.class, "dustGypsum", Mineralogy.MODID);
 	
+		drops.clear();
 		drops.add(new ItemStack(dustGypsum, prng.nextInt(3) + 1));
-		
-		super.getDrops(drops, world, pos, state, fortune);
+	}
+	
+	@Override
+	public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
+		return true;
 	}
 }

@@ -50,11 +50,6 @@ public class RockSlab extends net.minecraft.block.Block {
 
     	EnumFacing orientation = state.getValue(FACING);
 
-//    	west = x positive (bottom slab good torch placement)
-//    	east = x negative
-//    	south = enumfacing.axis.name = "Z" enumfacing.axisdirection.name = "NEGATIVE"
-//    	north = enumfacing.axis.name = "Z" enumfacing.axisdirection.name = "POSITIVE"
-    	
     	if (face.getAxis() == EnumFacing.Axis.Y) {
     		if (face.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE ) {
     		//    	    	top down y positive
@@ -73,35 +68,39 @@ public class RockSlab extends net.minecraft.block.Block {
     		}
     	}
     	
-//    	if (face.getAxis() == EnumFacing.Axis.X) {
-//    		if (face.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE ) {
-//    		//    	    	top down y positive
-//    			if (orientation == EnumFacing.UP) 
-//    				return BlockFaceShape.UNDEFINED;
-//    			else
-//    				return BlockFaceShape.SOLID;
-//    		} else {
-////    	    	bottom up y negative
-//    			if (orientation == EnumFacing.DOWN) 
-//    				return BlockFaceShape.UNDEFINED;
-//    			else
-//    				return BlockFaceShape.SOLID;
-//    		}
-//    	}
+    	if (face.getAxis() == EnumFacing.Axis.X) {
+    		if (face.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE ) {
+    		//    	    	west = x positive 
+    			if (orientation == EnumFacing.EAST) 
+    				return BlockFaceShape.UNDEFINED;
+    			else
+    				return BlockFaceShape.SOLID;
+    		} else {
+//    	    	east = x negative
+    			if (orientation == EnumFacing.WEST) 
+    				return BlockFaceShape.UNDEFINED;
+    			else
+    				return BlockFaceShape.SOLID;
+    		}
+    	}
     	
-//    	
-//        if (((BlockSlab)state.getBlock()).isDouble())
-//        {
-            return BlockFaceShape.SOLID;
-//        }
-//        else if (face == EnumFacing.UP)
-//        {
-//            return BlockFaceShape.SOLID;
-//        }
-//        else
-//        {
-//            return face == EnumFacing.DOWN && face == EnumFacing.DOWN ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
-//        }
+    	if (face.getAxis() == EnumFacing.Axis.Z) {
+    		if (face.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE ) {
+    		// north = enumfacing.axis.name = "Z" enumfacing.axisdirection.name = "POSITIVE"
+    			if (orientation == EnumFacing.SOUTH) 
+    				return BlockFaceShape.UNDEFINED;
+    			else
+    				return BlockFaceShape.SOLID;
+    		} else {
+//    	    	south = enumfacing.axis.name = "Z" enumfacing.axisdirection.name = "NEGATIVE"
+    			if (orientation == EnumFacing.NORTH) 
+    				return BlockFaceShape.UNDEFINED;
+    			else
+    				return BlockFaceShape.SOLID;
+    		}
+    	}
+        
+    	return BlockFaceShape.SOLID;
     }
 	
 	private static final AxisAlignedBB[] BOXES = new AxisAlignedBB[EnumFacing.values().length];

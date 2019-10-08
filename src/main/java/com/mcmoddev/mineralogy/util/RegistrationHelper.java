@@ -23,8 +23,10 @@ public class RegistrationHelper {
 	public static BlockItemPair registerBlock(Block block, String name, String oreDictionaryName, boolean addToTab, int maxStackSize) {
 		block.setTranslationKey(Mineralogy.MODID + "." + name);
 		block.setRegistryName(name);
-
-		Item item = registerItem(new ItemBlock(block), name, maxStackSize);
+		Item item = null;
+		
+		if (addToTab)
+			item = registerItem(new ItemBlock(block), name, maxStackSize);
 		
 		MinIoC IoC = MinIoC.getInstance();
 		

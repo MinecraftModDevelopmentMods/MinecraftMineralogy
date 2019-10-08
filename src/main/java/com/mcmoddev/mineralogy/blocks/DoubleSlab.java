@@ -22,6 +22,11 @@ public class DoubleSlab extends net.minecraft.block.Block {
 	}
 
 	@Override
+	protected ItemStack getSilkTouchDrop(IBlockState state) {
+		return new ItemStack(_drops, 2);
+	}
+	
+	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state,
 			int fortune) {
 		

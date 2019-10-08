@@ -34,35 +34,19 @@ public class RockSlab extends net.minecraft.block.Block {
 	
 	private static final float THICKNESS = 0.5f;
 
-	/**
-     * Get the geometry of the queried face at the given position and state. This is used to decide whether things like
-     * buttons are allowed to be placed on the face, or how glass panes connect to the face, among other things.
-     * <p>
-     * Common values are {@code SOLID}, which is the default, and {@code UNDEFINED}, which represents something that
-     * does not fit the other descriptions and will generally cause other things not to connect to the face.
-     * 
-     * @return an approximation of the form of the given face
-     * @deprecated call via {@link IBlockState#getBlockFaceShape(IBlockAccess,BlockPos,EnumFacing)} whenever possible.
-     * Implementing/overriding is fine.
-     */
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face)
     {
-
     	EnumFacing orientation = state.getValue(FACING);
 
     	if (face.getAxis() == EnumFacing.Axis.Y) {
     		if (face.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE ) {
-    		//    	    	top down y positive
-    			if ( orientation == EnumFacing.UP) { 
+    			if ( orientation == EnumFacing.UP) 
     				return BlockFaceShape.UNDEFINED;
-    			}
     			else
     				return BlockFaceShape.SOLID;
     		} else {
-//    	    	bottom up y negative
-    			if (orientation == EnumFacing.DOWN) { 
+    			if (orientation == EnumFacing.DOWN)
     				return BlockFaceShape.UNDEFINED;
-    			}
     			else
     				return BlockFaceShape.SOLID;
     		}
@@ -70,13 +54,11 @@ public class RockSlab extends net.minecraft.block.Block {
     	
     	if (face.getAxis() == EnumFacing.Axis.X) {
     		if (face.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE ) {
-    		//    	    	west = x positive 
     			if (orientation == EnumFacing.EAST) 
     				return BlockFaceShape.UNDEFINED;
     			else
     				return BlockFaceShape.SOLID;
     		} else {
-//    	    	east = x negative
     			if (orientation == EnumFacing.WEST) 
     				return BlockFaceShape.UNDEFINED;
     			else
@@ -86,13 +68,11 @@ public class RockSlab extends net.minecraft.block.Block {
     	
     	if (face.getAxis() == EnumFacing.Axis.Z) {
     		if (face.getAxisDirection() == EnumFacing.AxisDirection.POSITIVE ) {
-    		// north = enumfacing.axis.name = "Z" enumfacing.axisdirection.name = "POSITIVE"
     			if (orientation == EnumFacing.SOUTH) 
     				return BlockFaceShape.UNDEFINED;
     			else
     				return BlockFaceShape.SOLID;
     		} else {
-//    	    	south = enumfacing.axis.name = "Z" enumfacing.axisdirection.name = "NEGATIVE"
     			if (orientation == EnumFacing.NORTH) 
     				return BlockFaceShape.UNDEFINED;
     			else
@@ -177,13 +157,13 @@ public class RockSlab extends net.minecraft.block.Block {
 	        IBlockState iblockstate = worldIn.getBlockState(blockpos);
 	        BlockFaceShape blockfaceshape = iblockstate.getBlockFaceShape(worldIn, blockpos, facing);
 
-	        if (blockfaceshape == BlockFaceShape.UNDEFINED) {
+	        if (blockfaceshape == BlockFaceShape.UNDEFINED) 
 	        	return false;
-	        }
 	        
 	        return true;
 	    }
 	
+	 
 	 @Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
 			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
@@ -223,17 +203,10 @@ public class RockSlab extends net.minecraft.block.Block {
 		return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
 	}
 	
-	 
-    /**
-     * Checks if this block can be placed exactly at the given position.
-     */
+
     public boolean canPlaceBlockAt(World worldIn, BlockPos pos)
     {
-//    	if (_doubling) {
-//    		_doubling = false;
-//    		return false;
-//    	}
-//    	
+
         for (EnumFacing enumfacing : FACING.getAllowedValues())
             if (this.canPlaceAt(worldIn, pos, enumfacing))
                 return true;
@@ -241,16 +214,11 @@ public class RockSlab extends net.minecraft.block.Block {
         return false;
     }
 
-	 
 	@Deprecated
 	@Override
 	public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing face, float partialX,
 			float partialY, float partialZ, int meta, EntityLivingBase placer) {
-		
-//		if (!this.canPlaceAt(worldIn, pos, face)) {
-//			 return doubleSlabBlockstate;
-//		}
-//		
+			
 		IBlockState defaultState = this.getDefaultState().withProperty(FACING, face);
 		// redimension to face-local up and right dimensions
 		float up;

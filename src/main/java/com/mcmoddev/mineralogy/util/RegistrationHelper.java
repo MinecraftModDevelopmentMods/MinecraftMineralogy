@@ -1,6 +1,7 @@
 package com.mcmoddev.mineralogy.util;
 
 import com.mcmoddev.mineralogy.Mineralogy;
+import com.mcmoddev.mineralogy.ItemBlock.BypassItemBlock;
 import com.mcmoddev.mineralogy.init.MineralogyRegistry;
 import com.mcmoddev.mineralogy.ioc.MinIoC;
 import com.mcmoddev.mineralogy.lib.exceptions.ItemNotFoundException;
@@ -13,18 +14,23 @@ import net.minecraft.item.ItemBlock;
 
 public class RegistrationHelper {
 	public static BlockItemPair registerBlock(Block block, String name, String oreDictionaryName) {
-		return registerBlock(block, name, oreDictionaryName, true, 64);
+		return registerBlock(block, name, oreDictionaryName, true, 64, false);
 	}
 	
 	public static BlockItemPair registerBlock(Block block, String name, String oreDictionaryName, int maxStackSize) {
-		return registerBlock(block, name, oreDictionaryName, true, maxStackSize);
+		return registerBlock(block, name, oreDictionaryName, true, maxStackSize, false);
 	}
 	
-	public static BlockItemPair registerBlock(Block block, String name, String oreDictionaryName, boolean addToTab, int maxStackSize) {
+	public static BlockItemPair registerBlock(Block block, String name, String oreDictionaryName, boolean addToTab, int maxStackSize, boolean bypassSneak) {
 		block.setTranslationKey(Mineralogy.MODID + "." + name);
 		block.setRegistryName(name);
-
-		Item item = registerItem(new ItemBlock(block), name, maxStackSize);
+		Item item = null;
+		
+		if (addToTab)
+			if(bypassSneak)
+				item = registerItem(new BypassItemBlock(block), name, maxStackSize);
+			else
+				item = registerItem(new ItemBlock(block), name, maxStackSize);
 		
 		MinIoC IoC = MinIoC.getInstance();
 		
@@ -56,6 +62,7 @@ public class RegistrationHelper {
 		item.setTranslationKey(itemName);
 		item.setRegistryName(name);
 		item.setMaxStackSize(maxStackSize);
+		
 		
 		MineralogyRegistry.MineralogyItemRegistry.put(name, item);
 		return item;

@@ -53,6 +53,12 @@ public class RockFurnace extends BlockContainer
         this.setHarvestLevel("pickaxe", toolHardnessLevel);
     }
 
+    @Override
+    protected boolean canSilkHarvest() {
+    	// TODO Auto-generated method stub
+    	return false;
+    }
+    
     public Item getItemDropped(IBlockState state, Random rand, int fortune)
     {
     	Block drop = state.getBlock();

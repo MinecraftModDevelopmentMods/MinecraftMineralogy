@@ -163,7 +163,6 @@ public class RockSlab extends net.minecraft.block.Block {
 	        return true;
 	    }
 	
-	 
 	 @Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
 			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
@@ -196,6 +195,17 @@ public class RockSlab extends net.minecraft.block.Block {
 	
 			if (doubleIt && (block.getRegistryName().getPath() == itemStack.getItem().getRegistryName().getPath())) {
 				worldIn.setBlockState(pos, doubleSlabBlockstate);
+				
+				if (hand == EnumHand.MAIN_HAND) {
+					int newCount = playerIn.getHeldItemMainhand().getCount() -1;
+					
+					playerIn.getHeldItemMainhand().setCount(newCount);
+				} else  {
+					int newCount = playerIn.getHeldItemOffhand().getCount() -1;
+					
+					itemStack = playerIn.getHeldItemOffhand();
+				}
+				
 				return true;
 			}
 		}

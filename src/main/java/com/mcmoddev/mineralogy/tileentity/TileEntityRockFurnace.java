@@ -48,7 +48,16 @@ public class TileEntityRockFurnace extends TileEntityLockable implements ITickab
     private int cookTime;
     private int totalCookTime;
     private String furnaceCustomName;
+    private float _burnModifier;
 
+    public TileEntityRockFurnace(float burnModifier) {
+    	_burnModifier = burnModifier;
+    }
+    
+//    public void setBurnModifier(float burnModifier) {
+//    	_burnModifier = burnModifier;
+//    }
+    
     /**
      * Returns the number of slots in the inventory.
      */
@@ -211,7 +220,7 @@ public class TileEntityRockFurnace extends TileEntityLockable implements ITickab
             {
                 if (!this.isBurning() && this.canSmelt())
                 {
-                    this.furnaceBurnTime = getItemBurnTime(itemstack);
+                    this.furnaceBurnTime = (int) (getItemBurnTime(itemstack) * _burnModifier);
                     this.currentItemBurnTime = this.furnaceBurnTime;
 
                     if (this.isBurning())

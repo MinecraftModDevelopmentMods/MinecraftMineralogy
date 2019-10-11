@@ -223,6 +223,8 @@ public class RockSlab extends net.minecraft.block.Block {
 			else 
 				itemStack = playerIn.getHeldItemOffhand();
 			
+			if (itemStack == null)
+				return false;
 			
 			if (side ==  targetBlockOrientation)
 				doubleIt = true;

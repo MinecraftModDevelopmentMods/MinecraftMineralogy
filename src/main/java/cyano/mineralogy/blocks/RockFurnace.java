@@ -27,13 +27,16 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 * @author SkyBlade1978
 */
 public class RockFurnace extends BlockFurnace {	
+	double _burnModifier;
+	
 	public RockFurnace(float hardness, float blastResistance, int toolHardnessLevel,
-	 			SoundType sound, Boolean lit) {
+	 			SoundType sound, Boolean lit, double burnModifier) {
 		super(lit);
 	 	this.setSoundType(sound);
 	 	this.blockHardness = hardness;
 	 	this.blockResistance = blastResistance;
 	 	this.setHarvestLevel("pickaxe", toolHardnessLevel);
+	 	_burnModifier = burnModifier;
 	 	
 	 	if (!lit)
 	 		this.setCreativeTab(Mineralogy.mineralogyTab);
@@ -72,7 +75,7 @@ public class RockFurnace extends BlockFurnace {
 	 
 	@Override
 	public TileEntity createTileEntity(World world, IBlockState state) {
-		return new TileEntityRockFurnace();
+		return new TileEntityRockFurnace(_burnModifier);
 	}
 	
 	public static void setState(boolean active, World worldIn, BlockPos pos)

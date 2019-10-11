@@ -14,9 +14,13 @@ import scala.actors.Debug;
 * @author SkyBlade1978
 */
 public class TileEntityRockFurnace extends TileEntityFurnace {
-	public TileEntityRockFurnace()
+	double _burnModifier;
+	
+	public TileEntityRockFurnace(double burnModifier)
 	{
 		super();
+		
+		_burnModifier = burnModifier;
 	}
 	
 // set / get field keys 
@@ -67,7 +71,9 @@ public class TileEntityRockFurnace extends TileEntityFurnace {
 		            	try {
 		            		if (!this.isBurning() && this.canSmelt())
 			                {
-			                	super.setField(0, getItemBurnTime(super.getStackInSlot(1)));
+		            			int burnTime = (int) (getItemBurnTime(super.getStackInSlot(1)) * _burnModifier);
+		            			
+			                	super.setField(0, burnTime);
 			                    super.setField(1, super.getField(0));
 
 			                    if (this.isBurning())
@@ -82,7 +88,6 @@ public class TileEntityRockFurnace extends TileEntityFurnace {
 
 			                            if (items == null || items.stackSize == 0)
 			                            {
-			                            	
 			                            	items = new ItemStack(Blocks.COAL_ORE);
 			                            }
 			                        }

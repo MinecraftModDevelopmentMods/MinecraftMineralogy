@@ -1,0 +1,8 @@
+{
+  "parent": "mineralogy:block/brick",
+  "textures": {
+    "top": "mineralogy:blocks/siltstone",
+    "bottom": "mineralogy:blocks/siltstone",
+    "side": "mineralogy:blocks/siltstone"
+  }
+}

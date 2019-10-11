@@ -1,5 +1,6 @@
 package cyano.mineralogy.blocks;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -8,7 +9,10 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -23,7 +27,7 @@ public class RockSlab extends net.minecraft.block.Block {
 	public static final PropertyDirection FACING = PropertyDirection.create("facing");
 
 	private static float thickness = 0.5f;
-
+	private String _doubleSlab = "";
 	
 	private static final AxisAlignedBB[] BOXES = new AxisAlignedBB[EnumFacing.values().length];
 	static {
@@ -54,7 +58,6 @@ public class RockSlab extends net.minecraft.block.Block {
 			BOXES[orientation.ordinal()] = new AxisAlignedBB(x1, y1, z1, x2, y2, z2);
 		}
 	}
-
 	
 	public RockSlab(float hardness, float blastResistance, int toolHardnessLevel, SoundType sound) {
 		super(Material.ROCK);
@@ -66,6 +69,19 @@ public class RockSlab extends net.minecraft.block.Block {
 		this.setDefaultState(this.blockState.getBaseState()
 				.withProperty(FACING,EnumFacing.UP));
 		this.useNeighborBrightness = true;
+	}
+	
+	public RockSlab(float hardness, float blastResistance, int toolHardnessLevel, SoundType sound, String doubleSlab) {
+		super(Material.ROCK);
+		this.setHardness((float)hardness); // dirt is 0.5, grass is 0.6, stone is 1.5,iron ore is 3, obsidian is 50
+		this.setResistance((float)blastResistance); // dirt is 0, iron ore is 5, stone is 10, obsidian is 2000
+		this.setSoundType(sound); // sound for stone
+		this.setHarvestLevel("pickaxe", toolHardnessLevel);
+		this.setCreativeTab(Mineralogy.mineralogyTab);
+		this.setDefaultState(this.blockState.getBaseState()
+				.withProperty(FACING,EnumFacing.UP));
+		this.useNeighborBrightness = true;
+		_doubleSlab = doubleSlab;
 	}
 
 	@Override
@@ -182,5 +198,74 @@ public class RockSlab extends net.minecraft.block.Block {
 
 		final EnumFacing orientation = (EnumFacing) world.getBlockState(coord).getValue(FACING);
 		super.addCollisionBoxToList(coord, box, collisionBoxList, BOXES[orientation.ordinal()]);
+	}
+	
+
+	@Override
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
+			EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (_doubleSlab != "") {
+			IBlockState iblockstate = worldIn.getBlockState(pos);
+			
+			Block block = iblockstate.getBlock();
+			EnumFacing targetBlockOrientation = iblockstate.getValue(FACING);
+			
+			boolean doubleIt = false;
+			        
+			DoubleSlab doubleBlock =  (DoubleSlab)Mineralogy.mineralogyBlockRegistry.get(_doubleSlab);
+			
+	        IBlockState doubleSlabBlockstate = doubleBlock.getDefaultState();
+	        
+			ItemStack itemStack;
+			
+			if (hand == EnumHand.MAIN_HAND)
+				itemStack = playerIn.getHeldItemMainhand();
+			else 
+				itemStack = playerIn.getHeldItemOffhand();
+			
+			if (itemStack == null)
+				return false;
+			
+			if (side ==  targetBlockOrientation)
+				doubleIt = true;
+	
+			if (doubleIt && (block.getRegistryName().getResourcePath().equals(itemStack.getItem().getRegistryName().getResourcePath()))) {
+				worldIn.setBlockState(pos, doubleSlabBlockstate);
+				
+				if (!playerIn.isCreative()) {
+					if (hand == EnumHand.MAIN_HAND) {
+						int newCount = playerIn.getHeldItemMainhand().stackSize -1;
+						
+						playerIn.getHeldItemMainhand().stackSize = newCount;
+					} else  {
+						int newCount = playerIn.getHeldItemOffhand().stackSize -1;
+						
+						playerIn.getHeldItemOffhand().stackSize = newCount;
+					}
+				}
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	@Override
+	public boolean canPlaceBlockOnSide(World worldIn, BlockPos pos, EnumFacing side) {
+		IBlockState iblockstate = worldIn.getBlockState(pos.offset(side.getOpposite()));
+		
+		Block block = iblockstate.getBlock();
+		
+		if (block.getRegistryName().getResourcePath().equals(this.getRegistryName().getResourcePath())) {
+			EnumFacing targetBlockOrientation = iblockstate.getValue(FACING);
+			
+			if (side == targetBlockOrientation) {
+				return false;
+			}
+			
+			return true;
+		}
+		
+		return super.canPlaceBlockOnSide(worldIn, pos, side);
 	}
 }

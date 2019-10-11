@@ -1,8 +1,8 @@
 {
   "parent": "block/orientable",
   "textures": {
-    "top": "mineralogy:blocks/gabbro_smooth_brick_furnace_top",
+    "top": "mineralogy:blocks/gabbro_smooth_brick_top",
     "front": "mineralogy:blocks/gabbro_smooth_brick_furnace_front_on",
-    "side": "mineralogy:blocks/gabbro_smooth_brick_furnace_side"
+    "side": "mineralogy:blocks/gabbro_smooth_brick_side"
   }
 }

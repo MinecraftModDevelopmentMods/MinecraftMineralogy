@@ -2,8 +2,8 @@
   "credit": "Made with Blockbench",
   "textures": {
     "0": "mineralogy:blocks/schist_smooth",
-    "2": "mineralogy:blocks/schist",
-    "particle": "mineralogy:blocks/schist"
+    "2": "mineralogy:blocks/schist_smooth",
+    "particle": "mineralogy:blocks/schist_smooth"
   },
   "elements": [
     {

@@ -1,8 +1,8 @@
 {
   "parent": "block/orientable",
   "textures": {
-    "top": "mineralogy:blocks/pegmatite_furnace_top",
+    "top": "mineralogy:blocks/pegmatite",
     "front": "mineralogy:blocks/pegmatite_furnace_front_on",
-    "side": "mineralogy:blocks/pegmatite_furnace_side"
+    "side": "mineralogy:blocks/pegmatite"
   }
 }

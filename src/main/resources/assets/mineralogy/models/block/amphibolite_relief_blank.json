@@ -2,7 +2,7 @@
   "credit": "Made with Blockbench",
   "textures": {
     "0": "mineralogy:blocks/amphibolite_smooth",
-    "particle": "mineralogy:blocks/amphibolite"
+    "particle": "mineralogy:blocks/amphibolite_smooth"
   },
   "elements": [
     {

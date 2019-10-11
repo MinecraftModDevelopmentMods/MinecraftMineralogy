@@ -2,8 +2,8 @@
   "credit": "Made with Blockbench",
   "textures": {
     "0": "mineralogy:blocks/pegmatite_smooth",
-    "2": "mineralogy:blocks/pegmatite",
-    "particle": "mineralogy:blocks/pegmatite"
+    "2": "mineralogy:blocks/pegmatite_smooth",
+    "particle": "mineralogy:blocks/pegmatite_smooth"
   },
   "elements": [
     {

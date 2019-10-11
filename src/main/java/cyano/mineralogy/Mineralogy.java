@@ -8,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import cyano.mineralogy.blocks.*;
+import cyano.mineralogy.itemblock.BypassItemBlock;
 import cyano.mineralogy.items.*;
 import cyano.mineralogy.patching.PatchHandler;
 import cyano.mineralogy.tileentity.TileEntityRockFurnace;
@@ -501,18 +502,29 @@ public class Mineralogy {
     	return oreBlock;
     }
 
-    private static Block registerBlock(Block b, String name, int maxStackSize) {
+    private static Block registerBlock(Block b, String name, int maxStackSize, boolean createItem, boolean bypassSneak) {
     	GameRegistry.register(b.setRegistryName(MODID, name));
 		b.setUnlocalizedName(MODID + "." + name);
 		
-		ItemBlock itemBlock = new ItemBlock(b);
+		ItemBlock itemBlock;
+		
+		if (bypassSneak)
+			itemBlock = new BypassItemBlock(b);
+		else
+			itemBlock = new ItemBlock(b);
 		
 		itemBlock.setMaxStackSize(maxStackSize);
 		
-		registerItem(itemBlock, name);
+		if (createItem)
+			registerItem(itemBlock, name);
+		
 		mineralogyBlockRegistry.put(name, b);
 		return b;
     }
+    
+    private static Block registerBlock(Block b, String name, int maxStackSize) {
+		return registerBlock(b, name, maxStackSize, true, false);
+	}
     
 	private static Block registerBlock(Block b, String name) {
 		return registerBlock(b, name, 64);
@@ -589,27 +601,27 @@ public class Mineralogy {
     	
 		GameRegistry.addSmelting(rock, new ItemStack(Blocks.STONE), 0.1F);
 
-		if(GENERATE_RELIEFS) {
-			generateReliefs(name, hardness, blastResistance, toolHardnessLevel, rock);
-		}
-		
-		if (GENERATE_ROCKFURNACES) {
-			rockFurnace = registerBlock(new RockFurnace((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE, false), name + "_furnace");
-			registerBlock(new RockFurnace((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE, true).setLightLevel(0.875F), "lit_" + name + "_furnace");
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(rockFurnace, 1), "xxx", "x x", "xxx", 'x', rock));
-			GameRegistry.registerTileEntity(TileEntityRockFurnace.class, name + "_furnace");
-		}
-		
 		if (GENERATE_ROCKSTAIRS) {
 			rockStairs = registerBlock(new RockStairs(rock, (float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_stairs");
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(rockStairs, 4), "x  ", "xx ", "xxx", 'x', rock));
 		}
 		
 		if (GENERATE_ROCKSLAB) {
-			rockSlab = registerBlock(new RockSlab((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_slab");
+			rockSlab = registerBlock(new RockSlab((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE, name + "_double_slab"), name + "_slab");
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(rockSlab, 6), "xxx", 'x', rock));
-		}
 		
+			registerBlock(
+					new DoubleSlab((float) hardness, (float) blastResistance, toolHardnessLevel, SoundType.STONE, rockSlab),
+					name + "_double_slab",  64, false, true);
+			
+			if (GENERATE_ROCKFURNACES) {
+				rockFurnace = registerBlock(new RockFurnace((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE, false), name + "_furnace");
+				registerBlock(new RockFurnace((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE, true).setLightLevel(0.875F), "lit_" + name + "_furnace");
+				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(rockFurnace, 1), "xxx", "xyx", "xxx", 'x', rockSlab, 'y', Blocks.FURNACE));
+				GameRegistry.registerTileEntity(TileEntityRockFurnace.class, name + "_furnace");
+			}
+		}
+
 		if (GENERATE_ROCK_WALL) {
 			rockWall = registerBlock(new RockWall(rock, (float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_wall");
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(rockWall, 6), "xxx", "xxx", 'x', rock));
@@ -619,21 +631,21 @@ public class Mineralogy {
 			brick = registerBlock(new Rock(false, (float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_brick");
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(brick, 4), "xx", "xx", 'x', rock));
 			
-			if (GENERATE_BRICKFURNACES) {
-				brickFurnace = registerBlock(new RockFurnace((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE, false), name + "_brick_furnace");
-				registerBlock(new RockFurnace((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE, true).setLightLevel(0.875F), "lit_" + name + "_brick_furnace");
-				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(brickFurnace, 1), "xxx", "x x", "xxx", 'x', rock));
-				GameRegistry.registerTileEntity(TileEntityRockFurnace.class, name + "_brick_furnace");		
-			}
-			
 			if (GENERATE_BRICKSTAIRS) {
 				brickStairs = registerBlock(new RockStairs(rock, (float)hardness, (float)blastResistance,toolHardnessLevel, SoundType.STONE),name + "_brick_stairs");
 				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(brickStairs, 4), "x  ", "xx ", "xxx", 'x', brick));
 			}
 			
 			if (GENERATE_BRICKSLAB) {
-				brickSlab = registerBlock(new RockSlab((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_brick_slab");
+				brickSlab = registerBlock(new RockSlab((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE, name + "_double_brick_slab"), name + "_brick_slab");
 				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(brickSlab, 6), "xxx", 'x', brick));
+			
+				if (GENERATE_BRICKFURNACES) {
+					brickFurnace = registerBlock(new RockFurnace((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE, false), name + "_brick_furnace");
+					registerBlock(new RockFurnace((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE, true).setLightLevel(0.875F), "lit_" + name + "_brick_furnace");
+					GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(brickFurnace, 1), "xxx", "xyx", "xxx", 'x', brickSlab, 'y', Blocks.FURNACE));
+					GameRegistry.registerTileEntity(TileEntityRockFurnace.class, name + "_brick_furnace");		
+				}
 			}
 			
 			if (GENERATE_BRICK_WALL) {
@@ -646,17 +658,13 @@ public class Mineralogy {
 			smooth = registerBlock(new Rock(false, (float)hardness,(float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_smooth");
 			GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(smooth, 1), rock, "sand"));
 	
+			if(GENERATE_RELIEFS) {
+				generateReliefs(name, hardness, blastResistance, toolHardnessLevel, smooth);
+			}
 //			if (hardness >= 4) {
 //				smoothAnvil = registerBlock(new RockAnvil(name + "_smooth_anvil", (float)hardness, (float)blastResistance, toolHardnessLevel), name + "_smooth_anvil");
 //				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(smoothAnvil, 1), "xxx", "xxx", "xxx", 'x', smooth));
 //			}
-			
-			if (GENERATE_SMOOTHFURNACES) {
-				smoothFurnace = registerBlock(new RockFurnace((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE, false), name + "_smooth_furnace");
-				registerBlock(new RockFurnace((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE, true).setLightLevel(0.875F), "lit_" + name + "_smooth_furnace");
-				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(smoothFurnace, 1), "xxx", "x x", "xxx", 'x', rock));
-				GameRegistry.registerTileEntity(TileEntityRockFurnace.class, name + "_smooth_furnace");
-			}
 			
 			if (GENERATE_SMOOTHSTAIRS) {
 				smoothStairs = registerBlock(new RockStairs(rock, (float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE),name + "_smooth_stairs");
@@ -664,8 +672,15 @@ public class Mineralogy {
 			}
 			
 			if (GENERATE_SMOOTHSLAB) {
-				smoothSlab = registerBlock(new RockSlab((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE),name + "_smooth_slab");
+				smoothSlab = registerBlock(new RockSlab((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE, name + "_double_smooth_slab"),name + "_smooth_slab");
 				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(smoothSlab, 6), "xxx", 'x', smooth));
+			
+				if (GENERATE_SMOOTHFURNACES) {
+					smoothFurnace = registerBlock(new RockFurnace((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE, false), name + "_smooth_furnace");
+					registerBlock(new RockFurnace((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE, true).setLightLevel(0.875F), "lit_" + name + "_smooth_furnace");
+					GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(smoothFurnace, 1), "xxx", "xyx", "xxx", 'x', smoothSlab, 'y', Blocks.FURNACE));
+					GameRegistry.registerTileEntity(TileEntityRockFurnace.class, name + "_smooth_furnace");
+				}
 			}
 			
 			if (GENERATE_SMOOTH_WALL) {
@@ -677,21 +692,21 @@ public class Mineralogy {
 				smoothBrick = registerBlock(new Rock(false, (float)hardness,(float)blastResistance,toolHardnessLevel, SoundType.STONE), name + "_smooth_brick");
 				GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(smoothBrick, 4), "xx", "xx", 'x', smooth));
 			
-				if (GENERATE_SMOOTHBRICKFURNACES) {
-					smoothBrickFurnace = registerBlock(new RockFurnace((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE, false), name + "_smooth_brick_furnace");
-					registerBlock(new RockFurnace((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE, true).setLightLevel(0.875F), "lit_" + name + "_smooth_brick_furnace");
-					GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(smoothBrickFurnace, 1), "xxx", "x x", "xxx", 'x', rock));
-					GameRegistry.registerTileEntity(TileEntityRockFurnace.class, name + "_smooth_brick_furnace");
-				}
-				
 				if (GENERATE_SMOOTHBRICKSTAIRS) {
 					smoothBrickStairs = registerBlock(new RockStairs(rock, (float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_smooth_brick_stairs");
 					GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(smoothBrickStairs, 4), "x  ","xx ", "xxx", 'x', smoothBrick));
 				}
 				
 				if (GENERATE_SMOOTHBRICKSLAB) {
-					smoothBrickSlab = registerBlock(new RockSlab((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE), name + "_smooth_brick_slab");
+					smoothBrickSlab = registerBlock(new RockSlab((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE, name + "_double_smooth_brick_slab"), name + "_smooth_brick_slab");
 					GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(smoothBrickSlab, 6), "xxx", 'x', smoothBrick));
+				
+					if (GENERATE_SMOOTHBRICKFURNACES) {
+						smoothBrickFurnace = registerBlock(new RockFurnace((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE, false), name + "_smooth_brick_furnace");
+						registerBlock(new RockFurnace((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE, true).setLightLevel(0.875F), "lit_" + name + "_smooth_brick_furnace");
+						GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(smoothBrickFurnace, 1), "xxx", "xyx", "xxx", 'x', smoothBrickSlab, 'y', Blocks.FURNACE));
+						GameRegistry.registerTileEntity(TileEntityRockFurnace.class, name + "_smooth_brick_furnace");
+					}
 				}
 				
 				if (GENERATE_SMOOTHBRICK_WALL) {

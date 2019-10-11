@@ -2,7 +2,7 @@
   "credit": "Made with Blockbench",
   "textures": {
     "0": "mineralogy:blocks/diorite_smooth",
-    "particle": "mineralogy:blocks/diorite"
+    "particle": "mineralogy:blocks/diorite_smooth"
   },
   "elements": [
     {

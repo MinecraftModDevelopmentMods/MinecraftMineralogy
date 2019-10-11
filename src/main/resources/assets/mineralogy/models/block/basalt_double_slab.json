@@ -1,0 +1,8 @@
+{
+  "parent": "mineralogy:block/brick",
+  "textures": {
+    "top": "mineralogy:blocks/basalt",
+    "bottom": "mineralogy:blocks/basalt",
+    "side": "mineralogy:blocks/basalt"
+  }
+}

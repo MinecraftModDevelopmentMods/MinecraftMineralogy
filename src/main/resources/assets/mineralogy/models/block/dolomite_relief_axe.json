@@ -2,8 +2,8 @@
   "credit": "Made with Blockbench",
   "textures": {
     "0": "mineralogy:blocks/dolomite_smooth",
-    "2": "mineralogy:blocks/dolomite",
-    "particle": "mineralogy:blocks/dolomite"
+    "2": "mineralogy:blocks/dolomite_smooth",
+    "particle": "mineralogy:blocks/dolomite_smooth"
   },
   "elements": [
     {

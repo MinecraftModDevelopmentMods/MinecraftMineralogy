@@ -1,0 +1,8 @@
+{
+  "parent": "mineralogy:block/brick",
+  "textures": {
+    "top": "mineralogy:blocks/slate_smooth",
+    "bottom": "mineralogy:blocks/slate_smooth",
+    "side": "mineralogy:blocks/slate_smooth"
+  }
+}

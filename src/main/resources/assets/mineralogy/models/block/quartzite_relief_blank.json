@@ -2,7 +2,7 @@
   "credit": "Made with Blockbench",
   "textures": {
     "0": "mineralogy:blocks/quartzite_smooth",
-    "particle": "mineralogy:blocks/quartzite"
+    "particle": "mineralogy:blocks/quartzite_smooth"
   },
   "elements": [
     {

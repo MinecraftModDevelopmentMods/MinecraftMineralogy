@@ -1,9 +1,9 @@
 {
   "credit": "Made with Blockbench",
   "textures": {
-    "0": "mineralogy:blocks/granite_smooth",
-    "2": "mineralogy:blocks/granite",
-    "particle": "mineralogy:blocks/granite"
+    "0": "mineralogy:blocks/marble_smooth",
+    "2": "mineralogy:blocks/granite_smooth",
+    "particle": "mineralogy:blocks/marble_smooth"
   },
   "elements": [
     {

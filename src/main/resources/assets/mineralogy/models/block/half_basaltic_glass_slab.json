@@ -1,0 +1,8 @@
+{
+  "parent": "block/half_slab",
+  "textures": {
+    "bottom": "mineralogy:blocks/basaltic_glass",
+    "top": "mineralogy:blocks/basaltic_glass",
+    "side": "mineralogy:blocks/basaltic_glass"
+  }
+}

@@ -196,16 +196,17 @@ public class RockSlab extends net.minecraft.block.Block {
 			if (doubleIt && (block.getRegistryName().getPath() == itemStack.getItem().getRegistryName().getPath())) {
 				worldIn.setBlockState(pos, doubleSlabBlockstate);
 				
-				if (hand == EnumHand.MAIN_HAND) {
-					int newCount = playerIn.getHeldItemMainhand().getCount() -1;
-					
-					playerIn.getHeldItemMainhand().setCount(newCount);
-				} else  {
-					int newCount = playerIn.getHeldItemOffhand().getCount() -1;
-					
-					itemStack = playerIn.getHeldItemOffhand();
+				if (!playerIn.isCreative()) {
+					if (hand == EnumHand.MAIN_HAND) {
+						int newCount = playerIn.getHeldItemMainhand().getCount() -1;
+						
+						playerIn.getHeldItemMainhand().setCount(newCount);
+					} else  {
+						int newCount = playerIn.getHeldItemOffhand().getCount() -1;
+						
+						playerIn.getHeldItemOffhand().setCount(newCount);
+					}
 				}
-				
 				return true;
 			}
 		}

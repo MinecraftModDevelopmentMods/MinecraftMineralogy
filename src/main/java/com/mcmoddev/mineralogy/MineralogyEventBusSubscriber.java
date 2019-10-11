@@ -24,13 +24,17 @@ public class MineralogyEventBusSubscriber {
 				.toArray(new Block[PatchHandler.MineralogyPatchRegistry.size()]));
 	}
 
+	
+	
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> event) {
 		event.getRegistry().registerAll(
 				MineralogyRegistry.MineralogyItemRegistry.values().toArray(new Item[MineralogyRegistry.MineralogyItemRegistry.size()]));
 
-		for (Map.Entry<String, Block> map : MineralogyRegistry.BlocksToRegister.entrySet()) 
-			OreDictionary.registerOre(map.getKey(), map.getValue());
+		for (Map.Entry<String, Block> map : MineralogyRegistry.BlocksToRegister.entrySet())  {
+			if (!map.getKey().contains("ITEMLESS"))
+				OreDictionary.registerOre(map.getKey(), map.getValue());
+		}
 		
 		// make all of the rock types equivalent to cobblestone
 		if (MineralogyConfig.makeRockCobblestoneEquivilent()) {

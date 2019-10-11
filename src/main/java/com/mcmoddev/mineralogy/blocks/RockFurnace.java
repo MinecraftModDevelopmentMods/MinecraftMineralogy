@@ -42,8 +42,9 @@ public class RockFurnace extends BlockContainer
     private static final PropertyDirection FACING = BlockHorizontal.FACING;
     private final boolean isBurning;
     private static boolean keepInventory;
-
-    public RockFurnace(float  hardness, float blastResistance, int toolHardnessLevel, boolean isBurning)
+    private float _burnModifier;
+    
+    public RockFurnace(float  hardness, float blastResistance, int toolHardnessLevel, boolean isBurning, float burnModifier)
     {
         super(Material.ROCK);
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
@@ -51,6 +52,7 @@ public class RockFurnace extends BlockContainer
         this.setHardness(hardness);
         this.blockResistance = blastResistance;
         this.setHarvestLevel("pickaxe", toolHardnessLevel);
+        _burnModifier = burnModifier;
     }
 
     @Override
@@ -197,7 +199,11 @@ public class RockFurnace extends BlockContainer
 
     public TileEntity createNewTileEntity(World worldIn, int meta)
     {
-        return new TileEntityRockFurnace();
+    	TileEntityRockFurnace newTE = new TileEntityRockFurnace(_burnModifier);
+    	
+    	//newTE.setBurnModifier(_burnModifier);
+    	
+        return newTE;
     }
 
     public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)

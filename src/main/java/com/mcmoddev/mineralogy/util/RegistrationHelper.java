@@ -26,12 +26,14 @@ public class RegistrationHelper {
 		block.setRegistryName(name);
 		Item item = null;
 		
-		if (addToTab)
+		if (addToTab) {
 			if(bypassSneak)
 				item = registerItem(new BypassItemBlock(block), name, maxStackSize);
 			else
 				item = registerItem(new ItemBlock(block), name, maxStackSize);
-		
+		} else {
+			oreDictionaryName = "ITEMLESS" + oreDictionaryName;
+		}
 		MinIoC IoC = MinIoC.getInstance();
 		
 		BlockItemPair pair = new BlockItemPair(block, item);

@@ -118,40 +118,40 @@ public class Blocks {
 		RecipeHelper.addShapedOreRecipe(materialName + "_relief_blank", new ItemStack(blankRelief.PairedItem, 16), "xxx", "xxx", "xxx", 'x', oreDictName);
 		
 		final BlockItemPair axeRelief =  RegistrationHelper.registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_axe", Constants.RELIEF + "Axe" + materialName);
-		RecipeHelper.addShapelessOreRecipe(materialName + "_relief_axe", new ItemStack(axeRelief.PairedItem, 1), Constants.RELIEF + "Blank" + materialName, Items.STONE_AXE);
+		RecipeHelper.addShapelessOreRecipe(materialName + "_relief_axe", new ItemStack(axeRelief.PairedItem, 8), Constants.RELIEF + "Blank" + materialName, Constants.RELIEF + "Blank" + materialName, Constants.RELIEF + "Blank" + materialName, Constants.RELIEF + "Blank" + materialName, Constants.RELIEF + "Blank" + materialName, Constants.RELIEF + "Blank" + materialName, Constants.RELIEF + "Blank" + materialName, Constants.RELIEF + "Blank" + materialName, Items.STONE_AXE);
 		
 		final BlockItemPair crossRelief = RegistrationHelper.registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_cross", Constants.RELIEF  + "Cross" + materialName);
-		RecipeHelper.addShapedOreRecipe(materialName + "_relief_cross", new ItemStack(crossRelief.PairedItem, 1), "x x", "   ", "x x", 'x', Constants.RELIEF + "Blank" + materialName);
+		RecipeHelper.addShapedOreRecipe(materialName + "_relief_cross", new ItemStack(crossRelief.PairedItem, 4), "x x", "   ", "x x", 'x', Constants.RELIEF + "Blank" + materialName);
 		
 		final BlockItemPair hammerRelief = RegistrationHelper.registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_hammer", Constants.RELIEF  + "Hammer" + materialName);
-		RecipeHelper.addShapedOreRecipe(materialName + "_relief_hammer", new ItemStack(hammerRelief.PairedItem, 1), " x "," y "," z ",'x', oreDictName,'y', Items.STICK,'z', Constants.RELIEF + "Blank" + materialName);
+		RecipeHelper.addShapedOreRecipe(materialName + "_relief_hammer", new ItemStack(hammerRelief.PairedItem, 7), "zxz","zyz","zzz",'x', oreDictName,'y', Items.STICK,'z', Constants.RELIEF + "Blank" + materialName);
 			
 		final BlockItemPair hoeRelief =  RegistrationHelper.registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_hoe", Constants.RELIEF + "Hoe" + materialName);
-		RecipeHelper.addShapelessOreRecipe(materialName + "_relief_hoe", new ItemStack(hoeRelief.PairedItem, 1), Constants.RELIEF + "Blank" + materialName, Items.STONE_HOE);
+		RecipeHelper.addShapelessOreRecipe(materialName + "_relief_hoe", new ItemStack(hoeRelief.PairedItem, 8), Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName, Items.STONE_HOE);
 		
 		final BlockItemPair horizontalRelief = RegistrationHelper.registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_horizontal", Constants.RELIEF  + "Horizontal" + materialName);
-		RecipeHelper.addShapedOreRecipe(materialName + "_relief_horizontal", new ItemStack(horizontalRelief.PairedItem, 1), "xxx", 'x', Constants.RELIEF + "Blank" + materialName);
+		RecipeHelper.addShapedOreRecipe(materialName + "_relief_horizontal", new ItemStack(horizontalRelief.PairedItem, 3), "xxx", 'x', Constants.RELIEF + "Blank" + materialName);
 		
 		final BlockItemPair leftRelief = RegistrationHelper.registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_left", Constants.RELIEF  + "Left" + materialName);
-		RecipeHelper.addShapedOreRecipe(materialName + "_relief_left", new ItemStack(leftRelief.PairedItem, 1),"x  "," x ","  x",'x', Constants.RELIEF + "Blank" + materialName);
+		RecipeHelper.addShapedOreRecipe(materialName + "_relief_left", new ItemStack(leftRelief.PairedItem, 3),"x  "," x ","  x",'x', Constants.RELIEF + "Blank" + materialName);
 		
 		final BlockItemPair pickaxeRelief =  RegistrationHelper.registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_pickaxe", Constants.RELIEF + "Pickaxe" + materialName);
-		RecipeHelper.addShapelessOreRecipe(materialName + "_relief_pickaxe", new ItemStack(pickaxeRelief.PairedItem, 1), Constants.RELIEF + "Blank" + materialName, Items.STONE_PICKAXE);
+		RecipeHelper.addShapelessOreRecipe(materialName + "_relief_pickaxe", new ItemStack(pickaxeRelief.PairedItem, 8), Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName, Items.STONE_PICKAXE);
 		
 		final BlockItemPair plusRelief = RegistrationHelper.registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_plus", Constants.RELIEF  + "Plus" + materialName);
-		RecipeHelper.addShapedOreRecipe(materialName + "_relief_plus", new ItemStack(plusRelief.PairedItem, 1), " x ","xxx"," x ", 'x', Constants.RELIEF + "Blank" + materialName);
+		RecipeHelper.addShapedOreRecipe(materialName + "_relief_plus", new ItemStack(plusRelief.PairedItem, 5), " x ","xxx"," x ", 'x', Constants.RELIEF + "Blank" + materialName);
 		
 		final BlockItemPair rightRelief =  RegistrationHelper.registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_right", Constants.RELIEF + "Right" + materialName);
 		RecipeHelper.addShapedOreRecipe(materialName + "_relief_right", new ItemStack(rightRelief.PairedItem, 3),"  x"," x ","x  ",'x', Constants.RELIEF  + "Left" + materialName);
 		
 		final BlockItemPair swordRelief =  RegistrationHelper.registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_sword", Constants.RELIEF + "Sword" + materialName);
-		RecipeHelper.addShapelessOreRecipe(materialName + "_relief_sword", new ItemStack(swordRelief.PairedItem, 1), Constants.RELIEF + "Blank" + materialName, Items.STONE_SWORD);
+		RecipeHelper.addShapelessOreRecipe(materialName + "_relief_sword", new ItemStack(swordRelief.PairedItem, 8), Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName, Items.STONE_SWORD);
 		
 		final BlockItemPair iRelief = RegistrationHelper.registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_i", Constants.RELIEF  + "I" + materialName);
-		RecipeHelper.addShapedOreRecipe(materialName + "_relief_i", new ItemStack(iRelief.PairedItem, 1), "xxx"," x ","xxx", 'x', Constants.RELIEF + "Blank" + materialName);
+		RecipeHelper.addShapedOreRecipe(materialName + "_relief_i", new ItemStack(iRelief.PairedItem, 7), "xxx"," x ","xxx", 'x', Constants.RELIEF + "Blank" + materialName);
 		
 		final BlockItemPair verticalRelief = RegistrationHelper.registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_vertical", Constants.RELIEF  + "Vertical" + materialName);
-		RecipeHelper.addShapedOreRecipe(materialName + "_relief_vertical", new ItemStack(verticalRelief.PairedItem, 1), "x","x","x", 'x', Constants.RELIEF + "Blank" + materialName);
+		RecipeHelper.addShapedOreRecipe(materialName + "_relief_vertical", new ItemStack(verticalRelief.PairedItem, 3), "x","x","x", 'x', Constants.RELIEF + "Blank" + materialName);
 	}
 	
 	protected static void addStoneType(Material materialType, BlockItemPair rockPair) {

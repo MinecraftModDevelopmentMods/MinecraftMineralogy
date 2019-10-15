@@ -1,0 +1,8 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "top": "mineralogy:blocks/slate_smooth",
+    "front": "mineralogy:blocks/slate_smooth_furnace_front_off",
+    "side": "mineralogy:blocks/slate_smooth"
+  }
+}

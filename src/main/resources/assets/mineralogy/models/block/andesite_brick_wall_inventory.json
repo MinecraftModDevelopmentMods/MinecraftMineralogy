@@ -1,6 +1,6 @@
 {
-    "parent": "block/wall_inventory",
-    "textures": {
-    "wall": "mineralogy:blocks/andesite_brick_side"
-    }
+  "parent": "block/wall_inventory",
+  "textures": {
+    "wall": "mineralogy:blocks/andesite_brick_top"
+  }
 }

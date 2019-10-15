@@ -1,0 +1,6 @@
+{
+  "parent": "mineralogy:block/block",
+  "textures": {
+    "face": "mineralogy:blocks/basaltic_glass_smooth"
+  }
+}

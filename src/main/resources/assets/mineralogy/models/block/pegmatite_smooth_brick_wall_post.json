@@ -1,6 +1,6 @@
 {
-    "parent": "block/wall_post",
-    "textures": {
-        "wall": "mineralogy:blocks/pegmatite_smooth_brick"
-    }
+  "parent": "block/wall_post",
+  "textures": {
+    "wall": "mineralogy:blocks/pegmatite_smooth_brick_side"
+  }
 }

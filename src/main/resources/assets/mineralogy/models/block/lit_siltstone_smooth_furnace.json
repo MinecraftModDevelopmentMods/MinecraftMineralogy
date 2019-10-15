@@ -1,0 +1,8 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "top": "mineralogy:blocks/siltstone_smooth",
+    "front": "mineralogy:blocks/siltstone_smooth_furnace_front_on",
+    "side": "mineralogy:blocks/siltstone_smooth"
+  }
+}

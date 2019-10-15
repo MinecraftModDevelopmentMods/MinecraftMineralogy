@@ -1,6 +1,6 @@
 {
-    "parent": "block/wall_side",
-    "textures": {
-        "wall": "mineralogy:blocks/diorite_smooth_brick"
-    }
+  "parent": "block/wall_side",
+  "textures": {
+    "wall": "mineralogy:blocks/diorite_smooth_brick_side"
+  }
 }

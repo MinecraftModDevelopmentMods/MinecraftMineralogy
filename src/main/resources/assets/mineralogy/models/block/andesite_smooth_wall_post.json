@@ -1,6 +1,6 @@
 {
-    "parent": "block/wall_post",
-    "textures": {
-        "wall": "mineralogy:blocks/andesite_smooth"
-    }
+  "parent": "block/wall_post",
+  "textures": {
+    "wall": "mineralogy:blocks/andesite_smooth"
+  }
 }

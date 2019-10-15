@@ -1,0 +1,7 @@
+{
+  "parent": "mineralogy:block/stairs_inner",
+  "textures": {
+    "face": "mineralogy:blocks/basaltic_glass",
+    "side": "mineralogy:blocks/basaltic_glass"
+  }
+}

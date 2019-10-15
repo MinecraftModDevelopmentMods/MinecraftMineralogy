@@ -1,6 +1,6 @@
 {
-    "parent": "block/wall_inventory",
-    "textures": {
-    "wall": "mineralogy:blocks/basalt_smooth_brick"
-    }
+  "parent": "block/wall_inventory",
+  "textures": {
+    "wall": "mineralogy:blocks/basalt_smooth_brick_top"
+  }
 }

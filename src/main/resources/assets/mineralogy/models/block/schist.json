@@ -1,6 +1,6 @@
 {
-    "parent": "mineralogy:block/block",
-    "textures": {
-        "face": "mineralogy:blocks/schist"
-    }
+  "parent": "mineralogy:block/block",
+  "textures": {
+    "face": "mineralogy:blocks/schist"
+  }
 }

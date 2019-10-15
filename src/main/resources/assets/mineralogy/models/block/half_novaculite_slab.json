@@ -1,0 +1,8 @@
+{
+  "parent": "block/half_slab",
+  "textures": {
+    "bottom": "mineralogy:blocks/novaculite",
+    "top": "mineralogy:blocks/novaculite",
+    "side": "mineralogy:blocks/novaculite"
+  }
+}

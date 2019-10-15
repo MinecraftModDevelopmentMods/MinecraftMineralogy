@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "facing=up": { "model": "mineralogy:rocksaltstreetlamp" },
+        "facing=down": { "model": "mineralogy:rocksaltstreetlamp" },
+        "facing=east": { "model": "mineralogy:rocksaltstreetlamp"},
+        "facing=south": { "model": "mineralogy:rocksaltstreetlamp"},
+        "facing=west": { "model": "mineralogy:rocksaltstreetlamp"},
+        "facing=north": { "model": "mineralogy:rocksaltstreetlamp"}
+    }
+}

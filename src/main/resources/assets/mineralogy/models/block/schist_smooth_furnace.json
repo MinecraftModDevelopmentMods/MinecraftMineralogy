@@ -1,0 +1,8 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "top": "mineralogy:blocks/schist_smooth",
+    "front": "mineralogy:blocks/schist_smooth_furnace_front_off",
+    "side": "mineralogy:blocks/schist_smooth"
+  }
+}

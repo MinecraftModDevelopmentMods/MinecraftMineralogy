@@ -1,0 +1,8 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "top": "mineralogy:blocks/peridotite",
+    "front": "mineralogy:blocks/peridotite_furnace_front_on",
+    "side": "mineralogy:blocks/peridotite"
+  }
+}

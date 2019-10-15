@@ -16,7 +16,6 @@ import net.minecraftforge.oredict.OreDictionary;
 // This seems really not nice design, it'll do til we refactor the whole thing..
 @Mod.EventBusSubscriber(modid = Mineralogy.MODID)
 public class MineralogyEventBusSubscriber {
-
 	@SubscribeEvent
 	public static void registerBlocks(RegistryEvent.Register<Block> event) {
 		MineralogyRegistry.MineralogyBlockRegistry.values().forEach(block -> event.getRegistry().register(block.PairedBlock));
@@ -25,13 +24,17 @@ public class MineralogyEventBusSubscriber {
 				.toArray(new Block[PatchHandler.MineralogyPatchRegistry.size()]));
 	}
 
+	
+	
 	@SubscribeEvent
 	public static void registerItems(RegistryEvent.Register<Item> event) {
 		event.getRegistry().registerAll(
 				MineralogyRegistry.MineralogyItemRegistry.values().toArray(new Item[MineralogyRegistry.MineralogyItemRegistry.size()]));
 
-		for (Map.Entry<String, Block> map : MineralogyRegistry.BlocksToRegister.entrySet()) 
-			OreDictionary.registerOre(map.getKey(), map.getValue());
+		for (Map.Entry<String, Block> map : MineralogyRegistry.BlocksToRegister.entrySet())  {
+			if (!map.getKey().contains("ITEMLESS"))
+				OreDictionary.registerOre(map.getKey(), map.getValue());
+		}
 		
 		// make all of the rock types equivalent to cobblestone
 		if (MineralogyConfig.makeRockCobblestoneEquivilent()) {

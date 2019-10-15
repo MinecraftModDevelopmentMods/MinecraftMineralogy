@@ -1,0 +1,7 @@
+{
+  "parent": "mineralogy:block/slab",
+  "textures": {
+    "face": "mineralogy:blocks/basaltic_glass_smooth",
+    "side": "mineralogy:blocks/basaltic_glass_smooth"
+  }
+}

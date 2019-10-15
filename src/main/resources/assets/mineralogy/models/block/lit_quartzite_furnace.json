@@ -1,0 +1,8 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "top": "mineralogy:blocks/quartzite",
+    "front": "mineralogy:blocks/quartzite_furnace_front_on",
+    "side": "mineralogy:blocks/quartzite"
+  }
+}

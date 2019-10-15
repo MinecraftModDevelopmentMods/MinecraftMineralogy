@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "mineralogy:gneiss_relief_sword",
+      "x": 180
+    },
+    "facing=up": {
+      "model": "mineralogy:gneiss_relief_sword"
+    },
+    "facing=north": {
+      "model": "mineralogy:gneiss_relief_sword",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "mineralogy:gneiss_relief_sword",
+      "x": 90,
+      "y": 180
+    },
+    "facing=west": {
+      "model": "mineralogy:gneiss_relief_sword",
+      "x": 90,
+      "y": 270
+    },
+    "facing=east": {
+      "model": "mineralogy:gneiss_relief_sword",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

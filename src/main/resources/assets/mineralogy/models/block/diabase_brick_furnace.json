@@ -1,0 +1,8 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "top": "mineralogy:blocks/diabase_brick_top",
+    "front": "mineralogy:blocks/diabase_brick_furnace_front_off",
+    "side": "mineralogy:blocks/diabase_brick_side"
+  }
+}

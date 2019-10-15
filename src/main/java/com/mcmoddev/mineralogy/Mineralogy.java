@@ -53,7 +53,7 @@ public class Mineralogy {
 	 * increased whenever a change is made that has the potential to break
 	 * compatibility with other mods that depend on this one.
 	 */
-	static final String VERSION = "3.4.0";
+	static final String VERSION = "3.8.0";
 
 	private static final Logger logger = LogManager.getFormatterLogger(Mineralogy.MODID);
 

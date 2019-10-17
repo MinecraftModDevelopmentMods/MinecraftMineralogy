@@ -1,11 +1,11 @@
 # eclipse
 bin
 *.launch
-.settings
 .settings/*
 .metadata
 .classpath
 .project
+eclipse/*
 
 # idea
 out
@@ -19,8 +19,7 @@ build
 .gradle
 
 # other
-eclipse
-run
+run/*
 classes
 
 /README.txt

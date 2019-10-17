@@ -2,8 +2,6 @@ package cyano.mineralogy;
 
 import org.apache.commons.lang3.text.WordUtils;
 
-// DON'T FORGET TO UPDATE mcmod.info FILE!!!
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -41,10 +39,14 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import java.util.*;
 
-@Mod(modid = Mineralogy.MODID, name=Mineralogy.NAME, version = Mineralogy.VERSION,
+@Mod(
+		modid = Mineralogy.MODID,
+		name=Mineralogy.NAME,
+		version = Mineralogy.VERSION,
 		acceptedMinecraftVersions = "[1.10.2,)",
 		certificateFingerprint = "@FINGERPRINT@")
 public class Mineralogy {
+
 	public static final String MODID = "mineralogy";
     public static final String NAME ="Mineralogy";
     public static final String VERSION = "3.3.8";

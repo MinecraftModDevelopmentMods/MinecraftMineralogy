@@ -204,7 +204,7 @@ public class RockSlab extends net.minecraft.block.Block {
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
 			EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (_doubleSlab != "") {
+		if (!_doubleSlab.isEmpty()) {
 			IBlockState iblockstate = worldIn.getBlockState(pos);
 			
 			Block block = iblockstate.getBlock();

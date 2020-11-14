@@ -192,7 +192,7 @@ public class MineralogyConfig {
 	}
 	
 	public static boolean generateReliefs() {
-		return generateRockStairs;
+		return generateReliefs;
 	}
 	
 	public static boolean generateRockSlab() {

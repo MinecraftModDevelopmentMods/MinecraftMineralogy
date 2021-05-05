@@ -284,6 +284,7 @@ repositories {
 }
 
 dependencies {
+  deobfProvided "com.mcmoddev:OreSpawn:${mc_version}-${orespawn_version}"
   testCompile('org.junit.platform:junit-platform-launcher:1.2.+')
   testCompile('org.junit.jupiter:junit-jupiter-api:5.2.+') // testImplementation
   testRuntime('org.junit.jupiter:junit-jupiter-engine:5.2.+') //testRuntimeOnly
@@ -606,8 +607,8 @@ curseforge {
         if (getBooleanProperty('cf_use_custom_display_name')) {
           displayName = "${project.name} ${project.display_version}"
         }
-        if (project.hasProperty('cf_requirements') || project.hasProperty('cf_optionals') || project.hasProperty('cf_embeddeds') || project.hasProperty('cf_tools') || project.hasProperty('cf_incompatibles') || project.hasProperty('cf_includes')) {
           relations {
+          	requiredLibrary 'mmd-orespawn'
             if (project.hasProperty('cf_requirements')) {
               final def requirements = "${project.cf_requirements}".split(', ')
               requirements.each {
@@ -645,7 +646,7 @@ curseforge {
               }
             }
           }
-        }
+        
       }
       if (getBooleanProperty('create_api_jar')) {
         addArtifact(apiJar) {

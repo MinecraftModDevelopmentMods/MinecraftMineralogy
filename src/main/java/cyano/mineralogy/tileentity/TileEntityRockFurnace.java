@@ -2,7 +2,6 @@ package cyano.mineralogy.tileentity;
 
 import cyano.mineralogy.blocks.RockFurnace;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.tileentity.TileEntityFurnace;
@@ -64,7 +63,7 @@ public class TileEntityRockFurnace extends TileEntityFurnace {
 	        
 
 	        try {
-	        	if (!this.world.isRemote)
+	        	if (!this.getWorld().isRemote)
 		        {
 		            if (this.isBurning() || super.getStackInSlot(1) != null && super.getStackInSlot(0) != null)
 		            {
@@ -123,13 +122,13 @@ public class TileEntityRockFurnace extends TileEntityFurnace {
 		            }
 		            else if (!this.isBurning() && super.getField(2) > 0)
 		            {
-		            	super.setField(2, MathHelper.clamp(super.getField(2) - 2, 0, super.getField(3)));
+		            	super.setField(2, MathHelper.clamp_int(super.getField(2) - 2, 0, super.getField(3)));
 		            }
 
 		            if (flag != this.isBurning())
 		            {
 		                flag1 = true;
-		                RockFurnace.setState(this.isBurning(), this.world, this.pos);
+		                RockFurnace.setState(this.isBurning(), this.getWorld(), this.pos);
 		            }
 		        }
 

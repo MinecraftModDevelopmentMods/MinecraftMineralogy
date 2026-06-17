@@ -92,7 +92,7 @@ public class RockSlab extends Block {
 
 	@Override
 	public boolean isValidPosition(IBlockState state, IWorldReaderBase world, BlockPos pos) {
-		return canPlaceAt(world, pos, state.get(FACING));
+		return canPlaceAtAnyFace(world, pos);
 	}
 
 	@Override
@@ -141,6 +141,16 @@ public class RockSlab extends Block {
 		BlockPos supportPos = pos.offset(facing.getOpposite());
 		IBlockState support = world.getBlockState(supportPos);
 		return support.getBlockFaceShape(world, supportPos, facing) != BlockFaceShape.UNDEFINED;
+	}
+
+	private static boolean canPlaceAtAnyFace(IBlockReader world, BlockPos pos) {
+		for (EnumFacing facing : FACING.getAllowedValues()) {
+			if (canPlaceAt(world, pos, facing)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	private static EnumFacing getPlacementFacing(net.minecraft.item.BlockItemUseContext context) {

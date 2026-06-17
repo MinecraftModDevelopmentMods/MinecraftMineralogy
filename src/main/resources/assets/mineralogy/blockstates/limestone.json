@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "mineralogy:limestone"
+    "": {
+      "model": "mineralogy:block/limestone"
     }
   }
 }

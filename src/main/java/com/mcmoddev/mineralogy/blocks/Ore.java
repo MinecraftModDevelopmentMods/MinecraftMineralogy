@@ -4,59 +4,64 @@ import java.util.Random;
 
 import com.mcmoddev.mineralogy.Mineralogy;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockOre;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
+import net.minecraft.util.IItemProvider;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
+import net.minecraft.world.World;
+import net.minecraftforge.common.ToolType;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class Ore extends BlockOre {
-
-	private final Item dropItem;
+	private final String dropItemName;
 	private final int dropAdduct;
 	private final int dropRange;
+	private final int pickLevel;
 
-	public Ore(String name, Item oreDrop, int minNumberDropped, int maxNumberDropped, int pickLevel) {
-		super();
-		this.setSoundType(SoundType.STONE); // sound for stone
-		this.setTranslationKey(Mineralogy.MODID + "_" + name);
-		this.setHardness((float) 1.5); // dirt is 0.5, grass is 0.6, stone is 1.5,iron ore is 3, obsidian is 50
-		this.setResistance((float) 5); // dirt is 0, iron ore is 5, stone is 10, obsidian is 2000
-		this.setHarvestLevel("pickaxe", pickLevel);
-		
-		dropItem = oreDrop;
-		dropAdduct = minNumberDropped;
-		dropRange = (maxNumberDropped - minNumberDropped) + 1;
+	public Ore(String name, String dropItemName, int minNumberDropped, int maxNumberDropped, int pickLevel) {
+		super(Block.Properties.create(Material.ROCK).hardnessAndResistance(1.5F, 5.0F).sound(SoundType.STONE));
+		this.setRegistryName(Mineralogy.MODID, name);
+
+		this.dropItemName = dropItemName;
+		this.dropAdduct = minNumberDropped;
+		this.dropRange = (maxNumberDropped - minNumberDropped) + 1;
+		this.pickLevel = pickLevel;
 	}
 
 	@Override
-	public int getExpDrop(final IBlockState state, IBlockAccess world, final BlockPos pos, final int fortune) {
-		return 0; // XP comes from smelting
+	public int getExpDrop(IBlockState state, IWorldReader world, BlockPos pos, int fortune) {
+		return 0;
 	}
 
 	@Override
-	public int quantityDropped(Random random) {
+	public int quantityDropped(IBlockState state, Random random) {
 		return random.nextInt(dropRange) + dropAdduct;
 	}
 
 	@Override
-	public int quantityDropped(IBlockState state, int fortune, Random random) {
-		return quantityDroppedWithBonus(fortune, random);
+	public int getItemsToDropCount(IBlockState state, int fortune, World world, BlockPos pos, Random random) {
+		return quantityDropped(state, random);
 	}
 
 	@Override
-	public int quantityDroppedWithBonus(int fortune, Random random) {
-		return this.quantityDropped(random);
+	public IItemProvider getItemDropped(IBlockState state, World world, BlockPos pos, int fortune) {
+		Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(Mineralogy.MODID, dropItemName));
+		return item == null ? this : item;
 	}
 
 	@Override
-	public Item getItemDropped(IBlockState state, Random random, int fortune) {
-		return dropItem;
+	public ToolType getHarvestTool(IBlockState state) {
+		return ToolType.PICKAXE;
 	}
 
 	@Override
-	public int damageDropped(IBlockState state) {
-		return 0;
+	public int getHarvestLevel(IBlockState state) {
+		return pickLevel;
 	}
 }

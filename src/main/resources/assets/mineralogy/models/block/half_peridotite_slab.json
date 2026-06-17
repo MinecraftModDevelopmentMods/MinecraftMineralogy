@@ -1,5 +1,5 @@
 {
-  "parent": "block/half_slab",
+  "parent": "minecraft:block/slab",
   "textures": {
     "bottom": "mineralogy:blocks/peridotite",
     "top": "mineralogy:blocks/peridotite",

@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:hornfels_relief_blank"
+    }
+  },
+  "result": {
+    "item": "mineralogy:hornfels_relief_horizontal",
+    "count": 3
+  },
+  "conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_SMOOTH"
+    },
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_RELIEFS"
+    }
+  ]
+}

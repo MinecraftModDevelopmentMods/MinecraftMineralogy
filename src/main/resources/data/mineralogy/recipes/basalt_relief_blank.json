@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    "xxx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:basalt_smooth"
+    }
+  },
+  "result": {
+    "item": "mineralogy:basalt_relief_blank",
+    "count": 16
+  },
+  "conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_SMOOTH"
+    },
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_RELIEFS"
+    }
+  ]
+}

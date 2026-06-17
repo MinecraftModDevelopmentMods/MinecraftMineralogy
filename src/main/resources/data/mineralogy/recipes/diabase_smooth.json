@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mineralogy:diabase"
+    },
+    {
+      "item": "minecraft:sand"
+    }
+  ],
+  "result": {
+    "item": "mineralogy:diabase_smooth"
+  },
+  "conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_SMOOTH"
+    }
+  ]
+}

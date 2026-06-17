@@ -1,76 +1,118 @@
 package com.mcmoddev.mineralogy.init;
 
-import com.mcmoddev.mineralogy.Constants;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.mcmoddev.mineralogy.Mineralogy;
-import com.mcmoddev.mineralogy.ioc.MinIoC;
+import com.mcmoddev.mineralogy.blocks.DryWall;
+import com.mcmoddev.mineralogy.blocks.Ore;
+import com.mcmoddev.mineralogy.blocks.Rock;
+import com.mcmoddev.mineralogy.blocks.RockFurnace;
+import com.mcmoddev.mineralogy.blocks.RockRelief;
+import com.mcmoddev.mineralogy.blocks.RockSaltLamp;
+import com.mcmoddev.mineralogy.blocks.RockSaltStreetLamp;
+import com.mcmoddev.mineralogy.blocks.RockSlab;
+import com.mcmoddev.mineralogy.blocks.RockStairs;
+import com.mcmoddev.mineralogy.blocks.RockWall;
 import com.mcmoddev.mineralogy.items.MineralFertilizer;
-import com.mcmoddev.mineralogy.lib.exceptions.ItemNotFoundException;
-import com.mcmoddev.mineralogy.lib.exceptions.TabNotFoundException;
-import com.mcmoddev.mineralogy.lib.interfaces.IDynamicTabProvider;
-import com.mcmoddev.mineralogy.util.RecipeHelper;
-import com.mcmoddev.mineralogy.util.RegistrationHelper;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.ObjectHolder;
 
+@Mod.EventBusSubscriber(modid = Mineralogy.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@ObjectHolder(Mineralogy.MODID)
 public class Items {
-	private static boolean initDone = false;
-		
-	protected Items() {
-		throw new IllegalAccessError("Not a instantiable class");
+	public static final ItemBlock basalt = null;
+	public static final Item sulfur_dust = null;
+	public static final Item phosphorous_dust = null;
+	public static final Item nitrate_dust = null;
+	public static final Item gypsum_dust = null;
+	public static final Item chalk_dust = null;
+	public static final Item rock_salt_dust = null;
+	public static final Item salt_dust = null;
+	public static final Item mineral_fertilizer = null;
+
+	@SubscribeEvent
+	public static void registerItems(RegistryEvent.Register<Item> event) {
+		event.getRegistry().registerAll(
+				createItem("sulfur_dust"),
+				createItem("phosphorous_dust"),
+				createItem("nitrate_dust"),
+				createItem("gypsum_dust"),
+				createItem("chalk_dust"),
+				createItem("rock_salt_dust"),
+				createItem("salt_dust"),
+				createFertilizer()
+		);
+
+		List<Item> blockItems = new ArrayList<Item>();
+
+		for (Block block : ForgeRegistries.BLOCKS.getValues()) {
+			if (isMineralogyBlockItem(block)) {
+				blockItems.add(createBlockItem(block));
+			}
+		}
+
+		event.getRegistry().registerAll(blockItems.toArray(new Item[blockItems.size()]));
 	}
 
-	/**
-	 *
-	 */
-	public static void init() {
-		if (initDone) {
-			return;
-		}
-		
-		MinIoC IoC = MinIoC.getInstance();
-		
-		Item gypsumPowder = addDust(Constants.GYPSUM);;
-		Item chalkPowder = addDust(Constants.CHALK);;
-		Item rocksaltPowder = addDust(Constants.ROCKSALT);;
-		Item sulphurPowder = addDust(Constants.SULFUR);;
-		Item phosphorousPowder = addDust(Constants.PHOSPHOROUS);;
-		Item nitratePowder = addDust(Constants.NITRATE);
-		
-		Item mineralFertilizer = RegistrationHelper.registerItem(new MineralFertilizer(), "mineral_fertilizer")
-				.setTranslationKey(Mineralogy.MODID + "." + "mineral_fertilizer");
-		
-		IoC.register(Item.class, gypsumPowder, Constants.DUST_GYPSUM, Mineralogy.MODID);
-		IoC.register(Item.class, chalkPowder, Constants.DUST_CHALK, Mineralogy.MODID);
-		IoC.register(Item.class, rocksaltPowder, Constants.DUST_ROCKSALT, Mineralogy.MODID);
-		IoC.register(Item.class, sulphurPowder, Constants.SULFUR, Mineralogy.MODID);
-		IoC.register(Item.class, phosphorousPowder, Constants.PHOSPHOROUS, Mineralogy.MODID);
-		IoC.register(Item.class, nitratePowder, Constants.NITRATE, Mineralogy.MODID);
-		IoC.register(Item.class, mineralFertilizer, Constants.FERTILIZER, Mineralogy.MODID);
-		
-		MineralogyRegistry.ItemsToRegister.put(Constants.FERTILIZER, mineralFertilizer);
-		
-		initDone = true;
+	private static boolean isMineralogyBlockItem(Block block) {
+		ResourceLocation registryName = block.getRegistryName();
+
+		return registryName != null
+				&& Mineralogy.MODID.equals(registryName.getNamespace())
+				&& (block instanceof Rock
+						|| block instanceof RockStairs
+						|| block instanceof RockWall
+						|| block instanceof RockSlab
+						|| isUnlitRockFurnace(block)
+						|| block instanceof RockRelief
+						|| block instanceof Ore
+						|| block instanceof DryWall
+						|| block instanceof RockSaltLamp
+						|| block instanceof RockSaltStreetLamp);
 	}
-	
-	private static Item addDust(String oreDictionaryName) {
-		String dustName = oreDictionaryName.toLowerCase() + "_" + Constants.DUST;
 
-		Item item = RegistrationHelper.registerItem(new Item(), dustName).setTranslationKey(Mineralogy.MODID + "." + dustName);
-
-		try {
-			MinIoC.getInstance().resolve(IDynamicTabProvider.class).addToTab(item);
-		} catch (TabNotFoundException | ItemNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	private static ItemBlock createBlockItem(Block block) {
+		Item.Properties properties = new Item.Properties().group(MineralogyItemGroups.forBlock(block));
+		if (block instanceof RockFurnace) {
+			properties.maxStackSize(1);
+		} else if (block instanceof RockSaltStreetLamp) {
+			properties.maxStackSize(16);
 		}
-		
-		MineralogyRegistry.ItemsToRegister.put(Constants.DUST + oreDictionaryName, item);
-		MinIoC.getInstance().register(Item.class, item, Constants.DUST + oreDictionaryName, Mineralogy.MODID);
-		
-		RecipeHelper.addShapelessOreRecipe(Constants.BLOCK.toLowerCase() + oreDictionaryName, new ItemStack(item, 9),
-				Constants.BLOCK.toLowerCase() + oreDictionaryName);
 
+		ItemBlock item = new ItemBlock(block, properties);
+		item.setRegistryName(block.getRegistryName());
 		return item;
+	}
+
+	private static boolean isUnlitRockFurnace(Block block) {
+		ResourceLocation registryName = block.getRegistryName();
+		return block instanceof RockFurnace
+				&& registryName != null
+				&& !registryName.getPath().startsWith("lit_");
+	}
+
+	private static Item createItem(String name) {
+		Item item = new Item(new Item.Properties().group(MineralogyItemGroups.forItem()));
+		item.setRegistryName(Mineralogy.MODID, name);
+		return item;
+	}
+
+	private static Item createFertilizer() {
+		MineralFertilizer item = new MineralFertilizer(MineralogyItemGroups.forItem());
+		item.setRegistryName(Mineralogy.MODID, "mineral_fertilizer");
+		return item;
+	}
+
+	private Items() {
+		throw new IllegalAccessError("Not an instantiable class");
 	}
 }

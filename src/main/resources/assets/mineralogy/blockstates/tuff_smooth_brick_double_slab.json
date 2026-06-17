@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "mineralogy:tuff_smooth_brick_double_slab"
+    "": {
+      "model": "mineralogy:block/tuff_smooth_brick_double_slab"
     }
   }
 }

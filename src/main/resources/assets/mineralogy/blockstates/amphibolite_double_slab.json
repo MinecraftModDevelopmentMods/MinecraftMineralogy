@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "mineralogy:amphibolite_double_slab"
+    "": {
+      "model": "mineralogy:block/amphibolite_double_slab"
     }
   }
 }

@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "mineralogy:siltstone_smooth"
+    "": {
+      "model": "mineralogy:block/siltstone_smooth"
     }
   }
 }

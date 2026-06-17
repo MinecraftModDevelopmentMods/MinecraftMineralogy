@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xx",
+    "xx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:slate"
+    }
+  },
+  "result": {
+    "item": "mineralogy:slate_brick",
+    "count": 4
+  },
+  "conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_BRICK"
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "mineralogy:peridotite_smooth_brick"
+    "": {
+      "model": "mineralogy:block/peridotite_smooth_brick"
     }
   }
 }

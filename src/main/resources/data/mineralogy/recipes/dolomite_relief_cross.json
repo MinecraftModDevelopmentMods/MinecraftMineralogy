@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "x x",
+    "   ",
+    "x x"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:dolomite_relief_blank"
+    }
+  },
+  "result": {
+    "item": "mineralogy:dolomite_relief_cross",
+    "count": 4
+  },
+  "conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_SMOOTH"
+    },
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_RELIEFS"
+    }
+  ]
+}

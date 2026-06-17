@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    "xyx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:phyllite_brick_slab"
+    },
+    "y": {
+      "item": "minecraft:furnace"
+    }
+  },
+  "result": {
+    "item": "mineralogy:phyllite_brick_furnace"
+  },
+  "conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_BRICK"
+    },
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_BRICKSLAB"
+    },
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_BRICKFURNACE"
+    }
+  ]
+}

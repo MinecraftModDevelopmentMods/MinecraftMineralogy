@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:pegmatite"
+    }
+  },
+  "result": {
+    "item": "mineralogy:pegmatite_slab",
+    "count": 6
+  },
+  "conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_ROCKSLAB"
+    }
+  ]
+}

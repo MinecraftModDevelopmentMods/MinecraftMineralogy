@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "mineralogy:slate_brick"
+    "": {
+      "model": "mineralogy:block/slate_brick"
     }
   }
 }

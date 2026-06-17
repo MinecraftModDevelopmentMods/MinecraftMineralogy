@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:hornfels"
+    }
+  },
+  "result": {
+    "item": "mineralogy:hornfels_slab",
+    "count": 6
+  },
+  "conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_ROCKSLAB"
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "mineralogy:basalt_double_slab"
+    "": {
+      "model": "mineralogy:block/basalt_double_slab"
     }
   }
 }

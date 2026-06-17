@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "mineralogy:conglomerate_double_slab"
+    "": {
+      "model": "mineralogy:block/conglomerate_double_slab"
     }
   }
 }

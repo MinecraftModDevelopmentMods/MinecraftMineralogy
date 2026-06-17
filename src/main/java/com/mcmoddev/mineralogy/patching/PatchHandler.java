@@ -1,58 +1,71 @@
 package com.mcmoddev.mineralogy.patching;
 
-import static com.mcmoddev.mineralogy.Mineralogy.MODID;
-
-import java.util.HashMap;
-import java.util.Map;
-
 import com.mcmoddev.mineralogy.Mineralogy;
-import com.mcmoddev.mineralogy.init.MineralogyRegistry;
-import com.mcmoddev.mineralogy.ioc.MinIoC;
-import com.mcmoddev.mineralogy.util.BlockItemPair;
+import com.mcmoddev.mineralogy.MineralogyConfig;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 
-/**
- * Created by Chris on 5/10/2016.
- */
-public class PatchHandler {
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-	public static final Map<String, Block> MineralogyPatchRegistry = new HashMap<>();
+@Mod.EventBusSubscriber(modid = Mineralogy.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+public final class PatchHandler {
+	private static final Logger LOGGER = LogManager.getLogger();
 
-	private static PatchHandler instance = null;
+	private static final ResourceLocation SAPROLITE = mineralogyId("saprolite");
+	private static final ResourceLocation PUMMICE = mineralogyId("pummice");
+	private static final ResourceLocation LIMESTONE = mineralogyId("limestone");
+	private static final ResourceLocation PUMICE = mineralogyId("pumice");
 
 	private PatchHandler() {
-		//
+		throw new IllegalAccessError("Not an instantiable class");
 	}
 
-	Block saprolite;
-	Block pummice; // note the misspelling
-
-	public static PatchHandler getInstance() {
-		if (instance == null) {
-			instance = new PatchHandler();
+	@SubscribeEvent
+	public static void remapMissingBlocks(RegistryEvent.MissingMappings<Block> event) {
+		if (!MineralogyConfig.patchUpdate()) {
+			return;
 		}
-		return instance;
+
+		remapMissing(event, SAPROLITE, ForgeRegistries.BLOCKS.getValue(LIMESTONE));
+		remapMissing(event, PUMMICE, ForgeRegistries.BLOCKS.getValue(PUMICE));
 	}
 
-	public void init(boolean enabled) {
-		if (enabled) {
-			saprolite = legacyBlock("saprolite",
-					MineralogyRegistry.MineralogyBlockRegistry.get("limestone").PairedBlock.getDefaultState());
-			
-			Block blockPumice = MinIoC.getInstance().resolve(BlockItemPair.class, "blockPumice", Mineralogy.MODID).PairedBlock;
-			
-			pummice = legacyBlock("pummice", blockPumice.getDefaultState());
+	@SubscribeEvent
+	public static void remapMissingItems(RegistryEvent.MissingMappings<Item> event) {
+		if (!MineralogyConfig.patchUpdate()) {
+			return;
+		}
 
-			MineralogyPatchRegistry.put("saprolite", saprolite);
-			MineralogyPatchRegistry.put("pummice", pummice);
+		remapMissing(event, SAPROLITE, ForgeRegistries.ITEMS.getValue(LIMESTONE));
+		remapMissing(event, PUMMICE, ForgeRegistries.ITEMS.getValue(PUMICE));
+	}
+
+	private static <T extends IForgeRegistryEntry<T>> void remapMissing(RegistryEvent.MissingMappings<T> event,
+			ResourceLocation oldId, T replacement) {
+		for (RegistryEvent.MissingMappings.Mapping<T> mapping : event.getMappings()) {
+			if (!oldId.equals(mapping.key)) {
+				continue;
+			}
+
+			if (replacement != null) {
+				mapping.remap(replacement);
+				LOGGER.info("Remapped legacy Mineralogy id '{}' to '{}'", oldId, replacement.getRegistryName());
+			} else {
+				mapping.warn();
+				LOGGER.warn("Could not remap legacy Mineralogy id '{}' because the replacement is not registered", oldId);
+			}
 		}
 	}
 
-	private static Block legacyBlock(String name, IBlockState replacement) {
-		Block b = new UpdateBlock(replacement);
-		b.setTranslationKey(MODID + "." + name);
-		return b;
+	private static ResourceLocation mineralogyId(String path) {
+		return new ResourceLocation(Mineralogy.MODID, path);
 	}
 }

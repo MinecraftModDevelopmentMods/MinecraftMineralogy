@@ -1,25 +1,34 @@
 package com.mcmoddev.mineralogy.blocks;
 
-import java.util.Random;
-
-import com.mcmoddev.mineralogy.Mineralogy;
-
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockPane;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.Item;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraftforge.common.ToolType;
 
-public class DryWall extends net.minecraft.block.BlockPane {
-
-	private static final String ITEM_NAME = "drywall";
+public class DryWall extends BlockPane {
+	private final int toolHardnessLevel;
 
 	public DryWall(String color) {
-		super(Material.ROCK, true);
-		this.setTranslationKey(Mineralogy.MODID + "_" + ITEM_NAME + " _" + color);
-		this.useNeighborBrightness = true;
+		super(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.75F, 1.0F).sound(SoundType.STONE));
+		this.toolHardnessLevel = 0;
+		this.setRegistryName("drywall_" + color);
 	}
 
 	@Override
-	public Item getItemDropped(IBlockState bs, Random prng, int enchantmentLevel) {
-		return Item.getItemFromBlock(this);
+	public ToolType getHarvestTool(IBlockState state) {
+		return ToolType.PICKAXE;
+	}
+
+	@Override
+	public int getHarvestLevel(IBlockState state) {
+		return toolHardnessLevel;
+	}
+
+	@Override
+	public BlockRenderLayer getRenderLayer() {
+		return BlockRenderLayer.CUTOUT;
 	}
 }

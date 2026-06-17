@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "mineralogy:gabbro_double_slab"
+    "": {
+      "model": "mineralogy:block/gabbro_double_slab"
     }
   }
 }

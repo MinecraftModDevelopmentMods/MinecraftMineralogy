@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "x  ",
+    "xx ",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:marble"
+    }
+  },
+  "result": {
+    "item": "mineralogy:marble_stairs",
+    "count": 4
+  },
+  "conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_ROCKSTAIRS"
+    }
+  ]
+}

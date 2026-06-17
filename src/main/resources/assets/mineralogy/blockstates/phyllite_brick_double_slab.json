@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "mineralogy:phyllite_brick_double_slab"
+    "": {
+      "model": "mineralogy:block/phyllite_brick_double_slab"
     }
   }
 }

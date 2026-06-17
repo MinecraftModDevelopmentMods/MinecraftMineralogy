@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:marble"
+    }
+  },
+  "result": {
+    "item": "mineralogy:marble_wall",
+    "count": 6
+  },
+  "conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_ROCKWALL"
+    }
+  ]
+}

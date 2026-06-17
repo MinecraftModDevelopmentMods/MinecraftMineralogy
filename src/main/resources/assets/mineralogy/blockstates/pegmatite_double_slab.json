@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "mineralogy:pegmatite_double_slab"
+    "": {
+      "model": "mineralogy:block/pegmatite_double_slab"
     }
   }
 }

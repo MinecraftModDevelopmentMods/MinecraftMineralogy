@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xx",
+    "xx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:gabbro_smooth"
+    }
+  },
+  "result": {
+    "item": "mineralogy:gabbro_smooth_brick",
+    "count": 4
+  },
+  "conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_SMOOTH"
+    },
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_SMOOTHBRICK"
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "mineralogy:rock_salt_smooth"
+    "": {
+      "model": "mineralogy:block/rock_salt_smooth"
     }
   }
 }

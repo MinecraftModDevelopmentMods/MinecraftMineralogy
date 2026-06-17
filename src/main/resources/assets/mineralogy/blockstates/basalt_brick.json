@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "mineralogy:basalt_brick"
+    "": {
+      "model": "mineralogy:block/basalt_brick"
     }
   }
 }

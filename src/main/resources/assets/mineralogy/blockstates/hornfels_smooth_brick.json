@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "mineralogy:hornfels_smooth_brick"
+    "": {
+      "model": "mineralogy:block/hornfels_smooth_brick"
     }
   }
 }

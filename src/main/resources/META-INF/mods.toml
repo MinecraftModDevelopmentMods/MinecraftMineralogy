@@ -1,0 +1,29 @@
+modLoader="javafml"
+loaderVersion="[25,)"
+issueTrackerURL="https://github.com/SkyBlade1978/MinecraftMineralogy/issues"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/minecraft-mineralogy"
+logoFile=""
+credits="Cyanobacterium, SkyBlade1978, JRIwanek, FoxNekitsune, Proxy, the MMD Team, Forge, FML, and the mod authors"
+authors="Cyanobacterium, SkyBlade1978, JRIwanek"
+
+[[mods]]
+modId="mineralogy"
+version="${file.jarVersion}"
+displayName="Minecraft Mineralogy"
+description='''
+Fills the world with real-world rocks.
+'''
+
+[[dependencies.mineralogy]]
+    modId="forge"
+    mandatory=true
+    versionRange="[25,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.mineralogy]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.13.2]"
+    ordering="NONE"
+    side="BOTH"

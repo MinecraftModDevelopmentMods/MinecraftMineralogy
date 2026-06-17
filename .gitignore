@@ -23,6 +23,12 @@ eclipse
 run
 classes
 
+# local agent context
+/AGENTS.md
+/agent-notes/
+/.codex/
+/CLAUDE.md
+
 /README.txt
 /forge-*-changelog.txt
 

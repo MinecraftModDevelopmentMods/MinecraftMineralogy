@@ -6,42 +6,65 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import com.mcmoddev.mineralogy.MineralogyConfig;
 
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.IWorld;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.chunk.IChunk;
+import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.IChunkGenSettings;
 import net.minecraft.world.gen.IChunkGenerator;
-import net.minecraftforge.fml.common.IWorldGenerator;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.gen.placement.IPlacementConfig;
+import net.minecraftforge.registries.ForgeRegistries;
 
-public class StoneReplacer implements IWorldGenerator {
+public class StoneReplacer extends Feature<NoFeatureConfig> {
+	private static final StoneReplacer FEATURE = new StoneReplacer();
 
-	private Geology geom = null;
+	private final Lock geologyLock = new ReentrantLock();
+	private Geology geology = null;
+	private long geologySeed = Long.MIN_VALUE;
 
-	public StoneReplacer() {
-		//
-	}
-
-	private final Lock glock = new ReentrantLock();
-
-	/** is thread-safe */
-	final Geology getGeology(World w) {
-		if (geom == null) {
-			glock.lock();
-			try {
-				if (geom == null) {
-					geom = new Geology(w.getSeed(), MineralogyConfig.geomeSize(), MineralogyConfig.rockLayerNoise());
-				}
-			} finally {
-				glock.unlock();
-			}
+	public static void register() {
+		for (Biome biome : ForgeRegistries.BIOMES.getValues()) {
+			biome.addFeature(
+					GenerationStage.Decoration.UNDERGROUND_ORES,
+					Biome.createCompositeFeature(
+							FEATURE,
+							IFeatureConfig.NO_FEATURE_CONFIG,
+							Biome.PASSTHROUGH,
+							IPlacementConfig.NO_PLACEMENT_CONFIG));
 		}
-		return geom;
 	}
 
 	@Override
-	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator,
-			IChunkProvider chunkProvider) {
-		if (world.provider.getDimension() == 0 && MineralogyConfig.placeMineralogyRock()) {
-			getGeology(world).replaceStoneInChunk(chunkX, chunkZ, world);
+	public boolean func_212245_a(IWorld world, IChunkGenerator<? extends IChunkGenSettings> generator,
+			Random random, BlockPos pos, NoFeatureConfig config) {
+		if (!MineralogyConfig.placeMineralogyRock()
+				|| world.getDimension().getType() != DimensionType.OVERWORLD) {
+			return false;
 		}
+
+		IChunk chunk = world.getChunk(pos.getX() >> 4, pos.getZ() >> 4);
+		getGeology(world.getSeed()).replaceStoneInChunk(chunk);
+		return true;
 	}
 
+	private Geology getGeology(long seed) {
+		if (geology == null || geologySeed != seed) {
+			geologyLock.lock();
+			try {
+				if (geology == null || geologySeed != seed) {
+					geology = new Geology(seed, MineralogyConfig.geomeSize(), MineralogyConfig.rockLayerNoise());
+					geologySeed = seed;
+				}
+			} finally {
+				geologyLock.unlock();
+			}
+		}
+
+		return geology;
+	}
 }

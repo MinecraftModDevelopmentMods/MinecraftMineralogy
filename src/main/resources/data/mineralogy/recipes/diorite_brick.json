@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xx",
+    "xx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:diorite"
+    }
+  },
+  "result": {
+    "item": "mineralogy:diorite_brick",
+    "count": 4
+  },
+  "conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_BRICK"
+    }
+  ]
+}

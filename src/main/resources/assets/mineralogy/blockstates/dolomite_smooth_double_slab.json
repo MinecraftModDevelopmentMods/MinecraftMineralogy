@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "mineralogy:dolomite_smooth_double_slab"
+    "": {
+      "model": "mineralogy:block/dolomite_smooth_double_slab"
     }
   }
 }

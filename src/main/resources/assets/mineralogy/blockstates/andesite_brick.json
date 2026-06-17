@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "mineralogy:andesite_brick"
+    "": {
+      "model": "mineralogy:block/andesite_brick"
     }
   }
 }

@@ -1,6 +1,16 @@
 package com.mcmoddev.mineralogy.data;
 
+import com.mcmoddev.mineralogy.Mineralogy;
 import com.mcmoddev.mineralogy.RockType;
+import com.mcmoddev.mineralogy.blocks.Rock;
+import com.mcmoddev.mineralogy.blocks.RockStairs;
+import com.mcmoddev.mineralogy.blocks.RockWall;
+import com.mcmoddev.mineralogy.init.MineralogyItemGroups;
+
+import net.minecraft.block.SoundType;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.util.ResourceLocation;
 
 public class Material {
 	public String materialName;
@@ -10,6 +20,7 @@ public class Material {
 	public int toolHardnessLevel;
 	public boolean cobbleEquivilent;
 	public boolean standardRockType;
+	private Rock rock;
 	
 	/**
 	 * @param materialName
@@ -32,7 +43,7 @@ public class Material {
 	public Material(String materialName, RockType rockType, 
 			double hardness, double blastResistance, int toolHardnessLevel,
 			boolean cobbleEquivilent) {
-		this(materialName, rockType, hardness, blastResistance, toolHardnessLevel,cobbleEquivilent, true);
+		this(materialName, rockType, hardness, blastResistance, toolHardnessLevel, cobbleEquivilent, true);
 	}
 
 	public Material(String materialName, RockType rockType, 
@@ -45,6 +56,75 @@ public class Material {
 		this.toolHardnessLevel = toolHardnessLevel;
 		this.cobbleEquivilent = cobbleEquivilent;
 		this.standardRockType = standardRockType;
+	}
+
+	public Rock toRock(boolean isSmooth, boolean isBrick) {
+		String name = this.materialName.toLowerCase();
+		
+		if (isSmooth)
+			name = name + "_smooth";
+		
+		if (isBrick)
+			name = name + "_brick";
+		
+		rock = new Rock(true, (float)this.hardness, (float)this.blastResistance, (int)this.toolHardnessLevel, SoundType.STONE, name);
+		
+		return rock;
+	}
+
+	public void setRock(Rock rock) {
+		this.rock = rock;
+	}
+	
+	public RockWall toRockWall(boolean isSmooth, boolean isBrick) {
+		String name = this.materialName.toLowerCase();
+		
+		if (isSmooth)
+			name = name + "_smooth";
+		
+		if (isBrick)
+			name = name + "_brick";
+		
+		return new RockWall(rock, (float)this.hardness, (float)this.blastResistance, (int)this.toolHardnessLevel, SoundType.STONE, name + "_wall");
+	}
+	
+	public RockStairs toRockStairs(boolean isSmooth, boolean isBrick) {
+		String name = this.materialName.toLowerCase();
+		
+		if (isSmooth)
+			name = name + "_smooth";
+		
+		if (isBrick)
+			name = name + "_brick";
+			
+		return new RockStairs(rock, (float)this.hardness, (float)this.blastResistance, (int)this.toolHardnessLevel, SoundType.STONE, name + "_stairs");
+	}
+	
+	public ItemBlock getBlockItem(Rock blockHandle) {
+		ItemBlock blockItem = new ItemBlock(blockHandle,
+				new Item.Properties().group(MineralogyItemGroups.forBlock(blockHandle)));
+		
+		blockItem.setRegistryName(Mineralogy.MODID, blockHandle.getRegistryName().getPath());
+		
+		return blockItem;
+	}
+	
+	public ItemBlock getBlockItem(RockStairs blockHandle) {
+		ItemBlock blockItem = new ItemBlock(blockHandle,
+				new Item.Properties().group(MineralogyItemGroups.forBlock(blockHandle)));
+		
+		blockItem.setRegistryName(Mineralogy.MODID, blockHandle.getRegistryName().getPath());
+		
+		return blockItem;
+	}
+	
+	public ItemBlock getBlockItem(RockWall blockHandle) {
+		ItemBlock blockItem = new ItemBlock(blockHandle,
+				new Item.Properties().group(MineralogyItemGroups.forBlock(blockHandle)));
+		
+		blockItem.setRegistryName(Mineralogy.MODID, blockHandle.getRegistryName().getPath());
+		
+		return blockItem;
 	}
 	
 	@Override

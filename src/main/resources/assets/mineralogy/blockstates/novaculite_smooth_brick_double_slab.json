@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "mineralogy:novaculite_smooth_brick_double_slab"
+    "": {
+      "model": "mineralogy:block/novaculite_smooth_brick_double_slab"
     }
   }
 }

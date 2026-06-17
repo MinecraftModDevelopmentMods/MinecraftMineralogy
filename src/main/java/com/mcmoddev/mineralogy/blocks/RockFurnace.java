@@ -3,299 +3,237 @@ package com.mcmoddev.mineralogy.blocks;
 import java.util.Random;
 
 import com.mcmoddev.mineralogy.Mineralogy;
-import com.mcmoddev.mineralogy.ioc.MinIoC;
 import com.mcmoddev.mineralogy.tileentity.TileEntityRockFurnace;
-import com.mcmoddev.mineralogy.util.BlockItemPair;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Particles;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.item.Item;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.stats.StatList;
+import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.common.ToolType;
+import net.minecraftforge.registries.ForgeRegistries;
 
-public class RockFurnace extends BlockContainer
-{
-    private static final PropertyDirection FACING = BlockHorizontal.FACING;
-    private final boolean isBurning;
-    private static boolean keepInventory;
-    private float _burnModifier;
-    
-    public RockFurnace(float  hardness, float blastResistance, int toolHardnessLevel, boolean isBurning, float burnModifier)
-    {
-        super(Material.ROCK);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
-        this.isBurning = isBurning;
-        this.setHardness(hardness);
-        this.blockResistance = blastResistance;
-        this.setHarvestLevel("pickaxe", toolHardnessLevel);
-        _burnModifier = burnModifier;
-    }
+public class RockFurnace extends BlockContainer {
+	public static final net.minecraft.state.DirectionProperty FACING = BlockHorizontal.HORIZONTAL_FACING;
+	private static boolean keepInventory;
 
-    @Override
-    protected boolean canSilkHarvest() {
-    	// TODO Auto-generated method stub
-    	return false;
-    }
-    
-    public Item getItemDropped(IBlockState state, Random rand, int fortune)
-    {
-    	Block drop = state.getBlock();
-		ResourceLocation resource = drop.getRegistryName();
-		String path = resource.getPath();
-		
-		if (path.startsWith("lit_"))
-			drop = Block.getBlockFromName(resource.getNamespace() + ":" + path.substring(4, path.length()));
-		
-        return Item.getItemFromBlock(drop);
-    }
+	private final boolean burning;
+	private final float burnModifier;
+	private final int toolHardnessLevel;
 
-    public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state)
-    {
-        this.setDefaultFacing(worldIn, pos, state);
-    }
+	public RockFurnace(float hardness, float blastResistance, int toolHardnessLevel, boolean burning,
+			float burnModifier, String name) {
+		super(Block.Properties.create(Material.ROCK).hardnessAndResistance(hardness, blastResistance)
+				.sound(SoundType.STONE).lightValue(burning ? 14 : 0));
+		this.burning = burning;
+		this.burnModifier = burnModifier;
+		this.toolHardnessLevel = toolHardnessLevel;
+		this.setRegistryName(name);
+		this.setDefaultState(this.getStateContainer().getBaseState().with(FACING, EnumFacing.NORTH));
+	}
 
-    private void setDefaultFacing(World worldIn, BlockPos pos, IBlockState state)
-    {
-        if (!worldIn.isRemote)
-        {
-            IBlockState iblockstate = worldIn.getBlockState(pos.north());
-            IBlockState iblockstate1 = worldIn.getBlockState(pos.south());
-            IBlockState iblockstate2 = worldIn.getBlockState(pos.west());
-            IBlockState iblockstate3 = worldIn.getBlockState(pos.east());
-            EnumFacing enumfacing = (EnumFacing)state.getValue(FACING);
+	@Override
+	protected boolean canSilkHarvest() {
+		return false;
+	}
 
-            if (enumfacing == EnumFacing.NORTH && iblockstate.isFullBlock() && !iblockstate1.isFullBlock())
-            {
-                enumfacing = EnumFacing.SOUTH;
-            }
-            else if (enumfacing == EnumFacing.SOUTH && iblockstate1.isFullBlock() && !iblockstate.isFullBlock())
-            {
-                enumfacing = EnumFacing.NORTH;
-            }
-            else if (enumfacing == EnumFacing.WEST && iblockstate2.isFullBlock() && !iblockstate3.isFullBlock())
-            {
-                enumfacing = EnumFacing.EAST;
-            }
-            else if (enumfacing == EnumFacing.EAST && iblockstate3.isFullBlock() && !iblockstate2.isFullBlock())
-            {
-                enumfacing = EnumFacing.WEST;
-            }
+	@Override
+	public IItemProvider getItemDropped(IBlockState state, World world, BlockPos pos, int fortune) {
+		return getUnlitBlock(state.getBlock());
+	}
 
-            worldIn.setBlockState(pos, state.withProperty(FACING, enumfacing), 2);
-        }
-    }
-    @SideOnly(Side.CLIENT)
-    @SuppressWarnings("incomplete-switch")
-    public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand)
-    {
-        if (this.isBurning)
-        {
-            EnumFacing enumfacing = (EnumFacing)stateIn.getValue(FACING);
-            double d0 = (double)pos.getX() + 0.5D;
-            double d1 = (double)pos.getY() + rand.nextDouble() * 6.0D / 16.0D;
-            double d2 = (double)pos.getZ() + 0.5D;
-            double d4 = rand.nextDouble() * 0.6D - 0.3D;
+	@Override
+	public IBlockState getStateForPlacement(BlockItemUseContext context) {
+		return getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
+	}
 
-            if (rand.nextDouble() < 0.1D)
-            {
-                worldIn.playSound((double)pos.getX() + 0.5D, (double)pos.getY(), (double)pos.getZ() + 0.5D, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
-            }
+	@Override
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer,
+			ItemStack stack) {
+		if (stack.hasDisplayName()) {
+			TileEntity tileEntity = world.getTileEntity(pos);
+			if (tileEntity instanceof TileEntityRockFurnace) {
+				((TileEntityRockFurnace) tileEntity).setCustomInventoryName(stack.getDisplayName());
+			}
+		}
+	}
 
-            switch (enumfacing)
-            {
-                case WEST:
-                    worldIn.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0 - 0.52D, d1, d2 + d4, 0.0D, 0.0D, 0.0D);
-                    worldIn.spawnParticle(EnumParticleTypes.FLAME, d0 - 0.52D, d1, d2 + d4, 0.0D, 0.0D, 0.0D);
-                    break;
-                case EAST:
-                    worldIn.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0 + 0.52D, d1, d2 + d4, 0.0D, 0.0D, 0.0D);
-                    worldIn.spawnParticle(EnumParticleTypes.FLAME, d0 + 0.52D, d1, d2 + d4, 0.0D, 0.0D, 0.0D);
-                    break;
-                case NORTH:
-                    worldIn.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0 + d4, d1, d2 - 0.52D, 0.0D, 0.0D, 0.0D);
-                    worldIn.spawnParticle(EnumParticleTypes.FLAME, d0 + d4, d1, d2 - 0.52D, 0.0D, 0.0D, 0.0D);
-                    break;
-                case SOUTH:
-                    worldIn.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0 + d4, d1, d2 + 0.52D, 0.0D, 0.0D, 0.0D);
-                    worldIn.spawnParticle(EnumParticleTypes.FLAME, d0 + d4, d1, d2 + 0.52D, 0.0D, 0.0D, 0.0D);
-            }
-        }
-    }
+	@Override
+	public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player,
+			net.minecraft.util.EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		if (world.isRemote) {
+			return true;
+		}
 
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
-    {
-        if (worldIn.isRemote)
-        {
-            return true;
-        }
-        else
-        {
-            TileEntity tileentity = worldIn.getTileEntity(pos);
+		TileEntity tileEntity = world.getTileEntity(pos);
+		if (tileEntity instanceof TileEntityRockFurnace) {
+			player.displayGUIChest((TileEntityRockFurnace) tileEntity);
+			player.addStat(net.minecraft.stats.StatList.INTERACT_WITH_FURNACE);
+		}
 
-            if (tileentity instanceof TileEntityRockFurnace)
-            {
-                playerIn.displayGUIChest((TileEntityRockFurnace)tileentity);
-                playerIn.addStat(StatList.FURNACE_INTERACTION);
-            }
+		return true;
+	}
 
-            return true;
-        }
-    }
+	public static void setState(boolean active, World world, BlockPos pos) {
+		IBlockState oldState = world.getBlockState(pos);
+		Block oldBlock = oldState.getBlock();
+		Block newBlock = getStateBlock(oldBlock, active);
 
-    public static void setState(boolean active, World worldIn, BlockPos pos)
-    {
-        IBlockState iblockstate = worldIn.getBlockState(pos);
-        TileEntity tileentity = worldIn.getTileEntity(pos);
-        
-        String name = iblockstate.getBlock().getRegistryName().getPath();
-        
-        if (active && !name.startsWith("lit_"))
-        	name = "lit_" + name;
-        
-        if (!active && name.startsWith("lit_"))
-        	name = name.substring(4, name.length());
-        
-        MinIoC IoC =  MinIoC.getInstance();
-        
-        RockFurnace thisFurnace = (RockFurnace)IoC.resolve(BlockItemPair.class, name, Mineralogy.MODID).PairedBlock;   
-        
-        keepInventory = true;
+		if (!(newBlock instanceof RockFurnace) || newBlock == oldBlock) {
+			return;
+		}
 
-        worldIn.setBlockState(pos, thisFurnace.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
-        worldIn.setBlockState(pos, thisFurnace.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
-        
-        keepInventory = false;
+		TileEntity tileEntity = world.getTileEntity(pos);
+		keepInventory = true;
+		world.setBlockState(pos, newBlock.getDefaultState().with(FACING, oldState.get(FACING)), 3);
+		keepInventory = false;
 
-        if (tileentity != null)
-        {
-            tileentity.validate();
-            worldIn.setTileEntity(pos, tileentity);
-        }
-    }
+		if (tileEntity != null) {
+			tileEntity.validate();
+			world.setTileEntity(pos, tileEntity);
+		}
+	}
 
-    public TileEntity createNewTileEntity(World worldIn, int meta)
-    {
-    	TileEntityRockFurnace newTE = new TileEntityRockFurnace(_burnModifier);
-    	
-    	//newTE.setBurnModifier(_burnModifier);
-    	
-        return newTE;
-    }
+	@Override
+	public TileEntity createNewTileEntity(IBlockReader world) {
+		return new TileEntityRockFurnace(burnModifier);
+	}
 
-    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
-    {
-        return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
-    }
+	@Override
+	public void onReplaced(IBlockState state, World world, BlockPos pos, IBlockState newState, boolean isMoving) {
+		if (state.getBlock() != newState.getBlock()) {
+			if (!keepInventory) {
+				TileEntity tileEntity = world.getTileEntity(pos);
+				if (tileEntity instanceof TileEntityRockFurnace) {
+					InventoryHelper.dropInventoryItems(world, pos, (TileEntityRockFurnace) tileEntity);
+					world.updateComparatorOutputLevel(pos, this);
+				}
+			}
 
-    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack)
-    {
-        worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
+			super.onReplaced(state, world, pos, newState, isMoving);
+		}
+	}
 
-        if (stack.hasDisplayName())
-        {
-            TileEntity tileentity = worldIn.getTileEntity(pos);
+	@Override
+	public boolean hasComparatorInputOverride(IBlockState state) {
+		return true;
+	}
 
-            if (tileentity instanceof TileEntityRockFurnace)
-            {
-                ((TileEntityRockFurnace)tileentity).setCustomInventoryName(stack.getDisplayName());
-            }
-        }
-    }
+	@Override
+	public int getComparatorInputOverride(IBlockState blockState, World world, BlockPos pos) {
+		return Container.calcRedstone(world.getTileEntity(pos));
+	}
 
-    public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
-    {
-        if (!keepInventory)
-        {
-            TileEntity tileentity = worldIn.getTileEntity(pos);
+	@Override
+	public ItemStack getItem(IBlockReader world, BlockPos pos, IBlockState state) {
+		return new ItemStack(getUnlitBlock(state.getBlock()));
+	}
 
-            if (tileentity instanceof TileEntityRockFurnace)
-            {
-                InventoryHelper.dropInventoryItems(worldIn, pos, (TileEntityRockFurnace)tileentity);
-                worldIn.updateComparatorOutputLevel(pos, this);
-            }
-        }
-        super.breakBlock(worldIn, pos, state);
-    }
+	@Override
+	public void animateTick(IBlockState state, World world, BlockPos pos, Random random) {
+		if (!burning) {
+			return;
+		}
 
-    public boolean hasComparatorInputOverride(IBlockState state)
-    {
-        return true;
-    }
+		EnumFacing facing = state.get(FACING);
+		double x = (double) pos.getX() + 0.5D;
+		double y = (double) pos.getY();
+		double z = (double) pos.getZ() + 0.5D;
 
-    public int getComparatorInputOverride(IBlockState blockState, World worldIn, BlockPos pos)
-    {
-        return Container.calcRedstone(worldIn.getTileEntity(pos));
-    }
+		if (random.nextDouble() < 0.1D) {
+			world.playSound(x, y, z, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1.0F, 1.0F,
+					false);
+		}
 
-    public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state)
-    {
-        Block furnaceBlock = state.getBlock();
-		ResourceLocation resource = furnaceBlock.getRegistryName();
-		String path = resource.getPath();
-		
-		if (path.startsWith("lit_"))
-			furnaceBlock = Block.getBlockFromName(resource.getNamespace() + ":" + path.substring(4, path.length()));
-		
-		return new ItemStack(furnaceBlock);
-    }
-    
-    public EnumBlockRenderType getRenderType(IBlockState state)
-    {
-        return EnumBlockRenderType.MODEL;
-    }
+		double offset = 0.52D;
+		double randomOffset = random.nextDouble() * 0.6D - 0.3D;
+		EnumFacing.Axis axis = facing.getAxis();
+		double xOffset = axis == EnumFacing.Axis.X ? (double) facing.getXOffset() * offset : randomOffset;
+		double zOffset = axis == EnumFacing.Axis.Z ? (double) facing.getZOffset() * offset : randomOffset;
 
-    public IBlockState getStateFromMeta(int meta)
-    {
-        EnumFacing enumfacing = EnumFacing.byIndex(meta);
+		world.spawnParticle(Particles.SMOKE, x + xOffset, y + random.nextDouble() * 6.0D / 16.0D, z + zOffset,
+				0.0D, 0.0D, 0.0D);
+		world.spawnParticle(Particles.FLAME, x + xOffset, y + random.nextDouble() * 6.0D / 16.0D, z + zOffset,
+				0.0D, 0.0D, 0.0D);
+	}
 
-        if (enumfacing.getAxis() == EnumFacing.Axis.Y)
-        {
-            enumfacing = EnumFacing.NORTH;
-        }
+	@Override
+	public EnumBlockRenderType getRenderType(IBlockState state) {
+		return EnumBlockRenderType.MODEL;
+	}
 
-        return this.getDefaultState().withProperty(FACING, enumfacing);
-    }
-    public int getMetaFromState(IBlockState state)
-    {
-        return ((EnumFacing)state.getValue(FACING)).getIndex();
-    }
+	@Override
+	public IBlockState rotate(IBlockState state, Rotation rotation) {
+		return state.with(FACING, rotation.rotate(state.get(FACING)));
+	}
 
-    public IBlockState withRotation(IBlockState state, Rotation rot)
-    {
-        return state.withProperty(FACING, rot.rotate(state.getValue(FACING)));
-    }
+	@Override
+	public IBlockState mirror(IBlockState state, Mirror mirror) {
+		return state.rotate(mirror.toRotation(state.get(FACING)));
+	}
 
-    public IBlockState withMirror(IBlockState state, Mirror mirrorIn)
-    {
-        return state.withRotation(mirrorIn.toRotation(state.getValue(FACING)));
-    }
+	@Override
+	public ToolType getHarvestTool(IBlockState state) {
+		return ToolType.PICKAXE;
+	}
 
-    protected BlockStateContainer createBlockState()
-    {
-        return new BlockStateContainer(this, new IProperty[] {FACING});
-    }
+	@Override
+	public int getHarvestLevel(IBlockState state) {
+		return toolHardnessLevel;
+	}
+
+	@Override
+	protected void fillStateContainer(StateContainer.Builder<Block, IBlockState> builder) {
+		builder.add(FACING);
+	}
+
+	public float getBurnModifier() {
+		return burnModifier;
+	}
+
+	public boolean isBurningVariant() {
+		return burning;
+	}
+
+	private static Block getStateBlock(Block block, boolean active) {
+		ResourceLocation name = block.getRegistryName();
+		if (name == null) {
+			return block;
+		}
+
+		String path = name.getPath();
+		if (active && !path.startsWith("lit_")) {
+			path = "lit_" + path;
+		} else if (!active && path.startsWith("lit_")) {
+			path = path.substring(4);
+		}
+
+		Block stateBlock = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(Mineralogy.MODID, path));
+		return stateBlock == null ? block : stateBlock;
+	}
+
+	private static Block getUnlitBlock(Block block) {
+		return getStateBlock(block, false);
+	}
 }

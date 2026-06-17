@@ -1,42 +1,57 @@
 package com.mcmoddev.mineralogy.blocks;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ToolType;
 
-public class DoubleSlab extends net.minecraft.block.Block {
-	private net.minecraft.block.Block _drops;
-	
-	public DoubleSlab(float hardness, float blastResistance, int toolHardnessLevel,
-			SoundType sound, net.minecraft.block.Block drops) {
-		super(Material.ROCK);
-		this.setHardness(hardness); // dirt is 0.5, grass is 0.6, stone is 1.5,iron ore is 3, obsidian is 50
-		this.setResistance(blastResistance); // dirt is 0, iron ore is 5, stone is 10, obsidian is 2000
-		this.setSoundType(sound); // sound for stone
-		this.setHarvestLevel("pickaxe", toolHardnessLevel);
-		_drops = drops;
+import java.util.Random;
+
+public class DoubleSlab extends Block {
+	private final Block drops;
+	private final int toolHardnessLevel;
+
+	public DoubleSlab(float hardness, float blastResistance, int toolHardnessLevel, SoundType sound, Block drops,
+			String name) {
+		super(Block.Properties.create(Material.ROCK).hardnessAndResistance(hardness, blastResistance).sound(sound));
+		this.drops = drops;
+		this.toolHardnessLevel = toolHardnessLevel;
+		this.setRegistryName(name);
 	}
-	
+
 	@Override
-	public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
-		return new ItemStack(_drops);
+	public ItemStack getItem(IBlockReader world, BlockPos pos, IBlockState state) {
+		return new ItemStack(drops);
 	}
-	
+
+	@Override
+	public IItemProvider getItemDropped(IBlockState state, World world, BlockPos pos, int fortune) {
+		return drops;
+	}
+
+	@Override
+	public int quantityDropped(IBlockState state, Random random) {
+		return 2;
+	}
+
 	@Override
 	protected ItemStack getSilkTouchDrop(IBlockState state) {
-		return new ItemStack(_drops, 2);
+		return new ItemStack(drops, 2);
 	}
-	
+
 	@Override
-	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state,
-			int fortune) {
-		
-		//super.getDrops(drops, world, pos, state, fortune);
-		drops.add(new ItemStack(_drops, 2));
+	public ToolType getHarvestTool(IBlockState state) {
+		return ToolType.PICKAXE;
+	}
+
+	@Override
+	public int getHarvestLevel(IBlockState state) {
+		return toolHardnessLevel;
 	}
 }

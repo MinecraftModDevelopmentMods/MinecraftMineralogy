@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "zxz",
+    "zyz",
+    "zzz"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:dolomite_smooth"
+    },
+    "y": {
+      "item": "minecraft:stick"
+    },
+    "z": {
+      "item": "mineralogy:dolomite_relief_blank"
+    }
+  },
+  "result": {
+    "item": "mineralogy:dolomite_relief_hammer",
+    "count": 7
+  },
+  "conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_SMOOTH"
+    },
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_RELIEFS"
+    }
+  ]
+}

@@ -16,15 +16,15 @@ public class MaterialData {
 	public static final Material BASALTIC_GLASS = new Material("Basaltic_glass", RockType.IGNEOUS, 3, 15, 0, true);
 	public static final Material SCORIA = new Material("Scoria", RockType.IGNEOUS, 1, 7, 0, true);
 	public static final Material TUFF = new Material("Tuff", RockType.IGNEOUS, 2, 10, 0, true);
-	
+
 	public static final Material SHALE = new Material("Shale", RockType.SEDIMENTARY, 1.5, 10, 0, true);
 	public static final Material CONGLOMERATE = new Material("Conglomerate", RockType.SEDIMENTARY, 1.5, 10, 0, true);
 	public static final Material DOLOMITE = new Material("Dolomite", RockType.SEDIMENTARY, 3, 15, 1, true);
 	public static final Material LIMESTONE = new Material("Limestone", RockType.SEDIMENTARY, 1.5, 10, 0, true);
-	public static final Material MARBLE = new Material("Marble", RockType.SEDIMENTARY, 1.5, 10, 0, true);	
+	public static final Material MARBLE = new Material("Marble", RockType.SEDIMENTARY, 1.5, 10, 0, true);
 	public static final Material SILTSTONE = new Material("Siltstone", RockType.SEDIMENTARY, 1, 10, 0, true);
 	public static final Material ROCK_SALT = new Material("Rock_salt", RockType.SEDIMENTARY, 1.5, 10, 0, true, false);
-
+	
 	public static final Material SLATE = new Material("Slate", RockType.METAMORPHIC, 1.5, 10, 0, true);
 	public static final Material SCHIST = new Material("Schist", RockType.METAMORPHIC, 3, 15, 1, true);
 	public static final Material GNEISS = new Material("Gneiss", RockType.METAMORPHIC, 3, 15, 1, true);
@@ -33,7 +33,6 @@ public class MaterialData {
 	public static final Material HORNFELS = new Material("Hornfels", RockType.METAMORPHIC, 3, 15, 1, true);
 	public static final Material QUARTZITE = new Material("Quartzite", RockType.METAMORPHIC, 4, 15, 1, true);
 	public static final Material NOVACULITE = new Material("Novaculite", RockType.METAMORPHIC, 3, 15, 1, true);
-	
 	
 	public static ArrayList<Material> toArray() {
 		ArrayList<Material> materialArray = new ArrayList<Material>();

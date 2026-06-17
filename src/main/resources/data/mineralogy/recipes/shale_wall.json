@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:shale"
+    }
+  },
+  "result": {
+    "item": "mineralogy:shale_wall",
+    "count": 6
+  },
+  "conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_ROCKWALL"
+    }
+  ]
+}

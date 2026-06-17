@@ -1,10 +1,10 @@
 {
     "variants": {
-        "facing=up": { "model": "mineralogy:rocksaltstreetlamp" },
-        "facing=down": { "model": "mineralogy:rocksaltstreetlamp" },
-        "facing=east": { "model": "mineralogy:rocksaltstreetlamp"},
-        "facing=south": { "model": "mineralogy:rocksaltstreetlamp"},
-        "facing=west": { "model": "mineralogy:rocksaltstreetlamp"},
-        "facing=north": { "model": "mineralogy:rocksaltstreetlamp"}
+        "facing=up": { "model": "mineralogy:block/rocksaltstreetlamp" },
+        "facing=down": { "model": "mineralogy:block/rocksaltstreetlamp" },
+        "facing=east": { "model": "mineralogy:block/rocksaltstreetlamp"},
+        "facing=south": { "model": "mineralogy:block/rocksaltstreetlamp"},
+        "facing=west": { "model": "mineralogy:block/rocksaltstreetlamp"},
+        "facing=north": { "model": "mineralogy:block/rocksaltstreetlamp"}
     }
 }

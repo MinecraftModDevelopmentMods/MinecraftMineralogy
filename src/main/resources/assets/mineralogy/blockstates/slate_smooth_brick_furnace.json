@@ -1,18 +1,18 @@
 {
   "variants": {
     "facing=north": {
-      "model": "mineralogy:slate_smooth_brick_furnace"
+      "model": "mineralogy:block/slate_smooth_brick_furnace"
     },
     "facing=south": {
-      "model": "mineralogy:slate_smooth_brick_furnace",
+      "model": "mineralogy:block/slate_smooth_brick_furnace",
       "y": 180
     },
     "facing=west": {
-      "model": "mineralogy:slate_smooth_brick_furnace",
+      "model": "mineralogy:block/slate_smooth_brick_furnace",
       "y": 270
     },
     "facing=east": {
-      "model": "mineralogy:slate_smooth_brick_furnace",
+      "model": "mineralogy:block/slate_smooth_brick_furnace",
       "y": 90
     }
   }

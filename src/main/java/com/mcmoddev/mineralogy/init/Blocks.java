@@ -1,13 +1,14 @@
 package com.mcmoddev.mineralogy.init;
 
-import com.mcmoddev.mineralogy.Constants;
 import com.mcmoddev.mineralogy.Mineralogy;
 import com.mcmoddev.mineralogy.MineralogyConfig;
+import com.mcmoddev.mineralogy.RockType;
 import com.mcmoddev.mineralogy.blocks.Chalk;
 import com.mcmoddev.mineralogy.blocks.Chert;
 import com.mcmoddev.mineralogy.blocks.DoubleSlab;
 import com.mcmoddev.mineralogy.blocks.DryWall;
 import com.mcmoddev.mineralogy.blocks.Gypsum;
+import com.mcmoddev.mineralogy.blocks.Ore;
 import com.mcmoddev.mineralogy.blocks.Rock;
 import com.mcmoddev.mineralogy.blocks.RockFurnace;
 import com.mcmoddev.mineralogy.blocks.RockRelief;
@@ -17,396 +18,453 @@ import com.mcmoddev.mineralogy.blocks.RockSaltStreetLamp;
 import com.mcmoddev.mineralogy.blocks.RockSlab;
 import com.mcmoddev.mineralogy.blocks.RockStairs;
 import com.mcmoddev.mineralogy.blocks.RockWall;
-import com.mcmoddev.mineralogy.data.Material;
 import com.mcmoddev.mineralogy.data.MaterialData;
-import com.mcmoddev.mineralogy.ioc.MinIoC;
-import com.mcmoddev.mineralogy.lib.interfaces.IDynamicTabProvider;
-import com.mcmoddev.mineralogy.tileentity.TileEntityRockFurnace;
-import com.mcmoddev.mineralogy.util.BlockItemPair;
-import com.mcmoddev.mineralogy.util.RecipeHelper;
-import com.mcmoddev.mineralogy.util.RegistrationHelper;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ObjectHolder;
 
+@Mod.EventBusSubscriber(modid = Mineralogy.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@ObjectHolder(Mineralogy.MODID)
 public class Blocks {
-	private static boolean initDone = false;
-	
-	protected Blocks() {
-		throw new IllegalAccessError("Not a instantiable class");
-	}
 
-	/**
-	 *
-	 */
-	public static void init() {
-		if (initDone) {
-			return;
+    public static final Rock andesite = null;
+    public static final Rock basalt = null;
+    public static final Rock diorite = null;
+    public static final Rock granite = null;
+    public static final Rock rhyolite = null;
+    public static final Rock pegmatite = null;
+    public static final Rock shale = null;
+    public static final Rock conglomerate = null;
+    public static final Rock dolomite = null;
+    public static final Rock limestone = null;
+    public static final Rock marble = null;
+    public static final Rock slate = null;
+    public static final Rock schist = null;
+    public static final Rock gneiss = null;
+    public static final Rock phyllite = null;
+    public static final Rock amphibolite = null;
+    
+    public static final Rock andesite_smooth = null;
+    public static final Rock basalt_smooth = null;
+    public static final Rock diorite_smooth = null;
+    public static final Rock granite_smooth = null;
+    public static final Rock rhyolite_smooth = null;
+    public static final Rock pegmatite_smooth = null;
+    public static final Rock shale_smooth = null;
+    public static final Rock conglomerate_smooth = null;
+    public static final Rock dolomite_smooth = null;
+    public static final Rock limestone_smooth = null;
+    public static final Rock marble_smooth = null;
+    public static final Rock slate_smooth = null;
+    public static final Rock schist_smooth = null;
+    public static final Rock gneiss_smooth = null;
+    public static final Rock phyllite_smooth = null;
+    public static final Rock amphibolite_smooth = null;
+    
+    public static final RockStairs andesite_stairs = null;
+    public static final RockStairs basalt_stairs = null;
+    public static final RockStairs diorite_stairs = null;
+    public static final RockStairs granite_stairs = null;
+    public static final RockStairs rhyolite_stairs = null;
+    public static final RockStairs pegmatite_stairs = null;
+    public static final RockStairs shale_stairs = null;
+    public static final RockStairs conglomerate_stairs = null;
+    public static final RockStairs dolomite_stairs = null;
+    public static final RockStairs limestone_stairs = null;
+    public static final RockStairs marble_stairs = null;
+    public static final RockStairs slate_stairs = null;
+    public static final RockStairs schist_stairs = null;
+    public static final RockStairs gneiss_stairs = null;
+    public static final RockStairs phyllite_stairs = null;
+    public static final RockStairs amphibolite_stairs = null;
+    
+    public static final RockStairs andesite_smooth_stairs = null;
+    public static final RockStairs basalt_smooth_stairs = null;
+    public static final RockStairs diorite_smooth_stairs = null;
+    public static final RockStairs granite_smooth_stairs = null;
+    public static final RockStairs rhyolite_smooth_stairs = null;
+    public static final RockStairs pegmatite_smooth_stairs = null;
+    public static final RockStairs shale_smooth_stairs = null;
+    public static final RockStairs conglomerate_smooth_stairs = null;
+    public static final RockStairs dolomite_smooth_stairs = null;
+    public static final RockStairs limestone_smooth_stairs = null;
+    public static final RockStairs marble_smooth_stairs = null;
+    public static final RockStairs slate_smooth_stairs = null;
+    public static final RockStairs schist_smooth_stairs = null;
+    public static final RockStairs gneiss_smooth_stairs = null;
+    public static final RockStairs phyllite_smooth_stairs = null;
+    public static final RockStairs amphibolite_smooth_stairs = null;
+    
+    public static final Rock andesite_brick = null;
+    public static final Rock basalt_brick = null;
+    public static final Rock diorite_brick = null;
+    public static final Rock granite_brick = null;
+    public static final Rock rhyolite_brick = null;
+    public static final Rock pegmatite_brick = null;
+    public static final Rock shale_brick = null;
+    public static final Rock conglomerate_brick = null;
+    public static final Rock dolomite_brick = null;
+    public static final Rock limestone_brick = null;
+    public static final Rock marble_brick = null;
+    public static final Rock slate_brick = null;
+    public static final Rock schist_brick = null;
+    public static final Rock gneiss_brick = null;
+    public static final Rock phyllite_brick = null;
+    public static final Rock amphibolite_brick = null;
+    
+    public static final Rock andesite_smooth_brick = null;
+    public static final Rock basalt_smooth_brick = null;
+    public static final Rock diorite_smooth_brick = null;
+    public static final Rock granite_smooth_brick = null;
+    public static final Rock rhyolite_smooth_brick = null;
+    public static final Rock pegmatite_smooth_brick = null;
+    public static final Rock shale_smooth_brick = null;
+    public static final Rock conglomerate_smooth_brick = null;
+    public static final Rock dolomite_smooth_brick = null;
+    public static final Rock limestone_smooth_brick = null;
+    public static final Rock marble_smooth_brick = null;
+    public static final Rock slate_smooth_brick = null;
+    public static final Rock schist_smooth_brick = null;
+    public static final Rock gneiss_smooth_brick = null;
+    public static final Rock phyllite_smooth_brick = null;
+    public static final Rock amphibolite_smooth_brick = null;
+    
+    public static final RockStairs andesite_brick_stairs = null;
+    public static final RockStairs basalt_brick_stairs = null;
+    public static final RockStairs diorite_brick_stairs = null;
+    public static final RockStairs granite_brick_stairs = null;
+    public static final RockStairs rhyolite_brick_stairs = null;
+    public static final RockStairs pegmatite_brick_stairs = null;
+    public static final RockStairs shale_brick_stairs = null;
+    public static final RockStairs conglomerate_brick_stairs = null;
+    public static final RockStairs dolomite_brick_stairs = null;
+    public static final RockStairs limestone_brick_stairs = null;
+    public static final RockStairs marble_brick_stairs = null;
+    public static final RockStairs slate_brick_stairs = null;
+    public static final RockStairs schist_brick_stairs = null;
+    public static final RockStairs gneiss_brick_stairs = null;
+    public static final RockStairs phyllite_brick_stairs = null;
+    public static final RockStairs amphibolite_brick_stairs = null;
+    
+    public static final RockStairs andesite_smooth_brick_stairs = null;
+    public static final RockStairs basalt_smooth_brick_stairs = null;
+    public static final RockStairs diorite_smooth_brick_stairs = null;
+    public static final RockStairs granite_smooth_brick_stairs = null;
+    public static final RockStairs rhyolite_smooth_brick_stairs = null;
+    public static final RockStairs pegmatite_smooth_brick_stairs = null;
+    public static final RockStairs shale_smooth_brick_stairs = null;
+    public static final RockStairs conglomerate_smooth_brick_stairs = null;
+    public static final RockStairs dolomite_smooth_brick_stairs = null;
+    public static final RockStairs limestone_smooth_brick_stairs = null;
+    public static final RockStairs marble_smooth_brick_stairs = null;
+    public static final RockStairs slate_smooth_brick_stairs = null;
+    public static final RockStairs schist_smooth_brick_stairs = null;
+    public static final RockStairs gneiss_smooth_brick_stairs = null;
+    public static final RockStairs phyllite_smooth_brick_stairs = null;
+    public static final RockStairs amphibolite_smooth_brick_stairs = null;
+    
+    public static final RockWall andesite_wall = null;
+    public static final RockWall basalt_wall = null;
+    public static final RockWall diorite_wall = null;
+    public static final RockWall granite_wall = null;
+    public static final RockWall rhyolite_wall = null;
+    public static final RockWall pegmatite_wall = null;
+    public static final RockWall shale_wall = null;
+    public static final RockWall conglomerate_wall = null;
+    public static final RockWall dolomite_wall = null;
+    public static final RockWall limestone_wall = null;
+    public static final RockWall marble_wall = null;
+    public static final RockWall slate_wall = null;
+    public static final RockWall schist_wall = null;
+    public static final RockWall gneiss_wall = null;
+    public static final RockWall phyllite_wall = null;
+    public static final RockWall amphibolite_wall = null;
+	
+	public static final RockWall andesite_smooth_wall = null;
+    public static final RockWall basalt_smooth_wall = null;
+    public static final RockWall diorite_smooth_wall = null;
+    public static final RockWall granite_smooth_wall = null;
+    public static final RockWall rhyolite_smooth_wall = null;
+    public static final RockWall pegmatite_smooth_wall = null;
+    public static final RockWall shale_smooth_wall = null;
+    public static final RockWall conglomerate_smooth_wall = null;
+    public static final RockWall dolomite_smooth_wall = null;
+    public static final RockWall limestone_smooth_wall = null;
+    public static final RockWall marble_smooth_wall = null;
+    public static final RockWall slate_smooth_wall = null;
+    public static final RockWall schist_smooth_wall = null;
+    public static final RockWall gneiss_smooth_wall = null;
+    public static final RockWall phyllite_smooth_wall = null;
+    public static final RockWall amphibolite_smooth_wall = null;
+	
+	public static final RockWall andesite_brick_wall = null;
+    public static final RockWall basalt_brick_wall = null;
+    public static final RockWall diorite_brick_wall = null;
+    public static final RockWall granite_brick_wall = null;
+    public static final RockWall rhyolite_brick_wall = null;
+    public static final RockWall pegmatite_brick_wall = null;
+    public static final RockWall shale_brick_wall = null;
+    public static final RockWall conglomerate_brick_wall = null;
+    public static final RockWall dolomite_brick_wall = null;
+    public static final RockWall limestone_brick_wall = null;
+    public static final RockWall marble_brick_wall = null;
+    public static final RockWall slate_brick_wall = null;
+    public static final RockWall schist_brick_wall = null;
+    public static final RockWall gneiss_brick_wall = null;
+    public static final RockWall phyllite_brick_wall = null;
+    public static final RockWall amphibolite_brick_wall = null;
+	
+	public static final RockWall andesite_smooth_brick_wall = null;
+    public static final RockWall basalt_smooth_brick_wall = null;
+    public static final RockWall diorite_smooth_brick_wall = null;
+    public static final RockWall granite_smooth_brick_wall = null;
+    public static final RockWall rhyolite_smooth_brick_wall = null;
+    public static final RockWall pegmatite_smooth_brick_wall = null;
+    public static final RockWall shale_smooth_brick_wall = null;
+    public static final RockWall conglomerate_smooth_brick_wall = null;
+    public static final RockWall dolomite_smooth_brick_wall = null;
+    public static final RockWall limestone_smooth_brick_wall = null;
+    public static final RockWall marble_smooth_brick_wall = null;
+    public static final RockWall slate_smooth_brick_wall = null;
+    public static final RockWall schist_smooth_brick_wall = null;
+    public static final RockWall gneiss_smooth_brick_wall = null;
+    public static final RockWall phyllite_smooth_brick_wall = null;
+    public static final RockWall amphibolite_smooth_brick_wall = null;
+    
+    @SubscribeEvent
+    public static void registerBlocks(RegistryEvent.Register<Block> event) {
+    	for (com.mcmoddev.mineralogy.data.Material material : MaterialData.toArray()) {
+			registerMaterialFamily(event, material, material.toRock(false, false), true);
 		}
 
-		MinIoC IoC =  MinIoC.getInstance();
-		
-		BlockItemPair blockChert;
-		BlockItemPair blockGypsum;
-		BlockItemPair blockChalk;
-		BlockItemPair blockRocksalt;
-		BlockItemPair blockPumice;
-		BlockItemPair[] drywalls = new BlockItemPair[16];
-	    
-		GameRegistry.registerTileEntity(TileEntityRockFurnace.class, "rockfurnace");
-		
-		MaterialData.toArray().forEach(material -> addStoneType(material));		
-		
+		registerMaterialFamily(event, MaterialData.ROCK_SALT, new RockSalt(), true);
+
+		registerSpecialGeologyBlocks(event);
+		registerDryWalls(event);
+
+		event.getRegistry().registerAll(
+				new RockSaltLamp(),
+				new RockSaltStreetLamp(),
+				new Ore("sulfur_ore", "sulfur_dust", 1, 4, 0),
+				new Ore("phosphorous_ore", "phosphorous_dust", 1, 4, 0),
+				new Ore("nitrate_ore", "nitrate_dust", 1, 4, 0),
+				new Rock(false, 1.5F, 10.0F, 0, SoundType.STONE, "sulfur_block"),
+				new Rock(false, 1.5F, 10.0F, 0, SoundType.STONE, "phosphorous_block"),
+				new Rock(false, 1.5F, 10.0F, 0, SoundType.STONE, "nitrate_block")
+		);
+    	
+    	//event.getRegistry().register(MaterialData.BASALT.toRockWall(false, false));
+    	
+    	
+    }
+
+	private static void registerSpecialGeologyBlocks(RegistryEvent.Register<Block> event) {
+		Block chert = new Chert();
+		Block gypsum = new Gypsum();
+		Block chalk = new Chalk();
+		Block pumice = new Rock(false, 0.5F, 5.0F, 0, SoundType.STONE, "pumice");
+
+		event.getRegistry().registerAll(chert, gypsum, chalk, pumice);
+
 		MineralogyRegistry.sedimentaryStones.add(net.minecraft.init.Blocks.SANDSTONE);
-
-		blockChert = RegistrationHelper.registerBlock(new Chert(), Constants.CHERT, Constants.BLOCK_CHERT);
-		MineralogyRegistry.sedimentaryStones.add(blockChert.PairedBlock);
-		MineralogyRegistry.BlocksToRegister.put(Constants.COBBLESTONE, blockChert.PairedBlock);
-		
-		blockGypsum = RegistrationHelper.registerBlock(new Gypsum(), Constants.GYPSUM.toLowerCase(), Constants.BLOCK_GYPSUM);
-		MineralogyRegistry.sedimentaryStones.add(blockGypsum.PairedBlock);
-		
-		blockChalk = RegistrationHelper.registerBlock(new Chalk(), Constants.CHALK.toLowerCase(), Constants.BLOCK_CHALK);
-		MineralogyRegistry.sedimentaryStones.add(blockChalk.PairedBlock);
-		
-		blockRocksalt = RegistrationHelper.registerBlock(new RockSalt(), Constants.ROCKSALT.toLowerCase(), Constants.BLOCK_ROCKSALT);
-		MineralogyRegistry.sedimentaryStones.add(blockRocksalt.PairedBlock);
-		
-		addStoneType(MaterialData.ROCK_SALT, blockRocksalt);
-		
-		IoC.register(BlockItemPair.class, blockGypsum, Constants.BLOCK_GYPSUM, Mineralogy.MODID);
-		IoC.register(BlockItemPair.class, blockChalk, Constants.BLOCK_CHALK, Mineralogy.MODID);
-		IoC.register(BlockItemPair.class, blockRocksalt, Constants.BLOCK_ROCKSALT, Mineralogy.MODID);
-		
-		blockPumice = RegistrationHelper.registerBlock(new Rock(false, 0.5F, 5F, 0, SoundType.STONE), Constants.PUMICE, Constants.BLOCK_PUMICE);
-		MineralogyRegistry.igneousStones.add(blockPumice.PairedBlock);
-		MineralogyRegistry.BlocksToRegister.put(Constants.COBBLESTONE, blockPumice.PairedBlock);
-		
-		IoC.register(BlockItemPair.class, blockPumice, Constants.BLOCK_PUMICE, Mineralogy.MODID);
-		
-		RegistrationHelper.registerBlock(new RockSaltLamp(), "rocksaltlamp", "lampRocksalt");
-		RegistrationHelper.registerBlock(new RockSaltStreetLamp(), "rocksaltstreetlamp", "lampRocksaltStreet", 16);
-		
-		IDynamicTabProvider tabProvider = IoC.resolve(IDynamicTabProvider.class);
-		
-		for (int i = 0; i < 16; i++) {
-			if (MineralogyConfig.groupCreativeTabItemsByType())
-				tabProvider.setTabItemMapping("Item", Constants.DRYWALL + "_" + Constants.colorSuffixes[i]);
-			
-			drywalls[i] = RegistrationHelper.registerBlock(new DryWall(Constants.colorSuffixes[i]), Constants.DRYWALL + "_" + Constants.colorSuffixes[i],
-					Constants.DRYWALL + Constants.colorSuffixesTwo[i]);
-			
-			IoC.register(BlockItemPair.class, drywalls[i], Constants.DRYWALL + Constants.colorSuffixesTwo[i], Mineralogy.MODID);
-			
-			RecipeHelper.addShapelessOreRecipe(Constants.DRYWALL + "_" + Constants.colorSuffixes[i], new ItemStack(drywalls[i].PairedItem, 1),
-					Constants.DRYWALL_WHITE,
-					Ingredient.fromStacks(new ItemStack(Items.DYE, 1, i)));
-		}
-		
-		initDone = true;
+		MineralogyRegistry.sedimentaryStones.add(chert);
+		MineralogyRegistry.sedimentaryStones.add(gypsum);
+		MineralogyRegistry.sedimentaryStones.add(chalk);
+		MineralogyRegistry.igneousStones.add(pumice);
 	}
 
-	private static void generateReliefs(String materialName, double hardness, double blastResistance,
-			int toolHardnessLevel, final BlockItemPair rock) {
-		
-		String oreDictName = "stone" + materialName.substring(0, 1).toUpperCase() + materialName.substring(1) + "Smooth";
-		
-		final BlockItemPair  blankRelief = RegistrationHelper.registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_blank", Constants.RELIEF + "Blank" + materialName);		
-		RecipeHelper.addShapedOreRecipe(materialName + "_relief_blank", new ItemStack(blankRelief.PairedItem, 16), "xxx", "xxx", "xxx", 'x', oreDictName);
-		
-		final BlockItemPair axeRelief =  RegistrationHelper.registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_axe", Constants.RELIEF + "Axe" + materialName);
-		RecipeHelper.addShapelessOreRecipe(materialName + "_relief_axe", new ItemStack(axeRelief.PairedItem, 8), Constants.RELIEF + "Blank" + materialName, Constants.RELIEF + "Blank" + materialName, Constants.RELIEF + "Blank" + materialName, Constants.RELIEF + "Blank" + materialName, Constants.RELIEF + "Blank" + materialName, Constants.RELIEF + "Blank" + materialName, Constants.RELIEF + "Blank" + materialName, Constants.RELIEF + "Blank" + materialName, Items.STONE_AXE);
-		
-		final BlockItemPair crossRelief = RegistrationHelper.registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_cross", Constants.RELIEF  + "Cross" + materialName);
-		RecipeHelper.addShapedOreRecipe(materialName + "_relief_cross", new ItemStack(crossRelief.PairedItem, 4), "x x", "   ", "x x", 'x', Constants.RELIEF + "Blank" + materialName);
-		
-		final BlockItemPair hammerRelief = RegistrationHelper.registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_hammer", Constants.RELIEF  + "Hammer" + materialName);
-		RecipeHelper.addShapedOreRecipe(materialName + "_relief_hammer", new ItemStack(hammerRelief.PairedItem, 7), "zxz","zyz","zzz",'x', oreDictName,'y', Items.STICK,'z', Constants.RELIEF + "Blank" + materialName);
-			
-		final BlockItemPair hoeRelief =  RegistrationHelper.registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_hoe", Constants.RELIEF + "Hoe" + materialName);
-		RecipeHelper.addShapelessOreRecipe(materialName + "_relief_hoe", new ItemStack(hoeRelief.PairedItem, 8), Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName, Items.STONE_HOE);
-		
-		final BlockItemPair horizontalRelief = RegistrationHelper.registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_horizontal", Constants.RELIEF  + "Horizontal" + materialName);
-		RecipeHelper.addShapedOreRecipe(materialName + "_relief_horizontal", new ItemStack(horizontalRelief.PairedItem, 3), "xxx", 'x', Constants.RELIEF + "Blank" + materialName);
-		
-		final BlockItemPair leftRelief = RegistrationHelper.registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_left", Constants.RELIEF  + "Left" + materialName);
-		RecipeHelper.addShapedOreRecipe(materialName + "_relief_left", new ItemStack(leftRelief.PairedItem, 3),"x  "," x ","  x",'x', Constants.RELIEF + "Blank" + materialName);
-		
-		final BlockItemPair pickaxeRelief =  RegistrationHelper.registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_pickaxe", Constants.RELIEF + "Pickaxe" + materialName);
-		RecipeHelper.addShapelessOreRecipe(materialName + "_relief_pickaxe", new ItemStack(pickaxeRelief.PairedItem, 8), Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName, Items.STONE_PICKAXE);
-		
-		final BlockItemPair plusRelief = RegistrationHelper.registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_plus", Constants.RELIEF  + "Plus" + materialName);
-		RecipeHelper.addShapedOreRecipe(materialName + "_relief_plus", new ItemStack(plusRelief.PairedItem, 5), " x ","xxx"," x ", 'x', Constants.RELIEF + "Blank" + materialName);
-		
-		final BlockItemPair rightRelief =  RegistrationHelper.registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_right", Constants.RELIEF + "Right" + materialName);
-		RecipeHelper.addShapedOreRecipe(materialName + "_relief_right", new ItemStack(rightRelief.PairedItem, 3),"  x"," x ","x  ",'x', Constants.RELIEF  + "Left" + materialName);
-		
-		final BlockItemPair swordRelief =  RegistrationHelper.registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_sword", Constants.RELIEF + "Sword" + materialName);
-		RecipeHelper.addShapelessOreRecipe(materialName + "_relief_sword", new ItemStack(swordRelief.PairedItem, 8), Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName,Constants.RELIEF + "Blank" + materialName, Items.STONE_SWORD);
-		
-		final BlockItemPair iRelief = RegistrationHelper.registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_i", Constants.RELIEF  + "I" + materialName);
-		RecipeHelper.addShapedOreRecipe(materialName + "_relief_i", new ItemStack(iRelief.PairedItem, 7), "xxx"," x ","xxx", 'x', Constants.RELIEF + "Blank" + materialName);
-		
-		final BlockItemPair verticalRelief = RegistrationHelper.registerBlock(new RockRelief((float)hardness, (float)blastResistance / 2, toolHardnessLevel, SoundType.STONE), materialName + "_relief_vertical", Constants.RELIEF  + "Vertical" + materialName);
-		RecipeHelper.addShapedOreRecipe(materialName + "_relief_vertical", new ItemStack(verticalRelief.PairedItem, 3), "x","x","x", 'x', Constants.RELIEF + "Blank" + materialName);
-	}
-	
-	protected static void addStoneType(Material materialType, BlockItemPair rockPair) {
-
-		String name = materialType.materialName.toLowerCase();
-		String oreDictName = "stone" + materialType.materialName;
-		float burnModifier = (float) (1 + ((materialType.hardness - 3) / 10));
-		
-		final BlockItemPair rockFurnacePair;
-		final BlockItemPair rockStairPair;
-		final BlockItemPair rockSlabPair;
-		final BlockItemPair rockWallPair;
-		final BlockItemPair brickPair;
-		final BlockItemPair brickFurnacePair;
-		final BlockItemPair brickStairPair;
-		final BlockItemPair brickSlabPair;
-		final BlockItemPair brickWallPair;
-		final BlockItemPair smoothPair;
-		final BlockItemPair smoothFurnacePair;
-		final BlockItemPair smoothStairPair;
-		final BlockItemPair smoothSlabPair;
-		final BlockItemPair smoothWallPair;
-		final BlockItemPair smoothBrickPair;
-		final BlockItemPair smoothBrickFurnacePair;
-		final BlockItemPair smoothBrickStairPair;
-		final BlockItemPair smoothBrickSlabPair;
-		final BlockItemPair smoothBrickWallPair;
-
-		RecipeHelper.addShapelessOreRecipe(name + "_" + Constants.COBBLESTONE.toUpperCase(), new ItemStack(net.minecraft.init.Blocks.COBBLESTONE, 4),
-				oreDictName,
-				oreDictName,
-				Ingredient.fromStacks(new ItemStack(net.minecraft.init.Blocks.GRAVEL)),
-				Ingredient.fromStacks(new ItemStack(net.minecraft.init.Blocks.GRAVEL)));
-
-		switch (materialType.rockType) {
-			case IGNEOUS:
-				MineralogyRegistry.igneousStones.add(rockPair.PairedBlock);
-				break;
-			case METAMORPHIC:
-				MineralogyRegistry.metamorphicStones.add(rockPair.PairedBlock);
-				break;
-			case SEDIMENTARY:
-				MineralogyRegistry.sedimentaryStones.add(rockPair.PairedBlock);
-				break;
-			case ANY:
-				MineralogyRegistry.sedimentaryStones.add(rockPair.PairedBlock);
-				MineralogyRegistry.metamorphicStones.add(rockPair.PairedBlock);
-				MineralogyRegistry.igneousStones.add(rockPair.PairedBlock);
-				break;
+	private static void registerDryWalls(RegistryEvent.Register<Block> event) {
+		for (String color : com.mcmoddev.mineralogy.Constants.colorSuffixes) {
+			event.getRegistry().register(new DryWall(color));
 		}
+	}
 
-		GameRegistry.addSmelting(rockPair.PairedItem, new ItemStack(net.minecraft.init.Blocks.STONE), 0.1F);
-
-		// no point in ore dicting these recipes I think
-		if (MineralogyConfig.generateRockStairs()) {
-			rockStairPair = RegistrationHelper.registerBlock(new RockStairs(rockPair.PairedBlock, (float) materialType.hardness,
-					(float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE), name + "_" + Constants.STAIRS,
-					Constants.STAIRS + materialType.materialName);
-			RecipeHelper.addShapedOreRecipe(name + "_" + Constants.STAIRS, new ItemStack(rockStairPair.PairedItem, 4), "x  ", "xx ", "xxx",
-					'x', oreDictName);
+	private static void registerMaterialFamily(RegistryEvent.Register<Block> event,
+			com.mcmoddev.mineralogy.data.Material material, Rock baseRock, boolean addToGeology) {
+		event.getRegistry().register(baseRock);
+		if (addToGeology) {
+			addStoneType(material.rockType, baseRock);
 		}
 
 		if (MineralogyConfig.generateRockSlab()) {
-			rockSlabPair = RegistrationHelper.registerBlock(
-					new RockSlab((float) materialType.hardness, (float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE, name + "_double_" + Constants.SLAB),
-					name + "_" + Constants.SLAB, Constants.SLAB + materialType.materialName, true, 64, true);
-			RecipeHelper.addShapedOreRecipe(name + "_" + Constants.SLAB, new ItemStack(rockSlabPair.PairedItem, 6), "xxx", 'x',
-					oreDictName);
-		
-			RegistrationHelper.registerBlock(
-					new DoubleSlab((float) materialType.hardness, (float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE, rockSlabPair.PairedBlock),
-					name + "_double_" + Constants.SLAB, Constants.SLAB + "Double" + materialType.materialName, false, 64, false);
-			
+			registerSlabPair(event, createSlab(material, false, false), material, false, false);
 			if (MineralogyConfig.generateRockFurnace()) {
-				rockFurnacePair = RegistrationHelper.registerBlock(new RockFurnace((float) materialType.hardness,
-						(float) materialType.blastResistance, materialType.toolHardnessLevel, false, burnModifier), name + "_" + Constants.FURNACE,
-						Constants.FURNACE + materialType.materialName, true, 1, false);
-				RegistrationHelper.registerBlock(new RockFurnace((float) materialType.hardness,
-						(float) materialType.blastResistance, materialType.toolHardnessLevel, true, burnModifier).setLightLevel(0.875F), "lit_" + name + "_" + Constants.FURNACE,
-						Constants.FURNACE + "Lit" + materialType.materialName, false, 1, true);
-				
-				RecipeHelper.addShapedOreRecipe(name + "_" + Constants.FURNACE, new ItemStack(rockFurnacePair.PairedItem, 1), "xxx", "xyx", "xxx",
-						'x', Constants.SLAB + materialType.materialName, 'y', net.minecraft.init.Blocks.FURNACE);
+				registerFurnacePair(event, material, false, false);
 			}
 		}
-		
+		if (MineralogyConfig.generateRockStairs()) {
+			event.getRegistry().register(createStairs(baseRock, material, false, false));
+		}
 		if (MineralogyConfig.generateRockWall()) {
-			rockWallPair = RegistrationHelper.registerBlock(
-					new RockWall(rockPair.PairedBlock, (float) materialType.hardness, (float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE),
-					name + "_" + Constants.WALL, Constants.WALL + materialType.materialName);
-			RecipeHelper.addShapedOreRecipe(name + "_" + Constants.WALL, new ItemStack(rockWallPair.PairedItem, 6), "xxx", "xxx", 'x',
-					oreDictName);
+			event.getRegistry().register(createWall(baseRock, material, false, false));
 		}
 
-		if (MineralogyConfig.generateBrick()) {
-			brickPair = RegistrationHelper.registerBlock(
-					new Rock(false, (float) materialType.hardness, (float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE),
-					name + "_" + Constants.BRICK, "stone" + materialType.materialName + "Brick");
-			RecipeHelper.addShapedOreRecipe(name + "_" + Constants.BRICK, new ItemStack(brickPair.PairedItem, 4), "xx", "xx", 'x',
-					oreDictName);
+		Rock smoothRock = null;
+		if (MineralogyConfig.generateSmooth()) {
+			smoothRock = material.toRock(true, false);
+			event.getRegistry().register(smoothRock);
 
-			if (MineralogyConfig.generateBrickStairs()) {
-				brickStairPair = RegistrationHelper.registerBlock(
-						new RockStairs(rockPair.PairedBlock, (float) materialType.hardness, (float) materialType.blastResistance,
-								materialType.toolHardnessLevel, SoundType.STONE),
-						name + "_" + Constants.BRICK + "_" + Constants.STAIRS, Constants.STAIRS + materialType.materialName + "Brick");
-				
-				RecipeHelper.addShapedOreRecipe(name + "_" + Constants.BRICK + "_" + Constants.STAIRS, new ItemStack(brickStairPair.PairedItem, 4),
-						"x  ", "xx ", "xxx", 'x', "stone" + materialType.materialName + "Brick");
+			if (MineralogyConfig.generateReliefs()) {
+				registerReliefs(event, material);
 			}
+			if (MineralogyConfig.generateSmoothSlab()) {
+				registerSlabPair(event, createSlab(material, true, false), material, true, false);
+				if (MineralogyConfig.generateSmoothFurnace()) {
+					registerFurnacePair(event, material, true, false);
+				}
+			}
+			if (MineralogyConfig.generateSmoothStairs()) {
+				event.getRegistry().register(createStairs(smoothRock, material, true, false));
+			}
+			if (MineralogyConfig.generateSmoothWall()) {
+				event.getRegistry().register(createWall(smoothRock, material, true, false));
+			}
+		}
+
+		Rock brickRock = null;
+		if (MineralogyConfig.generateBrick()) {
+			brickRock = material.toRock(false, true);
+			event.getRegistry().register(brickRock);
 
 			if (MineralogyConfig.generateBrickSlab()) {
-				brickSlabPair = RegistrationHelper.registerBlock(
-						new RockSlab((float) materialType.hardness, (float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE, name + "_" + Constants.BRICK + "_double_" + Constants.SLAB),
-						name + "_" + Constants.BRICK + "_" + Constants.SLAB, Constants.SLAB + materialType.materialName + "Brick", true, 64, true);
-				RecipeHelper.addShapedOreRecipe(name + "_" + Constants.BRICK + "_" + Constants.SLAB, new ItemStack(brickSlabPair.PairedItem, 6), "xxx",
-						'x', "stone" + materialType.materialName + "Brick");
-			
-				RegistrationHelper.registerBlock(
-						new DoubleSlab((float) materialType.hardness, (float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE, brickSlabPair.PairedBlock),
-						name + "_" + Constants.BRICK + "_double_" + Constants.SLAB, Constants.SLAB + "Double" + materialType.materialName + "Brick", false, 64, false);
-				
+				registerSlabPair(event, createSlab(material, false, true), material, false, true);
 				if (MineralogyConfig.generateBrickFurnace()) {
-					brickFurnacePair = RegistrationHelper.registerBlock(new RockFurnace((float) materialType.hardness,
-									(float) materialType.blastResistance, materialType.toolHardnessLevel, false, burnModifier), name + "_" + Constants.BRICK + "_" + Constants.FURNACE,
-							Constants.FURNACE + materialType.materialName, true, 1, false);
-					RegistrationHelper.registerBlock(new RockFurnace((float) materialType.hardness,
-									(float) materialType.blastResistance, materialType.toolHardnessLevel, true, burnModifier).setLightLevel(0.875F), "lit_" + name + "_" + Constants.BRICK + "_" + Constants.FURNACE,
-							Constants.FURNACE + "Lit" +  materialType.materialName, false, 1, false);
-	
-					RecipeHelper.addShapedOreRecipe(name + "_" + Constants.BRICK + "_" + Constants.FURNACE, new ItemStack(brickFurnacePair.PairedItem, 1), "xxx", "xyx", "xxx",
-							'x', Constants.SLAB + materialType.materialName + "Brick", 'y', net.minecraft.init.Blocks.FURNACE);
+					registerFurnacePair(event, material, false, true);
 				}
 			}
-			
+			if (MineralogyConfig.generateBrickStairs()) {
+				event.getRegistry().register(createStairs(brickRock, material, false, true));
+			}
 			if (MineralogyConfig.generateBrickWall()) {
-				brickWallPair = RegistrationHelper.registerBlock(
-						new RockWall(rockPair.PairedBlock, (float) materialType.hardness, (float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE),
-						name + "_" + Constants.BRICK + "_" + Constants.WALL, Constants.WALL + materialType.materialName);
-				RecipeHelper.addShapedOreRecipe(name + "_" + Constants.BRICK + "_" + Constants.WALL, new ItemStack(brickWallPair.PairedItem, 6), "xxx", "xxx", 'x',
-						"stone" + materialType.materialName + "Brick");
+				event.getRegistry().register(createWall(brickRock, material, false, true));
 			}
 		}
 
-		if (MineralogyConfig.generateSmooth()) {
-			smoothPair = RegistrationHelper.registerBlock(
-					new Rock(false, (float) materialType.hardness, (float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE),
-					name + "_" + Constants.SMOOTH, "stone" + materialType.materialName + "Smooth");
-			RecipeHelper.addShapelessOreRecipe(name + "_" + Constants.SMOOTH, new ItemStack(smoothPair.PairedItem, 1),
-					oreDictName,
-					Ingredient.fromStacks(new ItemStack(net.minecraft.init.Blocks.SAND, 1)));
-	
-			if(MineralogyConfig.generateReliefs()) {
-				generateReliefs(name, materialType.hardness, materialType.blastResistance, materialType.toolHardnessLevel, smoothPair);
-			}
-			
-			if (MineralogyConfig.generateSmoothStairs()) {
-				smoothStairPair = RegistrationHelper.registerBlock(
-						new RockStairs(rockPair.PairedBlock, (float) materialType.hardness, (float) materialType.blastResistance,
-								materialType.toolHardnessLevel, SoundType.STONE),
-						name + "_" + Constants.SMOOTH + "_" + Constants.STAIRS, Constants.STAIRS + materialType.materialName + "Smooth");
-				RecipeHelper.addShapedOreRecipe(name + "_" + Constants.SMOOTH + "_" + Constants.STAIRS, new ItemStack(smoothStairPair.PairedItem, 4),
-						"x  ", "xx ", "xxx", 'x', "stone" + materialType.materialName + "Smooth");
-			}
+		if (smoothRock != null && MineralogyConfig.generateSmoothBrick()) {
+			Rock smoothBrickRock = material.toRock(true, true);
+			event.getRegistry().register(smoothBrickRock);
 
-			if (MineralogyConfig.generateSmoothSlab()) {
-				smoothSlabPair = RegistrationHelper.registerBlock(
-						new RockSlab((float) materialType.hardness, (float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE, name + "_" + Constants.SMOOTH + "_double_" + Constants.SLAB),
-						name + "_" + Constants.SMOOTH + "_" + Constants.SLAB, Constants.SLAB + materialType.materialName + "Smooth", true, 64, true);
-				RecipeHelper.addShapedOreRecipe(name + "_" + Constants.SMOOTH + "_" + Constants.SLAB, new ItemStack(smoothSlabPair.PairedItem, 6), "xxx",
-						'x', "stone" + materialType.materialName + "Smooth");
-				RegistrationHelper.registerBlock(
-						new DoubleSlab((float) materialType.hardness, (float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE, smoothSlabPair.PairedBlock),
-						name + "_" + Constants.SMOOTH + "_double_" + Constants.SLAB, Constants.SLAB + "Double" + materialType.materialName + "Smooth", false, 64, false);
-				
-				if (MineralogyConfig.generateSmoothFurnace()) {
-					smoothFurnacePair = RegistrationHelper.registerBlock(new RockFurnace((float) materialType.hardness,
-									(float) materialType.blastResistance, materialType.toolHardnessLevel, false, burnModifier), name + "_" + Constants.SMOOTH + "_" + Constants.FURNACE,
-							Constants.FURNACE + materialType.materialName, true, 1, false);
-					RegistrationHelper.registerBlock(new RockFurnace((float) materialType.hardness,
-									(float) materialType.blastResistance, materialType.toolHardnessLevel, true, burnModifier).setLightLevel(0.875F), "lit_" + name + "_" + Constants.SMOOTH + "_" + Constants.FURNACE,
-							Constants.FURNACE + "Lit" +  materialType.materialName, false, 1, false);
-	
-					RecipeHelper.addShapedOreRecipe(name + "_" + Constants.SMOOTH + "_" + Constants.FURNACE, new ItemStack(smoothFurnacePair.PairedItem, 1), "xxx", "xyx", "xxx",
-							'x', Constants.SLAB + materialType.materialName + "Smooth", 'y', net.minecraft.init.Blocks.FURNACE);
+			if (MineralogyConfig.generateSmoothBrickSlab()) {
+				registerSlabPair(event, createSlab(material, true, true), material, true, true);
+				if (MineralogyConfig.generateSmoothBrickFurnace()) {
+					registerFurnacePair(event, material, true, true);
 				}
 			}
-
-			if (MineralogyConfig.generateSmoothWall()) {
-				smoothWallPair = RegistrationHelper.registerBlock(
-						new RockWall(rockPair.PairedBlock, (float) materialType.hardness, (float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE),
-						name + "_" + Constants.SMOOTH + "_" + Constants.WALL, Constants.WALL + materialType.materialName);
-				RecipeHelper.addShapedOreRecipe(name + "_" + Constants.SMOOTH + "_" + Constants.WALL, new ItemStack(smoothWallPair.PairedItem, 6), "xxx", "xxx", 'x',
-						"stone" + materialType.materialName + "Smooth");
+			if (MineralogyConfig.generateSmoothBrickStairs()) {
+				event.getRegistry().register(createStairs(smoothBrickRock, material, true, true));
 			}
-			
-			if (MineralogyConfig.generateSmoothBrick()) {
-				smoothBrickPair = RegistrationHelper.registerBlock(
-						new Rock(false, (float) materialType.hardness, (float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE),
-						name + "_" + Constants.SMOOTH + "_" + Constants.BRICK, "stone" + materialType.materialName + "SmoothBrick");
-				RecipeHelper.addShapedOreRecipe(name + "_" + Constants.SMOOTH + "_" + Constants.BRICK, new ItemStack(smoothBrickPair.PairedItem, 4),
-						"xx", "xx", 'x', "stone" + materialType.materialName + "Smooth");
-			
-				if (MineralogyConfig.generateSmoothBrickStairs()) {
-					smoothBrickStairPair = RegistrationHelper.registerBlock(
-							new RockStairs(rockPair.PairedBlock, (float) materialType.hardness, (float) materialType.blastResistance,
-									materialType.toolHardnessLevel, SoundType.STONE),
-							name + "_" + Constants.SMOOTH + "_" + Constants.BRICK + "_" + Constants.STAIRS, Constants.STAIRS + materialType.materialName + "SmoothBrick");
-					RecipeHelper.addShapedOreRecipe(name + "_" + Constants.SMOOTH + "_" + Constants.BRICK + "_" + Constants.STAIRS,
-							new ItemStack(smoothBrickStairPair.PairedItem, 4), "x  ", "xx ", "xxx", 'x',
-							"stone" + materialType.materialName + "SmoothBrick");
-				}
-
-				if (MineralogyConfig.generateSmoothBrickSlab()) {
-					smoothBrickSlabPair = RegistrationHelper.registerBlock(
-							new RockSlab((float) materialType.hardness, (float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE, name + "_" + Constants.SMOOTH + "_" + Constants.BRICK + "_double_" + Constants.SLAB),
-							name + "_" + Constants.SMOOTH + "_" + Constants.BRICK + "_" + Constants.SLAB, Constants.SLAB + materialType.materialName + "SmoothBrick", true, 64, true);
-					RecipeHelper.addShapedOreRecipe(name + "_" + Constants.SMOOTH + "_" + Constants.BRICK + "_" + Constants.SLAB,
-							new ItemStack(smoothBrickSlabPair.PairedItem, 6), "xxx", 'x', "stone" + materialType.materialName + "SmoothBrick");
-					RegistrationHelper.registerBlock(
-							new DoubleSlab((float) materialType.hardness, (float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE, smoothBrickSlabPair.PairedBlock),
-							name + "_" + Constants.SMOOTH + "_" + Constants.BRICK + "_double_" + Constants.SLAB, Constants.SLAB + "Double" + materialType.materialName + "SmoothBrick", false, 64, false);
-					
-					if (MineralogyConfig.generateSmoothBrickFurnace()) {
-						smoothBrickFurnacePair = RegistrationHelper.registerBlock(new RockFurnace((float) materialType.hardness,
-										(float) materialType.blastResistance, materialType.toolHardnessLevel, false, burnModifier), name + "_" + Constants.SMOOTH + "_" + Constants.BRICK + "_" + Constants.FURNACE,
-								Constants.FURNACE + materialType.materialName, true, 1, false);
-						RegistrationHelper.registerBlock(new RockFurnace((float) materialType.hardness,
-										(float) materialType.blastResistance, materialType.toolHardnessLevel, true, burnModifier).setLightLevel(0.875F), "lit_" + name + "_" + Constants.SMOOTH + "_" + Constants.BRICK + "_" + Constants.FURNACE,
-								Constants.FURNACE + "Lit" +  materialType.materialName, false, 1, false);
-	
-						RecipeHelper.addShapedOreRecipe(name+ "_" + Constants.SMOOTH + "_" + Constants.BRICK + "_" + Constants.FURNACE, new ItemStack(smoothBrickFurnacePair.PairedItem, 1), "xxx", "xyx", "xxx",
-								'x', Constants.SLAB + materialType.materialName + "SmoothBrick", 'y', net.minecraft.init.Blocks.FURNACE);
-					}
-				}
-				
-				if (MineralogyConfig.generateSmoothBrickWall()) {
-					smoothBrickWallPair = RegistrationHelper.registerBlock(
-							new RockWall(rockPair.PairedBlock, (float) materialType.hardness, (float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE),
-							name + "_" + Constants.SMOOTH + "_" + Constants.BRICK + "_" + Constants.WALL, Constants.WALL + materialType.materialName);
-					RecipeHelper.addShapedOreRecipe(name + "_" + Constants.SMOOTH + "_" + Constants.BRICK + "_" + Constants.WALL, new ItemStack(smoothBrickWallPair.PairedItem, 6), "xxx", "xxx", 'x',
-							"stone" + materialType.materialName + "SmoothBrick");
-				}
+			if (MineralogyConfig.generateSmoothBrickWall()) {
+				event.getRegistry().register(createWall(smoothBrickRock, material, true, true));
 			}
 		}
-	
 	}
-	
-	protected static void addStoneType(Material materialType) {
-		String name = materialType.materialName.toLowerCase();
-		final BlockItemPair rockPair = RegistrationHelper.registerBlock(new Rock(true, (float) materialType.hardness, (float) materialType.blastResistance, materialType.toolHardnessLevel, SoundType.STONE), name, "stone" + materialType.materialName);
 
-		if (materialType.cobbleEquivilent)
-			MineralogyRegistry.BlocksToRegister.put(Constants.COBBLESTONE, rockPair.PairedBlock);
-		
-		addStoneType(materialType, rockPair);
+	private static void registerSlabPair(RegistryEvent.Register<Block> event, RockSlab slab,
+			com.mcmoddev.mineralogy.data.Material material, boolean isSmooth, boolean isBrick) {
+		event.getRegistry().register(slab);
+		event.getRegistry().register(createDoubleSlab(slab, material, isSmooth, isBrick));
+	}
+
+	private static RockStairs createStairs(Block sourceBlock, com.mcmoddev.mineralogy.data.Material material,
+			boolean isSmooth, boolean isBrick) {
+		return new RockStairs(sourceBlock, (float) material.hardness, (float) material.blastResistance,
+				material.toolHardnessLevel, SoundType.STONE, getVariantName(material, isSmooth, isBrick) + "_stairs");
+	}
+
+	private static RockWall createWall(Block sourceBlock, com.mcmoddev.mineralogy.data.Material material,
+			boolean isSmooth, boolean isBrick) {
+		return new RockWall(sourceBlock, (float) material.hardness, (float) material.blastResistance,
+				material.toolHardnessLevel, SoundType.STONE, getVariantName(material, isSmooth, isBrick) + "_wall");
+	}
+
+	private static RockSlab createSlab(com.mcmoddev.mineralogy.data.Material material, boolean isSmooth,
+			boolean isBrick) {
+		String name = getVariantName(material, isSmooth, isBrick);
+		return new RockSlab((float) material.hardness, (float) material.blastResistance,
+				material.toolHardnessLevel, SoundType.STONE, name + "_slab", name + "_double_slab");
+	}
+
+	private static DoubleSlab createDoubleSlab(Block sourceBlock, com.mcmoddev.mineralogy.data.Material material,
+			boolean isSmooth, boolean isBrick) {
+		return new DoubleSlab((float) material.hardness, (float) material.blastResistance,
+				material.toolHardnessLevel, SoundType.STONE, sourceBlock,
+				getVariantName(material, isSmooth, isBrick) + "_double_slab");
+	}
+
+	private static void registerFurnacePair(RegistryEvent.Register<Block> event,
+			com.mcmoddev.mineralogy.data.Material material, boolean isSmooth, boolean isBrick) {
+		String name = getVariantName(material, isSmooth, isBrick) + "_furnace";
+		float burnModifier = (float) (1.0D + ((material.hardness - 3.0D) / 10.0D));
+
+		event.getRegistry().register(new RockFurnace((float) material.hardness, (float) material.blastResistance,
+				material.toolHardnessLevel, false, burnModifier, name));
+		event.getRegistry().register(new RockFurnace((float) material.hardness, (float) material.blastResistance,
+				material.toolHardnessLevel, true, burnModifier, "lit_" + name));
+	}
+
+	private static void registerReliefs(RegistryEvent.Register<Block> event,
+			com.mcmoddev.mineralogy.data.Material material) {
+		String name = material.materialName.toLowerCase();
+		String[] suffixes = new String[] {
+				"blank",
+				"axe",
+				"cross",
+				"hammer",
+				"hoe",
+				"horizontal",
+				"left",
+				"pickaxe",
+				"plus",
+				"right",
+				"sword",
+				"i",
+				"vertical"
+		};
+
+		for (String suffix : suffixes) {
+			event.getRegistry().register(new RockRelief((float) material.hardness,
+					(float) material.blastResistance / 2.0F, material.toolHardnessLevel,
+					SoundType.STONE, name + "_relief_" + suffix));
+		}
+	}
+
+	private static String getVariantName(com.mcmoddev.mineralogy.data.Material material, boolean isSmooth,
+			boolean isBrick) {
+		String name = material.materialName.toLowerCase();
+
+		if (isSmooth) {
+			name = name + "_smooth";
+		}
+		if (isBrick) {
+			name = name + "_brick";
+		}
+
+		return name;
+	}
+
+	private static void addStoneType(RockType rockType, Block block) {
+		switch (rockType) {
+			case IGNEOUS:
+				MineralogyRegistry.igneousStones.add(block);
+				break;
+			case METAMORPHIC:
+				MineralogyRegistry.metamorphicStones.add(block);
+				break;
+			case SEDIMENTARY:
+				MineralogyRegistry.sedimentaryStones.add(block);
+				break;
+			case ANY:
+				MineralogyRegistry.igneousStones.add(block);
+				MineralogyRegistry.metamorphicStones.add(block);
+				MineralogyRegistry.sedimentaryStones.add(block);
+				break;
+			default:
+				break;
+		}
 	}
 }
+

@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "mineralogy:diorite_smooth_double_slab"
+    "": {
+      "model": "mineralogy:block/diorite_smooth_double_slab"
     }
   }
 }

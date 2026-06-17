@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "mineralogy:quartzite_double_slab"
+    "": {
+      "model": "mineralogy:block/quartzite_double_slab"
     }
   }
 }

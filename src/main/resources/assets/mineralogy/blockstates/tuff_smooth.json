@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "mineralogy:tuff_smooth"
+    "": {
+      "model": "mineralogy:block/tuff_smooth"
     }
   }
 }

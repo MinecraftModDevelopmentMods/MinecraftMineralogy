@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "mineralogy:basaltic_glass_brick_double_slab"
+    "": {
+      "model": "mineralogy:block/basaltic_glass_brick_double_slab"
     }
   }
 }

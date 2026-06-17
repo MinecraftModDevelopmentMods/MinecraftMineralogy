@@ -1,5 +1,5 @@
 {
     "variants": {
-        "normal": { "model": "mineralogy:pumice" }
+        "": { "model": "mineralogy:block/pumice" }
     }
 }

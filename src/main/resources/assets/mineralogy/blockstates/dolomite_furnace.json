@@ -1,18 +1,18 @@
 {
   "variants": {
     "facing=north": {
-      "model": "mineralogy:dolomite_furnace"
+      "model": "mineralogy:block/dolomite_furnace"
     },
     "facing=south": {
-      "model": "mineralogy:dolomite_furnace",
+      "model": "mineralogy:block/dolomite_furnace",
       "y": 180
     },
     "facing=west": {
-      "model": "mineralogy:dolomite_furnace",
+      "model": "mineralogy:block/dolomite_furnace",
       "y": 270
     },
     "facing=east": {
-      "model": "mineralogy:dolomite_furnace",
+      "model": "mineralogy:block/dolomite_furnace",
       "y": 90
     }
   }

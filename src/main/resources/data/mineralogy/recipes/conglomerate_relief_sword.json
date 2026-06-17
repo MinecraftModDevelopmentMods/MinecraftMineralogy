@@ -1,0 +1,46 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mineralogy:conglomerate_relief_blank"
+    },
+    {
+      "item": "mineralogy:conglomerate_relief_blank"
+    },
+    {
+      "item": "mineralogy:conglomerate_relief_blank"
+    },
+    {
+      "item": "mineralogy:conglomerate_relief_blank"
+    },
+    {
+      "item": "mineralogy:conglomerate_relief_blank"
+    },
+    {
+      "item": "mineralogy:conglomerate_relief_blank"
+    },
+    {
+      "item": "mineralogy:conglomerate_relief_blank"
+    },
+    {
+      "item": "mineralogy:conglomerate_relief_blank"
+    },
+    {
+      "item": "minecraft:stone_sword"
+    }
+  ],
+  "result": {
+    "item": "mineralogy:conglomerate_relief_sword",
+    "count": 8
+  },
+  "conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_SMOOTH"
+    },
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_RELIEFS"
+    }
+  ]
+}

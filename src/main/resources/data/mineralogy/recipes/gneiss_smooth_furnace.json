@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    "xyx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:gneiss_smooth_slab"
+    },
+    "y": {
+      "item": "minecraft:furnace"
+    }
+  },
+  "result": {
+    "item": "mineralogy:gneiss_smooth_furnace"
+  },
+  "conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_SMOOTH"
+    },
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_SMOOTHSLAB"
+    },
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_SMOOTHFURNACE"
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 {
-  "parent": "block/half_slab",
+  "parent": "minecraft:block/slab",
   "textures": {
     "bottom": "mineralogy:blocks/novaculite_smooth_brick_top",
     "top": "mineralogy:blocks/novaculite_smooth_brick_top",

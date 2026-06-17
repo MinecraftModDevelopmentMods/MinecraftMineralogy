@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "mineralogy:diabase_smooth"
+    "": {
+      "model": "mineralogy:block/diabase_smooth"
     }
   }
 }

@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " x ",
+    "xxx",
+    " x "
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:rhyolite_relief_blank"
+    }
+  },
+  "result": {
+    "item": "mineralogy:rhyolite_relief_plus",
+    "count": 5
+  },
+  "conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_SMOOTH"
+    },
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_RELIEFS"
+    }
+  ]
+}

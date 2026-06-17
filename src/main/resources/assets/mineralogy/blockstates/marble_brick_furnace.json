@@ -1,18 +1,18 @@
 {
   "variants": {
     "facing=north": {
-      "model": "mineralogy:marble_brick_furnace"
+      "model": "mineralogy:block/marble_brick_furnace"
     },
     "facing=south": {
-      "model": "mineralogy:marble_brick_furnace",
+      "model": "mineralogy:block/marble_brick_furnace",
       "y": 180
     },
     "facing=west": {
-      "model": "mineralogy:marble_brick_furnace",
+      "model": "mineralogy:block/marble_brick_furnace",
       "y": 270
     },
     "facing=east": {
-      "model": "mineralogy:marble_brick_furnace",
+      "model": "mineralogy:block/marble_brick_furnace",
       "y": 90
     }
   }

@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "x  ",
+    "xx ",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:basaltic_glass_brick"
+    }
+  },
+  "result": {
+    "item": "mineralogy:basaltic_glass_brick_stairs",
+    "count": 4
+  },
+  "conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_BRICK"
+    },
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_BRICKSTAIRS"
+    }
+  ]
+}

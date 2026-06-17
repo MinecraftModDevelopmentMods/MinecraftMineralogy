@@ -1,0 +1,18 @@
+{
+    "type":  "minecraft:crafting_shapeless",
+    "ingredients":  [
+                        {
+                            "item":  "minecraft:sugar"
+                        },
+                        {
+                            "tag":  "forge:dusts/nitrate"
+                        },
+                        {
+                            "tag":  "forge:dusts/sulfur"
+                        }
+                    ],
+    "result":  {
+                   "item":  "minecraft:gunpowder",
+                   "count":  4
+               }
+}

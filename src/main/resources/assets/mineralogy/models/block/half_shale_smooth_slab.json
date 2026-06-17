@@ -1,5 +1,5 @@
 {
-  "parent": "block/half_slab",
+  "parent": "minecraft:block/slab",
   "textures": {
     "bottom": "mineralogy:blocks/shale_smooth",
     "top": "mineralogy:blocks/shale_smooth",

@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "mineralogy:scoria_double_slab"
+    "": {
+      "model": "mineralogy:block/scoria_double_slab"
     }
   }
 }

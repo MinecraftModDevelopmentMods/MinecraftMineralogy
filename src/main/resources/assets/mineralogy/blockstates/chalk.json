@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "mineralogy:chalk"
+    "": {
+      "model": "mineralogy:block/chalk"
     }
   }
 }

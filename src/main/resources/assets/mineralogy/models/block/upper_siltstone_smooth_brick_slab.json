@@ -1,5 +1,5 @@
 {
-  "parent": "block/upper_slab",
+  "parent": "minecraft:block/slab_top",
   "textures": {
     "bottom": "mineralogy:blocks/siltstone_smooth_brick_top",
     "top": "mineralogy:blocks/siltstone_smooth_brick_top",

@@ -32,7 +32,8 @@ public class RockSaltLamp extends Block {
 	private static final VoxelShape EAST_SHAPE = Block.makeCuboidShape(0.0D, 3.2D, 5.6D, 4.8D, 12.8D, 10.4D);
 
 	public RockSaltLamp() {
-		super(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.25F).lightValue(15).sound(SoundType.STONE));
+		super(Block.Properties.create(Material.ROCK).hardnessAndResistance(0.25F)
+				.setLightLevel(state -> 15).sound(SoundType.STONE));
 		this.setRegistryName("rocksaltlamp");
 		this.setDefaultState(this.getStateContainer().getBaseState().with(FACING, Direction.UP));
 	}
@@ -58,7 +59,6 @@ public class RockSaltLamp extends Block {
 		return net.minecraft.util.math.shapes.VoxelShapes.empty();
 	}
 
-	@Override
 	public boolean isNormalCube(BlockState state, IBlockReader world, BlockPos pos) {
 		return false;
 	}
@@ -93,13 +93,13 @@ public class RockSaltLamp extends Block {
 		BlockState support = world.getBlockState(supportPos);
 
 		if (facing == Direction.UP) {
-			return Block.hasSolidSide(support, world, supportPos, Direction.UP);
+			return support.isSolidSide(world, supportPos, Direction.UP);
 		}
 		if (facing == Direction.DOWN) {
-			return Block.hasSolidSide(support, world, supportPos, Direction.DOWN);
+			return support.isSolidSide(world, supportPos, Direction.DOWN);
 		}
 
-		return Block.hasSolidSide(support, world, supportPos, facing);
+		return support.isSolidSide(world, supportPos, facing);
 	}
 
 	@Override

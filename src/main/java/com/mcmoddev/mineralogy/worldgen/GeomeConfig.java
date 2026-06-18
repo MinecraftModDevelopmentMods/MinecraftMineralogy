@@ -25,8 +25,10 @@ import com.mcmoddev.mineralogy.worldgen.BakedGeomeConfig.RockEntry;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.util.RegistryKey;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -221,10 +223,10 @@ public final class GeomeConfig {
 			ResourceLocation biomeId = biome.getRegistryName();
 			if (biomeId != null) {
 				merge(weights, biomeRules.get(biomeId.toString()));
-			}
-
-			for (BiomeDictionary.Type type : BiomeDictionary.getTypes(biome)) {
-				merge(weights, dictionaryRules.get(type.getName()));
+				RegistryKey<Biome> biomeKey = RegistryKey.getOrCreateKey(Registry.BIOME_KEY, biomeId);
+				for (BiomeDictionary.Type type : BiomeDictionary.getTypes(biomeKey)) {
+					merge(weights, dictionaryRules.get(type.getName()));
+				}
 			}
 			applyBiomeHeuristic(weights, geomeIndexes, biome);
 			result.put(biome, weights);
@@ -234,7 +236,7 @@ public final class GeomeConfig {
 
 	private static void applyBiomeHeuristic(double[] weights, Map<String, Integer> geomeIndexes, Biome biome) {
 		String category = biome.getCategory().name();
-		float temperature = biome.getDefaultTemperature();
+		float temperature = biome.getTemperature();
 		float downfall = biome.getDownfall();
 		float depth = biome.getDepth();
 		float scale = biome.getScale();
@@ -323,6 +325,7 @@ public final class GeomeConfig {
 		JsonObject biomeRules = new JsonObject();
 		addVanillaBiomeDefaults(biomeRules);
 		addBiomesOPlentyDefaults(biomeRules);
+		addBYGDefaults(biomeRules);
 		root.add("biomes", biomeRules);
 
 		JsonObject dictionaryRules = new JsonObject();
@@ -392,48 +395,117 @@ public final class GeomeConfig {
 	}
 
 	private static void addBiomesOPlentyDefaults(JsonObject biomes) {
-		String[] mountains = { "alps", "alps_foothills", "highland", "overgrown_cliffs", "shield" };
-		for (String name : mountains) {
-			addWeights(biomes, bop(name), "mountain_belt", 3.5D, "stable_craton", 0.8D);
-		}
+		String[] mountains = { "alps", "alps_foothills", "highland", "highland_crag", "jade_cliffs",
+				"rainbow_hills", "redwood_hills" };
+		addBOPWeights(biomes, mountains, "mountain_belt", 3.5D, "stable_craton", 0.8D);
+		addWeights(biomes, bop("highland_moor"), "mountain_belt", 2.0D, "wetland_basin", 1.0D);
 		addWeights(biomes, bop("volcano"), "volcanic_arc", 6.0D, "mountain_belt", 1.0D);
-		addWeights(biomes, bop("volcano_edge"), "volcanic_arc", 4.0D, "coastal_shelf", 0.8D);
+		addWeights(biomes, bop("volcanic_plains"), "volcanic_arc", 4.0D, "arid_basin", 0.8D);
 
-		String[] dry = { "brushland", "chaparral", "cold_desert", "dry_plains", "outback", "prairie",
-				"scrubland", "shrubland", "steppe", "wasteland", "xeric_shrubland", "oasis" };
-		for (String name : dry) {
-			addWeights(biomes, bop(name), "arid_basin", 3.0D, "sedimentary_basin", 1.0D);
-		}
+		String[] dry = { "cold_desert", "dry_boneyard", "dryland", "golden_prairie", "grassland",
+				"grassland_clover_patch", "lush_desert", "lush_savanna", "prairie", "scrubland", "shrubland",
+				"shrubland_hills", "wasteland", "wooded_scrubland" };
+		addBOPWeights(biomes, dry, "arid_basin", 3.0D, "sedimentary_basin", 1.0D);
 
-		String[] wet = { "bayou", "bog", "floodplain", "lush_swamp", "mangrove", "marsh", "mire", "moor",
-				"rainforest", "tropical_rainforest", "wetland" };
-		for (String name : wet) {
-			addWeights(biomes, bop(name), "wetland_basin", 3.0D, "sedimentary_basin", 1.1D);
-		}
+		String[] wet = { "bayou", "bayou_mangrove", "deep_bayou", "dense_marsh", "fungal_field",
+				"fungal_jungle", "marsh", "muskeg", "ominous_mire", "rainforest", "rainforest_cliffs",
+				"rainforest_floodplain", "shroomy_wetland", "wetland", "wetland_forest" };
+		addBOPWeights(biomes, wet, "wetland_basin", 3.0D, "sedimentary_basin", 1.1D);
 
-		String[] cold = { "boreal_forest", "coniferous_forest", "snowy_coniferous_forest", "snowy_forest",
-				"tundra" };
-		for (String name : cold) {
-			addWeights(biomes, bop(name), "glacial_highland", 2.0D, "stable_craton", 1.0D);
-		}
+		String[] cold = { "coniferous_forest", "coniferous_lakes", "fir_clearing",
+				"snowy_coniferous_forest", "snowy_fir_clearing", "snowy_maple_forest", "tundra",
+				"tundra_basin", "tundra_bog" };
+		addBOPWeights(biomes, cold, "glacial_highland", 2.0D, "stable_craton", 1.0D);
 
-		String[] temperate = { "cherry_blossom_grove", "dead_forest", "flower_meadow", "grassland", "grove",
-				"lavender_field", "lush_grassland", "maple_woods", "meadow", "mystic_grove", "ominous_woods",
-				"orchard", "pasture", "pumpkin_patch", "redwood_forest", "redwood_forest_edge",
-				"seasonal_forest", "silkglade", "temperate_rainforest", "woodland" };
-		for (String name : temperate) {
-			addWeights(biomes, bop(name), "stable_craton", 2.0D, "wetland_basin", 0.5D);
-		}
+		String[] temperate = { "bamboo_blossom_grove", "burnt_forest", "cherry_blossom_grove",
+				"dead_forest", "dense_woodland", "flower_meadow", "grove", "grove_clearing", "grove_lakes",
+				"lavender_field", "lavender_forest", "meadow", "meadow_forest", "mystic_grove",
+				"mystic_plains", "ominous_woods", "orchard", "origin_valley", "redwood_forest",
+				"redwood_forest_edge", "seasonal_forest", "seasonal_orchard", "seasonal_pumpkin_patch",
+				"tall_dead_forest", "woodland" };
+		addBOPWeights(biomes, temperate, "stable_craton", 2.0D, "wetland_basin", 0.5D);
 
 		addWeights(biomes, bop("gravel_beach"), "coastal_shelf", 3.0D, "mountain_belt", 0.8D);
-		addWeights(biomes, bop("white_beach"), "coastal_shelf", 3.5D);
-		addWeights(biomes, bop("origin_beach"), "coastal_shelf", 2.5D, "stable_craton", 1.0D);
-		addWeights(biomes, bop("origin_hills"), "stable_craton", 1.5D, "mountain_belt", 1.5D);
+		addWeights(biomes, bop("tropic_beach"), "coastal_shelf", 3.5D, "wetland_basin", 0.8D);
 		addWeights(biomes, bop("tropics"), "coastal_shelf", 2.0D, "wetland_basin", 1.2D);
+	}
+
+	private static void addBYGDefaults(JsonObject biomes) {
+		String[] mountains = { "alpine_foothills", "alps", "bluff_peaks", "bluff_steeps",
+				"cika_mountains", "crag_gardens", "dover_mountains", "forest_fault", "pointed_stone_forest",
+				"red_rock_highlands", "red_rock_mountains", "redwood_mountains", "sierra_range",
+				"sierra_valley", "skyris_highlands", "skyris_highlands_clearing", "skyris_peaks",
+				"skyris_steeps", "stone_forest", "wooded_red_rock_mountains" };
+		addBYGWeights(biomes, mountains, "mountain_belt", 3.5D, "stable_craton", 0.8D);
+		addWeights(biomes, byg("basalt_barrera"), "volcanic_arc", 3.0D, "coastal_shelf", 1.8D);
+
+		String[] dry = { "araucaria_savanna", "baobab_savanna", "canyon_edge", "canyons", "dead_sea",
+				"dunes", "grassland_plateau", "lush_red_desert", "mojave_desert", "oasis", "prairie",
+				"prairie_clearing", "red_desert", "red_desert_dunes", "red_rock_lowlands", "shrublands",
+				"wooded_grassland_plateau" };
+		addBYGWeights(biomes, dry, "arid_basin", 3.0D, "sedimentary_basin", 1.2D);
+
+		String[] wet = { "bayou", "bog", "cold_swamplands", "coral_mangroves", "cypress_swamplands",
+				"fresh_water_lake", "glowshroom_bayou", "great_lake_isles", "great_lakes",
+				"guiana_springs", "mangrove_marshes", "marshlands", "polluted_lake", "vibrant_swamplands" };
+		addBYGWeights(biomes, wet, "wetland_basin", 3.0D, "sedimentary_basin", 1.1D);
+
+		String[] cold = { "blue_giant_taiga", "blue_taiga", "blue_taiga_hills", "boreal_clearing",
+				"boreal_forest", "boreal_forest_hills", "coniferous_clearing", "coniferous_forest",
+				"coniferous_forest_hills", "evergreen_clearing", "evergreen_hills", "evergreen_taiga",
+				"frozen_lake", "lush_tundra", "maple_hills", "maple_taiga", "northern_forest",
+				"red_spruce_taiga", "seasonal_giant_taiga", "seasonal_taiga", "seasonal_taiga_hills",
+				"shattered_glacier", "snowy_black_beach", "snowy_blue_giant_taiga", "snowy_blue_taiga",
+				"snowy_blue_taiga_hills", "snowy_coniferous_clearing", "snowy_coniferous_forest",
+				"snowy_coniferous_forest_hills", "snowy_deciduous_clearing", "snowy_deciduous_forest",
+				"snowy_deciduous_forest_hills", "snowy_evergreen_clearing", "snowy_evergreen_hills",
+				"snowy_evergreen_taiga", "snowy_rocky_black_beach" };
+		addBYGWeights(biomes, cold, "glacial_highland", 2.0D, "stable_craton", 1.0D);
+
+		String[] temperate = { "allium_fields", "amaranth_fields", "ancient_forest", "araucaria_forest",
+				"aspen_clearing", "aspen_forest", "aspen_forest_hills", "autumnal_valley",
+				"bamboo_forest", "black_forest_clearing", "black_forest_hills", "cherry_blossom_clearing",
+				"cherry_blossom_forest", "cika_woods", "deciduous_clearing", "deciduous_forest",
+				"deciduous_forest_hills", "ebony_hills", "ebony_woods", "enchanted_forest",
+				"enchanted_forest_hills", "enchanted_grove", "flowering_ancient_forest",
+				"flowering_enchanted_grove", "flowering_grove", "flowering_meadow", "fungal_patch",
+				"glowing_ancient_forest", "grove", "guiana_clearing", "guiana_shield",
+				"jacaranda_clearing", "jacaranda_forest", "jacaranda_forest_hills", "meadow",
+				"orchard", "pumpkin_forest", "red_oak_forest", "red_oak_forest_hills",
+				"redwood_clearing", "rose_fields", "seasonal_birch_forest", "seasonal_birch_forest_hills",
+				"seasonal_deciduous_clearing", "seasonal_deciduous_forest",
+				"seasonal_deciduous_forest_hills", "seasonal_forest", "seasonal_forest_hills",
+				"the_black_forest", "twilight_valley", "twilight_valley_hills", "weeping_witch_clearing",
+				"weeping_witch_forest", "wooded_meadow", "woodlands", "zelkova_clearing",
+				"zelkova_forest", "zelkova_forest_hills" };
+		addBYGWeights(biomes, temperate, "stable_craton", 2.0D, "wetland_basin", 0.5D);
+
+		String[] tropical = { "redwood_tropics", "tropical_fungal_forest",
+				"tropical_fungal_rainforest_hills", "tropical_rainforest", "tropical_rainforest_hills" };
+		addBYGWeights(biomes, tropical, "wetland_basin", 2.5D, "stable_craton", 1.0D);
+
+		String[] coastal = { "rainbow_beach", "rocky_beach", "tropical_islands", "white_beach" };
+		addBYGWeights(biomes, coastal, "coastal_shelf", 3.5D);
 	}
 
 	private static String bop(String path) {
 		return "biomesoplenty:" + path;
+	}
+
+	private static String byg(String path) {
+		return "byg:" + path;
+	}
+
+	private static void addBOPWeights(JsonObject biomes, String[] names, Object... values) {
+		for (String name : names) {
+			addWeights(biomes, bop(name), values);
+		}
+	}
+
+	private static void addBYGWeights(JsonObject biomes, String[] names, Object... values) {
+		for (String name : names) {
+			addWeights(biomes, byg(name), values);
+		}
 	}
 
 	private static void addDefaultRocks(JsonObject rocks) {

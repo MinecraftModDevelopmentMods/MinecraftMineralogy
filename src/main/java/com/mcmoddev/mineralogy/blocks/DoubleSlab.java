@@ -10,7 +10,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.storage.loot.LootContext.Builder;
+import net.minecraft.loot.LootContext.Builder;
 import net.minecraftforge.common.ToolType;
 
 public class DoubleSlab extends Block {

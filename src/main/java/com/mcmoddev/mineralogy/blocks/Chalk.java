@@ -10,7 +10,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.LootContext.Builder;
+import net.minecraft.loot.LootContext.Builder;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class Chalk extends Rock {

@@ -36,7 +36,7 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootContext.Builder;
+import net.minecraft.loot.LootContext.Builder;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -51,7 +51,7 @@ public class RockFurnace extends ContainerBlock {
 	public RockFurnace(float hardness, float blastResistance, int toolHardnessLevel, boolean burning,
 			float burnModifier, String name) {
 		super(Block.Properties.create(Material.ROCK).hardnessAndResistance(hardness, blastResistance)
-				.sound(SoundType.STONE).lightValue(burning ? 14 : 0));
+				.sound(SoundType.STONE).setLightLevel(state -> burning ? 14 : 0));
 		this.burning = burning;
 		this.burnModifier = burnModifier;
 		this.toolHardnessLevel = toolHardnessLevel;

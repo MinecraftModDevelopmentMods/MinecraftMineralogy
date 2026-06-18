@@ -10,6 +10,7 @@ import com.mcmoddev.mineralogy.worldgen.StoneReplacer;
 
 import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -41,6 +42,8 @@ public class Mineralogy {
 		MineralogyConfig.registerAdvancementPredicates();
 
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+		MinecraftForge.EVENT_BUS.addListener(StoneReplacer::onBiomeLoading);
+		MinecraftForge.EVENT_BUS.addListener(MineralogyOreGeneration::onBiomeLoading);
 	}
 
 	private void setup(final FMLCommonSetupEvent event) {
@@ -48,8 +51,10 @@ public class Mineralogy {
 		applyGeologyConfigOverrides();
 		GeomeConfig.bake();
 		logGeomeSampler();
-		StoneReplacer.register();
-		MineralogyOreGeneration.register();
+		event.enqueueWork(() -> {
+			StoneReplacer.registerConfiguredFeature();
+			MineralogyOreGeneration.registerConfiguredFeatures();
+		});
 	}
 
 	private static void logGeomeSampler() {

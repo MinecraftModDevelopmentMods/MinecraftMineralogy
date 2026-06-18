@@ -8,7 +8,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.storage.loot.LootContext.Builder;
+import net.minecraft.loot.LootContext.Builder;
 
 public class Chert extends Rock {
 	private final Random prng = new Random();

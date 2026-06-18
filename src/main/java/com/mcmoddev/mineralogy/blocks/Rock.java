@@ -16,8 +16,8 @@ import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
-import net.minecraft.world.storage.loot.LootContext.Builder;
-import net.minecraft.world.storage.loot.LootParameters;
+import net.minecraft.loot.LootContext.Builder;
+import net.minecraft.loot.LootParameters;
 import net.minecraftforge.common.ToolType;
 
 public class Rock extends Block {
@@ -34,7 +34,6 @@ public class Rock extends Block {
 	public final boolean isStoneEquivalent;
 	private final int toolHardnessLevel;
 
-	@Override
 	public boolean isReplaceableOreGen(BlockState state, IWorldReader world, BlockPos pos,
 			Predicate<BlockState> target) {
 		return isStoneEquivalent;

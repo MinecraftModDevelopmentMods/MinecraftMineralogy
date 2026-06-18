@@ -27,7 +27,8 @@ public class RockSaltStreetLamp extends Block {
 	private static final VoxelShape STANDING_SHAPE = Block.makeCuboidShape(6.4D, 0.0D, 6.4D, 9.6D, 28.8D, 9.6D);
 
 	public RockSaltStreetLamp() {
-		super(Block.Properties.create(Material.IRON).hardnessAndResistance(1.0F).lightValue(15).sound(SoundType.METAL));
+		super(Block.Properties.create(Material.IRON).hardnessAndResistance(1.0F)
+				.setLightLevel(state -> 15).sound(SoundType.METAL));
 		this.setRegistryName("rocksaltstreetlamp");
 		this.setDefaultState(this.getStateContainer().getBaseState().with(FACING, Direction.UP));
 	}
@@ -37,7 +38,6 @@ public class RockSaltStreetLamp extends Block {
 		return STANDING_SHAPE;
 	}
 
-	@Override
 	public boolean isNormalCube(BlockState state, IBlockReader world, BlockPos pos) {
 		return false;
 	}
@@ -57,7 +57,7 @@ public class RockSaltStreetLamp extends Block {
 	@Override
 	public boolean isValidPosition(BlockState state, IWorldReader world, BlockPos pos) {
 		return world.getBlockState(pos.up()).isAir()
-				&& Block.hasSolidSide(world.getBlockState(pos.down()), world, pos.down(), Direction.UP);
+				&& world.getBlockState(pos.down()).isSolidSide(world, pos.down(), Direction.UP);
 	}
 
 	@Override

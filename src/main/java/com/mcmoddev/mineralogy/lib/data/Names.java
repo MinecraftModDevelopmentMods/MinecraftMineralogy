@@ -37,7 +37,7 @@ public enum Names implements IStringSerializable {
 	}
 
 	@Override
-	public String getName() {
+	public String getString() {
 		return this.name();
 	}
 
@@ -50,6 +50,6 @@ public enum Names implements IStringSerializable {
 
 	@Override
 	public String toString() {
-		return this.getName().toLowerCase(Locale.ROOT);
+		return this.getString().toLowerCase(Locale.ROOT);
 	}
 }

@@ -166,8 +166,8 @@ public class TileEntityRockFurnace extends LockableTileEntity
 	}
 
 	@Override
-	public void read(CompoundNBT compound) {
-		super.read(compound);
+	public void read(BlockState state, CompoundNBT compound) {
+		super.read(state, compound);
 		furnaceItemStacks = NonNullList.withSize(getSizeInventory(), ItemStack.EMPTY);
 		ItemStackHelper.loadAllItems(compound, furnaceItemStacks);
 		furnaceBurnTime = compound.getInt("BurnTime");
@@ -176,7 +176,7 @@ public class TileEntityRockFurnace extends LockableTileEntity
 		currentItemBurnTime = getItemBurnTime(furnaceItemStacks.get(1));
 
 		if (compound.contains("CustomName", 8)) {
-			furnaceCustomName = ITextComponent.Serializer.fromJson(compound.getString("CustomName"));
+			furnaceCustomName = ITextComponent.Serializer.getComponentFromJson(compound.getString("CustomName"));
 		}
 	}
 

@@ -4,26 +4,32 @@ import java.util.Random;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import com.mcmoddev.mineralogy.Mineralogy;
 import com.mcmoddev.mineralogy.MineralogyConfig;
 import com.mcmoddev.mineralogy.MineralogyConfig.GeologyMode;
 
-import net.minecraft.world.IWorld;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.WorldGenRegistries;
+import net.minecraft.world.ISeedReader;
+import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome.Category;
 import net.minecraft.world.chunk.IChunk;
-import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.placement.IPlacementConfig;
 import net.minecraft.world.gen.placement.Placement;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.event.world.BiomeLoadingEvent;
 
 public class StoneReplacer extends Feature<NoFeatureConfig> {
-	private static final StoneReplacer FEATURE = new StoneReplacer();
+	public static final StoneReplacer FEATURE = new StoneReplacer();
+	private static final ConfiguredFeature<?, ?> CONFIGURED_FEATURE =
+			FEATURE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG)
+					.withPlacement(Placement.NOPE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG));
 
 	private final Lock geologyLock = new ReentrantLock();
 	private Geology geology = null;
@@ -31,23 +37,26 @@ public class StoneReplacer extends Feature<NoFeatureConfig> {
 	private long geologySeed = Long.MIN_VALUE;
 
 	private StoneReplacer() {
-		super(NoFeatureConfig::deserialize);
+		super(NoFeatureConfig.CODEC);
+		setRegistryName(Mineralogy.MODID, "stone_replacer");
 	}
 
-	public static void register() {
-		for (Biome biome : ForgeRegistries.BIOMES.getValues()) {
-			biome.addFeature(
-					GenerationStage.Decoration.UNDERGROUND_ORES,
-					FEATURE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG)
-							.withPlacement(Placement.NOPE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
+	public static void registerConfiguredFeature() {
+		WorldGenRegistries.register(WorldGenRegistries.CONFIGURED_FEATURE,
+				new ResourceLocation(Mineralogy.MODID, "stone_replacer"), CONFIGURED_FEATURE);
+	}
+
+	public static void onBiomeLoading(BiomeLoadingEvent event) {
+		if (isOverworldCategory(event.getCategory())) {
+			event.getGeneration().withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, CONFIGURED_FEATURE);
 		}
 	}
 
 	@Override
-	public boolean place(IWorld world, ChunkGenerator<? extends GenerationSettings> generator,
+	public boolean generate(ISeedReader world, ChunkGenerator generator,
 			Random random, BlockPos pos, NoFeatureConfig config) {
 		if (!MineralogyConfig.placeMineralogyRock()
-				|| world.getDimension().getType() != DimensionType.OVERWORLD) {
+				|| world.getWorld().getDimensionKey() != World.OVERWORLD) {
 			return false;
 		}
 
@@ -58,6 +67,10 @@ public class StoneReplacer extends Feature<NoFeatureConfig> {
 			getGeomeGeology(world.getSeed()).replaceStoneInChunk(world, chunk);
 		}
 		return true;
+	}
+
+	private static boolean isOverworldCategory(Category category) {
+		return category != Category.NETHER && category != Category.THEEND && category != Category.NONE;
 	}
 
 	private Geology getLegacyGeology(long seed) {

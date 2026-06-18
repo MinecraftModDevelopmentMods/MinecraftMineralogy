@@ -16,9 +16,9 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
@@ -72,7 +72,6 @@ public class RockSlab extends Block {
 		return getShape(state, world, pos, context);
 	}
 
-	@Override
 	public boolean isNormalCube(BlockState state, IBlockReader world, BlockPos pos) {
 		return false;
 	}
@@ -139,7 +138,7 @@ public class RockSlab extends Block {
 	private static boolean canPlaceAt(IBlockReader world, BlockPos pos, Direction facing) {
 		BlockPos supportPos = pos.offset(facing.getOpposite());
 		BlockState support = world.getBlockState(supportPos);
-		return Block.hasSolidSide(support, world, supportPos, facing);
+		return support.isSolidSide(world, supportPos, facing);
 	}
 
 	private static boolean canPlaceAtAnyFace(IBlockReader world, BlockPos pos) {
@@ -154,7 +153,7 @@ public class RockSlab extends Block {
 
 	private static Direction getPlacementFacing(net.minecraft.item.BlockItemUseContext context) {
 		Direction face = context.getFace();
-		Vec3d hitVec = context.getHitVec();
+		Vector3d hitVec = context.getHitVec();
 		BlockPos pos = context.getPos();
 		float hitX = (float) (hitVec.x - (double) pos.getX());
 		float hitY = (float) (hitVec.y - (double) pos.getY());

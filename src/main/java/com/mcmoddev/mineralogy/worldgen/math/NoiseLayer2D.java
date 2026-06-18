@@ -36,13 +36,20 @@ public class NoiseLayer2D {
 		y *= multiplier;
 		int gridX = CubicInterpolator.floor(x);
 		int gridY = CubicInterpolator.floor(y);
-		float[][] local16 = new float[4][4];
-		for (int dx = 0; dx < 4; dx++) {
-			for (int dy = 0; dy < 4; dy++) {
-				local16[dx][dy] = randAt(gridX + dx, gridY + dy);
-			}
-		}
-		return CubicInterpolator.interpolate2d(x, y, local16);
+		float sx0 = interpolateY(y, gridX, gridY, 0);
+		float sx1 = interpolateY(y, gridX, gridY, 1);
+		float sx2 = interpolateY(y, gridX, gridY, 2);
+		float sx3 = interpolateY(y, gridX, gridY, 3);
+		return CubicInterpolator.interpolate1d(x, sx0, sx1, sx2, sx3);
+	}
+
+	private float interpolateY(double y, int gridX, int gridY, int dx) {
+		int sampleX = gridX + dx;
+		return CubicInterpolator.interpolate1d(y,
+				randAt(sampleX, gridY),
+				randAt(sampleX, gridY + 1),
+				randAt(sampleX, gridY + 2),
+				randAt(sampleX, gridY + 3));
 	}
 
 	protected float randAt(int x, int y) {

@@ -21,7 +21,7 @@ public class MaterialData {
 	public static final Material CONGLOMERATE = new Material("Conglomerate", RockType.SEDIMENTARY, 1.5, 10, 0, true);
 	public static final Material DOLOMITE = new Material("Dolomite", RockType.SEDIMENTARY, 3, 15, 1, true);
 	public static final Material LIMESTONE = new Material("Limestone", RockType.SEDIMENTARY, 1.5, 10, 0, true);
-	public static final Material MARBLE = new Material("Marble", RockType.SEDIMENTARY, 1.5, 10, 0, true);
+	public static final Material MARBLE = new Material("Marble", RockType.METAMORPHIC, 1.5, 10, 0, true);
 	public static final Material SILTSTONE = new Material("Siltstone", RockType.SEDIMENTARY, 1, 10, 0, true);
 	public static final Material ROCK_SALT = new Material("Rock_salt", RockType.SEDIMENTARY, 1.5, 10, 0, true, false);
 	

@@ -1,0 +1,18 @@
+{
+  "replace": false,
+  "values": [
+    "mineralogy:andesite",
+    "mineralogy:basalt",
+    "mineralogy:diorite",
+    "mineralogy:granite",
+    "mineralogy:rhyolite",
+    "mineralogy:pegmatite",
+    "mineralogy:diabase",
+    "mineralogy:gabbro",
+    "mineralogy:peridotite",
+    "mineralogy:basaltic_glass",
+    "mineralogy:scoria",
+    "mineralogy:tuff",
+    "mineralogy:pumice"
+  ]
+}

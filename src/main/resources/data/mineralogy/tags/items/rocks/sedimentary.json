@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "mineralogy:shale",
+    "mineralogy:conglomerate",
+    "mineralogy:dolomite",
+    "mineralogy:limestone",
+    "mineralogy:siltstone",
+    "mineralogy:rock_salt",
+    "mineralogy:chert",
+    "mineralogy:gypsum",
+    "mineralogy:chalk"
+  ]
+}

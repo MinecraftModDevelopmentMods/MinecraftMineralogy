@@ -28,6 +28,7 @@ public final class MineralogyConfig {
 	private static final ForgeConfigSpec.DoubleValue ROCK_LAYER_NOISE;
 	private static final ForgeConfigSpec.IntValue GEOME_SIZE;
 	private static final ForgeConfigSpec.IntValue ROCK_LAYER_THICKNESS;
+	private static final ForgeConfigSpec.EnumValue<GeologyMode> GEOLOGY_MODE;
 	private static final ForgeConfigSpec.BooleanValue PLACE_MINERALOGY_ROCK;
 	private static final ForgeConfigSpec.BooleanValue SMELTABLE_GRAVEL;
 	private static final ForgeConfigSpec.BooleanValue DROP_COBBLESTONE;
@@ -67,6 +68,7 @@ public final class MineralogyConfig {
 	private static double rockLayerNoise = 32.0D;
 	private static int geomeSize = 100;
 	private static int geomLayerThickness = 8;
+	private static GeologyMode geologyMode = GeologyMode.GEOME;
 	private static boolean placeMineralogyRock = true;
 	private static boolean smeltableGravel = true;
 	private static boolean dropCobblestone = false;
@@ -172,6 +174,9 @@ public final class MineralogyConfig {
 		GEOME_SIZE = builder
 				.comment("Making this value larger increases the size of regions of igneous, sedimentary, and metamorphic rocks.")
 				.defineInRange("GEOME_SIZE", geomeSize, 4, Short.MAX_VALUE);
+		GEOLOGY_MODE = builder
+				.comment("Controls Mineralogy stone replacement. GEOME is the biome-influenced geology model; LEGACY is the old random layer model.")
+				.defineEnum("GEOLOGY_MODE", geologyMode);
 		ROCK_LAYER_NOISE = builder
 				.comment("Changing this value will change the waviness of the layers.")
 				.defineInRange("ROCK_LAYER_NOISE", rockLayerNoise, 1.0D, Short.MAX_VALUE);
@@ -233,6 +238,7 @@ public final class MineralogyConfig {
 		rockLayerNoise = ROCK_LAYER_NOISE.get();
 		geomeSize = GEOME_SIZE.get();
 		geomLayerThickness = ROCK_LAYER_THICKNESS.get();
+		geologyMode = GEOLOGY_MODE.get();
 		placeMineralogyRock = PLACE_MINERALOGY_ROCK.get();
 		smeltableGravel = SMELTABLE_GRAVEL.get();
 		dropCobblestone = DROP_COBBLESTONE.get();
@@ -399,6 +405,10 @@ public final class MineralogyConfig {
 
 	public static int geomLayerThickness() {
 		return geomLayerThickness;
+	}
+
+	public static GeologyMode geologyMode() {
+		return geologyMode;
 	}
 
 	public static boolean placeMineralogyRock() {
@@ -624,5 +634,10 @@ public final class MineralogyConfig {
 			Item item = IRegistry.field_212630_s.func_212608_b(itemName);
 			return item != null && stack.getItem() == item;
 		}
+	}
+
+	public static enum GeologyMode {
+		GEOME,
+		LEGACY
 	}
 }

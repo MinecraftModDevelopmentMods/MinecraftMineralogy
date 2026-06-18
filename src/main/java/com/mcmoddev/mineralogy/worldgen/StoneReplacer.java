@@ -5,6 +5,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import com.mcmoddev.mineralogy.MineralogyConfig;
+import com.mcmoddev.mineralogy.MineralogyConfig.GeologyMode;
 
 import net.minecraft.world.IWorld;
 import net.minecraft.util.math.BlockPos;
@@ -25,6 +26,7 @@ public class StoneReplacer extends Feature<NoFeatureConfig> {
 
 	private final Lock geologyLock = new ReentrantLock();
 	private Geology geology = null;
+	private GeomeGeology geomeGeology = null;
 	private long geologySeed = Long.MIN_VALUE;
 
 	public static void register() {
@@ -48,16 +50,21 @@ public class StoneReplacer extends Feature<NoFeatureConfig> {
 		}
 
 		IChunk chunk = world.getChunk(pos.getX() >> 4, pos.getZ() >> 4);
-		getGeology(world.getSeed()).replaceStoneInChunk(chunk);
+		if (MineralogyConfig.geologyMode() == GeologyMode.LEGACY) {
+			getLegacyGeology(world.getSeed()).replaceStoneInChunk(chunk);
+		} else {
+			getGeomeGeology(world.getSeed()).replaceStoneInChunk(world, chunk);
+		}
 		return true;
 	}
 
-	private Geology getGeology(long seed) {
+	private Geology getLegacyGeology(long seed) {
 		if (geology == null || geologySeed != seed) {
 			geologyLock.lock();
 			try {
 				if (geology == null || geologySeed != seed) {
 					geology = new Geology(seed, MineralogyConfig.geomeSize(), MineralogyConfig.rockLayerNoise());
+					geomeGeology = null;
 					geologySeed = seed;
 				}
 			} finally {
@@ -66,5 +73,22 @@ public class StoneReplacer extends Feature<NoFeatureConfig> {
 		}
 
 		return geology;
+	}
+
+	private GeomeGeology getGeomeGeology(long seed) {
+		if (geomeGeology == null || geologySeed != seed) {
+			geologyLock.lock();
+			try {
+				if (geomeGeology == null || geologySeed != seed) {
+					geomeGeology = new GeomeGeology(seed, GeomeConfig.baked());
+					geology = null;
+					geologySeed = seed;
+				}
+			} finally {
+				geologyLock.unlock();
+			}
+		}
+
+		return geomeGeology;
 	}
 }

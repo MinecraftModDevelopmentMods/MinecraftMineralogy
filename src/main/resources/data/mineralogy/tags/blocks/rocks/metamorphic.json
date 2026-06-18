@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "mineralogy:marble",
+    "mineralogy:slate",
+    "mineralogy:schist",
+    "mineralogy:gneiss",
+    "mineralogy:phyllite",
+    "mineralogy:amphibolite",
+    "mineralogy:hornfels",
+    "mineralogy:quartzite",
+    "mineralogy:novaculite"
+  ]
+}

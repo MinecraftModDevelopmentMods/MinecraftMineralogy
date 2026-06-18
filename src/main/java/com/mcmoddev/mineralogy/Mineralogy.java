@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.mcmoddev.mineralogy.init.MineralogyRegistry;
 import com.mcmoddev.mineralogy.worldgen.MineralogyOreGeneration;
+import com.mcmoddev.mineralogy.worldgen.GeomeConfig;
+import com.mcmoddev.mineralogy.worldgen.GeomeDistributionSampler;
 import com.mcmoddev.mineralogy.worldgen.StoneReplacer;
 
 import net.minecraft.block.Block;
@@ -22,9 +24,15 @@ public class Mineralogy {
 
 	public static final String MODID = "mineralogy";
 	public static final String NAME = "Mineralogy";
-	public static final String VERSION = "4.1.0.0";
+	public static final String VERSION = getVersion();
 
 	private static final Logger LOGGER = LogManager.getLogger();
+
+	private static String getVersion() {
+		Package metadata = Mineralogy.class.getPackage();
+		String version = metadata == null ? null : metadata.getImplementationVersion();
+		return version == null ? "DEV" : version;
+	}
 
 	public Mineralogy() {
 		instance = this;
@@ -38,8 +46,16 @@ public class Mineralogy {
 	private void setup(final FMLCommonSetupEvent event) {
 		MineralogyConfig.bake();
 		applyGeologyConfigOverrides();
+		GeomeConfig.bake();
+		logGeomeSampler();
 		StoneReplacer.register();
 		MineralogyOreGeneration.register();
+	}
+
+	private static void logGeomeSampler() {
+		if (Boolean.getBoolean("mineralogy.geomeSampler")) {
+			LOGGER.info("\n{}", GeomeDistributionSampler.sample(19780401L, ForgeRegistries.BIOMES.getValues(), 8, 8));
+		}
 	}
 
 	private static void applyGeologyConfigOverrides() {

@@ -1,14 +1,14 @@
 package com.mcmoddev.mineralogy.blocks;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockPane;
+import net.minecraft.block.PaneBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraftforge.common.ToolType;
 
-public class DryWall extends BlockPane {
+public class DryWall extends PaneBlock {
 	private final int toolHardnessLevel;
 
 	public DryWall(String color) {
@@ -18,12 +18,12 @@ public class DryWall extends BlockPane {
 	}
 
 	@Override
-	public ToolType getHarvestTool(IBlockState state) {
+	public ToolType getHarvestTool(BlockState state) {
 		return ToolType.PICKAXE;
 	}
 
 	@Override
-	public int getHarvestLevel(IBlockState state) {
+	public int getHarvestLevel(BlockState state) {
 		return toolHardnessLevel;
 	}
 

@@ -18,7 +18,7 @@ import com.mcmoddev.mineralogy.items.MineralFertilizer;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.item.BlockItem;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -29,7 +29,7 @@ import net.minecraftforge.registries.ObjectHolder;
 @Mod.EventBusSubscriber(modid = Mineralogy.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 @ObjectHolder(Mineralogy.MODID)
 public class Items {
-	public static final ItemBlock basalt = null;
+	public static final BlockItem basalt = null;
 	public static final Item sulfur_dust = null;
 	public static final Item phosphorous_dust = null;
 	public static final Item nitrate_dust = null;
@@ -80,7 +80,7 @@ public class Items {
 						|| block instanceof RockSaltStreetLamp);
 	}
 
-	private static ItemBlock createBlockItem(Block block) {
+	private static BlockItem createBlockItem(Block block) {
 		Item.Properties properties = new Item.Properties().group(MineralogyItemGroups.forBlock(block));
 		if (block instanceof RockFurnace) {
 			properties.maxStackSize(1);
@@ -88,7 +88,7 @@ public class Items {
 			properties.maxStackSize(16);
 		}
 
-		ItemBlock item = new ItemBlock(block, properties);
+		BlockItem item = new BlockItem(block, properties);
 		item.setRegistryName(block.getRegistryName());
 		return item;
 	}

@@ -57,7 +57,7 @@ public final class MineralogyItemGroups {
 			@OnlyIn(Dist.CLIENT)
 			public ItemStack createIcon() {
 				Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(Mineralogy.MODID, iconItemName));
-				return item != null ? new ItemStack(item) : new ItemStack(net.minecraft.init.Items.IRON_PICKAXE);
+				return item != null ? new ItemStack(item) : new ItemStack(net.minecraft.item.Items.IRON_PICKAXE);
 			}
 		};
 	}

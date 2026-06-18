@@ -5,7 +5,7 @@
       "item": "mineralogy:drywall_white"
     },
     {
-      "item": "minecraft:cyan_dye"
+      "tag": "forge:dyes/cyan"
     }
   ],
   "result": {

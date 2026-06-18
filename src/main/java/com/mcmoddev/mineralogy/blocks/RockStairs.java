@@ -2,11 +2,12 @@ package com.mcmoddev.mineralogy.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.StairsBlock;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraftforge.common.ToolType;
 
-public class RockStairs extends net.minecraft.block.BlockStairs {
+public class RockStairs extends StairsBlock {
 
 	public RockStairs(Block materialBlock, float hardness, float blastResistance, int toolHardnessLevel,
 			SoundType sound, String name) {
@@ -20,12 +21,12 @@ public class RockStairs extends net.minecraft.block.BlockStairs {
 	private final int toolHardnessLevel;
 
 	@Override
-	public ToolType getHarvestTool(IBlockState state) {
+	public ToolType getHarvestTool(BlockState state) {
 		return ToolType.PICKAXE;
 	}
 
 	@Override
-	public int getHarvestLevel(IBlockState state) {
+	public int getHarvestLevel(BlockState state) {
 		return toolHardnessLevel;
 	}
 }

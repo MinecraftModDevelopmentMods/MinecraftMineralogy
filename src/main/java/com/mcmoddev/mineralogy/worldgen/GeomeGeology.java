@@ -6,7 +6,7 @@ import com.mcmoddev.mineralogy.MineralogyConfig;
 import com.mcmoddev.mineralogy.worldgen.math.PerlinNoise2D;
 
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.IWorld;
@@ -95,7 +95,7 @@ public final class GeomeGeology {
 		return config.pickGeome(biome, regionalValues, boundary);
 	}
 
-	private net.minecraft.block.state.IBlockState pickReplacement(int geomeIndex, int baseRockValue, int x, int y,
+	private net.minecraft.block.BlockState pickReplacement(int geomeIndex, int baseRockValue, int x, int y,
 			int z) {
 		int stratum = baseRockValue + y;
 		int layerIndex = Math.floorDiv(stratum, layerThickness);

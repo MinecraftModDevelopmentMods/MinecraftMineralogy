@@ -1,41 +1,46 @@
 package com.mcmoddev.mineralogy.blocks;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 import com.mcmoddev.mineralogy.Mineralogy;
 import com.mcmoddev.mineralogy.tileentity.TileEntityRockFurnace;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
-import net.minecraft.block.BlockHorizontal;
+import net.minecraft.block.ContainerBlock;
+import net.minecraft.block.HorizontalBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Particles;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.Container;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.particles.ParticleTypes;
+import net.minecraft.stats.Stats;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IItemProvider;
+import net.minecraft.block.BlockRenderType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Hand;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootContext.Builder;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.registries.ForgeRegistries;
 
-public class RockFurnace extends BlockContainer {
-	public static final net.minecraft.state.DirectionProperty FACING = BlockHorizontal.HORIZONTAL_FACING;
+public class RockFurnace extends ContainerBlock {
+	public static final net.minecraft.state.DirectionProperty FACING = HorizontalBlock.HORIZONTAL_FACING;
 	private static boolean keepInventory;
 
 	private final boolean burning;
@@ -50,26 +55,20 @@ public class RockFurnace extends BlockContainer {
 		this.burnModifier = burnModifier;
 		this.toolHardnessLevel = toolHardnessLevel;
 		this.setRegistryName(name);
-		this.setDefaultState(this.getStateContainer().getBaseState().with(FACING, EnumFacing.NORTH));
+		this.setDefaultState(this.getStateContainer().getBaseState().with(FACING, Direction.NORTH));
 	}
 
-	@Override
 	protected boolean canSilkHarvest() {
 		return false;
 	}
 
 	@Override
-	public IItemProvider getItemDropped(IBlockState state, World world, BlockPos pos, int fortune) {
-		return getUnlitBlock(state.getBlock());
-	}
-
-	@Override
-	public IBlockState getStateForPlacement(BlockItemUseContext context) {
+	public BlockState getStateForPlacement(BlockItemUseContext context) {
 		return getDefaultState().with(FACING, context.getPlacementHorizontalFacing().getOpposite());
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer,
+	public void onBlockPlacedBy(World world, BlockPos pos, BlockState state, LivingEntity placer,
 			ItemStack stack) {
 		if (stack.hasDisplayName()) {
 			TileEntity tileEntity = world.getTileEntity(pos);
@@ -80,23 +79,23 @@ public class RockFurnace extends BlockContainer {
 	}
 
 	@Override
-	public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player,
-			net.minecraft.util.EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player,
+			Hand hand, BlockRayTraceResult hit) {
 		if (world.isRemote) {
 			return true;
 		}
 
 		TileEntity tileEntity = world.getTileEntity(pos);
 		if (tileEntity instanceof TileEntityRockFurnace) {
-			player.displayGUIChest((TileEntityRockFurnace) tileEntity);
-			player.addStat(net.minecraft.stats.StatList.INTERACT_WITH_FURNACE);
+			player.openContainer((TileEntityRockFurnace) tileEntity);
+			player.addStat(Stats.INTERACT_WITH_FURNACE);
 		}
 
 		return true;
 	}
 
 	public static void setState(boolean active, World world, BlockPos pos) {
-		IBlockState oldState = world.getBlockState(pos);
+		BlockState oldState = world.getBlockState(pos);
 		Block oldBlock = oldState.getBlock();
 		Block newBlock = getStateBlock(oldBlock, active);
 
@@ -121,7 +120,12 @@ public class RockFurnace extends BlockContainer {
 	}
 
 	@Override
-	public void onReplaced(IBlockState state, World world, BlockPos pos, IBlockState newState, boolean isMoving) {
+	public List<ItemStack> getDrops(BlockState state, Builder builder) {
+		return Collections.singletonList(new ItemStack(getUnlitBlock(state.getBlock())));
+	}
+
+	@Override
+	public void onReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving) {
 		if (state.getBlock() != newState.getBlock()) {
 			if (!keepInventory) {
 				TileEntity tileEntity = world.getTileEntity(pos);
@@ -136,27 +140,27 @@ public class RockFurnace extends BlockContainer {
 	}
 
 	@Override
-	public boolean hasComparatorInputOverride(IBlockState state) {
+	public boolean hasComparatorInputOverride(BlockState state) {
 		return true;
 	}
 
 	@Override
-	public int getComparatorInputOverride(IBlockState blockState, World world, BlockPos pos) {
+	public int getComparatorInputOverride(BlockState blockState, World world, BlockPos pos) {
 		return Container.calcRedstone(world.getTileEntity(pos));
 	}
 
 	@Override
-	public ItemStack getItem(IBlockReader world, BlockPos pos, IBlockState state) {
+	public ItemStack getItem(IBlockReader world, BlockPos pos, BlockState state) {
 		return new ItemStack(getUnlitBlock(state.getBlock()));
 	}
 
 	@Override
-	public void animateTick(IBlockState state, World world, BlockPos pos, Random random) {
+	public void animateTick(BlockState state, World world, BlockPos pos, Random random) {
 		if (!burning) {
 			return;
 		}
 
-		EnumFacing facing = state.get(FACING);
+		Direction facing = state.get(FACING);
 		double x = (double) pos.getX() + 0.5D;
 		double y = (double) pos.getY();
 		double z = (double) pos.getZ() + 0.5D;
@@ -168,43 +172,43 @@ public class RockFurnace extends BlockContainer {
 
 		double offset = 0.52D;
 		double randomOffset = random.nextDouble() * 0.6D - 0.3D;
-		EnumFacing.Axis axis = facing.getAxis();
-		double xOffset = axis == EnumFacing.Axis.X ? (double) facing.getXOffset() * offset : randomOffset;
-		double zOffset = axis == EnumFacing.Axis.Z ? (double) facing.getZOffset() * offset : randomOffset;
+		Direction.Axis axis = facing.getAxis();
+		double xOffset = axis == Direction.Axis.X ? (double) facing.getXOffset() * offset : randomOffset;
+		double zOffset = axis == Direction.Axis.Z ? (double) facing.getZOffset() * offset : randomOffset;
 
-		world.spawnParticle(Particles.SMOKE, x + xOffset, y + random.nextDouble() * 6.0D / 16.0D, z + zOffset,
+		world.addParticle(ParticleTypes.SMOKE, x + xOffset, y + random.nextDouble() * 6.0D / 16.0D, z + zOffset,
 				0.0D, 0.0D, 0.0D);
-		world.spawnParticle(Particles.FLAME, x + xOffset, y + random.nextDouble() * 6.0D / 16.0D, z + zOffset,
+		world.addParticle(ParticleTypes.FLAME, x + xOffset, y + random.nextDouble() * 6.0D / 16.0D, z + zOffset,
 				0.0D, 0.0D, 0.0D);
 	}
 
 	@Override
-	public EnumBlockRenderType getRenderType(IBlockState state) {
-		return EnumBlockRenderType.MODEL;
+	public BlockRenderType getRenderType(BlockState state) {
+		return BlockRenderType.MODEL;
 	}
 
 	@Override
-	public IBlockState rotate(IBlockState state, Rotation rotation) {
+	public BlockState rotate(BlockState state, Rotation rotation) {
 		return state.with(FACING, rotation.rotate(state.get(FACING)));
 	}
 
 	@Override
-	public IBlockState mirror(IBlockState state, Mirror mirror) {
+	public BlockState mirror(BlockState state, Mirror mirror) {
 		return state.rotate(mirror.toRotation(state.get(FACING)));
 	}
 
 	@Override
-	public ToolType getHarvestTool(IBlockState state) {
+	public ToolType getHarvestTool(BlockState state) {
 		return ToolType.PICKAXE;
 	}
 
 	@Override
-	public int getHarvestLevel(IBlockState state) {
+	public int getHarvestLevel(BlockState state) {
 		return toolHardnessLevel;
 	}
 
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, IBlockState> builder) {
+	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
 		builder.add(FACING);
 	}
 

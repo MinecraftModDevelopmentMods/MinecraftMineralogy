@@ -3,8 +3,8 @@ package com.mcmoddev.mineralogy.worldgen;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.world.biome.Biome;
 
 public final class BakedGeomeConfig {
@@ -84,7 +84,7 @@ public final class BakedGeomeConfig {
 		return RockFamily.SEDIMENTARY;
 	}
 
-	public IBlockState pickRock(int geomeIndex, RockFamily family, int y, int hash) {
+	public BlockState pickRock(int geomeIndex, RockFamily family, int y, int hash) {
 		return rockPickers[geomeIndex][family.ordinal()][clampY(y)].pick(hash);
 	}
 
@@ -127,7 +127,7 @@ public final class BakedGeomeConfig {
 			}
 		}
 
-		IBlockState[] states = new IBlockState[count];
+		BlockState[] states = new BlockState[count];
 		int[] thresholds = new int[count];
 		int total = 0;
 		int index = 0;
@@ -150,7 +150,7 @@ public final class BakedGeomeConfig {
 		}
 
 		if (index != states.length) {
-			IBlockState[] compactStates = new IBlockState[index];
+			BlockState[] compactStates = new BlockState[index];
 			int[] compactThresholds = new int[index];
 			System.arraycopy(states, 0, compactStates, 0, index);
 			System.arraycopy(thresholds, 0, compactThresholds, 0, index);
@@ -216,14 +216,14 @@ public final class BakedGeomeConfig {
 	}
 
 	static final class RockEntry {
-		final IBlockState state;
+		final BlockState state;
 		final RockFamily family;
 		final int depthPeak;
 		final int depthSpread;
 		final double weight;
 		final double[] geomeWeights;
 
-		RockEntry(IBlockState state, RockFamily family, int depthPeak, int depthSpread, double weight,
+		RockEntry(BlockState state, RockFamily family, int depthPeak, int depthSpread, double weight,
 				double[] geomeWeights) {
 			this.state = state;
 			this.family = family;
@@ -235,13 +235,13 @@ public final class BakedGeomeConfig {
 	}
 
 	private static final class WeightedBlockPicker {
-		private static final IBlockState FALLBACK = Blocks.STONE.getDefaultState();
+		private static final BlockState FALLBACK = Blocks.STONE.getDefaultState();
 
-		private final IBlockState[] states;
+		private final BlockState[] states;
 		private final int[] thresholds;
 		private final int total;
 
-		WeightedBlockPicker(IBlockState[] states, int[] thresholds, int total) {
+		WeightedBlockPicker(BlockState[] states, int[] thresholds, int total) {
 			this.states = states;
 			this.thresholds = thresholds;
 			this.total = total;
@@ -251,7 +251,7 @@ public final class BakedGeomeConfig {
 			return total <= 0 || states.length == 0;
 		}
 
-		IBlockState pick(int hash) {
+		BlockState pick(int hash) {
 			if (isEmpty()) {
 				return FALLBACK;
 			}

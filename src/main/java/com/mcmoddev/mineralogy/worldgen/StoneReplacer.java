@@ -12,13 +12,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.IChunk;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.GenerationSettings;
 import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.IChunkGenSettings;
-import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.placement.IPlacementConfig;
+import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class StoneReplacer extends Feature<NoFeatureConfig> {
@@ -29,20 +30,24 @@ public class StoneReplacer extends Feature<NoFeatureConfig> {
 	private GeomeGeology geomeGeology = null;
 	private long geologySeed = Long.MIN_VALUE;
 
+	private StoneReplacer() {
+		super(NoFeatureConfig::deserialize);
+	}
+
 	public static void register() {
 		for (Biome biome : ForgeRegistries.BIOMES.getValues()) {
 			biome.addFeature(
 					GenerationStage.Decoration.UNDERGROUND_ORES,
-					Biome.createCompositeFeature(
+					Biome.createDecoratedFeature(
 							FEATURE,
 							IFeatureConfig.NO_FEATURE_CONFIG,
-							Biome.PASSTHROUGH,
+							Placement.NOPE,
 							IPlacementConfig.NO_PLACEMENT_CONFIG));
 		}
 	}
 
 	@Override
-	public boolean func_212245_a(IWorld world, IChunkGenerator<? extends IChunkGenSettings> generator,
+	public boolean place(IWorld world, ChunkGenerator<? extends GenerationSettings> generator,
 			Random random, BlockPos pos, NoFeatureConfig config) {
 		if (!MineralogyConfig.placeMineralogyRock()
 				|| world.getDimension().getType() != DimensionType.OVERWORLD) {

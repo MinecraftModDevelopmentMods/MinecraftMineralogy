@@ -1,24 +1,25 @@
 package com.mcmoddev.mineralogy.blocks;
 
-import java.util.Random;
+import java.util.Collections;
+import java.util.List;
 
 import com.mcmoddev.mineralogy.Mineralogy;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockOre;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootContext.Builder;
 import net.minecraftforge.common.ToolType;
 import net.minecraftforge.registries.ForgeRegistries;
 
-public class Ore extends BlockOre {
+public class Ore extends Block {
 	private final String dropItemName;
 	private final int dropAdduct;
 	private final int dropRange;
@@ -35,33 +36,28 @@ public class Ore extends BlockOre {
 	}
 
 	@Override
-	public int getExpDrop(IBlockState state, IWorldReader world, BlockPos pos, int fortune) {
+	public int getExpDrop(BlockState state, IWorldReader world, BlockPos pos, int fortune, int silktouch) {
 		return 0;
 	}
 
-	@Override
-	public int quantityDropped(IBlockState state, Random random) {
-		return random.nextInt(dropRange) + dropAdduct;
-	}
-
-	@Override
-	public int getItemsToDropCount(IBlockState state, int fortune, World world, BlockPos pos, Random random) {
-		return quantityDropped(state, random);
-	}
-
-	@Override
-	public IItemProvider getItemDropped(IBlockState state, World world, BlockPos pos, int fortune) {
+	public IItemProvider getItemDropped() {
 		Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(Mineralogy.MODID, dropItemName));
 		return item == null ? this : item;
 	}
 
 	@Override
-	public ToolType getHarvestTool(IBlockState state) {
+	public List<ItemStack> getDrops(BlockState state, Builder builder) {
+		return Collections.singletonList(new ItemStack(getItemDropped(),
+				builder.getWorld().rand.nextInt(dropRange) + dropAdduct));
+	}
+
+	@Override
+	public ToolType getHarvestTool(BlockState state) {
 		return ToolType.PICKAXE;
 	}
 
 	@Override
-	public int getHarvestLevel(IBlockState state) {
+	public int getHarvestLevel(BlockState state) {
 		return pickLevel;
 	}
 }

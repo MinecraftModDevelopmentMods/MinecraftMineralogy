@@ -14,13 +14,15 @@ import com.google.gson.JsonSyntaxException;
 import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.IRegistry;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.common.crafting.conditions.ICondition;
+import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public final class MineralogyConfig {
 	public static final ForgeConfigSpec SPEC;
@@ -106,6 +108,7 @@ public final class MineralogyConfig {
 	private static OreGenerationSettings nitrateOre = new OreGenerationSettings(16, 64, 1.0D, 16);
 	private static boolean recipeConditionsRegistered = false;
 	private static boolean advancementPredicatesRegistered = false;
+	private static final ResourceLocation CONFIG_CONDITION_ID = new ResourceLocation(Mineralogy.MODID, "config");
 
 	static {
 		ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -118,7 +121,7 @@ public final class MineralogyConfig {
 				.comment("If true, then the world patching path may fix compatibility-breaking changes from older versions.")
 				.define("patch_world", patchUpdate);
 		SMELTABLE_GRAVEL = builder
-				.comment("If true, then gravel can be smelted into generic stone. 1.13 data recipes may need a restart after changing this.")
+				.comment("If true, then gravel can be smelted into generic stone. Data recipes may need a restart after changing this.")
 				.define("SMELTABLE_GRAVEL", smeltableGravel);
 		DROP_COBBLESTONE = builder
 				.comment("If true, then ordinary rock blocks also drop cobblestone.")
@@ -219,8 +222,7 @@ public final class MineralogyConfig {
 			return;
 		}
 
-		CraftingHelper.register(new ResourceLocation(Mineralogy.MODID, "config"),
-				json -> configFlagCondition(JsonUtils.getString(json, "flag")));
+		CraftingHelper.register(new ConfigConditionSerializer());
 		recipeConditionsRegistered = true;
 	}
 
@@ -308,15 +310,15 @@ public final class MineralogyConfig {
 	private static ItemPredicate configItemPredicate(JsonObject json) {
 		List<BooleanSupplier> flags = new ArrayList<>();
 		if (json.has("flags")) {
-			JsonArray flagArray = JsonUtils.getJsonArray(json, "flags");
+			JsonArray flagArray = JSONUtils.getJsonArray(json, "flags");
 			for (JsonElement flag : flagArray) {
-				flags.add(configFlagCondition(JsonUtils.getString(flag, "flag")));
+				flags.add(configFlagCondition(JSONUtils.getString(flag, "flag")));
 			}
 		} else {
-			flags.add(configFlagCondition(JsonUtils.getString(json, "flag")));
+			flags.add(configFlagCondition(JSONUtils.getString(json, "flag")));
 		}
 
-		return new ConfigItemPredicate(flags, new ResourceLocation(JsonUtils.getString(json, "item")));
+		return new ConfigItemPredicate(flags, new ResourceLocation(JSONUtils.getString(json, "item")));
 	}
 
 	private static BooleanSupplier configFlagCondition(String flag) {
@@ -373,6 +375,43 @@ public final class MineralogyConfig {
 			bakeIfConfigured();
 			return flag.getAsBoolean();
 		};
+	}
+
+	private static final class ConfigCondition implements ICondition {
+		private final String flagName;
+		private final BooleanSupplier flag;
+
+		private ConfigCondition(String flagName) {
+			this.flagName = flagName;
+			this.flag = configFlagCondition(flagName);
+		}
+
+		@Override
+		public ResourceLocation getID() {
+			return CONFIG_CONDITION_ID;
+		}
+
+		@Override
+		public boolean test() {
+			return flag.getAsBoolean();
+		}
+	}
+
+	private static final class ConfigConditionSerializer implements IConditionSerializer<ConfigCondition> {
+		@Override
+		public void write(JsonObject json, ConfigCondition value) {
+			json.addProperty("flag", value.flagName);
+		}
+
+		@Override
+		public ConfigCondition read(JsonObject json) {
+			return new ConfigCondition(JSONUtils.getString(json, "flag"));
+		}
+
+		@Override
+		public ResourceLocation getID() {
+			return CONFIG_CONDITION_ID;
+		}
 	}
 
 	private static void bakeIfConfigured() {
@@ -631,7 +670,7 @@ public final class MineralogyConfig {
 				}
 			}
 
-			Item item = IRegistry.field_212630_s.func_212608_b(itemName);
+			Item item = ForgeRegistries.ITEMS.getValue(itemName);
 			return item != null && stack.getItem() == item;
 		}
 	}

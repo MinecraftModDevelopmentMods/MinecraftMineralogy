@@ -9,7 +9,7 @@ import com.mcmoddev.mineralogy.init.MineralogyItemGroups;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
+import net.minecraft.item.BlockItem;
 import net.minecraft.util.ResourceLocation;
 
 public class Material {
@@ -100,8 +100,8 @@ public class Material {
 		return new RockStairs(rock, (float)this.hardness, (float)this.blastResistance, (int)this.toolHardnessLevel, SoundType.STONE, name + "_stairs");
 	}
 	
-	public ItemBlock getBlockItem(Rock blockHandle) {
-		ItemBlock blockItem = new ItemBlock(blockHandle,
+	public BlockItem getBlockItem(Rock blockHandle) {
+		BlockItem blockItem = new BlockItem(blockHandle,
 				new Item.Properties().group(MineralogyItemGroups.forBlock(blockHandle)));
 		
 		blockItem.setRegistryName(Mineralogy.MODID, blockHandle.getRegistryName().getPath());
@@ -109,8 +109,8 @@ public class Material {
 		return blockItem;
 	}
 	
-	public ItemBlock getBlockItem(RockStairs blockHandle) {
-		ItemBlock blockItem = new ItemBlock(blockHandle,
+	public BlockItem getBlockItem(RockStairs blockHandle) {
+		BlockItem blockItem = new BlockItem(blockHandle,
 				new Item.Properties().group(MineralogyItemGroups.forBlock(blockHandle)));
 		
 		blockItem.setRegistryName(Mineralogy.MODID, blockHandle.getRegistryName().getPath());
@@ -118,8 +118,8 @@ public class Material {
 		return blockItem;
 	}
 	
-	public ItemBlock getBlockItem(RockWall blockHandle) {
-		ItemBlock blockItem = new ItemBlock(blockHandle,
+	public BlockItem getBlockItem(RockWall blockHandle) {
+		BlockItem blockItem = new BlockItem(blockHandle,
 				new Item.Properties().group(MineralogyItemGroups.forBlock(blockHandle)));
 		
 		blockItem.setRegistryName(Mineralogy.MODID, blockHandle.getRegistryName().getPath());

@@ -12,44 +12,47 @@ import com.mcmoddev.mineralogy.init.TileEntities;
 import com.mcmoddev.mineralogy.inventory.ContainerRockFurnace;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.Container;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.block.Blocks;
+import net.minecraft.item.Items;
+import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.IRecipeHelperPopulator;
 import net.minecraft.inventory.IRecipeHolder;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.inventory.SlotFurnaceFuel;
+import net.minecraft.inventory.container.FurnaceFuelSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipe;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeItemHelper;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntityFurnace;
-import net.minecraft.tileentity.TileEntityLockable;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ITickable;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.tileentity.AbstractFurnaceTileEntity;
+import net.minecraft.tileentity.LockableTileEntity;
+import net.minecraft.tileentity.ITickableTileEntity;
+import net.minecraft.util.Direction;
+import net.minecraft.util.IIntArray;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.crafting.VanillaRecipeTypes;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
-public class TileEntityRockFurnace extends TileEntityLockable
-		implements ISidedInventory, IRecipeHolder, IRecipeHelperPopulator, ITickable {
+public class TileEntityRockFurnace extends LockableTileEntity
+		implements ISidedInventory, IRecipeHolder, IRecipeHelperPopulator, ITickableTileEntity {
 	private static final int[] SLOTS_TOP = new int[] { 0 };
 	private static final int[] SLOTS_BOTTOM = new int[] { 2, 1 };
 	private static final int[] SLOTS_SIDES = new int[] { 1 };
@@ -61,8 +64,24 @@ public class TileEntityRockFurnace extends TileEntityLockable
 	private int totalCookTime = 200;
 	private ITextComponent furnaceCustomName;
 	private final Map<ResourceLocation, Integer> recipeUseCounts = new HashMap<ResourceLocation, Integer>();
+	private final IIntArray furnaceData = new IIntArray() {
+		@Override
+		public int get(int index) {
+			return getField(index);
+		}
+
+		@Override
+		public void set(int index, int value) {
+			setField(index, value);
+		}
+
+		@Override
+		public int size() {
+			return 4;
+		}
+	};
 	private final LazyOptional<? extends IItemHandlerModifiable>[] handlers =
-			SidedInvWrapper.create(this, EnumFacing.UP, EnumFacing.DOWN, EnumFacing.NORTH);
+			SidedInvWrapper.create(this, Direction.UP, Direction.DOWN, Direction.NORTH);
 	private final float fallbackBurnModifier;
 
 	public TileEntityRockFurnace() {
@@ -124,7 +143,7 @@ public class TileEntityRockFurnace extends TileEntityLockable
 
 	@Override
 	public ITextComponent getName() {
-		return hasCustomName() ? furnaceCustomName : new TextComponentTranslation("container.furnace");
+		return hasCustomName() ? furnaceCustomName : getDefaultName();
 	}
 
 	@Override
@@ -137,12 +156,17 @@ public class TileEntityRockFurnace extends TileEntityLockable
 		return furnaceCustomName;
 	}
 
+	@Override
+	protected ITextComponent getDefaultName() {
+		return new TranslationTextComponent("container.furnace");
+	}
+
 	public void setCustomInventoryName(ITextComponent name) {
 		furnaceCustomName = name;
 	}
 
 	@Override
-	public void read(NBTTagCompound compound) {
+	public void read(CompoundNBT compound) {
 		super.read(compound);
 		furnaceItemStacks = NonNullList.withSize(getSizeInventory(), ItemStack.EMPTY);
 		ItemStackHelper.loadAllItems(compound, furnaceItemStacks);
@@ -157,15 +181,15 @@ public class TileEntityRockFurnace extends TileEntityLockable
 	}
 
 	@Override
-	public NBTTagCompound write(NBTTagCompound compound) {
+	public CompoundNBT write(CompoundNBT compound) {
 		super.write(compound);
-		compound.setInt("BurnTime", furnaceBurnTime);
-		compound.setInt("CookTime", cookTime);
-		compound.setInt("CookTimeTotal", totalCookTime);
+		compound.putInt("BurnTime", furnaceBurnTime);
+		compound.putInt("CookTime", cookTime);
+		compound.putInt("CookTimeTotal", totalCookTime);
 		ItemStackHelper.saveAllItems(compound, furnaceItemStacks);
 
 		if (hasCustomName()) {
-			compound.setString("CustomName", ITextComponent.Serializer.toJson(furnaceCustomName));
+			compound.putString("CustomName", ITextComponent.Serializer.toJson(furnaceCustomName));
 		}
 
 		return compound;
@@ -178,10 +202,6 @@ public class TileEntityRockFurnace extends TileEntityLockable
 
 	public boolean isBurning() {
 		return furnaceBurnTime > 0;
-	}
-
-	public static boolean isBurning(IInventory inventory) {
-		return inventory.getField(0) > 0;
 	}
 
 	@Override
@@ -243,16 +263,15 @@ public class TileEntityRockFurnace extends TileEntityLockable
 	}
 
 	private int getCookTime(@Nullable FurnaceRecipe recipe) {
-		return recipe != null ? recipe.getCookingTime() : 200;
+		return recipe != null ? recipe.getCookTime() : 200;
 	}
 
 	@Nullable
 	private FurnaceRecipe getSmeltingRecipe() {
-		IRecipe recipe = world.getRecipeManager().getRecipe(this, world, VanillaRecipeTypes.SMELTING);
-		return recipe instanceof FurnaceRecipe ? (FurnaceRecipe) recipe : null;
+		return world.getRecipeManager().getRecipe(IRecipeType.SMELTING, this, world).orElse(null);
 	}
 
-	private boolean canSmelt(@Nullable IRecipe recipe) {
+	private boolean canSmelt(@Nullable IRecipe<?> recipe) {
 		if (furnaceItemStacks.get(0).isEmpty() || recipe == null) {
 			return false;
 		}
@@ -277,7 +296,7 @@ public class TileEntityRockFurnace extends TileEntityLockable
 		return output.getCount() + result.getCount() <= result.getMaxStackSize();
 	}
 
-	private void smeltItem(@Nullable IRecipe recipe) {
+	private void smeltItem(@Nullable IRecipe<?> recipe) {
 		if (!canSmelt(recipe)) {
 			return;
 		}
@@ -308,7 +327,7 @@ public class TileEntityRockFurnace extends TileEntityLockable
 			return 0;
 		}
 
-		Integer vanillaBurnTime = TileEntityFurnace.getBurnTimes().get(stack.getItem());
+		Integer vanillaBurnTime = AbstractFurnaceTileEntity.getBurnTimes().get(stack.getItem());
 		int defaultBurnTime = vanillaBurnTime == null ? 0 : vanillaBurnTime.intValue();
 		return ForgeEventFactory.getItemBurnTime(stack, defaultBurnTime);
 	}
@@ -318,7 +337,7 @@ public class TileEntityRockFurnace extends TileEntityLockable
 	}
 
 	@Override
-	public boolean isUsableByPlayer(EntityPlayer player) {
+	public boolean isUsableByPlayer(PlayerEntity player) {
 		if (world.getTileEntity(pos) != this) {
 			return false;
 		}
@@ -327,11 +346,11 @@ public class TileEntityRockFurnace extends TileEntityLockable
 	}
 
 	@Override
-	public void openInventory(EntityPlayer player) {
+	public void openInventory(PlayerEntity player) {
 	}
 
 	@Override
-	public void closeInventory(EntityPlayer player) {
+	public void closeInventory(PlayerEntity player) {
 	}
 
 	@Override
@@ -344,22 +363,22 @@ public class TileEntityRockFurnace extends TileEntityLockable
 		}
 
 		ItemStack fuel = furnaceItemStacks.get(1);
-		return isItemFuel(stack) || SlotFurnaceFuel.isBucket(stack) && fuel.getItem() != Items.BUCKET;
+		return isItemFuel(stack) || FurnaceFuelSlot.isBucket(stack) && fuel.getItem() != Items.BUCKET;
 	}
 
 	@Override
-	public int[] getSlotsForFace(EnumFacing side) {
-		return side == EnumFacing.DOWN ? SLOTS_BOTTOM : side == EnumFacing.UP ? SLOTS_TOP : SLOTS_SIDES;
+	public int[] getSlotsForFace(Direction side) {
+		return side == Direction.DOWN ? SLOTS_BOTTOM : side == Direction.UP ? SLOTS_TOP : SLOTS_SIDES;
 	}
 
 	@Override
-	public boolean canInsertItem(int index, ItemStack stack, EnumFacing direction) {
+	public boolean canInsertItem(int index, ItemStack stack, Direction direction) {
 		return isItemValidForSlot(index, stack);
 	}
 
 	@Override
-	public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
-		if (direction == EnumFacing.DOWN && index == 1) {
+	public boolean canExtractItem(int index, ItemStack stack, Direction direction) {
+		if (direction == Direction.DOWN && index == 1) {
 			Item item = stack.getItem();
 			return item == Items.WATER_BUCKET || item == Items.BUCKET;
 		}
@@ -368,16 +387,10 @@ public class TileEntityRockFurnace extends TileEntityLockable
 	}
 
 	@Override
-	public String getGuiID() {
-		return "minecraft:furnace";
+	protected Container createMenu(int windowId, PlayerInventory playerInventory) {
+		return new ContainerRockFurnace(windowId, playerInventory, this, furnaceData);
 	}
 
-	@Override
-	public Container createContainer(InventoryPlayer playerInventory, EntityPlayer player) {
-		return new ContainerRockFurnace(playerInventory, this);
-	}
-
-	@Override
 	public int getField(int id) {
 		switch (id) {
 			case 0:
@@ -393,7 +406,6 @@ public class TileEntityRockFurnace extends TileEntityLockable
 		}
 	}
 
-	@Override
 	public void setField(int id, int value) {
 		switch (id) {
 			case 0:
@@ -414,11 +426,6 @@ public class TileEntityRockFurnace extends TileEntityLockable
 	}
 
 	@Override
-	public int getFieldCount() {
-		return 4;
-	}
-
-	@Override
 	public void clear() {
 		furnaceItemStacks.clear();
 	}
@@ -431,14 +438,14 @@ public class TileEntityRockFurnace extends TileEntityLockable
 	}
 
 	@Override
-	public void setRecipeUsed(IRecipe recipe) {
+	public void setRecipeUsed(IRecipe<?> recipe) {
 		ResourceLocation id = recipe.getId();
 		Integer count = recipeUseCounts.get(id);
 		recipeUseCounts.put(id, count == null ? 1 : count + 1);
 	}
 
 	@Override
-	public IRecipe getRecipeUsed() {
+	public IRecipe<?> getRecipeUsed() {
 		return null;
 	}
 
@@ -447,7 +454,7 @@ public class TileEntityRockFurnace extends TileEntityLockable
 	}
 
 	@Override
-	public boolean canUseRecipe(World world, EntityPlayerMP player, IRecipe recipe) {
+	public boolean canUseRecipe(World world, ServerPlayerEntity player, IRecipe<?> recipe) {
 		if (recipe == null) {
 			return false;
 		}
@@ -456,11 +463,11 @@ public class TileEntityRockFurnace extends TileEntityLockable
 	}
 
 	@Override
-	public void onCrafting(EntityPlayer player) {
-		if (!world.getGameRules().getBoolean("doLimitedCrafting")) {
-			List<IRecipe> recipes = new ArrayList<IRecipe>();
+	public void onCrafting(PlayerEntity player) {
+		if (!world.getGameRules().getBoolean(GameRules.DO_LIMITED_CRAFTING)) {
+			List<IRecipe<?>> recipes = new ArrayList<IRecipe<?>>();
 			for (ResourceLocation id : recipeUseCounts.keySet()) {
-				IRecipe recipe = player.world.getRecipeManager().getRecipe(id);
+				IRecipe<?> recipe = player.world.getRecipeManager().getRecipe(id).orElse(null);
 				if (recipe != null) {
 					recipes.add(recipe);
 				}
@@ -472,12 +479,12 @@ public class TileEntityRockFurnace extends TileEntityLockable
 	}
 
 	@Override
-	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
+	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
 		if (!removed && facing != null && capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-			if (facing == EnumFacing.UP) {
+			if (facing == Direction.UP) {
 				return handlers[0].cast();
 			}
-			if (facing == EnumFacing.DOWN) {
+			if (facing == Direction.DOWN) {
 				return handlers[1].cast();
 			}
 			return handlers[2].cast();
@@ -494,7 +501,8 @@ public class TileEntityRockFurnace extends TileEntityLockable
 	}
 
 	private float getBurnModifier() {
-		Block block = getBlockState().getBlock();
+		BlockState state = getBlockState();
+		Block block = state.getBlock();
 		return block instanceof RockFurnace ? ((RockFurnace) block).getBurnModifier() : fallbackBurnModifier;
 	}
 }

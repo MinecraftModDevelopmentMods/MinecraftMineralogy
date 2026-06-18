@@ -4,22 +4,23 @@ import java.util.Map;
 
 import com.mcmoddev.mineralogy.tileentity.TileEntityRockFurnace;
 
-import net.minecraft.entity.item.EntityXPOrb;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Slot;
+import net.minecraft.entity.item.ExperienceOrbEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipe;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.hooks.BasicEventHooks;
 
 public class SlotRockFurnaceOutput extends Slot {
-	private final EntityPlayer player;
+	private final PlayerEntity player;
 	private final TileEntityRockFurnace furnace;
 	private int removeCount;
 
-	public SlotRockFurnaceOutput(EntityPlayer player, TileEntityRockFurnace furnace, int index, int xPosition,
+	public SlotRockFurnaceOutput(PlayerEntity player, TileEntityRockFurnace furnace, int index, int xPosition,
 			int yPosition) {
 		super(furnace, index, xPosition, yPosition);
 		this.player = player;
@@ -41,7 +42,7 @@ public class SlotRockFurnaceOutput extends Slot {
 	}
 
 	@Override
-	public ItemStack onTake(EntityPlayer player, ItemStack stack) {
+	public ItemStack onTake(PlayerEntity player, ItemStack stack) {
 		onCrafting(stack);
 		super.onTake(player, stack);
 		return stack;
@@ -68,15 +69,17 @@ public class SlotRockFurnaceOutput extends Slot {
 
 	private void spawnExperience() {
 		for (Map.Entry<ResourceLocation, Integer> entry : furnace.getRecipeUseCounts().entrySet()) {
-			IRecipe recipe = player.world.getRecipeManager().getRecipe(entry.getKey());
+			IRecipe<?> recipe = player.world.getRecipeManager().getRecipe(entry.getKey()).orElse(null);
 			float experience = recipe instanceof FurnaceRecipe ? ((FurnaceRecipe) recipe).getExperience() : 0.0F;
 			int amount = getExperienceAmount(entry.getValue().intValue(), experience);
 
 			while (amount > 0) {
-				int split = EntityXPOrb.getXPSplit(amount);
+				int split = ExperienceOrbEntity.getXPSplit(amount);
 				amount -= split;
-				player.world.spawnEntity(new EntityXPOrb(player.world, player.posX, player.posY + 0.5D,
-						player.posZ + 0.5D, split));
+				if (player.world instanceof ServerWorld) {
+					((ServerWorld) player.world).addEntity(new ExperienceOrbEntity(player.world, player.posX,
+							player.posY + 0.5D, player.posZ + 0.5D, split));
+				}
 			}
 		}
 	}

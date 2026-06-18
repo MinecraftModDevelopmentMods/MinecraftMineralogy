@@ -5,7 +5,7 @@
       "item": "mineralogy:drywall_white"
     },
     {
-      "item": "minecraft:dandelion_yellow"
+      "tag": "forge:dyes/yellow"
     }
   ],
   "result": {

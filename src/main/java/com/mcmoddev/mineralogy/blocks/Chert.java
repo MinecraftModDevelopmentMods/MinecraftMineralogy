@@ -1,14 +1,14 @@
 package com.mcmoddev.mineralogy.blocks;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.SoundType;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Items;
+import net.minecraft.block.BlockState;
+import net.minecraft.item.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootContext.Builder;
 
 public class Chert extends Rock {
 	private final Random prng = new Random();
@@ -18,11 +18,13 @@ public class Chert extends Rock {
 	}
 
 	@Override
-	public void getDrops(IBlockState state, NonNullList<ItemStack> drops, World world, BlockPos pos, int fortune) {
-		super.getDrops(state, drops, world, pos, fortune);
+	public List<ItemStack> getDrops(BlockState state, Builder builder) {
+		List<ItemStack> drops = new ArrayList<ItemStack>(super.getDrops(state, builder));
 
 		if (prng.nextInt(10) == 0) {
-			drops.add(new ItemStack(Items.FLINT, 1 + Math.max(0, fortune)));
+			drops.add(new ItemStack(Items.FLINT, 1 + Math.max(0, getFortuneLevel(builder))));
 		}
+
+		return drops;
 	}
 }

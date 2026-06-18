@@ -1,13 +1,13 @@
 package com.mcmoddev.mineralogy.items;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BoneMealItem;
+import net.minecraft.item.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBoneMeal;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -23,12 +23,12 @@ public class MineralFertilizer extends Item {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(ItemUseContext context) {
+	public ActionResultType onItemUse(ItemUseContext context) {
 		World world = context.getWorld();
 		BlockPos target = context.getPos();
-		EntityPlayer player = context.getPlayer();
+		PlayerEntity player = context.getPlayer();
 
-		boolean canUse = ItemBoneMeal.applyBonemeal(context.getItem(), world, target, player);
+		boolean canUse = BoneMealItem.applyBonemeal(context.getItem(), world, target, player);
 		if (canUse) {
 			phantomBonemeal.setCount(27);
 			for (int dx = -2; dx <= 2; dx++) {
@@ -37,13 +37,13 @@ public class MineralFertilizer extends Item {
 						if ((dx | dy | dz) == 0) {
 							continue;
 						}
-						ItemBoneMeal.applyBonemeal(phantomBonemeal, world, target.add(dx, dy, dz), player);
+						BoneMealItem.applyBonemeal(phantomBonemeal, world, target.add(dx, dy, dz), player);
 					}
 				}
 			}
-			return EnumActionResult.SUCCESS;
+			return ActionResultType.SUCCESS;
 		}
 
-		return EnumActionResult.PASS;
+		return ActionResultType.PASS;
 	}
 }

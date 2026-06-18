@@ -5,7 +5,7 @@
       "item": "mineralogy:drywall_white"
     },
     {
-      "item": "minecraft:bone_meal"
+      "tag": "forge:dyes/white"
     }
   ],
   "result": {

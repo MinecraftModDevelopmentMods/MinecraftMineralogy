@@ -24,8 +24,8 @@ import com.mcmoddev.mineralogy.worldgen.BakedGeomeConfig.GeomeDefinition;
 import com.mcmoddev.mineralogy.worldgen.BakedGeomeConfig.RockEntry;
 
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
@@ -109,7 +109,7 @@ public final class GeomeConfig {
 	}
 
 	private static GeomeDefinition[] readGeomes(JsonObject root, LinkedHashMap<String, Integer> geomeIndexes) {
-		JsonObject geomeRoot = JsonUtils.getJsonObject(root, "geomes", defaultConfig().getAsJsonObject("geomes"));
+		JsonObject geomeRoot = JSONUtils.getJsonObject(root, "geomes", defaultConfig().getAsJsonObject("geomes"));
 		List<GeomeDefinition> geomes = new ArrayList<>();
 		for (Entry<String, JsonElement> entry : geomeRoot.entrySet()) {
 			if (!entry.getValue().isJsonObject()) {
@@ -123,7 +123,7 @@ public final class GeomeConfig {
 				familyWeights[family.ordinal()] = 1.0D;
 			}
 
-			JsonObject families = JsonUtils.getJsonObject(json, "families", new JsonObject());
+			JsonObject families = JSONUtils.getJsonObject(json, "families", new JsonObject());
 			for (RockFamily family : RockFamily.values()) {
 				familyWeights[family.ordinal()] = getDouble(families, family.configName, familyWeights[family.ordinal()]);
 			}
@@ -158,7 +158,7 @@ public final class GeomeConfig {
 	}
 
 	private static RockEntry[] readRocks(JsonObject root, Map<String, Integer> geomeIndexes) {
-		JsonObject rockRoot = JsonUtils.getJsonObject(root, "rocks", defaultConfig().getAsJsonObject("rocks"));
+		JsonObject rockRoot = JSONUtils.getJsonObject(root, "rocks", defaultConfig().getAsJsonObject("rocks"));
 		List<RockEntry> rocks = new ArrayList<>();
 		for (Entry<String, JsonElement> entry : rockRoot.entrySet()) {
 			if (!entry.getValue().isJsonObject()) {
@@ -183,17 +183,17 @@ public final class GeomeConfig {
 			JsonObject json = entry.getValue().getAsJsonObject();
 			RockFamily family;
 			try {
-				family = RockFamily.fromConfigName(JsonUtils.getString(json, "family"));
+				family = RockFamily.fromConfigName(JSONUtils.getString(json, "family"));
 			} catch (RuntimeException e) {
 				LOGGER.warn("Ignoring Mineralogy geome rock '{}' with invalid family", id);
 				continue;
 			}
 
-			JsonObject geomeWeightsJson = JsonUtils.getJsonObject(json, "geomes", new JsonObject());
+			JsonObject geomeWeightsJson = JSONUtils.getJsonObject(json, "geomes", new JsonObject());
 			double[] geomeWeights = readGeomeWeights(geomeWeightsJson, geomeIndexes, 1.0D);
 			rocks.add(new RockEntry(block.getDefaultState(), family,
-					JsonUtils.getInt(json, "depth_peak", 48),
-					Math.max(1, JsonUtils.getInt(json, "depth_spread", 48)),
+					JSONUtils.getInt(json, "depth_peak", 48),
+					Math.max(1, JSONUtils.getInt(json, "depth_spread", 48)),
 					getDouble(json, "weight", 1.0D),
 					geomeWeights));
 		}
@@ -298,7 +298,7 @@ public final class GeomeConfig {
 		if (!json.has(key)) {
 			return fallback;
 		}
-		return JsonUtils.getFloat(json, key);
+		return JSONUtils.getFloat(json, key);
 	}
 
 	private static JsonObject defaultConfig() {

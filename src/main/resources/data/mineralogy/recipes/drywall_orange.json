@@ -5,7 +5,7 @@
       "item": "mineralogy:drywall_white"
     },
     {
-      "item": "minecraft:orange_dye"
+      "tag": "forge:dyes/orange"
     }
   ],
   "result": {

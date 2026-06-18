@@ -1,17 +1,17 @@
 package com.mcmoddev.mineralogy.blocks;
 
+import java.util.Collections;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootContext.Builder;
 import net.minecraftforge.common.ToolType;
-
-import java.util.Random;
 
 public class DoubleSlab extends Block {
 	private final Block drops;
@@ -26,32 +26,21 @@ public class DoubleSlab extends Block {
 	}
 
 	@Override
-	public ItemStack getItem(IBlockReader world, BlockPos pos, IBlockState state) {
+	public ItemStack getItem(IBlockReader world, BlockPos pos, BlockState state) {
 		return new ItemStack(drops);
 	}
 
-	@Override
-	public IItemProvider getItemDropped(IBlockState state, World world, BlockPos pos, int fortune) {
-		return drops;
+	public List<ItemStack> getDrops(BlockState state, Builder builder) {
+		return Collections.singletonList(new ItemStack(drops, 2));
 	}
 
 	@Override
-	public int quantityDropped(IBlockState state, Random random) {
-		return 2;
-	}
-
-	@Override
-	protected ItemStack getSilkTouchDrop(IBlockState state) {
-		return new ItemStack(drops, 2);
-	}
-
-	@Override
-	public ToolType getHarvestTool(IBlockState state) {
+	public ToolType getHarvestTool(BlockState state) {
 		return ToolType.PICKAXE;
 	}
 
 	@Override
-	public int getHarvestLevel(IBlockState state) {
+	public int getHarvestLevel(BlockState state) {
 		return toolHardnessLevel;
 	}
 }

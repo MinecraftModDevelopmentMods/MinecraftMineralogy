@@ -270,7 +270,7 @@ public class Blocks {
 
 		event.getRegistry().registerAll(chert, gypsum, chalk, pumice);
 
-		MineralogyRegistry.sedimentaryStones.add(net.minecraft.init.Blocks.SANDSTONE);
+		MineralogyRegistry.sedimentaryStones.add(net.minecraft.block.Blocks.SANDSTONE);
 		MineralogyRegistry.sedimentaryStones.add(chert);
 		MineralogyRegistry.sedimentaryStones.add(gypsum);
 		MineralogyRegistry.sedimentaryStones.add(chalk);

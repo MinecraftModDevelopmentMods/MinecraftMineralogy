@@ -77,8 +77,8 @@ public class SlotRockFurnaceOutput extends Slot {
 				int split = ExperienceOrbEntity.getXPSplit(amount);
 				amount -= split;
 				if (player.world instanceof ServerWorld) {
-					((ServerWorld) player.world).addEntity(new ExperienceOrbEntity(player.world, player.posX,
-							player.posY + 0.5D, player.posZ + 0.5D, split));
+					((ServerWorld) player.world).addEntity(new ExperienceOrbEntity(player.world, player.getPosX(),
+							player.getPosY() + 0.5D, player.getPosZ() + 0.5D, split));
 				}
 			}
 		}

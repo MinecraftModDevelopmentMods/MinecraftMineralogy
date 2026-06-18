@@ -21,7 +21,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public final class MineralogyOreGeneration {
 	private static final Predicate<BlockState> MINERALOGY_ORE_TARGET_PREDICATE = state -> {
-		if (OreFeatureConfig.FillerBlockType.NATURAL_STONE.func_214738_b().test(state)) {
+		if (OreFeatureConfig.FillerBlockType.NATURAL_STONE.getTargetBlockPredicate().test(state)) {
 			return true;
 		}
 
@@ -58,23 +58,17 @@ public final class MineralogyOreGeneration {
 			if (wholeCount > 0) {
 				biome.addFeature(
 						GenerationStage.Decoration.UNDERGROUND_ORES,
-						Biome.createDecoratedFeature(
-								Feature.ORE,
-								oreConfig,
-								Placement.COUNT_RANGE,
-								new CountRangeConfig(wholeCount, settings.minY(), settings.minY(),
-										settings.maxY())));
+						Feature.ORE.withConfiguration(oreConfig)
+								.withPlacement(Placement.COUNT_RANGE.configure(new CountRangeConfig(wholeCount,
+										settings.minY(), settings.minY(), settings.maxY()))));
 			}
 
 			if (fractionalChance > 0.0F) {
 				biome.addFeature(
 						GenerationStage.Decoration.UNDERGROUND_ORES,
-						Biome.createDecoratedFeature(
-								Feature.ORE,
-								oreConfig,
-								Placement.CHANCE_RANGE,
-								new ChanceRangeConfig(fractionalChance, settings.minY(), settings.minY(),
-										settings.maxY())));
+						Feature.ORE.withConfiguration(oreConfig)
+								.withPlacement(Placement.CHANCE_RANGE.configure(new ChanceRangeConfig(fractionalChance,
+										settings.minY(), settings.minY(), settings.maxY()))));
 			}
 		}
 	}

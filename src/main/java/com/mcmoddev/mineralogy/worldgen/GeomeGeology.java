@@ -46,7 +46,7 @@ public final class GeomeGeology {
 		ChunkPos chunkPos = chunk.getPos();
 		int xOffset = chunkPos.getXStart();
 		int zOffset = chunkPos.getZStart();
-		BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos();
+		BlockPos.Mutable cursor = new BlockPos.Mutable();
 		double[] regionalValues = new double[config.geomeCount()];
 		boolean changed = false;
 

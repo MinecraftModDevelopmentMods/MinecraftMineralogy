@@ -38,11 +38,8 @@ public class StoneReplacer extends Feature<NoFeatureConfig> {
 		for (Biome biome : ForgeRegistries.BIOMES.getValues()) {
 			biome.addFeature(
 					GenerationStage.Decoration.UNDERGROUND_ORES,
-					Biome.createDecoratedFeature(
-							FEATURE,
-							IFeatureConfig.NO_FEATURE_CONFIG,
-							Placement.NOPE,
-							IPlacementConfig.NO_PLACEMENT_CONFIG));
+					FEATURE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG)
+							.withPlacement(Placement.NOPE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
 		}
 	}
 

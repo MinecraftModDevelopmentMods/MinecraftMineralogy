@@ -10,6 +10,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.StateContainer;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
@@ -93,7 +94,7 @@ public class RockSlab extends Block {
 	}
 
 	@Override
-	public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player,
+	public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player,
 			Hand hand, BlockRayTraceResult hit) {
 		Direction facing = hit.getFace();
 		if (this.doubleSlabName == null || this.doubleSlabName.isEmpty() || facing != state.get(FACING)) {
@@ -117,7 +118,7 @@ public class RockSlab extends Block {
 			held.shrink(1);
 		}
 
-		return true;
+		return ActionResultType.SUCCESS;
 	}
 
 	@Override
@@ -212,11 +213,63 @@ public class RockSlab extends Block {
 		boolean upOrLeft = up - right > 0;
 
 		if (upOrRight) {
-			return upOrLeft ? face.rotateAround(upRotationAxis)
-					: face.rotateAround(rightRotationAxis).getOpposite();
+			return upOrLeft ? rotateAround(face, upRotationAxis)
+					: rotateAround(face, rightRotationAxis).getOpposite();
 		}
 
-		return upOrLeft ? face.rotateAround(rightRotationAxis)
-				: face.rotateAround(upRotationAxis).getOpposite();
+		return upOrLeft ? rotateAround(face, rightRotationAxis)
+				: rotateAround(face, upRotationAxis).getOpposite();
+	}
+
+	private static Direction rotateAround(Direction face, Direction.Axis axis) {
+		switch (axis) {
+			case X:
+				if (face == Direction.WEST || face == Direction.EAST) {
+					return face;
+				}
+				return rotateX(face);
+			case Y:
+				if (face == Direction.UP || face == Direction.DOWN) {
+					return face;
+				}
+				return face.rotateY();
+			case Z:
+				if (face == Direction.NORTH || face == Direction.SOUTH) {
+					return face;
+				}
+				return rotateZ(face);
+			default:
+				return face;
+		}
+	}
+
+	private static Direction rotateX(Direction face) {
+		switch (face) {
+			case NORTH:
+				return Direction.DOWN;
+			case SOUTH:
+				return Direction.UP;
+			case UP:
+				return Direction.NORTH;
+			case DOWN:
+				return Direction.SOUTH;
+			default:
+				return face;
+		}
+	}
+
+	private static Direction rotateZ(Direction face) {
+		switch (face) {
+			case EAST:
+				return Direction.DOWN;
+			case WEST:
+				return Direction.UP;
+			case UP:
+				return Direction.EAST;
+			case DOWN:
+				return Direction.WEST;
+			default:
+				return face;
+		}
 	}
 }

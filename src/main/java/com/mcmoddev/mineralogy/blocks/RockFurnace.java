@@ -25,6 +25,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.block.BlockRenderType;
+import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Mirror;
@@ -79,10 +80,10 @@ public class RockFurnace extends ContainerBlock {
 	}
 
 	@Override
-	public boolean onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player,
+	public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player,
 			Hand hand, BlockRayTraceResult hit) {
 		if (world.isRemote) {
-			return true;
+			return ActionResultType.SUCCESS;
 		}
 
 		TileEntity tileEntity = world.getTileEntity(pos);
@@ -91,7 +92,7 @@ public class RockFurnace extends ContainerBlock {
 			player.addStat(Stats.INTERACT_WITH_FURNACE);
 		}
 
-		return true;
+		return ActionResultType.SUCCESS;
 	}
 
 	public static void setState(boolean active, World world, BlockPos pos) {

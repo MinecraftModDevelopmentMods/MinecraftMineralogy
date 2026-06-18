@@ -2,10 +2,12 @@ package com.mcmoddev.mineralogy.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 
 public class RockRelief extends RockSlab {
@@ -34,5 +36,15 @@ public class RockRelief extends RockSlab {
 	@Override
 	public VoxelShape getShape(IBlockState state, IBlockReader world, BlockPos pos) {
 		return SHAPES[state.get(FACING).ordinal()];
+	}
+
+	@Override
+	public VoxelShape getRenderShape(IBlockState state, IBlockReader world, BlockPos pos) {
+		return VoxelShapes.empty();
+	}
+
+	@Override
+	public BlockFaceShape getBlockFaceShape(IBlockReader world, IBlockState state, BlockPos pos, EnumFacing face) {
+		return BlockFaceShape.UNDEFINED;
 	}
 }

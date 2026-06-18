@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 
 import com.mcmoddev.mineralogy.blocks.RockFurnace;
 import com.mcmoddev.mineralogy.init.TileEntities;
+import com.mcmoddev.mineralogy.inventory.ContainerRockFurnace;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,7 +18,6 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ContainerFurnace;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.IRecipeHelperPopulator;
 import net.minecraft.inventory.IRecipeHolder;
@@ -374,7 +374,7 @@ public class TileEntityRockFurnace extends TileEntityLockable
 
 	@Override
 	public Container createContainer(InventoryPlayer playerInventory, EntityPlayer player) {
-		return new ContainerFurnace(playerInventory, this);
+		return new ContainerRockFurnace(playerInventory, this);
 	}
 
 	@Override

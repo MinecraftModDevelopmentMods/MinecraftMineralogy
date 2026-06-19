@@ -1,27 +1,34 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "x  ",
-    "xx ",
-    "xxx"
-  ],
-  "key": {
-    "x": {
-      "item": "mineralogy:marble_smooth"
-    }
-  },
-  "result": {
-    "item": "mineralogy:marble_smooth_stairs",
-    "count": 4
-  },
-  "conditions": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTH"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTHSTAIRS"
+      "conditions": [
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_SMOOTH"
+        },
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_SMOOTHSTAIRS"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "x  ",
+          "xx ",
+          "xxx"
+        ],
+        "key": {
+          "x": {
+            "item": "mineralogy:marble_smooth"
+          }
+        },
+        "result": {
+          "item": "mineralogy:marble_smooth_stairs",
+          "count": 4
+        }
+      }
     }
   ]
 }

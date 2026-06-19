@@ -1,31 +1,38 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "x  ",
-    "xx ",
-    "xxx"
-  ],
-  "key": {
-    "x": {
-      "item": "mineralogy:diabase_smooth_brick"
-    }
-  },
-  "result": {
-    "item": "mineralogy:diabase_smooth_brick_stairs",
-    "count": 4
-  },
-  "conditions": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTH"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTHBRICK"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTHBRICKSTAIRS"
+      "conditions": [
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_SMOOTH"
+        },
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_SMOOTHBRICK"
+        },
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_SMOOTHBRICKSTAIRS"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "x  ",
+          "xx ",
+          "xxx"
+        ],
+        "key": {
+          "x": {
+            "item": "mineralogy:diabase_smooth_brick"
+          }
+        },
+        "result": {
+          "item": "mineralogy:diabase_smooth_brick_stairs",
+          "count": 4
+        }
+      }
     }
   ]
 }

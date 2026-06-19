@@ -3,9 +3,9 @@ package com.mcmoddev.mineralogy.worldgen;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.biome.Biome;
 
 public final class BakedGeomeConfig {
 	private static final int MAX_Y = 255;
@@ -235,7 +235,7 @@ public final class BakedGeomeConfig {
 	}
 
 	private static final class WeightedBlockPicker {
-		private static final BlockState FALLBACK = Blocks.STONE.getDefaultState();
+		private static final BlockState FALLBACK = Blocks.STONE.defaultBlockState();
 
 		private final BlockState[] states;
 		private final int[] thresholds;

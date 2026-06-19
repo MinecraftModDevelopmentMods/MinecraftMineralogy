@@ -23,13 +23,13 @@ import com.google.gson.JsonSyntaxException;
 import com.mcmoddev.mineralogy.worldgen.BakedGeomeConfig.GeomeDefinition;
 import com.mcmoddev.mineralogy.worldgen.BakedGeomeConfig.RockEntry;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.Registry;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -111,7 +111,7 @@ public final class GeomeConfig {
 	}
 
 	private static GeomeDefinition[] readGeomes(JsonObject root, LinkedHashMap<String, Integer> geomeIndexes) {
-		JsonObject geomeRoot = JSONUtils.getJsonObject(root, "geomes", defaultConfig().getAsJsonObject("geomes"));
+		JsonObject geomeRoot = GsonHelper.getAsJsonObject(root, "geomes", defaultConfig().getAsJsonObject("geomes"));
 		List<GeomeDefinition> geomes = new ArrayList<>();
 		for (Entry<String, JsonElement> entry : geomeRoot.entrySet()) {
 			if (!entry.getValue().isJsonObject()) {
@@ -125,7 +125,7 @@ public final class GeomeConfig {
 				familyWeights[family.ordinal()] = 1.0D;
 			}
 
-			JsonObject families = JSONUtils.getJsonObject(json, "families", new JsonObject());
+			JsonObject families = GsonHelper.getAsJsonObject(json, "families", new JsonObject());
 			for (RockFamily family : RockFamily.values()) {
 				familyWeights[family.ordinal()] = getDouble(families, family.configName, familyWeights[family.ordinal()]);
 			}
@@ -160,7 +160,7 @@ public final class GeomeConfig {
 	}
 
 	private static RockEntry[] readRocks(JsonObject root, Map<String, Integer> geomeIndexes) {
-		JsonObject rockRoot = JSONUtils.getJsonObject(root, "rocks", defaultConfig().getAsJsonObject("rocks"));
+		JsonObject rockRoot = GsonHelper.getAsJsonObject(root, "rocks", defaultConfig().getAsJsonObject("rocks"));
 		List<RockEntry> rocks = new ArrayList<>();
 		for (Entry<String, JsonElement> entry : rockRoot.entrySet()) {
 			if (!entry.getValue().isJsonObject()) {
@@ -185,17 +185,17 @@ public final class GeomeConfig {
 			JsonObject json = entry.getValue().getAsJsonObject();
 			RockFamily family;
 			try {
-				family = RockFamily.fromConfigName(JSONUtils.getString(json, "family"));
+				family = RockFamily.fromConfigName(GsonHelper.getAsString(json, "family"));
 			} catch (RuntimeException e) {
 				LOGGER.warn("Ignoring Mineralogy geome rock '{}' with invalid family", id);
 				continue;
 			}
 
-			JsonObject geomeWeightsJson = JSONUtils.getJsonObject(json, "geomes", new JsonObject());
+			JsonObject geomeWeightsJson = GsonHelper.getAsJsonObject(json, "geomes", new JsonObject());
 			double[] geomeWeights = readGeomeWeights(geomeWeightsJson, geomeIndexes, 1.0D);
-			rocks.add(new RockEntry(block.getDefaultState(), family,
-					JSONUtils.getInt(json, "depth_peak", 48),
-					Math.max(1, JSONUtils.getInt(json, "depth_spread", 48)),
+			rocks.add(new RockEntry(block.defaultBlockState(), family,
+					GsonHelper.getAsInt(json, "depth_peak", 48),
+					Math.max(1, GsonHelper.getAsInt(json, "depth_spread", 48)),
 					getDouble(json, "weight", 1.0D),
 					geomeWeights));
 		}
@@ -206,7 +206,7 @@ public final class GeomeConfig {
 			for (int i = 0; i < weights.length; i++) {
 				weights[i] = 1.0D;
 			}
-			rocks.add(new RockEntry(Blocks.STONE.getDefaultState(), RockFamily.SEDIMENTARY, 64, 64, 1.0D, weights));
+			rocks.add(new RockEntry(Blocks.STONE.defaultBlockState(), RockFamily.SEDIMENTARY, 64, 64, 1.0D, weights));
 		}
 		return rocks.toArray(new RockEntry[rocks.size()]);
 	}
@@ -223,7 +223,7 @@ public final class GeomeConfig {
 			ResourceLocation biomeId = biome.getRegistryName();
 			if (biomeId != null) {
 				merge(weights, biomeRules.get(biomeId.toString()));
-				RegistryKey<Biome> biomeKey = RegistryKey.getOrCreateKey(Registry.BIOME_KEY, biomeId);
+				ResourceKey<Biome> biomeKey = ResourceKey.create(Registry.BIOME_REGISTRY, biomeId);
 				for (BiomeDictionary.Type type : BiomeDictionary.getTypes(biomeKey)) {
 					merge(weights, dictionaryRules.get(type.getName()));
 				}
@@ -235,8 +235,8 @@ public final class GeomeConfig {
 	}
 
 	private static void applyBiomeHeuristic(double[] weights, Map<String, Integer> geomeIndexes, Biome biome) {
-		String category = biome.getCategory().name();
-		float temperature = biome.getTemperature();
+		String category = biome.getBiomeCategory().name();
+		float temperature = biome.getBaseTemperature();
 		float downfall = biome.getDownfall();
 		float depth = biome.getDepth();
 		float scale = biome.getScale();
@@ -300,7 +300,7 @@ public final class GeomeConfig {
 		if (!json.has(key)) {
 			return fallback;
 		}
-		return JSONUtils.getFloat(json, key);
+		return GsonHelper.getAsFloat(json, key);
 	}
 
 	private static JsonObject defaultConfig() {
@@ -325,7 +325,6 @@ public final class GeomeConfig {
 		JsonObject biomeRules = new JsonObject();
 		addVanillaBiomeDefaults(biomeRules);
 		addBiomesOPlentyDefaults(biomeRules);
-		addBYGDefaults(biomeRules);
 		root.add("biomes", biomeRules);
 
 		JsonObject dictionaryRules = new JsonObject();
@@ -430,81 +429,13 @@ public final class GeomeConfig {
 		addWeights(biomes, bop("tropics"), "coastal_shelf", 2.0D, "wetland_basin", 1.2D);
 	}
 
-	private static void addBYGDefaults(JsonObject biomes) {
-		String[] mountains = { "alpine_foothills", "alps", "bluff_peaks", "bluff_steeps",
-				"cika_mountains", "crag_gardens", "dover_mountains", "forest_fault", "pointed_stone_forest",
-				"red_rock_highlands", "red_rock_mountains", "redwood_mountains", "sierra_range",
-				"sierra_valley", "skyris_highlands", "skyris_highlands_clearing", "skyris_peaks",
-				"skyris_steeps", "stone_forest", "wooded_red_rock_mountains" };
-		addBYGWeights(biomes, mountains, "mountain_belt", 3.5D, "stable_craton", 0.8D);
-		addWeights(biomes, byg("basalt_barrera"), "volcanic_arc", 3.0D, "coastal_shelf", 1.8D);
-
-		String[] dry = { "araucaria_savanna", "baobab_savanna", "canyon_edge", "canyons", "dead_sea",
-				"dunes", "grassland_plateau", "lush_red_desert", "mojave_desert", "oasis", "prairie",
-				"prairie_clearing", "red_desert", "red_desert_dunes", "red_rock_lowlands", "shrublands",
-				"wooded_grassland_plateau" };
-		addBYGWeights(biomes, dry, "arid_basin", 3.0D, "sedimentary_basin", 1.2D);
-
-		String[] wet = { "bayou", "bog", "cold_swamplands", "coral_mangroves", "cypress_swamplands",
-				"fresh_water_lake", "glowshroom_bayou", "great_lake_isles", "great_lakes",
-				"guiana_springs", "mangrove_marshes", "marshlands", "polluted_lake", "vibrant_swamplands" };
-		addBYGWeights(biomes, wet, "wetland_basin", 3.0D, "sedimentary_basin", 1.1D);
-
-		String[] cold = { "blue_giant_taiga", "blue_taiga", "blue_taiga_hills", "boreal_clearing",
-				"boreal_forest", "boreal_forest_hills", "coniferous_clearing", "coniferous_forest",
-				"coniferous_forest_hills", "evergreen_clearing", "evergreen_hills", "evergreen_taiga",
-				"frozen_lake", "lush_tundra", "maple_hills", "maple_taiga", "northern_forest",
-				"red_spruce_taiga", "seasonal_giant_taiga", "seasonal_taiga", "seasonal_taiga_hills",
-				"shattered_glacier", "snowy_black_beach", "snowy_blue_giant_taiga", "snowy_blue_taiga",
-				"snowy_blue_taiga_hills", "snowy_coniferous_clearing", "snowy_coniferous_forest",
-				"snowy_coniferous_forest_hills", "snowy_deciduous_clearing", "snowy_deciduous_forest",
-				"snowy_deciduous_forest_hills", "snowy_evergreen_clearing", "snowy_evergreen_hills",
-				"snowy_evergreen_taiga", "snowy_rocky_black_beach" };
-		addBYGWeights(biomes, cold, "glacial_highland", 2.0D, "stable_craton", 1.0D);
-
-		String[] temperate = { "allium_fields", "amaranth_fields", "ancient_forest", "araucaria_forest",
-				"aspen_clearing", "aspen_forest", "aspen_forest_hills", "autumnal_valley",
-				"bamboo_forest", "black_forest_clearing", "black_forest_hills", "cherry_blossom_clearing",
-				"cherry_blossom_forest", "cika_woods", "deciduous_clearing", "deciduous_forest",
-				"deciduous_forest_hills", "ebony_hills", "ebony_woods", "enchanted_forest",
-				"enchanted_forest_hills", "enchanted_grove", "flowering_ancient_forest",
-				"flowering_enchanted_grove", "flowering_grove", "flowering_meadow", "fungal_patch",
-				"glowing_ancient_forest", "grove", "guiana_clearing", "guiana_shield",
-				"jacaranda_clearing", "jacaranda_forest", "jacaranda_forest_hills", "meadow",
-				"orchard", "pumpkin_forest", "red_oak_forest", "red_oak_forest_hills",
-				"redwood_clearing", "rose_fields", "seasonal_birch_forest", "seasonal_birch_forest_hills",
-				"seasonal_deciduous_clearing", "seasonal_deciduous_forest",
-				"seasonal_deciduous_forest_hills", "seasonal_forest", "seasonal_forest_hills",
-				"the_black_forest", "twilight_valley", "twilight_valley_hills", "weeping_witch_clearing",
-				"weeping_witch_forest", "wooded_meadow", "woodlands", "zelkova_clearing",
-				"zelkova_forest", "zelkova_forest_hills" };
-		addBYGWeights(biomes, temperate, "stable_craton", 2.0D, "wetland_basin", 0.5D);
-
-		String[] tropical = { "redwood_tropics", "tropical_fungal_forest",
-				"tropical_fungal_rainforest_hills", "tropical_rainforest", "tropical_rainforest_hills" };
-		addBYGWeights(biomes, tropical, "wetland_basin", 2.5D, "stable_craton", 1.0D);
-
-		String[] coastal = { "rainbow_beach", "rocky_beach", "tropical_islands", "white_beach" };
-		addBYGWeights(biomes, coastal, "coastal_shelf", 3.5D);
-	}
-
 	private static String bop(String path) {
 		return "biomesoplenty:" + path;
-	}
-
-	private static String byg(String path) {
-		return "byg:" + path;
 	}
 
 	private static void addBOPWeights(JsonObject biomes, String[] names, Object... values) {
 		for (String name : names) {
 			addWeights(biomes, bop(name), values);
-		}
-	}
-
-	private static void addBYGWeights(JsonObject biomes, String[] names, Object... values) {
-		for (String name : names) {
-			addWeights(biomes, byg(name), values);
 		}
 	}
 

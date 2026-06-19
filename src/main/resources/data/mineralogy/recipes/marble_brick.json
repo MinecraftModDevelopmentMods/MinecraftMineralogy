@@ -1,22 +1,29 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xx",
-    "xx"
-  ],
-  "key": {
-    "x": {
-      "item": "mineralogy:marble"
-    }
-  },
-  "result": {
-    "item": "mineralogy:marble_brick",
-    "count": 4
-  },
-  "conditions": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_BRICK"
+      "conditions": [
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_BRICK"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "xx",
+          "xx"
+        ],
+        "key": {
+          "x": {
+            "tag": "mineralogy:crafting_materials/marble"
+          }
+        },
+        "result": {
+          "item": "mineralogy:marble_brick",
+          "count": 4
+        }
+      }
     }
   ]
 }

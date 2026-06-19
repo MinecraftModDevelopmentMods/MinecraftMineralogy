@@ -1,27 +1,34 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "x  ",
-    "xx ",
-    "xxx"
-  ],
-  "key": {
-    "x": {
-      "item": "mineralogy:slate_brick"
-    }
-  },
-  "result": {
-    "item": "mineralogy:slate_brick_stairs",
-    "count": 4
-  },
-  "conditions": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_BRICK"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_BRICKSTAIRS"
+      "conditions": [
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_BRICK"
+        },
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_BRICKSTAIRS"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "x  ",
+          "xx ",
+          "xxx"
+        ],
+        "key": {
+          "x": {
+            "item": "mineralogy:slate_brick"
+          }
+        },
+        "result": {
+          "item": "mineralogy:slate_brick_stairs",
+          "count": 4
+        }
+      }
     }
   ]
 }

@@ -6,25 +6,26 @@ import java.util.function.Predicate;
 
 import com.mcmoddev.mineralogy.MineralogyConfig;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.loot.LootContext.Builder;
-import net.minecraft.loot.LootParameters;
-import net.minecraftforge.common.ToolType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.storage.loot.LootContext.Builder;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
 public class Rock extends Block {
 
 	public Rock(boolean isStoneEquivalent, float hardness, float blastResistance, int toolHardnessLevel,
 			SoundType sound, String name) {
-		super(Block.Properties.create(Material.ROCK).hardnessAndResistance(hardness, blastResistance).sound(sound));
+		super(BlockBehaviour.Properties.of(Material.STONE).strength(hardness, blastResistance).sound(sound)
+				.requiresCorrectToolForDrops());
 		
 		this.setRegistryName(name);
 		this.isStoneEquivalent = isStoneEquivalent;
@@ -34,22 +35,11 @@ public class Rock extends Block {
 	public final boolean isStoneEquivalent;
 	private final int toolHardnessLevel;
 
-	public boolean isReplaceableOreGen(BlockState state, IWorldReader world, BlockPos pos,
+	public boolean isReplaceableOreGen(BlockState state, LevelReader world, BlockPos pos,
 			Predicate<BlockState> target) {
 		return isStoneEquivalent;
 	}
-
-	@Override
-	public ToolType getHarvestTool(BlockState state) {
-		return ToolType.PICKAXE;
-	}
-
-	@Override
-	public int getHarvestLevel(BlockState state) {
-		return toolHardnessLevel;
-	}
-
-	@Override
+@Override
 	public List<ItemStack> getDrops(BlockState state, Builder builder) {
 		List<ItemStack> drops = new ArrayList<ItemStack>(super.getDrops(state, builder));
 
@@ -61,12 +51,13 @@ public class Rock extends Block {
 	}
 
 	protected static boolean hasSilkTouch(Builder builder) {
-		ItemStack tool = builder.get(LootParameters.TOOL);
-		return !tool.isEmpty() && EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, tool) > 0;
+		ItemStack tool = builder.getOptionalParameter(LootContextParams.TOOL);
+		return tool != null && !tool.isEmpty()
+				&& EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, tool) > 0;
 	}
 
 	protected static int getFortuneLevel(Builder builder) {
-		ItemStack tool = builder.get(LootParameters.TOOL);
-		return tool.isEmpty() ? 0 : EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, tool);
+		ItemStack tool = builder.getOptionalParameter(LootContextParams.TOOL);
+		return tool == null || tool.isEmpty() ? 0 : EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, tool);
 	}
 }

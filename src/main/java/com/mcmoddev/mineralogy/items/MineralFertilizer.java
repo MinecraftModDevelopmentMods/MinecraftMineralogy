@@ -1,15 +1,15 @@
 package com.mcmoddev.mineralogy.items;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BoneMealItem;
-import net.minecraft.item.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemUseContext;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BoneMealItem;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 public class MineralFertilizer extends Item {
 	private final ItemStack phantomBonemeal = new ItemStack(Items.BONE_MEAL, 27);
@@ -18,17 +18,17 @@ public class MineralFertilizer extends Item {
 		this(com.mcmoddev.mineralogy.init.MineralogyItemGroups.forItem());
 	}
 
-	public MineralFertilizer(ItemGroup group) {
-		super(new Item.Properties().group(group));
+	public MineralFertilizer(CreativeModeTab group) {
+		super(new Item.Properties().tab(group));
 	}
 
 	@Override
-	public ActionResultType onItemUse(ItemUseContext context) {
-		World world = context.getWorld();
-		BlockPos target = context.getPos();
-		PlayerEntity player = context.getPlayer();
+	public InteractionResult useOn(UseOnContext context) {
+		Level world = context.getLevel();
+		BlockPos target = context.getClickedPos();
+		Player player = context.getPlayer();
 
-		boolean canUse = BoneMealItem.applyBonemeal(context.getItem(), world, target, player);
+		boolean canUse = BoneMealItem.applyBonemeal(context.getItemInHand(), world, target, player);
 		if (canUse) {
 			phantomBonemeal.setCount(27);
 			for (int dx = -2; dx <= 2; dx++) {
@@ -37,13 +37,13 @@ public class MineralFertilizer extends Item {
 						if ((dx | dy | dz) == 0) {
 							continue;
 						}
-						BoneMealItem.applyBonemeal(phantomBonemeal, world, target.add(dx, dy, dz), player);
+						BoneMealItem.applyBonemeal(phantomBonemeal, world, target.offset(dx, dy, dz), player);
 					}
 				}
 			}
-			return ActionResultType.SUCCESS;
+			return InteractionResult.SUCCESS;
 		}
 
-		return ActionResultType.PASS;
+		return InteractionResult.PASS;
 	}
 }

@@ -1,26 +1,33 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xxx",
-    "xxx"
-  ],
-  "key": {
-    "x": {
-      "item": "mineralogy:diabase_brick"
-    }
-  },
-  "result": {
-    "item": "mineralogy:diabase_brick_wall",
-    "count": 6
-  },
-  "conditions": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_BRICK"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_BRICKWALL"
+      "conditions": [
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_BRICK"
+        },
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_BRICKWALL"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "xxx",
+          "xxx"
+        ],
+        "key": {
+          "x": {
+            "item": "mineralogy:diabase_brick"
+          }
+        },
+        "result": {
+          "item": "mineralogy:diabase_brick_wall",
+          "count": 6
+        }
+      }
     }
   ]
 }

@@ -5,9 +5,9 @@ import com.mcmoddev.mineralogy.blocks.DryWall;
 import com.mcmoddev.mineralogy.blocks.RockSaltLamp;
 import com.mcmoddev.mineralogy.blocks.RockSaltStreetLamp;
 
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -21,10 +21,10 @@ public final class ClientSetup {
 
 	@SubscribeEvent
 	public static void clientSetup(FMLClientSetupEvent event) {
-		RenderType cutout = RenderType.getCutout();
+		RenderType cutout = RenderType.cutout();
 		for (Block block : ForgeRegistries.BLOCKS.getValues()) {
 			if (block instanceof DryWall || block instanceof RockSaltLamp || block instanceof RockSaltStreetLamp) {
-				RenderTypeLookup.setRenderLayer(block, cutout);
+				ItemBlockRenderTypes.setRenderLayer(block, cutout);
 			}
 		}
 	}

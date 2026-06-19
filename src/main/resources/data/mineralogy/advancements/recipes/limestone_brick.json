@@ -16,7 +16,9 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:limestone"
+            "items": [
+              "mineralogy:limestone"
+            ]
           }
         ]
       }

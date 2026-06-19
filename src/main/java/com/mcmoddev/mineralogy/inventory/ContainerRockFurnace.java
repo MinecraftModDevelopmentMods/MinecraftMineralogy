@@ -2,16 +2,15 @@ package com.mcmoddev.mineralogy.inventory;
 
 import com.mcmoddev.mineralogy.tileentity.TileEntityRockFurnace;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.FurnaceContainer;
-import net.minecraft.util.IIntArray;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.FurnaceMenu;
+import net.minecraft.world.inventory.ContainerData;
 
-public class ContainerRockFurnace extends FurnaceContainer {
-	public ContainerRockFurnace(int windowId, PlayerInventory playerInventory, TileEntityRockFurnace furnace,
-			IIntArray furnaceData) {
+public class ContainerRockFurnace extends FurnaceMenu {
+	public ContainerRockFurnace(int windowId, Inventory playerInventory, TileEntityRockFurnace furnace,
+			ContainerData furnaceData) {
 		super(windowId, playerInventory, furnace, furnaceData);
 		SlotRockFurnaceOutput outputSlot = new SlotRockFurnaceOutput(playerInventory.player, furnace, 2, 116, 35);
-		outputSlot.slotNumber = 2;
-		this.inventorySlots.set(2, outputSlot);
+		this.slots.set(2, outputSlot);
 	}
 }

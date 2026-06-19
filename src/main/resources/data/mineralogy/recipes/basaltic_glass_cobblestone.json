@@ -2,10 +2,10 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "mineralogy:basaltic_glass"
+      "tag": "mineralogy:crafting_materials/basaltic_glass"
     },
     {
-      "item": "mineralogy:basaltic_glass"
+      "tag": "mineralogy:crafting_materials/basaltic_glass"
     },
     {
       "item": "minecraft:gravel"

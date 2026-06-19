@@ -2,10 +2,10 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "mineralogy:pegmatite"
+      "tag": "mineralogy:crafting_materials/pegmatite"
     },
     {
-      "item": "mineralogy:pegmatite"
+      "tag": "mineralogy:crafting_materials/pegmatite"
     },
     {
       "item": "minecraft:gravel"

@@ -1,37 +1,44 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xxx",
-    "xyx",
-    "xxx"
-  ],
-  "key": {
-    "x": {
-      "item": "mineralogy:rhyolite_smooth_brick_slab"
-    },
-    "y": {
-      "item": "minecraft:furnace"
-    }
-  },
-  "result": {
-    "item": "mineralogy:rhyolite_smooth_brick_furnace"
-  },
-  "conditions": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTH"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTHBRICK"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTHBRICKSLAB"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTHBRICKFURNACE"
+      "conditions": [
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_SMOOTH"
+        },
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_SMOOTHBRICK"
+        },
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_SMOOTHBRICKSLAB"
+        },
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_SMOOTHBRICKFURNACE"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "xxx",
+          "xyx",
+          "xxx"
+        ],
+        "key": {
+          "x": {
+            "item": "mineralogy:rhyolite_smooth_brick_slab"
+          },
+          "y": {
+            "item": "minecraft:furnace"
+          }
+        },
+        "result": {
+          "item": "mineralogy:rhyolite_smooth_brick_furnace"
+        }
+      }
     }
   ]
 }

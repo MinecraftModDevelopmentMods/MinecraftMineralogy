@@ -1,20 +1,27 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "item": "mineralogy:novaculite"
-    },
-    {
-      "item": "minecraft:sand"
-    }
-  ],
-  "result": {
-    "item": "mineralogy:novaculite_smooth"
-  },
-  "conditions": [
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTH"
+      "conditions": [
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_SMOOTH"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "ingredients": [
+          {
+            "tag": "mineralogy:crafting_materials/novaculite"
+          },
+          {
+            "item": "minecraft:sand"
+          }
+        ],
+        "result": {
+          "item": "mineralogy:novaculite_smooth"
+        }
+      }
     }
   ]
 }

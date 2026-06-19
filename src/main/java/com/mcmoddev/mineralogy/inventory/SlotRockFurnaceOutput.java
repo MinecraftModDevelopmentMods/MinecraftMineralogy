@@ -4,23 +4,24 @@ import java.util.Map;
 
 import com.mcmoddev.mineralogy.tileentity.TileEntityRockFurnace;
 
-import net.minecraft.entity.item.ExperienceOrbEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.FurnaceRecipe;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.fml.hooks.BasicEventHooks;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.ExperienceOrb;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.SmeltingRecipe;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.fmllegacy.hooks.BasicEventHooks;
 
 public class SlotRockFurnaceOutput extends Slot {
-	private final PlayerEntity player;
+	private final Player player;
 	private final TileEntityRockFurnace furnace;
 	private int removeCount;
 
-	public SlotRockFurnaceOutput(PlayerEntity player, TileEntityRockFurnace furnace, int index, int xPosition,
+	public SlotRockFurnaceOutput(Player player, TileEntityRockFurnace furnace, int index, int xPosition,
 			int yPosition) {
 		super(furnace, index, xPosition, yPosition);
 		this.player = player;
@@ -28,37 +29,36 @@ public class SlotRockFurnaceOutput extends Slot {
 	}
 
 	@Override
-	public boolean isItemValid(ItemStack stack) {
+	public boolean mayPlace(ItemStack stack) {
 		return false;
 	}
 
 	@Override
-	public ItemStack decrStackSize(int amount) {
-		if (getHasStack()) {
-			removeCount += Math.min(amount, getStack().getCount());
+	public ItemStack remove(int amount) {
+		if (hasItem()) {
+			removeCount += Math.min(amount, getItem().getCount());
 		}
 
-		return super.decrStackSize(amount);
+		return super.remove(amount);
 	}
 
 	@Override
-	public ItemStack onTake(PlayerEntity player, ItemStack stack) {
-		onCrafting(stack);
+	public void onTake(Player player, ItemStack stack) {
+		checkTakeAchievements(stack);
 		super.onTake(player, stack);
-		return stack;
 	}
 
 	@Override
-	protected void onCrafting(ItemStack stack, int amount) {
+	protected void onQuickCraft(ItemStack stack, int amount) {
 		removeCount += amount;
-		onCrafting(stack);
+		checkTakeAchievements(stack);
 	}
 
 	@Override
-	protected void onCrafting(ItemStack stack) {
-		stack.onCrafting(player.world, player, removeCount);
+	protected void checkTakeAchievements(ItemStack stack) {
+		stack.onCraftedBy(player.level, player, removeCount);
 
-		if (!player.world.isRemote) {
+		if (!player.level.isClientSide) {
 			spawnExperience();
 			furnace.onCrafting(player);
 		}
@@ -69,17 +69,13 @@ public class SlotRockFurnaceOutput extends Slot {
 
 	private void spawnExperience() {
 		for (Map.Entry<ResourceLocation, Integer> entry : furnace.getRecipeUseCounts().entrySet()) {
-			IRecipe<?> recipe = player.world.getRecipeManager().getRecipe(entry.getKey()).orElse(null);
-			float experience = recipe instanceof FurnaceRecipe ? ((FurnaceRecipe) recipe).getExperience() : 0.0F;
+			Recipe<?> recipe = player.level.getRecipeManager().byKey(entry.getKey()).orElse(null);
+			float experience = recipe instanceof SmeltingRecipe ? ((SmeltingRecipe) recipe).getExperience() : 0.0F;
 			int amount = getExperienceAmount(entry.getValue().intValue(), experience);
 
-			while (amount > 0) {
-				int split = ExperienceOrbEntity.getXPSplit(amount);
-				amount -= split;
-				if (player.world instanceof ServerWorld) {
-					((ServerWorld) player.world).addEntity(new ExperienceOrbEntity(player.world, player.getPosX(),
-							player.getPosY() + 0.5D, player.getPosZ() + 0.5D, split));
-				}
+			if (amount > 0 && player.level instanceof ServerLevel) {
+				Vec3 position = player.position().add(0.0D, 0.5D, 0.0D);
+				ExperienceOrb.award((ServerLevel) player.level, position, amount);
 			}
 		}
 	}
@@ -93,8 +89,8 @@ public class SlotRockFurnaceOutput extends Slot {
 			return smeltedCount;
 		}
 
-		int amount = MathHelper.floor((float) smeltedCount * experience);
-		if (amount < MathHelper.ceil((float) smeltedCount * experience)
+		int amount = Mth.floor((float) smeltedCount * experience);
+		if (amount < Mth.ceil((float) smeltedCount * experience)
 				&& Math.random() < (double) ((float) smeltedCount * experience - (float) amount)) {
 			++amount;
 		}

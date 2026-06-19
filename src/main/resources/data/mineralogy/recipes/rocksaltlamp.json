@@ -1,17 +1,17 @@
 {
-    "type":  "minecraft:crafting_shapeless",
-    "ingredients":  [
-                        {
-                            "tag":  "forge:storage_blocks/rock_salt"
-                        },
-                        {
-                            "item":  "minecraft:torch"
-                        },
-                        {
-                            "item":  "minecraft:iron_ingot"
-                        }
-                    ],
-    "result":  {
-                   "item":  "mineralogy:rocksaltlamp"
-               }
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "forge:storage_blocks/rock_salt"
+    },
+    {
+      "item": "minecraft:torch"
+    },
+    {
+      "item": "minecraft:iron_ingot"
+    }
+  ],
+  "result": {
+    "item": "mineralogy:rocksaltlamp"
+  }
 }

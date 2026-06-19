@@ -2,10 +2,10 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "mineralogy:schist"
+      "tag": "mineralogy:crafting_materials/schist"
     },
     {
-      "item": "mineralogy:schist"
+      "tag": "mineralogy:crafting_materials/schist"
     },
     {
       "item": "minecraft:gravel"

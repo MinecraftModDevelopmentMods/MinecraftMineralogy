@@ -16,7 +16,9 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:rock_salt"
+            "items": [
+              "mineralogy:rock_salt"
+            ]
           }
         ]
       }

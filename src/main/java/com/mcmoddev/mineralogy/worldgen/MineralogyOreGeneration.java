@@ -10,26 +10,25 @@ import com.mcmoddev.mineralogy.MineralogyConfig.OreGenerationSettings;
 import com.mcmoddev.mineralogy.blocks.Rock;
 import com.mojang.serialization.Codec;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.WorldGenRegistries;
-import net.minecraft.world.biome.Biome.Category;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
-import net.minecraft.world.gen.feature.FeatureSpreadConfig;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.OreFeatureConfig;
-import net.minecraft.world.gen.feature.template.IRuleTestType;
-import net.minecraft.world.gen.feature.template.RuleTest;
-import net.minecraft.world.gen.placement.TopSolidRangeConfig;
-import net.minecraft.world.gen.placement.Placement;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.core.Registry;
+import net.minecraft.world.level.biome.Biome.BiomeCategory;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.VerticalAnchor;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
+import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTestType;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public final class MineralogyOreGeneration {
-	private static final IRuleTestType<MineralogyOreRuleTest> MINERALOGY_ORE_TARGET_TYPE =
-			IRuleTestType.register(Mineralogy.MODID + ":ore_targets",
+	private static final RuleTestType<MineralogyOreRuleTest> MINERALOGY_ORE_TARGET_TYPE =
+			RuleTestType.register(Mineralogy.MODID + ":ore_targets",
 					Codec.unit(MineralogyOreRuleTest::new));
 	private static final RuleTest MINERALOGY_ORE_TARGETS = new MineralogyOreRuleTest();
 	private static final List<ConfiguredFeature<?, ?>> CONFIGURED_FEATURES = new ArrayList<ConfiguredFeature<?, ?>>();
@@ -46,13 +45,13 @@ public final class MineralogyOreGeneration {
 	}
 
 	public static void onBiomeLoading(BiomeLoadingEvent event) {
-		if (event.getCategory() == Category.NETHER || event.getCategory() == Category.THEEND
-				|| event.getCategory() == Category.NONE) {
+		if (event.getCategory() == BiomeCategory.NETHER || event.getCategory() == BiomeCategory.THEEND
+				|| event.getCategory() == BiomeCategory.NONE) {
 			return;
 		}
 
 		for (ConfiguredFeature<?, ?> feature : CONFIGURED_FEATURES) {
-			event.getGeneration().withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, feature);
+			event.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, feature);
 		}
 	}
 
@@ -63,7 +62,7 @@ public final class MineralogyOreGeneration {
 			return;
 		}
 
-		OreFeatureConfig oreConfig = new OreFeatureConfig(MINERALOGY_ORE_TARGETS, ore.getDefaultState(),
+		OreConfiguration oreConfig = new OreConfiguration(MINERALOGY_ORE_TARGETS, ore.defaultBlockState(),
 				settings.quantity());
 		int wholeCount = (int) settings.frequency();
 		float fractionalChance = (float) (settings.frequency() - wholeCount);
@@ -76,20 +75,19 @@ public final class MineralogyOreGeneration {
 		if (fractionalChance > 0.0F) {
 			int chance = Math.max(1, (int) Math.ceil(1.0F / fractionalChance));
 			addConfiguredOreFeature(oreName, "chance", oreConfig,
-					baseOreFeature(oreConfig, settings).chance(chance));
+					baseOreFeature(oreConfig, settings).rarity(chance));
 		}
 	}
 
-	private static ConfiguredFeature<?, ?> baseOreFeature(OreFeatureConfig oreConfig, OreGenerationSettings settings) {
-		return Feature.ORE.withConfiguration(oreConfig)
-				.withPlacement(Placement.RANGE.configure(new TopSolidRangeConfig(settings.minY(),
-						settings.minY(), settings.maxY())))
-				.square();
+	private static ConfiguredFeature<?, ?> baseOreFeature(OreConfiguration oreConfig, OreGenerationSettings settings) {
+		return Feature.ORE.configured(oreConfig)
+				.rangeUniform(VerticalAnchor.absolute(settings.minY()), VerticalAnchor.absolute(settings.maxY()))
+				.squared();
 	}
 
-	private static void addConfiguredOreFeature(String oreName, String suffix, OreFeatureConfig oreConfig,
+	private static void addConfiguredOreFeature(String oreName, String suffix, OreConfiguration oreConfig,
 			ConfiguredFeature<?, ?> configuredFeature) {
-		WorldGenRegistries.register(WorldGenRegistries.CONFIGURED_FEATURE,
+		Registry.register(BuiltinRegistries.CONFIGURED_FEATURE,
 				new ResourceLocation(Mineralogy.MODID, oreName + "_" + suffix), configuredFeature);
 		CONFIGURED_FEATURES.add(configuredFeature);
 	}
@@ -97,7 +95,7 @@ public final class MineralogyOreGeneration {
 	private static final class MineralogyOreRuleTest extends RuleTest {
 		@Override
 		public boolean test(BlockState state, Random random) {
-			if (OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD.test(state, random)) {
+			if (OreConfiguration.Predicates.NATURAL_STONE.test(state, random)) {
 				return true;
 			}
 
@@ -106,7 +104,7 @@ public final class MineralogyOreGeneration {
 		}
 
 		@Override
-		protected IRuleTestType<?> getType() {
+		protected RuleTestType<?> getType() {
 			return MINERALOGY_ORE_TARGET_TYPE;
 		}
 	}

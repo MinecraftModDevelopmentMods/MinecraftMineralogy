@@ -16,7 +16,9 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:basaltic_glass"
+            "items": [
+              "mineralogy:basaltic_glass"
+            ]
           }
         ]
       }

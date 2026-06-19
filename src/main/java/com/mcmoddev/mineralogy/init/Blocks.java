@@ -20,8 +20,8 @@ import com.mcmoddev.mineralogy.blocks.RockStairs;
 import com.mcmoddev.mineralogy.blocks.RockWall;
 import com.mcmoddev.mineralogy.data.MaterialData;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -270,7 +270,7 @@ public class Blocks {
 
 		event.getRegistry().registerAll(chert, gypsum, chalk, pumice);
 
-		MineralogyRegistry.sedimentaryStones.add(net.minecraft.block.Blocks.SANDSTONE);
+		MineralogyRegistry.sedimentaryStones.add(net.minecraft.world.level.block.Blocks.SANDSTONE);
 		MineralogyRegistry.sedimentaryStones.add(chert);
 		MineralogyRegistry.sedimentaryStones.add(gypsum);
 		MineralogyRegistry.sedimentaryStones.add(chalk);

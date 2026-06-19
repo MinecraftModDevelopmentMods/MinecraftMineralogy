@@ -1,100 +1,152 @@
 {
-    "display": {
-        "icon": {
-            "item": "mineralogy:basalt"
-        },
-        "title": {
-            "translate": "advancements.mineralogy.all_the_rocks.title"
-        },
-        "description": {
-            "translate": "advancements.mineralogy.all_the_rocks.description"
-        }
+  "display": {
+    "icon": {
+      "item": "mineralogy:basalt"
     },
-    "criteria": {
-        "miners_delight": {
-            "trigger": "minecraft:inventory_changed",
-            "conditions": {
-                "items": [
-                    {
-                        "item": "mineralogy:andesite"
-                    },
-                    {
-                        "item": "mineralogy:basalt"
-                    },
-                    {
-                        "item": "mineralogy:diorite"
-                    },
-                    {
-                        "item": "mineralogy:granite"
-                    },
-                    {
-                        "item": "mineralogy:rhyolite"
-                    },
-                    {
-                        "item": "mineralogy:pegmatite"
-                    },
-                    {
-                        "item": "mineralogy:diabase"
-                    },
-                    {
-                        "item": "mineralogy:gabbro"
-                    },
-                    {
-                        "item": "mineralogy:peridotite"
-                    },
-                    {
-                        "item": "mineralogy:basaltic_glass"
-                    },
-                    {
-                        "item": "mineralogy:scoria"
-                    },
-                    {
-                        "item": "mineralogy:tuff"
-                    },
-                    {
-                        "item": "mineralogy:shale"
-                    },
-                    {
-                        "item": "mineralogy:conglomerate"
-                    },
-                    {
-                        "item": "mineralogy:dolomite"
-                    },
-                    {
-                        "item": "mineralogy:limestone"
-                    },
-                    {
-                        "item": "mineralogy:siltstone"
-                    },
-                    {
-                        "item": "mineralogy:marble"
-                    },
-                    {
-                        "item": "mineralogy:slate"
-                    },
-                    {
-                        "item": "mineralogy:schist"
-                    },
-                    {
-                        "item": "mineralogy:gneiss"
-                    },
-                    {
-                        "item": "mineralogy:phyllite"
-                    },
-                    {
-                        "item": "mineralogy:amphibolite"
-                    },
-                    {
-                        "item": "mineralogy:hornfels"
-                    },
-                    {
-                        "item": "mineralogy:quartzite"
-                    },
-                    {
-                        "item": "mineralogy:novaculite"
-                    }
-                ]
-            }
-        }
+    "title": {
+      "translate": "advancements.mineralogy.all_the_rocks.title"
+    },
+    "description": {
+      "translate": "advancements.mineralogy.all_the_rocks.description"
     }
+  },
+  "criteria": {
+    "miners_delight": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "mineralogy:andesite"
+            ]
+          },
+          {
+            "items": [
+              "mineralogy:basalt"
+            ]
+          },
+          {
+            "items": [
+              "mineralogy:diorite"
+            ]
+          },
+          {
+            "items": [
+              "mineralogy:granite"
+            ]
+          },
+          {
+            "items": [
+              "mineralogy:rhyolite"
+            ]
+          },
+          {
+            "items": [
+              "mineralogy:pegmatite"
+            ]
+          },
+          {
+            "items": [
+              "mineralogy:diabase"
+            ]
+          },
+          {
+            "items": [
+              "mineralogy:gabbro"
+            ]
+          },
+          {
+            "items": [
+              "mineralogy:peridotite"
+            ]
+          },
+          {
+            "items": [
+              "mineralogy:basaltic_glass"
+            ]
+          },
+          {
+            "items": [
+              "mineralogy:scoria"
+            ]
+          },
+          {
+            "items": [
+              "mineralogy:tuff"
+            ]
+          },
+          {
+            "items": [
+              "mineralogy:shale"
+            ]
+          },
+          {
+            "items": [
+              "mineralogy:conglomerate"
+            ]
+          },
+          {
+            "items": [
+              "mineralogy:dolomite"
+            ]
+          },
+          {
+            "items": [
+              "mineralogy:limestone"
+            ]
+          },
+          {
+            "items": [
+              "mineralogy:siltstone"
+            ]
+          },
+          {
+            "items": [
+              "mineralogy:marble"
+            ]
+          },
+          {
+            "items": [
+              "mineralogy:slate"
+            ]
+          },
+          {
+            "items": [
+              "mineralogy:schist"
+            ]
+          },
+          {
+            "items": [
+              "mineralogy:gneiss"
+            ]
+          },
+          {
+            "items": [
+              "mineralogy:phyllite"
+            ]
+          },
+          {
+            "items": [
+              "mineralogy:amphibolite"
+            ]
+          },
+          {
+            "items": [
+              "mineralogy:hornfels"
+            ]
+          },
+          {
+            "items": [
+              "mineralogy:quartzite"
+            ]
+          },
+          {
+            "items": [
+              "mineralogy:novaculite"
+            ]
+          }
+        ]
+      }
+    }
+  }
 }

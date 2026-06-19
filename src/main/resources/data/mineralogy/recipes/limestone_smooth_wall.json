@@ -1,26 +1,33 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xxx",
-    "xxx"
-  ],
-  "key": {
-    "x": {
-      "item": "mineralogy:limestone_smooth"
-    }
-  },
-  "result": {
-    "item": "mineralogy:limestone_smooth_wall",
-    "count": 6
-  },
-  "conditions": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTH"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTHWALL"
+      "conditions": [
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_SMOOTH"
+        },
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_SMOOTHWALL"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "xxx",
+          "xxx"
+        ],
+        "key": {
+          "x": {
+            "item": "mineralogy:limestone_smooth"
+          }
+        },
+        "result": {
+          "item": "mineralogy:limestone_smooth_wall",
+          "count": 6
+        }
+      }
     }
   ]
 }

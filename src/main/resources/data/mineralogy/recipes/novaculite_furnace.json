@@ -1,29 +1,36 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xxx",
-    "xyx",
-    "xxx"
-  ],
-  "key": {
-    "x": {
-      "item": "mineralogy:novaculite_slab"
-    },
-    "y": {
-      "item": "minecraft:furnace"
-    }
-  },
-  "result": {
-    "item": "mineralogy:novaculite_furnace"
-  },
-  "conditions": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_ROCKSLAB"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_ROCKFURNACE"
+      "conditions": [
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_ROCKSLAB"
+        },
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_ROCKFURNACE"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "xxx",
+          "xyx",
+          "xxx"
+        ],
+        "key": {
+          "x": {
+            "item": "mineralogy:novaculite_slab"
+          },
+          "y": {
+            "item": "minecraft:furnace"
+          }
+        },
+        "result": {
+          "item": "mineralogy:novaculite_furnace"
+        }
+      }
     }
   ]
 }

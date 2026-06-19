@@ -1,22 +1,29 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xx",
-    "xx"
-  ],
-  "key": {
-    "x": {
-      "item": "mineralogy:rock_salt"
-    }
-  },
-  "result": {
-    "item": "mineralogy:rock_salt_brick",
-    "count": 4
-  },
-  "conditions": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_BRICK"
+      "conditions": [
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_BRICK"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "xx",
+          "xx"
+        ],
+        "key": {
+          "x": {
+            "tag": "mineralogy:crafting_materials/rock_salt"
+          }
+        },
+        "result": {
+          "item": "mineralogy:rock_salt_brick",
+          "count": 4
+        }
+      }
     }
   ]
 }

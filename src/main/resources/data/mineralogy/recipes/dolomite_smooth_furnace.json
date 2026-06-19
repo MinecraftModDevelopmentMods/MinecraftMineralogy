@@ -1,33 +1,40 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xxx",
-    "xyx",
-    "xxx"
-  ],
-  "key": {
-    "x": {
-      "item": "mineralogy:dolomite_smooth_slab"
-    },
-    "y": {
-      "item": "minecraft:furnace"
-    }
-  },
-  "result": {
-    "item": "mineralogy:dolomite_smooth_furnace"
-  },
-  "conditions": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTH"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTHSLAB"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTHFURNACE"
+      "conditions": [
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_SMOOTH"
+        },
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_SMOOTHSLAB"
+        },
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_SMOOTHFURNACE"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "xxx",
+          "xyx",
+          "xxx"
+        ],
+        "key": {
+          "x": {
+            "item": "mineralogy:dolomite_smooth_slab"
+          },
+          "y": {
+            "item": "minecraft:furnace"
+          }
+        },
+        "result": {
+          "item": "mineralogy:dolomite_smooth_furnace"
+        }
+      }
     }
   ]
 }

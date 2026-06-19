@@ -5,12 +5,12 @@ import java.util.List;
 
 import com.mcmoddev.mineralogy.Mineralogy;
 
-import net.minecraft.block.SoundType;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.loot.LootContext.Builder;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.storage.loot.LootContext.Builder;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class Chalk extends Rock {

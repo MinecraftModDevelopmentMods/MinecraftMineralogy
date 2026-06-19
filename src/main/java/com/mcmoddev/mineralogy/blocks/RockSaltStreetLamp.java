@@ -1,67 +1,69 @@
 package com.mcmoddev.mineralogy.blocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.particles.ParticleTypes;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.Level;
 
 import java.util.Random;
 
 public class RockSaltStreetLamp extends Block {
 	public static final DirectionProperty FACING = DirectionProperty.create("facing", Direction.values());
-	private static final VoxelShape STANDING_SHAPE = Block.makeCuboidShape(6.4D, 0.0D, 6.4D, 9.6D, 28.8D, 9.6D);
+	private static final VoxelShape STANDING_SHAPE = Block.box(6.4D, 0.0D, 6.4D, 9.6D, 28.8D, 9.6D);
 
 	public RockSaltStreetLamp() {
-		super(Block.Properties.create(Material.IRON).hardnessAndResistance(1.0F)
-				.setLightLevel(state -> 15).sound(SoundType.METAL));
+		super(BlockBehaviour.Properties.of(Material.METAL).strength(1.0F)
+				.lightLevel(state -> 15).sound(SoundType.METAL));
 		this.setRegistryName("rocksaltstreetlamp");
-		this.setDefaultState(this.getStateContainer().getBaseState().with(FACING, Direction.UP));
+		this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.UP));
 	}
 
 	@Override
-	public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
+	public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
 		return STANDING_SHAPE;
 	}
 
-	public boolean isNormalCube(BlockState state, IBlockReader world, BlockPos pos) {
+	public boolean isCollisionShapeFullBlock(BlockState state, BlockGetter world, BlockPos pos) {
 		return false;
 	}
 
 	@Override
-	public BlockState getStateForPlacement(BlockItemUseContext context) {
-		BlockState state = this.getDefaultState().with(FACING, Direction.UP);
-		return state.isValidPosition(context.getWorld(), context.getPos()) ? state : null;
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
+		BlockState state = this.defaultBlockState().setValue(FACING, Direction.UP);
+		return state.canSurvive(context.getLevel(), context.getClickedPos()) ? state : null;
 	}
 
 	@Override
-	public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState facingState,
-			IWorld world, BlockPos currentPos, BlockPos facingPos) {
-		return !state.isValidPosition(world, currentPos) ? Blocks.AIR.getDefaultState() : state;
+	public BlockState updateShape(BlockState state, Direction facing, BlockState facingState,
+			LevelAccessor world, BlockPos currentPos, BlockPos facingPos) {
+		return !state.canSurvive(world, currentPos) ? Blocks.AIR.defaultBlockState() : state;
 	}
 
 	@Override
-	public boolean isValidPosition(BlockState state, IWorldReader world, BlockPos pos) {
-		return world.getBlockState(pos.up()).isAir()
-				&& world.getBlockState(pos.down()).isSolidSide(world, pos.down(), Direction.UP);
+	public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
+		BlockPos supportPos = pos.below();
+		return world.getBlockState(pos.above()).isAir()
+				&& world.getBlockState(supportPos).isFaceSturdy(world, supportPos, Direction.UP);
 	}
 
 	@Override
-	public void animateTick(BlockState state, World world, BlockPos pos, Random random) {
+	public void animateTick(BlockState state, Level world, BlockPos pos, Random random) {
 		world.addParticle(ParticleTypes.SMOKE,
 				(double) pos.getX() + 0.5D,
 				(double) pos.getY() + 1.92D,
@@ -71,16 +73,16 @@ public class RockSaltStreetLamp extends Block {
 
 	@Override
 	public BlockState rotate(BlockState state, Rotation rotation) {
-		return state.with(FACING, rotation.rotate(state.get(FACING)));
+		return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
 	}
 
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirror) {
-		return state.rotate(mirror.toRotation(state.get(FACING)));
+		return state.rotate(mirror.getRotation(state.getValue(FACING)));
 	}
 
 	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		builder.add(FACING);
 	}
 }

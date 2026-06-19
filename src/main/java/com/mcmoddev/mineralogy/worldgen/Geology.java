@@ -7,13 +7,12 @@ import com.mcmoddev.mineralogy.MineralogyConfig;
 import com.mcmoddev.mineralogy.init.MineralogyRegistry;
 import com.mcmoddev.mineralogy.worldgen.math.PerlinNoise2D;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.IChunk;
-import net.minecraft.world.gen.Heightmap;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.world.level.levelgen.Heightmap;
 
 public class Geology {
 	private final PerlinNoise2D geomeNoiseLayer;
@@ -46,33 +45,33 @@ public class Geology {
 		return pickBlockFromList(rockValue, MineralogyRegistry.sedimentaryStones);
 	}
 
-	public void replaceStoneInChunk(IChunk chunk) {
+	public void replaceStoneInChunk(ChunkAccess chunk) {
 		ChunkPos chunkPos = chunk.getPos();
-		int xOffset = chunkPos.getXStart();
-		int zOffset = chunkPos.getZStart();
-		BlockPos.Mutable cursor = new BlockPos.Mutable();
+		int xOffset = chunkPos.getMinBlockX();
+		int zOffset = chunkPos.getMinBlockZ();
+		BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos();
 		boolean changed = false;
 
 		for (int dx = 0; dx < 16; dx++) {
 			int x = xOffset + dx;
 			for (int dz = 0; dz < 16; dz++) {
 				int z = zOffset + dz;
-				int y = chunk.getTopBlockY(Heightmap.Type.WORLD_SURFACE_WG, dx, dz);
+				int y = chunk.getHeight(Heightmap.Types.WORLD_SURFACE_WG, dx, dz);
 				int baseRockVal = (int) rockNoiseLayer.valueAt(x, z);
 				int geomeBase = (int) geomeNoiseLayer.valueAt(x, z);
 
 				for (; y > 0; y--) {
-					cursor.setPos(x, y, z);
+					cursor.set(x, y, z);
 					if (chunk.getBlockState(cursor).getBlock() == Blocks.STONE) {
-						chunk.setBlockState(cursor, pickReplacement(baseRockVal, geomeBase, y).getDefaultState(), false);
+						chunk.setBlockState(cursor, pickReplacement(baseRockVal, geomeBase, y).defaultBlockState(), false);
 						changed = true;
 					}
 				}
 			}
 		}
 
-		if (changed && chunk instanceof Chunk) {
-			((Chunk) chunk).setModified(true);
+		if (changed) {
+			chunk.setUnsaved(true);
 		}
 	}
 

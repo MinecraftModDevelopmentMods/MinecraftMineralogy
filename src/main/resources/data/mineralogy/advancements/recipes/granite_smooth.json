@@ -16,7 +16,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:granite"
+            "tag": "mineralogy:crafting_materials/granite"
           }
         ]
       }

@@ -16,7 +16,9 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:diabase"
+            "items": [
+              "mineralogy:diabase"
+            ]
           }
         ]
       }

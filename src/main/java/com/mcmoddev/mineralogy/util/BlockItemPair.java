@@ -1,7 +1,7 @@
 package com.mcmoddev.mineralogy.util;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.item.Item;
 
 public class BlockItemPair {
 

@@ -16,10 +16,10 @@ import com.mcmoddev.mineralogy.blocks.RockStairs;
 import com.mcmoddev.mineralogy.blocks.RockWall;
 import com.mcmoddev.mineralogy.items.MineralFertilizer;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.BlockItem;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -81,11 +81,11 @@ public class Items {
 	}
 
 	private static BlockItem createBlockItem(Block block) {
-		Item.Properties properties = new Item.Properties().group(MineralogyItemGroups.forBlock(block));
+		Item.Properties properties = new Item.Properties().tab(MineralogyItemGroups.forBlock(block));
 		if (block instanceof RockFurnace) {
-			properties.maxStackSize(1);
+			properties.stacksTo(1);
 		} else if (block instanceof RockSaltStreetLamp) {
-			properties.maxStackSize(16);
+			properties.stacksTo(16);
 		}
 
 		BlockItem item = new BlockItem(block, properties);
@@ -101,7 +101,7 @@ public class Items {
 	}
 
 	private static Item createItem(String name) {
-		Item item = new Item(new Item.Properties().group(MineralogyItemGroups.forItem()));
+		Item item = new Item(new Item.Properties().tab(MineralogyItemGroups.forItem()));
 		item.setRegistryName(Mineralogy.MODID, name);
 		return item;
 	}

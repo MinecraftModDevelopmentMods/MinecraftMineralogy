@@ -1,0 +1,21 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_ROCKSLAB"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:stonecutting",
+        "ingredient": {
+          "item": "mineralogy:granite"
+        },
+        "result": "mineralogy:granite_slab",
+        "count": 2
+      }
+    }
+  ]
+}

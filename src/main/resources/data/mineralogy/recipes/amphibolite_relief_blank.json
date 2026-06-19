@@ -1,27 +1,34 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xxx",
-    "xxx",
-    "xxx"
-  ],
-  "key": {
-    "x": {
-      "item": "mineralogy:amphibolite_smooth"
-    }
-  },
-  "result": {
-    "item": "mineralogy:amphibolite_relief_blank",
-    "count": 16
-  },
-  "conditions": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTH"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_RELIEFS"
+      "conditions": [
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_SMOOTH"
+        },
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_RELIEFS"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "xxx",
+          "xxx",
+          "xxx"
+        ],
+        "key": {
+          "x": {
+            "item": "mineralogy:amphibolite_smooth"
+          }
+        },
+        "result": {
+          "item": "mineralogy:amphibolite_relief_blank",
+          "count": 16
+        }
+      }
     }
   ]
 }

@@ -1,20 +1,20 @@
 {
-    "type":  "minecraft:crafting_shaped",
-    "pattern":  [
-                    "pgp",
-                    "pgp",
-                    "pgp"
-                ],
-    "key":  {
-                "p":  {
-                          "item":  "minecraft:paper"
-                      },
-                "g":  {
-                          "tag":  "forge:dusts/gypsum"
-                      }
-            },
-    "result":  {
-                   "item":  "mineralogy:drywall_white",
-                   "count":  3
-               }
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "pgp",
+    "pgp",
+    "pgp"
+  ],
+  "key": {
+    "p": {
+      "item": "minecraft:paper"
+    },
+    "g": {
+      "tag": "forge:dusts/gypsum"
+    }
+  },
+  "result": {
+    "item": "mineralogy:drywall_white",
+    "count": 3
+  }
 }

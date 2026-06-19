@@ -16,7 +16,9 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:conglomerate"
+            "items": [
+              "mineralogy:conglomerate"
+            ]
           }
         ]
       }

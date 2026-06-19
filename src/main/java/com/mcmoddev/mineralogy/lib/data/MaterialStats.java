@@ -6,9 +6,9 @@ import javax.annotation.Nonnull;
 
 import com.google.common.collect.Maps;
 
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.StringRepresentable;
 
-public enum MaterialStats implements IStringSerializable {
+public enum MaterialStats implements StringRepresentable {
 	/**
 	 * hardness on a scale from 0 to 10 (or more), where 0 is non-solid and
 	 * diamond is 10. For reference, wood is 3, stone is 5, iron is 8, diamond
@@ -44,7 +44,7 @@ public enum MaterialStats implements IStringSerializable {
 	}
 
 	@Override
-	public String getString() {
+	public String getSerializedName() {
 		return name().toLowerCase();
 	}
 
@@ -57,6 +57,6 @@ public enum MaterialStats implements IStringSerializable {
 
 	@Override
 	public String toString() {
-		return getString();
+		return getSerializedName();
 	}
 }

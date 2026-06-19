@@ -1,33 +1,40 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xxx",
-    "xyx",
-    "xxx"
-  ],
-  "key": {
-    "x": {
-      "item": "mineralogy:tuff_brick_slab"
-    },
-    "y": {
-      "item": "minecraft:furnace"
-    }
-  },
-  "result": {
-    "item": "mineralogy:tuff_brick_furnace"
-  },
-  "conditions": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_BRICK"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_BRICKSLAB"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_BRICKFURNACE"
+      "conditions": [
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_BRICK"
+        },
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_BRICKSLAB"
+        },
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_BRICKFURNACE"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "xxx",
+          "xyx",
+          "xxx"
+        ],
+        "key": {
+          "x": {
+            "item": "mineralogy:tuff_brick_slab"
+          },
+          "y": {
+            "item": "minecraft:furnace"
+          }
+        },
+        "result": {
+          "item": "mineralogy:tuff_brick_furnace"
+        }
+      }
     }
   ]
 }

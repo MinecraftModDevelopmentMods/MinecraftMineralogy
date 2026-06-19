@@ -16,7 +16,9 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:siltstone"
+            "items": [
+              "mineralogy:siltstone"
+            ]
           }
         ]
       }

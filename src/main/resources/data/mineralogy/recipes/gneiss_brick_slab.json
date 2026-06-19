@@ -1,25 +1,32 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xxx"
-  ],
-  "key": {
-    "x": {
-      "item": "mineralogy:gneiss_brick"
-    }
-  },
-  "result": {
-    "item": "mineralogy:gneiss_brick_slab",
-    "count": 6
-  },
-  "conditions": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_BRICK"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_BRICKSLAB"
+      "conditions": [
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_BRICK"
+        },
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_BRICKSLAB"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "xxx"
+        ],
+        "key": {
+          "x": {
+            "item": "mineralogy:gneiss_brick"
+          }
+        },
+        "result": {
+          "item": "mineralogy:gneiss_brick_slab",
+          "count": 6
+        }
+      }
     }
   ]
 }

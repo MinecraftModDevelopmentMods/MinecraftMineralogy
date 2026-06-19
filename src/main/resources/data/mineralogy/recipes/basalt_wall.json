@@ -1,22 +1,29 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xxx",
-    "xxx"
-  ],
-  "key": {
-    "x": {
-      "item": "mineralogy:basalt"
-    }
-  },
-  "result": {
-    "item": "mineralogy:basalt_wall",
-    "count": 6
-  },
-  "conditions": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_ROCKWALL"
+      "conditions": [
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_ROCKWALL"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "xxx",
+          "xxx"
+        ],
+        "key": {
+          "x": {
+            "tag": "mineralogy:crafting_materials/basalt"
+          }
+        },
+        "result": {
+          "item": "mineralogy:basalt_wall",
+          "count": 6
+        }
+      }
     }
   ]
 }

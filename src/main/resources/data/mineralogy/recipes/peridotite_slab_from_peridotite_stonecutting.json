@@ -1,0 +1,21 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_ROCKSLAB"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:stonecutting",
+        "ingredient": {
+          "tag": "mineralogy:crafting_materials/peridotite"
+        },
+        "result": "mineralogy:peridotite_slab",
+        "count": 2
+      }
+    }
+  ]
+}

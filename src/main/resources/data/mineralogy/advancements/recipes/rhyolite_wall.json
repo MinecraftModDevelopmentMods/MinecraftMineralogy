@@ -16,7 +16,9 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:rhyolite"
+            "items": [
+              "mineralogy:rhyolite"
+            ]
           }
         ]
       }

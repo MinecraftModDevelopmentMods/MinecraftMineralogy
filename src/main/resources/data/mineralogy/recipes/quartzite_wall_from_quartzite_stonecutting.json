@@ -1,0 +1,21 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_ROCKWALL"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:stonecutting",
+        "ingredient": {
+          "tag": "mineralogy:crafting_materials/quartzite"
+        },
+        "result": "mineralogy:quartzite_wall",
+        "count": 1
+      }
+    }
+  ]
+}

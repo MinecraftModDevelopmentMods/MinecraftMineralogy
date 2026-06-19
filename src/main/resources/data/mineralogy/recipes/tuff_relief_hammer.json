@@ -1,33 +1,40 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "zxz",
-    "zyz",
-    "zzz"
-  ],
-  "key": {
-    "x": {
-      "item": "mineralogy:tuff_smooth"
-    },
-    "y": {
-      "item": "minecraft:stick"
-    },
-    "z": {
-      "item": "mineralogy:tuff_relief_blank"
-    }
-  },
-  "result": {
-    "item": "mineralogy:tuff_relief_hammer",
-    "count": 7
-  },
-  "conditions": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTH"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_RELIEFS"
+      "conditions": [
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_SMOOTH"
+        },
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_RELIEFS"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "zxz",
+          "zyz",
+          "zzz"
+        ],
+        "key": {
+          "x": {
+            "item": "mineralogy:tuff_smooth"
+          },
+          "y": {
+            "item": "minecraft:stick"
+          },
+          "z": {
+            "item": "mineralogy:tuff_relief_blank"
+          }
+        },
+        "result": {
+          "item": "mineralogy:tuff_relief_hammer",
+          "count": 7
+        }
+      }
     }
   ]
 }

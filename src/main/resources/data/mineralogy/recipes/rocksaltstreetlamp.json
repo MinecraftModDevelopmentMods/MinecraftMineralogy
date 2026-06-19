@@ -1,19 +1,19 @@
 {
-    "type":  "minecraft:crafting_shaped",
-    "pattern":  [
-                    "x",
-                    "y",
-                    "y"
-                ],
-    "key":  {
-                "x":  {
-                          "tag":  "forge:lamps/rock_salt"
-                      },
-                "y":  {
-                          "item":  "minecraft:iron_ingot"
-                      }
-            },
-    "result":  {
-                   "item":  "mineralogy:rocksaltstreetlamp"
-               }
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "x",
+    "y",
+    "y"
+  ],
+  "key": {
+    "x": {
+      "tag": "forge:lamps/rock_salt"
+    },
+    "y": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "mineralogy:rocksaltstreetlamp"
+  }
 }

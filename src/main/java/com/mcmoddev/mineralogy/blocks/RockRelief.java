@@ -1,31 +1,31 @@
 package com.mcmoddev.mineralogy.blocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.level.BlockGetter;
 
 public class RockRelief extends RockSlab {
 	private static final double THICKNESS = 1.12D;
 	private static final VoxelShape[] SHAPES = new VoxelShape[Direction.values().length];
 
 	static {
-		SHAPES[Direction.DOWN.ordinal()] = Block.makeCuboidShape(0.0D, 16.0D - THICKNESS, 0.0D,
+		SHAPES[Direction.DOWN.ordinal()] = Block.box(0.0D, 16.0D - THICKNESS, 0.0D,
 				16.0D, 16.0D, 16.0D);
-		SHAPES[Direction.UP.ordinal()] = Block.makeCuboidShape(0.0D, 0.0D, 0.0D,
+		SHAPES[Direction.UP.ordinal()] = Block.box(0.0D, 0.0D, 0.0D,
 				16.0D, THICKNESS, 16.0D);
-		SHAPES[Direction.NORTH.ordinal()] = Block.makeCuboidShape(0.0D, 0.0D, 16.0D - THICKNESS,
+		SHAPES[Direction.NORTH.ordinal()] = Block.box(0.0D, 0.0D, 16.0D - THICKNESS,
 				16.0D, 16.0D, 16.0D);
-		SHAPES[Direction.SOUTH.ordinal()] = Block.makeCuboidShape(0.0D, 0.0D, 0.0D,
+		SHAPES[Direction.SOUTH.ordinal()] = Block.box(0.0D, 0.0D, 0.0D,
 				16.0D, 16.0D, THICKNESS);
-		SHAPES[Direction.WEST.ordinal()] = Block.makeCuboidShape(16.0D - THICKNESS, 0.0D, 0.0D,
+		SHAPES[Direction.WEST.ordinal()] = Block.box(16.0D - THICKNESS, 0.0D, 0.0D,
 				16.0D, 16.0D, 16.0D);
-		SHAPES[Direction.EAST.ordinal()] = Block.makeCuboidShape(0.0D, 0.0D, 0.0D,
+		SHAPES[Direction.EAST.ordinal()] = Block.box(0.0D, 0.0D, 0.0D,
 				THICKNESS, 16.0D, 16.0D);
 	}
 
@@ -34,17 +34,17 @@ public class RockRelief extends RockSlab {
 	}
 
 	@Override
-	public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
-		return SHAPES[state.get(FACING).ordinal()];
+	public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+		return SHAPES[state.getValue(FACING).ordinal()];
 	}
 
 	@Override
-	public VoxelShape getRenderShape(BlockState state, IBlockReader world, BlockPos pos) {
-		return VoxelShapes.empty();
+	public VoxelShape getVisualShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+		return Shapes.empty();
 	}
 
 	@Override
-	public boolean isNormalCube(BlockState state, IBlockReader world, BlockPos pos) {
+	public boolean isCollisionShapeFullBlock(BlockState state, BlockGetter world, BlockPos pos) {
 		return false;
 	}
 }

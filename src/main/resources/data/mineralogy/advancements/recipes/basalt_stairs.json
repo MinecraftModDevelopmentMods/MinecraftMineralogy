@@ -16,7 +16,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:basalt"
+            "tag": "mineralogy:crafting_materials/basalt"
           }
         ]
       }

@@ -1,21 +1,28 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xxx"
-  ],
-  "key": {
-    "x": {
-      "item": "mineralogy:novaculite"
-    }
-  },
-  "result": {
-    "item": "mineralogy:novaculite_slab",
-    "count": 6
-  },
-  "conditions": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_ROCKSLAB"
+      "conditions": [
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_ROCKSLAB"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "xxx"
+        ],
+        "key": {
+          "x": {
+            "tag": "mineralogy:crafting_materials/novaculite"
+          }
+        },
+        "result": {
+          "item": "mineralogy:novaculite_slab",
+          "count": 6
+        }
+      }
     }
   ]
 }

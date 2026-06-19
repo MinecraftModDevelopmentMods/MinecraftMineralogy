@@ -16,7 +16,9 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:shale"
+            "items": [
+              "mineralogy:shale"
+            ]
           }
         ]
       }

@@ -2,10 +2,10 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "mineralogy:slate"
+      "tag": "mineralogy:crafting_materials/slate"
     },
     {
-      "item": "mineralogy:slate"
+      "tag": "mineralogy:crafting_materials/slate"
     },
     {
       "item": "minecraft:gravel"

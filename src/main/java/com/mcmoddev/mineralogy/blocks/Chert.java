@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.SoundType;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.LootContext.Builder;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.LootContext.Builder;
 
 public class Chert extends Rock {
 	private final Random prng = new Random();

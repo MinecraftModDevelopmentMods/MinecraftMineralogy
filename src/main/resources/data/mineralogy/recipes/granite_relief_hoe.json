@@ -1,46 +1,53 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "item": "mineralogy:granite_relief_blank"
-    },
-    {
-      "item": "mineralogy:granite_relief_blank"
-    },
-    {
-      "item": "mineralogy:granite_relief_blank"
-    },
-    {
-      "item": "mineralogy:granite_relief_blank"
-    },
-    {
-      "item": "mineralogy:granite_relief_blank"
-    },
-    {
-      "item": "mineralogy:granite_relief_blank"
-    },
-    {
-      "item": "mineralogy:granite_relief_blank"
-    },
-    {
-      "item": "mineralogy:granite_relief_blank"
-    },
-    {
-      "item": "minecraft:stone_hoe"
-    }
-  ],
-  "result": {
-    "item": "mineralogy:granite_relief_hoe",
-    "count": 8
-  },
-  "conditions": [
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTH"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_RELIEFS"
+      "conditions": [
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_SMOOTH"
+        },
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_RELIEFS"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shapeless",
+        "ingredients": [
+          {
+            "item": "mineralogy:granite_relief_blank"
+          },
+          {
+            "item": "mineralogy:granite_relief_blank"
+          },
+          {
+            "item": "mineralogy:granite_relief_blank"
+          },
+          {
+            "item": "mineralogy:granite_relief_blank"
+          },
+          {
+            "item": "mineralogy:granite_relief_blank"
+          },
+          {
+            "item": "mineralogy:granite_relief_blank"
+          },
+          {
+            "item": "mineralogy:granite_relief_blank"
+          },
+          {
+            "item": "mineralogy:granite_relief_blank"
+          },
+          {
+            "item": "minecraft:stone_hoe"
+          }
+        ],
+        "result": {
+          "item": "mineralogy:granite_relief_hoe",
+          "count": 8
+        }
+      }
     }
   ]
 }

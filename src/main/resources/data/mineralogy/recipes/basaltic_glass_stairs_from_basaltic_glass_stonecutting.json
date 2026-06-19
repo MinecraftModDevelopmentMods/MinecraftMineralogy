@@ -1,0 +1,21 @@
+{
+  "type": "forge:conditional",
+  "recipes": [
+    {
+      "conditions": [
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_ROCKSTAIRS"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:stonecutting",
+        "ingredient": {
+          "tag": "mineralogy:crafting_materials/basaltic_glass"
+        },
+        "result": "mineralogy:basaltic_glass_stairs",
+        "count": 1
+      }
+    }
+  ]
+}

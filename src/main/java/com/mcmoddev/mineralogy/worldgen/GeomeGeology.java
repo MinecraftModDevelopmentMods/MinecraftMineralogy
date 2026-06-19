@@ -5,15 +5,14 @@ import java.util.Random;
 import com.mcmoddev.mineralogy.MineralogyConfig;
 import com.mcmoddev.mineralogy.worldgen.math.PerlinNoise2D;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.IChunk;
-import net.minecraft.world.gen.Heightmap;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.world.level.levelgen.Heightmap;
 
 public final class GeomeGeology {
 	private final BakedGeomeConfig config;
@@ -42,11 +41,11 @@ public final class GeomeGeology {
 		}
 	}
 
-	public void replaceStoneInChunk(IWorld world, IChunk chunk) {
+	public void replaceStoneInChunk(LevelAccessor world, ChunkAccess chunk) {
 		ChunkPos chunkPos = chunk.getPos();
-		int xOffset = chunkPos.getXStart();
-		int zOffset = chunkPos.getZStart();
-		BlockPos.Mutable cursor = new BlockPos.Mutable();
+		int xOffset = chunkPos.getMinBlockX();
+		int zOffset = chunkPos.getMinBlockZ();
+		BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos();
 		double[] regionalValues = new double[config.geomeCount()];
 		boolean changed = false;
 
@@ -54,14 +53,14 @@ public final class GeomeGeology {
 			int x = xOffset + dx;
 			for (int dz = 0; dz < 16; dz++) {
 				int z = zOffset + dz;
-				int surfaceY = chunk.getTopBlockY(Heightmap.Type.WORLD_SURFACE_WG, dx, dz);
-				cursor.setPos(x, surfaceY, z);
+				int surfaceY = chunk.getHeight(Heightmap.Types.WORLD_SURFACE_WG, dx, dz);
+				cursor.set(x, surfaceY, z);
 				Biome biome = world.getBiome(cursor);
 				int geomeIndex = classifyColumn(biome, x, z, regionalValues);
 				int baseRockValue = (int) stratumNoise.valueAt(x, z);
 
 				for (int y = surfaceY; y > 0; y--) {
-					cursor.setPos(x, y, z);
+					cursor.set(x, y, z);
 					if (chunk.getBlockState(cursor).getBlock() == Blocks.STONE) {
 						chunk.setBlockState(cursor, pickReplacement(geomeIndex, baseRockValue, x, y, z), false);
 						changed = true;
@@ -70,8 +69,8 @@ public final class GeomeGeology {
 			}
 		}
 
-		if (changed && chunk instanceof Chunk) {
-			((Chunk) chunk).setModified(true);
+		if (changed) {
+			chunk.setUnsaved(true);
 		}
 	}
 
@@ -95,7 +94,7 @@ public final class GeomeGeology {
 		return config.pickGeome(biome, regionalValues, boundary);
 	}
 
-	private net.minecraft.block.BlockState pickReplacement(int geomeIndex, int baseRockValue, int x, int y,
+	private net.minecraft.world.level.block.state.BlockState pickReplacement(int geomeIndex, int baseRockValue, int x, int y,
 			int z) {
 		int stratum = baseRockValue + y;
 		int layerIndex = Math.floorDiv(stratum, layerThickness);

@@ -1,23 +1,30 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "x  ",
-    "xx ",
-    "xxx"
-  ],
-  "key": {
-    "x": {
-      "item": "mineralogy:siltstone"
-    }
-  },
-  "result": {
-    "item": "mineralogy:siltstone_stairs",
-    "count": 4
-  },
-  "conditions": [
+  "type": "forge:conditional",
+  "recipes": [
     {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_ROCKSTAIRS"
+      "conditions": [
+        {
+          "type": "mineralogy:config",
+          "flag": "GENERATE_ROCKSTAIRS"
+        }
+      ],
+      "recipe": {
+        "type": "minecraft:crafting_shaped",
+        "pattern": [
+          "x  ",
+          "xx ",
+          "xxx"
+        ],
+        "key": {
+          "x": {
+            "tag": "mineralogy:crafting_materials/siltstone"
+          }
+        },
+        "result": {
+          "item": "mineralogy:siltstone_stairs",
+          "count": 4
+        }
+      }
     }
   ]
 }

@@ -1,6 +1,5 @@
 package com.mcmoddev.mineralogy.worldgen;
 
-import java.util.Random;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -8,28 +7,28 @@ import com.mcmoddev.mineralogy.Mineralogy;
 import com.mcmoddev.mineralogy.MineralogyConfig;
 import com.mcmoddev.mineralogy.MineralogyConfig.GeologyMode;
 
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.WorldGenRegistries;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome.Category;
-import net.minecraft.world.chunk.IChunk;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.IFeatureConfig;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.placement.IPlacementConfig;
-import net.minecraft.world.gen.placement.Placement;
+import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.core.Registry;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome.BiomeCategory;
+import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneDecoratorConfiguration;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.world.level.levelgen.placement.FeatureDecorator;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 
-public class StoneReplacer extends Feature<NoFeatureConfig> {
+public class StoneReplacer extends Feature<NoneFeatureConfiguration> {
 	public static final StoneReplacer FEATURE = new StoneReplacer();
 	private static final ConfiguredFeature<?, ?> CONFIGURED_FEATURE =
-			FEATURE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG)
-					.withPlacement(Placement.NOPE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG));
+			FEATURE.configured(NoneFeatureConfiguration.INSTANCE)
+					.decorated(FeatureDecorator.NOPE.configured(NoneDecoratorConfiguration.INSTANCE));
 
 	private final Lock geologyLock = new ReentrantLock();
 	private Geology geology = null;
@@ -37,30 +36,31 @@ public class StoneReplacer extends Feature<NoFeatureConfig> {
 	private long geologySeed = Long.MIN_VALUE;
 
 	private StoneReplacer() {
-		super(NoFeatureConfig.CODEC);
+		super(NoneFeatureConfiguration.CODEC);
 		setRegistryName(Mineralogy.MODID, "stone_replacer");
 	}
 
 	public static void registerConfiguredFeature() {
-		WorldGenRegistries.register(WorldGenRegistries.CONFIGURED_FEATURE,
+		Registry.register(BuiltinRegistries.CONFIGURED_FEATURE,
 				new ResourceLocation(Mineralogy.MODID, "stone_replacer"), CONFIGURED_FEATURE);
 	}
 
 	public static void onBiomeLoading(BiomeLoadingEvent event) {
 		if (isOverworldCategory(event.getCategory())) {
-			event.getGeneration().withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, CONFIGURED_FEATURE);
+			event.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, CONFIGURED_FEATURE);
 		}
 	}
 
 	@Override
-	public boolean generate(ISeedReader world, ChunkGenerator generator,
-			Random random, BlockPos pos, NoFeatureConfig config) {
+	public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
+		WorldGenLevel world = context.level();
+		BlockPos pos = context.origin();
 		if (!MineralogyConfig.placeMineralogyRock()
-				|| world.getWorld().getDimensionKey() != World.OVERWORLD) {
+				|| world.getLevel().dimension() != Level.OVERWORLD) {
 			return false;
 		}
 
-		IChunk chunk = world.getChunk(pos.getX() >> 4, pos.getZ() >> 4);
+		ChunkAccess chunk = world.getChunk(pos);
 		if (MineralogyConfig.geologyMode() == GeologyMode.LEGACY) {
 			getLegacyGeology(world.getSeed()).replaceStoneInChunk(chunk);
 		} else {
@@ -69,8 +69,9 @@ public class StoneReplacer extends Feature<NoFeatureConfig> {
 		return true;
 	}
 
-	private static boolean isOverworldCategory(Category category) {
-		return category != Category.NETHER && category != Category.THEEND && category != Category.NONE;
+	private static boolean isOverworldCategory(BiomeCategory category) {
+		return category != BiomeCategory.NETHER && category != BiomeCategory.THEEND
+				&& category != BiomeCategory.NONE;
 	}
 
 	private Geology getLegacyGeology(long seed) {

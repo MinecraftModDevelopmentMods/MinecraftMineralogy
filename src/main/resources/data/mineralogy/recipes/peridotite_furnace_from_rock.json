@@ -1,0 +1,26 @@
+{
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "xxx",
+                    "x x",
+                    "xxx"
+                ],
+    "key":  {
+                "x":  {
+                          "item":  "mineralogy:peridotite"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:peridotite_furnace"
+               },
+    "conditions":  [
+                       {
+                           "type":  "mineralogy:config",
+                           "flag":  "GENERATE_ROCKSLAB"
+                       },
+                       {
+                           "type":  "mineralogy:config",
+                           "flag":  "GENERATE_ROCKFURNACE"
+                       }
+                   ]
+}

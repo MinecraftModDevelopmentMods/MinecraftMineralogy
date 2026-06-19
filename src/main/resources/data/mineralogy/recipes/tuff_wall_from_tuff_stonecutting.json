@@ -1,0 +1,14 @@
+{
+    "type":  "minecraft:stonecutting",
+    "ingredient":  {
+                       "item":  "mineralogy:tuff"
+                   },
+    "result":  "mineralogy:tuff_wall",
+    "count":  1,
+    "conditions":  [
+                       {
+                           "type":  "mineralogy:config",
+                           "flag":  "GENERATE_ROCKWALL"
+                       }
+                   ]
+}

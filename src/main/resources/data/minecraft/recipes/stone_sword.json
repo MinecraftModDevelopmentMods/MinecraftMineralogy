@@ -1,0 +1,19 @@
+{
+    "type":  "crafting_shaped",
+    "pattern":  [
+                    "X",
+                    "X",
+                    "#"
+                ],
+    "key":  {
+                "#":  {
+                          "item":  "minecraft:stick"
+                      },
+                "X":  {
+                          "tag":  "forge:cobblestone"
+                      }
+            },
+    "result":  {
+                   "item":  "minecraft:stone_sword"
+               }
+}

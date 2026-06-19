@@ -1,0 +1,14 @@
+{
+    "type":  "minecraft:stonecutting",
+    "ingredient":  {
+                       "item":  "mineralogy:scoria"
+                   },
+    "result":  "mineralogy:scoria_stairs",
+    "count":  1,
+    "conditions":  [
+                       {
+                           "type":  "mineralogy:config",
+                           "flag":  "GENERATE_ROCKSTAIRS"
+                       }
+                   ]
+}

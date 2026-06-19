@@ -1,0 +1,14 @@
+{
+    "type":  "minecraft:stonecutting",
+    "ingredient":  {
+                       "item":  "mineralogy:siltstone"
+                   },
+    "result":  "mineralogy:siltstone_slab",
+    "count":  2,
+    "conditions":  [
+                       {
+                           "type":  "mineralogy:config",
+                           "flag":  "GENERATE_ROCKSLAB"
+                       }
+                   ]
+}

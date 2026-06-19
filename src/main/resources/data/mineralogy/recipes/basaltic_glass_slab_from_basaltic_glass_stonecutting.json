@@ -1,0 +1,14 @@
+{
+    "type":  "minecraft:stonecutting",
+    "ingredient":  {
+                       "item":  "mineralogy:basaltic_glass"
+                   },
+    "result":  "mineralogy:basaltic_glass_slab",
+    "count":  2,
+    "conditions":  [
+                       {
+                           "type":  "mineralogy:config",
+                           "flag":  "GENERATE_ROCKSLAB"
+                       }
+                   ]
+}

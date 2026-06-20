@@ -228,37 +228,40 @@ public final class GeomeConfig {
 					merge(weights, dictionaryRules.get(type.getName()));
 				}
 			}
-			applyBiomeHeuristic(weights, geomeIndexes, biome);
+			applyBiomeHeuristic(weights, geomeIndexes, biomeId, biome);
 			result.put(biome, weights);
 		}
 		return result;
 	}
 
-	private static void applyBiomeHeuristic(double[] weights, Map<String, Integer> geomeIndexes, Biome biome) {
-		String category = biome.getBiomeCategory().name();
+	private static void applyBiomeHeuristic(double[] weights, Map<String, Integer> geomeIndexes,
+			ResourceLocation biomeId, Biome biome) {
+		String biomeName = biomeId == null ? "" : biomeId.getPath();
 		float temperature = biome.getBaseTemperature();
 		float downfall = biome.getDownfall();
-		float depth = biome.getDepth();
-		float scale = biome.getScale();
 
-		if (category.contains("OCEAN") || category.contains("RIVER") || category.contains("BEACH")) {
+		if (biomeName.contains("ocean") || biomeName.contains("river") || biomeName.contains("beach")
+				|| biomeName.contains("shore")) {
 			add(weights, geomeIndexes, "coastal_shelf", 2.25D);
 			add(weights, geomeIndexes, "sedimentary_basin", 0.75D);
 		}
-		if (category.contains("DESERT") || category.contains("MESA") || category.contains("SAVANNA")
+		if (biomeName.contains("desert") || biomeName.contains("badlands") || biomeName.contains("savanna")
 				|| (temperature > 0.95F && downfall < 0.25F)) {
 			add(weights, geomeIndexes, "arid_basin", 2.5D);
 		}
-		if (category.contains("SWAMP") || downfall > 0.85F) {
+		if (biomeName.contains("swamp") || biomeName.contains("marsh") || downfall > 0.85F) {
 			add(weights, geomeIndexes, "wetland_basin", 2.0D);
 		}
-		if (category.contains("MOUNTAIN") || category.contains("HILLS") || depth > 0.85F || scale > 0.65F) {
+		if (biomeName.contains("mountain") || biomeName.contains("hill") || biomeName.contains("peak")
+				|| biomeName.contains("slope") || biomeName.contains("windswept") || biomeName.contains("stony")) {
 			add(weights, geomeIndexes, "mountain_belt", 2.5D);
 		}
-		if (category.contains("ICY") || temperature < 0.15F) {
+		if (biomeName.contains("frozen") || biomeName.contains("snowy") || biomeName.contains("ice")
+				|| temperature < 0.15F) {
 			add(weights, geomeIndexes, "glacial_highland", 1.75D);
 		}
-		if (category.contains("PLAINS") || category.contains("FOREST") || category.contains("TAIGA")) {
+		if (biomeName.contains("plains") || biomeName.contains("forest") || biomeName.contains("taiga")
+				|| biomeName.contains("meadow") || biomeName.contains("grove")) {
 			add(weights, geomeIndexes, "stable_craton", 1.25D);
 		}
 	}
@@ -370,6 +373,7 @@ public final class GeomeConfig {
 		addWeights(biomes, "minecraft:river", "coastal_shelf", 2.0D, "sedimentary_basin", 2.0D);
 		addWeights(biomes, "minecraft:beach", "coastal_shelf", 4.0D);
 		addWeights(biomes, "minecraft:stone_shore", "coastal_shelf", 2.5D, "mountain_belt", 1.5D);
+		addWeights(biomes, "minecraft:stony_shore", "coastal_shelf", 2.5D, "mountain_belt", 1.5D);
 		addWeights(biomes, "minecraft:plains", "stable_craton", 2.0D, "sedimentary_basin", 1.0D);
 		addWeights(biomes, "minecraft:forest", "stable_craton", 2.0D);
 		addWeights(biomes, "minecraft:birch_forest", "stable_craton", 2.0D);
@@ -385,6 +389,18 @@ public final class GeomeConfig {
 		addWeights(biomes, "minecraft:mountains", "mountain_belt", 4.0D, "stable_craton", 1.0D);
 		addWeights(biomes, "minecraft:wooded_mountains", "mountain_belt", 3.5D, "stable_craton", 1.2D);
 		addWeights(biomes, "minecraft:gravelly_mountains", "mountain_belt", 4.0D, "glacial_highland", 0.8D);
+		addWeights(biomes, "minecraft:windswept_hills", "mountain_belt", 4.0D, "stable_craton", 1.0D);
+		addWeights(biomes, "minecraft:windswept_forest", "mountain_belt", 3.0D, "stable_craton", 1.3D);
+		addWeights(biomes, "minecraft:windswept_gravelly_hills", "mountain_belt", 4.0D,
+				"glacial_highland", 0.8D);
+		addWeights(biomes, "minecraft:meadow", "stable_craton", 1.7D, "mountain_belt", 1.2D);
+		addWeights(biomes, "minecraft:grove", "glacial_highland", 1.8D, "mountain_belt", 1.4D);
+		addWeights(biomes, "minecraft:snowy_slopes", "glacial_highland", 3.0D, "mountain_belt", 2.4D);
+		addWeights(biomes, "minecraft:jagged_peaks", "mountain_belt", 4.8D, "glacial_highland", 2.0D);
+		addWeights(biomes, "minecraft:frozen_peaks", "glacial_highland", 3.6D, "mountain_belt", 3.0D);
+		addWeights(biomes, "minecraft:stony_peaks", "mountain_belt", 4.5D, "volcanic_arc", 0.8D);
+		addWeights(biomes, "minecraft:dripstone_caves", "sedimentary_basin", 2.8D, "coastal_shelf", 1.0D);
+		addWeights(biomes, "minecraft:lush_caves", "wetland_basin", 2.5D, "sedimentary_basin", 1.2D);
 		addWeights(biomes, "minecraft:swamp", "wetland_basin", 4.0D, "sedimentary_basin", 1.5D);
 		addWeights(biomes, "minecraft:jungle", "wetland_basin", 1.5D, "stable_craton", 1.5D);
 		addWeights(biomes, "minecraft:snowy_tundra", "glacial_highland", 3.5D, "sedimentary_basin", 0.7D);

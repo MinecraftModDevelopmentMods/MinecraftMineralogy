@@ -1,5 +1,6 @@
 package com.mcmoddev.mineralogy.worldgen;
 
+import java.util.Collections;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -8,9 +9,9 @@ import com.mcmoddev.mineralogy.MineralogyConfig;
 import com.mcmoddev.mineralogy.MineralogyConfig.GeologyMode;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.data.BuiltinRegistries;
-import net.minecraft.core.Registry;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome.BiomeCategory;
@@ -19,16 +20,13 @@ import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneDecoratorConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import net.minecraft.world.level.levelgen.placement.FeatureDecorator;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 
 public class StoneReplacer extends Feature<NoneFeatureConfiguration> {
 	public static final StoneReplacer FEATURE = new StoneReplacer();
-	private static final ConfiguredFeature<?, ?> CONFIGURED_FEATURE =
-			FEATURE.configured(NoneFeatureConfiguration.INSTANCE)
-					.decorated(FeatureDecorator.NOPE.configured(NoneDecoratorConfiguration.INSTANCE));
+	private static Holder<PlacedFeature> placedFeature;
 
 	private final Lock geologyLock = new ReentrantLock();
 	private Geology geology = null;
@@ -41,13 +39,17 @@ public class StoneReplacer extends Feature<NoneFeatureConfiguration> {
 	}
 
 	public static void registerConfiguredFeature() {
-		Registry.register(BuiltinRegistries.CONFIGURED_FEATURE,
-				new ResourceLocation(Mineralogy.MODID, "stone_replacer"), CONFIGURED_FEATURE);
+		ResourceLocation id = new ResourceLocation(Mineralogy.MODID, "stone_replacer");
+		Holder<ConfiguredFeature<?, ?>> configured = BuiltinRegistries.register(BuiltinRegistries.CONFIGURED_FEATURE,
+				id, new ConfiguredFeature<NoneFeatureConfiguration, StoneReplacer>(FEATURE,
+						NoneFeatureConfiguration.INSTANCE));
+		placedFeature = BuiltinRegistries.register(BuiltinRegistries.PLACED_FEATURE, id,
+				new PlacedFeature(configured, Collections.emptyList()));
 	}
 
 	public static void onBiomeLoading(BiomeLoadingEvent event) {
-		if (isOverworldCategory(event.getCategory())) {
-			event.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, CONFIGURED_FEATURE);
+		if (isOverworldCategory(event.getCategory()) && placedFeature != null) {
+			event.getGeneration().getFeatures(GenerationStep.Decoration.UNDERGROUND_ORES).add(placedFeature);
 		}
 	}
 

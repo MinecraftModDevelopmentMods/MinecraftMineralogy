@@ -13,6 +13,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.block.state.BlockState;
 
 public final class GeomeGeology {
 	private final BakedGeomeConfig config;
@@ -55,13 +56,13 @@ public final class GeomeGeology {
 				int z = zOffset + dz;
 				int surfaceY = chunk.getHeight(Heightmap.Types.WORLD_SURFACE_WG, dx, dz);
 				cursor.set(x, surfaceY, z);
-				Biome biome = world.getBiome(cursor);
+				Biome biome = world.getBiome(cursor).value();
 				int geomeIndex = classifyColumn(biome, x, z, regionalValues);
 				int baseRockValue = (int) stratumNoise.valueAt(x, z);
 
-				for (int y = surfaceY; y > 0; y--) {
+				for (int y = surfaceY; y >= chunk.getMinBuildHeight(); y--) {
 					cursor.set(x, y, z);
-					if (chunk.getBlockState(cursor).getBlock() == Blocks.STONE) {
+					if (isReplaceableBaseStone(chunk.getBlockState(cursor))) {
 						chunk.setBlockState(cursor, pickReplacement(geomeIndex, baseRockValue, x, y, z), false);
 						changed = true;
 					}
@@ -103,6 +104,11 @@ public final class GeomeGeology {
 		RockFamily family = pickShapedFamily(geomeIndex, x, y, z, layerY, familyHash);
 		int rockHash = whiteNoiseArray[((layerIndex * 31) + (family.ordinal() * 53) + (geomeIndex * 79)) & 0xFF];
 		return config.pickRock(geomeIndex, family, layerY, rockHash);
+	}
+
+	private static boolean isReplaceableBaseStone(BlockState state) {
+		Block block = state.getBlock();
+		return block == Blocks.STONE || block == Blocks.DEEPSLATE;
 	}
 
 	private RockFamily pickShapedFamily(int geomeIndex, int x, int y, int z, int layerY, int familyHash) {

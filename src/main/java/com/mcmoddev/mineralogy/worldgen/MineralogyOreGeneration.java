@@ -1,6 +1,7 @@
 package com.mcmoddev.mineralogy.worldgen;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -14,13 +15,21 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.data.BuiltinRegistries;
-import net.minecraft.core.Registry;
+import net.minecraft.core.Holder;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.biome.Biome.BiomeCategory;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.OreConfiguration;
+import net.minecraft.world.level.levelgen.placement.BiomeFilter;
+import net.minecraft.world.level.levelgen.placement.CountPlacement;
+import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
+import net.minecraft.world.level.levelgen.placement.InSquarePlacement;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.level.levelgen.placement.PlacementModifier;
+import net.minecraft.world.level.levelgen.placement.RarityFilter;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTest;
 import net.minecraft.world.level.levelgen.structure.templatesystem.RuleTestType;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
@@ -31,14 +40,14 @@ public final class MineralogyOreGeneration {
 			RuleTestType.register(Mineralogy.MODID + ":ore_targets",
 					Codec.unit(MineralogyOreRuleTest::new));
 	private static final RuleTest MINERALOGY_ORE_TARGETS = new MineralogyOreRuleTest();
-	private static final List<ConfiguredFeature<?, ?>> CONFIGURED_FEATURES = new ArrayList<ConfiguredFeature<?, ?>>();
+	private static final List<Holder<PlacedFeature>> PLACED_FEATURES = new ArrayList<Holder<PlacedFeature>>();
 
 	private MineralogyOreGeneration() {
 		throw new IllegalAccessError("Not an instantiable class");
 	}
 
 	public static void registerConfiguredFeatures() {
-		CONFIGURED_FEATURES.clear();
+		PLACED_FEATURES.clear();
 		addOre("sulfur_ore", MineralogyConfig.sulfurOre());
 		addOre("phosphorous_ore", MineralogyConfig.phosphorousOre());
 		addOre("nitrate_ore", MineralogyConfig.nitrateOre());
@@ -50,8 +59,8 @@ public final class MineralogyOreGeneration {
 			return;
 		}
 
-		for (ConfiguredFeature<?, ?> feature : CONFIGURED_FEATURES) {
-			event.getGeneration().addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, feature);
+		for (Holder<PlacedFeature> feature : PLACED_FEATURES) {
+			event.getGeneration().getFeatures(GenerationStep.Decoration.UNDERGROUND_ORES).add(feature);
 		}
 	}
 
@@ -69,33 +78,33 @@ public final class MineralogyOreGeneration {
 
 		if (wholeCount > 0) {
 			addConfiguredOreFeature(oreName, "count", oreConfig,
-					baseOreFeature(oreConfig, settings).count(wholeCount));
+					settings, CountPlacement.of(wholeCount));
 		}
 
 		if (fractionalChance > 0.0F) {
 			int chance = Math.max(1, (int) Math.ceil(1.0F / fractionalChance));
 			addConfiguredOreFeature(oreName, "chance", oreConfig,
-					baseOreFeature(oreConfig, settings).rarity(chance));
+					settings, RarityFilter.onAverageOnceEvery(chance));
 		}
 	}
 
-	private static ConfiguredFeature<?, ?> baseOreFeature(OreConfiguration oreConfig, OreGenerationSettings settings) {
-		return Feature.ORE.configured(oreConfig)
-				.rangeUniform(VerticalAnchor.absolute(settings.minY()), VerticalAnchor.absolute(settings.maxY()))
-				.squared();
-	}
-
 	private static void addConfiguredOreFeature(String oreName, String suffix, OreConfiguration oreConfig,
-			ConfiguredFeature<?, ?> configuredFeature) {
-		Registry.register(BuiltinRegistries.CONFIGURED_FEATURE,
-				new ResourceLocation(Mineralogy.MODID, oreName + "_" + suffix), configuredFeature);
-		CONFIGURED_FEATURES.add(configuredFeature);
+			OreGenerationSettings settings, PlacementModifier countOrRarity) {
+		ResourceLocation id = new ResourceLocation(Mineralogy.MODID, oreName + "_" + suffix);
+		Holder<ConfiguredFeature<?, ?>> configured = BuiltinRegistries.register(BuiltinRegistries.CONFIGURED_FEATURE,
+				id, new ConfiguredFeature<OreConfiguration, Feature<OreConfiguration>>(Feature.ORE, oreConfig));
+		PlacedFeature placed = new PlacedFeature(configured,
+				Arrays.asList(countOrRarity, InSquarePlacement.spread(),
+						HeightRangePlacement.uniform(VerticalAnchor.absolute(settings.minY()),
+								VerticalAnchor.absolute(settings.maxY())),
+						BiomeFilter.biome()));
+		PLACED_FEATURES.add(BuiltinRegistries.register(BuiltinRegistries.PLACED_FEATURE, id, placed));
 	}
 
 	private static final class MineralogyOreRuleTest extends RuleTest {
 		@Override
 		public boolean test(BlockState state, Random random) {
-			if (OreConfiguration.Predicates.NATURAL_STONE.test(state, random)) {
+			if (state.is(BlockTags.STONE_ORE_REPLACEABLES) || state.is(BlockTags.DEEPSLATE_ORE_REPLACEABLES)) {
 				return true;
 			}
 

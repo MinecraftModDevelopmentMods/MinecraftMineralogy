@@ -159,13 +159,12 @@ public class TileEntityRockFurnace extends BaseContainerBlockEntity
 	}
 
 	@Override
-	public CompoundTag save(CompoundTag compound) {
-		super.save(compound);
+	protected void saveAdditional(CompoundTag compound) {
+		super.saveAdditional(compound);
 		compound.putInt("BurnTime", furnaceBurnTime);
 		compound.putInt("CookTime", cookTime);
 		compound.putInt("CookTimeTotal", totalCookTime);
 		ContainerHelper.saveAllItems(compound, furnaceItemStacks);
-		return compound;
 	}
 
 	public boolean isBurning() {

@@ -13,6 +13,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class Geology {
 	private final PerlinNoise2D geomeNoiseLayer;
@@ -60,9 +61,9 @@ public class Geology {
 				int baseRockVal = (int) rockNoiseLayer.valueAt(x, z);
 				int geomeBase = (int) geomeNoiseLayer.valueAt(x, z);
 
-				for (; y > 0; y--) {
+				for (; y >= chunk.getMinBuildHeight(); y--) {
 					cursor.set(x, y, z);
-					if (chunk.getBlockState(cursor).getBlock() == Blocks.STONE) {
+					if (isReplaceableBaseStone(chunk.getBlockState(cursor))) {
 						chunk.setBlockState(cursor, pickReplacement(baseRockVal, geomeBase, y).defaultBlockState(), false);
 						changed = true;
 					}
@@ -101,6 +102,11 @@ public class Geology {
 			}
 		}
 		return column;
+	}
+
+	private static boolean isReplaceableBaseStone(BlockState state) {
+		Block block = state.getBlock();
+		return block == Blocks.STONE || block == Blocks.DEEPSLATE;
 	}
 
 	private Block pickBlockFromList(int value, List<Block> list) {

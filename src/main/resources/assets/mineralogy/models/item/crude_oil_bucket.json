@@ -1,0 +1,4 @@
+{
+  "loader": "forge:bucket",
+  "fluid": "mineralogy:crude_oil"
+}

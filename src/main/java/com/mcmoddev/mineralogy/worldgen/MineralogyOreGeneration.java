@@ -7,6 +7,7 @@ import java.util.Random;
 
 import com.mcmoddev.mineralogy.Mineralogy;
 import com.mcmoddev.mineralogy.MineralogyConfig;
+import com.mcmoddev.mineralogy.MineralogyConfig.GeologyMode;
 import com.mcmoddev.mineralogy.MineralogyConfig.OreGenerationSettings;
 import com.mcmoddev.mineralogy.blocks.Rock;
 import com.mojang.serialization.Codec;
@@ -41,6 +42,8 @@ public final class MineralogyOreGeneration {
 					Codec.unit(MineralogyOreRuleTest::new));
 	private static final RuleTest MINERALOGY_ORE_TARGETS = new MineralogyOreRuleTest();
 	private static final List<Holder<PlacedFeature>> PLACED_FEATURES = new ArrayList<Holder<PlacedFeature>>();
+	private static BakedGeomeConfig geomeConfig;
+	private static boolean useGeomeTaxonomy;
 
 	private MineralogyOreGeneration() {
 		throw new IllegalAccessError("Not an instantiable class");
@@ -48,9 +51,15 @@ public final class MineralogyOreGeneration {
 
 	public static void registerConfiguredFeatures() {
 		PLACED_FEATURES.clear();
+		refreshWorldConfig();
 		addOre("sulfur_ore", MineralogyConfig.sulfurOre());
 		addOre("phosphorous_ore", MineralogyConfig.phosphorousOre());
 		addOre("nitrate_ore", MineralogyConfig.nitrateOre());
+	}
+
+	public static void refreshWorldConfig() {
+		geomeConfig = GeomeConfig.baked();
+		useGeomeTaxonomy = WorldGeologyProfileManager.geologyMode() == GeologyMode.GEOME;
 	}
 
 	public static void onBiomeLoading(BiomeLoadingEvent event) {
@@ -106,6 +115,10 @@ public final class MineralogyOreGeneration {
 		public boolean test(BlockState state, Random random) {
 			if (state.is(BlockTags.STONE_ORE_REPLACEABLES) || state.is(BlockTags.DEEPSLATE_ORE_REPLACEABLES)) {
 				return true;
+			}
+
+			if (useGeomeTaxonomy) {
+				return geomeConfig != null && geomeConfig.isOreReplaceable(state);
 			}
 
 			Block block = state.getBlock();

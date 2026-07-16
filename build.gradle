@@ -147,25 +147,6 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 }
 
-// This block of code expands all declared replace properties in the specified resource targets.
-// A missing property will result in an error. Properties are expanded using ${} Groovy notation.
-// When "copyIdeResources" is enabled, this will also run before the game launches in IDE environments.
-// See https://docs.gradle.org/current/dsl/org.gradle.language.jvm.tasks.ProcessResources.html
-tasks.named('processResources', ProcessResources).configure {
-    var replaceProperties = [
-            minecraft_version: minecraft_version, minecraft_version_range: minecraft_version_range,
-            forge_version: forge_version, forge_version_range: forge_version_range,
-            loader_version_range: loader_version_range,
-            mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
-            mod_authors: mod_authors, mod_description: mod_description,
-    ]
-    inputs.properties replaceProperties
-
-    filesMatching(['META-INF/mods.toml', 'pack.mcmeta']) {
-        expand replaceProperties + [project: project]
-    }
-}
-
 // Example for how to get properties into the manifest for reading at runtime.
 tasks.named('jar', Jar).configure {
     manifest {
@@ -204,4 +185,139 @@ publishing {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}
+
+// Eclipse and command-line verification use different Gradle homes in this workspace. Keep every
+// Eclipse runtime input on Buildship's cache while Forge remains free to rewrite build/classpath.
+def syncEclipseRunClasspaths = tasks.register('syncEclipseRunClasspaths') {
+    group = 'IDE'
+    description = 'Aligns Eclipse project and Forge run classpaths with Buildship\'s Gradle home.'
+
+    doLast {
+        File classpathDir = layout.buildDirectory.dir('classpath').get().asFile
+        Set<File> classpathFiles = fileTree(classpathDir) {
+            include '*_minecraftClasspath.txt'
+        }.files
+        if (classpathFiles.isEmpty()) {
+            throw new GradleException('Missing Forge run classpaths. Run genEclipseRuns before launching from Eclipse.')
+        }
+
+        File buildshipPreferences = file('.settings/org.eclipse.buildship.core.prefs')
+        Properties buildship = new Properties()
+        if (buildshipPreferences.isFile()) {
+            buildshipPreferences.withInputStream { buildship.load(it) }
+        }
+        String configuredGradleHome = buildship.getProperty('connection.gradle.user.home', '').trim()
+        File eclipseGradleHome = configuredGradleHome
+                ? file(configuredGradleHome).canonicalFile
+                : gradle.gradleUserHomeDir.canonicalFile
+        File eclipseCache = new File(eclipseGradleHome, 'caches').canonicalFile
+        File eclipseClasspathDir = file('.settings/mineralogy-run-classpaths')
+        eclipseClasspathDir.mkdirs()
+
+        Closure<String> mapCacheReferences = { String value ->
+            value.replaceAll(/(?i)[A-Z]:[\\\/]\S*?[\\\/]caches(?=[\\\/])/) { String cacheRoot ->
+                cacheRoot.contains('/')
+                        ? eclipseCache.absolutePath.replace('\\', '/')
+                        : eclipseCache.absolutePath
+            }
+        }
+
+        Map<File, File> stableClasspaths = [:]
+        classpathFiles.each { File classpathFile ->
+            List<String> original = classpathFile.readLines('UTF-8')
+            List<String> synced = original.collect { String entry ->
+                String mapped = mapCacheReferences(entry)
+                String portable = mapped.replace('\\', '/')
+                int marker = portable.indexOf('/caches/')
+                if (marker < 0) {
+                    return mapped
+                }
+
+                File target = file(mapped).canonicalFile
+                if (!target.isFile()) {
+                    throw new GradleException("Missing Eclipse run dependency in configured Gradle cache: ${target}")
+                }
+                return target.absolutePath
+            }
+
+            File stableClasspath = new File(eclipseClasspathDir, classpathFile.name)
+            stableClasspath.setText(synced.join(System.lineSeparator()) + System.lineSeparator(), 'UTF-8')
+            stableClasspaths.put(classpathFile.canonicalFile, stableClasspath.canonicalFile)
+        }
+
+        File eclipseProjectClasspath = file('.classpath')
+        int changedProjectClasspath = 0
+        int changedResourceExclusions = 0
+        if (eclipseProjectClasspath.isFile()) {
+            String original = eclipseProjectClasspath.getText('UTF-8')
+            String synced = mapCacheReferences(original)
+            if (original != synced) {
+                eclipseProjectClasspath.setText(synced, 'UTF-8')
+                changedProjectClasspath = 1
+            }
+
+            def parsedClasspath = new XmlParser(false, false).parse(eclipseProjectClasspath)
+            parsedClasspath.classpathentry.findAll { entry ->
+                entry.attribute('kind') == 'src' && entry.attribute('path') == 'src/main/resources'
+            }.each { entry ->
+                List<String> exclusions = (entry.attribute('excluding') ?: '')
+                        .split(/\|/)
+                        .findAll { !it.isEmpty() }
+                ['META-INF/mods.toml', 'pack.mcmeta'].each { String metadataFile ->
+                    if (exclusions.remove(metadataFile)) {
+                        changedResourceExclusions = 1
+                    }
+                }
+                if (exclusions.isEmpty()) {
+                    entry.attributes().remove('excluding')
+                } else {
+                    entry.attributes().put('excluding', exclusions.join('|'))
+                }
+            }
+            if (changedResourceExclusions) {
+                eclipseProjectClasspath.setText(groovy.xml.XmlUtil.serialize(parsedClasspath), 'UTF-8')
+                changedProjectClasspath = 1
+            }
+
+            parsedClasspath.classpathentry.each { entry ->
+                ['path', 'sourcepath'].each { String attribute ->
+                    String value = entry.attribute(attribute)
+                    if (value && value.replace('\\', '/').contains('/caches/')) {
+                        File target = file(value).canonicalFile
+                        if (!target.exists()) {
+                            throw new GradleException("Missing Eclipse project dependency in configured Gradle cache: ${target}")
+                        }
+                    }
+                }
+            }
+        }
+
+        File eclipseLaunchDir = file('.eclipse/configurations')
+        int changedLaunches = 0
+        if (eclipseLaunchDir.isDirectory()) {
+            fileTree(eclipseLaunchDir) {
+                include '*Slim.launch'
+            }.files.each { File launchFile ->
+                String original = launchFile.getText('UTF-8')
+                String synced = mapCacheReferences(original)
+                stableClasspaths.each { File generated, File stable ->
+                    synced = synced
+                            .replace(generated.absolutePath, stable.absolutePath)
+                            .replace(generated.absolutePath.replace('\\', '/'), stable.absolutePath.replace('\\', '/'))
+                }
+                if (original != synced) {
+                    launchFile.setText(synced, 'UTF-8')
+                    changedLaunches++
+                }
+            }
+        }
+        logger.lifecycle("Eclipse runtime paths aligned with ${eclipseCache} (${stableClasspaths.size()} Forge classpaths, ${changedProjectClasspath} project classpath, ${changedResourceExclusions} metadata exclusion, ${changedLaunches} launches updated)")
+    }
+}
+
+tasks.configureEach {
+    if (name in ['copyEclipseResources', 'genEclipseRuns', 'eclipse']) {
+        finalizedBy syncEclipseRunClasspaths
+    }
 }

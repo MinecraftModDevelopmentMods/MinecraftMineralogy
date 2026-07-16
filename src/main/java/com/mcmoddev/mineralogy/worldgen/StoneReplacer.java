@@ -26,6 +26,15 @@ import net.minecraftforge.event.world.BiomeLoadingEvent;
 
 public class StoneReplacer extends Feature<NoneFeatureConfiguration> {
 	public static final StoneReplacer FEATURE = new StoneReplacer();
+	private static final ResourceLocation[] VANILLA_MATCHING_STONE_FEATURES = new ResourceLocation[] {
+			new ResourceLocation("minecraft", "ore_granite_upper"),
+			new ResourceLocation("minecraft", "ore_granite_lower"),
+			new ResourceLocation("minecraft", "ore_diorite_upper"),
+			new ResourceLocation("minecraft", "ore_diorite_lower"),
+			new ResourceLocation("minecraft", "ore_andesite_upper"),
+			new ResourceLocation("minecraft", "ore_andesite_lower"),
+			new ResourceLocation("minecraft", "ore_tuff")
+	};
 	private static Holder<PlacedFeature> placedFeature;
 
 	private final Lock geologyLock = new ReentrantLock();
@@ -48,8 +57,14 @@ public class StoneReplacer extends Feature<NoneFeatureConfiguration> {
 	}
 
 	public static void onBiomeLoading(BiomeLoadingEvent event) {
-		if (isOverworldCategory(event.getCategory()) && placedFeature != null) {
-			event.getGeneration().getFeatures(GenerationStep.Decoration.UNDERGROUND_ORES).add(placedFeature);
+		if (!isOverworldCategory(event.getCategory())) {
+			return;
+		}
+
+		removeVanillaMatchingStoneFeatures(event);
+		if (placedFeature != null) {
+			event.getGeneration().getFeatures(GenerationStep.Decoration.UNDERGROUND_ORES)
+					.add(placedFeature);
 		}
 	}
 
@@ -63,7 +78,7 @@ public class StoneReplacer extends Feature<NoneFeatureConfiguration> {
 		}
 
 		ChunkAccess chunk = world.getChunk(pos);
-		if (MineralogyConfig.geologyMode() == GeologyMode.LEGACY) {
+		if (WorldGeologyProfileManager.geologyMode() == GeologyMode.LEGACY) {
 			getLegacyGeology(world.getSeed()).replaceStoneInChunk(chunk);
 		} else {
 			getGeomeGeology(world.getSeed()).replaceStoneInChunk(world, chunk);
@@ -74,6 +89,20 @@ public class StoneReplacer extends Feature<NoneFeatureConfiguration> {
 	private static boolean isOverworldCategory(BiomeCategory category) {
 		return category != BiomeCategory.NETHER && category != BiomeCategory.THEEND
 				&& category != BiomeCategory.NONE;
+	}
+
+	private static void removeVanillaMatchingStoneFeatures(BiomeLoadingEvent event) {
+		event.getGeneration().getFeatures(GenerationStep.Decoration.UNDERGROUND_ORES)
+				.removeIf(StoneReplacer::isVanillaMatchingStoneFeature);
+	}
+
+	private static boolean isVanillaMatchingStoneFeature(Holder<PlacedFeature> feature) {
+		for (ResourceLocation id : VANILLA_MATCHING_STONE_FEATURES) {
+			if (feature.is(id)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private Geology getLegacyGeology(long seed) {
@@ -108,5 +137,20 @@ public class StoneReplacer extends Feature<NoneFeatureConfiguration> {
 		}
 
 		return geomeGeology;
+	}
+
+	public static void refreshWorldConfig() {
+		FEATURE.clearCachedGeology();
+	}
+
+	private void clearCachedGeology() {
+		geologyLock.lock();
+		try {
+			geology = null;
+			geomeGeology = null;
+			geologySeed = Long.MIN_VALUE;
+		} finally {
+			geologyLock.unlock();
+		}
 	}
 }

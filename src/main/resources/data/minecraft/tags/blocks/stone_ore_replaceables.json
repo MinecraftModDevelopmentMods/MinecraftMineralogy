@@ -1,6 +1,11 @@
 {
   "replace": false,
   "values": [
-    "#mineralogy:rocks"
+    "#mineralogy:rocks",
+    "minecraft:andesite",
+    "minecraft:basalt",
+    "minecraft:diorite",
+    "minecraft:granite",
+    "minecraft:tuff"
   ]
 }

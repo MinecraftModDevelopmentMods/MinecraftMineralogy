@@ -2,11 +2,17 @@ package com.mcmoddev.mineralogy;
 
 import java.util.List;
 
+import com.mcmoddev.mineralogy.init.MineralogyFluids;
 import com.mcmoddev.mineralogy.init.MineralogyRegistry;
 import com.mcmoddev.mineralogy.worldgen.MineralogyOreGeneration;
 import com.mcmoddev.mineralogy.worldgen.GeomeConfig;
 import com.mcmoddev.mineralogy.worldgen.GeomeDistributionSampler;
+import com.mcmoddev.mineralogy.worldgen.OilDepositFeature;
 import com.mcmoddev.mineralogy.worldgen.StoneReplacer;
+import com.mcmoddev.mineralogy.worldgen.WorldGeologyProfileManager;
+import com.mcmoddev.mineralogy.worldgen.FormationSettings.Preset;
+import com.mcmoddev.mineralogy.MineralogyConfig.GeologyMode;
+import com.mcmoddev.mineralogy.worldgen.WorldGeologyProfile;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.resources.ResourceLocation;
@@ -42,8 +48,12 @@ public class Mineralogy {
 		MineralogyConfig.registerAdvancementPredicates();
 
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+		MineralogyFluids.register(FMLJavaModLoadingContext.get().getModEventBus());
 		MinecraftForge.EVENT_BUS.addListener(StoneReplacer::onBiomeLoading);
 		MinecraftForge.EVENT_BUS.addListener(MineralogyOreGeneration::onBiomeLoading);
+		MinecraftForge.EVENT_BUS.addListener(OilDepositFeature::onBiomeLoading);
+		MinecraftForge.EVENT_BUS.addListener(WorldGeologyProfileManager::onServerAboutToStart);
+		MinecraftForge.EVENT_BUS.addListener(WorldGeologyProfileManager::onServerStopped);
 	}
 
 	private void setup(final FMLCommonSetupEvent event) {
@@ -54,12 +64,73 @@ public class Mineralogy {
 		event.enqueueWork(() -> {
 			StoneReplacer.registerConfiguredFeature();
 			MineralogyOreGeneration.registerConfiguredFeatures();
+			OilDepositFeature.registerConfiguredFeature();
 		});
 	}
 
 	private static void logGeomeSampler() {
-		if (Boolean.getBoolean("mineralogy.geomeSampler")) {
-			LOGGER.info("\n{}", GeomeDistributionSampler.sample(19780401L, ForgeRegistries.BIOMES.getValues(), 8, 8));
+		if (!Boolean.getBoolean("mineralogy.geomeSampler")) {
+			return;
+		}
+
+		WorldGeologyProfile original = GeomeConfig.globalProfile();
+		String defaultSeed = Long.toString(Long.getLong("mineralogy.geomeSamplerSeed", 19780401L));
+		String[] samplerSeeds = System.getProperty("mineralogy.geomeSamplerSeeds", defaultSeed).split(",");
+		String profileFilter = System.getProperty("mineralogy.geomeSamplerProfiles", "all");
+		boolean includeBiomeAudit = Boolean.parseBoolean(
+				System.getProperty("mineralogy.geomeSamplerBiomeAudit", "true"));
+		try {
+			for (String seedText : samplerSeeds) {
+				long samplerSeed = Long.parseLong(seedText.trim());
+				for (Preset preset : new Preset[] {
+						Preset.TINY, Preset.SMALL, Preset.AVERAGE, Preset.LARGE, Preset.HUGE }) {
+					if (!samplerProfileEnabled(profileFilter, preset.configName())) {
+						continue;
+					}
+					WorldGeologyProfile profile = WorldGeologyProfile.recommended(original.placeCrudeOil())
+							.withSelection(GeologyMode.GEOME, preset, preset, preset, preset, preset,
+									original.placeCrudeOil());
+					logSamplerProfile("Sky " + preset.configName(), samplerSeed, profile, includeBiomeAudit);
+				}
+				if (samplerProfileEnabled(profileFilter, "mixed_huge")) {
+					WorldGeologyProfile mixedHuge = WorldGeologyProfile.recommended(original.placeCrudeOil())
+							.withSelection(GeologyMode.GEOME, Preset.AVERAGE, Preset.HUGE, Preset.HUGE,
+									Preset.HUGE, Preset.HUGE, original.placeCrudeOil());
+					logSamplerProfile("Sky mixed-huge", samplerSeed, mixedHuge, includeBiomeAudit);
+				}
+			}
+		} finally {
+			GeomeConfig.applyWorldProfile(original);
+		}
+	}
+
+	private static boolean samplerProfileEnabled(String filter, String profile) {
+		if ("all".equalsIgnoreCase(filter.trim())) {
+			return true;
+		}
+		for (String configured : filter.split(",")) {
+			if (profile.equalsIgnoreCase(configured.trim())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static void logSamplerProfile(String label, long seed, WorldGeologyProfile profile,
+			boolean includeBiomeAudit) {
+		GeomeConfig.applyWorldProfile(profile);
+		String terrainSample = System.getProperty("mineralogy.geomeSamplerTerrain");
+		if (terrainSample == null || terrainSample.trim().isEmpty()) {
+			LOGGER.info("\n{} sampler\n{}", label,
+					GeomeDistributionSampler.sample(seed, ForgeRegistries.BIOMES.getValues(), 8, 8,
+							includeBiomeAudit));
+			return;
+		}
+		try {
+			LOGGER.info("\n{} sampler\n{}", label,
+					GeomeDistributionSampler.sampleTerrain(seed, java.nio.file.Paths.get(terrainSample)));
+		} catch (java.io.IOException e) {
+			LOGGER.error("Could not replay Mineralogy terrain sample '{}'", terrainSample, e);
 		}
 	}
 

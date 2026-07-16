@@ -57,6 +57,16 @@ public final class MineralogyConfig {
 	private static final ForgeConfigSpec.BooleanValue GENERATE_SMOOTHBRICKSLAB;
 	private static final ForgeConfigSpec.BooleanValue GENERATE_SMOOTHBRICKWALL;
 	private static final ForgeConfigSpec.BooleanValue GROUP_TABS_BY_TYPE;
+	private static final ForgeConfigSpec.BooleanValue PLACE_CRUDE_OIL;
+	private static final ForgeConfigSpec.DoubleValue CRUDE_OIL_FREQUENCY;
+	private static final ForgeConfigSpec.IntValue CRUDE_OIL_MIN_Y;
+	private static final ForgeConfigSpec.IntValue CRUDE_OIL_MAX_Y;
+	private static final ForgeConfigSpec.IntValue CRUDE_OIL_MIN_RADIUS;
+	private static final ForgeConfigSpec.IntValue CRUDE_OIL_MAX_RADIUS;
+	private static final ForgeConfigSpec.IntValue CRUDE_OIL_MIN_VERTICAL_RADIUS;
+	private static final ForgeConfigSpec.IntValue CRUDE_OIL_MAX_VERTICAL_RADIUS;
+	private static final ForgeConfigSpec.IntValue CRUDE_OIL_MAX_LOBES;
+	private static final ForgeConfigSpec.IntValue CRUDE_OIL_MIN_SOLID_COVER;
 	private static final ForgeConfigSpec.ConfigValue<List<? extends String>> IGNEOUS_BLACKLIST;
 	private static final ForgeConfigSpec.ConfigValue<List<? extends String>> SEDIMENTARY_BLACKLIST;
 	private static final ForgeConfigSpec.ConfigValue<List<? extends String>> METAMORPHIC_BLACKLIST;
@@ -97,6 +107,8 @@ public final class MineralogyConfig {
 	private static boolean generateSmoothBrickSlab = true;
 	private static boolean generateSmoothBrickWall = true;
 	private static boolean groupCreativeTabItemsByType = false;
+	private static boolean placeCrudeOil = true;
+	private static OilGenerationSettings crudeOil = new OilGenerationSettings(-48, 48, 0.08D, 5, 12, 2, 5, 4, 2);
 	private static List<String> igneousWhitelist = Collections.emptyList();
 	private static List<String> igneousBlacklist = Collections.emptyList();
 	private static List<String> sedimentaryWhitelist = Collections.emptyList();
@@ -175,29 +187,59 @@ public final class MineralogyConfig {
 
 		builder.push("world-gen");
 		GEOME_SIZE = builder
-				.comment("Making this value larger increases the size of regions of igneous, sedimentary, and metamorphic rocks.")
+				.comment("Legacy geology only: larger values make broader igneous, sedimentary, and metamorphic regions. Sky geology uses mineralogy-geomes.json.")
 				.defineInRange("GEOME_SIZE", geomeSize, 4, Short.MAX_VALUE);
 		GEOLOGY_MODE = builder
 				.comment("Controls Mineralogy stone replacement. GEOME is the biome-influenced geology model; LEGACY is the old random layer model.")
 				.defineEnum("GEOLOGY_MODE", geologyMode);
 		ROCK_LAYER_NOISE = builder
-				.comment("Changing this value will change the waviness of the layers.")
+				.comment("Legacy geology only: controls the horizontal wavelength of Cyano-style layers. Sky geology uses mineralogy-geomes.json.")
 				.defineInRange("ROCK_LAYER_NOISE", rockLayerNoise, 1.0D, Short.MAX_VALUE);
 		ROCK_LAYER_THICKNESS = builder
-				.comment("Changing this value will change the height of individual layers.")
+				.comment("Legacy geology only: controls individual layer thickness. Sky geology uses mineralogy-geomes.json.")
 				.defineInRange("ROCK_LAYER_THICKNESS", geomLayerThickness, 1, 255);
-		IGNEOUS_BLACKLIST = builder.comment("Ban blocks from spawning in igneous rock layers. Use mod:block entries.")
+		IGNEOUS_BLACKLIST = builder.comment("Legacy geology only: ban blocks from igneous layers. Use mod:block entries.")
 				.defineList("igneous_blacklist", Collections.emptyList(), MineralogyConfig::isString);
-		SEDIMENTARY_BLACKLIST = builder.comment("Ban blocks from spawning in sedimentary rock layers. Use mod:block entries.")
+		SEDIMENTARY_BLACKLIST = builder.comment("Legacy geology only: ban blocks from sedimentary layers. Use mod:block entries.")
 				.defineList("sedimentary_blacklist", Collections.emptyList(), MineralogyConfig::isString);
-		METAMORPHIC_BLACKLIST = builder.comment("Ban blocks from spawning in metamorphic rock layers. Use mod:block entries.")
+		METAMORPHIC_BLACKLIST = builder.comment("Legacy geology only: ban blocks from metamorphic layers. Use mod:block entries.")
 				.defineList("metamorphic_blacklist", Collections.emptyList(), MineralogyConfig::isString);
-		IGNEOUS_WHITELIST = builder.comment("Add blocks to igneous rock layers. Use mod:block entries.")
+		IGNEOUS_WHITELIST = builder.comment("Legacy geology only: add blocks to igneous layers. Use mod:block entries.")
 				.defineList("igneous_whitelist", Collections.emptyList(), MineralogyConfig::isString);
-		SEDIMENTARY_WHITELIST = builder.comment("Add blocks to sedimentary rock layers. Use mod:block entries.")
+		SEDIMENTARY_WHITELIST = builder.comment("Legacy geology only: add blocks to sedimentary layers. Use mod:block entries.")
 				.defineList("sedimentary_whitelist", Collections.emptyList(), MineralogyConfig::isString);
-		METAMORPHIC_WHITELIST = builder.comment("Add blocks to metamorphic rock layers. Use mod:block entries.")
+		METAMORPHIC_WHITELIST = builder.comment("Legacy geology only: add blocks to metamorphic layers. Use mod:block entries.")
 				.defineList("metamorphic_whitelist", Collections.emptyList(), MineralogyConfig::isString);
+		PLACE_CRUDE_OIL = builder
+				.comment("If true, Mineralogy places crude oil deposits in covered sedimentary layers under ocean biomes.")
+				.define("PLACE_CRUDE_OIL", placeCrudeOil);
+		CRUDE_OIL_FREQUENCY = builder
+				.comment("Average crude oil deposits per ocean chunk. Fractional values are supported.")
+				.defineInRange("crude_oil.frequency", crudeOil.frequency(), 0.0D, 16.0D);
+		CRUDE_OIL_MIN_Y = builder
+				.comment("Minimum crude oil deposit center height.")
+				.defineInRange("crude_oil.minY", crudeOil.minY(), -64, 320);
+		CRUDE_OIL_MAX_Y = builder
+				.comment("Maximum crude oil deposit center height before ocean-floor cover is applied.")
+				.defineInRange("crude_oil.maxY", crudeOil.maxY(), -64, 320);
+		CRUDE_OIL_MIN_RADIUS = builder
+				.comment("Minimum horizontal radius for a crude oil deposit lobe.")
+				.defineInRange("crude_oil.minRadius", crudeOil.minRadius(), 1, 24);
+		CRUDE_OIL_MAX_RADIUS = builder
+				.comment("Maximum horizontal radius for a crude oil deposit lobe.")
+				.defineInRange("crude_oil.maxRadius", crudeOil.maxRadius(), 1, 32);
+		CRUDE_OIL_MIN_VERTICAL_RADIUS = builder
+				.comment("Minimum vertical radius for a crude oil deposit lobe.")
+				.defineInRange("crude_oil.minVerticalRadius", crudeOil.minVerticalRadius(), 1, 16);
+		CRUDE_OIL_MAX_VERTICAL_RADIUS = builder
+				.comment("Maximum vertical radius for a crude oil deposit lobe.")
+				.defineInRange("crude_oil.maxVerticalRadius", crudeOil.maxVerticalRadius(), 1, 24);
+		CRUDE_OIL_MAX_LOBES = builder
+				.comment("Maximum overlapping lobes per crude oil deposit. Higher values make deposits larger and less spherical.")
+				.defineInRange("crude_oil.maxLobes", crudeOil.maxLobes(), 1, 8);
+		CRUDE_OIL_MIN_SOLID_COVER = builder
+				.comment("Minimum solid blocks required above every crude oil block before the ocean water or open space.")
+				.defineInRange("crude_oil.minSolidCover", crudeOil.minSolidCover(), 1, 16);
 		builder.pop();
 
 		builder.push("ores");
@@ -267,12 +309,17 @@ public final class MineralogyConfig {
 		generateSmoothBrickSlab = GENERATE_SMOOTHBRICKSLAB.get();
 		generateSmoothBrickWall = GENERATE_SMOOTHBRICKWALL.get();
 		groupCreativeTabItemsByType = GROUP_TABS_BY_TYPE.get();
+		placeCrudeOil = PLACE_CRUDE_OIL.get();
 		igneousBlacklist = cleanList(IGNEOUS_BLACKLIST.get());
 		sedimentaryBlacklist = cleanList(SEDIMENTARY_BLACKLIST.get());
 		metamorphicBlacklist = cleanList(METAMORPHIC_BLACKLIST.get());
 		igneousWhitelist = cleanList(IGNEOUS_WHITELIST.get());
 		sedimentaryWhitelist = cleanList(SEDIMENTARY_WHITELIST.get());
 		metamorphicWhitelist = cleanList(METAMORPHIC_WHITELIST.get());
+		crudeOil = new OilGenerationSettings(CRUDE_OIL_MIN_Y.get(), CRUDE_OIL_MAX_Y.get(),
+				CRUDE_OIL_FREQUENCY.get(), CRUDE_OIL_MIN_RADIUS.get(), CRUDE_OIL_MAX_RADIUS.get(),
+				CRUDE_OIL_MIN_VERTICAL_RADIUS.get(), CRUDE_OIL_MAX_VERTICAL_RADIUS.get(),
+				CRUDE_OIL_MAX_LOBES.get(), CRUDE_OIL_MIN_SOLID_COVER.get());
 		sulfurOre = SULFUR_ORE.bake();
 		phosphorousOre = PHOSPHOROUS_ORE.bake();
 		nitrateOre = NITRATE_ORE.bake();
@@ -592,6 +639,14 @@ public final class MineralogyConfig {
 		return groupCreativeTabItemsByType;
 	}
 
+	public static boolean placeCrudeOil() {
+		return placeCrudeOil;
+	}
+
+	public static OilGenerationSettings crudeOil() {
+		return crudeOil;
+	}
+
 	public static OreGenerationSettings sulfurOre() {
 		return sulfurOre;
 	}
@@ -650,6 +705,67 @@ public final class MineralogyConfig {
 
 		public int quantity() {
 			return quantity;
+		}
+	}
+
+	public static final class OilGenerationSettings {
+		private final int minY;
+		private final int maxY;
+		private final double frequency;
+		private final int minRadius;
+		private final int maxRadius;
+		private final int minVerticalRadius;
+		private final int maxVerticalRadius;
+		private final int maxLobes;
+		private final int minSolidCover;
+
+		private OilGenerationSettings(int minY, int maxY, double frequency, int minRadius, int maxRadius,
+				int minVerticalRadius, int maxVerticalRadius, int maxLobes, int minSolidCover) {
+			this.minY = minY;
+			this.maxY = maxY;
+			this.frequency = frequency;
+			this.minRadius = Math.min(minRadius, maxRadius);
+			this.maxRadius = Math.max(minRadius, maxRadius);
+			this.minVerticalRadius = Math.min(minVerticalRadius, maxVerticalRadius);
+			this.maxVerticalRadius = Math.max(minVerticalRadius, maxVerticalRadius);
+			this.maxLobes = maxLobes;
+			this.minSolidCover = minSolidCover;
+		}
+
+		public int minY() {
+			return minY;
+		}
+
+		public int maxY() {
+			return maxY;
+		}
+
+		public double frequency() {
+			return frequency;
+		}
+
+		public int minRadius() {
+			return minRadius;
+		}
+
+		public int maxRadius() {
+			return maxRadius;
+		}
+
+		public int minVerticalRadius() {
+			return minVerticalRadius;
+		}
+
+		public int maxVerticalRadius() {
+			return maxVerticalRadius;
+		}
+
+		public int maxLobes() {
+			return maxLobes;
+		}
+
+		public int minSolidCover() {
+			return minSolidCover;
 		}
 	}
 

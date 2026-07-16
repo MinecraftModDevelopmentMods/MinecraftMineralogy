@@ -3,11 +3,14 @@ package com.mcmoddev.mineralogy.worldgen;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -20,11 +23,15 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
+import com.mcmoddev.mineralogy.MineralogyConfig;
 import com.mcmoddev.mineralogy.worldgen.BakedGeomeConfig.GeomeDefinition;
 import com.mcmoddev.mineralogy.worldgen.BakedGeomeConfig.RockEntry;
+import com.mcmoddev.mineralogy.worldgen.FormationSettings.Algorithm;
+import com.mcmoddev.mineralogy.worldgen.FormationSettings.Preset;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.resources.ResourceLocation;
@@ -40,17 +47,45 @@ public final class GeomeConfig {
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 	private static final Path CONFIG_PATH = Paths.get("config", "mineralogy-geomes.json");
+	private static final Path CONFIG_BACKUP_PATH = Paths.get("config", "mineralogy-geomes.v1.bak");
+	private static final Path BIOME_DEFAULTS_BACKUP_PATH = Paths.get("config",
+			"mineralogy-geomes.pre-biome-revision-2.bak");
+	private static final Path CONFIG_TEMP_PATH = Paths.get("config", "mineralogy-geomes.json.tmp");
+	private static final int SCHEMA_VERSION = 2;
+	private static final int BIOME_DEFAULTS_REVISION = 2;
 
-	private static BakedGeomeConfig bakedConfig = null;
+	private static volatile BakedGeomeConfig bakedConfig = null;
+	private static JsonObject globalConfigRoot = null;
+	private static volatile WorldGeologyProfile globalProfile = null;
 
 	private GeomeConfig() {
 		throw new IllegalAccessError("Not an instantiable class");
 	}
 
-	public static BakedGeomeConfig bake() {
+	public static synchronized BakedGeomeConfig bake() {
 		JsonObject root = loadConfig();
+		globalConfigRoot = root.deepCopy();
+		globalProfile = WorldGeologyProfile.fromGlobalConfig(root,
+				MineralogyConfig.geologyMode(), MineralogyConfig.placeCrudeOil());
 		bakedConfig = bake(root);
 		return bakedConfig;
+	}
+
+	public static synchronized BakedGeomeConfig applyWorldProfile(WorldGeologyProfile profile) {
+		if (globalConfigRoot == null) {
+			bake();
+		}
+		JsonObject effective = globalConfigRoot.deepCopy();
+		effective.add("formations", profile.toFormationJson());
+		bakedConfig = bake(effective);
+		return bakedConfig;
+	}
+
+	public static WorldGeologyProfile globalProfile() {
+		if (globalProfile == null) {
+			bake();
+		}
+		return globalProfile;
 	}
 
 	public static BakedGeomeConfig baked() {
@@ -73,7 +108,24 @@ public final class GeomeConfig {
 				LOGGER.warn("Mineralogy geome config '{}' is not a JSON object; using defaults", CONFIG_PATH);
 				return defaults;
 			}
-			return element.getAsJsonObject();
+			JsonObject root = element.getAsJsonObject();
+			int schemaVersion = getInt(root, "schema_version", 1);
+			if (schemaVersion < SCHEMA_VERSION) {
+				JsonObject migrated = migrateV1(root);
+				writeMigratedConfig(migrated);
+				return migrated;
+			}
+			if (schemaVersion > SCHEMA_VERSION) {
+				LOGGER.warn("Mineralogy geome config schema {} is newer than supported schema {}; reading known fields only",
+						schemaVersion, SCHEMA_VERSION);
+				return root;
+			}
+			if (getInt(root, "biome_defaults_revision", 0) < BIOME_DEFAULTS_REVISION) {
+				JsonObject refreshed = refreshBiomeDefaults(root, defaults);
+				writeBiomeDefaultsRefresh(refreshed);
+				return refreshed;
+			}
+			return root;
 		} catch (IOException | JsonSyntaxException | IllegalStateException e) {
 			LOGGER.warn("Could not read Mineralogy geome config '{}'; using defaults", CONFIG_PATH, e);
 			return defaults;
@@ -94,6 +146,7 @@ public final class GeomeConfig {
 	private static BakedGeomeConfig bake(JsonObject root) {
 		LinkedHashMap<String, Integer> geomeIndexes = new LinkedHashMap<>();
 		GeomeDefinition[] geomes = readGeomes(root, geomeIndexes);
+		FormationSettings formations = readFormationSettings(root);
 		double geomeScale = getDouble(root, "geome_scale", 384.0D);
 		double biomeInfluence = getDouble(root, "biome_influence", 1.15D);
 		double regionalNoiseInfluence = getDouble(root, "regional_noise_influence", 0.90D);
@@ -101,13 +154,84 @@ public final class GeomeConfig {
 
 		Map<String, double[]> biomeRules = readWeightRules(root, "biomes", geomeIndexes);
 		Map<String, double[]> dictionaryRules = readWeightRules(root, "biome_dictionary", geomeIndexes);
-		RockEntry[] rocks = readRocks(root, geomeIndexes);
+		Map<ResourceLocation, ResourceLocation> worldgenAliases = readWorldgenAliases(root);
+		RockEntry[] rocks = readRocks(root, geomeIndexes, worldgenAliases);
 		Map<Biome, double[]> biomeWeights = bakeBiomeWeights(geomeIndexes, biomeRules, dictionaryRules);
 
-		LOGGER.info("Baked Mineralogy geome config with {} geomes, {} rock entries, and {} registered biome profiles",
-				geomes.length, rocks.length, biomeWeights.size());
+		LOGGER.info("Baked Mineralogy geome config with {} geomes, {} rock entries, {} biome profiles, and {} formations",
+				geomes.length, rocks.length, biomeWeights.size(), formations.algorithm.configName);
 		return new BakedGeomeConfig(geomes, geomeScale, biomeInfluence, regionalNoiseInfluence,
-				boundaryNoiseInfluence, biomeWeights, rocks);
+				boundaryNoiseInfluence, biomeWeights, rocks, formations);
+	}
+
+	private static FormationSettings readFormationSettings(JsonObject root) {
+		JsonObject defaults = defaultFormationConfig();
+		JsonObject json = getObject(root, "formations", defaults);
+		JsonObject custom = getObject(json, "custom", defaults.getAsJsonObject("custom"));
+
+		Algorithm algorithm = Algorithm.STABLE_LAYERS;
+		String algorithmName = getString(json, "algorithm", algorithm.configName);
+		try {
+			algorithm = Algorithm.fromConfigName(algorithmName);
+		} catch (IllegalArgumentException e) {
+			LOGGER.warn("Unknown Mineralogy formation algorithm '{}'; using stable_layers", algorithmName);
+		}
+
+		Preset horizontal = readPreset(json, "horizontal_size");
+		Preset thickness = readPreset(json, "vertical_thickness");
+		Preset waviness = readPreset(json, "waviness");
+		Preset irregularity = readPreset(json, "edge_irregularity");
+		Preset continuity = readPreset(json, "formation_continuity");
+
+		boolean stableLayers = algorithm == Algorithm.STABLE_LAYERS;
+		double stratumWavelength = stableLayers
+				? waviness == Preset.CUSTOM
+						? getBoundedDouble(custom, "waviness_wavelength", 256.0D, 32.0D, 2048.0D)
+						: horizontal == Preset.CUSTOM
+								? getBoundedDouble(custom, "stratum_wavelength", 256.0D, 32.0D, 2048.0D)
+								: horizontal.stableWavinessWavelength
+				: horizontal == Preset.CUSTOM
+						? getBoundedDouble(custom, "stratum_wavelength", 256.0D, 16.0D, 8192.0D)
+						: horizontal.stratumWavelength;
+		double familyRegionWavelength = horizontal == Preset.CUSTOM
+				? getBoundedDouble(custom, "family_region_wavelength", 100.0D, 16.0D, 8192.0D)
+				: horizontal.familyRegionWavelength;
+		int verticalThickness = thickness == Preset.CUSTOM
+				? getBoundedInt(custom, "vertical_thickness", 8, 1, 192)
+				: thickness.verticalThickness;
+		double wavinessAmplitude = waviness == Preset.CUSTOM
+				? getBoundedDouble(custom, "waviness_amplitude", stableLayers ? 48.0D : 60.0D, 0.0D, 512.0D)
+				: stableLayers ? waviness.stableWavinessAmplitude : waviness.wavinessAmplitude;
+		double edgeWavelength = stableLayers
+				? irregularity == Preset.CUSTOM
+						? getBoundedDouble(custom, "edge_wavelength", 64.0D, 8.0D, 512.0D)
+						: irregularity.stableEdgeWavelength
+				: 64.0D;
+		double edgeAmplitude = !stableLayers
+				? 0.0D
+				: irregularity == Preset.CUSTOM
+						? getBoundedDouble(custom, "edge_amplitude", 12.0D, 0.0D, 256.0D)
+						: irregularity.stableEdgeAmplitude;
+		int edgeOctaves = irregularity == Preset.CUSTOM
+				? getBoundedInt(custom, "edge_octaves", stableLayers ? 2 : 4, 1, 8)
+				: stableLayers ? irregularity.stableEdgeOctaves : irregularity.edgeOctaves;
+		double formationContinuity = continuity == Preset.CUSTOM
+				? getBoundedDouble(custom, "continuity", 0.85D, 0.0D, 1.0D)
+				: continuity.continuity;
+
+		return new FormationSettings(algorithm, stratumWavelength, familyRegionWavelength,
+				verticalThickness, wavinessAmplitude, edgeWavelength, edgeAmplitude,
+				edgeOctaves, formationContinuity);
+	}
+
+	private static Preset readPreset(JsonObject json, String key) {
+		String name = getString(json, key, Preset.AVERAGE.configName);
+		try {
+			return Preset.fromConfigName(name);
+		} catch (IllegalArgumentException e) {
+			LOGGER.warn("Unknown Mineralogy formation preset '{}' for '{}'; using average", name, key);
+			return Preset.AVERAGE;
+		}
 	}
 
 	private static GeomeDefinition[] readGeomes(JsonObject root, LinkedHashMap<String, Integer> geomeIndexes) {
@@ -127,7 +251,8 @@ public final class GeomeConfig {
 
 			JsonObject families = GsonHelper.getAsJsonObject(json, "families", new JsonObject());
 			for (RockFamily family : RockFamily.values()) {
-				familyWeights[family.ordinal()] = getDouble(families, family.configName, familyWeights[family.ordinal()]);
+				familyWeights[family.ordinal()] = getNonNegativeDouble(families, family.configName,
+						familyWeights[family.ordinal()]);
 			}
 
 			geomeIndexes.put(entry.getKey(), geomes.size());
@@ -159,12 +284,24 @@ public final class GeomeConfig {
 		return rules;
 	}
 
-	private static RockEntry[] readRocks(JsonObject root, Map<String, Integer> geomeIndexes) {
-		JsonObject rockRoot = GsonHelper.getAsJsonObject(root, "rocks", defaultConfig().getAsJsonObject("rocks"));
+	private static RockEntry[] readRocks(JsonObject root, Map<String, Integer> geomeIndexes,
+			Map<ResourceLocation, ResourceLocation> worldgenAliases) {
+		JsonObject rockRoot = getObject(root, "rocks", defaultConfig().getAsJsonObject("rocks"));
 		List<RockEntry> rocks = new ArrayList<>();
+		Map<BlockState, ResourceLocation> configuredStates = new HashMap<BlockState, ResourceLocation>();
 		for (Entry<String, JsonElement> entry : rockRoot.entrySet()) {
 			if (!entry.getValue().isJsonObject()) {
 				LOGGER.warn("Ignoring Mineralogy geome rock '{}' because it is not an object", entry.getKey());
+				continue;
+			}
+
+			JsonObject json = entry.getValue().getAsJsonObject();
+			if (!getBoolean(json, "enabled", true)) {
+				continue;
+			}
+
+			double weight = getNonNegativeDouble(json, "weight", 1.0D);
+			if (weight <= 0.0D) {
 				continue;
 			}
 
@@ -182,21 +319,41 @@ public final class GeomeConfig {
 				continue;
 			}
 
-			JsonObject json = entry.getValue().getAsJsonObject();
 			RockFamily family;
 			try {
-				family = RockFamily.fromConfigName(GsonHelper.getAsString(json, "family"));
+				family = RockFamily.fromConfigName(getString(json, "family", ""));
 			} catch (RuntimeException e) {
 				LOGGER.warn("Ignoring Mineralogy geome rock '{}' with invalid family", id);
 				continue;
 			}
 
+			int minY = getBoundedInt(json, "min_y", BakedGeomeConfig.MIN_Y,
+					BakedGeomeConfig.MIN_Y, BakedGeomeConfig.MAX_Y);
+			int maxY = getBoundedInt(json, "max_y", BakedGeomeConfig.MAX_Y,
+					BakedGeomeConfig.MIN_Y, BakedGeomeConfig.MAX_Y);
+			if (minY > maxY) {
+				LOGGER.warn("Ignoring Mineralogy geome rock '{}' because min_y {} is above max_y {}", id, minY, maxY);
+				continue;
+			}
+
 			JsonObject geomeWeightsJson = GsonHelper.getAsJsonObject(json, "geomes", new JsonObject());
 			double[] geomeWeights = readGeomeWeights(geomeWeightsJson, geomeIndexes, 1.0D);
-			rocks.add(new RockEntry(block.defaultBlockState(), family,
-					GsonHelper.getAsInt(json, "depth_peak", 48),
-					Math.max(1, GsonHelper.getAsInt(json, "depth_spread", 48)),
-					getDouble(json, "weight", 1.0D),
+			BlockState state = GeologyBlockAliases.aliasState(id, block.defaultBlockState(), worldgenAliases);
+			ResourceLocation previousId = configuredStates.putIfAbsent(state, id);
+			if (previousId != null) {
+				LOGGER.warn("Ignoring duplicate Mineralogy geome rock '{}' because it resolves to the same block state as '{}'",
+						id, previousId);
+				continue;
+			}
+
+			rocks.add(new RockEntry(state,
+					family,
+					getBoundedInt(json, "depth_peak", 48, BakedGeomeConfig.MIN_Y, BakedGeomeConfig.MAX_Y),
+					getBoundedInt(json, "depth_spread", 48, 1, 512),
+					minY,
+					maxY,
+					weight,
+					getBoolean(json, "ore_replaceable", true),
 					geomeWeights));
 		}
 
@@ -206,9 +363,136 @@ public final class GeomeConfig {
 			for (int i = 0; i < weights.length; i++) {
 				weights[i] = 1.0D;
 			}
-			rocks.add(new RockEntry(Blocks.STONE.defaultBlockState(), RockFamily.SEDIMENTARY, 64, 64, 1.0D, weights));
+			rocks.add(new RockEntry(Blocks.STONE.defaultBlockState(), RockFamily.SEDIMENTARY, 64, 64,
+					BakedGeomeConfig.MIN_Y, BakedGeomeConfig.MAX_Y, 1.0D, true, weights));
 		}
 		return rocks.toArray(new RockEntry[rocks.size()]);
+	}
+
+	private static JsonObject migrateV1(JsonObject original) {
+		JsonObject migrated = original.deepCopy();
+		migrated.addProperty("schema_version", SCHEMA_VERSION);
+		migrated.add("formations", legacyFormationConfig());
+
+		if (migrated.has("rocks") && migrated.get("rocks").isJsonObject()) {
+			for (Entry<String, JsonElement> entry : migrated.getAsJsonObject("rocks").entrySet()) {
+				if (!entry.getValue().isJsonObject()) {
+					continue;
+				}
+				JsonObject rock = entry.getValue().getAsJsonObject();
+				addIfMissing(rock, "enabled", true);
+				addIfMissing(rock, "min_y", BakedGeomeConfig.MIN_Y);
+				addIfMissing(rock, "max_y", BakedGeomeConfig.MAX_Y);
+				addIfMissing(rock, "ore_replaceable", true);
+			}
+		}
+		return refreshBiomeDefaults(migrated, defaultConfig());
+	}
+
+	private static JsonObject refreshBiomeDefaults(JsonObject original, JsonObject defaults) {
+		JsonObject refreshed = original.deepCopy();
+		mergeMissingEntries(refreshed, defaults, "biomes");
+		mergeMissingEntries(refreshed, defaults, "biome_dictionary");
+		refreshed.addProperty("biome_defaults_revision", BIOME_DEFAULTS_REVISION);
+		return refreshed;
+	}
+
+	private static void mergeMissingEntries(JsonObject targetRoot, JsonObject defaultsRoot, String key) {
+		JsonObject defaults = defaultsRoot.getAsJsonObject(key);
+		if (!targetRoot.has(key)) {
+			targetRoot.add(key, defaults.deepCopy());
+			return;
+		}
+		if (!targetRoot.get(key).isJsonObject()) {
+			LOGGER.warn("Could not add updated Mineralogy {} defaults because the existing value is not an object", key);
+			return;
+		}
+
+		JsonObject target = targetRoot.getAsJsonObject(key);
+		for (Entry<String, JsonElement> entry : defaults.entrySet()) {
+			if (!target.has(entry.getKey())) {
+				target.add(entry.getKey(), entry.getValue().deepCopy());
+			}
+		}
+	}
+
+	private static void writeMigratedConfig(JsonObject migrated) {
+		if (writeUpdatedConfig(migrated, CONFIG_BACKUP_PATH)) {
+			LOGGER.info("Migrated Mineralogy geome config to schema {}. The previous file is preserved at '{}'",
+					SCHEMA_VERSION, CONFIG_BACKUP_PATH);
+		} else {
+			LOGGER.warn("Could not persist Mineralogy geome config migration; using migrated settings in memory");
+		}
+	}
+
+	private static void writeBiomeDefaultsRefresh(JsonObject refreshed) {
+		if (writeUpdatedConfig(refreshed, BIOME_DEFAULTS_BACKUP_PATH)) {
+			LOGGER.info("Updated Mineralogy biome defaults to revision {}. The previous file is preserved at '{}'",
+					BIOME_DEFAULTS_REVISION, BIOME_DEFAULTS_BACKUP_PATH);
+		} else {
+			LOGGER.warn("Could not persist updated Mineralogy biome defaults; using refreshed settings in memory");
+		}
+	}
+
+	private static boolean writeUpdatedConfig(JsonObject updated, Path backupPath) {
+		try {
+			Files.createDirectories(CONFIG_PATH.getParent());
+			if (!Files.exists(backupPath)) {
+				Files.copy(CONFIG_PATH, backupPath);
+			}
+			try (BufferedWriter writer = Files.newBufferedWriter(CONFIG_TEMP_PATH, StandardCharsets.UTF_8)) {
+				GSON.toJson(updated, writer);
+			}
+			try {
+				Files.move(CONFIG_TEMP_PATH, CONFIG_PATH, StandardCopyOption.ATOMIC_MOVE,
+						StandardCopyOption.REPLACE_EXISTING);
+			} catch (AtomicMoveNotSupportedException e) {
+				Files.move(CONFIG_TEMP_PATH, CONFIG_PATH, StandardCopyOption.REPLACE_EXISTING);
+			} catch (IOException atomicFailure) {
+				try {
+					Files.move(CONFIG_TEMP_PATH, CONFIG_PATH, StandardCopyOption.REPLACE_EXISTING);
+				} catch (IOException fallbackFailure) {
+					fallbackFailure.addSuppressed(atomicFailure);
+					throw fallbackFailure;
+				}
+			}
+			return true;
+		} catch (IOException e) {
+			try {
+				Files.deleteIfExists(CONFIG_TEMP_PATH);
+			} catch (IOException ignored) {
+				// Keep the original migration failure as the useful diagnostic.
+			}
+			LOGGER.warn("Could not write updated Mineralogy geome config", e);
+			return false;
+		}
+	}
+
+	private static Map<ResourceLocation, ResourceLocation> readWorldgenAliases(JsonObject root) {
+		Map<ResourceLocation, ResourceLocation> aliases = GeologyBlockAliases.defaultAliases();
+		JsonObject aliasRoot = GsonHelper.getAsJsonObject(root, "worldgen_aliases",
+				defaultConfig().getAsJsonObject("worldgen_aliases"));
+		for (Entry<String, JsonElement> entry : aliasRoot.entrySet()) {
+			ResourceLocation sourceId;
+			ResourceLocation targetId;
+			try {
+				sourceId = new ResourceLocation(entry.getKey());
+				targetId = new ResourceLocation(entry.getValue().getAsString());
+			} catch (RuntimeException e) {
+				LOGGER.warn("Ignoring invalid Mineralogy worldgen alias '{}'", entry.getKey());
+				continue;
+			}
+
+			Block target = ForgeRegistries.BLOCKS.getValue(targetId);
+			if (target == null || target == Blocks.AIR) {
+				LOGGER.warn("Ignoring Mineralogy worldgen alias '{}' -> '{}' because the target block is unknown",
+						sourceId, targetId);
+				aliases.put(sourceId, sourceId);
+				continue;
+			}
+			aliases.put(sourceId, targetId);
+		}
+		return aliases;
 	}
 
 	private static Map<Biome, double[]> bakeBiomeWeights(Map<String, Integer> geomeIndexes,
@@ -220,7 +504,7 @@ public final class GeomeConfig {
 				weights[i] = 1.0D;
 			}
 
-			ResourceLocation biomeId = biome.getRegistryName();
+			ResourceLocation biomeId = ForgeRegistries.BIOMES.getKey(biome);
 			if (biomeId != null) {
 				merge(weights, biomeRules.get(biomeId.toString()));
 				ResourceKey<Biome> biomeKey = ResourceKey.create(Registry.BIOME_REGISTRY, biomeId);
@@ -241,28 +525,46 @@ public final class GeomeConfig {
 		float downfall = biome.getDownfall();
 
 		if (biomeName.contains("ocean") || biomeName.contains("river") || biomeName.contains("beach")
-				|| biomeName.contains("shore")) {
+				|| biomeName.contains("shore") || biomeName.contains("coast")
+				|| biomeName.contains("island") || biomeName.contains("tropic")) {
 			add(weights, geomeIndexes, "coastal_shelf", 2.25D);
 			add(weights, geomeIndexes, "sedimentary_basin", 0.75D);
 		}
 		if (biomeName.contains("desert") || biomeName.contains("badlands") || biomeName.contains("savanna")
+				|| biomeName.contains("dune") || biomeName.contains("wasteland")
+				|| biomeName.contains("scrubland") || biomeName.contains("shrubland")
 				|| (temperature > 0.95F && downfall < 0.25F)) {
 			add(weights, geomeIndexes, "arid_basin", 2.5D);
 		}
-		if (biomeName.contains("swamp") || biomeName.contains("marsh") || downfall > 0.85F) {
+		if (biomeName.contains("swamp") || biomeName.contains("marsh") || biomeName.contains("wetland")
+				|| biomeName.contains("bayou") || biomeName.contains("bog") || biomeName.contains("mire")
+				|| biomeName.contains("floodplain") || biomeName.contains("rainforest") || downfall > 0.85F) {
 			add(weights, geomeIndexes, "wetland_basin", 2.0D);
 		}
 		if (biomeName.contains("mountain") || biomeName.contains("hill") || biomeName.contains("peak")
-				|| biomeName.contains("slope") || biomeName.contains("windswept") || biomeName.contains("stony")) {
+				|| biomeName.contains("slope") || biomeName.contains("windswept") || biomeName.contains("stony")
+				|| biomeName.contains("highland") || biomeName.contains("cliff") || biomeName.contains("crag")
+				|| biomeName.contains("rocky")) {
 			add(weights, geomeIndexes, "mountain_belt", 2.5D);
 		}
+		if (biomeName.contains("volcano") || biomeName.contains("volcanic")) {
+			add(weights, geomeIndexes, "volcanic_arc", 4.0D);
+			add(weights, geomeIndexes, "mountain_belt", 0.75D);
+		}
 		if (biomeName.contains("frozen") || biomeName.contains("snowy") || biomeName.contains("ice")
+				|| biomeName.contains("tundra") || biomeName.contains("muskeg") || biomeName.contains("cold")
 				|| temperature < 0.15F) {
 			add(weights, geomeIndexes, "glacial_highland", 1.75D);
 		}
 		if (biomeName.contains("plains") || biomeName.contains("forest") || biomeName.contains("taiga")
-				|| biomeName.contains("meadow") || biomeName.contains("grove")) {
+				|| biomeName.contains("meadow") || biomeName.contains("grove") || biomeName.contains("woods")
+				|| biomeName.contains("woodland") || biomeName.contains("field")
+				|| biomeName.contains("pasture") || biomeName.contains("prairie")
+				|| biomeName.contains("orchard")) {
 			add(weights, geomeIndexes, "stable_craton", 1.25D);
+		}
+		if (biomeName.contains("cave") || biomeName.contains("grotto") || biomeName.contains("karst")) {
+			add(weights, geomeIndexes, "sedimentary_basin", 1.5D);
 		}
 	}
 
@@ -278,7 +580,15 @@ public final class GeomeConfig {
 				LOGGER.warn("Ignoring unknown Mineralogy geome weight '{}'", entry.getKey());
 				continue;
 			}
-			weights[index] = entry.getValue().getAsDouble();
+			try {
+				double value = entry.getValue().getAsDouble();
+				if (!Double.isFinite(value) || value < 0.0D) {
+					throw new NumberFormatException("weight must be finite and non-negative");
+				}
+				weights[index] = value;
+			} catch (RuntimeException e) {
+				LOGGER.warn("Ignoring invalid Mineralogy geome weight '{}' for '{}'", entry.getValue(), entry.getKey());
+			}
 		}
 		return weights;
 	}
@@ -303,16 +613,115 @@ public final class GeomeConfig {
 		if (!json.has(key)) {
 			return fallback;
 		}
-		return GsonHelper.getAsFloat(json, key);
+		try {
+			double value = json.get(key).getAsDouble();
+			return Double.isFinite(value) ? value : fallback;
+		} catch (RuntimeException e) {
+			LOGGER.warn("Invalid Mineralogy geome config number for '{}'; using {}", key, fallback);
+			return fallback;
+		}
+	}
+
+	private static double getNonNegativeDouble(JsonObject json, String key, double fallback) {
+		double value = getDouble(json, key, fallback);
+		if (value < 0.0D) {
+			LOGGER.warn("Mineralogy geome config '{}' must be non-negative; using {}", key, fallback);
+			return fallback;
+		}
+		return value;
+	}
+
+	private static double getBoundedDouble(JsonObject json, String key, double fallback, double min, double max) {
+		double value = getDouble(json, key, fallback);
+		if (value < min || value > max) {
+			double clamped = Math.max(min, Math.min(max, value));
+			LOGGER.warn("Mineralogy geome config '{}' value {} is outside {}..{}; using {}",
+					key, value, min, max, clamped);
+			return clamped;
+		}
+		return value;
+	}
+
+	private static int getInt(JsonObject json, String key, int fallback) {
+		if (!json.has(key)) {
+			return fallback;
+		}
+		try {
+			return json.get(key).getAsInt();
+		} catch (RuntimeException e) {
+			LOGGER.warn("Invalid Mineralogy geome config integer for '{}'; using {}", key, fallback);
+			return fallback;
+		}
+	}
+
+	private static int getBoundedInt(JsonObject json, String key, int fallback, int min, int max) {
+		int value = getInt(json, key, fallback);
+		if (value < min || value > max) {
+			int clamped = Math.max(min, Math.min(max, value));
+			LOGGER.warn("Mineralogy geome config '{}' value {} is outside {}..{}; using {}",
+					key, value, min, max, clamped);
+			return clamped;
+		}
+		return value;
+	}
+
+	private static boolean getBoolean(JsonObject json, String key, boolean fallback) {
+		if (!json.has(key)) {
+			return fallback;
+		}
+		try {
+			return json.get(key).getAsBoolean();
+		} catch (RuntimeException e) {
+			LOGGER.warn("Invalid Mineralogy geome config boolean for '{}'; using {}", key, fallback);
+			return fallback;
+		}
+	}
+
+	private static String getString(JsonObject json, String key, String fallback) {
+		if (!json.has(key)) {
+			return fallback;
+		}
+		try {
+			return json.get(key).getAsString();
+		} catch (RuntimeException e) {
+			LOGGER.warn("Invalid Mineralogy geome config string for '{}'; using '{}'", key, fallback);
+			return fallback;
+		}
+	}
+
+	private static JsonObject getObject(JsonObject json, String key, JsonObject fallback) {
+		if (!json.has(key)) {
+			return fallback;
+		}
+		if (!json.get(key).isJsonObject()) {
+			LOGGER.warn("Invalid Mineralogy geome config object for '{}'; using defaults", key);
+			return fallback;
+		}
+		return json.getAsJsonObject(key);
+	}
+
+	private static void addIfMissing(JsonObject json, String key, boolean value) {
+		if (!json.has(key)) {
+			json.addProperty(key, value);
+		}
+	}
+
+	private static void addIfMissing(JsonObject json, String key, int value) {
+		if (!json.has(key)) {
+			json.addProperty(key, value);
+		}
 	}
 
 	private static JsonObject defaultConfig() {
 		JsonObject root = new JsonObject();
-		root.addProperty("schema_version", 1);
+		root.addProperty("schema_version", SCHEMA_VERSION);
+		root.addProperty("biome_defaults_revision", BIOME_DEFAULTS_REVISION);
 		root.addProperty("geome_scale", 384.0D);
 		root.addProperty("biome_influence", 1.15D);
 		root.addProperty("regional_noise_influence", 0.90D);
 		root.addProperty("boundary_noise_influence", 0.45D);
+		root.add("formations", defaultFormationConfig());
+		root.add("worldgen_aliases", defaultWorldgenAliases());
 
 		JsonObject geomes = new JsonObject();
 		addGeome(geomes, "stable_craton", 1.0D, 0.9D, 1.0D, 1.4D, 0.25D);
@@ -346,12 +755,79 @@ public final class GeomeConfig {
 		addWeights(dictionaryRules, "MESA", "arid_basin", 3.0D, "sedimentary_basin", 2.0D);
 		addWeights(dictionaryRules, "FOREST", "stable_craton", 1.2D);
 		addWeights(dictionaryRules, "PLAINS", "stable_craton", 1.1D, "sedimentary_basin", 0.6D);
+		addWeights(dictionaryRules, "SAVANNA", "arid_basin", 1.5D, "stable_craton", 0.75D);
+		addWeights(dictionaryRules, "CONIFEROUS", "stable_craton", 1.0D, "glacial_highland", 0.5D);
+		addWeights(dictionaryRules, "JUNGLE", "wetland_basin", 1.5D, "stable_craton", 1.0D);
+		addWeights(dictionaryRules, "LUSH", "wetland_basin", 1.0D, "stable_craton", 0.5D);
+		addWeights(dictionaryRules, "MUSHROOM", "coastal_shelf", 1.0D, "volcanic_arc", 0.75D);
+		addWeights(dictionaryRules, "PLATEAU", "mountain_belt", 1.0D, "stable_craton", 0.5D);
+		addWeights(dictionaryRules, "PEAK", "mountain_belt", 3.0D, "glacial_highland", 0.5D);
+		addWeights(dictionaryRules, "SLOPE", "mountain_belt", 2.0D, "stable_craton", 0.5D);
+		addWeights(dictionaryRules, "UNDERGROUND", "sedimentary_basin", 1.5D, "mountain_belt", 0.5D);
+		addWeights(dictionaryRules, "WASTELAND", "arid_basin", 2.0D, "sedimentary_basin", 0.75D);
+		addWeights(dictionaryRules, "WATER", "coastal_shelf", 0.75D, "sedimentary_basin", 1.0D);
+		addWeights(dictionaryRules, "DENSE", "stable_craton", 1.0D, "wetland_basin", 0.5D);
+		addWeights(dictionaryRules, "SPARSE", "stable_craton", 0.75D, "arid_basin", 0.5D);
+		addWeights(dictionaryRules, "DEAD", "stable_craton", 0.75D, "arid_basin", 0.5D);
+		addWeights(dictionaryRules, "MAGICAL", "stable_craton", 1.0D);
+		addWeights(dictionaryRules, "SPOOKY", "stable_craton", 0.75D, "wetland_basin", 0.5D);
 		root.add("biome_dictionary", dictionaryRules);
 
 		JsonObject rocks = new JsonObject();
 		addDefaultRocks(rocks);
 		root.add("rocks", rocks);
 		return root;
+	}
+
+	private static JsonObject defaultFormationConfig() {
+		JsonObject formations = new JsonObject();
+		formations.addProperty("algorithm", Algorithm.STABLE_LAYERS.configName);
+		formations.addProperty("horizontal_size", Preset.AVERAGE.configName);
+		formations.addProperty("vertical_thickness", Preset.AVERAGE.configName);
+		formations.addProperty("waviness", Preset.AVERAGE.configName);
+		formations.addProperty("edge_irregularity", Preset.AVERAGE.configName);
+		formations.addProperty("formation_continuity", Preset.AVERAGE.configName);
+		formations.add("custom", customFormationConfig(
+				256.0D, 100.0D, 8, 48.0D, 2, 0.85D,
+				256.0D, 64.0D, 12.0D));
+		return formations;
+	}
+
+	private static JsonObject legacyFormationConfig() {
+		JsonObject formations = new JsonObject();
+		formations.addProperty("algorithm", Algorithm.SKY_V1.configName);
+		formations.addProperty("horizontal_size", Preset.CUSTOM.configName);
+		formations.addProperty("vertical_thickness", Preset.CUSTOM.configName);
+		formations.addProperty("waviness", Preset.CUSTOM.configName);
+		formations.addProperty("edge_irregularity", Preset.CUSTOM.configName);
+		formations.addProperty("formation_continuity", Preset.CUSTOM.configName);
+		formations.add("custom", customFormationConfig(
+				MineralogyConfig.rockLayerNoise() * 8.0D,
+				MineralogyConfig.geomeSize(),
+				MineralogyConfig.geomLayerThickness(),
+				60.0D,
+				4,
+				0.0D,
+				256.0D,
+				64.0D,
+				0.0D));
+		return formations;
+	}
+
+	private static JsonObject customFormationConfig(double stratumWavelength, double familyRegionWavelength,
+			int verticalThickness, double wavinessAmplitude, int edgeOctaves, double continuity,
+			double wavinessWavelength, double edgeWavelength, double edgeAmplitude) {
+		JsonObject custom = new JsonObject();
+		custom.addProperty("stratum_wavelength", stratumWavelength);
+		custom.addProperty("family_region_wavelength", familyRegionWavelength);
+		custom.addProperty("vertical_thickness", verticalThickness);
+		custom.addProperty("waviness_wavelength", wavinessWavelength);
+		custom.addProperty("waviness_amplitude", wavinessAmplitude);
+		custom.addProperty("edge_wavelength", edgeWavelength);
+		custom.addProperty("edge_amplitude", edgeAmplitude);
+		custom.addProperty("edge_octaves", edgeOctaves);
+		custom.addProperty("continuity", continuity);
+		return custom;
 	}
 
 	private static void addGeome(JsonObject geomes, String name, double base, double sedimentary,
@@ -369,26 +845,46 @@ public final class GeomeConfig {
 
 	private static void addVanillaBiomeDefaults(JsonObject biomes) {
 		addWeights(biomes, "minecraft:ocean", "coastal_shelf", 4.0D);
-		addWeights(biomes, "minecraft:deep_ocean", "coastal_shelf", 4.0D, "sedimentary_basin", 1.0D);
+		addWeights(biomes, "minecraft:deep_ocean", "coastal_shelf", 4.0D, "sedimentary_basin", 1.5D);
+		addWeights(biomes, "minecraft:warm_ocean", "coastal_shelf", 4.0D, "sedimentary_basin", 1.0D);
+		addWeights(biomes, "minecraft:lukewarm_ocean", "coastal_shelf", 4.0D, "sedimentary_basin", 1.0D);
+		addWeights(biomes, "minecraft:deep_lukewarm_ocean", "coastal_shelf", 4.0D, "sedimentary_basin", 1.5D);
+		addWeights(biomes, "minecraft:cold_ocean", "coastal_shelf", 4.0D, "glacial_highland", 0.8D);
+		addWeights(biomes, "minecraft:deep_cold_ocean", "coastal_shelf", 4.0D, "sedimentary_basin", 1.5D,
+				"glacial_highland", 0.8D);
+		addWeights(biomes, "minecraft:frozen_ocean", "coastal_shelf", 4.0D, "glacial_highland", 1.5D);
+		addWeights(biomes, "minecraft:deep_frozen_ocean", "coastal_shelf", 4.0D, "sedimentary_basin", 1.5D,
+				"glacial_highland", 1.5D);
 		addWeights(biomes, "minecraft:river", "coastal_shelf", 2.0D, "sedimentary_basin", 2.0D);
+		addWeights(biomes, "minecraft:frozen_river", "coastal_shelf", 2.0D, "sedimentary_basin", 2.0D,
+				"glacial_highland", 1.5D);
 		addWeights(biomes, "minecraft:beach", "coastal_shelf", 4.0D);
-		addWeights(biomes, "minecraft:stone_shore", "coastal_shelf", 2.5D, "mountain_belt", 1.5D);
+		addWeights(biomes, "minecraft:snowy_beach", "coastal_shelf", 3.5D, "glacial_highland", 1.5D);
 		addWeights(biomes, "minecraft:stony_shore", "coastal_shelf", 2.5D, "mountain_belt", 1.5D);
 		addWeights(biomes, "minecraft:plains", "stable_craton", 2.0D, "sedimentary_basin", 1.0D);
+		addWeights(biomes, "minecraft:sunflower_plains", "stable_craton", 2.0D, "sedimentary_basin", 1.0D);
+		addWeights(biomes, "minecraft:snowy_plains", "glacial_highland", 3.5D, "sedimentary_basin", 0.8D);
+		addWeights(biomes, "minecraft:ice_spikes", "glacial_highland", 4.0D, "mountain_belt", 1.2D);
 		addWeights(biomes, "minecraft:forest", "stable_craton", 2.0D);
+		addWeights(biomes, "minecraft:flower_forest", "stable_craton", 2.0D, "sedimentary_basin", 0.5D);
 		addWeights(biomes, "minecraft:birch_forest", "stable_craton", 2.0D);
+		addWeights(biomes, "minecraft:old_growth_birch_forest", "stable_craton", 2.3D);
 		addWeights(biomes, "minecraft:dark_forest", "stable_craton", 2.0D, "wetland_basin", 0.5D);
 		addWeights(biomes, "minecraft:taiga", "stable_craton", 1.5D, "glacial_highland", 0.75D);
+		addWeights(biomes, "minecraft:snowy_taiga", "glacial_highland", 2.5D, "stable_craton", 1.0D);
+		addWeights(biomes, "minecraft:old_growth_pine_taiga", "stable_craton", 2.0D,
+				"glacial_highland", 0.8D);
+		addWeights(biomes, "minecraft:old_growth_spruce_taiga", "stable_craton", 2.0D,
+				"glacial_highland", 1.0D);
 		addWeights(biomes, "minecraft:desert", "arid_basin", 4.0D, "sedimentary_basin", 1.5D);
-		addWeights(biomes, "minecraft:desert_hills", "arid_basin", 3.5D, "sedimentary_basin", 1.2D);
 		addWeights(biomes, "minecraft:savanna", "arid_basin", 2.5D, "stable_craton", 0.75D);
-		addWeights(biomes, "minecraft:savanna_plateau", "arid_basin", 2.5D, "mountain_belt", 1.0D);
+		addWeights(biomes, "minecraft:savanna_plateau", "arid_basin", 2.5D, "mountain_belt", 2.5D);
+		addWeights(biomes, "minecraft:windswept_savanna", "mountain_belt", 5.0D, "arid_basin", 1.5D);
 		addWeights(biomes, "minecraft:badlands", "arid_basin", 3.5D, "sedimentary_basin", 3.0D);
-		addWeights(biomes, "minecraft:badlands_plateau", "arid_basin", 3.0D, "sedimentary_basin", 2.5D,
+		addWeights(biomes, "minecraft:wooded_badlands", "arid_basin", 3.0D, "sedimentary_basin", 2.5D,
 				"mountain_belt", 0.8D);
-		addWeights(biomes, "minecraft:mountains", "mountain_belt", 4.0D, "stable_craton", 1.0D);
-		addWeights(biomes, "minecraft:wooded_mountains", "mountain_belt", 3.5D, "stable_craton", 1.2D);
-		addWeights(biomes, "minecraft:gravelly_mountains", "mountain_belt", 4.0D, "glacial_highland", 0.8D);
+		addWeights(biomes, "minecraft:eroded_badlands", "arid_basin", 3.0D, "sedimentary_basin", 3.0D,
+				"mountain_belt", 1.2D);
 		addWeights(biomes, "minecraft:windswept_hills", "mountain_belt", 4.0D, "stable_craton", 1.0D);
 		addWeights(biomes, "minecraft:windswept_forest", "mountain_belt", 3.0D, "stable_craton", 1.3D);
 		addWeights(biomes, "minecraft:windswept_gravelly_hills", "mountain_belt", 4.0D,
@@ -403,46 +899,52 @@ public final class GeomeConfig {
 		addWeights(biomes, "minecraft:lush_caves", "wetland_basin", 2.5D, "sedimentary_basin", 1.2D);
 		addWeights(biomes, "minecraft:swamp", "wetland_basin", 4.0D, "sedimentary_basin", 1.5D);
 		addWeights(biomes, "minecraft:jungle", "wetland_basin", 1.5D, "stable_craton", 1.5D);
-		addWeights(biomes, "minecraft:snowy_tundra", "glacial_highland", 3.5D, "sedimentary_basin", 0.7D);
-		addWeights(biomes, "minecraft:snowy_mountains", "glacial_highland", 3.5D, "mountain_belt", 2.0D);
-		addWeights(biomes, "minecraft:frozen_ocean", "glacial_highland", 1.5D, "coastal_shelf", 3.0D);
-		addWeights(biomes, "minecraft:frozen_river", "glacial_highland", 1.5D, "coastal_shelf", 2.0D);
+		addWeights(biomes, "minecraft:sparse_jungle", "stable_craton", 1.5D, "wetland_basin", 1.0D);
+		addWeights(biomes, "minecraft:bamboo_jungle", "wetland_basin", 2.0D, "stable_craton", 1.2D);
+		addWeights(biomes, "minecraft:mushroom_fields", "coastal_shelf", 2.0D, "volcanic_arc", 1.5D,
+				"stable_craton", 1.0D);
 	}
 
 	private static void addBiomesOPlentyDefaults(JsonObject biomes) {
-		String[] mountains = { "alps", "alps_foothills", "highland", "highland_crag", "jade_cliffs",
-				"rainbow_hills", "redwood_hills" };
-		addBOPWeights(biomes, mountains, "mountain_belt", 3.5D, "stable_craton", 0.8D);
-		addWeights(biomes, bop("highland_moor"), "mountain_belt", 2.0D, "wetland_basin", 1.0D);
+		String[] stable = { "cherry_blossom_grove", "clover_patch", "dead_forest", "field",
+				"forested_field", "lavender_field", "lavender_forest", "maple_woods", "old_growth_dead_forest",
+				"old_growth_woodland", "ominous_woods", "orchard", "origin_valley", "pasture", "pumpkin_patch",
+				"redwood_forest", "seasonal_forest", "woodland" };
+		addBOPWeights(biomes, stable, "stable_craton", 2.0D, "sedimentary_basin", 0.5D);
+		addWeights(biomes, bop("bamboo_grove"), "wetland_basin", 3.0D, "stable_craton", 1.5D);
+		addWeights(biomes, bop("grassland"), "stable_craton", 1.5D, "arid_basin", 1.0D,
+				"sedimentary_basin", 1.0D);
+		addWeights(biomes, bop("prairie"), "stable_craton", 1.5D, "arid_basin", 1.0D,
+				"sedimentary_basin", 1.0D);
+
+		String[] mountains = { "crag", "highland", "jade_cliffs", "rainbow_hills" };
+		addBOPWeights(biomes, mountains, "mountain_belt", 3.8D, "stable_craton", 0.8D);
+		addWeights(biomes, bop("highland_moor"), "mountain_belt", 2.5D, "wetland_basin", 1.5D);
+		addWeights(biomes, bop("rocky_rainforest"), "mountain_belt", 2.0D, "wetland_basin", 3.0D);
+		addWeights(biomes, bop("rocky_shrubland"), "mountain_belt", 2.0D, "arid_basin", 2.5D);
 		addWeights(biomes, bop("volcano"), "volcanic_arc", 6.0D, "mountain_belt", 1.0D);
 		addWeights(biomes, bop("volcanic_plains"), "volcanic_arc", 4.0D, "arid_basin", 0.8D);
 
-		String[] dry = { "cold_desert", "dry_boneyard", "dryland", "golden_prairie", "grassland",
-				"grassland_clover_patch", "lush_desert", "lush_savanna", "prairie", "scrubland", "shrubland",
-				"shrubland_hills", "wasteland", "wooded_scrubland" };
+		String[] dry = { "dryland", "lush_desert", "lush_savanna", "mediterranean_forest", "scrubland",
+				"shrubland", "wasteland", "wooded_scrubland", "wooded_wasteland" };
 		addBOPWeights(biomes, dry, "arid_basin", 3.0D, "sedimentary_basin", 1.0D);
+		addWeights(biomes, bop("cold_desert"), "arid_basin", 3.0D, "glacial_highland", 2.0D,
+				"sedimentary_basin", 1.0D);
+		addWeights(biomes, bop("dune_beach"), "coastal_shelf", 4.0D, "arid_basin", 2.0D,
+				"sedimentary_basin", 1.0D);
 
-		String[] wet = { "bayou", "bayou_mangrove", "deep_bayou", "dense_marsh", "fungal_field",
-				"fungal_jungle", "marsh", "muskeg", "ominous_mire", "rainforest", "rainforest_cliffs",
-				"rainforest_floodplain", "shroomy_wetland", "wetland", "wetland_forest" };
-		addBOPWeights(biomes, wet, "wetland_basin", 3.0D, "sedimentary_basin", 1.1D);
+		String[] wet = { "bayou", "bog", "floodplain", "fungal_jungle", "marsh", "mystic_grove",
+				"rainforest", "wetland" };
+		addBOPWeights(biomes, wet, "wetland_basin", 3.5D, "sedimentary_basin", 1.5D);
+		addWeights(biomes, bop("muskeg"), "wetland_basin", 2.5D, "glacial_highland", 2.0D,
+				"sedimentary_basin", 1.0D);
+		addWeights(biomes, bop("glowing_grotto"), "wetland_basin", 2.0D, "sedimentary_basin", 2.0D);
+		addWeights(biomes, bop("tropics"), "coastal_shelf", 2.0D, "wetland_basin", 2.0D,
+				"stable_craton", 0.5D);
 
-		String[] cold = { "coniferous_forest", "coniferous_lakes", "fir_clearing",
-				"snowy_coniferous_forest", "snowy_fir_clearing", "snowy_maple_forest", "tundra",
-				"tundra_basin", "tundra_bog" };
+		String[] cold = { "boreal_forest", "coniferous_forest", "fir_clearing", "snowy_coniferous_forest",
+				"snowy_fir_clearing", "snowy_maple_woods", "tundra" };
 		addBOPWeights(biomes, cold, "glacial_highland", 2.0D, "stable_craton", 1.0D);
-
-		String[] temperate = { "bamboo_blossom_grove", "burnt_forest", "cherry_blossom_grove",
-				"dead_forest", "dense_woodland", "flower_meadow", "grove", "grove_clearing", "grove_lakes",
-				"lavender_field", "lavender_forest", "meadow", "meadow_forest", "mystic_grove",
-				"mystic_plains", "ominous_woods", "orchard", "origin_valley", "redwood_forest",
-				"redwood_forest_edge", "seasonal_forest", "seasonal_orchard", "seasonal_pumpkin_patch",
-				"tall_dead_forest", "woodland" };
-		addBOPWeights(biomes, temperate, "stable_craton", 2.0D, "wetland_basin", 0.5D);
-
-		addWeights(biomes, bop("gravel_beach"), "coastal_shelf", 3.0D, "mountain_belt", 0.8D);
-		addWeights(biomes, bop("tropic_beach"), "coastal_shelf", 3.5D, "wetland_basin", 0.8D);
-		addWeights(biomes, bop("tropics"), "coastal_shelf", 2.0D, "wetland_basin", 1.2D);
 	}
 
 	private static String bop(String path) {
@@ -456,9 +958,9 @@ public final class GeomeConfig {
 	}
 
 	private static void addDefaultRocks(JsonObject rocks) {
-		addRock(rocks, "mineralogy:andesite", RockFamily.IGNEOUS_VOLCANIC, 68, 42, 1.0D,
+		addRock(rocks, "minecraft:andesite", RockFamily.IGNEOUS_VOLCANIC, 68, 42, 1.0D,
 				"volcanic_arc", 3.0D, "mountain_belt", 1.2D);
-		addRock(rocks, "mineralogy:basalt", RockFamily.IGNEOUS_VOLCANIC, 72, 36, 1.2D,
+		addRock(rocks, "minecraft:basalt", RockFamily.IGNEOUS_VOLCANIC, 72, 36, 1.2D,
 				"volcanic_arc", 4.0D, "coastal_shelf", 0.7D);
 		addRock(rocks, "mineralogy:rhyolite", RockFamily.IGNEOUS_VOLCANIC, 70, 36, 1.0D,
 				"volcanic_arc", 3.5D, "mountain_belt", 0.8D);
@@ -466,14 +968,14 @@ public final class GeomeConfig {
 				"volcanic_arc", 4.5D);
 		addRock(rocks, "mineralogy:scoria", RockFamily.IGNEOUS_VOLCANIC, 80, 22, 0.85D,
 				"volcanic_arc", 4.0D);
-		addRock(rocks, "mineralogy:tuff", RockFamily.IGNEOUS_VOLCANIC, 74, 30, 0.9D,
+		addRock(rocks, "minecraft:tuff", RockFamily.IGNEOUS_VOLCANIC, 74, 30, 0.9D,
 				"volcanic_arc", 3.5D, "arid_basin", 0.8D);
 		addRock(rocks, "mineralogy:pumice", RockFamily.IGNEOUS_VOLCANIC, 82, 20, 0.65D,
 				"volcanic_arc", 4.0D);
 
-		addRock(rocks, "mineralogy:diorite", RockFamily.IGNEOUS_INTRUSIVE, 36, 42, 1.0D,
+		addRock(rocks, "minecraft:diorite", RockFamily.IGNEOUS_INTRUSIVE, 36, 42, 1.0D,
 				"stable_craton", 1.3D, "mountain_belt", 1.0D);
-		addRock(rocks, "mineralogy:granite", RockFamily.IGNEOUS_INTRUSIVE, 30, 48, 1.1D,
+		addRock(rocks, "minecraft:granite", RockFamily.IGNEOUS_INTRUSIVE, 30, 48, 1.1D,
 				"stable_craton", 2.0D, "mountain_belt", 1.4D);
 		addRock(rocks, "mineralogy:pegmatite", RockFamily.IGNEOUS_INTRUSIVE, 26, 36, 0.8D,
 				"stable_craton", 1.6D, "mountain_belt", 1.2D);
@@ -536,15 +1038,27 @@ public final class GeomeConfig {
 	private static void addRock(JsonObject rocks, String id, RockFamily family, int peak, int spread,
 			double weight, Object... geomeWeights) {
 		JsonObject rock = new JsonObject();
+		rock.addProperty("enabled", true);
 		rock.addProperty("family", family.configName);
 		rock.addProperty("depth_peak", peak);
 		rock.addProperty("depth_spread", spread);
+		rock.addProperty("min_y", BakedGeomeConfig.MIN_Y);
+		rock.addProperty("max_y", BakedGeomeConfig.MAX_Y);
 		rock.addProperty("weight", weight);
+		rock.addProperty("ore_replaceable", true);
 		JsonObject geomes = new JsonObject();
 		for (int i = 0; i + 1 < geomeWeights.length; i += 2) {
 			geomes.addProperty((String) geomeWeights[i], (Double) geomeWeights[i + 1]);
 		}
 		rock.add("geomes", geomes);
 		rocks.add(id, rock);
+	}
+
+	private static JsonObject defaultWorldgenAliases() {
+		JsonObject aliases = new JsonObject();
+		for (Entry<ResourceLocation, ResourceLocation> entry : GeologyBlockAliases.defaultAliases().entrySet()) {
+			aliases.addProperty(entry.getKey().toString(), entry.getValue().toString());
+		}
+		return aliases;
 	}
 }

@@ -1,6 +1,7 @@
 package com.mcmoddev.mineralogy.init;
 
 import com.mcmoddev.mineralogy.Mineralogy;
+import com.mcmoddev.mineralogy.worldgen.OilDepositFeature;
 import com.mcmoddev.mineralogy.worldgen.StoneReplacer;
 
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -13,6 +14,7 @@ public final class Features {
 	@SubscribeEvent
 	public static void registerFeatures(RegistryEvent.Register<Feature<?>> event) {
 		event.getRegistry().register(StoneReplacer.FEATURE);
+		event.getRegistry().register(OilDepositFeature.FEATURE);
 	}
 
 	private Features() {

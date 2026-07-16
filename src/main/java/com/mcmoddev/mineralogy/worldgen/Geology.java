@@ -19,6 +19,9 @@ public class Geology {
 	private final PerlinNoise2D geomeNoiseLayer;
 	private final PerlinNoise2D rockNoiseLayer;
 	private final short[] whiteNoiseArray;
+	private final BlockState[] igneousStones;
+	private final BlockState[] metamorphicStones;
+	private final BlockState[] sedimentaryStones;
 
 	public Geology(long seed, double geomeSize, double rockLayerSize) {
 		int rockLayerUndertones = 4;
@@ -32,18 +35,22 @@ public class Geology {
 		for (int i = 0; i < whiteNoiseArray.length; i++) {
 			whiteNoiseArray[i] = (short) random.nextInt(0x7FFF);
 		}
+
+		igneousStones = aliasList(MineralogyRegistry.igneousStones);
+		metamorphicStones = aliasList(MineralogyRegistry.metamorphicStones);
+		sedimentaryStones = aliasList(MineralogyRegistry.sedimentaryStones);
 	}
 
 	public Block getStoneAt(int x, int y, int z) {
 		float geome = geomeNoiseLayer.valueAt(x, z) + y;
 		int rockValue = (int) rockNoiseLayer.valueAt(x, z) + y;
 		if (geome < -64) {
-			return pickBlockFromList(rockValue, MineralogyRegistry.igneousStones);
+			return pickStateFromList(rockValue, igneousStones).getBlock();
 		} else if (geome < 64) {
-			return pickBlockFromList(rockValue, MineralogyRegistry.metamorphicStones);
+			return pickStateFromList(rockValue, metamorphicStones).getBlock();
 		}
 
-		return pickBlockFromList(rockValue, MineralogyRegistry.sedimentaryStones);
+		return pickStateFromList(rockValue, sedimentaryStones).getBlock();
 	}
 
 	public void replaceStoneInChunk(ChunkAccess chunk) {
@@ -64,7 +71,7 @@ public class Geology {
 				for (; y >= chunk.getMinBuildHeight(); y--) {
 					cursor.set(x, y, z);
 					if (isReplaceableBaseStone(chunk.getBlockState(cursor))) {
-						chunk.setBlockState(cursor, pickReplacement(baseRockVal, geomeBase, y).defaultBlockState(), false);
+						chunk.setBlockState(cursor, pickReplacement(baseRockVal, geomeBase, y), false);
 						changed = true;
 					}
 				}
@@ -76,15 +83,15 @@ public class Geology {
 		}
 	}
 
-	private Block pickReplacement(int baseRockVal, int geomeBase, int y) {
+	private BlockState pickReplacement(int baseRockVal, int geomeBase, int y) {
 		int geome = geomeBase + y;
 		if (geome < -32) {
-			return pickBlockFromList(baseRockVal + y, MineralogyRegistry.igneousStones);
+			return pickStateFromList(baseRockVal + y, igneousStones);
 		} else if (geome < 32) {
-			return pickBlockFromList(baseRockVal + y, MineralogyRegistry.metamorphicStones);
+			return pickStateFromList(baseRockVal + y, metamorphicStones);
 		}
 
-		return pickBlockFromList(baseRockVal + y, MineralogyRegistry.sedimentaryStones);
+		return pickStateFromList(baseRockVal + y, sedimentaryStones);
 	}
 
 	public Block[] getStoneColumn(int x, int z, int height) {
@@ -94,11 +101,11 @@ public class Geology {
 		for (int y = 0; y < column.length; y++) {
 			double geome = geomeBase + y;
 			if (geome < -32) {
-				column[y] = pickBlockFromList(baseRockVal + y, MineralogyRegistry.igneousStones);
+				column[y] = pickStateFromList(baseRockVal + y, igneousStones).getBlock();
 			} else if (geome < 32) {
-				column[y] = pickBlockFromList(baseRockVal + y + 3, MineralogyRegistry.metamorphicStones);
+				column[y] = pickStateFromList(baseRockVal + y + 3, metamorphicStones).getBlock();
 			} else {
-				column[y] = pickBlockFromList(baseRockVal + y + 5, MineralogyRegistry.sedimentaryStones);
+				column[y] = pickStateFromList(baseRockVal + y + 5, sedimentaryStones).getBlock();
 			}
 		}
 		return column;
@@ -109,11 +116,19 @@ public class Geology {
 		return block == Blocks.STONE || block == Blocks.DEEPSLATE;
 	}
 
-	private Block pickBlockFromList(int value, List<Block> list) {
-		if (list.isEmpty()) {
-			return Blocks.STONE;
+	private BlockState pickStateFromList(int value, BlockState[] list) {
+		if (list.length == 0) {
+			return Blocks.STONE.defaultBlockState();
 		}
 
-		return list.get(whiteNoiseArray[(value / MineralogyConfig.geomLayerThickness()) & 0xFF] % list.size());
+		return list[whiteNoiseArray[(value / MineralogyConfig.geomLayerThickness()) & 0xFF] % list.length];
+	}
+
+	private static BlockState[] aliasList(List<Block> blocks) {
+		BlockState[] states = new BlockState[blocks.size()];
+		for (int i = 0; i < states.length; i++) {
+			states[i] = GeologyBlockAliases.aliasState(blocks.get(i).defaultBlockState());
+		}
+		return states;
 	}
 }

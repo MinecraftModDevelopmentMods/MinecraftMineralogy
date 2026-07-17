@@ -41,11 +41,9 @@ public final class GeologyBlockAliases {
 		}
 
 		ResourceLocation targetId = null;
-		if (configuredAliases != null && configuredAliases.containsKey(sourceId)) {
-			targetId = configuredAliases.get(sourceId);
-		} else {
-			targetId = DEFAULT_ALIASES.get(sourceId);
-		}
+		targetId = configuredAliases == null
+				? DEFAULT_ALIASES.get(sourceId)
+				: configuredAliases.get(sourceId);
 
 		if (targetId == null || targetId.equals(sourceId)) {
 			return original;

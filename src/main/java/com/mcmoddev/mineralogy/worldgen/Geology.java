@@ -1,10 +1,7 @@
 package com.mcmoddev.mineralogy.worldgen;
 
-import java.util.List;
 import java.util.Random;
 
-import com.mcmoddev.mineralogy.MineralogyConfig;
-import com.mcmoddev.mineralogy.init.MineralogyRegistry;
 import com.mcmoddev.mineralogy.worldgen.math.PerlinNoise2D;
 
 import net.minecraft.world.level.block.Block;
@@ -22,8 +19,11 @@ public class Geology {
 	private final BlockState[] igneousStones;
 	private final BlockState[] metamorphicStones;
 	private final BlockState[] sedimentaryStones;
+	private final int layerThickness;
 
-	public Geology(long seed, double geomeSize, double rockLayerSize) {
+	public Geology(long seed, double geomeSize, double rockLayerSize, int layerThickness,
+			BakedGeomeConfig config) {
+		this.layerThickness = layerThickness;
 		int rockLayerUndertones = 4;
 		int undertoneMultiplier = 1 << (rockLayerUndertones - 1);
 		geomeNoiseLayer = new PerlinNoise2D(~seed, 128, (float) geomeSize, 2);
@@ -36,9 +36,9 @@ public class Geology {
 			whiteNoiseArray[i] = (short) random.nextInt(0x7FFF);
 		}
 
-		igneousStones = aliasList(MineralogyRegistry.igneousStones);
-		metamorphicStones = aliasList(MineralogyRegistry.metamorphicStones);
-		sedimentaryStones = aliasList(MineralogyRegistry.sedimentaryStones);
+		igneousStones = config.statesForFamily(RockFamily.IGNEOUS_INTRUSIVE, RockFamily.IGNEOUS_VOLCANIC);
+		metamorphicStones = config.statesForFamily(RockFamily.METAMORPHIC);
+		sedimentaryStones = config.statesForFamily(RockFamily.SEDIMENTARY);
 	}
 
 	public Block getStoneAt(int x, int y, int z) {
@@ -121,14 +121,7 @@ public class Geology {
 			return Blocks.STONE.defaultBlockState();
 		}
 
-		return list[whiteNoiseArray[(value / MineralogyConfig.geomLayerThickness()) & 0xFF] % list.length];
+		return list[whiteNoiseArray[(value / layerThickness) & 0xFF] % list.length];
 	}
 
-	private static BlockState[] aliasList(List<Block> blocks) {
-		BlockState[] states = new BlockState[blocks.size()];
-		for (int i = 0; i < states.length; i++) {
-			states[i] = GeologyBlockAliases.aliasState(blocks.get(i).defaultBlockState());
-		}
-		return states;
-	}
 }

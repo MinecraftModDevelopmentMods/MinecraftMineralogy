@@ -1,16 +1,13 @@
 package com.mcmoddev.mineralogy.worldgen;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Random;
-import java.util.Set;
 
+import com.google.gson.JsonObject;
 import com.mcmoddev.mineralogy.Mineralogy;
 import com.mcmoddev.mineralogy.MineralogyConfig;
-import com.mcmoddev.mineralogy.MineralogyConfig.GeologyMode;
 import com.mcmoddev.mineralogy.MineralogyConfig.OilGenerationSettings;
 import com.mcmoddev.mineralogy.init.MineralogyFluids;
-import com.mcmoddev.mineralogy.init.MineralogyRegistry;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -37,11 +34,10 @@ public final class OilDepositFeature extends Feature<NoneFeatureConfiguration> {
 	private static final int CHUNK_WIDTH = 16;
 
 	private static Holder<PlacedFeature> placedFeature;
-	private static Set<net.minecraft.world.level.block.Block> sedimentaryTargets = Collections.emptySet();
 	private static BakedGeomeConfig geomeConfig;
-	private static boolean useGeomeTaxonomy;
 	private static boolean placeCrudeOil;
 	private static BlockState oilState;
+	private static OilSettings oilSettings;
 
 	private OilDepositFeature() {
 		super(NoneFeatureConfiguration.CODEC);
@@ -61,13 +57,13 @@ public final class OilDepositFeature extends Feature<NoneFeatureConfiguration> {
 
 	public static void refreshWorldConfig() {
 		geomeConfig = GeomeConfig.baked();
-		useGeomeTaxonomy = WorldGeologyProfileManager.geologyMode() == GeologyMode.GEOME;
 		placeCrudeOil = WorldGeologyProfileManager.placeCrudeOil();
-		sedimentaryTargets = bakeSedimentaryTargets();
+		oilSettings = readOilSettings(WorldGeologyProfileManager.activeProfile().rootCopy());
 	}
 
 	public static void onBiomeLoading(BiomeLoadingEvent event) {
-		if (event.getCategory() == BiomeCategory.OCEAN && placedFeature != null) {
+		if (!WorldgenBenchmark.isVanillaBaseline()
+				&& event.getCategory() == BiomeCategory.OCEAN && placedFeature != null) {
 			event.getGeneration().getFeatures(GenerationStep.Decoration.UNDERGROUND_ORES).add(placedFeature);
 		}
 	}
@@ -79,7 +75,7 @@ public final class OilDepositFeature extends Feature<NoneFeatureConfiguration> {
 			return false;
 		}
 
-		OilGenerationSettings settings = MineralogyConfig.crudeOil();
+		OilSettings settings = oilSettings;
 		if (settings.frequency() <= 0.0D || settings.maxY() < settings.minY()) {
 			return false;
 		}
@@ -101,7 +97,7 @@ public final class OilDepositFeature extends Feature<NoneFeatureConfiguration> {
 		return changed;
 	}
 
-	private static boolean placeDeposit(ChunkAccess chunk, Random random, OilGenerationSettings settings) {
+	private static boolean placeDeposit(ChunkAccess chunk, Random random, OilSettings settings) {
 		int radius = randomBetween(random, settings.minRadius(), settings.maxRadius());
 		int verticalRadius = randomBetween(random, settings.minVerticalRadius(), settings.maxVerticalRadius());
 		int dx = random.nextInt(CHUNK_WIDTH);
@@ -201,17 +197,7 @@ public final class OilDepositFeature extends Feature<NoneFeatureConfiguration> {
 	}
 
 	private static boolean isSedimentaryRock(BlockState state) {
-		return useGeomeTaxonomy && geomeConfig != null
-				? geomeConfig.isSedimentaryRock(state)
-				: sedimentaryTargets.contains(state.getBlock());
-	}
-
-	private static Set<net.minecraft.world.level.block.Block> bakeSedimentaryTargets() {
-		Set<net.minecraft.world.level.block.Block> targets = new HashSet<net.minecraft.world.level.block.Block>();
-		for (net.minecraft.world.level.block.Block block : MineralogyRegistry.sedimentaryStones) {
-			targets.add(GeologyBlockAliases.aliasState(block.defaultBlockState()).getBlock());
-		}
-		return targets;
+		return geomeConfig != null && geomeConfig.isSedimentaryRock(state);
 	}
 
 	private static int attemptsForFrequency(Random random, double frequency) {
@@ -227,5 +213,71 @@ public final class OilDepositFeature extends Feature<NoneFeatureConfiguration> {
 			return min;
 		}
 		return min + random.nextInt((max - min) + 1);
+	}
+
+	private static OilSettings readOilSettings(JsonObject profile) {
+		OilGenerationSettings fallback = MineralogyConfig.crudeOil();
+		JsonObject json = profile.has("oil") && profile.get("oil").isJsonObject()
+				? profile.getAsJsonObject("oil") : new JsonObject();
+		return new OilSettings(
+				integer(json, "min_y", fallback.minY()), integer(json, "max_y", fallback.maxY()),
+				decimal(json, "frequency", fallback.frequency()),
+				integer(json, "min_radius", fallback.minRadius()),
+				integer(json, "max_radius", fallback.maxRadius()),
+				integer(json, "min_vertical_radius", fallback.minVerticalRadius()),
+				integer(json, "max_vertical_radius", fallback.maxVerticalRadius()),
+				integer(json, "max_lobes", fallback.maxLobes()),
+				integer(json, "min_solid_cover", fallback.minSolidCover()));
+	}
+
+	private static int integer(JsonObject json, String key, int fallback) {
+		try {
+			return json.has(key) ? json.get(key).getAsInt() : fallback;
+		} catch (RuntimeException e) {
+			return fallback;
+		}
+	}
+
+	private static double decimal(JsonObject json, String key, double fallback) {
+		try {
+			return json.has(key) ? json.get(key).getAsDouble() : fallback;
+		} catch (RuntimeException e) {
+			return fallback;
+		}
+	}
+
+	private static final class OilSettings {
+		private final int minY;
+		private final int maxY;
+		private final double frequency;
+		private final int minRadius;
+		private final int maxRadius;
+		private final int minVerticalRadius;
+		private final int maxVerticalRadius;
+		private final int maxLobes;
+		private final int minSolidCover;
+
+		OilSettings(int minY, int maxY, double frequency, int minRadius, int maxRadius,
+				int minVerticalRadius, int maxVerticalRadius, int maxLobes, int minSolidCover) {
+			this.minY = minY;
+			this.maxY = maxY;
+			this.frequency = frequency;
+			this.minRadius = Math.max(1, minRadius);
+			this.maxRadius = Math.max(this.minRadius, maxRadius);
+			this.minVerticalRadius = Math.max(1, minVerticalRadius);
+			this.maxVerticalRadius = Math.max(this.minVerticalRadius, maxVerticalRadius);
+			this.maxLobes = Math.max(1, maxLobes);
+			this.minSolidCover = Math.max(1, minSolidCover);
+		}
+
+		int minY() { return minY; }
+		int maxY() { return maxY; }
+		double frequency() { return frequency; }
+		int minRadius() { return minRadius; }
+		int maxRadius() { return maxRadius; }
+		int minVerticalRadius() { return minVerticalRadius; }
+		int maxVerticalRadius() { return maxVerticalRadius; }
+		int maxLobes() { return maxLobes; }
+		int minSolidCover() { return minSolidCover; }
 	}
 }

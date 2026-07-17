@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.mcmoddev.mineralogy.init.MineralogyFluids;
 import com.mcmoddev.mineralogy.init.MineralogyRegistry;
+import com.mcmoddev.mineralogy.api.MineralogyOreIntegration;
 import com.mcmoddev.mineralogy.worldgen.MineralogyOreGeneration;
 import com.mcmoddev.mineralogy.worldgen.GeomeConfig;
 import com.mcmoddev.mineralogy.worldgen.GeomeDistributionSampler;
@@ -13,12 +14,15 @@ import com.mcmoddev.mineralogy.worldgen.WorldGeologyProfileManager;
 import com.mcmoddev.mineralogy.worldgen.FormationSettings.Preset;
 import com.mcmoddev.mineralogy.MineralogyConfig.GeologyMode;
 import com.mcmoddev.mineralogy.worldgen.WorldGeologyProfile;
+import com.mcmoddev.mineralogy.worldgen.WorldgenBenchmark;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -48,17 +52,40 @@ public class Mineralogy {
 		MineralogyConfig.registerAdvancementPredicates();
 
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueInterMod);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::loadComplete);
 		MineralogyFluids.register(FMLJavaModLoadingContext.get().getModEventBus());
 		MinecraftForge.EVENT_BUS.addListener(StoneReplacer::onBiomeLoading);
 		MinecraftForge.EVENT_BUS.addListener(MineralogyOreGeneration::onBiomeLoading);
 		MinecraftForge.EVENT_BUS.addListener(OilDepositFeature::onBiomeLoading);
 		MinecraftForge.EVENT_BUS.addListener(WorldGeologyProfileManager::onServerAboutToStart);
 		MinecraftForge.EVENT_BUS.addListener(WorldGeologyProfileManager::onServerStopped);
+		WorldgenBenchmark.register();
+	}
+
+	private void loadComplete(final FMLLoadCompleteEvent event) {
+		event.enqueueWork(() -> {
+			// Provider mods may create their handoff file during common setup. Scan again
+			// after every mod has completed that phase, then refresh new-world defaults.
+			MineralogyOreIntegration.initialize();
+			GeomeConfig.bake();
+			MineralogyOreGeneration.refreshWorldConfig();
+		});
+	}
+
+	private void enqueueInterMod(final InterModEnqueueEvent event) {
+		// Common setup has completed for every mod. Provider mods can create their
+		// handoff file there, then query the API during IMC processing or later.
+		MineralogyOreIntegration.initialize();
+		GeomeConfig.bake();
+		MineralogyOreGeneration.refreshWorldConfig();
+		MineralogyOreIntegration.markFeatureReady();
 	}
 
 	private void setup(final FMLCommonSetupEvent event) {
 		MineralogyConfig.bake();
 		applyGeologyConfigOverrides();
+		MineralogyOreIntegration.initialize();
 		GeomeConfig.bake();
 		logGeomeSampler();
 		event.enqueueWork(() -> {
@@ -87,13 +114,13 @@ public class Mineralogy {
 					if (!samplerProfileEnabled(profileFilter, preset.configName())) {
 						continue;
 					}
-					WorldGeologyProfile profile = WorldGeologyProfile.recommended(original.placeCrudeOil())
+					WorldGeologyProfile profile = original
 							.withSelection(GeologyMode.GEOME, preset, preset, preset, preset, preset,
 									original.placeCrudeOil());
 					logSamplerProfile("Sky " + preset.configName(), samplerSeed, profile, includeBiomeAudit);
 				}
 				if (samplerProfileEnabled(profileFilter, "mixed_huge")) {
-					WorldGeologyProfile mixedHuge = WorldGeologyProfile.recommended(original.placeCrudeOil())
+					WorldGeologyProfile mixedHuge = original
 							.withSelection(GeologyMode.GEOME, Preset.AVERAGE, Preset.HUGE, Preset.HUGE,
 									Preset.HUGE, Preset.HUGE, original.placeCrudeOil());
 					logSamplerProfile("Sky mixed-huge", samplerSeed, mixedHuge, includeBiomeAudit);

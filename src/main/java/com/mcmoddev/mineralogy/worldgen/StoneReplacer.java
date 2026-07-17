@@ -57,7 +57,7 @@ public class StoneReplacer extends Feature<NoneFeatureConfiguration> {
 	}
 
 	public static void onBiomeLoading(BiomeLoadingEvent event) {
-		if (!isOverworldCategory(event.getCategory())) {
+		if (WorldgenBenchmark.isVanillaBaseline() || !isOverworldCategory(event.getCategory())) {
 			return;
 		}
 
@@ -110,7 +110,9 @@ public class StoneReplacer extends Feature<NoneFeatureConfiguration> {
 			geologyLock.lock();
 			try {
 				if (geology == null || geologySeed != seed) {
-					geology = new Geology(seed, MineralogyConfig.geomeSize(), MineralogyConfig.rockLayerNoise());
+					WorldGeologyProfile profile = WorldGeologyProfileManager.activeProfile();
+					geology = new Geology(seed, profile.cyanoGeomeSize(), profile.cyanoRockLayerNoise(),
+							profile.cyanoLayerThickness(), GeomeConfig.baked());
 					geomeGeology = null;
 					geologySeed = seed;
 				}

@@ -99,6 +99,13 @@ minecraft {
         // The gametest system is also enabled by default for other run configs under the /test command.
         gameTestServer {
             property 'forge.enabledGameTestNamespaces', mod_id
+            if (providers.gradleProperty('mineralogyBenchmarkMode').isPresent()) {
+                property 'mineralogy.worldgenBenchmarkMode', providers.gradleProperty('mineralogyBenchmarkMode').get()
+                property 'mineralogy.worldgenBenchmarkRadius',
+                        providers.gradleProperty('mineralogyBenchmarkRadius').getOrElse('4')
+                property 'mineralogy.worldgenBenchmarkRepetitions',
+                        providers.gradleProperty('mineralogyBenchmarkRepetitions').getOrElse('3')
+            }
         }
 
         data {
@@ -131,6 +138,9 @@ dependencies {
     // If the group id is "net.minecraft" and the artifact id is one of ["client", "server", "joined"],
     // then special handling is done to allow a setup of a vanilla dependency without the use of an external repository.
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+    testImplementation platform('org.junit:junit-bom:5.10.2')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
 
     // Real mod deobf dependency examples - these get remapped to your current mappings
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency
@@ -185,6 +195,10 @@ publishing {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}
+
+tasks.named('test', Test).configure {
+    useJUnitPlatform()
 }
 
 // Eclipse and command-line verification use different Gradle homes in this workspace. Keep every
@@ -251,13 +265,32 @@ def syncEclipseRunClasspaths = tasks.register('syncEclipseRunClasspaths') {
         int changedResourceExclusions = 0
         if (eclipseProjectClasspath.isFile()) {
             String original = eclipseProjectClasspath.getText('UTF-8')
-            String synced = mapCacheReferences(original)
-            if (original != synced) {
-                eclipseProjectClasspath.setText(synced, 'UTF-8')
-                changedProjectClasspath = 1
+            def parsedClasspath = new XmlParser(false, false).parseText(original)
+            parsedClasspath.classpathentry.each { entry ->
+                ['path', 'sourcepath'].each { String attribute ->
+                    String value = entry.attribute(attribute)
+                    if (!value) {
+                        return
+                    }
+                    String mapped = mapCacheReferences(value)
+                    if (mapped == value) {
+                        return
+                    }
+                    File mappedTarget = file(mapped).canonicalFile
+                    if (mappedTarget.exists()) {
+                        entry.attributes().put(attribute, mappedTarget.absolutePath)
+                        changedProjectClasspath = 1
+                    } else {
+                        // Test-only libraries may have been resolved by command-line Gradle
+                        // but not yet by Buildship. They are not part of the Forge launch
+                        // module path, so retaining the existing valid path is safe.
+                        File existingTarget = file(value).canonicalFile
+                        if (!existingTarget.exists()) {
+                            throw new GradleException("Missing Eclipse project dependency in both Gradle caches: ${mappedTarget}")
+                        }
+                    }
+                }
             }
-
-            def parsedClasspath = new XmlParser(false, false).parse(eclipseProjectClasspath)
             parsedClasspath.classpathentry.findAll { entry ->
                 entry.attribute('kind') == 'src' && entry.attribute('path') == 'src/main/resources'
             }.each { entry ->
@@ -275,9 +308,8 @@ def syncEclipseRunClasspaths = tasks.register('syncEclipseRunClasspaths') {
                     entry.attributes().put('excluding', exclusions.join('|'))
                 }
             }
-            if (changedResourceExclusions) {
+            if (changedProjectClasspath || changedResourceExclusions) {
                 eclipseProjectClasspath.setText(groovy.xml.XmlUtil.serialize(parsedClasspath), 'UTF-8')
-                changedProjectClasspath = 1
             }
 
             parsedClasspath.classpathentry.each { entry ->

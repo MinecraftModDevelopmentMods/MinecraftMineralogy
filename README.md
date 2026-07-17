@@ -24,6 +24,12 @@ Q: Why do the ores look funny?
 A: We re-textured the ores to better match the appearance of the new rock types. You can change them back by making your own texture pack from the default Minecraft resources.
 
 ## Notes to Other Modders
-This mod replaces the WorldProvider for the Overworld in Minecraft. There can only be one provider per dimension, so this mod is therefore incompatible with other mods that also replace the same WorldProvider.
+Mods targeting the 1.18 port can delegate ore placement to Mineralogy through
+the data-only provider contract documented in [ORE_PROVIDERS.md](ORE_PROVIDERS.md).
 
-The stone types are all registered with the OreDictionary as Stone and/or Cobblestone. If you use OreDictionary crafting recipes (ShapelessOreRecipe or ShapedOreRecipe), then there shouldn't be any trouble. However, if you manually specify the Stone or Cobblestone blocks in a standard crafting recipe object, then users of the Mineralogy mod will have to craft Cobblestone (2 gravel + 2 rock blocks) to use your recipe.
+The modern port adds cached world-generation features and does not replace a
+dimension provider. Rock replacement remains Overworld-only; managed ores may
+target other dimensions through explicit block and tag hosts.
+
+Use Forge and vanilla stone/cobblestone tags in recipes rather than hard-coded
+blocks so Mineralogy and other compatible stones work naturally.

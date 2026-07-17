@@ -160,8 +160,40 @@ public final class BakedGeomeConfig {
 		return rockFamilies.get(state.getBlock());
 	}
 
+	BlockState[] statesForFamily(RockFamily... families) {
+		int mask = 0;
+		for (RockFamily family : families) {
+			mask |= 1 << family.ordinal();
+		}
+		int count = 0;
+		for (BlockState state : rockStates) {
+			RockFamily family = rockFamilies.get(state.getBlock());
+			if (family != null && (mask & (1 << family.ordinal())) != 0) {
+				count++;
+			}
+		}
+		BlockState[] result = new BlockState[count];
+		int index = 0;
+		for (BlockState state : rockStates) {
+			RockFamily family = rockFamilies.get(state.getBlock());
+			if (family != null && (mask & (1 << family.ordinal())) != 0) {
+				result[index++] = state;
+			}
+		}
+		return result;
+	}
+
 	int geomeCount() {
 		return geomes.length;
+	}
+
+	int geomeIndex(String name) {
+		for (int i = 0; i < geomes.length; i++) {
+			if (geomes[i].name.equals(name)) {
+				return i;
+			}
+		}
+		return -1;
 	}
 
 	int familyDiversitySlots() {

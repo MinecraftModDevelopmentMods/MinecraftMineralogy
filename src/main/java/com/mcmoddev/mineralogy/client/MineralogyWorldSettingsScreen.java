@@ -23,7 +23,7 @@ public final class MineralogyWorldSettingsScreen extends Screen {
 	private static final int BUTTON_HEIGHT = 20;
 
 	private final Screen parent;
-	private WorldGeologyProfile baseProfile;
+	private final GeologyEditorSession session;
 	private GeologyMode geologyMode;
 	private Preset horizontalSize;
 	private Preset verticalThickness;
@@ -39,10 +39,12 @@ public final class MineralogyWorldSettingsScreen extends Screen {
 	private CycleButton<Preset> wavinessButton;
 	private CycleButton<Preset> edgeIrregularityButton;
 	private CycleButton<Preset> formationContinuityButton;
+	private Component validationError;
 
 	public MineralogyWorldSettingsScreen(Screen parent, WorldGeologyProfile profile) {
 		super(new TranslatableComponent("screen.mineralogy.world_settings"));
 		this.parent = parent;
+		this.session = new GeologyEditorSession(profile);
 		setProfile(profile);
 	}
 
@@ -50,7 +52,8 @@ public final class MineralogyWorldSettingsScreen extends Screen {
 	protected void init() {
 		int left = this.width / 2 - 155;
 		int right = this.width / 2 + 5;
-		int top = 52;
+		int top = 42;
+		int row = 24;
 
 		geologyModeButton = addRenderableWidget(CycleButton
 				.builder(this::geologyModeName)
@@ -70,24 +73,37 @@ public final class MineralogyWorldSettingsScreen extends Screen {
 						new TranslatableComponent("option.mineralogy.crude_oil"),
 						(button, value) -> placeCrudeOil = value));
 
-		horizontalSizeButton = addPresetButton(left, top + 28,
+		horizontalSizeButton = addPresetButton(left, top + row,
 				"option.mineralogy.horizontal_size", "tooltip.mineralogy.horizontal_size",
 				horizontalSize, value -> horizontalSize = value);
-		verticalThicknessButton = addPresetButton(right, top + 28,
+		verticalThicknessButton = addPresetButton(right, top + row,
 				"option.mineralogy.vertical_thickness", "tooltip.mineralogy.vertical_thickness",
 				verticalThickness, value -> verticalThickness = value);
-		wavinessButton = addPresetButton(left, top + 56,
+		wavinessButton = addPresetButton(left, top + (row * 2),
 				"option.mineralogy.waviness", "tooltip.mineralogy.waviness",
 				waviness, value -> waviness = value);
-		edgeIrregularityButton = addPresetButton(right, top + 56,
+		edgeIrregularityButton = addPresetButton(right, top + (row * 2),
 				"option.mineralogy.edge_irregularity", "tooltip.mineralogy.edge_irregularity",
 				edgeIrregularity, value -> edgeIrregularity = value);
-		formationContinuityButton = addPresetButton(left, top + 84,
+		formationContinuityButton = addPresetButton(left, top + (row * 3),
 				"option.mineralogy.formation_continuity", "tooltip.mineralogy.formation_continuity",
 				formationContinuity, value -> formationContinuity = value);
 
-		addRenderableWidget(new Button(right, top + 84, BUTTON_WIDTH, BUTTON_HEIGHT,
+		addRenderableWidget(new Button(right, top + (row * 3), BUTTON_WIDTH, BUTTON_HEIGHT,
 				new TranslatableComponent("button.mineralogy.recommended"), button -> resetRecommended()));
+		addRenderableWidget(new Button(left, top + (row * 4), BUTTON_WIDTH, BUTTON_HEIGHT,
+				new TranslatableComponent("button.mineralogy.materials"), button -> openMaterials()));
+		addRenderableWidget(new Button(right, top + (row * 4), BUTTON_WIDTH, BUTTON_HEIGHT,
+				new TranslatableComponent("button.mineralogy.geomes"), button -> openGeomes()));
+		addRenderableWidget(new Button(left, top + (row * 5), BUTTON_WIDTH, BUTTON_HEIGHT,
+				new TranslatableComponent("button.mineralogy.formation_details"),
+				button -> openNumeric("formations.custom", NumericConfigScreen.FORMATION_FIELDS)));
+		addRenderableWidget(new Button(right, top + (row * 5), BUTTON_WIDTH, BUTTON_HEIGHT,
+				new TranslatableComponent("button.mineralogy.oil_details"),
+				button -> openNumeric("oil", NumericConfigScreen.OIL_FIELDS)));
+		addRenderableWidget(new Button(left, top + (row * 6), BUTTON_WIDTH, BUTTON_HEIGHT,
+				new TranslatableComponent("button.mineralogy.cyano_details"),
+				button -> openNumeric("cyano", NumericConfigScreen.CYANO_FIELDS)));
 		addRenderableWidget(new Button(left, this.height - 28, BUTTON_WIDTH, BUTTON_HEIGHT,
 				CommonComponents.GUI_DONE, button -> saveAndClose()));
 		addRenderableWidget(new Button(right, this.height - 28, BUTTON_WIDTH, BUTTON_HEIGHT,
@@ -129,7 +145,6 @@ public final class MineralogyWorldSettingsScreen extends Screen {
 	}
 
 	private void setProfile(WorldGeologyProfile profile) {
-		baseProfile = profile;
 		geologyMode = profile.geologyMode();
 		horizontalSize = profile.horizontalSize();
 		verticalThickness = profile.verticalThickness();
@@ -140,10 +155,35 @@ public final class MineralogyWorldSettingsScreen extends Screen {
 	}
 
 	private void saveAndClose() {
-		WorldGeologyProfileManager.setPendingNewWorldProfile(baseProfile.withSelection(
+		syncSession();
+		List<String> errors = session.validate();
+		if (!errors.isEmpty()) {
+			validationError = new net.minecraft.network.chat.TextComponent(errors.get(0));
+			return;
+		}
+		WorldGeologyProfileManager.setPendingNewWorldProfile(session.profile());
+		minecraft.setScreen(parent);
+	}
+
+	private void syncSession() {
+		session.applyProfile(session.profile().withSelection(
 				geologyMode, horizontalSize, verticalThickness, waviness,
 				edgeIrregularity, formationContinuity, placeCrudeOil));
-		minecraft.setScreen(parent);
+	}
+
+	private void openMaterials() {
+		syncSession();
+		minecraft.setScreen(new GeologyMaterialsScreen(this, session));
+	}
+
+	private void openGeomes() {
+		syncSession();
+		minecraft.setScreen(new GeomeBiomeScreen(this, session));
+	}
+
+	private void openNumeric(String path, NumericConfigScreen.Field[] fields) {
+		syncSession();
+		minecraft.setScreen(new NumericConfigScreen(this, session, path, fields));
 	}
 
 	@Override
@@ -155,6 +195,9 @@ public final class MineralogyWorldSettingsScreen extends Screen {
 	public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
 		renderBackground(poseStack);
 		drawCenteredString(poseStack, font, title, width / 2, 20, 0xFFFFFF);
+		if (validationError != null) {
+			drawCenteredString(poseStack, font, validationError, width / 2, height - 42, 0xFF5555);
+		}
 		super.render(poseStack, mouseX, mouseY, partialTick);
 	}
 

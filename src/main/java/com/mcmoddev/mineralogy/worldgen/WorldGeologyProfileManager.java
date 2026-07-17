@@ -18,6 +18,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import com.mcmoddev.mineralogy.MineralogyConfig;
 import com.mcmoddev.mineralogy.MineralogyConfig.GeologyMode;
+import com.mcmoddev.mineralogy.api.MineralogyOreIntegration;
 
 import net.minecraft.world.level.storage.LevelResource;
 import net.minecraftforge.event.server.ServerAboutToStartEvent;
@@ -41,7 +42,7 @@ public final class WorldGeologyProfileManager {
 
 	public static synchronized WorldGeologyProfile beginNewWorldCreation(Object session) {
 		if (pendingNewWorldSession != session) {
-			pendingNewWorldProfile = WorldGeologyProfile.recommended(globalProfile().placeCrudeOil());
+			pendingNewWorldProfile = globalProfile().copy();
 			pendingNewWorldSession = session;
 		}
 		return pendingNewWorldProfile;
@@ -59,7 +60,7 @@ public final class WorldGeologyProfileManager {
 	public static synchronized WorldGeologyProfile pendingNewWorldProfile() {
 		WorldGeologyProfile pending = pendingNewWorldProfile;
 		if (pending == null) {
-			pending = WorldGeologyProfile.recommended(globalProfile().placeCrudeOil());
+			pending = globalProfile().copy();
 			pendingNewWorldProfile = pending;
 		}
 		return pending;
@@ -75,6 +76,11 @@ public final class WorldGeologyProfileManager {
 		return profile == null ? globalProfile().placeCrudeOil() : profile.placeCrudeOil();
 	}
 
+	public static WorldGeologyProfile activeProfile() {
+		WorldGeologyProfile profile = activeProfile;
+		return profile == null ? globalProfile() : profile;
+	}
+
 	public static void onServerAboutToStart(ServerAboutToStartEvent event) {
 		Path worldRoot = event.getServer().getWorldPath(LevelResource.ROOT).normalize();
 		Path profilePath = worldRoot.resolve("serverconfig").resolve(PROFILE_FILE_NAME);
@@ -85,6 +91,14 @@ public final class WorldGeologyProfileManager {
 		if (Files.exists(profilePath)) {
 			clearPendingNewWorldProfile();
 			profile = readProfile(profilePath, fallback);
+			JsonObject merged = profile.rootCopy();
+			String beforeMerge = merged.toString();
+			MineralogyOreIntegration.mergeProviderOres(merged);
+			if (!beforeMerge.equals(merged.toString())) {
+				profile = profile.withRoot(merged);
+				writeProfile(profilePath, profile);
+				LOGGER.info("Merged new Mineralogy ore-provider definitions into '{}'", profilePath);
+			}
 		} else {
 			pending = consumePendingProfile();
 			boolean generatedWorld = hasGeneratedOverworldChunks(worldRoot);
@@ -96,19 +110,15 @@ public final class WorldGeologyProfileManager {
 				profile = fallback;
 				source = "instance (existing world)";
 			} else {
-				profile = WorldGeologyProfile.recommended(fallback.placeCrudeOil());
-				source = "recommended fresh-world";
+				profile = fallback.copy();
+				source = "installed-pack fresh-world";
 			}
 			writeProfile(profilePath, profile);
 			LOGGER.info("Created Mineralogy world geology profile '{}' from {} settings",
 					profilePath, source);
 		}
 
-		activeProfile = profile;
-		GeomeConfig.applyWorldProfile(profile);
-		StoneReplacer.refreshWorldConfig();
-		MineralogyOreGeneration.refreshWorldConfig();
-		OilDepositFeature.refreshWorldConfig();
+		activateProfile(profile);
 		LOGGER.info("Activated Mineralogy world geology profile: mode={}, formations={}, horizontal={}, thickness={}, waviness={}, edge={}, continuity={}, oil={}",
 				profile.geologyMode(), profile.algorithm().configName(), profile.horizontalSize().configName(),
 				profile.verticalThickness().configName(), profile.waviness().configName(),
@@ -118,7 +128,22 @@ public final class WorldGeologyProfileManager {
 
 	public static void onServerStopped(ServerStoppedEvent event) {
 		activeProfile = null;
+		GeomeConfig.applyWorldProfile(globalProfile());
 		StoneReplacer.refreshWorldConfig();
+		MineralogyOreGeneration.refreshWorldConfig();
+		OilDepositFeature.refreshWorldConfig();
+	}
+
+	static void applyBenchmarkProfile(WorldGeologyProfile profile) {
+		activateProfile(profile);
+	}
+
+	private static void activateProfile(WorldGeologyProfile profile) {
+		activeProfile = profile;
+		GeomeConfig.applyWorldProfile(profile);
+		StoneReplacer.refreshWorldConfig();
+		MineralogyOreGeneration.refreshWorldConfig();
+		OilDepositFeature.refreshWorldConfig();
 	}
 
 	private static WorldGeologyProfile globalProfile() {
@@ -163,7 +188,13 @@ public final class WorldGeologyProfileManager {
 				LOGGER.warn("Mineralogy world geology profile '{}' uses newer schema {}; reading known fields only",
 						path, schema);
 			}
-			return WorldGeologyProfile.fromJson(root, fallback);
+			WorldGeologyProfile profile = WorldGeologyProfile.fromJson(root, fallback);
+			if (schema < WorldGeologyProfile.SCHEMA_VERSION) {
+				writeProfile(path, profile);
+				LOGGER.info("Migrated Mineralogy world geology profile '{}' to schema {}",
+						path, WorldGeologyProfile.SCHEMA_VERSION);
+			}
+			return profile;
 		} catch (IOException | JsonSyntaxException | IllegalStateException e) {
 			LOGGER.warn("Could not read Mineralogy world geology profile '{}'; using instance settings", path, e);
 			return fallback;

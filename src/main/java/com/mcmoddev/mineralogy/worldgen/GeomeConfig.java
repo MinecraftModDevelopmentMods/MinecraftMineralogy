@@ -19,11 +19,15 @@ import java.util.Map.Entry;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import com.mcmoddev.mineralogy.MineralogyConfig;
+import com.mcmoddev.mineralogy.MineralogyConfig.OilGenerationSettings;
+import com.mcmoddev.mineralogy.MineralogyConfig.OreGenerationSettings;
+import com.mcmoddev.mineralogy.api.MineralogyOreIntegration;
 import com.mcmoddev.mineralogy.worldgen.BakedGeomeConfig.GeomeDefinition;
 import com.mcmoddev.mineralogy.worldgen.BakedGeomeConfig.RockEntry;
 import com.mcmoddev.mineralogy.worldgen.FormationSettings.Algorithm;
@@ -48,11 +52,15 @@ public final class GeomeConfig {
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 	private static final Path CONFIG_PATH = Paths.get("config", "mineralogy-geomes.json");
 	private static final Path CONFIG_BACKUP_PATH = Paths.get("config", "mineralogy-geomes.v1.bak");
+	private static final Path CONFIG_V2_BACKUP_PATH = Paths.get("config", "mineralogy-geomes.v2.bak");
 	private static final Path BIOME_DEFAULTS_BACKUP_PATH = Paths.get("config",
-			"mineralogy-geomes.pre-biome-revision-2.bak");
+			"mineralogy-geomes.pre-biome-revision-3.bak");
+	private static final Path WORLDGEN_ALIAS_DEFAULTS_BACKUP_PATH = Paths.get("config",
+			"mineralogy-geomes.pre-alias-revision-1.bak");
 	private static final Path CONFIG_TEMP_PATH = Paths.get("config", "mineralogy-geomes.json.tmp");
-	private static final int SCHEMA_VERSION = 2;
-	private static final int BIOME_DEFAULTS_REVISION = 2;
+	public static final int SCHEMA_VERSION = 3;
+	private static final int BIOME_DEFAULTS_REVISION = 3;
+	private static final int WORLDGEN_ALIAS_DEFAULTS_REVISION = 1;
 
 	private static volatile BakedGeomeConfig bakedConfig = null;
 	private static JsonObject globalConfigRoot = null;
@@ -64,6 +72,7 @@ public final class GeomeConfig {
 
 	public static synchronized BakedGeomeConfig bake() {
 		JsonObject root = loadConfig();
+		MineralogyOreIntegration.mergeProviderOres(root);
 		globalConfigRoot = root.deepCopy();
 		globalProfile = WorldGeologyProfile.fromGlobalConfig(root,
 				MineralogyConfig.geologyMode(), MineralogyConfig.placeCrudeOil());
@@ -72,13 +81,16 @@ public final class GeomeConfig {
 	}
 
 	public static synchronized BakedGeomeConfig applyWorldProfile(WorldGeologyProfile profile) {
+		JsonObject effective = profile.toGeomeConfigJson();
+		bakedConfig = bake(effective);
+		return bakedConfig;
+	}
+
+	public static JsonObject globalConfigSnapshot() {
 		if (globalConfigRoot == null) {
 			bake();
 		}
-		JsonObject effective = globalConfigRoot.deepCopy();
-		effective.add("formations", profile.toFormationJson());
-		bakedConfig = bake(effective);
-		return bakedConfig;
+		return globalConfigRoot.deepCopy();
 	}
 
 	public static WorldGeologyProfile globalProfile() {
@@ -111,8 +123,10 @@ public final class GeomeConfig {
 			JsonObject root = element.getAsJsonObject();
 			int schemaVersion = getInt(root, "schema_version", 1);
 			if (schemaVersion < SCHEMA_VERSION) {
-				JsonObject migrated = migrateV1(root);
-				writeMigratedConfig(migrated);
+				JsonObject migrated = schemaVersion <= 1 ? migrateV1(root) : root.deepCopy();
+				migrated = migrateToV3(migrated, defaults);
+				writeMigratedConfig(migrated,
+						schemaVersion <= 1 ? CONFIG_BACKUP_PATH : CONFIG_V2_BACKUP_PATH);
 				return migrated;
 			}
 			if (schemaVersion > SCHEMA_VERSION) {
@@ -123,6 +137,11 @@ public final class GeomeConfig {
 			if (getInt(root, "biome_defaults_revision", 0) < BIOME_DEFAULTS_REVISION) {
 				JsonObject refreshed = refreshBiomeDefaults(root, defaults);
 				writeBiomeDefaultsRefresh(refreshed);
+				root = refreshed;
+			}
+			if (getInt(root, "worldgen_alias_defaults_revision", 0) < WORLDGEN_ALIAS_DEFAULTS_REVISION) {
+				JsonObject refreshed = refreshWorldgenAliasDefaults(root, defaults);
+				writeWorldgenAliasDefaultsRefresh(refreshed);
 				return refreshed;
 			}
 			return root;
@@ -371,7 +390,6 @@ public final class GeomeConfig {
 
 	private static JsonObject migrateV1(JsonObject original) {
 		JsonObject migrated = original.deepCopy();
-		migrated.addProperty("schema_version", SCHEMA_VERSION);
 		migrated.add("formations", legacyFormationConfig());
 
 		if (migrated.has("rocks") && migrated.get("rocks").isJsonObject()) {
@@ -389,11 +407,49 @@ public final class GeomeConfig {
 		return refreshBiomeDefaults(migrated, defaultConfig());
 	}
 
+	private static JsonObject migrateToV3(JsonObject original, JsonObject defaults) {
+		JsonObject migrated = getInt(original, "biome_defaults_revision", 0) < BIOME_DEFAULTS_REVISION
+				? refreshBiomeDefaults(original, defaults) : original.deepCopy();
+		for (String key : new String[] { "geology_mode", "place_crude_oil", "cyano", "oil", "ores",
+				"ore_providers", "worldgen_aliases" }) {
+			if (!migrated.has(key)) {
+				migrated.add(key, defaults.get(key).deepCopy());
+			}
+		}
+		migrated = refreshWorldgenAliasDefaults(migrated, defaults);
+		migrated.addProperty("schema_version", SCHEMA_VERSION);
+		return migrated;
+	}
+
 	private static JsonObject refreshBiomeDefaults(JsonObject original, JsonObject defaults) {
 		JsonObject refreshed = original.deepCopy();
 		mergeMissingEntries(refreshed, defaults, "biomes");
 		mergeMissingEntries(refreshed, defaults, "biome_dictionary");
 		refreshed.addProperty("biome_defaults_revision", BIOME_DEFAULTS_REVISION);
+		return refreshed;
+	}
+
+	static JsonObject refreshWorldgenAliasDefaults(JsonObject original, JsonObject defaults) {
+		JsonObject refreshed = original.deepCopy();
+		mergeMissingEntries(refreshed, defaults, "worldgen_aliases");
+		if (refreshed.has("rocks") && refreshed.get("rocks").isJsonObject()) {
+			JsonObject rocks = refreshed.getAsJsonObject("rocks");
+			JsonObject defaultAliases = defaults.getAsJsonObject("worldgen_aliases");
+			JsonObject normalized = new JsonObject();
+			for (Entry<String, JsonElement> entry : rocks.entrySet()) {
+				String id = entry.getKey();
+				if (defaultAliases.has(id)) {
+					try {
+						id = defaultAliases.get(id).getAsString();
+					} catch (RuntimeException ignored) { }
+				}
+				if (!normalized.has(id)) {
+					normalized.add(id, entry.getValue().deepCopy());
+				}
+			}
+			refreshed.add("rocks", normalized);
+		}
+		refreshed.addProperty("worldgen_alias_defaults_revision", WORLDGEN_ALIAS_DEFAULTS_REVISION);
 		return refreshed;
 	}
 
@@ -416,10 +472,10 @@ public final class GeomeConfig {
 		}
 	}
 
-	private static void writeMigratedConfig(JsonObject migrated) {
-		if (writeUpdatedConfig(migrated, CONFIG_BACKUP_PATH)) {
+	private static void writeMigratedConfig(JsonObject migrated, Path backupPath) {
+		if (writeUpdatedConfig(migrated, backupPath)) {
 			LOGGER.info("Migrated Mineralogy geome config to schema {}. The previous file is preserved at '{}'",
-					SCHEMA_VERSION, CONFIG_BACKUP_PATH);
+					SCHEMA_VERSION, backupPath);
 		} else {
 			LOGGER.warn("Could not persist Mineralogy geome config migration; using migrated settings in memory");
 		}
@@ -431,6 +487,16 @@ public final class GeomeConfig {
 					BIOME_DEFAULTS_REVISION, BIOME_DEFAULTS_BACKUP_PATH);
 		} else {
 			LOGGER.warn("Could not persist updated Mineralogy biome defaults; using refreshed settings in memory");
+		}
+	}
+
+	private static void writeWorldgenAliasDefaultsRefresh(JsonObject refreshed) {
+		if (writeUpdatedConfig(refreshed, WORLDGEN_ALIAS_DEFAULTS_BACKUP_PATH)) {
+			LOGGER.info("Updated Mineralogy matching-vanilla worldgen aliases to revision {}. "
+					+ "The previous file is preserved at '{}'",
+					WORLDGEN_ALIAS_DEFAULTS_REVISION, WORLDGEN_ALIAS_DEFAULTS_BACKUP_PATH);
+		} else {
+			LOGGER.warn("Could not persist updated Mineralogy worldgen aliases; using refreshed settings in memory");
 		}
 	}
 
@@ -469,7 +535,7 @@ public final class GeomeConfig {
 	}
 
 	private static Map<ResourceLocation, ResourceLocation> readWorldgenAliases(JsonObject root) {
-		Map<ResourceLocation, ResourceLocation> aliases = GeologyBlockAliases.defaultAliases();
+		Map<ResourceLocation, ResourceLocation> aliases = new LinkedHashMap<>();
 		JsonObject aliasRoot = GsonHelper.getAsJsonObject(root, "worldgen_aliases",
 				defaultConfig().getAsJsonObject("worldgen_aliases"));
 		for (Entry<String, JsonElement> entry : aliasRoot.entrySet()) {
@@ -716,6 +782,9 @@ public final class GeomeConfig {
 		JsonObject root = new JsonObject();
 		root.addProperty("schema_version", SCHEMA_VERSION);
 		root.addProperty("biome_defaults_revision", BIOME_DEFAULTS_REVISION);
+		root.addProperty("worldgen_alias_defaults_revision", WORLDGEN_ALIAS_DEFAULTS_REVISION);
+		root.addProperty("geology_mode", MineralogyConfig.geologyMode().name().toLowerCase(java.util.Locale.ROOT));
+		root.addProperty("place_crude_oil", MineralogyConfig.placeCrudeOil());
 		root.addProperty("geome_scale", 384.0D);
 		root.addProperty("biome_influence", 1.15D);
 		root.addProperty("regional_noise_influence", 0.90D);
@@ -734,10 +803,7 @@ public final class GeomeConfig {
 		addGeome(geomes, "glacial_highland", 0.8D, 0.75D, 2.0D, 1.25D, 0.35D);
 		root.add("geomes", geomes);
 
-		JsonObject biomeRules = new JsonObject();
-		addVanillaBiomeDefaults(biomeRules);
-		addBiomesOPlentyDefaults(biomeRules);
-		root.add("biomes", biomeRules);
+		root.add("biomes", defaultBiomeRules());
 
 		JsonObject dictionaryRules = new JsonObject();
 		addWeights(dictionaryRules, "MOUNTAIN", "mountain_belt", 3.0D, "stable_craton", 0.75D);
@@ -776,7 +842,67 @@ public final class GeomeConfig {
 		JsonObject rocks = new JsonObject();
 		addDefaultRocks(rocks);
 		root.add("rocks", rocks);
+		root.add("cyano", defaultCyanoConfig());
+		root.add("oil", defaultOilConfig());
+		root.add("ores", defaultOreConfig());
+		root.add("ore_providers", new JsonObject());
 		return root;
+	}
+
+	private static JsonObject defaultCyanoConfig() {
+		JsonObject cyano = new JsonObject();
+		cyano.addProperty("geome_size", MineralogyConfig.geomeSize());
+		cyano.addProperty("rock_layer_noise", MineralogyConfig.rockLayerNoise());
+		cyano.addProperty("rock_layer_thickness", MineralogyConfig.geomLayerThickness());
+		return cyano;
+	}
+
+	private static JsonObject defaultOilConfig() {
+		OilGenerationSettings settings = MineralogyConfig.crudeOil();
+		JsonObject oil = new JsonObject();
+		oil.addProperty("min_y", settings.minY());
+		oil.addProperty("max_y", settings.maxY());
+		oil.addProperty("frequency", settings.frequency());
+		oil.addProperty("min_radius", settings.minRadius());
+		oil.addProperty("max_radius", settings.maxRadius());
+		oil.addProperty("min_vertical_radius", settings.minVerticalRadius());
+		oil.addProperty("max_vertical_radius", settings.maxVerticalRadius());
+		oil.addProperty("max_lobes", settings.maxLobes());
+		oil.addProperty("min_solid_cover", settings.minSolidCover());
+		return oil;
+	}
+
+	private static JsonObject defaultOreConfig() {
+		JsonObject ores = new JsonObject();
+		addDefaultOre(ores, "mineralogy:sulfur_ore", MineralogyConfig.sulfurOre());
+		addDefaultOre(ores, "mineralogy:phosphorous_ore", MineralogyConfig.phosphorousOre());
+		addDefaultOre(ores, "mineralogy:nitrate_ore", MineralogyConfig.nitrateOre());
+		return ores;
+	}
+
+	private static void addDefaultOre(JsonObject ores, String id, OreGenerationSettings settings) {
+		JsonObject ore = new JsonObject();
+		ore.addProperty("enabled", true);
+		ore.addProperty("source_mod", "mineralogy");
+		JsonObject dimensions = new JsonObject();
+		JsonObject overworld = new JsonObject();
+		overworld.addProperty("enabled", true);
+		overworld.addProperty("min_y", settings.minY());
+		overworld.addProperty("max_y", settings.maxY());
+		overworld.addProperty("frequency", settings.frequency());
+		overworld.addProperty("quantity", settings.quantity());
+		JsonArray families = new JsonArray();
+		for (RockFamily family : RockFamily.values()) {
+			families.add(family.configName);
+		}
+		overworld.add("host_families", families);
+		JsonArray tags = new JsonArray();
+		tags.add("minecraft:stone_ore_replaceables");
+		tags.add("minecraft:deepslate_ore_replaceables");
+		overworld.add("host_tags", tags);
+		dimensions.add("minecraft:overworld", overworld);
+		ore.add("dimensions", dimensions);
+		ores.add(id, ore);
 	}
 
 	private static JsonObject defaultFormationConfig() {
@@ -905,6 +1031,14 @@ public final class GeomeConfig {
 				"stable_craton", 1.0D);
 	}
 
+	static JsonObject defaultBiomeRules() {
+		JsonObject biomeRules = new JsonObject();
+		addVanillaBiomeDefaults(biomeRules);
+		addBiomesOPlentyDefaults(biomeRules);
+		addBiomesYoullGoDefaults(biomeRules);
+		return biomeRules;
+	}
+
 	private static void addBiomesOPlentyDefaults(JsonObject biomes) {
 		String[] stable = { "cherry_blossom_grove", "clover_patch", "dead_forest", "field",
 				"forested_field", "lavender_field", "lavender_forest", "maple_woods", "old_growth_dead_forest",
@@ -954,6 +1088,68 @@ public final class GeomeConfig {
 	private static void addBOPWeights(JsonObject biomes, String[] names, Object... values) {
 		for (String name : names) {
 			addWeights(biomes, bop(name), values);
+		}
+	}
+
+	private static void addBiomesYoullGoDefaults(JsonObject biomes) {
+		String[] stable = { "allium_fields", "amaranth_fields", "autumnal_forest", "autumnal_valley",
+				"cherry_blossom_forest", "coconino_meadow", "ebony_woods", "firecracker_shrubland",
+				"forgotten_forest", "fragment_forest", "jacaranda_forest", "orchard", "prairie",
+				"red_oak_forest", "redwood_thicket", "rose_fields", "temperate_grove", "twilight_meadow" };
+		addBYGWeights(biomes, stable, "stable_craton", 2.0D, "sedimentary_basin", 0.5D);
+
+		String[] coldWoodland = { "aspen_forest", "autumnal_taiga", "borealis_grove", "cika_woods",
+				"coniferous_forest", "frosted_coniferous_forest", "frosted_taiga", "maple_taiga",
+				"weeping_witch_forest", "zelkova_forest" };
+		addBYGWeights(biomes, coldWoodland, "glacial_highland", 2.0D, "stable_craton", 1.0D);
+
+		String[] savannas = { "araucaria_savanna", "baobab_savanna" };
+		addBYGWeights(biomes, savannas, "arid_basin", 2.5D, "stable_craton", 0.8D);
+		String[] deserts = { "atacama_desert", "mojave_desert", "windswept_desert" };
+		addBYGWeights(biomes, deserts, "arid_basin", 4.0D, "sedimentary_basin", 1.5D);
+		String[] badlands = { "red_rock_valley", "sierra_badlands", "windswept_dunes" };
+		addBYGWeights(biomes, badlands, "arid_basin", 3.5D, "sedimentary_basin", 3.0D);
+
+		String[] wetlands = { "bayou", "cypress_swamplands", "white_mangrove_marshes" };
+		addBYGWeights(biomes, wetlands, "wetland_basin", 4.0D, "sedimentary_basin", 1.5D);
+		String[] rainforests = { "temperate_rainforest", "tropical_rainforest" };
+		addBYGWeights(biomes, rainforests, "wetland_basin", 3.5D, "stable_craton", 1.0D,
+				"sedimentary_basin", 0.8D);
+
+		addWeights(biomes, byg("lush_stacks"), "coastal_shelf", 4.0D, "wetland_basin", 1.2D,
+				"sedimentary_basin", 1.0D);
+		addWeights(biomes, byg("dead_sea"), "coastal_shelf", 4.0D, "sedimentary_basin", 1.8D,
+				"arid_basin", 1.2D);
+		addWeights(biomes, byg("windswept_beach"), "coastal_shelf", 4.0D, "mountain_belt", 1.0D);
+		addWeights(biomes, byg("rainbow_beach"), "coastal_shelf", 4.0D, "stable_craton", 0.5D);
+
+		addWeights(biomes, byg("black_forest"), "mountain_belt", 2.5D, "stable_craton", 1.5D);
+		addWeights(biomes, byg("canadian_shield"), "mountain_belt", 3.5D, "glacial_highland", 1.5D,
+				"stable_craton", 0.5D);
+		addWeights(biomes, byg("crag_gardens"), "mountain_belt", 3.5D, "wetland_basin", 1.5D);
+		addWeights(biomes, byg("dacite_ridges"), "mountain_belt", 4.0D, "volcanic_arc", 2.0D,
+				"glacial_highland", 1.0D);
+		addWeights(biomes, byg("guiana_shield"), "mountain_belt", 3.5D, "wetland_basin", 2.0D);
+		addWeights(biomes, byg("howling_peaks"), "mountain_belt", 5.0D, "glacial_highland", 1.0D);
+		addWeights(biomes, byg("skyris_vale"), "mountain_belt", 3.0D, "glacial_highland", 1.0D,
+				"stable_craton", 1.0D);
+
+		addWeights(biomes, byg("cardinal_tundra"), "glacial_highland", 3.5D,
+				"sedimentary_basin", 1.0D);
+		addWeights(biomes, byg("shattered_glacier"), "glacial_highland", 5.0D, "mountain_belt", 2.0D);
+		addWeights(biomes, byg("basalt_barrera"), "volcanic_arc", 6.0D, "coastal_shelf", 2.0D,
+				"mountain_belt", 1.0D);
+		addWeights(biomes, byg("dacite_shore"), "volcanic_arc", 4.0D, "coastal_shelf", 3.0D,
+				"mountain_belt", 1.0D);
+	}
+
+	private static String byg(String path) {
+		return "byg:" + path;
+	}
+
+	private static void addBYGWeights(JsonObject biomes, String[] names, Object... values) {
+		for (String name : names) {
+			addWeights(biomes, byg(name), values);
 		}
 	}
 

@@ -106,12 +106,17 @@ public final class GeomeGeology {
 				int baseRockValue = stratumOffsetAt(x, z);
 				long formationRegion = formationRegionAt(x, z);
 
-				for (int y = surfaceY; y >= chunk.getMinBuildHeight(); y--) {
-					cursor.set(x, y, z);
-					if (isReplaceableBaseStone(chunk.getBlockState(cursor))) {
-						chunk.setBlockState(cursor,
-								pickReplacement(geomeIndex, baseRockValue, formationRegion, x, y, z), false);
-						changed = true;
+				if (stableLayers) {
+					changed |= replaceStableColumn(chunk, cursor, geomeIndex, baseRockValue,
+							formationRegion, x, z, surfaceY);
+				} else {
+					for (int y = surfaceY; y >= chunk.getMinBuildHeight(); y--) {
+						cursor.set(x, y, z);
+						if (isReplaceableBaseStone(chunk.getBlockState(cursor))) {
+							chunk.setBlockState(cursor,
+									pickReplacement(geomeIndex, baseRockValue, formationRegion, x, y, z), false);
+							changed = true;
+						}
 					}
 				}
 			}
@@ -120,6 +125,30 @@ public final class GeomeGeology {
 		if (changed) {
 			chunk.setUnsaved(true);
 		}
+	}
+
+	private boolean replaceStableColumn(ChunkAccess chunk, BlockPos.MutableBlockPos cursor, int geomeIndex,
+			int baseRockValue, long formationRegion, int x, int z, int surfaceY) {
+		int layerIndex = Math.floorDiv(baseRockValue + surfaceY, layerThickness);
+		int layerStart = layerIndex * layerThickness;
+		BlockState replacement = pickStableReplacement(geomeIndex, formationRegion, layerIndex);
+		boolean changed = false;
+		cursor.set(x, surfaceY, z);
+
+		for (int y = surfaceY; y >= chunk.getMinBuildHeight(); y--) {
+			int stratum = baseRockValue + y;
+			if (stratum < layerStart) {
+				layerIndex--;
+				layerStart -= layerThickness;
+				replacement = pickStableReplacement(geomeIndex, formationRegion, layerIndex);
+			}
+			cursor.setY(y);
+			if (isReplaceableBaseStone(chunk.getBlockState(cursor))) {
+				chunk.setBlockState(cursor, replacement, false);
+				changed = true;
+			}
+		}
+		return changed;
 	}
 
 	public Block getStoneAt(Biome biome, int x, int y, int z, int surfaceY) {
@@ -151,33 +180,7 @@ public final class GeomeGeology {
 		int stratum = baseRockValue + y;
 		int layerIndex = Math.floorDiv(stratum, layerThickness);
 		if (stableLayers) {
-			// A dipping or uplifted layer keeps the depth identity it had in stratum space.
-			int formationY = (layerIndex * layerThickness) + (layerThickness / 2);
-			int layerBucket = layerIndex & 0xFF;
-			int regionHash = (int) (formationRegion >> 32);
-			int regionalIndex = (layerIndex + regionHash) & 0xFF;
-			int originalFamilyIndex = globallyContinuousLayers[layerBucket] ? layerBucket : regionalIndex;
-			int familyBucket;
-			int familySlot = 0;
-			if (familyDiversitySlots == 1) {
-				familyBucket = whiteNoiseArray[originalFamilyIndex] & 0xFF;
-			} else {
-				int familyGroup = Math.floorDiv(layerIndex, familyDiversitySlots);
-				int groupBucket = familyGroup & 0xFF;
-				int regionalGroup = (familyGroup + regionHash) & 0xFF;
-				int familyIndex = globallyContinuousLayers[groupBucket] ? groupBucket : regionalGroup;
-				familyBucket = whiteNoiseArray[familyIndex] & 0xFF;
-				familySlot = (layerIndex + (int) formationRegion) & (familyDiversitySlots - 1);
-			}
-			int rockIndex = regionallyVariedRocks[layerBucket] ? regionalIndex : originalFamilyIndex;
-			int rockBucket = whiteNoiseArray[rockIndex] & 0xFF;
-			if (familyDiversitySlots > 1) {
-				// Reuse the same rendezvous table while preventing thick single-family provinces
-				// from collapsing onto one exact rock.
-				rockBucket ^= LITHOLOGY_ROCK_SALTS[familySlot];
-			}
-			RockFamily family = config.pickFamily(geomeIndex, formationY, familyBucket, familySlot);
-			return config.pickRock(geomeIndex, family, formationY, rockBucket);
+			return pickStableReplacement(geomeIndex, formationRegion, layerIndex);
 		}
 
 		int layerY = y + (layerThickness / 2) - Math.floorMod(stratum, layerThickness);
@@ -185,6 +188,36 @@ public final class GeomeGeology {
 		RockFamily family = pickShapedFamily(geomeIndex, x, y, z, layerY, familyHash);
 		int rockHash = whiteNoiseArray[((layerIndex * 31) + (family.ordinal() * 53) + (geomeIndex * 79)) & 0xFF];
 		return config.pickRock(geomeIndex, family, layerY, rockHash);
+	}
+
+	private BlockState pickStableReplacement(int geomeIndex, long formationRegion, int layerIndex) {
+		// A dipping or uplifted layer keeps the depth identity it had in stratum space.
+		int formationY = (layerIndex * layerThickness) + (layerThickness / 2);
+		int layerBucket = layerIndex & 0xFF;
+		int regionHash = (int) (formationRegion >> 32);
+		int regionalIndex = (layerIndex + regionHash) & 0xFF;
+		int originalFamilyIndex = globallyContinuousLayers[layerBucket] ? layerBucket : regionalIndex;
+		int familyBucket;
+		int familySlot = 0;
+		if (familyDiversitySlots == 1) {
+			familyBucket = whiteNoiseArray[originalFamilyIndex] & 0xFF;
+		} else {
+			int familyGroup = Math.floorDiv(layerIndex, familyDiversitySlots);
+			int groupBucket = familyGroup & 0xFF;
+			int regionalGroup = (familyGroup + regionHash) & 0xFF;
+			int familyIndex = globallyContinuousLayers[groupBucket] ? groupBucket : regionalGroup;
+			familyBucket = whiteNoiseArray[familyIndex] & 0xFF;
+			familySlot = (layerIndex + (int) formationRegion) & (familyDiversitySlots - 1);
+		}
+		int rockIndex = regionallyVariedRocks[layerBucket] ? regionalIndex : originalFamilyIndex;
+		int rockBucket = whiteNoiseArray[rockIndex] & 0xFF;
+		if (familyDiversitySlots > 1) {
+			// Reuse the same rendezvous table while preventing thick single-family provinces
+			// from collapsing onto one exact rock.
+			rockBucket ^= LITHOLOGY_ROCK_SALTS[familySlot];
+		}
+		RockFamily family = config.pickFamily(geomeIndex, formationY, familyBucket, familySlot);
+		return config.pickRock(geomeIndex, family, formationY, rockBucket);
 	}
 
 	int stratumOffsetAt(int x, int z) {

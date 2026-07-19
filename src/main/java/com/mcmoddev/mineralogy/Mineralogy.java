@@ -3,6 +3,7 @@ package com.mcmoddev.mineralogy;
 import java.util.List;
 
 import com.mcmoddev.mineralogy.init.MineralogyRegistry;
+import com.mcmoddev.mineralogy.patching.LegacyWorldDataHook;
 import com.mcmoddev.mineralogy.worldgen.MineralogyOreGeneration;
 import com.mcmoddev.mineralogy.worldgen.GeomeConfig;
 import com.mcmoddev.mineralogy.worldgen.GeomeDistributionSampler;
@@ -40,8 +41,10 @@ public class Mineralogy {
 		MineralogyConfig.register();
 		MineralogyConfig.registerRecipeConditions();
 		MineralogyConfig.registerAdvancementPredicates();
+		LegacyWorldDataHook.registerWorldPersistenceHook();
 
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+		MinecraftForge.EVENT_BUS.addListener(LegacyWorldDataHook::onServerAboutToStart);
 		MinecraftForge.EVENT_BUS.addListener(StoneReplacer::onBiomeLoading);
 		MinecraftForge.EVENT_BUS.addListener(MineralogyOreGeneration::onBiomeLoading);
 	}

@@ -160,7 +160,7 @@ public final class BakedGeomeConfig {
 		return rockFamilies.get(state.getBlock());
 	}
 
-	BlockState[] statesForFamily(RockFamily... families) {
+	public BlockState[] statesForFamily(RockFamily... families) {
 		int mask = 0;
 		for (RockFamily family : families) {
 			mask |= 1 << family.ordinal();
@@ -189,7 +189,10 @@ public final class BakedGeomeConfig {
 
 	int geomeIndex(String name) {
 		for (int i = 0; i < geomes.length; i++) {
-			if (geomes[i].name.equals(name)) {
+			if (geomes[i].name.equals(name)
+					|| (name.startsWith("mineralogy:")
+							&& geomes[i].name.equals(name.substring("mineralogy:".length())))
+					|| (name.indexOf(':') < 0 && geomes[i].name.equals("mineralogy:" + name))) {
 				return i;
 			}
 		}

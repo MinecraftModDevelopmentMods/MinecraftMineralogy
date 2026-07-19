@@ -33,7 +33,8 @@ public final class WorldCreationScreenHandler {
 		event.addListener(new Button(x, 6, width, 20,
 				new TranslatableComponent("button.mineralogy.world_settings"), button ->
 						Minecraft.getInstance().setScreen(new MineralogyWorldSettingsScreen(
-								screen, WorldGeologyProfileManager.pendingNewWorldProfile()))));
+								screen, WorldGeologyProfileManager.pendingNewWorldProfile(),
+								DimensionDiscovery.availableDimensionIds((CreateWorldScreen) screen)))));
 	}
 
 	@SubscribeEvent

@@ -20,6 +20,7 @@ import com.mcmoddev.mineralogy.MineralogyConfig;
 import com.mcmoddev.mineralogy.MineralogyConfig.GeologyMode;
 import com.mcmoddev.mineralogy.api.MineralogyOreIntegration;
 
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.storage.LevelResource;
 import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.event.server.ServerStoppedEvent;
@@ -35,6 +36,7 @@ public final class WorldGeologyProfileManager {
 	private static volatile WorldGeologyProfile pendingNewWorldProfile;
 	private static volatile Object pendingNewWorldSession;
 	private static volatile WorldGeologyProfile activeProfile;
+	private static volatile MinecraftServer activeServer;
 
 	private WorldGeologyProfileManager() {
 		throw new IllegalAccessError("Not an instantiable class");
@@ -81,7 +83,12 @@ public final class WorldGeologyProfileManager {
 		return profile == null ? globalProfile() : profile;
 	}
 
+	public static MinecraftServer activeServer() {
+		return activeServer;
+	}
+
 	public static void onServerAboutToStart(ServerAboutToStartEvent event) {
+		activeServer = event.getServer();
 		Path worldRoot = event.getServer().getWorldPath(LevelResource.ROOT).normalize();
 		Path profilePath = worldRoot.resolve("serverconfig").resolve(PROFILE_FILE_NAME);
 		WorldGeologyProfile fallback = globalProfile();
@@ -97,7 +104,7 @@ public final class WorldGeologyProfileManager {
 			if (!beforeMerge.equals(merged.toString())) {
 				profile = profile.withRoot(merged);
 				writeProfile(profilePath, profile);
-				LOGGER.info("Merged new Mineralogy ore-provider definitions into '{}'", profilePath);
+				LOGGER.info("Merged new Mineralogy worldgen-provider definitions into '{}'", profilePath);
 			}
 		} else {
 			pending = consumePendingProfile();
@@ -127,6 +134,7 @@ public final class WorldGeologyProfileManager {
 	}
 
 	public static void onServerStopped(ServerStoppedEvent event) {
+		activeServer = null;
 		activeProfile = null;
 		GeomeConfig.applyWorldProfile(globalProfile());
 		StoneReplacer.refreshWorldConfig();

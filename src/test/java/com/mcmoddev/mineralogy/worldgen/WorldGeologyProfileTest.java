@@ -44,19 +44,131 @@ class WorldGeologyProfileTest {
 	@Test
 	void schemaTwoRoundTripKeepsExternalAndProviderData() {
 		JsonObject root = completeGlobalFixture();
-		root.addProperty("schema_version", WorldGeologyProfile.SCHEMA_VERSION);
+		root.addProperty("schema_version", 2);
+		root.remove("terrain_dimensions");
+		root.remove("providers");
 		root.getAsJsonObject("rocks").add("examplemod:slate", rockFixture());
 		JsonObject provider = new JsonObject();
 		provider.addProperty("provider_revision", 3);
 		root.getAsJsonObject("ore_providers").add("basemetals", provider);
 
 		WorldGeologyProfile profile = WorldGeologyProfile.fromJson(root,
-				WorldGeologyProfile.recommended(true));
+				WorldGeologyProfile.fromGlobalConfig(completeGlobalFixture(), GeologyMode.GEOME, true));
 		JsonObject result = profile.toJson();
 		assertTrue(result.getAsJsonObject("rocks").has("examplemod:slate"));
 		assertEquals(3, result.getAsJsonObject("ore_providers")
 				.getAsJsonObject("basemetals").get("provider_revision").getAsInt());
 		assertEquals(WorldGeologyProfile.SCHEMA_VERSION, result.get("schema_version").getAsInt());
+		assertTrue(result.has("terrain_dimensions"));
+		assertTrue(result.has("providers"));
+	}
+
+	@Test
+	void vanillaOreTakeoverRoundTripIsOptIn() {
+		JsonObject root = completeGlobalFixture();
+		root.addProperty("manage_vanilla_ores", true);
+		WorldGeologyProfile profile = WorldGeologyProfile.fromJson(root,
+				WorldGeologyProfile.recommended(true));
+
+		assertTrue(profile.manageVanillaOres());
+		assertTrue(profile.toJson().get("manage_vanilla_ores").getAsBoolean());
+		assertFalse(WorldGeologyProfile.recommended(true).manageVanillaOres());
+	}
+
+	@Test
+	void oreDefaultsMergeAddsMissingEntriesWithoutOverwritingPackChoices() {
+		JsonObject original = new JsonObject();
+		JsonObject originalOres = new JsonObject();
+		JsonObject customizedCoal = new JsonObject();
+		customizedCoal.addProperty("enabled", false);
+		originalOres.add("minecraft:coal_ore", customizedCoal);
+		original.add("ores", originalOres);
+
+		JsonObject defaults = new JsonObject();
+		JsonObject defaultOres = new JsonObject();
+		JsonObject defaultCoal = new JsonObject();
+		defaultCoal.addProperty("enabled", true);
+		defaultOres.add("minecraft:coal_ore", defaultCoal);
+		defaultOres.add("minecraft:iron_ore", new JsonObject());
+		defaults.add("ores", defaultOres);
+
+		JsonObject refreshed = GeomeConfig.refreshOreDefaults(original, defaults);
+		assertFalse(refreshed.getAsJsonObject("ores").getAsJsonObject("minecraft:coal_ore")
+				.get("enabled").getAsBoolean());
+		assertTrue(refreshed.getAsJsonObject("ores").has("minecraft:iron_ore"));
+		assertFalse(refreshed.get("manage_vanilla_ores").getAsBoolean());
+		assertEquals(4, refreshed.get("ore_defaults_revision").getAsInt());
+	}
+
+	@Test
+	void oreDefaultsUpgradeUntouchedClusterRules() {
+		JsonObject original = oreDefaultsFixture(20.0D);
+		JsonObject refreshed = GeomeConfig.refreshOreDefaults(original, original);
+		JsonObject coal = refreshed.getAsJsonObject("ores").getAsJsonObject("minecraft:coal_ore")
+				.getAsJsonObject("dimensions").getAsJsonObject("minecraft:overworld");
+
+		assertEquals(0, coal.get("min_y").getAsInt());
+		assertEquals(96, coal.get("max_y").getAsInt());
+		assertEquals(12.0D, coal.get("frequency").getAsDouble());
+	}
+
+	@Test
+	void oreDefaultsUpgradeRevisionTwoClusterRules() {
+		JsonObject original = oreDefaultsFixture(6.0D);
+		original.getAsJsonObject("ores").getAsJsonObject("minecraft:coal_ore")
+				.getAsJsonObject("dimensions").getAsJsonObject("minecraft:overworld")
+				.addProperty("max_y", 96);
+		JsonObject refreshed = GeomeConfig.refreshOreDefaults(original, original);
+		JsonObject coal = refreshed.getAsJsonObject("ores").getAsJsonObject("minecraft:coal_ore")
+				.getAsJsonObject("dimensions").getAsJsonObject("minecraft:overworld");
+
+		assertEquals(12.0D, coal.get("frequency").getAsDouble());
+	}
+
+	@Test
+	void oreDefaultsUpgradeUntouchedVeinRules() {
+		JsonObject rule = new JsonObject();
+		rule.addProperty("min_y", -64);
+		rule.addProperty("max_y", 256);
+		rule.addProperty("frequency", 20.0D);
+		rule.addProperty("quantity", 9);
+		rule.addProperty("pattern", "vein");
+		JsonObject iron = objectWith("dimensions", objectWith("minecraft:overworld", rule));
+		JsonObject original = objectWith("ores", objectWith("minecraft:iron_ore", iron));
+		JsonObject refreshed = GeomeConfig.refreshOreDefaults(original, original);
+
+		assertEquals(34.0D, refreshed.getAsJsonObject("ores").getAsJsonObject("minecraft:iron_ore")
+				.getAsJsonObject("dimensions").getAsJsonObject("minecraft:overworld")
+				.get("frequency").getAsDouble());
+	}
+
+	@Test
+	void oreDefaultsUpgradePreservesCustomizedClusterRules() {
+		JsonObject original = oreDefaultsFixture(7.5D);
+		JsonObject refreshed = GeomeConfig.refreshOreDefaults(original, original);
+		JsonObject coal = refreshed.getAsJsonObject("ores").getAsJsonObject("minecraft:coal_ore")
+				.getAsJsonObject("dimensions").getAsJsonObject("minecraft:overworld");
+
+		assertEquals(256, coal.get("max_y").getAsInt());
+		assertEquals(7.5D, coal.get("frequency").getAsDouble());
+	}
+
+	@Test
+	void orePatternNamesRejectUnknownValues() {
+		assertEquals(OrePattern.VEIN, OrePattern.fromConfigName("VEIN"));
+		assertEquals(OrePattern.CLUSTER, OrePattern.fromConfigName("cluster"));
+		assertEquals(OrePattern.CLOUD, OrePattern.fromConfigName(" cloud "));
+		assertEquals(OreHeightDistribution.TRIANGLE,
+				OreHeightDistribution.fromConfigName("triangle"));
+		org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class,
+				() -> OrePattern.fromConfigName("cascading_chunk_cache"));
+	}
+
+	@Test
+	void legacyBuiltInGeomeNamesNormalizeWithoutChangingExternalIds() {
+		assertEquals("mineralogy:stable_craton", GeomeConfig.normalizeGeomeName("stable_craton"));
+		assertEquals("mineralogy:stable_craton", GeomeConfig.normalizeGeomeName("mineralogy:stable_craton"));
+		assertEquals("examplemod:crystal_basin", GeomeConfig.normalizeGeomeName("examplemod:crystal_basin"));
 	}
 
 	@Test
@@ -97,6 +209,8 @@ class WorldGeologyProfileTest {
 		root.add("oil", new JsonObject());
 		root.add("cyano", new JsonObject());
 		root.add("ore_providers", new JsonObject());
+		root.add("providers", new JsonObject());
+		root.add("terrain_dimensions", objectWith("minecraft:overworld", new JsonObject()));
 		return root;
 	}
 
@@ -106,6 +220,18 @@ class WorldGeologyProfileTest {
 		rock.addProperty("family", "sedimentary");
 		rock.addProperty("weight", 1.0D);
 		return rock;
+	}
+
+	private static JsonObject oreDefaultsFixture(double frequency) {
+		JsonObject rule = new JsonObject();
+		rule.addProperty("min_y", 0);
+		rule.addProperty("max_y", 256);
+		rule.addProperty("frequency", frequency);
+		rule.addProperty("quantity", 17);
+		rule.addProperty("pattern", "cluster");
+		JsonObject dimensions = objectWith("minecraft:overworld", rule);
+		JsonObject coal = objectWith("dimensions", dimensions);
+		return objectWith("ores", objectWith("minecraft:coal_ore", coal));
 	}
 
 	private static JsonObject objectWith(String key, JsonObject value) {

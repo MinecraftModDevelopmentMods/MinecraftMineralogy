@@ -55,6 +55,7 @@ public final class MineralogyOreGeneration extends Feature<NoneFeatureConfigurat
 
 	private static Holder<PlacedFeature> placedFeature;
 	private static volatile Map<ResourceKey<Level>, BakedOre[]> oresByDimension = EMPTY_DIMENSIONS;
+	private static volatile Map<ResourceKey<Level>, Set<Block>> vanillaTakeoverOutputs = Collections.emptyMap();
 	private static volatile BakedGeomeConfig geomeConfig;
 	private static volatile GeomeGeology classifier;
 	private static volatile long classifierSeed = Long.MIN_VALUE;
@@ -73,12 +74,15 @@ public final class MineralogyOreGeneration extends Feature<NoneFeatureConfigurat
 						NoneFeatureConfiguration.INSTANCE));
 		placedFeature = BuiltinRegistries.register(BuiltinRegistries.PLACED_FEATURE, id,
 				new PlacedFeature(configured, Collections.emptyList()));
+		VanillaOreFeatureGate.register();
 		refreshWorldConfig();
 	}
 
 	public static void refreshWorldConfig() {
 		geomeConfig = GeomeConfig.baked();
-		oresByDimension = bakeOres(WorldGeologyProfileManager.activeProfile().rootCopy(), geomeConfig);
+		BakedOres baked = bakeOres(WorldGeologyProfileManager.activeProfile().rootCopy(), geomeConfig);
+		oresByDimension = baked.byDimension;
+		vanillaTakeoverOutputs = baked.vanillaOutputs;
 		synchronized (CLASSIFIER_LOCK) {
 			classifier = null;
 			classifierSeed = Long.MIN_VALUE;
@@ -87,10 +91,16 @@ public final class MineralogyOreGeneration extends Feature<NoneFeatureConfigurat
 	}
 
 	public static void onBiomeLoading(BiomeLoadingEvent event) {
+		VanillaOreFeatureGate.wrapVanillaOres(event);
 		if (!WorldgenBenchmark.isVanillaBaseline()
 				&& event.getCategory() != BiomeCategory.NONE && placedFeature != null) {
 			event.getGeneration().getFeatures(GenerationStep.Decoration.UNDERGROUND_ORES).add(placedFeature);
 		}
+	}
+
+	static boolean takesOverVanillaOre(ResourceKey<Level> dimension, Block output) {
+		Set<Block> outputs = vanillaTakeoverOutputs.get(dimension);
+		return !WorldgenBenchmark.isVanillaBaseline() && outputs != null && outputs.contains(output);
 	}
 
 	@Override
@@ -123,7 +133,7 @@ public final class MineralogyOreGeneration extends Feature<NoneFeatureConfigurat
 			}
 			int attempts = attemptsForFrequency(random, frequency);
 			for (int attempt = 0; attempt < attempts; attempt++) {
-				changed |= placeAttempt(chunk, random, ore, geome, scratch.cursor);
+				changed |= placeAttempt(chunk, random, ore, geome, scratch);
 			}
 		}
 		if (changed) {
@@ -133,16 +143,102 @@ public final class MineralogyOreGeneration extends Feature<NoneFeatureConfigurat
 	}
 
 	private static boolean placeAttempt(ChunkAccess chunk, Random random, BakedOre ore, int geome,
-			BlockPos.MutableBlockPos cursor) {
+			GenerationScratch scratch) {
 		int minY = Math.max(ore.minY, chunk.getMinBuildHeight());
 		int maxY = Math.min(ore.maxY, chunk.getMaxBuildHeight() - 1);
 		if (maxY < minY) {
 			return false;
 		}
 		int x = chunk.getPos().getMinBlockX() + random.nextInt(16);
-		int y = minY + random.nextInt((maxY - minY) + 1);
+		int y = ore.heightDistribution == OreHeightDistribution.TRIANGLE
+				? sampleTriangle(random, minY, maxY)
+				: minY + random.nextInt((maxY - minY) + 1);
 		int z = chunk.getPos().getMinBlockZ() + random.nextInt(16);
-		return placeVein(chunk, random, ore, geome, x, y, z, cursor);
+		switch (ore.pattern) {
+			case CLUSTER:
+				return placeClusters(chunk, random, ore, geome, x, y, z, scratch);
+			case CLOUD:
+				return placeCloud(chunk, random, ore, geome, x, y, z, scratch.cursor);
+			case VEIN:
+			default:
+				return placeVein(chunk, random, ore, geome, x, y, z, scratch.cursor);
+		}
+	}
+
+	private static boolean placeClusters(ChunkAccess chunk, Random random, BakedOre ore, int geome,
+			int originX, int originY, int originZ, GenerationScratch scratch) {
+		int remaining = ore.quantity;
+		boolean changed = false;
+		while (remaining > 0) {
+			int nodeSize = Math.min(ore.nodeSize, remaining);
+			int centerX = originX + centeredTriangular(random, ore.spread);
+			int centerY = originY + centeredTriangular(random, ore.verticalSpread);
+			int centerZ = originZ + centeredTriangular(random, ore.spread);
+			changed |= placeClusterNode(chunk, random, ore, geome,
+					centerX, centerY, centerZ, nodeSize, scratch);
+			remaining -= nodeSize;
+		}
+		return changed;
+	}
+
+	private static boolean placeClusterNode(ChunkAccess chunk, Random random, BakedOre ore, int geome,
+			int centerX, int centerY, int centerZ, int targetSize, GenerationScratch scratch) {
+		int placed = 0;
+		int orientation = random.nextInt(ClusterOffsets.ORIENTATIONS);
+		int offsetBase = orientation * ClusterOffsets.COUNT;
+		for (int candidate = 0; candidate < targetSize; candidate++) {
+			int offset = offsetBase + candidate;
+			int x = centerX + ClusterOffsets.X[offset];
+			int y = centerY + ClusterOffsets.Y[offset];
+			int z = centerZ + ClusterOffsets.Z[offset];
+			if (!insideChunk(chunk, x, y, z)) {
+				continue;
+			}
+			scratch.cursor.set(x, y, z);
+			BlockState existing = chunk.getBlockState(scratch.cursor);
+			if (ore.accepts(existing, geomeConfig)) {
+				chunk.setBlockState(scratch.cursor, ore.outputAt(y), false);
+				placed++;
+			}
+		}
+		return placed > 0;
+	}
+
+	private static boolean placeCloud(ChunkAccess chunk, Random random, BakedOre ore, int geome,
+			int originX, int originY, int originZ, BlockPos.MutableBlockPos cursor) {
+		int placed = 0;
+		int attempts = ore.quantity * 4;
+		for (int attempt = 0; attempt < attempts && placed < ore.quantity; attempt++) {
+			int x = originX + centeredTriangular(random, ore.spread);
+			int y = originY + centeredTriangular(random, ore.verticalSpread);
+			int z = originZ + centeredTriangular(random, ore.spread);
+			if (!insideChunk(chunk, x, y, z)) {
+				continue;
+			}
+			cursor.set(x, y, z);
+			BlockState existing = chunk.getBlockState(cursor);
+			if (ore.accepts(existing, geomeConfig)) {
+				chunk.setBlockState(cursor, ore.outputAt(cursor.getY()), false);
+				placed++;
+			}
+		}
+		return placed > 0;
+	}
+
+	private static boolean insideChunk(ChunkAccess chunk, int x, int y, int z) {
+		ChunkPos pos = chunk.getPos();
+		return x >= pos.getMinBlockX() && x <= pos.getMaxBlockX()
+				&& z >= pos.getMinBlockZ() && z <= pos.getMaxBlockZ()
+				&& y >= chunk.getMinBuildHeight() && y < chunk.getMaxBuildHeight();
+	}
+
+	private static int centeredTriangular(Random random, int radius) {
+		return radius <= 0 ? 0 : random.nextInt(radius + 1) - random.nextInt(radius + 1);
+	}
+
+	private static int sampleTriangle(Random random, int min, int max) {
+		int range = (max - min) + 1;
+		return min + ((random.nextInt(range) + random.nextInt(range)) / 2);
 	}
 
 	private static boolean placeVein(ChunkAccess chunk, Random random, BakedOre ore, int geome,
@@ -193,7 +289,7 @@ public final class MineralogyOreGeneration extends Feature<NoneFeatureConfigurat
 						cursor.set(x, y, z);
 						BlockState existing = chunk.getBlockState(cursor);
 						if (ore.accepts(existing, geomeConfig)) {
-							chunk.setBlockState(cursor, ore.output, false);
+							chunk.setBlockState(cursor, ore.outputAt(cursor.getY()), false);
 							changed = true;
 						}
 					}
@@ -203,18 +299,24 @@ public final class MineralogyOreGeneration extends Feature<NoneFeatureConfigurat
 		return changed;
 	}
 
-	private static Map<ResourceKey<Level>, BakedOre[]> bakeOres(JsonObject profile, BakedGeomeConfig config) {
+	private static BakedOres bakeOres(JsonObject profile, BakedGeomeConfig config) {
 		if (!profile.has("ores") || !profile.get("ores").isJsonObject()) {
-			return EMPTY_DIMENSIONS;
+			return BakedOres.EMPTY;
 		}
+		boolean manageVanillaOres = bool(profile, "manage_vanilla_ores", false);
 		Map<TagKey<Block>, Set<Block>> resolvedTags = new HashMap<>();
 		Map<ResourceKey<Level>, List<BakedOre>> grouped = new LinkedHashMap<>();
+		Map<ResourceKey<Level>, Set<Block>> vanillaOutputs = new LinkedHashMap<>();
 		for (Entry<String, JsonElement> oreEntry : profile.getAsJsonObject("ores").entrySet()) {
 			if (!oreEntry.getValue().isJsonObject()) {
 				continue;
 			}
 			JsonObject oreJson = oreEntry.getValue().getAsJsonObject();
 			if (!bool(oreJson, "enabled", true)) {
+				continue;
+			}
+			boolean nativeGeneration = bool(oreJson, "native_generation", false);
+			if (nativeGeneration && !manageVanillaOres) {
 				continue;
 			}
 			ResourceLocation oreId = resource(oreEntry.getKey());
@@ -224,6 +326,13 @@ public final class MineralogyOreGeneration extends Feature<NoneFeatureConfigurat
 				LOGGER.warn("Ignoring invalid Mineralogy-managed ore '{}'", oreEntry.getKey());
 				continue;
 			}
+			BlockState deepOutput = blockState(oreJson, "deep_output", output.defaultBlockState());
+			if (deepOutput == null) {
+				LOGGER.warn("Ignoring Mineralogy-managed ore '{}' because its deep output is invalid",
+						oreEntry.getKey());
+				continue;
+			}
+			int deepOutputMaxY = integer(oreJson, "deep_output_max_y", -1);
 
 			for (Entry<String, JsonElement> dimensionEntry : oreJson.getAsJsonObject("dimensions").entrySet()) {
 				if (!dimensionEntry.getValue().isJsonObject()) {
@@ -235,12 +344,23 @@ public final class MineralogyOreGeneration extends Feature<NoneFeatureConfigurat
 				}
 				ResourceLocation dimensionId = resource(dimensionEntry.getKey());
 				if (dimensionId == null) {
+					LOGGER.warn("Ignoring invalid dimension '{}' for Mineralogy-managed ore '{}'",
+							dimensionEntry.getKey(), oreEntry.getKey());
 					continue;
 				}
 				ResourceKey<Level> dimensionKey = ResourceKey.create(Registry.DIMENSION_REGISTRY, dimensionId);
-				BakedOre baked = bakeOre(output.defaultBlockState(), dimension, config, resolvedTags);
+				BakedOre baked = bakeOre(output.defaultBlockState(), deepOutput, deepOutputMaxY,
+						dimension, config, resolvedTags);
 				if (baked != null) {
 					grouped.computeIfAbsent(dimensionKey, ignored -> new ArrayList<>()).add(baked);
+					if (nativeGeneration) {
+						vanillaOutputs.computeIfAbsent(dimensionKey,
+								ignored -> Collections.newSetFromMap(new IdentityHashMap<Block, Boolean>()))
+								.add(output);
+					}
+				} else {
+					LOGGER.warn("Ignoring invalid placement rule for Mineralogy-managed ore '{}' in '{}'",
+							oreEntry.getKey(), dimensionEntry.getKey());
 				}
 			}
 		}
@@ -251,11 +371,16 @@ public final class MineralogyOreGeneration extends Feature<NoneFeatureConfigurat
 		}
 		LOGGER.info("Baked {} Mineralogy-managed ore definitions across {} dimensions",
 				grouped.values().stream().mapToInt(List::size).sum(), result.size());
-		return Collections.unmodifiableMap(result);
+		Map<ResourceKey<Level>, Set<Block>> immutableVanillaOutputs = new LinkedHashMap<>();
+		for (Entry<ResourceKey<Level>, Set<Block>> entry : vanillaOutputs.entrySet()) {
+			immutableVanillaOutputs.put(entry.getKey(), Collections.unmodifiableSet(entry.getValue()));
+		}
+		return new BakedOres(Collections.unmodifiableMap(result),
+				Collections.unmodifiableMap(immutableVanillaOutputs));
 	}
 
-	private static BakedOre bakeOre(BlockState output, JsonObject json, BakedGeomeConfig config,
-			Map<TagKey<Block>, Set<Block>> resolvedTags) {
+	private static BakedOre bakeOre(BlockState output, BlockState deepOutput, int deepOutputMaxY,
+			JsonObject json, BakedGeomeConfig config, Map<TagKey<Block>, Set<Block>> resolvedTags) {
 		int minY = integer(json, "min_y", -64);
 		int maxY = integer(json, "max_y", 320);
 		double frequency = decimal(json, "frequency", 0.0D);
@@ -280,6 +405,18 @@ public final class MineralogyOreGeneration extends Feature<NoneFeatureConfigurat
 		if (hostBlocks.isEmpty() && familyMask == 0) {
 			return null;
 		}
+		OrePattern pattern;
+		OreHeightDistribution heightDistribution;
+		try {
+			pattern = OrePattern.fromConfigName(string(json, "pattern", OrePattern.VEIN.configName));
+			heightDistribution = OreHeightDistribution.fromConfigName(string(json,
+					"height_distribution", OreHeightDistribution.UNIFORM.configName));
+		} catch (IllegalArgumentException e) {
+			return null;
+		}
+		int spread = boundedInteger(json, "spread", 8, 0, 64);
+		int verticalSpread = boundedInteger(json, "vertical_spread", Math.max(1, spread / 2), 0, 64);
+		int nodeSize = boundedInteger(json, "node_size", 4, 1, 32);
 
 		double[] geomeWeights = new double[config.geomeCount()];
 		java.util.Arrays.fill(geomeWeights, 1.0D);
@@ -291,7 +428,9 @@ public final class MineralogyOreGeneration extends Feature<NoneFeatureConfigurat
 				}
 			}
 		}
-		return new BakedOre(output, minY, maxY, Math.min(64.0D, frequency), Math.min(64, quantity),
+		return new BakedOre(output, deepOutput, deepOutputMaxY,
+				minY, maxY, Math.min(64.0D, frequency), Math.min(64, quantity),
+				pattern, heightDistribution, spread, verticalSpread, nodeSize,
 				hostBlocks, familyMask, geomeWeights);
 	}
 
@@ -392,26 +531,68 @@ public final class MineralogyOreGeneration extends Feature<NoneFeatureConfigurat
 		}
 	}
 
+	private static String string(JsonObject json, String key, String fallback) {
+		try {
+			return json.has(key) ? json.get(key).getAsString() : fallback;
+		} catch (RuntimeException e) {
+			return fallback;
+		}
+	}
+
+	private static int boundedInteger(JsonObject json, String key, int fallback, int min, int max) {
+		return Math.max(min, Math.min(max, integer(json, key, fallback)));
+	}
+
+	private static BlockState blockState(JsonObject json, String key, BlockState fallback) {
+		if (!json.has(key)) {
+			return fallback;
+		}
+		ResourceLocation id = resource(string(json, key, ""));
+		Block block = id == null ? null : ForgeRegistries.BLOCKS.getValue(id);
+		return block == null || block == Blocks.AIR ? null : block.defaultBlockState();
+	}
+
 	private static final class BakedOre {
 		final BlockState output;
+		final BlockState deepOutput;
+		final int deepOutputMaxY;
 		final int minY;
 		final int maxY;
 		final double frequency;
 		final int quantity;
+		final OrePattern pattern;
+		final OreHeightDistribution heightDistribution;
+		final int spread;
+		final int verticalSpread;
+		final int nodeSize;
 		final Set<Block> hostBlocks;
 		final int familyMask;
 		final double[] geomeWeights;
 
-		BakedOre(BlockState output, int minY, int maxY, double frequency, int quantity,
+		BakedOre(BlockState output, BlockState deepOutput, int deepOutputMaxY,
+				int minY, int maxY, double frequency, int quantity,
+				OrePattern pattern, OreHeightDistribution heightDistribution,
+				int spread, int verticalSpread, int nodeSize,
 				Set<Block> hostBlocks, int familyMask, double[] geomeWeights) {
 			this.output = output;
+			this.deepOutput = deepOutput;
+			this.deepOutputMaxY = deepOutputMaxY;
 			this.minY = minY;
 			this.maxY = maxY;
 			this.frequency = frequency;
 			this.quantity = quantity;
+			this.pattern = pattern;
+			this.heightDistribution = heightDistribution;
+			this.spread = spread;
+			this.verticalSpread = verticalSpread;
+			this.nodeSize = nodeSize;
 			this.hostBlocks = hostBlocks;
 			this.familyMask = familyMask;
 			this.geomeWeights = geomeWeights;
+		}
+
+		BlockState outputAt(int y) {
+			return y <= deepOutputMaxY ? deepOutput : output;
 		}
 
 		boolean accepts(BlockState state, BakedGeomeConfig config) {
@@ -421,6 +602,19 @@ public final class MineralogyOreGeneration extends Feature<NoneFeatureConfigurat
 			RockFamily family = config.familyOf(state);
 			return family != null && config.isOreReplaceable(state)
 					&& (familyMask & (1 << family.ordinal())) != 0;
+		}
+	}
+
+	private static final class BakedOres {
+		static final BakedOres EMPTY = new BakedOres(EMPTY_DIMENSIONS, Collections.emptyMap());
+
+		final Map<ResourceKey<Level>, BakedOre[]> byDimension;
+		final Map<ResourceKey<Level>, Set<Block>> vanillaOutputs;
+
+		BakedOres(Map<ResourceKey<Level>, BakedOre[]> byDimension,
+				Map<ResourceKey<Level>, Set<Block>> vanillaOutputs) {
+			this.byDimension = byDimension;
+			this.vanillaOutputs = vanillaOutputs;
 		}
 	}
 
@@ -434,5 +628,61 @@ public final class MineralogyOreGeneration extends Feature<NoneFeatureConfigurat
 			}
 			return geomeValues;
 		}
+	}
+
+	private static final class ClusterOffsets {
+		static final int COUNT = 32;
+		static final int ORIENTATIONS = 48;
+		static final byte[] X = new byte[COUNT * ORIENTATIONS];
+		static final byte[] Y = new byte[COUNT * ORIENTATIONS];
+		static final byte[] Z = new byte[COUNT * ORIENTATIONS];
+
+		private static final byte[] BASE_X = {
+				0, 1, -1, 0, 0, 0, 0,
+				1, 1, -1, -1, 1, 1, -1, -1, 0, 0, 0, 0,
+				1, 1, 1, 1, -1, -1, -1, -1,
+				2, -2, 0, 0, 0
+		};
+		private static final byte[] BASE_Y = {
+				0, 0, 0, 1, -1, 0, 0,
+				1, -1, 1, -1, 0, 0, 0, 0, 1, 1, -1, -1,
+				1, 1, -1, -1, 1, 1, -1, -1,
+				0, 0, 2, -2, 0
+		};
+		private static final byte[] BASE_Z = {
+				0, 0, 0, 0, 0, 1, -1,
+				0, 0, 0, 0, 1, -1, 1, -1, 1, -1, 1, -1,
+				1, -1, 1, -1, 1, -1, 1, -1,
+				0, 0, 0, 0, 2
+		};
+
+		static {
+			for (int orientation = 0; orientation < ORIENTATIONS; orientation++) {
+				int permutation = orientation % 6;
+				int signs = orientation / 6;
+				for (int i = 0; i < COUNT; i++) {
+					int a = BASE_X[i];
+					int b = BASE_Y[i];
+					int c = BASE_Z[i];
+					int x;
+					int y;
+					int z;
+					switch (permutation) {
+						case 1: x = a; y = c; z = b; break;
+						case 2: x = b; y = a; z = c; break;
+						case 3: x = b; y = c; z = a; break;
+						case 4: x = c; y = a; z = b; break;
+						case 5: x = c; y = b; z = a; break;
+						default: x = a; y = b; z = c; break;
+					}
+					int index = orientation * COUNT + i;
+					X[index] = (byte) ((signs & 1) == 0 ? x : -x);
+					Y[index] = (byte) ((signs & 2) == 0 ? y : -y);
+					Z[index] = (byte) ((signs & 4) == 0 ? z : -z);
+				}
+			}
+		}
+
+		private ClusterOffsets() { }
 	}
 }

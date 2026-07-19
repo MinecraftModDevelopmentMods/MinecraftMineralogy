@@ -13,9 +13,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
+import java.util.Collections;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -28,6 +31,7 @@ import com.mcmoddev.mineralogy.MineralogyConfig;
 import com.mcmoddev.mineralogy.MineralogyConfig.OilGenerationSettings;
 import com.mcmoddev.mineralogy.MineralogyConfig.OreGenerationSettings;
 import com.mcmoddev.mineralogy.api.MineralogyOreIntegration;
+import com.mcmoddev.mineralogy.integration.WorldgenIntegrationManager;
 import com.mcmoddev.mineralogy.worldgen.BakedGeomeConfig.GeomeDefinition;
 import com.mcmoddev.mineralogy.worldgen.BakedGeomeConfig.RockEntry;
 import com.mcmoddev.mineralogy.worldgen.FormationSettings.Algorithm;
@@ -40,6 +44,8 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.Registry;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -53,16 +59,22 @@ public final class GeomeConfig {
 	private static final Path CONFIG_PATH = Paths.get("config", "mineralogy-geomes.json");
 	private static final Path CONFIG_BACKUP_PATH = Paths.get("config", "mineralogy-geomes.v1.bak");
 	private static final Path CONFIG_V2_BACKUP_PATH = Paths.get("config", "mineralogy-geomes.v2.bak");
+	private static final Path CONFIG_V3_BACKUP_PATH = Paths.get("config", "mineralogy-geomes.v3.bak");
 	private static final Path BIOME_DEFAULTS_BACKUP_PATH = Paths.get("config",
 			"mineralogy-geomes.pre-biome-revision-3.bak");
 	private static final Path WORLDGEN_ALIAS_DEFAULTS_BACKUP_PATH = Paths.get("config",
 			"mineralogy-geomes.pre-alias-revision-1.bak");
+	private static final Path ORE_DEFAULTS_BACKUP_PATH = Paths.get("config",
+			"mineralogy-geomes.pre-ore-revision-1.bak");
 	private static final Path CONFIG_TEMP_PATH = Paths.get("config", "mineralogy-geomes.json.tmp");
-	public static final int SCHEMA_VERSION = 3;
+	public static final int SCHEMA_VERSION = 4;
 	private static final int BIOME_DEFAULTS_REVISION = 3;
 	private static final int WORLDGEN_ALIAS_DEFAULTS_REVISION = 1;
+	private static final int ORE_DEFAULTS_REVISION = 4;
 
 	private static volatile BakedGeomeConfig bakedConfig = null;
+	private static volatile Map<ResourceKey<Level>, BakedGeomeConfig> bakedConfigs = Collections.emptyMap();
+	private static volatile Map<ResourceKey<Level>, BakedTerrainDimension> terrainDimensions = Collections.emptyMap();
 	private static JsonObject globalConfigRoot = null;
 	private static volatile WorldGeologyProfile globalProfile = null;
 
@@ -73,16 +85,17 @@ public final class GeomeConfig {
 	public static synchronized BakedGeomeConfig bake() {
 		JsonObject root = loadConfig();
 		MineralogyOreIntegration.mergeProviderOres(root);
+		root = applyDefaultTemplate(root);
 		globalConfigRoot = root.deepCopy();
 		globalProfile = WorldGeologyProfile.fromGlobalConfig(root,
 				MineralogyConfig.geologyMode(), MineralogyConfig.placeCrudeOil());
-		bakedConfig = bake(root);
+		bakeDimensions(root);
 		return bakedConfig;
 	}
 
 	public static synchronized BakedGeomeConfig applyWorldProfile(WorldGeologyProfile profile) {
 		JsonObject effective = profile.toGeomeConfigJson();
-		bakedConfig = bake(effective);
+		bakeDimensions(effective);
 		return bakedConfig;
 	}
 
@@ -107,6 +120,20 @@ public final class GeomeConfig {
 		return bakedConfig;
 	}
 
+	public static BakedGeomeConfig baked(ResourceKey<Level> dimension) {
+		if (bakedConfig == null) {
+			bake();
+		}
+		return bakedConfigs.get(dimension);
+	}
+
+	static BakedTerrainDimension terrainDimension(ResourceKey<Level> dimension) {
+		if (bakedConfig == null) {
+			bake();
+		}
+		return terrainDimensions.get(dimension);
+	}
+
 	private static JsonObject loadConfig() {
 		JsonObject defaults = defaultConfig();
 		if (!Files.exists(CONFIG_PATH)) {
@@ -124,9 +151,10 @@ public final class GeomeConfig {
 			int schemaVersion = getInt(root, "schema_version", 1);
 			if (schemaVersion < SCHEMA_VERSION) {
 				JsonObject migrated = schemaVersion <= 1 ? migrateV1(root) : root.deepCopy();
-				migrated = migrateToV3(migrated, defaults);
+				migrated = migrateToV4(migrated, defaults);
 				writeMigratedConfig(migrated,
-						schemaVersion <= 1 ? CONFIG_BACKUP_PATH : CONFIG_V2_BACKUP_PATH);
+						schemaVersion <= 1 ? CONFIG_BACKUP_PATH
+								: schemaVersion == 2 ? CONFIG_V2_BACKUP_PATH : CONFIG_V3_BACKUP_PATH);
 				return migrated;
 			}
 			if (schemaVersion > SCHEMA_VERSION) {
@@ -142,7 +170,12 @@ public final class GeomeConfig {
 			if (getInt(root, "worldgen_alias_defaults_revision", 0) < WORLDGEN_ALIAS_DEFAULTS_REVISION) {
 				JsonObject refreshed = refreshWorldgenAliasDefaults(root, defaults);
 				writeWorldgenAliasDefaultsRefresh(refreshed);
-				return refreshed;
+				root = refreshed;
+			}
+			if (getInt(root, "ore_defaults_revision", 0) < ORE_DEFAULTS_REVISION) {
+				JsonObject refreshed = refreshOreDefaults(root, defaults);
+				writeOreDefaultsRefresh(refreshed);
+				root = refreshed;
 			}
 			return root;
 		} catch (IOException | JsonSyntaxException | IllegalStateException e) {
@@ -162,7 +195,26 @@ public final class GeomeConfig {
 		}
 	}
 
-	private static BakedGeomeConfig bake(JsonObject root) {
+	private static void bakeDimensions(JsonObject root) {
+		Map<ResourceKey<Level>, BakedTerrainDimension> terrain = readTerrainDimensions(root);
+		Map<ResourceKey<Level>, BakedGeomeConfig> configs = new LinkedHashMap<>();
+		Map<ResourceKey<Level>, BakedTerrainDimension> usableTerrain = new LinkedHashMap<>();
+		for (Entry<ResourceKey<Level>, BakedTerrainDimension> entry : terrain.entrySet()) {
+			BakedGeomeConfig config = bake(root, entry.getKey().location());
+			if (config != null) {
+				configs.put(entry.getKey(), config);
+				usableTerrain.put(entry.getKey(), entry.getValue());
+			}
+		}
+		bakedConfigs = Collections.unmodifiableMap(configs);
+		terrainDimensions = Collections.unmodifiableMap(usableTerrain);
+		bakedConfig = configs.get(Level.OVERWORLD);
+		if (bakedConfig == null) {
+			bakedConfig = bake(root, Level.OVERWORLD.location());
+		}
+	}
+
+	private static BakedGeomeConfig bake(JsonObject root, ResourceLocation dimension) {
 		LinkedHashMap<String, Integer> geomeIndexes = new LinkedHashMap<>();
 		GeomeDefinition[] geomes = readGeomes(root, geomeIndexes);
 		FormationSettings formations = readFormationSettings(root);
@@ -174,13 +226,121 @@ public final class GeomeConfig {
 		Map<String, double[]> biomeRules = readWeightRules(root, "biomes", geomeIndexes);
 		Map<String, double[]> dictionaryRules = readWeightRules(root, "biome_dictionary", geomeIndexes);
 		Map<ResourceLocation, ResourceLocation> worldgenAliases = readWorldgenAliases(root);
-		RockEntry[] rocks = readRocks(root, geomeIndexes, worldgenAliases);
+		RockEntry[] rocks = readRocks(root, geomeIndexes, worldgenAliases, dimension);
+		if (rocks.length == 0 && !Level.OVERWORLD.location().equals(dimension)) {
+			LOGGER.warn("Disabling Mineralogy terrain replacement in '{}' because it has no eligible rocks", dimension);
+			return null;
+		}
 		Map<Biome, double[]> biomeWeights = bakeBiomeWeights(geomeIndexes, biomeRules, dictionaryRules);
 
-		LOGGER.info("Baked Mineralogy geome config with {} geomes, {} rock entries, {} biome profiles, and {} formations",
-				geomes.length, rocks.length, biomeWeights.size(), formations.algorithm.configName);
+		LOGGER.info("Baked Mineralogy geome config for '{}' with {} geomes, {} rock entries, {} biome profiles, and {} formations",
+				dimension, geomes.length, rocks.length, biomeWeights.size(), formations.algorithm.configName);
 		return new BakedGeomeConfig(geomes, geomeScale, biomeInfluence, regionalNoiseInfluence,
 				boundaryNoiseInfluence, biomeWeights, rocks, formations);
+	}
+
+	private static JsonObject applyDefaultTemplate(JsonObject root) {
+		String configured = getString(root, "default_template", "").trim();
+		if (configured.isEmpty()) {
+			return root;
+		}
+		try {
+			return WorldgenIntegrationManager.applyTemplate(root, new ResourceLocation(configured));
+		} catch (RuntimeException e) {
+			LOGGER.warn("Ignoring unavailable Mineralogy default template '{}'", configured);
+			return root;
+		}
+	}
+
+	private static Map<ResourceKey<Level>, BakedTerrainDimension> readTerrainDimensions(JsonObject root) {
+		JsonObject definitions = getObject(root, "terrain_dimensions", defaultTerrainDimensions());
+		Map<ResourceKey<Level>, BakedTerrainDimension> result = new LinkedHashMap<>();
+		for (Entry<String, JsonElement> entry : definitions.entrySet()) {
+			if (!entry.getValue().isJsonObject()) {
+				LOGGER.warn("Ignoring terrain dimension '{}' because it is not an object", entry.getKey());
+				continue;
+			}
+			JsonObject json = entry.getValue().getAsJsonObject();
+			if (!getBoolean(json, "enabled", true)) {
+				continue;
+			}
+			try {
+				ResourceLocation id = new ResourceLocation(entry.getKey());
+				Set<Block> hosts = Collections.newSetFromMap(new IdentityHashMap<Block, Boolean>());
+				addTerrainHostBlocks(hosts, json.get("host_blocks"));
+				addTerrainHostTags(hosts, json.get("host_tags"));
+				if (hosts.isEmpty()) {
+					LOGGER.warn("Ignoring terrain dimension '{}' because no replacement hosts resolved", id);
+					continue;
+				}
+				Set<ResourceLocation> biomeIds = resourceLocations(json.get("biome_ids"));
+				Set<String> namespaces = strings(json.get("biome_namespaces"));
+				ResourceKey<Level> key = ResourceKey.create(Registry.DIMENSION_REGISTRY, id);
+				result.put(key, new BakedTerrainDimension(key, biomeIds, namespaces, hosts));
+			} catch (RuntimeException e) {
+				LOGGER.warn("Ignoring invalid Mineralogy terrain dimension '{}'", entry.getKey());
+			}
+		}
+		return result;
+	}
+
+	private static void addTerrainHostBlocks(Set<Block> target, JsonElement element) {
+		for (ResourceLocation id : resourceLocations(element)) {
+			Block block = ForgeRegistries.BLOCKS.getValue(id);
+			if (block != null && block != Blocks.AIR) {
+				target.add(block);
+			}
+		}
+	}
+
+	private static void addTerrainHostTags(Set<Block> target, JsonElement element) {
+		for (ResourceLocation id : resourceLocations(element)) {
+			TagKey<Block> tag = TagKey.create(Registry.BLOCK_REGISTRY, id);
+			for (Block block : ForgeRegistries.BLOCKS.getValues()) {
+				if (block.defaultBlockState().is(tag)) {
+					target.add(block);
+				}
+			}
+		}
+	}
+
+	private static Set<ResourceLocation> resourceLocations(JsonElement element) {
+		Set<ResourceLocation> result = new LinkedHashSet<>();
+		if (element != null && element.isJsonArray()) {
+			for (JsonElement value : element.getAsJsonArray()) {
+				result.add(new ResourceLocation(value.getAsString()));
+			}
+		}
+		return result;
+	}
+
+	private static Set<String> strings(JsonElement element) {
+		Set<String> result = new LinkedHashSet<>();
+		if (element != null && element.isJsonArray()) {
+			for (JsonElement value : element.getAsJsonArray()) {
+				result.add(value.getAsString());
+			}
+		}
+		return result;
+	}
+
+	private static boolean rockAppliesToDimension(JsonObject rock, ResourceLocation dimension) {
+		if (!rock.has("dimensions")) {
+			return Level.OVERWORLD.location().equals(dimension);
+		}
+		if (!rock.get("dimensions").isJsonArray()) {
+			return false;
+		}
+		for (JsonElement value : rock.getAsJsonArray("dimensions")) {
+			try {
+				if (dimension.equals(new ResourceLocation(value.getAsString()))) {
+					return true;
+				}
+			} catch (RuntimeException ignored) {
+				// Provider/config validation reports malformed registry IDs once at setup.
+			}
+		}
+		return false;
 	}
 
 	private static FormationSettings readFormationSettings(JsonObject root) {
@@ -261,6 +421,17 @@ public final class GeomeConfig {
 				LOGGER.warn("Ignoring Mineralogy geome '{}' because it is not an object", entry.getKey());
 				continue;
 			}
+			String geomeName;
+			try {
+				geomeName = normalizeGeomeName(entry.getKey());
+			} catch (RuntimeException e) {
+				LOGGER.warn("Ignoring invalid Mineralogy geome ID '{}'", entry.getKey());
+				continue;
+			}
+			if (geomeIndexes.containsKey(geomeName)) {
+				LOGGER.warn("Ignoring duplicate Mineralogy geome '{}' after ID normalization", entry.getKey());
+				continue;
+			}
 
 			JsonObject json = entry.getValue().getAsJsonObject();
 			double[] familyWeights = new double[RockFamily.values().length];
@@ -274,8 +445,8 @@ public final class GeomeConfig {
 						familyWeights[family.ordinal()]);
 			}
 
-			geomeIndexes.put(entry.getKey(), geomes.size());
-			geomes.add(new GeomeDefinition(entry.getKey(), getDouble(json, "base", 1.0D), familyWeights));
+			geomeIndexes.put(geomeName, geomes.size());
+			geomes.add(new GeomeDefinition(geomeName, getDouble(json, "base", 1.0D), familyWeights));
 		}
 
 		if (geomes.isEmpty()) {
@@ -304,7 +475,7 @@ public final class GeomeConfig {
 	}
 
 	private static RockEntry[] readRocks(JsonObject root, Map<String, Integer> geomeIndexes,
-			Map<ResourceLocation, ResourceLocation> worldgenAliases) {
+			Map<ResourceLocation, ResourceLocation> worldgenAliases, ResourceLocation dimension) {
 		JsonObject rockRoot = getObject(root, "rocks", defaultConfig().getAsJsonObject("rocks"));
 		List<RockEntry> rocks = new ArrayList<>();
 		Map<BlockState, ResourceLocation> configuredStates = new HashMap<BlockState, ResourceLocation>();
@@ -316,6 +487,9 @@ public final class GeomeConfig {
 
 			JsonObject json = entry.getValue().getAsJsonObject();
 			if (!getBoolean(json, "enabled", true)) {
+				continue;
+			}
+			if (!rockAppliesToDimension(json, dimension)) {
 				continue;
 			}
 
@@ -376,7 +550,7 @@ public final class GeomeConfig {
 					geomeWeights));
 		}
 
-		if (rocks.isEmpty()) {
+		if (rocks.isEmpty() && Level.OVERWORLD.location().equals(dimension)) {
 			LOGGER.warn("Mineralogy geome config produced no valid rock entries; falling back to vanilla stone");
 			double[] weights = new double[geomeIndexes.size()];
 			for (int i = 0; i < weights.length; i++) {
@@ -407,11 +581,13 @@ public final class GeomeConfig {
 		return refreshBiomeDefaults(migrated, defaultConfig());
 	}
 
-	private static JsonObject migrateToV3(JsonObject original, JsonObject defaults) {
+	private static JsonObject migrateToV4(JsonObject original, JsonObject defaults) {
 		JsonObject migrated = getInt(original, "biome_defaults_revision", 0) < BIOME_DEFAULTS_REVISION
 				? refreshBiomeDefaults(original, defaults) : original.deepCopy();
-		for (String key : new String[] { "geology_mode", "place_crude_oil", "cyano", "oil", "ores",
-				"ore_providers", "worldgen_aliases" }) {
+		for (String key : new String[] { "geology_mode", "place_crude_oil", "manage_vanilla_ores",
+				"ore_defaults_revision", "cyano", "oil", "ores",
+				"ore_providers", "providers", "worldgen_aliases", "default_template",
+				"terrain_dimensions" }) {
 			if (!migrated.has(key)) {
 				migrated.add(key, defaults.get(key).deepCopy());
 			}
@@ -451,6 +627,70 @@ public final class GeomeConfig {
 		}
 		refreshed.addProperty("worldgen_alias_defaults_revision", WORLDGEN_ALIAS_DEFAULTS_REVISION);
 		return refreshed;
+	}
+
+	static JsonObject refreshOreDefaults(JsonObject original, JsonObject defaults) {
+		JsonObject refreshed = original.deepCopy();
+		if (!refreshed.has("manage_vanilla_ores")) {
+			refreshed.addProperty("manage_vanilla_ores", false);
+		}
+		mergeMissingEntries(refreshed, defaults, "ores");
+		upgradeOrePatternDefaults(refreshed);
+		refreshed.addProperty("ore_defaults_revision", ORE_DEFAULTS_REVISION);
+		return refreshed;
+	}
+
+	private static void upgradeOrePatternDefaults(JsonObject root) {
+		upgradeOreRule(root, "minecraft:coal_ore", "minecraft:overworld",
+				0, 256, 20.0D, 17, "cluster", 0, 96, 12.0D);
+		upgradeOreRule(root, "minecraft:coal_ore", "minecraft:overworld",
+				0, 96, 6.0D, 17, "cluster", 0, 96, 12.0D);
+		upgradeOreRule(root, "minecraft:iron_ore", "minecraft:overworld",
+				-64, 256, 20.0D, 9, "vein", -64, 256, 34.0D);
+		upgradeOreRule(root, "minecraft:copper_ore", "minecraft:overworld",
+				-16, 112, 16.0D, 10, "cloud", -16, 112, 13.0D);
+		upgradeOreRule(root, "minecraft:diamond_ore", "minecraft:overworld",
+				-64, 16, 4.0D, 8, "cluster", -64, 16, 2.6D);
+		upgradeOreRule(root, "minecraft:diamond_ore", "minecraft:overworld",
+				-64, 16, 2.0D, 8, "cluster", -64, 16, 2.6D);
+		upgradeOreRule(root, "minecraft:lapis_ore", "minecraft:overworld",
+				-64, 64, 4.0D, 7, "cloud", -64, 64, 3.4D);
+		upgradeOreRule(root, "minecraft:emerald_ore", "minecraft:overworld",
+				-16, 319, 8.0D, 3, "cluster", -16, 128, 0.55D);
+		upgradeOreRule(root, "minecraft:emerald_ore", "minecraft:overworld",
+				-16, 128, 3.0D, 3, "cluster", -16, 128, 0.55D);
+		upgradeOreRule(root, "minecraft:nether_gold_ore", "minecraft:the_nether",
+				0, 127, 10.0D, 10, "cluster", 0, 127, 6.0D);
+		upgradeOreRule(root, "minecraft:ancient_debris", "minecraft:the_nether",
+				8, 120, 2.0D, 3, "cluster", 8, 120, 1.0D);
+	}
+
+	private static void upgradeOreRule(JsonObject root, String oreId, String dimensionId,
+			int oldMinY, int oldMaxY, double oldFrequency, int oldQuantity, String oldPattern,
+			int newMinY, int newMaxY, double newFrequency) {
+		if (!root.has("ores") || !root.get("ores").isJsonObject()) {
+			return;
+		}
+		JsonObject ores = root.getAsJsonObject("ores");
+		if (!ores.has(oreId) || !ores.get(oreId).isJsonObject()) {
+			return;
+		}
+		JsonObject ore = ores.getAsJsonObject(oreId);
+		if (!ore.has("dimensions") || !ore.get("dimensions").isJsonObject()
+				|| !ore.getAsJsonObject("dimensions").has(dimensionId)
+				|| !ore.getAsJsonObject("dimensions").get(dimensionId).isJsonObject()) {
+			return;
+		}
+		JsonObject rule = ore.getAsJsonObject("dimensions").getAsJsonObject(dimensionId);
+		if (getInt(rule, "min_y", Integer.MIN_VALUE) == oldMinY
+				&& getInt(rule, "max_y", Integer.MIN_VALUE) == oldMaxY
+				&& Math.abs(getDouble(rule, "frequency", -1.0D) - oldFrequency) < 0.000001D
+				&& getInt(rule, "quantity", -1) == oldQuantity
+				&& oldPattern.equals(getString(rule, "pattern", ""))) {
+			rule.addProperty("min_y", newMinY);
+			rule.addProperty("max_y", newMaxY);
+			rule.addProperty("frequency", newFrequency);
+		}
 	}
 
 	private static void mergeMissingEntries(JsonObject targetRoot, JsonObject defaultsRoot, String key) {
@@ -497,6 +737,16 @@ public final class GeomeConfig {
 					WORLDGEN_ALIAS_DEFAULTS_REVISION, WORLDGEN_ALIAS_DEFAULTS_BACKUP_PATH);
 		} else {
 			LOGGER.warn("Could not persist updated Mineralogy worldgen aliases; using refreshed settings in memory");
+		}
+	}
+
+	private static void writeOreDefaultsRefresh(JsonObject refreshed) {
+		if (writeUpdatedConfig(refreshed, ORE_DEFAULTS_BACKUP_PATH)) {
+			LOGGER.info("Updated Mineralogy managed-ore defaults to revision {}. "
+					+ "The previous file is preserved at '{}'",
+					ORE_DEFAULTS_REVISION, ORE_DEFAULTS_BACKUP_PATH);
+		} else {
+			LOGGER.warn("Could not persist updated Mineralogy ore defaults; using refreshed settings in memory");
 		}
 	}
 
@@ -641,7 +891,12 @@ public final class GeomeConfig {
 		}
 
 		for (Entry<String, JsonElement> entry : json.entrySet()) {
-			Integer index = geomeIndexes.get(entry.getKey());
+			Integer index = null;
+			try {
+				index = geomeIndexes.get(normalizeGeomeName(entry.getKey()));
+			} catch (RuntimeException ignored) {
+				// The warning below includes the original user-facing value.
+			}
 			if (index == null) {
 				LOGGER.warn("Ignoring unknown Mineralogy geome weight '{}'", entry.getKey());
 				continue;
@@ -669,10 +924,15 @@ public final class GeomeConfig {
 	}
 
 	private static void add(double[] weights, Map<String, Integer> indexes, String geome, double value) {
-		Integer index = indexes.get(geome);
+		Integer index = indexes.get(normalizeGeomeName(geome));
 		if (index != null) {
 			weights[index] += value;
 		}
+	}
+
+	static String normalizeGeomeName(String geome) {
+		return geome.indexOf(':') >= 0 ? new ResourceLocation(geome).toString()
+				: new ResourceLocation("mineralogy", geome).toString();
 	}
 
 	private static double getDouble(JsonObject json, String key, double fallback) {
@@ -783,8 +1043,11 @@ public final class GeomeConfig {
 		root.addProperty("schema_version", SCHEMA_VERSION);
 		root.addProperty("biome_defaults_revision", BIOME_DEFAULTS_REVISION);
 		root.addProperty("worldgen_alias_defaults_revision", WORLDGEN_ALIAS_DEFAULTS_REVISION);
+		root.addProperty("ore_defaults_revision", ORE_DEFAULTS_REVISION);
 		root.addProperty("geology_mode", MineralogyConfig.geologyMode().name().toLowerCase(java.util.Locale.ROOT));
 		root.addProperty("place_crude_oil", MineralogyConfig.placeCrudeOil());
+		root.addProperty("manage_vanilla_ores", false);
+		root.addProperty("default_template", "");
 		root.addProperty("geome_scale", 384.0D);
 		root.addProperty("biome_influence", 1.15D);
 		root.addProperty("regional_noise_influence", 0.90D);
@@ -846,7 +1109,24 @@ public final class GeomeConfig {
 		root.add("oil", defaultOilConfig());
 		root.add("ores", defaultOreConfig());
 		root.add("ore_providers", new JsonObject());
+		root.add("providers", new JsonObject());
+		root.add("terrain_dimensions", defaultTerrainDimensions());
 		return root;
+	}
+
+	private static JsonObject defaultTerrainDimensions() {
+		JsonObject dimensions = new JsonObject();
+		JsonObject overworld = new JsonObject();
+		overworld.addProperty("enabled", true);
+		overworld.add("biome_ids", new JsonArray());
+		overworld.add("biome_namespaces", new JsonArray());
+		JsonArray hosts = new JsonArray();
+		hosts.add("minecraft:stone");
+		hosts.add("minecraft:deepslate");
+		overworld.add("host_blocks", hosts);
+		overworld.add("host_tags", new JsonArray());
+		dimensions.add("minecraft:overworld", overworld);
+		return dimensions;
 	}
 
 	private static JsonObject defaultCyanoConfig() {
@@ -877,7 +1157,106 @@ public final class GeomeConfig {
 		addDefaultOre(ores, "mineralogy:sulfur_ore", MineralogyConfig.sulfurOre());
 		addDefaultOre(ores, "mineralogy:phosphorous_ore", MineralogyConfig.phosphorousOre());
 		addDefaultOre(ores, "mineralogy:nitrate_ore", MineralogyConfig.nitrateOre());
+		addVanillaOverworldOre(ores, "coal_ore", "deepslate_coal_ore", 0, 96, 12.0D, 17,
+				OrePattern.CLUSTER, 10, 4, 6);
+		addVanillaOverworldOre(ores, "iron_ore", "deepslate_iron_ore", -64, 256, 34.0D, 9,
+				OrePattern.VEIN, 8, 4, 4);
+		addVanillaOverworldOre(ores, "copper_ore", "deepslate_copper_ore", -16, 112, 13.0D, 10,
+				OrePattern.CLOUD, 6, 4, 4);
+		addVanillaOverworldOre(ores, "gold_ore", "deepslate_gold_ore", -64, 32, 4.5D, 9,
+				OrePattern.VEIN, 8, 4, 4);
+		addVanillaOverworldOre(ores, "redstone_ore", "deepslate_redstone_ore", -64, 15, 8.0D, 8,
+				OrePattern.VEIN, 8, 4, 4);
+		addVanillaOverworldOre(ores, "diamond_ore", "deepslate_diamond_ore", -64, 16, 2.6D, 8,
+				OrePattern.CLUSTER, 6, 3, 4);
+		addVanillaOverworldOre(ores, "lapis_ore", "deepslate_lapis_ore", -64, 64, 3.4D, 7,
+				OrePattern.CLOUD, 8, 4, 4);
+		addVanillaOverworldOre(ores, "emerald_ore", "deepslate_emerald_ore", -16, 128, 0.55D, 3,
+				OrePattern.CLUSTER, 8, 5, 3);
+		setOreGeomeWeights(ores, "coal_ore", "sedimentary_basin", 1.8D,
+				"coastal_shelf", 1.5D, "wetland_basin", 1.4D, "volcanic_arc", 0.45D);
+		setOreGeomeWeights(ores, "iron_ore", "mountain_belt", 1.4D,
+				"volcanic_arc", 1.25D, "stable_craton", 1.15D);
+		setOreGeomeWeights(ores, "copper_ore", "mountain_belt", 1.5D, "volcanic_arc", 1.6D);
+		setOreGeomeWeights(ores, "gold_ore", "mountain_belt", 1.5D,
+				"volcanic_arc", 1.7D, "arid_basin", 1.25D);
+		setOreGeomeWeights(ores, "diamond_ore", "stable_craton", 1.35D, "volcanic_arc", 1.2D);
+		setOreGeomeWeights(ores, "lapis_ore", "mountain_belt", 1.6D, "glacial_highland", 1.25D);
+		setOreGeomeWeights(ores, "emerald_ore", "mountain_belt", 4.0D,
+				"glacial_highland", 2.0D, "stable_craton", 0.15D, "sedimentary_basin", 0.05D,
+				"coastal_shelf", 0.05D, "arid_basin", 0.15D, "wetland_basin", 0.05D,
+				"volcanic_arc", 0.35D);
+		addVanillaNetherOre(ores, "nether_gold_ore", 0, 127, 6.0D, 10, OrePattern.CLUSTER, 8, 5, 5);
+		addVanillaNetherOre(ores, "nether_quartz_ore", 0, 127, 16.0D, 14, OrePattern.VEIN, 8, 4, 4);
+		addVanillaNetherOre(ores, "ancient_debris", 8, 120, 1.0D, 3, OrePattern.CLUSTER, 12, 8, 3);
 		return ores;
+	}
+
+	private static void addVanillaOverworldOre(JsonObject ores, String id, String deepId,
+			int minY, int maxY, double frequency, int quantity, OrePattern pattern,
+			int spread, int verticalSpread, int nodeSize) {
+		JsonObject ore = vanillaOre(id);
+		ore.addProperty("deep_output", "minecraft:" + deepId);
+		ore.addProperty("deep_output_max_y", -1);
+		JsonObject rule = oreRule(minY, maxY, frequency, quantity, pattern, spread, verticalSpread, nodeSize);
+		rule.addProperty("height_distribution", OreHeightDistribution.TRIANGLE.configName);
+		JsonArray families = new JsonArray();
+		for (RockFamily family : RockFamily.values()) {
+			families.add(family.configName);
+		}
+		rule.add("host_families", families);
+		JsonArray tags = new JsonArray();
+		tags.add("minecraft:stone_ore_replaceables");
+		tags.add("minecraft:deepslate_ore_replaceables");
+		rule.add("host_tags", tags);
+		ore.getAsJsonObject("dimensions").add("minecraft:overworld", rule);
+		ores.add("minecraft:" + id, ore);
+	}
+
+	private static void addVanillaNetherOre(JsonObject ores, String id, int minY, int maxY,
+			double frequency, int quantity, OrePattern pattern, int spread, int verticalSpread, int nodeSize) {
+		JsonObject ore = vanillaOre(id);
+		JsonObject rule = oreRule(minY, maxY, frequency, quantity, pattern, spread, verticalSpread, nodeSize);
+		JsonArray tags = new JsonArray();
+		tags.add("minecraft:base_stone_nether");
+		rule.add("host_tags", tags);
+		ore.getAsJsonObject("dimensions").add("minecraft:the_nether", rule);
+		ores.add("minecraft:" + id, ore);
+	}
+
+	private static JsonObject vanillaOre(String id) {
+		JsonObject ore = new JsonObject();
+		ore.addProperty("enabled", true);
+		ore.addProperty("source_mod", "minecraft");
+		ore.addProperty("native_generation", true);
+		ore.add("dimensions", new JsonObject());
+		return ore;
+	}
+
+	private static JsonObject oreRule(int minY, int maxY, double frequency, int quantity,
+			OrePattern pattern, int spread, int verticalSpread, int nodeSize) {
+		JsonObject rule = new JsonObject();
+		rule.addProperty("enabled", true);
+		rule.addProperty("min_y", minY);
+		rule.addProperty("max_y", maxY);
+		rule.addProperty("frequency", frequency);
+		rule.addProperty("quantity", quantity);
+		rule.addProperty("pattern", pattern.configName);
+		rule.addProperty("height_distribution", OreHeightDistribution.UNIFORM.configName);
+		rule.addProperty("spread", spread);
+		rule.addProperty("vertical_spread", verticalSpread);
+		rule.addProperty("node_size", nodeSize);
+		return rule;
+	}
+
+	private static void setOreGeomeWeights(JsonObject ores, String oreId, Object... values) {
+		JsonObject rule = ores.getAsJsonObject("minecraft:" + oreId)
+				.getAsJsonObject("dimensions").getAsJsonObject("minecraft:overworld");
+		JsonObject weights = new JsonObject();
+		for (int i = 0; i < values.length; i += 2) {
+			weights.addProperty((String) values[i], (Double) values[i + 1]);
+		}
+		rule.add("geomes", weights);
 	}
 
 	private static void addDefaultOre(JsonObject ores, String id, OreGenerationSettings settings) {
@@ -891,6 +1270,11 @@ public final class GeomeConfig {
 		overworld.addProperty("max_y", settings.maxY());
 		overworld.addProperty("frequency", settings.frequency());
 		overworld.addProperty("quantity", settings.quantity());
+		overworld.addProperty("pattern", OrePattern.VEIN.configName);
+		overworld.addProperty("height_distribution", OreHeightDistribution.UNIFORM.configName);
+		overworld.addProperty("spread", 8);
+		overworld.addProperty("vertical_spread", 4);
+		overworld.addProperty("node_size", 4);
 		JsonArray families = new JsonArray();
 		for (RockFamily family : RockFamily.values()) {
 			families.add(family.configName);

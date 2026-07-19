@@ -6,7 +6,6 @@ import java.util.Optional;
 import com.mcmoddev.mineralogy.worldgen.math.PerlinNoise2D;
 
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.core.Holder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
@@ -84,7 +83,7 @@ public final class GeomeGeology {
 		}
 	}
 
-	public void replaceStoneInChunk(LevelAccessor world, ChunkAccess chunk) {
+	public void replaceStoneInChunk(LevelAccessor world, ChunkAccess chunk, BakedTerrainDimension terrain) {
 		ChunkPos chunkPos = chunk.getPos();
 		int xOffset = chunkPos.getMinBlockX();
 		int zOffset = chunkPos.getMinBlockZ();
@@ -102,17 +101,20 @@ public final class GeomeGeology {
 				Biome biome = biomeHolder.value();
 				Optional<ResourceKey<Biome>> biomeKey = biomeHolder.unwrapKey();
 				ResourceLocation biomeId = biomeKey.isPresent() ? biomeKey.get().location() : null;
+				if (!terrain.acceptsBiome(biomeId)) {
+					continue;
+				}
 				int geomeIndex = classifyColumn(biome, biomeId, x, z, regionalValues);
 				int baseRockValue = stratumOffsetAt(x, z);
 				long formationRegion = formationRegionAt(x, z);
 
 				if (stableLayers) {
 					changed |= replaceStableColumn(chunk, cursor, geomeIndex, baseRockValue,
-							formationRegion, x, z, surfaceY);
+							formationRegion, x, z, surfaceY, terrain);
 				} else {
 					for (int y = surfaceY; y >= chunk.getMinBuildHeight(); y--) {
 						cursor.set(x, y, z);
-						if (isReplaceableBaseStone(chunk.getBlockState(cursor))) {
+						if (terrain.isReplaceable(chunk.getBlockState(cursor))) {
 							chunk.setBlockState(cursor,
 									pickReplacement(geomeIndex, baseRockValue, formationRegion, x, y, z), false);
 							changed = true;
@@ -128,7 +130,8 @@ public final class GeomeGeology {
 	}
 
 	private boolean replaceStableColumn(ChunkAccess chunk, BlockPos.MutableBlockPos cursor, int geomeIndex,
-			int baseRockValue, long formationRegion, int x, int z, int surfaceY) {
+			int baseRockValue, long formationRegion, int x, int z, int surfaceY,
+			BakedTerrainDimension terrain) {
 		int layerIndex = Math.floorDiv(baseRockValue + surfaceY, layerThickness);
 		int layerStart = layerIndex * layerThickness;
 		BlockState replacement = pickStableReplacement(geomeIndex, formationRegion, layerIndex);
@@ -143,7 +146,7 @@ public final class GeomeGeology {
 				replacement = pickStableReplacement(geomeIndex, formationRegion, layerIndex);
 			}
 			cursor.setY(y);
-			if (isReplaceableBaseStone(chunk.getBlockState(cursor))) {
+			if (terrain.isReplaceable(chunk.getBlockState(cursor))) {
 				chunk.setBlockState(cursor, replacement, false);
 				changed = true;
 			}
@@ -164,6 +167,44 @@ public final class GeomeGeology {
 
 	int classifyColumn(Biome biome, int x, int z, double[] regionalValues) {
 		return classifyColumn(biome, null, x, z, regionalValues);
+	}
+
+	/**
+	 * Classifies a column once for read-only API sampling. All Y queries on the
+	 * returned object reuse the same biome, geome, stratum, and formation data.
+	 */
+	public ColumnSample sampleColumn(Biome biome, ResourceLocation biomeId, int x, int z) {
+		double[] regionalValues = new double[config.geomeCount()];
+		int geomeIndex = classifyColumn(biome, biomeId, x, z, regionalValues);
+		return new ColumnSample(geomeIndex, stratumOffsetAt(x, z), formationRegionAt(x, z), x, z);
+	}
+
+	public final class ColumnSample {
+		private final int geomeIndex;
+		private final int stratumOffset;
+		private final long formationRegion;
+		private final int x;
+		private final int z;
+
+		private ColumnSample(int geomeIndex, int stratumOffset, long formationRegion, int x, int z) {
+			this.geomeIndex = geomeIndex;
+			this.stratumOffset = stratumOffset;
+			this.formationRegion = formationRegion;
+			this.x = x;
+			this.z = z;
+		}
+
+		public String geomeName() {
+			return config.geomeName(geomeIndex);
+		}
+
+		public BlockState rockAt(int y) {
+			return pickReplacement(geomeIndex, stratumOffset, formationRegion, x, y, z);
+		}
+
+		public RockFamily familyAt(int y) {
+			return config.familyOf(rockAt(y));
+		}
 	}
 
 	private int classifyColumn(Biome biome, ResourceLocation biomeId, int x, int z, double[] regionalValues) {
@@ -265,11 +306,6 @@ public final class GeomeGeology {
 			return (200.0D - regionScale) / 700.0D;
 		}
 		return Math.min(1.0D, (regionScale - 200.0D) / 440.0D);
-	}
-
-	private static boolean isReplaceableBaseStone(BlockState state) {
-		Block block = state.getBlock();
-		return block == Blocks.STONE || block == Blocks.DEEPSLATE;
 	}
 
 	private RockFamily pickShapedFamily(int geomeIndex, int x, int y, int z, int layerY, int familyHash) {

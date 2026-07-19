@@ -4,7 +4,8 @@ import java.util.List;
 
 import com.mcmoddev.mineralogy.init.MineralogyFluids;
 import com.mcmoddev.mineralogy.init.MineralogyRegistry;
-import com.mcmoddev.mineralogy.api.MineralogyOreIntegration;
+import com.mcmoddev.mineralogy.integration.WorldgenIntegrationManager;
+import com.mcmoddev.mineralogy.patching.LegacyWorldDataHook;
 import com.mcmoddev.mineralogy.worldgen.MineralogyOreGeneration;
 import com.mcmoddev.mineralogy.worldgen.GeomeConfig;
 import com.mcmoddev.mineralogy.worldgen.GeomeDistributionSampler;
@@ -23,6 +24,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -53,11 +55,13 @@ public class Mineralogy {
 
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueInterMod);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processInterMod);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::loadComplete);
 		MineralogyFluids.register(FMLJavaModLoadingContext.get().getModEventBus());
 		MinecraftForge.EVENT_BUS.addListener(StoneReplacer::onBiomeLoading);
 		MinecraftForge.EVENT_BUS.addListener(MineralogyOreGeneration::onBiomeLoading);
 		MinecraftForge.EVENT_BUS.addListener(OilDepositFeature::onBiomeLoading);
+		MinecraftForge.EVENT_BUS.addListener(LegacyWorldDataHook::onServerAboutToStart);
 		MinecraftForge.EVENT_BUS.addListener(WorldGeologyProfileManager::onServerAboutToStart);
 		MinecraftForge.EVENT_BUS.addListener(WorldGeologyProfileManager::onServerStopped);
 		WorldgenBenchmark.register();
@@ -65,27 +69,29 @@ public class Mineralogy {
 
 	private void loadComplete(final FMLLoadCompleteEvent event) {
 		event.enqueueWork(() -> {
-			// Provider mods may create their handoff file during common setup. Scan again
-			// after every mod has completed that phase, then refresh new-world defaults.
-			MineralogyOreIntegration.initialize();
+			WorldgenIntegrationManager.freeze();
 			GeomeConfig.bake();
 			MineralogyOreGeneration.refreshWorldConfig();
+			WorldgenIntegrationManager.markFeatureReady();
 		});
 	}
 
 	private void enqueueInterMod(final InterModEnqueueEvent event) {
-		// Common setup has completed for every mod. Provider mods can create their
-		// handoff file there, then query the API during IMC processing or later.
-		MineralogyOreIntegration.initialize();
+		// Provider mods submit WorldgenProvider values from their own enqueue event.
+	}
+
+	private void processInterMod(final InterModProcessEvent event) {
+		// Files are authoritative, so scan them before accepting API submissions.
+		WorldgenIntegrationManager.initialize();
+		WorldgenIntegrationManager.processImcMessages();
 		GeomeConfig.bake();
 		MineralogyOreGeneration.refreshWorldConfig();
-		MineralogyOreIntegration.markFeatureReady();
 	}
 
 	private void setup(final FMLCommonSetupEvent event) {
 		MineralogyConfig.bake();
 		applyGeologyConfigOverrides();
-		MineralogyOreIntegration.initialize();
+		WorldgenIntegrationManager.initialize();
 		GeomeConfig.bake();
 		logGeomeSampler();
 		event.enqueueWork(() -> {

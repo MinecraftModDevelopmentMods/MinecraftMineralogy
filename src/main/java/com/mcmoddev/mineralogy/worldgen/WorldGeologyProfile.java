@@ -1,19 +1,23 @@
 package com.mcmoddev.mineralogy.worldgen;
 
 import java.util.Locale;
+import java.util.Optional;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mcmoddev.mineralogy.MineralogyConfig.GeologyMode;
 import com.mcmoddev.mineralogy.worldgen.FormationSettings.Algorithm;
 import com.mcmoddev.mineralogy.worldgen.FormationSettings.Preset;
+import com.mcmoddev.mineralogy.integration.WorldgenIntegrationManager;
+
+import net.minecraft.resources.ResourceLocation;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /** A complete, self-contained snapshot of the geology settings for one world. */
 public final class WorldGeologyProfile {
-	public static final int SCHEMA_VERSION = 2;
+	public static final int SCHEMA_VERSION = 3;
 
 	private static final Logger LOGGER = LogManager.getLogger();
 
@@ -71,6 +75,15 @@ public final class WorldGeologyProfile {
 		if (schema >= SCHEMA_VERSION) {
 			return new WorldGeologyProfile(json, fallback.geologyMode, fallback.placeCrudeOil);
 		}
+		if (schema == 2) {
+			JsonObject migrated = json.deepCopy();
+			for (String key : new String[] { "terrain_dimensions", "providers" }) {
+				if (!migrated.has(key) && fallback.root.has(key)) {
+					migrated.add(key, fallback.root.get(key).deepCopy());
+				}
+			}
+			return new WorldGeologyProfile(migrated, fallback.geologyMode, fallback.placeCrudeOil);
+		}
 
 		// Schema 1 contained only mode, oil and formations. Overlay those fields on
 		// the currently effective pack profile so the resulting profile is complete.
@@ -100,6 +113,28 @@ public final class WorldGeologyProfile {
 
 	public WorldGeologyProfile withRoot(JsonObject editedRoot) {
 		return new WorldGeologyProfile(editedRoot, geologyMode, placeCrudeOil);
+	}
+
+	public WorldGeologyProfile withTemplate(ResourceLocation templateId) {
+		return new WorldGeologyProfile(WorldgenIntegrationManager.applyTemplate(root, templateId),
+				geologyMode, placeCrudeOil);
+	}
+
+	public WorldGeologyProfile withoutTemplate() {
+		JsonObject edited = rootCopy();
+		edited.remove("selected_template");
+		return new WorldGeologyProfile(edited, geologyMode, placeCrudeOil);
+	}
+
+	public Optional<ResourceLocation> selectedTemplate() {
+		if (!root.has("selected_template")) {
+			return Optional.empty();
+		}
+		try {
+			return Optional.of(new ResourceLocation(root.get("selected_template").getAsString()));
+		} catch (RuntimeException ignored) {
+			return Optional.empty();
+		}
 	}
 
 	public WorldGeologyProfile copy() {
@@ -156,6 +191,10 @@ public final class WorldGeologyProfile {
 
 	public boolean placeCrudeOil() {
 		return placeCrudeOil;
+	}
+
+	public boolean manageVanillaOres() {
+		return booleanValue(root, "manage_vanilla_ores", false);
 	}
 
 	public int cyanoGeomeSize() {

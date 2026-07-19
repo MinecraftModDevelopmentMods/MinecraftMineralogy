@@ -4,6 +4,7 @@ import com.mcmoddev.mineralogy.Mineralogy;
 import com.mcmoddev.mineralogy.worldgen.MineralogyOreGeneration;
 import com.mcmoddev.mineralogy.worldgen.OilDepositFeature;
 import com.mcmoddev.mineralogy.worldgen.StoneReplacer;
+import com.mcmoddev.mineralogy.worldgen.VanillaOreFeatureGate;
 
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraftforge.event.RegistryEvent;
@@ -17,6 +18,7 @@ public final class Features {
 		event.getRegistry().register(StoneReplacer.FEATURE);
 		event.getRegistry().register(MineralogyOreGeneration.FEATURE);
 		event.getRegistry().register(OilDepositFeature.FEATURE);
+		VanillaOreFeatureGate.registerFeatures(event.getRegistry());
 	}
 
 	private Features() {

@@ -48,6 +48,11 @@ public final class WorldgenBenchmark {
 		WorldGeologyProfile benchmarkProfile = source.withSelection(geologyMode,
 				Preset.AVERAGE, Preset.AVERAGE, Preset.AVERAGE, Preset.AVERAGE, Preset.AVERAGE,
 				source.placeCrudeOil());
+		if (Boolean.getBoolean("mineralogy.worldgenBenchmarkVanillaOres")) {
+			com.google.gson.JsonObject root = benchmarkProfile.rootCopy();
+			root.addProperty("manage_vanilla_ores", true);
+			benchmarkProfile = benchmarkProfile.withRoot(root);
+		}
 		WorldGeologyProfileManager.applyBenchmarkProfile(benchmarkProfile);
 	}
 

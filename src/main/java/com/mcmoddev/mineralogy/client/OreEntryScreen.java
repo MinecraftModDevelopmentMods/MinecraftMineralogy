@@ -13,9 +13,11 @@ import net.minecraft.client.gui.components.CycleButton;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FormattedCharSequence;
 
 final class OreEntryScreen extends Screen {
 	private final Screen parent;
@@ -24,6 +26,7 @@ final class OreEntryScreen extends Screen {
 	private boolean enabled;
 	private int page;
 	private EditBox dimensionId;
+	private String dimensionText = "";
 
 	OreEntryScreen(Screen parent, GeologyEditorSession session, String oreId) {
 		super(new TranslatableComponent("screen.mineralogy.ore_entry"));
@@ -47,8 +50,9 @@ final class OreEntryScreen extends Screen {
 		List<String> ids = new ArrayList<>(dimensions.keySet());
 		Collections.sort(ids);
 		int listTop = 76;
+		int pickerY = height - 76;
 		int controlsY = height - 52;
-		int pageSize = Math.max(1, (controlsY - listTop) / 24);
+		int pageSize = Math.max(1, (pickerY - listTop) / 24);
 		int pageCount = Math.max(1, (ids.size() + pageSize - 1) / pageSize);
 		page = Math.max(0, Math.min(page, pageCount - 1));
 		int start = page * pageSize;
@@ -67,6 +71,18 @@ final class OreEntryScreen extends Screen {
 		dimensionId = addRenderableWidget(new EditBox(font, width / 2 - 55, controlsY, 150, 20,
 				new TranslatableComponent("option.mineralogy.dimension")));
 		dimensionId.setMaxLength(128);
+		List<String> availableDimensions = session.availableDimensionIds();
+		String selectedDimension = selectedDimension(availableDimensions, dimensions);
+		if (dimensionText.isEmpty()) dimensionText = selectedDimension;
+		dimensionId.setValue(dimensionText);
+		dimensionId.setResponder(value -> dimensionText = value);
+		addRenderableWidget(CycleButton.builder(this::dimensionName)
+				.withValues(availableDimensions)
+				.withInitialValue(selectedDimension)
+				.withTooltip(value -> tooltip("tooltip.mineralogy.available_dimension"))
+				.create(width / 2 - 155, pickerY, 310, 20,
+						new TranslatableComponent("option.mineralogy.available_dimension"),
+						(button, value) -> dimensionId.setValue(value)));
 		addRenderableWidget(new Button(width / 2 + 100, controlsY, 55, 20,
 				new TranslatableComponent("button.mineralogy.add"), button -> addDimension()));
 
@@ -78,32 +94,52 @@ final class OreEntryScreen extends Screen {
 	}
 
 	private void addDimension() {
-		String id = dimensionId.getValue().trim();
+		String id;
 		try {
-			new ResourceLocation(id);
+			id = new ResourceLocation(dimensionId.getValue().trim()).toString();
 		} catch (RuntimeException e) {
 			return;
 		}
+		dimensionText = id;
 		JsonObject dimensions = dimensions(session.ore(oreId));
 		if (!dimensions.has(id)) {
-			JsonObject rule;
-			if ("minecraft:overworld".equals(id)) {
-				rule = GeologyEditorSession.defaultOreDimension();
-			} else {
-				rule = new JsonObject();
-				rule.addProperty("enabled", true);
-				rule.addProperty("min_y", 0);
-				rule.addProperty("max_y", 128);
-				rule.addProperty("frequency", 1.0D);
-				rule.addProperty("quantity", 8);
-				JsonArray tags = new JsonArray();
-				tags.add("minecraft:the_nether".equals(id)
-						? "minecraft:base_stone_nether" : "minecraft:stone_ore_replaceables");
-				rule.add("host_tags", tags);
-			}
-			dimensions.add(id, rule);
+			dimensions.add(id, defaultDimension(id));
 		}
 		minecraft.setScreen(new OreDimensionScreen(this, session, oreId, id));
+	}
+
+	private static JsonObject defaultDimension(String id) {
+		if ("minecraft:overworld".equals(id)) return GeologyEditorSession.defaultOreDimension();
+		JsonObject rule = new JsonObject();
+		rule.addProperty("enabled", true);
+		rule.addProperty("min_y", 0);
+		rule.addProperty("max_y", "minecraft:the_end".equals(id) ? 256 : 128);
+		rule.addProperty("frequency", 1.0D);
+		rule.addProperty("quantity", 8);
+		rule.addProperty("pattern", "vein");
+		rule.addProperty("height_distribution", "uniform");
+		rule.addProperty("spread", 8);
+		rule.addProperty("vertical_spread", 4);
+		rule.addProperty("node_size", 4);
+		if ("minecraft:the_end".equals(id)) {
+			JsonArray blocks = new JsonArray();
+			blocks.add("minecraft:end_stone");
+			rule.add("host_blocks", blocks);
+		} else {
+			JsonArray tags = new JsonArray();
+			tags.add("minecraft:the_nether".equals(id)
+					? "minecraft:base_stone_nether" : "minecraft:stone_ore_replaceables");
+			rule.add("host_tags", tags);
+		}
+		return rule;
+	}
+
+	private String selectedDimension(List<String> available, JsonObject configured) {
+		if (available.contains(dimensionText)) return dimensionText;
+		for (String id : available) {
+			if (!configured.has(id)) return id;
+		}
+		return available.get(0);
 	}
 
 	private void rebuildWidgets() {
@@ -129,6 +165,23 @@ final class OreEntryScreen extends Screen {
 			return result;
 		}
 		return ore.getAsJsonObject("dimensions");
+	}
+
+	private Component dimensionName(String id) {
+		if ("minecraft:overworld".equals(id)) {
+			return new TranslatableComponent("value.mineralogy.dimension.overworld");
+		}
+		if ("minecraft:the_nether".equals(id)) {
+			return new TranslatableComponent("value.mineralogy.dimension.the_nether");
+		}
+		if ("minecraft:the_end".equals(id)) {
+			return new TranslatableComponent("value.mineralogy.dimension.the_end");
+		}
+		return new TextComponent(id);
+	}
+
+	private List<FormattedCharSequence> tooltip(String key) {
+		return font.split(new TranslatableComponent(key), 260);
 	}
 
 	@Override

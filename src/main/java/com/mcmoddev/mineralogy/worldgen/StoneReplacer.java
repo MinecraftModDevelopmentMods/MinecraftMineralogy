@@ -1,6 +1,8 @@
 package com.mcmoddev.mineralogy.worldgen;
 
 import java.util.Collections;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -38,9 +40,8 @@ public class StoneReplacer extends Feature<NoneFeatureConfiguration> {
 	private static Holder<PlacedFeature> placedFeature;
 
 	private final Lock geologyLock = new ReentrantLock();
-	private Geology geology = null;
-	private GeomeGeology geomeGeology = null;
-	private long geologySeed = Long.MIN_VALUE;
+	private final Map<net.minecraft.resources.ResourceKey<Level>, CachedGeology> geologyByDimension =
+			new ConcurrentHashMap<>();
 
 	private StoneReplacer() {
 		super(NoneFeatureConfiguration.CODEC);
@@ -57,11 +58,13 @@ public class StoneReplacer extends Feature<NoneFeatureConfiguration> {
 	}
 
 	public static void onBiomeLoading(BiomeLoadingEvent event) {
-		if (WorldgenBenchmark.isVanillaBaseline() || !isOverworldCategory(event.getCategory())) {
+		if (WorldgenBenchmark.isVanillaBaseline()) {
 			return;
 		}
 
-		removeVanillaMatchingStoneFeatures(event);
+		if (isOverworldCategory(event.getCategory())) {
+			removeVanillaMatchingStoneFeatures(event);
+		}
 		if (placedFeature != null) {
 			event.getGeneration().getFeatures(GenerationStep.Decoration.UNDERGROUND_ORES)
 					.add(placedFeature);
@@ -72,16 +75,19 @@ public class StoneReplacer extends Feature<NoneFeatureConfiguration> {
 	public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
 		WorldGenLevel world = context.level();
 		BlockPos pos = context.origin();
-		if (!MineralogyConfig.placeMineralogyRock()
-				|| world.getLevel().dimension() != Level.OVERWORLD) {
+		net.minecraft.resources.ResourceKey<Level> dimension = world.getLevel().dimension();
+		BakedTerrainDimension terrain = GeomeConfig.terrainDimension(dimension);
+		BakedGeomeConfig config = GeomeConfig.baked(dimension);
+		if (!MineralogyConfig.placeMineralogyRock() || terrain == null || config == null) {
 			return false;
 		}
 
 		ChunkAccess chunk = world.getChunk(pos);
-		if (WorldGeologyProfileManager.geologyMode() == GeologyMode.LEGACY) {
-			getLegacyGeology(world.getSeed()).replaceStoneInChunk(chunk);
+		CachedGeology geology = geology(dimension, world.getSeed(), config);
+		if (geology.legacy != null) {
+			geology.legacy.replaceStoneInChunk(world, chunk, terrain);
 		} else {
-			getGeomeGeology(world.getSeed()).replaceStoneInChunk(world, chunk);
+			geology.sky.replaceStoneInChunk(world, chunk, terrain);
 		}
 		return true;
 	}
@@ -105,40 +111,27 @@ public class StoneReplacer extends Feature<NoneFeatureConfiguration> {
 		return false;
 	}
 
-	private Geology getLegacyGeology(long seed) {
-		if (geology == null || geologySeed != seed) {
+	private CachedGeology geology(net.minecraft.resources.ResourceKey<Level> dimension, long seed,
+			BakedGeomeConfig config) {
+		CachedGeology current = geologyByDimension.get(dimension);
+		GeologyMode mode = WorldGeologyProfileManager.geologyMode();
+		if (current == null || current.seed != seed || current.mode != mode) {
 			geologyLock.lock();
 			try {
-				if (geology == null || geologySeed != seed) {
+				current = geologyByDimension.get(dimension);
+				if (current == null || current.seed != seed || current.mode != mode) {
 					WorldGeologyProfile profile = WorldGeologyProfileManager.activeProfile();
-					geology = new Geology(seed, profile.cyanoGeomeSize(), profile.cyanoRockLayerNoise(),
-							profile.cyanoLayerThickness(), GeomeConfig.baked());
-					geomeGeology = null;
-					geologySeed = seed;
+					current = mode == GeologyMode.LEGACY
+							? new CachedGeology(seed, mode, new Geology(seed, profile.cyanoGeomeSize(),
+									profile.cyanoRockLayerNoise(), profile.cyanoLayerThickness(), config), null)
+							: new CachedGeology(seed, mode, null, new GeomeGeology(seed, config));
+					geologyByDimension.put(dimension, current);
 				}
 			} finally {
 				geologyLock.unlock();
 			}
 		}
-
-		return geology;
-	}
-
-	private GeomeGeology getGeomeGeology(long seed) {
-		if (geomeGeology == null || geologySeed != seed) {
-			geologyLock.lock();
-			try {
-				if (geomeGeology == null || geologySeed != seed) {
-					geomeGeology = new GeomeGeology(seed, GeomeConfig.baked());
-					geology = null;
-					geologySeed = seed;
-				}
-			} finally {
-				geologyLock.unlock();
-			}
-		}
-
-		return geomeGeology;
+		return current;
 	}
 
 	public static void refreshWorldConfig() {
@@ -148,11 +141,23 @@ public class StoneReplacer extends Feature<NoneFeatureConfiguration> {
 	private void clearCachedGeology() {
 		geologyLock.lock();
 		try {
-			geology = null;
-			geomeGeology = null;
-			geologySeed = Long.MIN_VALUE;
+			geologyByDimension.clear();
 		} finally {
 			geologyLock.unlock();
+		}
+	}
+
+	private static final class CachedGeology {
+		final long seed;
+		final GeologyMode mode;
+		final Geology legacy;
+		final GeomeGeology sky;
+
+		CachedGeology(long seed, GeologyMode mode, Geology legacy, GeomeGeology sky) {
+			this.seed = seed;
+			this.mode = mode;
+			this.legacy = legacy;
+			this.sky = sky;
 		}
 	}
 }

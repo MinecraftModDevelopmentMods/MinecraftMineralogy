@@ -15,6 +15,8 @@ import java.util.Map.Entry;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mcmoddev.mineralogy.worldgen.OreHeightDistribution;
+import com.mcmoddev.mineralogy.worldgen.OrePattern;
 import com.mcmoddev.mineralogy.worldgen.RockFamily;
 import com.mcmoddev.mineralogy.worldgen.WorldGeologyProfile;
 
@@ -51,13 +53,22 @@ final class GeologyEditorSession {
 	private final WorldGeologyProfile originalProfile;
 	private final JsonObject original;
 	private final JsonObject root;
+	private final Set<String> availableDimensionIds = new TreeSet<>();
 
 	GeologyEditorSession(WorldGeologyProfile profile) {
+		this(profile, Collections.emptyList());
+	}
+
+	GeologyEditorSession(WorldGeologyProfile profile, Iterable<String> dimensions) {
 		originalProfile = profile;
 		original = profile.rootCopy();
 		root = profile.rootCopy();
 		normalizeRegistrySections(original);
 		normalizeRegistrySections(root);
+		rememberDimension("minecraft:overworld");
+		rememberDimension("minecraft:the_nether");
+		rememberDimension("minecraft:the_end");
+		for (String dimension : dimensions) rememberDimension(dimension);
 	}
 
 	JsonObject root() {
@@ -78,6 +89,43 @@ final class GeologyEditorSession {
 
 	JsonObject section(String key) {
 		return object(root, key);
+	}
+
+	double oreFrequencyBaseline(String oreId, String dimensionId) {
+		if (!original.has("ores") || !original.get("ores").isJsonObject()) return 1.0D;
+		JsonObject ores = original.getAsJsonObject("ores");
+		if (!ores.has(oreId) || !ores.get(oreId).isJsonObject()) return 1.0D;
+		JsonObject ore = ores.getAsJsonObject(oreId);
+		if (!ore.has("dimensions") || !ore.get("dimensions").isJsonObject()) return 1.0D;
+		JsonObject dimensions = ore.getAsJsonObject("dimensions");
+		if (!dimensions.has(dimensionId) || !dimensions.get(dimensionId).isJsonObject()) return 1.0D;
+		double value = decimal(dimensions.getAsJsonObject(dimensionId), "frequency", 1.0D);
+		return Double.isFinite(value) && value >= 0.0D && value <= OreRichnessPreset.MAX_FREQUENCY
+				? value : 1.0D;
+	}
+
+	List<String> availableDimensionIds() {
+		Set<String> result = new TreeSet<>(availableDimensionIds);
+		for (Entry<String, JsonElement> oreEntry : section("ores").entrySet()) {
+			JsonElement oreElement = oreEntry.getValue();
+			if (!oreElement.isJsonObject()) continue;
+			JsonObject ore = oreElement.getAsJsonObject();
+			if (!ore.has("dimensions") || !ore.get("dimensions").isJsonObject()) continue;
+			for (String id : ore.getAsJsonObject("dimensions").keySet()) {
+				if (validResource(id)) result.add(new ResourceLocation(id).toString());
+			}
+		}
+		List<String> ordered = new ArrayList<>();
+		for (String vanilla : Arrays.asList("minecraft:overworld", "minecraft:the_nether", "minecraft:the_end")) {
+			ordered.add(vanilla);
+			result.remove(vanilla);
+		}
+		ordered.addAll(result);
+		return ordered;
+	}
+
+	private void rememberDimension(String id) {
+		if (validResource(id)) availableDimensionIds.add(new ResourceLocation(id).toString());
 	}
 
 	List<String> materialIds(MaterialTab tab, String search, boolean showAll) {
@@ -319,6 +367,9 @@ final class GeologyEditorSession {
 			if (integer(rock, "min_y", -64) > integer(rock, "max_y", 319)) {
 				errors.add("Minimum Y is above maximum Y for " + entry.getKey());
 			}
+			if (rock.has("dimensions") && !validIdArray(rock.get("dimensions"))) {
+				errors.add("Invalid or empty terrain dimension list for " + entry.getKey());
+			}
 			validateGeomeWeights(errors, entry.getKey(), rock.get("geomes"), geomes);
 			if ("sedimentary".equals(family)) sedimentary++;
 			else if ("metamorphic".equals(family)) metamorphic++;
@@ -337,6 +388,9 @@ final class GeologyEditorSession {
 			if (!bool(ore, "enabled", true)) {
 				continue;
 			}
+			if (ore.has("deep_output") && !validBlock(string(ore, "deep_output", ""))) {
+				errors.add("Invalid deep ore block: " + string(ore, "deep_output", ""));
+			}
 			if (!ore.has("dimensions") || !ore.get("dimensions").isJsonObject()
 					|| ore.getAsJsonObject("dimensions").entrySet().isEmpty()) {
 				errors.add("Ore has no dimension rules: " + entry.getKey());
@@ -350,8 +404,19 @@ final class GeologyEditorSession {
 				JsonObject rule = dimension.getValue().getAsJsonObject();
 				if (integer(rule, "min_y", -64) > integer(rule, "max_y", 320)
 						|| decimal(rule, "frequency", 0.0D) < 0.0D
-						|| integer(rule, "quantity", 0) < 1) {
+						|| decimal(rule, "frequency", 0.0D) > 64.0D
+						|| integer(rule, "quantity", 0) < 1 || integer(rule, "quantity", 0) > 64
+						|| integer(rule, "spread", 8) < 0 || integer(rule, "spread", 8) > 64
+						|| integer(rule, "vertical_spread", 4) < 0
+						|| integer(rule, "vertical_spread", 4) > 64
+						|| integer(rule, "node_size", 4) < 1 || integer(rule, "node_size", 4) > 32) {
 					errors.add("Invalid placement values for " + entry.getKey() + " in " + dimension.getKey());
+				}
+				try {
+					OrePattern.fromConfigName(string(rule, "pattern", "vein"));
+					OreHeightDistribution.fromConfigName(string(rule, "height_distribution", "uniform"));
+				} catch (RuntimeException e) {
+					errors.add("Invalid ore pattern for " + entry.getKey() + " in " + dimension.getKey());
 				}
 				if (bool(rule, "enabled", true)) {
 					boolean hosts = validBlockArray(rule.get("host_blocks"), errors, entry.getKey())
@@ -369,6 +434,24 @@ final class GeologyEditorSession {
 		}
 		validateRuleGeomes(errors, section("biomes"), geomes, "biome");
 		validateRuleGeomes(errors, section("biome_dictionary"), geomes, "biome type");
+		for (Entry<String, JsonElement> entry : section("terrain_dimensions").entrySet()) {
+			if (!validResource(entry.getKey()) || !entry.getValue().isJsonObject()) {
+				errors.add("Invalid terrain dimension: " + entry.getKey());
+				continue;
+			}
+			JsonObject dimension = entry.getValue().getAsJsonObject();
+			if (!bool(dimension, "enabled", true)) continue;
+			boolean hosts = validBlockArray(dimension.get("host_blocks"), errors, entry.getKey())
+					|| validIdArray(dimension.get("host_tags"));
+			if (!hosts) errors.add("Enabled terrain dimension has no valid hosts: " + entry.getKey());
+			if (dimension.has("biome_ids")) {
+				JsonElement biomeIds = dimension.get("biome_ids");
+				if (!biomeIds.isJsonArray()
+						|| (biomeIds.getAsJsonArray().size() > 0 && !validIdArray(biomeIds))) {
+					errors.add("Invalid biome IDs for terrain dimension " + entry.getKey());
+				}
+			}
+		}
 		return errors;
 	}
 
@@ -436,6 +519,11 @@ final class GeologyEditorSession {
 		dimension.addProperty("max_y", 64);
 		dimension.addProperty("frequency", 1.0D);
 		dimension.addProperty("quantity", 8);
+		dimension.addProperty("pattern", "vein");
+		dimension.addProperty("height_distribution", "uniform");
+		dimension.addProperty("spread", 8);
+		dimension.addProperty("vertical_spread", 4);
+		dimension.addProperty("node_size", 4);
 		JsonArray families = new JsonArray();
 		for (RockFamily family : RockFamily.values()) {
 			families.add(family.configName);

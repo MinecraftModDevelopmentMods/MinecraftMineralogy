@@ -1,12 +1,16 @@
 package com.mcmoddev.mineralogy.client;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mcmoddev.mineralogy.worldgen.OreHeightDistribution;
+import com.mcmoddev.mineralogy.worldgen.OrePattern;
 import com.mcmoddev.mineralogy.worldgen.RockFamily;
 import com.mojang.blaze3d.vertex.PoseStack;
 
@@ -20,25 +24,35 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FormattedCharSequence;
 
 final class OreDimensionScreen extends Screen {
-	private enum Page { PLACEMENT, HOSTS }
+	private enum Page { PLACEMENT, PATTERN, HOSTS }
 
 	private final Screen parent;
 	private final GeologyEditorSession session;
 	private final String oreId;
 	private final String dimensionId;
+	private final double baselineFrequency;
 	private final EnumSet<RockFamily> families = EnumSet.noneOf(RockFamily.class);
 	private boolean enabled;
 	private EditBox minY;
 	private EditBox maxY;
 	private EditBox frequency;
 	private EditBox quantity;
+	private CycleButton<OreRichnessPreset> richness;
+	private EditBox spread;
+	private EditBox verticalSpread;
+	private EditBox nodeSize;
 	private EditBox hostBlocks;
 	private EditBox hostTags;
+	private OrePattern pattern;
+	private OreHeightDistribution heightDistribution;
 	private Component error;
 	private Page page = Page.PLACEMENT;
+	private final List<Button> pageButtons = new ArrayList<>();
 	private final List<AbstractWidget> placementWidgets = new ArrayList<>();
+	private final List<AbstractWidget> patternWidgets = new ArrayList<>();
 	private final List<AbstractWidget> hostWidgets = new ArrayList<>();
 
 	OreDimensionScreen(Screen parent, GeologyEditorSession session, String oreId, String dimensionId) {
@@ -47,12 +61,24 @@ final class OreDimensionScreen extends Screen {
 		this.session = session;
 		this.oreId = oreId;
 		this.dimensionId = dimensionId;
+		this.baselineFrequency = session.oreFrequencyBaseline(oreId, dimensionId);
 		load();
 	}
 
 	private void load() {
 		JsonObject rule = rule();
 		enabled = GeologyEditorSession.bool(rule, "enabled", true);
+		try {
+			pattern = OrePattern.fromConfigName(GeologyEditorSession.string(rule, "pattern", "vein"));
+		} catch (RuntimeException e) {
+			pattern = OrePattern.VEIN;
+		}
+		try {
+			heightDistribution = OreHeightDistribution.fromConfigName(
+					GeologyEditorSession.string(rule, "height_distribution", "uniform"));
+		} catch (RuntimeException e) {
+			heightDistribution = OreHeightDistribution.UNIFORM;
+		}
 		families.clear();
 		if (rule.has("host_families") && rule.get("host_families").isJsonArray()) {
 			for (JsonElement value : rule.getAsJsonArray("host_families")) {
@@ -67,39 +93,70 @@ final class OreDimensionScreen extends Screen {
 		JsonObject rule = rule();
 		int left = width / 2 - 155;
 		int right = width / 2 + 5;
+		pageButtons.clear();
 		placementWidgets.clear();
+		patternWidgets.clear();
 		hostWidgets.clear();
-		addRenderableWidget(new Button(left, 32, 100, 20,
-				new TranslatableComponent("tab.mineralogy.placement"), button -> showPage(Page.PLACEMENT)));
-		addRenderableWidget(new Button(left + 105, 32, 100, 20,
-				new TranslatableComponent("tab.mineralogy.hosts"), button -> showPage(Page.HOSTS)));
-		addRenderableWidget(CycleButton.onOffBuilder(enabled).create(left + 210, 32, 100, 20,
+		addRenderableWidget(CycleButton.onOffBuilder(enabled).create(left, 32, 310, 20,
 				new TranslatableComponent("option.mineralogy.enabled"), (button, value) -> enabled = value));
-		minY = addPlacementField(right, 56, "min_y", text(rule, "min_y", -64));
-		maxY = addPlacementField(right, 80, "max_y", text(rule, "max_y", 64));
-		frequency = addPlacementField(right, 104, "frequency", text(rule, "frequency", 1.0D));
-		quantity = addPlacementField(right, 128, "quantity", text(rule, "quantity", 8));
+		pageButtons.add(addRenderableWidget(new Button(left, 56, 100, 20,
+				new TranslatableComponent("tab.mineralogy.placement"), button -> showPage(Page.PLACEMENT))));
+		pageButtons.add(addRenderableWidget(new Button(left + 105, 56, 100, 20,
+				new TranslatableComponent("tab.mineralogy.pattern"), button -> showPage(Page.PATTERN))));
+		pageButtons.add(addRenderableWidget(new Button(left + 210, 56, 100, 20,
+				new TranslatableComponent("tab.mineralogy.hosts"), button -> showPage(Page.HOSTS))));
+		double currentFrequency = GeologyEditorSession.decimal(rule, "frequency", baselineFrequency);
+		richness = addRenderableWidget(CycleButton.builder(this::richnessName)
+				.withValues(Arrays.asList(OreRichnessPreset.values()))
+				.withInitialValue(OreRichnessPreset.fromFrequency(baselineFrequency, currentFrequency))
+				.withTooltip(value -> tooltip("tooltip.mineralogy.ore_richness"))
+				.create(left, 80, 310, 20, new TranslatableComponent("option.mineralogy.ore_richness"),
+						(button, value) -> applyRichness(value)));
+		placementWidgets.add(richness);
+		minY = addPlacementField(right, 104, "min_y", text(rule, "min_y", -64));
+		maxY = addPlacementField(right, 128, "max_y", text(rule, "max_y", 64));
+		frequency = addPlacementField(right, 152, "frequency", text(rule, "frequency", 1.0D));
+		quantity = addPlacementField(right, 176, "quantity", text(rule, "quantity", 8));
+
+		CycleButton<OrePattern> patternButton = addRenderableWidget(CycleButton.builder(this::patternName)
+				.withValues(Arrays.asList(OrePattern.values()))
+				.withInitialValue(pattern)
+				.create(left, 80, 310, 20, new TranslatableComponent("option.mineralogy.pattern"),
+						(button, value) -> {
+							pattern = value;
+							updatePatternControls();
+						}));
+		patternWidgets.add(patternButton);
+		patternWidgets.add(addRenderableWidget(CycleButton.builder(this::distributionName)
+				.withValues(Arrays.asList(OreHeightDistribution.values()))
+				.withInitialValue(heightDistribution)
+				.create(left, 104, 310, 20,
+						new TranslatableComponent("option.mineralogy.height_distribution"),
+						(button, value) -> heightDistribution = value)));
+		spread = addPatternField(right, 128, "spread", text(rule, "spread", 8));
+		verticalSpread = addPatternField(right, 152, "vertical_spread", text(rule, "vertical_spread", 4));
+		nodeSize = addPatternField(right, 176, "node_size", text(rule, "node_size", 4));
+
+		hostBlocks = addHostField(left, 88, "host_blocks", join(rule.get("host_blocks")));
+		hostTags = addHostField(left, 120, "host_tags", join(rule.get("host_tags")));
+		Button weights = addRenderableWidget(new Button(left, 144, 150, 20,
+				new TranslatableComponent("button.mineralogy.geome_weights"), button -> openWeights()));
+		weights.active = "minecraft:overworld".equals(dimensionId);
+		hostWidgets.add(weights);
+		hostWidgets.add(addRenderableWidget(new Button(right, 144, 150, 20,
+				new TranslatableComponent("button.mineralogy.remove_dimension"), button -> removeDimension())));
 
 		RockFamily[] values = RockFamily.values();
 		for (int i = 0; i < values.length; i++) {
 			RockFamily family = values[i];
 			int x = (i & 1) == 0 ? left : right;
-			int y = 154 + ((i / 2) * 24);
-			placementWidgets.add(addRenderableWidget(CycleButton.onOffBuilder(families.contains(family)).create(x, y, 150, 20,
+			int y = 168 + ((i / 2) * 22);
+			hostWidgets.add(addRenderableWidget(CycleButton.onOffBuilder(families.contains(family)).create(x, y, 150, 20,
 					new TranslatableComponent("value.mineralogy.family." + family.configName),
 					(button, selected) -> {
 						if (selected) families.add(family); else families.remove(family);
 					})));
 		}
-
-		hostBlocks = addHostField(left, 72, "host_blocks", join(rule.get("host_blocks")));
-		hostTags = addHostField(left, 112, "host_tags", join(rule.get("host_tags")));
-		Button weights = addRenderableWidget(new Button(left, 142, 150, 20,
-				new TranslatableComponent("button.mineralogy.geome_weights"), button -> openWeights()));
-		weights.active = "minecraft:overworld".equals(dimensionId);
-		hostWidgets.add(weights);
-		hostWidgets.add(addRenderableWidget(new Button(right, 142, 150, 20,
-				new TranslatableComponent("button.mineralogy.remove_dimension"), button -> removeDimension())));
 
 		int bottom = height - 28;
 		addRenderableWidget(new Button(left, bottom, 150, 20, CommonComponents.GUI_DONE,
@@ -107,6 +164,7 @@ final class OreDimensionScreen extends Screen {
 		addRenderableWidget(new Button(right, bottom, 150, 20, CommonComponents.GUI_CANCEL,
 				button -> onClose()));
 		showPage(page);
+		updatePatternControls();
 	}
 
 	private EditBox addPlacementField(int x, int y, String key, String value) {
@@ -125,10 +183,36 @@ final class OreDimensionScreen extends Screen {
 		return box;
 	}
 
+	private EditBox addPatternField(int x, int y, String key, String value) {
+		EditBox box = new EditBox(font, x, y, 150, 20, new TextComponent(key));
+		box.setValue(value);
+		box.setMaxLength(32);
+		patternWidgets.add(addRenderableWidget(box));
+		return box;
+	}
+
 	private void showPage(Page selected) {
 		page = selected;
+		for (int i = 0; i < pageButtons.size(); i++) {
+			pageButtons.get(i).active = i != selected.ordinal();
+		}
 		for (AbstractWidget widget : placementWidgets) widget.visible = selected == Page.PLACEMENT;
+		for (AbstractWidget widget : patternWidgets) widget.visible = selected == Page.PATTERN;
 		for (AbstractWidget widget : hostWidgets) widget.visible = selected == Page.HOSTS;
+	}
+
+	private void updatePatternControls() {
+		if (spread != null) {
+			boolean usesSpread = pattern != OrePattern.VEIN;
+			spread.active = usesSpread;
+			verticalSpread.active = usesSpread;
+			nodeSize.active = pattern == OrePattern.CLUSTER;
+		}
+	}
+
+	private void applyRichness(OreRichnessPreset preset) {
+		frequency.setValue(format(preset.scaledFrequency(baselineFrequency)));
+		error = null;
 	}
 
 	private void openWeights() {
@@ -151,6 +235,9 @@ final class OreDimensionScreen extends Screen {
 			int parsedMax = integer(maxY, -2048, 2048);
 			double parsedFrequency = number(frequency, 0.0D, 64.0D);
 			int parsedQuantity = integer(quantity, 1, 64);
+			int parsedSpread = integer(spread, 0, 64);
+			int parsedVerticalSpread = integer(verticalSpread, 0, 64);
+			int parsedNodeSize = integer(nodeSize, 1, 32);
 			if (parsedMin > parsedMax) throw new NumberFormatException();
 			JsonArray blocks = ids(hostBlocks.getValue());
 			JsonArray tags = ids(hostTags.getValue());
@@ -164,6 +251,11 @@ final class OreDimensionScreen extends Screen {
 			rule.addProperty("max_y", parsedMax);
 			rule.addProperty("frequency", parsedFrequency);
 			rule.addProperty("quantity", parsedQuantity);
+			rule.addProperty("pattern", pattern.configName);
+			rule.addProperty("height_distribution", heightDistribution.configName);
+			rule.addProperty("spread", parsedSpread);
+			rule.addProperty("vertical_spread", parsedVerticalSpread);
+			rule.addProperty("node_size", parsedNodeSize);
 			JsonArray familyArray = new JsonArray();
 			for (RockFamily family : RockFamily.values()) {
 				if (families.contains(family)) familyArray.add(family.configName);
@@ -222,6 +314,10 @@ final class OreDimensionScreen extends Screen {
 		return json.has(key) ? json.get(key).getAsString() : fallback.toString();
 	}
 
+	private static String format(double value) {
+		return BigDecimal.valueOf(value).stripTrailingZeros().toPlainString();
+	}
+
 	private static double number(EditBox box, double min, double max) {
 		double value = Double.parseDouble(box.getValue().trim());
 		if (!Double.isFinite(value) || value < min || value > max) throw new NumberFormatException();
@@ -249,15 +345,37 @@ final class OreDimensionScreen extends Screen {
 			String[] labels = { "min_y", "max_y", "frequency", "quantity" };
 			for (int i = 0; i < labels.length; i++) {
 				drawString(poseStack, font, new TranslatableComponent("option.mineralogy." + labels[i]),
-						width / 2 - 155, 62 + (i * 24), 0xDDDDDD);
+						width / 2 - 155, 110 + (i * 24), 0xDDDDDD);
+			}
+		} else if (page == Page.PATTERN) {
+			String[] labels = { "spread", "vertical_spread", "node_size" };
+			for (int i = 0; i < labels.length; i++) {
+				drawString(poseStack, font, new TranslatableComponent("option.mineralogy." + labels[i]),
+						width / 2 - 155, 134 + (i * 24), 0xDDDDDD);
 			}
 		} else {
 			drawString(poseStack, font, new TranslatableComponent("option.mineralogy.host_blocks"),
-					width / 2 - 155, 62, 0xDDDDDD);
+					width / 2 - 155, 78, 0xDDDDDD);
 			drawString(poseStack, font, new TranslatableComponent("option.mineralogy.host_tags"),
-					width / 2 - 155, 102, 0xDDDDDD);
+					width / 2 - 155, 110, 0xDDDDDD);
 		}
 		if (error != null) drawCenteredString(poseStack, font, error, width / 2, height - 40, 0xFF5555);
 		super.render(poseStack, mouseX, mouseY, partialTick);
+	}
+
+	private Component patternName(OrePattern value) {
+		return new TranslatableComponent("value.mineralogy.ore_pattern." + value.configName);
+	}
+
+	private Component distributionName(OreHeightDistribution value) {
+		return new TranslatableComponent("value.mineralogy.height_distribution." + value.configName);
+	}
+
+	private Component richnessName(OreRichnessPreset value) {
+		return new TranslatableComponent("value.mineralogy.ore_richness." + value.configName);
+	}
+
+	private List<FormattedCharSequence> tooltip(String key) {
+		return font.split(new TranslatableComponent(key), 240);
 	}
 }

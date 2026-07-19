@@ -11,6 +11,10 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.biome.Biome;
 
 public class Geology {
 	private final PerlinNoise2D geomeNoiseLayer;
@@ -53,7 +57,7 @@ public class Geology {
 		return pickStateFromList(rockValue, sedimentaryStones).getBlock();
 	}
 
-	public void replaceStoneInChunk(ChunkAccess chunk) {
+	public void replaceStoneInChunk(LevelAccessor world, ChunkAccess chunk, BakedTerrainDimension terrain) {
 		ChunkPos chunkPos = chunk.getPos();
 		int xOffset = chunkPos.getMinBlockX();
 		int zOffset = chunkPos.getMinBlockZ();
@@ -65,12 +69,20 @@ public class Geology {
 			for (int dz = 0; dz < 16; dz++) {
 				int z = zOffset + dz;
 				int y = chunk.getHeight(Heightmap.Types.WORLD_SURFACE_WG, dx, dz);
+				if (terrain.hasBiomeFilter()) {
+					cursor.set(x, y, z);
+					Holder<Biome> biome = world.getBiome(cursor);
+					ResourceLocation biomeId = biome.unwrapKey().map(key -> key.location()).orElse(null);
+					if (!terrain.acceptsBiome(biomeId)) {
+						continue;
+					}
+				}
 				int baseRockVal = (int) rockNoiseLayer.valueAt(x, z);
 				int geomeBase = (int) geomeNoiseLayer.valueAt(x, z);
 
 				for (; y >= chunk.getMinBuildHeight(); y--) {
 					cursor.set(x, y, z);
-					if (isReplaceableBaseStone(chunk.getBlockState(cursor))) {
+					if (terrain.isReplaceable(chunk.getBlockState(cursor))) {
 						chunk.setBlockState(cursor, pickReplacement(baseRockVal, geomeBase, y), false);
 						changed = true;
 					}
@@ -109,11 +121,6 @@ public class Geology {
 			}
 		}
 		return column;
-	}
-
-	private static boolean isReplaceableBaseStone(BlockState state) {
-		Block block = state.getBlock();
-		return block == Blocks.STONE || block == Blocks.DEEPSLATE;
 	}
 
 	private BlockState pickStateFromList(int value, BlockState[] list) {

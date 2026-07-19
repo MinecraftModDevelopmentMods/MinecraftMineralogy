@@ -3,6 +3,7 @@ package com.mcmoddev.mineralogy;
 import java.util.List;
 
 import com.mcmoddev.mineralogy.init.MineralogyRegistry;
+import com.mcmoddev.mineralogy.patching.LegacyWorldDataHook;
 import com.mcmoddev.mineralogy.worldgen.MineralogyOreGeneration;
 import com.mcmoddev.mineralogy.worldgen.GeomeConfig;
 import com.mcmoddev.mineralogy.worldgen.GeomeDistributionSampler;
@@ -10,6 +11,7 @@ import com.mcmoddev.mineralogy.worldgen.StoneReplacer;
 
 import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -41,6 +43,7 @@ public class Mineralogy {
 		MineralogyConfig.registerAdvancementPredicates();
 
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+		MinecraftForge.EVENT_BUS.addListener(LegacyWorldDataHook::onServerAboutToStart);
 	}
 
 	private void setup(final FMLCommonSetupEvent event) {

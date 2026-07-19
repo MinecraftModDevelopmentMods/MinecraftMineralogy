@@ -15,7 +15,7 @@ import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Mod.EventBusSubscriber(modid = Mineralogy.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = Mineralogy.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class PatchHandler {
 	private static final Logger LOGGER = LogManager.getLogger();
 
@@ -50,7 +50,9 @@ public final class PatchHandler {
 
 	private static <T extends IForgeRegistryEntry<T>> void remapMissing(RegistryEvent.MissingMappings<T> event,
 			ResourceLocation oldId, T replacement) {
-		for (RegistryEvent.MissingMappings.Mapping<T> mapping : event.getMappings()) {
+		// Legacy world snapshots are injected before Forge associates this event
+		// with an active mod container, so getMappings() cannot namespace-filter it.
+		for (RegistryEvent.MissingMappings.Mapping<T> mapping : event.getAllMappings()) {
 			if (!oldId.equals(mapping.key)) {
 				continue;
 			}

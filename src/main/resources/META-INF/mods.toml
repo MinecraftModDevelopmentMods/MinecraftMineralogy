@@ -40,6 +40,13 @@ authors="Cyanobacterium, SkyBlade1978, JRIwanek" #optional
 
 # The description text for the mod (multi line!) (#mandatory)
 description='''Fills the world with real-world rocks.'''
+[[dependencies.mineralogy]]
+modId="orespawn"
+mandatory=true
+versionRange="[4.0.0,5.0.0)"
+ordering="AFTER"
+side="BOTH"
+
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.mineralogy]] #optional
 # the modid of the dependency

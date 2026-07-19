@@ -103,14 +103,14 @@ minecraft {
         // The gametest system is also enabled by default for other run configs under the /test command.
         gameTestServer {
             property 'forge.enabledGameTestNamespaces', mod_id
-            if (providers.gradleProperty('mineralogyBenchmarkMode').isPresent()) {
-                property 'mineralogy.worldgenBenchmarkMode', providers.gradleProperty('mineralogyBenchmarkMode').get()
-                property 'mineralogy.worldgenBenchmarkRadius',
-                        providers.gradleProperty('mineralogyBenchmarkRadius').getOrElse('4')
-                property 'mineralogy.worldgenBenchmarkRepetitions',
-                        providers.gradleProperty('mineralogyBenchmarkRepetitions').getOrElse('3')
-                property 'mineralogy.worldgenBenchmarkVanillaOres',
-                        providers.gradleProperty('mineralogyBenchmarkVanillaOres').getOrElse('false')
+            if (providers.gradleProperty('orespawnBenchmarkMode').isPresent()) {
+                property 'orespawn.worldgenBenchmarkMode', providers.gradleProperty('orespawnBenchmarkMode').get()
+                property 'orespawn.worldgenBenchmarkRadius',
+                        providers.gradleProperty('orespawnBenchmarkRadius').getOrElse('4')
+                property 'orespawn.worldgenBenchmarkRepetitions',
+                        providers.gradleProperty('orespawnBenchmarkRepetitions').getOrElse('3')
+                property 'orespawn.worldgenBenchmarkVanillaOres',
+                        providers.gradleProperty('orespawnBenchmarkVanillaOres').getOrElse('false')
             }
         }
 
@@ -132,9 +132,9 @@ repositories {
     // ForgeGradle automatically adds the Forge maven and Maven Central for you
 
     // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
-    // flatDir {
-    //     dir 'libs'
-    // }
+    flatDir {
+        dirs rootProject.file('../../OS118/OreSpawn/build/libs')
+    }
 }
 
 dependencies {
@@ -144,6 +144,9 @@ dependencies {
     // If the group id is "net.minecraft" and the artifact id is one of ["client", "server", "joined"],
     // then special handling is done to allow a setup of a vanilla dependency without the use of an external repository.
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+    // OreSpawn owns all geology and managed ore generation in Mineralogy 6.
+    runtimeOnly fg.deobf("blank:OreSpawn-${minecraft_version}:4.0.0")
 
     testImplementation platform('org.junit:junit-bom:5.10.2')
     testImplementation 'org.junit.jupiter:junit-jupiter'
@@ -173,8 +176,7 @@ tasks.named('jar', Jar).configure {
                 'Implementation-Title'    : project.name,
                 'Implementation-Version'  : project.jar.archiveVersion,
                 'Implementation-Vendor'   : 'SkyBlade1978',
-                'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                'Mineralogy-API-Version'  : '1'
+                'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
 

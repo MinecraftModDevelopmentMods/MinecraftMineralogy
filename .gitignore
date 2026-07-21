@@ -32,6 +32,11 @@ logs
 /.codex/
 /CLAUDE.md
 
+# generated local tooling/output
+/.eclipse/
+/run-data/
+/mcmodsrepo/
+
 /README.txt
 /forge-*-changelog.txt
 

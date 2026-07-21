@@ -1,35 +1,62 @@
-[![](https://img.shields.io/badge/Discord-MMD-green.svg?style=flat&logo=Discord)](https://discord.mcmoddev.com)
-[![](http://cf.way2muchnoise.eu/full_minecraft-mineralogy_downloads.svg)](http://minecraft.curseforge.com/projects/minecraft-mineralogy)
-[![](http://cf.way2muchnoise.eu/versions/Minecraft_minecraft-mineralogy_all.svg)](http://minecraft.curseforge.com/projects/minecraft-mineralogy)
-[![Build Status](https://ci.mcmoddev.com/job/Minecraft%20Mineralogy/job/Minecraft%20Mineralogy%201.12/badge/icon)](https://ci.mcmoddev.com/job/Minecraft%20Mineralogy/job/Minecraft%20Mineralogy%201.12/)
+# Minecraft Mineralogy 6
 
-# Mineralogy
-## MMD's Minecraft Mineralogy Mod
-This mod replaces the generic "stone" in Minecraft with real-world rock types.
+Mineralogy adds real-world rock types to Minecraft 1.18.2, together with
+matching slabs, stairs, walls, bricks, polished blocks, reliefs, and furnaces.
+It also supplies sulfur, phosphorous, nitrate, rock salt lighting, and crude
+oil content.
 
-## Texture Packs
-There are three levels of texture resolution available. The default textures are low-resolution (16x16 pixels, same as Minecraft), but I recommend trying the high-resolution (64x64 pixels) textures via the high-res texture pack (available on the Release page).
+Mineralogy 6 requires **OreSpawn 4**. Mineralogy owns the blocks, items,
+recipes, loot, textures, tags, and old-world compatibility. OreSpawn owns
+terrain replacement, geological regions, formations, ore and fluid-deposit placement,
+world profiles, configuration screens, retrogen, and the public worldgen API.
 
-## Q&A
-Q: Why make this mod?
-A: Minecraft is a game that involves a lot of mining, yet it takes very little inspiration from actual geology. We made this mod to give Minecraft more of a geology vibe. After all, there's no mineral called "stone" in the geology textbook.
+## Players
 
-Q: Where's the cobblestone?!
-A: Many of the stone types can be used as cobblestone or as stone in crafting recipes. If you want "Stone", smelt gravel. If you want "Cobblestone", craft two blocks of rock with 2 blocks of gravel.
+Install matching Minecraft 1.18.2 builds of Mineralogy 6 and OreSpawn 4 on the
+client and server. When creating a world, open **OreSpawn World Generation** to
+choose the recommended settings or tune the geology. Its **Help & Guide**
+button explains the controls in game.
 
-Q: There's too much lag when generating new chunks!
-A: Yes, that can happen. Mineralogy puts a lot more computation into world generation, so you don't want to run the server (or play single-player) on a computer with a slow CPU. We tried to improve performance as much as possible, but there's no getting around the fact that the stone type needs to be calculated for every single underground block in the game.
+Mineralogy rocks work as stone or cobblestone where appropriate. Matching
+rocks can also make their own furnaces and decorative block families.
 
-Q: Why do the ores look funny?
-A: We re-textured the ores to better match the appearance of the new rock types. You can change them back by making your own texture pack from the default Minecraft resources.
+Five names now have vanilla equivalents: andesite, basalt, diorite, granite,
+and tuff. New terrain uses the vanilla blocks by default. Mineralogy's versions
+remain registered so old worlds still load and pack authors can select them.
 
-## Notes to Other Modders
-Mods targeting the 1.18 port can delegate ore placement to Mineralogy through
-the data-only provider contract documented in [ORE_PROVIDERS.md](ORE_PROVIDERS.md).
+## Configuration
 
-The modern port adds cached world-generation features and does not replace a
-dimension provider. Rock replacement remains Overworld-only; managed ores may
-target other dimensions through explicit block and tag hosts.
+- `config/mineralogy-common.toml` controls Mineralogy content and recipes.
+- `config/orespawn-worldgen.json` controls installed-pack worldgen defaults.
+- `<world>/serverconfig/orespawn-worldgen.json` is the world's complete
+  snapshot and can be copied with the world to a dedicated server.
+- `config/mineralogy-orespawn.json` may override Mineralogy's packaged OreSpawn
+  provider for a modpack.
+- `config/mineralogy-guide/` is written on first load with Mineralogy's player,
+  content, and provider documentation.
+- `config/orespawn-guide/` contains the full engine, API, schema, template, and
+  dimension documentation.
 
-Use Forge and vanilla stone/cobblestone tags in recipes rather than hard-coded
-blocks so Mineralogy and other compatible stones work naturally.
+Configuration changes affect newly generated chunks. Existing terrain is not
+rewritten.
+
+## Developers
+
+Start with [the developer guide](docs/DEVELOPER_GUIDE.md) and
+[provider notes](docs/PROVIDER.md). Integrations should use OreSpawn's supported
+API and provider format rather than calling Mineralogy internals.
+
+Mineralogy requires Java 17. Build from the repository root with:
+
+```powershell
+.\gradlew.bat build --no-daemon
+```
+
+Private `AGENTS.md` and `agent-notes/` files are local workspace context and are
+ignored. Tracked public guidance lives under `docs/` and is packaged in the jar.
+
+## Links
+
+- [CurseForge](https://www.curseforge.com/minecraft/mc-mods/minecraft-mineralogy)
+- [Issues](https://github.com/SkyBlade1978/MinecraftMineralogy/issues)
+- [Minecraft Mod Development Discord](https://discord.mcmoddev.com)

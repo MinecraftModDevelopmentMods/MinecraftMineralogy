@@ -1,20 +1,22 @@
-# Mineralogy 6 With OreSpawn 4
+# Mineralogy Guide
 
-Mineralogy 6.0 owns and registers its rocks, decorative families, furnaces,
-ores, and crude-oil fluid. OreSpawn 4.0 owns terrain replacement, geomes, ore
-placement, oil deposits, world profiles, configuration screens, retrogen, and
-the public world-generation API.
+Mineralogy 6 is a content provider for OreSpawn 4. This guide explains the
+Mineralogy content, its small content configuration, and the declaration it
+supplies to OreSpawn.
 
-Mineralogy has a mandatory runtime dependency on OreSpawn `[4.0.0,5.0.0)` and
-packages its provider at `data/mineralogy/orespawn/provider.json`. That provider
-contains Mineralogy's stable-layer defaults, 32 rock rules, 14 ore rules,
-biome/geome influences, matching-vanilla aliases, and crude-oil settings.
+- [Player Guide](PLAYER_GUIDE.md): installation, world creation, content, and
+  server copying.
+- [Content Configuration](CONTENT_CONFIG.md): every
+  `mineralogy-common.toml` option.
+- [Developer Guide](DEVELOPER_GUIDE.md): ownership boundaries, tags, builds,
+  and compatibility rules.
+- [Provider Reference](PROVIDER.md): Mineralogy's packaged OreSpawn declaration
+  and pack override.
+- [AGENTS.md](AGENTS.md): short machine-readable orientation for coding agents.
 
-Use `config/orespawn-worldgen.json` for installed-pack defaults and
-`<world>/serverconfig/orespawn-worldgen.json` for a world's self-contained
-snapshot. OreSpawn's jar contains the full API guide, schemas, examples, and
-root `AGENTS.md`.
+The actual provider is also exported as
+`examples/mineralogy-provider.json` for inspection.
 
-Mineralogy's `mineralogy-common.toml` contains content and recipe options only.
-Older Mineralogy blocks remain registered for world compatibility even where a
-matching vanilla block is now the default worldgen output.
+For general worldgen controls, JSON schemas, templates, dimensions, ore
+patterns, performance constraints, or the Java API, use the OreSpawn guide
+exported to `config/orespawn-guide/`.

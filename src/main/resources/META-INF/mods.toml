@@ -39,7 +39,7 @@ authors="Cyanobacterium, SkyBlade1978, JRIwanek" #optional
 #displayTest="MATCH_VERSION" # MATCH_VERSION is the default if nothing is specified (#optional)
 
 # The description text for the mod (multi line!) (#mandatory)
-description='''Fills the world with real-world rocks.'''
+description='''Adds real-world rocks, matching building blocks, furnaces, ores, and geological content. OreSpawn places Mineralogy's configured strata and deposits.'''
 [[dependencies.mineralogy]]
 modId="orespawn"
 mandatory=true

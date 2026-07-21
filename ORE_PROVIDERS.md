@@ -1,12 +1,13 @@
-# Mineralogy Worldgen Integration
+# Ore Provider Migration Note
 
-The former ore-only handoff contract is now part of Mineralogy 6.0's complete
-worldgen integration surface. Ore-provider schema 1 remains supported without
-changes.
+Mineralogy no longer runs a general-purpose ore-provider system. OreSpawn 4
+owns ore and terrain provider discovery, validation, placement, configuration,
+and its public API.
 
-Start with:
+Mineralogy itself contributes a packaged schema-3 provider at
+`data/mineralogy/orespawn/provider.json`. See [docs/PROVIDER.md](docs/PROVIDER.md)
+for Mineralogy-specific details.
 
-- `docs/PROVIDERS.md` for provider JSON and takeover behavior.
-- `docs/API.md` for Forge IMC and the typed Java API.
-- `docs/CONFIGURATION.md` for global and per-world profiles.
-- `docs/schemas/` and `docs/examples/` for machine-readable contracts.
+To add ores or terrain from another mod, use OreSpawn's provider and API guides.
+They are packaged in the OreSpawn jar and exported on first load to
+`config/orespawn-guide/`.

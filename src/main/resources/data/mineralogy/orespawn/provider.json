@@ -1,10 +1,10 @@
 {
-    "schema_version":  2,
+    "schema_version":  3,
     "provider_modid":  "mineralogy",
-    "provider_revision":  1,
+    "provider_revision":  3,
     "profile_defaults":  {
                              "geology_mode":  "geome",
-                             "place_crude_oil":  true,
+                             "place_fluid_deposits":  true,
                              "manage_vanilla_ores":  false,
                              "default_template":  "",
                              "geome_scale":  384.0,
@@ -39,18 +39,6 @@
                                            "rock_layer_noise":  32.0,
                                            "rock_layer_thickness":  8
                                        },
-                             "oil":  {
-                                         "min_y":  -48,
-                                         "max_y":  48,
-                                         "frequency":  0.08,
-                                         "min_radius":  5,
-                                         "max_radius":  12,
-                                         "min_vertical_radius":  2,
-                                         "max_vertical_radius":  5,
-                                         "max_lobes":  4,
-                                         "min_solid_cover":  2,
-                                         "block":  "mineralogy:crude_oil"
-                                     },
                              "terrain_dimensions":  {
                                                         "minecraft:overworld":  {
                                                                                     "enabled":  true,
@@ -70,6 +58,34 @@
                                                                                 }
                                                     }
                          },
+    "fluid_deposits":  {
+                            "mineralogy:fluid_deposit/crude_oil":  {
+                                "enabled":  true,
+                                "block":  "mineralogy:crude_oil",
+                                "dimensions":  {
+                                    "minecraft:overworld":  {
+                                        "enabled":  true,
+                                        "min_y":  -48,
+                                        "max_y":  48,
+                                        "frequency":  0.08,
+                                        "min_radius":  5,
+                                        "max_radius":  12,
+                                        "min_vertical_radius":  2,
+                                        "max_vertical_radius":  5,
+                                        "max_lobes":  4,
+                                        "min_solid_cover":  2,
+                                        "host_families":  ["sedimentary"],
+                                        "host_blocks":  [],
+                                        "host_tags":  [],
+                                        "biome_ids":  [],
+                                        "excluded_biome_ids":  [],
+                                        "biome_dictionary":  ["OCEAN"],
+                                        "excluded_biome_dictionary":  [],
+                                        "geomes":  {}
+                                    }
+                                }
+                            }
+                        },
     "rocks":  {
                   "mineralogy:rock/minecraft/andesite":  {
                                                              "family":  "igneous_volcanic",
@@ -618,370 +634,7 @@
                                                                                                           }
                                                                               },
                                                                "block":  "mineralogy:nitrate_ore"
-                                                           },
-                 "mineralogy:ore/minecraft/coal_ore":  {
-                                                           "enabled":  true,
-                                                           "source_mod":  "minecraft",
-                                                           "native_generation":  true,
-                                                           "dimensions":  {
-                                                                              "minecraft:overworld":  {
-                                                                                                          "enabled":  true,
-                                                                                                          "min_y":  0,
-                                                                                                          "max_y":  96,
-                                                                                                          "frequency":  12.0,
-                                                                                                          "quantity":  17,
-                                                                                                          "pattern":  "cluster",
-                                                                                                          "height_distribution":  "triangle",
-                                                                                                          "spread":  10,
-                                                                                                          "vertical_spread":  4,
-                                                                                                          "node_size":  6,
-                                                                                                          "host_families":  [
-                                                                                                                                "sedimentary",
-                                                                                                                                "metamorphic",
-                                                                                                                                "igneous_intrusive",
-                                                                                                                                "igneous_volcanic"
-                                                                                                                            ],
-                                                                                                          "host_tags":  [
-                                                                                                                            "minecraft:stone_ore_replaceables",
-                                                                                                                            "minecraft:deepslate_ore_replaceables"
-                                                                                                                        ],
-                                                                                                          "geomes":  {
-                                                                                                                         "sedimentary_basin":  1.8,
-                                                                                                                         "coastal_shelf":  1.5,
-                                                                                                                         "wetland_basin":  1.4,
-                                                                                                                         "volcanic_arc":  0.45
-                                                                                                                     }
-                                                                                                      }
-                                                                          },
-                                                           "deep_output":  "minecraft:deepslate_coal_ore",
-                                                           "deep_output_max_y":  -1,
-                                                           "block":  "minecraft:coal_ore"
-                                                       },
-                 "mineralogy:ore/minecraft/iron_ore":  {
-                                                           "enabled":  true,
-                                                           "source_mod":  "minecraft",
-                                                           "native_generation":  true,
-                                                           "dimensions":  {
-                                                                              "minecraft:overworld":  {
-                                                                                                          "enabled":  true,
-                                                                                                          "min_y":  -64,
-                                                                                                          "max_y":  256,
-                                                                                                          "frequency":  34.0,
-                                                                                                          "quantity":  9,
-                                                                                                          "pattern":  "vein",
-                                                                                                          "height_distribution":  "triangle",
-                                                                                                          "spread":  8,
-                                                                                                          "vertical_spread":  4,
-                                                                                                          "node_size":  4,
-                                                                                                          "host_families":  [
-                                                                                                                                "sedimentary",
-                                                                                                                                "metamorphic",
-                                                                                                                                "igneous_intrusive",
-                                                                                                                                "igneous_volcanic"
-                                                                                                                            ],
-                                                                                                          "host_tags":  [
-                                                                                                                            "minecraft:stone_ore_replaceables",
-                                                                                                                            "minecraft:deepslate_ore_replaceables"
-                                                                                                                        ],
-                                                                                                          "geomes":  {
-                                                                                                                         "mountain_belt":  1.4,
-                                                                                                                         "volcanic_arc":  1.25,
-                                                                                                                         "stable_craton":  1.15
-                                                                                                                     }
-                                                                                                      }
-                                                                          },
-                                                           "deep_output":  "minecraft:deepslate_iron_ore",
-                                                           "deep_output_max_y":  -1,
-                                                           "block":  "minecraft:iron_ore"
-                                                       },
-                 "mineralogy:ore/minecraft/copper_ore":  {
-                                                             "enabled":  true,
-                                                             "source_mod":  "minecraft",
-                                                             "native_generation":  true,
-                                                             "dimensions":  {
-                                                                                "minecraft:overworld":  {
-                                                                                                            "enabled":  true,
-                                                                                                            "min_y":  -16,
-                                                                                                            "max_y":  112,
-                                                                                                            "frequency":  13.0,
-                                                                                                            "quantity":  10,
-                                                                                                            "pattern":  "cloud",
-                                                                                                            "height_distribution":  "triangle",
-                                                                                                            "spread":  6,
-                                                                                                            "vertical_spread":  4,
-                                                                                                            "node_size":  4,
-                                                                                                            "host_families":  [
-                                                                                                                                  "sedimentary",
-                                                                                                                                  "metamorphic",
-                                                                                                                                  "igneous_intrusive",
-                                                                                                                                  "igneous_volcanic"
-                                                                                                                              ],
-                                                                                                            "host_tags":  [
-                                                                                                                              "minecraft:stone_ore_replaceables",
-                                                                                                                              "minecraft:deepslate_ore_replaceables"
-                                                                                                                          ],
-                                                                                                            "geomes":  {
-                                                                                                                           "mountain_belt":  1.5,
-                                                                                                                           "volcanic_arc":  1.6
-                                                                                                                       }
-                                                                                                        }
-                                                                            },
-                                                             "deep_output":  "minecraft:deepslate_copper_ore",
-                                                             "deep_output_max_y":  -1,
-                                                             "block":  "minecraft:copper_ore"
-                                                         },
-                 "mineralogy:ore/minecraft/gold_ore":  {
-                                                           "enabled":  true,
-                                                           "source_mod":  "minecraft",
-                                                           "native_generation":  true,
-                                                           "dimensions":  {
-                                                                              "minecraft:overworld":  {
-                                                                                                          "enabled":  true,
-                                                                                                          "min_y":  -64,
-                                                                                                          "max_y":  32,
-                                                                                                          "frequency":  4.5,
-                                                                                                          "quantity":  9,
-                                                                                                          "pattern":  "vein",
-                                                                                                          "height_distribution":  "triangle",
-                                                                                                          "spread":  8,
-                                                                                                          "vertical_spread":  4,
-                                                                                                          "node_size":  4,
-                                                                                                          "host_families":  [
-                                                                                                                                "sedimentary",
-                                                                                                                                "metamorphic",
-                                                                                                                                "igneous_intrusive",
-                                                                                                                                "igneous_volcanic"
-                                                                                                                            ],
-                                                                                                          "host_tags":  [
-                                                                                                                            "minecraft:stone_ore_replaceables",
-                                                                                                                            "minecraft:deepslate_ore_replaceables"
-                                                                                                                        ],
-                                                                                                          "geomes":  {
-                                                                                                                         "mountain_belt":  1.5,
-                                                                                                                         "volcanic_arc":  1.7,
-                                                                                                                         "arid_basin":  1.25
-                                                                                                                     }
-                                                                                                      }
-                                                                          },
-                                                           "deep_output":  "minecraft:deepslate_gold_ore",
-                                                           "deep_output_max_y":  -1,
-                                                           "block":  "minecraft:gold_ore"
-                                                       },
-                 "mineralogy:ore/minecraft/redstone_ore":  {
-                                                               "enabled":  true,
-                                                               "source_mod":  "minecraft",
-                                                               "native_generation":  true,
-                                                               "dimensions":  {
-                                                                                  "minecraft:overworld":  {
-                                                                                                              "enabled":  true,
-                                                                                                              "min_y":  -64,
-                                                                                                              "max_y":  15,
-                                                                                                              "frequency":  8.0,
-                                                                                                              "quantity":  8,
-                                                                                                              "pattern":  "vein",
-                                                                                                              "height_distribution":  "triangle",
-                                                                                                              "spread":  8,
-                                                                                                              "vertical_spread":  4,
-                                                                                                              "node_size":  4,
-                                                                                                              "host_families":  [
-                                                                                                                                    "sedimentary",
-                                                                                                                                    "metamorphic",
-                                                                                                                                    "igneous_intrusive",
-                                                                                                                                    "igneous_volcanic"
-                                                                                                                                ],
-                                                                                                              "host_tags":  [
-                                                                                                                                "minecraft:stone_ore_replaceables",
-                                                                                                                                "minecraft:deepslate_ore_replaceables"
-                                                                                                                            ]
-                                                                                                          }
-                                                                              },
-                                                               "deep_output":  "minecraft:deepslate_redstone_ore",
-                                                               "deep_output_max_y":  -1,
-                                                               "block":  "minecraft:redstone_ore"
-                                                           },
-                 "mineralogy:ore/minecraft/diamond_ore":  {
-                                                              "enabled":  true,
-                                                              "source_mod":  "minecraft",
-                                                              "native_generation":  true,
-                                                              "dimensions":  {
-                                                                                 "minecraft:overworld":  {
-                                                                                                             "enabled":  true,
-                                                                                                             "min_y":  -64,
-                                                                                                             "max_y":  16,
-                                                                                                             "frequency":  2.6,
-                                                                                                             "quantity":  8,
-                                                                                                             "pattern":  "cluster",
-                                                                                                             "height_distribution":  "triangle",
-                                                                                                             "spread":  6,
-                                                                                                             "vertical_spread":  3,
-                                                                                                             "node_size":  4,
-                                                                                                             "host_families":  [
-                                                                                                                                   "sedimentary",
-                                                                                                                                   "metamorphic",
-                                                                                                                                   "igneous_intrusive",
-                                                                                                                                   "igneous_volcanic"
-                                                                                                                               ],
-                                                                                                             "host_tags":  [
-                                                                                                                               "minecraft:stone_ore_replaceables",
-                                                                                                                               "minecraft:deepslate_ore_replaceables"
-                                                                                                                           ],
-                                                                                                             "geomes":  {
-                                                                                                                            "stable_craton":  1.35,
-                                                                                                                            "volcanic_arc":  1.2
-                                                                                                                        }
-                                                                                                         }
-                                                                             },
-                                                              "deep_output":  "minecraft:deepslate_diamond_ore",
-                                                              "deep_output_max_y":  -1,
-                                                              "block":  "minecraft:diamond_ore"
-                                                          },
-                 "mineralogy:ore/minecraft/lapis_ore":  {
-                                                            "enabled":  true,
-                                                            "source_mod":  "minecraft",
-                                                            "native_generation":  true,
-                                                            "dimensions":  {
-                                                                               "minecraft:overworld":  {
-                                                                                                           "enabled":  true,
-                                                                                                           "min_y":  -64,
-                                                                                                           "max_y":  64,
-                                                                                                           "frequency":  3.4,
-                                                                                                           "quantity":  7,
-                                                                                                           "pattern":  "cloud",
-                                                                                                           "height_distribution":  "triangle",
-                                                                                                           "spread":  8,
-                                                                                                           "vertical_spread":  4,
-                                                                                                           "node_size":  4,
-                                                                                                           "host_families":  [
-                                                                                                                                 "sedimentary",
-                                                                                                                                 "metamorphic",
-                                                                                                                                 "igneous_intrusive",
-                                                                                                                                 "igneous_volcanic"
-                                                                                                                             ],
-                                                                                                           "host_tags":  [
-                                                                                                                             "minecraft:stone_ore_replaceables",
-                                                                                                                             "minecraft:deepslate_ore_replaceables"
-                                                                                                                         ],
-                                                                                                           "geomes":  {
-                                                                                                                          "mountain_belt":  1.6,
-                                                                                                                          "glacial_highland":  1.25
-                                                                                                                      }
-                                                                                                       }
-                                                                           },
-                                                            "deep_output":  "minecraft:deepslate_lapis_ore",
-                                                            "deep_output_max_y":  -1,
-                                                            "block":  "minecraft:lapis_ore"
-                                                        },
-                 "mineralogy:ore/minecraft/emerald_ore":  {
-                                                              "enabled":  true,
-                                                              "source_mod":  "minecraft",
-                                                              "native_generation":  true,
-                                                              "dimensions":  {
-                                                                                 "minecraft:overworld":  {
-                                                                                                             "enabled":  true,
-                                                                                                             "min_y":  -16,
-                                                                                                             "max_y":  128,
-                                                                                                             "frequency":  0.55,
-                                                                                                             "quantity":  3,
-                                                                                                             "pattern":  "cluster",
-                                                                                                             "height_distribution":  "triangle",
-                                                                                                             "spread":  8,
-                                                                                                             "vertical_spread":  5,
-                                                                                                             "node_size":  3,
-                                                                                                             "host_families":  [
-                                                                                                                                   "sedimentary",
-                                                                                                                                   "metamorphic",
-                                                                                                                                   "igneous_intrusive",
-                                                                                                                                   "igneous_volcanic"
-                                                                                                                               ],
-                                                                                                             "host_tags":  [
-                                                                                                                               "minecraft:stone_ore_replaceables",
-                                                                                                                               "minecraft:deepslate_ore_replaceables"
-                                                                                                                           ],
-                                                                                                             "geomes":  {
-                                                                                                                            "mountain_belt":  4.0,
-                                                                                                                            "glacial_highland":  2.0,
-                                                                                                                            "stable_craton":  0.15,
-                                                                                                                            "sedimentary_basin":  0.05,
-                                                                                                                            "coastal_shelf":  0.05,
-                                                                                                                            "arid_basin":  0.15,
-                                                                                                                            "wetland_basin":  0.05,
-                                                                                                                            "volcanic_arc":  0.35
-                                                                                                                        }
-                                                                                                         }
-                                                                             },
-                                                              "deep_output":  "minecraft:deepslate_emerald_ore",
-                                                              "deep_output_max_y":  -1,
-                                                              "block":  "minecraft:emerald_ore"
-                                                          },
-                 "mineralogy:ore/minecraft/nether_gold_ore":  {
-                                                                  "enabled":  true,
-                                                                  "source_mod":  "minecraft",
-                                                                  "native_generation":  true,
-                                                                  "dimensions":  {
-                                                                                     "minecraft:the_nether":  {
-                                                                                                                  "enabled":  true,
-                                                                                                                  "min_y":  0,
-                                                                                                                  "max_y":  127,
-                                                                                                                  "frequency":  6.0,
-                                                                                                                  "quantity":  10,
-                                                                                                                  "pattern":  "cluster",
-                                                                                                                  "height_distribution":  "uniform",
-                                                                                                                  "spread":  8,
-                                                                                                                  "vertical_spread":  5,
-                                                                                                                  "node_size":  5,
-                                                                                                                  "host_tags":  [
-                                                                                                                                    "minecraft:base_stone_nether"
-                                                                                                                                ]
-                                                                                                              }
-                                                                                 },
-                                                                  "block":  "minecraft:nether_gold_ore"
-                                                              },
-                 "mineralogy:ore/minecraft/nether_quartz_ore":  {
-                                                                    "enabled":  true,
-                                                                    "source_mod":  "minecraft",
-                                                                    "native_generation":  true,
-                                                                    "dimensions":  {
-                                                                                       "minecraft:the_nether":  {
-                                                                                                                    "enabled":  true,
-                                                                                                                    "min_y":  0,
-                                                                                                                    "max_y":  127,
-                                                                                                                    "frequency":  16.0,
-                                                                                                                    "quantity":  14,
-                                                                                                                    "pattern":  "vein",
-                                                                                                                    "height_distribution":  "uniform",
-                                                                                                                    "spread":  8,
-                                                                                                                    "vertical_spread":  4,
-                                                                                                                    "node_size":  4,
-                                                                                                                    "host_tags":  [
-                                                                                                                                      "minecraft:base_stone_nether"
-                                                                                                                                  ]
-                                                                                                                }
-                                                                                   },
-                                                                    "block":  "minecraft:nether_quartz_ore"
-                                                                },
-                 "mineralogy:ore/minecraft/ancient_debris":  {
-                                                                 "enabled":  true,
-                                                                 "source_mod":  "minecraft",
-                                                                 "native_generation":  true,
-                                                                 "dimensions":  {
-                                                                                    "minecraft:the_nether":  {
-                                                                                                                 "enabled":  true,
-                                                                                                                 "min_y":  8,
-                                                                                                                 "max_y":  120,
-                                                                                                                 "frequency":  1.0,
-                                                                                                                 "quantity":  3,
-                                                                                                                 "pattern":  "cluster",
-                                                                                                                 "height_distribution":  "uniform",
-                                                                                                                 "spread":  12,
-                                                                                                                 "vertical_spread":  8,
-                                                                                                                 "node_size":  3,
-                                                                                                                 "host_tags":  [
-                                                                                                                                   "minecraft:base_stone_nether"
-                                                                                                                               ]
-                                                                                                             }
-                                                                                },
-                                                                 "block":  "minecraft:ancient_debris"
-                                                             }
+                                                           }
              },
     "geomes":  {
 

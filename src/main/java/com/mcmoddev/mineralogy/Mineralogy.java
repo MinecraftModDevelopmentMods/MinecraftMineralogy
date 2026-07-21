@@ -1,5 +1,6 @@
 package com.mcmoddev.mineralogy;
 
+import com.mcmoddev.mineralogy.documentation.DocumentationExporter;
 import com.mcmoddev.mineralogy.init.MineralogyFluids;
 import com.mcmoddev.mineralogy.patching.LegacyWorldDataHook;
 
@@ -34,5 +35,6 @@ public class Mineralogy {
 
 	private void setup(final FMLCommonSetupEvent event) {
 		MineralogyConfig.bake();
+		event.enqueueWork(DocumentationExporter::exportBundledGuide);
 	}
 }

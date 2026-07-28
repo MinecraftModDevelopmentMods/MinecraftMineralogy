@@ -12,7 +12,7 @@
 
 Mineralogy has a mandatory runtime dependency on OreSpawn `[4.0.0,5.0.0)`.
 Do not build integrations against Mineralogy internals. Use
-`com.mcmoddev.orespawn.api` or an OreSpawn provider file.
+`zone.moddev.mc.orespawn.api` or an OreSpawn provider file.
 
 ## Packaged Provider
 

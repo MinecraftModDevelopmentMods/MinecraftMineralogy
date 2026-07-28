@@ -10,7 +10,7 @@ Mineralogy is an OreSpawn 4 content provider and first customer. Read
   mining and crafting tags; and old-world registry compatibility.
 - OreSpawn owns terrain, geomes, formations, ores, fluid-deposit placement, profiles,
   world-creation UI, retrogen, flat bedrock, and integration APIs.
-- Do not restore old `com.mcmoddev.mineralogy.api`, geology editor, or worldgen
+- Do not restore old `zone.moddev.mc.mineralogy.api`, geology editor, or worldgen
   packages. Make reusable engine changes in OreSpawn.
 - Keep the provider declarative. No callbacks, registry access, logging, config
   reads, or allocation belong in generation loops.

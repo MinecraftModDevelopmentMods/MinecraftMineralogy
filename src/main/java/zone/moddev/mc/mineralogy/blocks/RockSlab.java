@@ -25,7 +25,7 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 
-public class RockSlab extends Block {
+public class RockSlab extends Block implements NamedMineralogyBlock {
 	public static final DirectionProperty FACING = DirectionProperty.create("facing", Direction.values());
 	private static final double THICKNESS = 8.0D;
 	private static final VoxelShape[] SHAPES = new VoxelShape[Direction.values().length];
@@ -41,6 +41,7 @@ public class RockSlab extends Block {
 
 	private final String doubleSlabName;
 	private final int toolHardnessLevel;
+	private final String registryPath;
 
 	public RockSlab(float hardness, float blastResistance, int toolHardnessLevel, SoundType sound) {
 		this(hardness, blastResistance, toolHardnessLevel, sound, null, "");
@@ -56,11 +57,13 @@ public class RockSlab extends Block {
 				.requiresCorrectToolForDrops());
 		this.toolHardnessLevel = toolHardnessLevel;
 		this.doubleSlabName = doubleSlabName;
+		this.registryPath = name;
 		this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.UP));
+	}
 
-		if (name != null) {
-			this.setRegistryName(name);
-		}
+	@Override
+	public String mineralogyRegistryPath() {
+		return registryPath;
 	}
 
 	@Override
@@ -102,9 +105,9 @@ public class RockSlab extends Block {
 		}
 
 		ItemStack held = player.getItemInHand(hand);
-		ResourceLocation slabItemName = held.isEmpty() ? null : held.getItem().getRegistryName();
+		ResourceLocation slabItemName = held.isEmpty() ? null : ForgeRegistries.ITEMS.getKey(held.getItem());
 
-		if (!this.getRegistryName().equals(slabItemName)) {
+		if (!ForgeRegistries.BLOCKS.getKey(this).equals(slabItemName)) {
 			return super.use(state, world, pos, player, hand, hit);
 		}
 

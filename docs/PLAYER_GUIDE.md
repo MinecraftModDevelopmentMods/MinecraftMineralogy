@@ -2,9 +2,9 @@
 
 ## Installing
 
-Mineralogy 6 needs both the Mineralogy and OreSpawn 4 jars for Minecraft
-1.18.2. Install both on clients and servers. A world that contains Mineralogy
-blocks should not be opened without Mineralogy.
+Mineralogy 6.1.0 needs OreSpawn 4.0.1 or a later compatible 4.x build for
+Minecraft 1.19.4. Install both mods on clients and servers. A world that
+contains Mineralogy blocks should not be opened without Mineralogy.
 
 ## Creating A World
 

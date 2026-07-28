@@ -2,7 +2,6 @@ package zone.moddev.mc.mineralogy.blocks;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 import zone.moddev.mc.mineralogy.Mineralogy;
 import zone.moddev.mc.mineralogy.init.TileEntities;
@@ -10,6 +9,7 @@ import zone.moddev.mc.mineralogy.tileentity.TileEntityRockFurnace;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.SoundType;
@@ -43,13 +43,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootContext.Builder;
 import net.minecraftforge.registries.ForgeRegistries;
 
-public class RockFurnace extends BaseEntityBlock {
+public class RockFurnace extends BaseEntityBlock implements NamedMineralogyBlock {
 	public static final net.minecraft.world.level.block.state.properties.DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 	private static boolean keepInventory;
 
 	private final boolean burning;
 	private final float burnModifier;
 	private final int toolHardnessLevel;
+	private final String registryPath;
 
 	public RockFurnace(float hardness, float blastResistance, int toolHardnessLevel, boolean burning,
 			float burnModifier, String name) {
@@ -58,8 +59,13 @@ public class RockFurnace extends BaseEntityBlock {
 		this.burning = burning;
 		this.burnModifier = burnModifier;
 		this.toolHardnessLevel = toolHardnessLevel;
-		this.setRegistryName(name);
+		this.registryPath = name;
 		this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH));
+	}
+
+	@Override
+	public String mineralogyRegistryPath() {
+		return registryPath;
 	}
 
 	protected boolean canSilkHarvest() {
@@ -166,7 +172,7 @@ public class RockFurnace extends BaseEntityBlock {
 	}
 
 	@Override
-	public void animateTick(BlockState state, Level world, BlockPos pos, Random random) {
+	public void animateTick(BlockState state, Level world, BlockPos pos, RandomSource random) {
 		if (!burning) {
 			return;
 		}
@@ -222,7 +228,7 @@ public class RockFurnace extends BaseEntityBlock {
 	}
 
 	private static Block getStateBlock(Block block, boolean active) {
-		ResourceLocation name = block.getRegistryName();
+		ResourceLocation name = ForgeRegistries.BLOCKS.getKey(block);
 		if (name == null) {
 			return block;
 		}

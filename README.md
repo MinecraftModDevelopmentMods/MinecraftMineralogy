@@ -1,6 +1,6 @@
 # Minecraft Mineralogy 6
 
-Mineralogy adds real-world rock types to Minecraft 1.18.2, together with
+Mineralogy adds real-world rock types to Minecraft 1.19.4, together with
 matching slabs, stairs, walls, bricks, polished blocks, reliefs, and furnaces.
 It also supplies sulfur, phosphorous, nitrate, rock salt lighting, and crude
 oil content.
@@ -12,7 +12,8 @@ world profiles, configuration screens, retrogen, and the public worldgen API.
 
 ## Players
 
-Install matching Minecraft 1.18.2 builds of Mineralogy 6 and OreSpawn 4 on the
+Install Mineralogy 6.1.0 and OreSpawn 4.0.1 (or a later compatible 4.x build)
+for Minecraft 1.19.4 on the
 client and server. When creating a world, open **OreSpawn World Generation** to
 choose the recommended settings or tune the geology. Its **Help & Guide**
 button explains the controls in game.

@@ -15,11 +15,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.storage.loot.LootContext.Builder;
 import net.minecraftforge.registries.ForgeRegistries;
 
-public class Ore extends Block {
+public class Ore extends Block implements NamedMineralogyBlock {
+	private final String registryPath;
 	private final String dropItemName;
 	private final int dropAdduct;
 	private final int dropRange;
@@ -28,8 +30,7 @@ public class Ore extends Block {
 	public Ore(String name, String dropItemName, int minNumberDropped, int maxNumberDropped, int pickLevel) {
 		super(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 5.0F).sound(SoundType.STONE)
 				.requiresCorrectToolForDrops());
-		this.setRegistryName(Mineralogy.MODID, name);
-
+		this.registryPath = name;
 		this.dropItemName = dropItemName;
 		this.dropAdduct = minNumberDropped;
 		this.dropRange = (maxNumberDropped - minNumberDropped) + 1;
@@ -37,7 +38,13 @@ public class Ore extends Block {
 	}
 
 	@Override
-	public int getExpDrop(BlockState state, LevelReader world, BlockPos pos, int fortune, int silktouch) {
+	public String mineralogyRegistryPath() {
+		return registryPath;
+	}
+
+	@Override
+	public int getExpDrop(BlockState state, LevelReader world, RandomSource random, BlockPos pos,
+			int fortune, int silktouch) {
 		return 0;
 	}
 

@@ -1,9 +1,13 @@
 package zone.moddev.mc.mineralogy.init;
 
+import java.util.function.Consumer;
+
 import zone.moddev.mc.mineralogy.Mineralogy;
 import zone.moddev.mc.mineralogy.blocks.MineralogyLiquidBlock;
 import zone.moddev.mc.mineralogy.items.MineralogyBucketItem;
 
+import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.minecraftforge.common.SoundActions;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.Item;
@@ -14,13 +18,15 @@ import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 public final class MineralogyFluids {
+	private static final DeferredRegister<FluidType> FLUID_TYPES =
+			DeferredRegister.create(ForgeRegistries.Keys.FLUID_TYPES, Mineralogy.MODID);
 	private static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(ForgeRegistries.FLUIDS,
 			Mineralogy.MODID);
 	private static final DeferredRegister<net.minecraft.world.level.block.Block> BLOCKS =
@@ -32,14 +38,34 @@ public final class MineralogyFluids {
 			"blocks/crude_oil_still");
 	private static final ResourceLocation CRUDE_OIL_FLOW = new ResourceLocation(Mineralogy.MODID,
 			"blocks/crude_oil_flow");
+
+	public static final RegistryObject<FluidType> CRUDE_OIL_TYPE = FLUID_TYPES.register("crude_oil",
+			() -> new FluidType(FluidType.Properties.create()
+					.density(850)
+					.viscosity(6000)
+					.temperature(300)
+					.sound(SoundActions.BUCKET_FILL, SoundEvents.BUCKET_FILL)
+					.sound(SoundActions.BUCKET_EMPTY, SoundEvents.BUCKET_EMPTY)) {
+				@Override
+				public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer) {
+					consumer.accept(new IClientFluidTypeExtensions() {
+						@Override
+						public ResourceLocation getStillTexture() {
+							return CRUDE_OIL_STILL;
+						}
+
+						@Override
+						public ResourceLocation getFlowingTexture() {
+							return CRUDE_OIL_FLOW;
+						}
+					});
+				}
+			});
+
 	private static final ForgeFlowingFluid.Properties CRUDE_OIL_PROPERTIES =
-			new ForgeFlowingFluid.Properties(MineralogyFluids::crudeOil,
-					MineralogyFluids::flowingCrudeOil,
-					FluidAttributes.builder(CRUDE_OIL_STILL, CRUDE_OIL_FLOW)
-							.density(850)
-							.viscosity(6000)
-							.temperature(300)
-							.sound(SoundEvents.BUCKET_FILL, SoundEvents.BUCKET_EMPTY))
+			new ForgeFlowingFluid.Properties(MineralogyFluids::crudeOilType,
+					MineralogyFluids::crudeOil,
+					MineralogyFluids::flowingCrudeOil)
 					.bucket(MineralogyFluids::crudeOilBucket)
 					.block(MineralogyFluids::crudeOilBlock)
 					.slopeFindDistance(2)
@@ -53,13 +79,13 @@ public final class MineralogyFluids {
 			FLUIDS.register("flowing_crude_oil", () -> new ForgeFlowingFluid.Flowing(CRUDE_OIL_PROPERTIES));
 	public static final RegistryObject<LiquidBlock> CRUDE_OIL_BLOCK = BLOCKS.register("crude_oil",
 			() -> new MineralogyLiquidBlock(MineralogyFluids::crudeOilFlowing,
-					BlockBehaviour.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
+					BlockBehaviour.Properties.of(Material.WATER).noCollission().strength(100.0F).noLootTable()));
 	public static final RegistryObject<Item> CRUDE_OIL_BUCKET = ITEMS.register("crude_oil_bucket",
 			() -> new MineralogyBucketItem(MineralogyFluids::crudeOil,
-					new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)
-							.tab(MineralogyItemGroups.forItem())));
+					new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
 	public static void register(IEventBus modBus) {
+		FLUID_TYPES.register(modBus);
 		FLUIDS.register(modBus);
 		BLOCKS.register(modBus);
 		ITEMS.register(modBus);
@@ -67,6 +93,10 @@ public final class MineralogyFluids {
 
 	public static Fluid crudeOil() {
 		return CRUDE_OIL.get();
+	}
+
+	public static FluidType crudeOilType() {
+		return CRUDE_OIL_TYPE.get();
 	}
 
 	public static FlowingFluid crudeOilFlowing() {

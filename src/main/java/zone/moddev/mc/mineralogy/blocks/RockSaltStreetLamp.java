@@ -21,17 +21,21 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.Level;
 
-import java.util.Random;
+import net.minecraft.util.RandomSource;
 
-public class RockSaltStreetLamp extends Block {
+public class RockSaltStreetLamp extends Block implements NamedMineralogyBlock {
 	public static final DirectionProperty FACING = DirectionProperty.create("facing", Direction.values());
 	private static final VoxelShape STANDING_SHAPE = Block.box(6.4D, 0.0D, 6.4D, 9.6D, 28.8D, 9.6D);
 
 	public RockSaltStreetLamp() {
 		super(BlockBehaviour.Properties.of(Material.METAL).strength(1.0F)
 				.lightLevel(state -> 15).sound(SoundType.METAL));
-		this.setRegistryName("rocksaltstreetlamp");
 		this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.UP));
+	}
+
+	@Override
+	public String mineralogyRegistryPath() {
+		return "rocksaltstreetlamp";
 	}
 
 	@Override
@@ -63,7 +67,7 @@ public class RockSaltStreetLamp extends Block {
 	}
 
 	@Override
-	public void animateTick(BlockState state, Level world, BlockPos pos, Random random) {
+	public void animateTick(BlockState state, Level world, BlockPos pos, RandomSource random) {
 		world.addParticle(ParticleTypes.SMOKE,
 				(double) pos.getX() + 0.5D,
 				(double) pos.getY() + 1.92D,

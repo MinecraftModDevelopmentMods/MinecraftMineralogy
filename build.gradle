@@ -113,6 +113,12 @@ minecraft {
                         providers.gradleProperty('orespawnBenchmarkVanillaOres').getOrElse('false')
                 property 'orespawn.worldgenBenchmarkOreAudit',
                         providers.gradleProperty('orespawnBenchmarkOreAudit').getOrElse('false')
+                property 'orespawn.worldgenBenchmarkFluidAudit',
+                        providers.gradleProperty('orespawnBenchmarkFluidAudit').getOrElse('false')
+                if (providers.gradleProperty('orespawnBenchmarkBiomeAudit').isPresent()) {
+                    property 'orespawn.worldgenBenchmarkBiomeAudit',
+                            providers.gradleProperty('orespawnBenchmarkBiomeAudit').get()
+                }
                 if (providers.gradleProperty('orespawnBenchmarkBlockAudit').isPresent()) {
                     property 'orespawn.worldgenBenchmarkBlockAudit',
                             providers.gradleProperty('orespawnBenchmarkBlockAudit').get()
@@ -150,9 +156,12 @@ repositories {
     // Put repositories for dependencies here
     // ForgeGradle automatically adds the Forge maven and Maven Central for you
 
-    // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
-    flatDir {
-        dirs rootProject.file('../../OS118/OreSpawn/build/libs')
+    maven {
+        name = 'CurseMaven'
+        url = 'https://www.cursemaven.com'
+        content {
+            includeGroup 'curse.maven'
+        }
     }
 }
 
@@ -165,7 +174,7 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
     // OreSpawn owns all geology and managed ore generation in Mineralogy 6.
-    runtimeOnly fg.deobf("blank:OreSpawn-${minecraft_version}:${orespawn_version}")
+    runtimeOnly fg.deobf("curse.maven:mmd-orespawn-245586:${orespawn_file_id}")
 
     testImplementation platform('org.junit:junit-bom:5.10.2')
     testImplementation 'org.junit.jupiter:junit-jupiter'

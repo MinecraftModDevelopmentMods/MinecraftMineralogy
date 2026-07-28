@@ -12,15 +12,21 @@ import net.minecraft.world.level.block.state.BlockState;
 * @author Jasmine Iwanek
 *
 */
-public class RockWall extends WallBlock {
+public class RockWall extends WallBlock implements NamedMineralogyBlock {
+	private final String registryPath;
 	public RockWall(Block materialBlock, float hardness, float blastResistance, int toolHardnessLevel,
 	 			SoundType sound, String name) {
 		super(BlockBehaviour.Properties.of(Material.STONE).strength(hardness, blastResistance).sound(sound)
 				.requiresCorrectToolForDrops());
 
-		this.setRegistryName(name);
+		this.registryPath = name;
 		this.toolHardnessLevel = toolHardnessLevel;
 	 }
+
+	@Override
+	public String mineralogyRegistryPath() {
+		return registryPath;
+	}
 
 	private final int toolHardnessLevel;
 }

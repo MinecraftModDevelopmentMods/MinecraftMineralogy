@@ -298,7 +298,7 @@ public final class MineralogyConfig {
 		}
 
 		@Override public ResourceLocation getID() { return CONFIG_CONDITION_ID; }
-		@Override public boolean test() { return flag.getAsBoolean(); }
+		@Override public boolean test(ICondition.IContext context) { return flag.getAsBoolean(); }
 	}
 
 	private static final class ConfigConditionSerializer

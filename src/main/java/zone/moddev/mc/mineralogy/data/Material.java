@@ -1,16 +1,13 @@
 package zone.moddev.mc.mineralogy.data;
 
-import zone.moddev.mc.mineralogy.Mineralogy;
 import zone.moddev.mc.mineralogy.RockType;
 import zone.moddev.mc.mineralogy.blocks.Rock;
 import zone.moddev.mc.mineralogy.blocks.RockStairs;
 import zone.moddev.mc.mineralogy.blocks.RockWall;
-import zone.moddev.mc.mineralogy.init.MineralogyItemGroups;
 
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.resources.ResourceLocation;
 
 public class Material {
 	public String materialName;
@@ -26,7 +23,7 @@ public class Material {
 	 * @param materialName
 	 * 			Name of the block (should start with capital letter)
 	 *
-	 * @param type
+	 * @param rockType
 	 *            Igneous, sedimentary, or metamorphic
 	 *
 	 * @param hardness
@@ -101,30 +98,15 @@ public class Material {
 	}
 
 	public BlockItem getBlockItem(Rock blockHandle) {
-		BlockItem blockItem = new BlockItem(blockHandle,
-				new Item.Properties().tab(MineralogyItemGroups.forBlock(blockHandle)));
-
-		blockItem.setRegistryName(Mineralogy.MODID, blockHandle.getRegistryName().getPath());
-
-		return blockItem;
+		return new BlockItem(blockHandle, new Item.Properties());
 	}
 
 	public BlockItem getBlockItem(RockStairs blockHandle) {
-		BlockItem blockItem = new BlockItem(blockHandle,
-				new Item.Properties().tab(MineralogyItemGroups.forBlock(blockHandle)));
-
-		blockItem.setRegistryName(Mineralogy.MODID, blockHandle.getRegistryName().getPath());
-
-		return blockItem;
+		return new BlockItem(blockHandle, new Item.Properties());
 	}
 
 	public BlockItem getBlockItem(RockWall blockHandle) {
-		BlockItem blockItem = new BlockItem(blockHandle,
-				new Item.Properties().tab(MineralogyItemGroups.forBlock(blockHandle)));
-
-		blockItem.setRegistryName(Mineralogy.MODID, blockHandle.getRegistryName().getPath());
-
-		return blockItem;
+		return new BlockItem(blockHandle, new Item.Properties());
 	}
 
 	@Override

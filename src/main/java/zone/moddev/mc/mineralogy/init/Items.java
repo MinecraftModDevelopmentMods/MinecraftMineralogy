@@ -20,37 +20,39 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.ObjectHolder;
+import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.RegisterEvent;
 
 @Mod.EventBusSubscriber(modid = Mineralogy.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
-@ObjectHolder(Mineralogy.MODID)
 public class Items {
-	public static final BlockItem basalt = null;
-	public static final Item sulfur_dust = null;
-	public static final Item phosphorous_dust = null;
-	public static final Item nitrate_dust = null;
-	public static final Item gypsum_dust = null;
-	public static final Item chalk_dust = null;
-	public static final Item rock_salt_dust = null;
-	public static final Item salt_dust = null;
-	public static final Item mineral_fertilizer = null;
+	public static BlockItem basalt;
+	public static Item sulfur_dust;
+	public static Item phosphorous_dust;
+	public static Item nitrate_dust;
+	public static Item gypsum_dust;
+	public static Item chalk_dust;
+	public static Item rock_salt_dust;
+	public static Item salt_dust;
+	public static Item mineral_fertilizer;
 
 	@SubscribeEvent
-	public static void registerItems(RegistryEvent.Register<Item> event) {
-		event.getRegistry().registerAll(
-				createItem("sulfur_dust"),
-				createItem("phosphorous_dust"),
-				createItem("nitrate_dust"),
-				createItem("gypsum_dust"),
-				createItem("chalk_dust"),
-				createItem("rock_salt_dust"),
-				createItem("salt_dust"),
-				createFertilizer()
-		);
+	public static void registerItems(RegisterEvent event) {
+		if (!ForgeRegistries.Keys.ITEMS.equals(event.getRegistryKey())) {
+			return;
+		}
+		IForgeRegistry<Item> registry = event.getForgeRegistry();
+
+		sulfur_dust = register(registry, "sulfur_dust", createItem());
+		phosphorous_dust = register(registry, "phosphorous_dust", createItem());
+		nitrate_dust = register(registry, "nitrate_dust", createItem());
+		gypsum_dust = register(registry, "gypsum_dust", createItem());
+		chalk_dust = register(registry, "chalk_dust", createItem());
+		rock_salt_dust = register(registry, "rock_salt_dust", createItem());
+		salt_dust = register(registry, "salt_dust", createItem());
+		mineral_fertilizer = register(registry, "mineral_fertilizer", createFertilizer());
 
 		List<Item> blockItems = new ArrayList<Item>();
 
@@ -60,11 +62,17 @@ public class Items {
 			}
 		}
 
-		event.getRegistry().registerAll(blockItems.toArray(new Item[blockItems.size()]));
+		for (Item item : blockItems) {
+			ResourceLocation name = ForgeRegistries.BLOCKS.getKey(((BlockItem) item).getBlock());
+			registry.register(name, item);
+			if ("basalt".equals(name.getPath())) {
+				basalt = (BlockItem) item;
+			}
+		}
 	}
 
 	private static boolean isMineralogyBlockItem(Block block) {
-		ResourceLocation registryName = block.getRegistryName();
+		ResourceLocation registryName = ForgeRegistries.BLOCKS.getKey(block);
 
 		return registryName != null
 				&& Mineralogy.MODID.equals(registryName.getNamespace())
@@ -81,34 +89,33 @@ public class Items {
 	}
 
 	private static BlockItem createBlockItem(Block block) {
-		Item.Properties properties = new Item.Properties().tab(MineralogyItemGroups.forBlock(block));
+		Item.Properties properties = new Item.Properties();
 		if (block instanceof RockFurnace) {
 			properties.stacksTo(1);
 		} else if (block instanceof RockSaltStreetLamp) {
 			properties.stacksTo(16);
 		}
 
-		BlockItem item = new BlockItem(block, properties);
-		item.setRegistryName(block.getRegistryName());
-		return item;
+		return new BlockItem(block, properties);
 	}
 
 	private static boolean isUnlitRockFurnace(Block block) {
-		ResourceLocation registryName = block.getRegistryName();
+		ResourceLocation registryName = ForgeRegistries.BLOCKS.getKey(block);
 		return block instanceof RockFurnace
 				&& registryName != null
 				&& !registryName.getPath().startsWith("lit_");
 	}
 
-	private static Item createItem(String name) {
-		Item item = new Item(new Item.Properties().tab(MineralogyItemGroups.forItem()));
-		item.setRegistryName(Mineralogy.MODID, name);
-		return item;
+	private static Item createItem() {
+		return new Item(new Item.Properties());
 	}
 
 	private static Item createFertilizer() {
-		MineralFertilizer item = new MineralFertilizer(MineralogyItemGroups.forItem());
-		item.setRegistryName(Mineralogy.MODID, "mineral_fertilizer");
+		return new MineralFertilizer();
+	}
+
+	private static <T extends Item> T register(IForgeRegistry<Item> registry, String path, T item) {
+		registry.register(new ResourceLocation(Mineralogy.MODID, path), item);
 		return item;
 	}
 

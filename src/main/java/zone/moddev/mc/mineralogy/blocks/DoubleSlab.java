@@ -13,9 +13,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.storage.loot.LootContext.Builder;
 
-public class DoubleSlab extends Block {
+public class DoubleSlab extends Block implements NamedMineralogyBlock {
 	private final Block drops;
 	private final int toolHardnessLevel;
+	private final String registryPath;
 
 	public DoubleSlab(float hardness, float blastResistance, int toolHardnessLevel, SoundType sound, Block drops,
 			String name) {
@@ -23,7 +24,12 @@ public class DoubleSlab extends Block {
 				.requiresCorrectToolForDrops());
 		this.drops = drops;
 		this.toolHardnessLevel = toolHardnessLevel;
-		this.setRegistryName(name);
+		this.registryPath = name;
+	}
+
+	@Override
+	public String mineralogyRegistryPath() {
+		return registryPath;
 	}
 
 	@Override

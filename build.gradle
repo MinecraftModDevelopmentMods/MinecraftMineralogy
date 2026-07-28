@@ -103,14 +103,33 @@ minecraft {
         // The gametest system is also enabled by default for other run configs under the /test command.
         gameTestServer {
             property 'forge.enabledGameTestNamespaces', mod_id
-            if (providers.gradleProperty('mineralogyBenchmarkMode').isPresent()) {
-                property 'mineralogy.worldgenBenchmarkMode', providers.gradleProperty('mineralogyBenchmarkMode').get()
-                property 'mineralogy.worldgenBenchmarkRadius',
-                        providers.gradleProperty('mineralogyBenchmarkRadius').getOrElse('4')
-                property 'mineralogy.worldgenBenchmarkRepetitions',
-                        providers.gradleProperty('mineralogyBenchmarkRepetitions').getOrElse('3')
-                property 'mineralogy.worldgenBenchmarkVanillaOres',
-                        providers.gradleProperty('mineralogyBenchmarkVanillaOres').getOrElse('false')
+            if (providers.gradleProperty('orespawnBenchmarkMode').isPresent()) {
+                property 'orespawn.worldgenBenchmarkMode', providers.gradleProperty('orespawnBenchmarkMode').get()
+                property 'orespawn.worldgenBenchmarkRadius',
+                        providers.gradleProperty('orespawnBenchmarkRadius').getOrElse('4')
+                property 'orespawn.worldgenBenchmarkRepetitions',
+                        providers.gradleProperty('orespawnBenchmarkRepetitions').getOrElse('3')
+                property 'orespawn.worldgenBenchmarkVanillaOres',
+                        providers.gradleProperty('orespawnBenchmarkVanillaOres').getOrElse('false')
+                property 'orespawn.worldgenBenchmarkOreAudit',
+                        providers.gradleProperty('orespawnBenchmarkOreAudit').getOrElse('false')
+                if (providers.gradleProperty('orespawnBenchmarkBlockAudit').isPresent()) {
+                    property 'orespawn.worldgenBenchmarkBlockAudit',
+                            providers.gradleProperty('orespawnBenchmarkBlockAudit').get()
+                }
+                property 'orespawn.worldgenBenchmarkCenterX',
+                        providers.gradleProperty('orespawnBenchmarkCenterX').getOrElse('256')
+                property 'orespawn.worldgenBenchmarkCenterZ',
+                        providers.gradleProperty('orespawnBenchmarkCenterZ').getOrElse('256')
+                property 'orespawn.worldgenBenchmarkCenterStep',
+                        providers.gradleProperty('orespawnBenchmarkCenterStep').getOrElse('64')
+                property 'orespawn.worldgenBenchmarkDimension',
+                        providers.gradleProperty('orespawnBenchmarkDimension').getOrElse('overworld')
+                if (providers.gradleProperty('orespawnBenchmarkBiomeType').isPresent()) {
+                    property 'orespawn.worldgenBenchmarkBiomeType',
+                            providers.gradleProperty('orespawnBenchmarkBiomeType').get()
+                }
+                property 'orespawn.worldgenBenchmarkStopServer', 'true'
             }
         }
 
@@ -132,9 +151,9 @@ repositories {
     // ForgeGradle automatically adds the Forge maven and Maven Central for you
 
     // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
-    // flatDir {
-    //     dir 'libs'
-    // }
+    flatDir {
+        dirs rootProject.file('../../OS118/OreSpawn/build/libs')
+    }
 }
 
 dependencies {
@@ -144,6 +163,9 @@ dependencies {
     // If the group id is "net.minecraft" and the artifact id is one of ["client", "server", "joined"],
     // then special handling is done to allow a setup of a vanilla dependency without the use of an external repository.
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+    // OreSpawn owns all geology and managed ore generation in Mineralogy 6.
+    runtimeOnly fg.deobf("blank:OreSpawn-${minecraft_version}:${orespawn_version}")
 
     testImplementation platform('org.junit:junit-bom:5.10.2')
     testImplementation 'org.junit.jupiter:junit-jupiter'
@@ -173,11 +195,15 @@ tasks.named('jar', Jar).configure {
                 'Implementation-Title'    : project.name,
                 'Implementation-Version'  : project.jar.archiveVersion,
                 'Implementation-Vendor'   : 'SkyBlade1978',
-                'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                'Mineralogy-API-Version'  : '1'
+                'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
 
+    // This is the preferred method to reobfuscate your jar file
+    finalizedBy 'reobfJar'
+}
+
+tasks.named('processResources', ProcessResources).configure {
     from('docs/AGENTS.md') {
         into ''
         rename { 'AGENTS.md' }
@@ -185,9 +211,6 @@ tasks.named('jar', Jar).configure {
     from('docs') {
         into 'META-INF/mineralogy/docs'
     }
-
-    // This is the preferred method to reobfuscate your jar file
-    finalizedBy 'reobfJar'
 }
 
 // However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing:
@@ -223,11 +246,11 @@ tasks.named('test', Test).configure {
     useJUnitPlatform()
 }
 
-// Eclipse and command-line verification use different Gradle homes in this workspace. Keep every
-// Eclipse runtime input on Buildship's cache while Forge remains free to rewrite build/classpath.
+// Keep every Eclipse launch input on Buildship's physical Gradle cache. Command-line
+// verification may deliberately use a separate cache, which must not leak into Eclipse.
 def syncEclipseRunClasspaths = tasks.register('syncEclipseRunClasspaths') {
     group = 'IDE'
-    description = 'Aligns Eclipse project and Forge run classpaths with Buildship\'s Gradle home.'
+    description = 'Aligns Eclipse project, Buildship, and Forge run classpaths with Eclipse\'s Gradle home.'
 
     doLast {
         File classpathDir = layout.buildDirectory.dir('classpath').get().asFile
@@ -244,9 +267,35 @@ def syncEclipseRunClasspaths = tasks.register('syncEclipseRunClasspaths') {
             buildshipPreferences.withInputStream { buildship.load(it) }
         }
         String configuredGradleHome = buildship.getProperty('connection.gradle.user.home', '').trim()
-        File eclipseGradleHome = configuredGradleHome
-                ? file(configuredGradleHome).canonicalFile
-                : gradle.gradleUserHomeDir.canonicalFile
+        File eclipseProjectClasspath = file('.classpath')
+        String eclipseGradleHomeOverride = (findProperty('eclipseGradleUserHome')
+                ?: System.getenv('ECLIPSE_GRADLE_USER_HOME') ?: '').toString().trim()
+        File eclipseGradleHome = eclipseGradleHomeOverride
+                ? file(eclipseGradleHomeOverride).canonicalFile
+                : new File(System.getProperty('user.home'), '.gradle').canonicalFile
+        Map<String, String> requiredBuildshipSettings = [
+                'eclipse.preferences.version'      : '1',
+                'connection.gradle.distribution'  : 'GRADLE_DISTRIBUTION(WRAPPER)',
+                'connection.gradle.user.home'     : eclipseGradleHome.absolutePath,
+                'connection.project.dir'          : '',
+                'override.workspace.settings'     : 'false',
+                'project.path'                    : ':'
+        ]
+        boolean buildshipChanged = !configuredGradleHome ||
+                file(configuredGradleHome).canonicalFile != eclipseGradleHome
+        requiredBuildshipSettings.each { String key, String value ->
+            if (buildship.getProperty(key) != value) {
+                buildship.setProperty(key, value)
+                buildshipChanged = true
+            }
+        }
+        if (buildshipChanged) {
+            buildshipPreferences.parentFile.mkdirs()
+            buildshipPreferences.withOutputStream {
+                buildship.store(it,
+                        'Generated by syncEclipseRunClasspaths; keep Eclipse launch inputs on the Buildship cache.')
+            }
+        }
         File eclipseCache = new File(eclipseGradleHome, 'caches').canonicalFile
         File eclipseClasspathDir = file('.settings/mineralogy-run-classpaths')
         eclipseClasspathDir.mkdirs()
@@ -282,7 +331,6 @@ def syncEclipseRunClasspaths = tasks.register('syncEclipseRunClasspaths') {
             stableClasspaths.put(classpathFile.canonicalFile, stableClasspath.canonicalFile)
         }
 
-        File eclipseProjectClasspath = file('.classpath')
         int changedProjectClasspath = 0
         int changedResourceExclusions = 0
         if (eclipseProjectClasspath.isFile()) {
@@ -348,8 +396,49 @@ def syncEclipseRunClasspaths = tasks.register('syncEclipseRunClasspaths') {
         }
 
         File eclipseLaunchDir = file('.eclipse/configurations')
+        int changedPrepareLaunches = 0
+        if (eclipseLaunchDir.isDirectory()) {
+            boolean windows = System.getProperty('os.name', '').toLowerCase().contains('windows')
+            File gradleWrapper = file(windows ? 'gradlew.bat' : 'gradlew').canonicalFile
+            String launcher = windows
+                    ? (System.getenv('ComSpec') ?: new File(System.getenv('SystemRoot') ?: 'C:\\Windows',
+                            'System32\\cmd.exe').absolutePath)
+                    : '/bin/sh'
+            String arguments = windows
+                    ? "/d /s /c \"\\\"${gradleWrapper.absolutePath}\\\" copyEclipseResources --console plain\""
+                    : "-c \"'${gradleWrapper.absolutePath.replace("'", "'\\''")}' copyEclipseResources --console plain\""
+
+            fileTree(eclipseLaunchDir) {
+                include '*prepareRun*.launch'
+            }.files.each { File launchFile ->
+                StringWriter output = new StringWriter()
+                def xml = new groovy.xml.MarkupBuilder(output)
+                xml.mkp.xmlDeclaration(version: '1.0', encoding: 'UTF-8', standalone: 'no')
+                xml.launchConfiguration(type: 'org.eclipse.ui.externaltools.ProgramLaunchConfigurationType') {
+                    booleanAttribute(key: 'org.eclipse.debug.ui.ATTR_LAUNCH_IN_BACKGROUND', value: 'true')
+                    booleanAttribute(key: 'org.eclipse.ui.externaltools.ATTR_CAPTURE_OUTPUT', value: 'true')
+                    stringAttribute(key: 'org.eclipse.ui.externaltools.ATTR_LOCATION', value: launcher)
+                    booleanAttribute(key: 'org.eclipse.ui.externaltools.ATTR_SHOW_CONSOLE', value: 'true')
+                    stringAttribute(key: 'org.eclipse.ui.externaltools.ATTR_TOOL_ARGUMENTS', value: arguments)
+                    stringAttribute(key: 'org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY',
+                            value: projectDir.canonicalPath)
+                    mapAttribute(key: 'org.eclipse.debug.core.environmentVariables') {
+                        mapEntry(key: 'GRADLE_USER_HOME', value: eclipseGradleHome.absolutePath)
+                        mapEntry(key: 'JAVA_HOME', value: System.getProperty('java.home'))
+                    }
+                }
+                String replacement = output.toString() + System.lineSeparator()
+                if (launchFile.getText('UTF-8') != replacement) {
+                    launchFile.setText(replacement, 'UTF-8')
+                    changedPrepareLaunches++
+                }
+            }
+        }
+
         int changedLaunches = 0
         if (eclipseLaunchDir.isDirectory()) {
+            File eclipseClasses = file('bin/main').canonicalFile
+            String modClasses = "${mod_id}%%${eclipseClasses.absolutePath}"
             fileTree(eclipseLaunchDir) {
                 include '*Slim.launch'
             }.files.each { File launchFile ->
@@ -360,18 +449,42 @@ def syncEclipseRunClasspaths = tasks.register('syncEclipseRunClasspaths') {
                             .replace(generated.absolutePath, stable.absolutePath)
                             .replace(generated.absolutePath.replace('\\', '/'), stable.absolutePath.replace('\\', '/'))
                 }
+                synced = synced.replaceFirst(
+                        /<mapEntry key="MOD_CLASSES" value="[^"]*"\/>/) {
+                    "<mapEntry key=\"MOD_CLASSES\" value=\"${modClasses}\"/>"
+                }
                 if (original != synced) {
                     launchFile.setText(synced, 'UTF-8')
                     changedLaunches++
                 }
             }
         }
-        logger.lifecycle("Eclipse runtime paths aligned with ${eclipseCache} (${stableClasspaths.size()} Forge classpaths, ${changedProjectClasspath} project classpath, ${changedResourceExclusions} metadata exclusion, ${changedLaunches} launches updated)")
+
+        // ForgeGradle's launch group lets Java start even if its Buildship
+        // preparation step changed caches or failed. Publish the synchronized
+        // Java launch directly; Eclipse already copies resources into bin/main.
+        int changedLaunchGroups = 0
+        fileTree(projectDir) {
+            include 'run*.launch'
+        }.files.each { File launchFile ->
+            String runName = launchFile.name.substring(0, launchFile.name.length() - '.launch'.length())
+            File slimLaunch = new File(eclipseLaunchDir, "${project.name} - ${runName}Slim.launch")
+            if (!slimLaunch.isFile()) {
+                return
+            }
+            String replacement = slimLaunch.getText('UTF-8')
+            if (launchFile.getText('UTF-8') != replacement) {
+                launchFile.setText(replacement, 'UTF-8')
+                changedLaunchGroups++
+            }
+        }
+        logger.lifecycle("Eclipse runtime paths aligned with ${eclipseCache} (${stableClasspaths.size()} Forge classpaths, ${changedProjectClasspath} project classpath, ${changedResourceExclusions} metadata exclusion, ${changedPrepareLaunches} prepare launches, ${changedLaunches} slim launches, ${changedLaunchGroups} direct project launches updated)")
     }
 }
 
 tasks.configureEach {
-    if (name in ['copyEclipseResources', 'genEclipseRuns', 'eclipse']) {
+    if (name in ['copyEclipseResources', 'genEclipseRuns', 'eclipse',
+            'prepareRunClient', 'prepareRunServer', 'prepareRunData', 'prepareRunGameTestServer']) {
         finalizedBy syncEclipseRunClasspaths
     }
 }

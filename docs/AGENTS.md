@@ -1,44 +1,26 @@
-# Mineralogy Integration Notes For Humans And Agents
+# Mineralogy 6 Agent Guide
 
-Mineralogy 6.0 is a required Forge mod and world-generation engine. Public API
-major version 1 consists only of `com.mcmoddev.mineralogy.api`. Treat every
-other Java package as internal and unstable.
+Mineralogy is an OreSpawn 4 content provider and first customer. Read
+`DEVELOPER_GUIDE.md` and `PROVIDER.md` before changing integrations.
 
-Integration entry points:
+- Required engine: OreSpawn `[4.0.0,5.0.0)`.
+- Provider resource: `data/mineralogy/orespawn/provider.json`, schema 3,
+  provider revision 3.
+- Mineralogy owns block, fluid, and item registration; assets; recipes; loot;
+  mining and crafting tags; and old-world registry compatibility.
+- OreSpawn owns terrain, geomes, formations, ores, fluid-deposit placement, profiles,
+  world-creation UI, retrogen, flat bedrock, and integration APIs.
+- Do not restore old `zone.moddev.mc.mineralogy.api`, geology editor, or worldgen
+  packages. Make reusable engine changes in OreSpawn.
+- Keep the provider declarative. No callbacks, registry access, logging, config
+  reads, or allocation belong in generation loops.
+- Matching vanilla rocks remain preferred worldgen outputs through aliases.
+  Mineralogy equivalents stay registered for old saves and explicit pack use.
+- Mineralogy contributes sulfur, phosphorous, and nitrate ore rules. OreSpawn
+  owns optional vanilla-ore presets; do not duplicate them here.
+- Mineralogy owns and supplies the crude-oil fluid block and the
+  `mineralogy:fluid_deposit/crude_oil` provider rule. OreSpawn has no standalone
+  oil block or default fluid rule.
 
-- Java declarations: `MineralogyApi.enqueue(WorldgenProvider)` during
-  `InterModEnqueueEvent`.
-- File declarations: `config/<modid>-mineralogy.json`, provider schema 2.
-- Ore-only compatibility: provider schema 1 remains accepted.
-- Active queries: `getActiveProfile(MinecraftServer)` and
-  `createSampler(ServerLevel)`.
-- Native-ore takeover: disable only when `isOreTakeoverActive(modid)` is true.
-
-Configuration contracts:
-
-- Global `config/mineralogy-geomes.json`: schema 4.
-- World `serverconfig/mineralogy-geology.json`: schema 3.
-- Provider `config/<modid>-mineralogy.json`: schema 2.
-- JSON Schemas and examples are under `META-INF/mineralogy/docs/` in the jar.
-
-Lifecycle and ownership:
-
-- Forge setup is parallel. Never mutate Mineralogy internals directly.
-- File definitions override API definitions for the same provider.
-- Malformed present files fail closed and leave the provider inactive.
-- Provider-owned rocks, ores, geomes, automatic dimensions, and templates use
-  the provider namespace. Biome rules may target external biomes.
-- Definitions freeze at load completion and change only after restart.
-
-Performance constraints:
-
-- Do not request callbacks in block-generation loops.
-- Registry IDs remain `ResourceLocation` values until setup-time baking.
-- Dimension, tag, alias, biome, geome, family, and block-state resolution occurs
-  before generation.
-- The chunk hot path must contain no config reads, registry access, strings,
-  logging, or per-block allocation.
-
-Common tasks and examples are documented in `API.md`, `PROVIDERS.md`,
-`TEMPLATES.md`, and `DIMENSIONS.md`. The normal Mineralogy jar is the compile
-and runtime dependency; it must not be embedded or shaded into another mod.
+The complete OreSpawn integration guide is packaged by OreSpawn and exported
+to `config/orespawn-guide/` on first load.

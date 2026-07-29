@@ -12,7 +12,7 @@ world profiles, configuration screens, retrogen, and the public worldgen API.
 
 ## Players
 
-Install Mineralogy 6.1.0 and OreSpawn 4.0.1 (or a later compatible 4.x build)
+Install Mineralogy 6.0.0 and OreSpawn 4.0.1 (or a later compatible 4.x build)
 for Minecraft 1.19.4 on the
 client and server. When creating a world, open **OreSpawn World Generation** to
 choose the recommended settings or tune the geology. Its **Help & Guide**

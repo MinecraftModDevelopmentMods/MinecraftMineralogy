@@ -2,7 +2,7 @@
 
 ## Installing
 
-Mineralogy 6.1.0 needs OreSpawn 4.0.1 or a later compatible 4.x build for
+Mineralogy 6.0.0 needs OreSpawn 4.0.1 or a later compatible 4.x build for
 Minecraft 1.19.4. Install both mods on clients and servers. A world that
 contains Mineralogy blocks should not be opened without Mineralogy.
 

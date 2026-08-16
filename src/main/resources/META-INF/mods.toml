@@ -1,5 +1,6 @@
 modLoader="javafml"
 loaderVersion="[28,)"
+license="LGPL-2.1"
 issueTrackerURL="https://github.com/SkyBlade1978/MinecraftMineralogy/issues"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/minecraft-mineralogy"
 logoFile=""

@@ -35,6 +35,13 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle.forge'
 //apply plugin: 'com.jaredsburrows.checkerframework'
 
+configurations {
+  // ForgeGradle 2's Minecraft dependency metadata exposes these client
+  // libraries to Eclipse without reliably materialising their jars in a
+  // modern Gradle cache. Resolve them explicitly for the generated classpath.
+  legacyEclipseLibraries
+}
+
 project.afterEvaluate {
   //final def junitPlatformTestTask = project.tasks.getByName('junitPlatformTest')
   // configure jacoco to analyze the junitPlatformTest task
@@ -99,9 +106,10 @@ static String getBuildNumber() {
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
-eclipse.project {
-  buildCommand 'org.eclipse.buildship.core.gradleprojectbuilder'
-  natures 'org.eclipse.buildship.core.gradleprojectnature'
+eclipse {
+  classpath {
+    plusConfigurations += [configurations.legacyEclipseLibraries]
+  }
 }
 
 idea.module {
@@ -238,6 +246,11 @@ repositories {
   mavenCentral()
 
   maven {
+    name 'MinecraftLibraries'
+    url 'https://libraries.minecraft.net/'
+  }
+
+  maven {
     name 'CurseMaven'
     url 'https://www.cursemaven.com'
   }
@@ -250,6 +263,11 @@ repositories {
 
 dependencies {
   deobfCompile "curse.maven:mmd-orespawn-${project.orespawn_curse_project_id}:${project.orespawn_curse_file_id}"
+
+  legacyEclipseLibraries 'com.paulscode:codecjorbis:20101023@jar'
+  legacyEclipseLibraries 'com.paulscode:codecwav:20101023@jar'
+  legacyEclipseLibraries 'com.paulscode:libraryjavasound:20101123@jar'
+  legacyEclipseLibraries 'java3d:vecmath:1.5.2@jar'
 
   testCompile('org.junit.platform:junit-platform-launcher:1.2.+')
   testCompile('org.junit.jupiter:junit-jupiter-api:5.2.+') // testImplementation

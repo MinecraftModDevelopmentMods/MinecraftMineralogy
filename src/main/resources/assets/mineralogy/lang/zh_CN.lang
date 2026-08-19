@@ -585,7 +585,7 @@ tile.mineralogy.chalk.name=粉笔
 item.mineralogy.chalk_dust.name=粉笔粉
 item.mineralogy.salt_dust.name=盐
 item.mineralogy.rock_salt_dust.name=岩盐晶体
-tile.mineralogy.rocksaltlamp.name岩盐灯
+tile.mineralogy.rocksaltlamp.name=岩盐灯
 tile.mineralogy.rocksaltstreetlamp.name=岩盐路灯
 
 tile.mineralogy.andesite_relief_axe.name=安山岩 斧头救济
@@ -940,4 +940,7 @@ tile.mineralogy.novaculite_relief_right.name=均密石英岩 正确的救济
 tile.mineralogy.novaculite_relief_sword.name=均密石英岩 剑救济
 tile.mineralogy.novaculite_relief_vertical.name=均密石英岩 垂直救济
 
-itemGroup.mineralogy.mineralogy=我的地理
+itemGroup.mineralogyTab=矿物学
+tile.mineralogy.crude_oil.name=原油
+item.mineralogy.crude_oil_bucket.name=原油桶
+fluid.mineralogy.crude_oil=原油

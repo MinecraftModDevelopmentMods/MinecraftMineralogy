@@ -942,3 +942,6 @@ tile.mineralogy.novaculite_relief_sword.name=Novaculita Alivio de espada
 tile.mineralogy.novaculite_relief_vertical.name=Novaculita Alivio vertical
 
 itemGroup.mineralogyTab=Mineralogía
+tile.mineralogy.crude_oil.name=Crude Oil
+item.mineralogy.crude_oil_bucket.name=Crude Oil Bucket
+fluid.mineralogy.crude_oil=Crude Oil

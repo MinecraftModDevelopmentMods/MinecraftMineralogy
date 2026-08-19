@@ -932,4 +932,15 @@ tile.mineralogy.novaculite_relief_right.name=Novaculite Bon soulagement
 tile.mineralogy.novaculite_relief_sword.name=Novaculite Soulagement de l'épée
 tile.mineralogy.novaculite_relief_vertical.name=Novaculite Relief vertical
 
-itemGroup.mineralogy.mineralogy=Minéralogie
+itemGroup.mineralogyTab=Minéralogie
+tile.mineralogy.andesite_brick_furnace.name=Four en briques d'andésite
+tile.mineralogy.andesite_furnace.name=Four en andésite
+tile.mineralogy.andesite_smooth_brick_furnace.name=Four en briques d'andésite polie
+tile.mineralogy.andesite_smooth_furnace.name=Four en andésite polie
+tile.mineralogy.basalt_brick_furnace.name=Four en briques de basalte
+tile.mineralogy.basalt_furnace.name=Four en basalte
+tile.mineralogy.basalt_smooth_brick_furnace.name=Four en briques de basalte poli
+tile.mineralogy.basalt_smooth_furnace.name=Four en basalte poli
+tile.mineralogy.crude_oil.name=Pétrole brut
+item.mineralogy.crude_oil_bucket.name=Seau de pétrole brut
+fluid.mineralogy.crude_oil=Pétrole brut

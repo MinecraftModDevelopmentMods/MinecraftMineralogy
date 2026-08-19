@@ -942,3 +942,6 @@ tile.mineralogy.novaculite_relief_sword.name=Novaculite Schwert Relief
 tile.mineralogy.novaculite_relief_vertical.name=Novaculite Vertikales Relief
 
 itemGroup.mineralogyTab=Mineralogie
+tile.mineralogy.crude_oil.name=Crude Oil
+item.mineralogy.crude_oil_bucket.name=Crude Oil Bucket
+fluid.mineralogy.crude_oil=Crude Oil

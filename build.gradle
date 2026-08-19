@@ -238,16 +238,23 @@ repositories {
   mavenCentral()
 
   maven {
+    name 'CurseMaven'
+    url 'https://www.cursemaven.com'
+  }
+
+  maven {
     name 'MMD'
     url 'https://maven.mcmoddev.com/'
   }
 }
 
 dependencies {
+  deobfCompile "curse.maven:mmd-orespawn-${project.orespawn_curse_project_id}:${project.orespawn_curse_file_id}"
+
   testCompile('org.junit.platform:junit-platform-launcher:1.2.+')
   testCompile('org.junit.jupiter:junit-jupiter-api:5.2.+') // testImplementation
   testRuntime('org.junit.jupiter:junit-jupiter-engine:5.2.+') //testRuntimeOnly
-  testCompileOnly 'junit:junit:4.12'
+  testCompile 'junit:junit:4.13.2'
   testRuntime 'org.junit.vintage:junit-vintage-engine:5.2.+' //testRuntimeOnly
   testCompile('org.mockito:mockito-core:2.+')
   testCompile('org.mockito:mockito-junit-jupiter:2.+') {

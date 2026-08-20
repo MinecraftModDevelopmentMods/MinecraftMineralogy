@@ -7,4 +7,4 @@ Mineralogy 6.0.0 for Minecraft 1.10.2
 - Migrates valid non-default legacy ore settings non-destructively and writes a deterministic upgrade report.
 - Preserves existing mineralogy.cfg files byte-for-byte and writes content-only configuration for clean installations.
 - Removes Mineralogy's internal geology, noise, stone-replacement, and ore-placement implementation.
-- Repairs French and Simplified Chinese localization keys and enforces exact parity across all eleven locales.
+- Backports the complete 17-locale Mineralogy 6 language set, normalizes translated geology and block-family terminology, removes inherited English fallbacks, and enforces exact 931-key parity and translation-quality checks.

@@ -10,6 +10,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -38,15 +40,35 @@ public class NamespaceAndLocaleContractTest {
     }
 
     @Test
-    public void allElevenLocalesHaveExactKeyParity() throws Exception {
+    public void allSeventeenLocalesHaveExactOrderedKeyParity() throws Exception {
         File directory = new File("src/main/resources/assets/mineralogy/lang");
         File[] files = directory.listFiles((dir, name) -> name.endsWith(".lang"));
         assertNotNull(files);
-        assertEquals(11, files.length);
-        Set<String> expected = keys(new File(directory, "en_US.lang"));
+        Set<String> expectedFiles = new HashSet<String>(Arrays.asList(
+                "de_AU.lang", "de_DE.lang",
+                "en_CA.lang", "en_EN.lang", "en_GB.lang", "en_PT.lang", "en_US.lang",
+                "es_ES.lang", "es_MX.lang",
+                "fr_CA.lang", "fr_FR.lang",
+                "ja_JP.lang", "ko_KR.lang",
+                "pt_BR.lang", "pt_PT.lang",
+                "ru_RU.lang", "zh_CN.lang"));
+        Set<String> actualFiles = new HashSet<String>();
         for (File file : files) {
-            assertEquals(file.getName(), expected, keys(file));
+            actualFiles.add(file.getName());
         }
+        assertEquals(expectedFiles, actualFiles);
+
+        List<String> expected = keysInOrder(new File(directory, "en_US.lang"));
+        assertEquals(931, expected.size());
+        for (File file : files) {
+            assertEquals(file.getName(), expected, keysInOrder(file));
+        }
+
+        assertLocalePair(directory, "de_AU.lang", "de_DE.lang");
+        assertLocalePair(directory, "es_ES.lang", "es_MX.lang");
+        assertLocalePair(directory, "fr_CA.lang", "fr_FR.lang");
+        assertLocalePair(directory, "pt_BR.lang", "pt_PT.lang");
+
         assertTrue(expected.contains("tile.mineralogy.crude_oil.name"));
         assertTrue(expected.contains("item.mineralogy.crude_oil_bucket.name"));
         assertTrue(expected.contains("fluid.mineralogy.crude_oil"));
@@ -66,15 +88,24 @@ public class NamespaceAndLocaleContractTest {
                 joined.contains("MineralogyFluids.registerClientModels();"));
     }
 
-    private static Set<String> keys(File file) throws Exception {
+    private static void assertLocalePair(File directory, String first, String second) throws Exception {
+        assertArrayEquals(first + " and " + second + " must remain byte-identical",
+                Files.readAllBytes(new File(directory, first).toPath()),
+                Files.readAllBytes(new File(directory, second).toPath()));
+    }
+
+    private static List<String> keysInOrder(File file) throws Exception {
+        List<String> ordered = new ArrayList<String>();
         Set<String> keys = new HashSet<String>();
         for (String line : Files.readAllLines(file.toPath(), StandardCharsets.UTF_8)) {
             String trimmed = line.trim();
             if (!trimmed.isEmpty() && !trimmed.startsWith("#") && trimmed.contains("=")) {
-                assertTrue(file.getName() + " duplicate key", keys.add(trimmed.substring(0, trimmed.indexOf('='))));
+                String key = trimmed.substring(0, trimmed.indexOf('='));
+                assertTrue(file.getName() + " duplicate key " + key, keys.add(key));
+                ordered.add(key);
             }
         }
-        return keys;
+        return ordered;
     }
 
     private static boolean containsJava(File directory) {

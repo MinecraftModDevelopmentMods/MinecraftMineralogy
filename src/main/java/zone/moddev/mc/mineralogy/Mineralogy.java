@@ -230,7 +230,7 @@ public class Mineralogy {
 
         addStoneType("hornfels", 3, 15, 1);// new
         addStoneType("quartzite", 4, 15, 1);// new
-        addStoneType("novaculite", 2.5, 10, 1);// new // TODO: this can be used like flint
+        addStoneType("novaculite", 3, 15, 1);// new // TODO: this can be used like flint
 
         addStoneType("slate", 1.5, 10, 0);
         addStoneType("schist", 3, 15, 1);
@@ -529,7 +529,8 @@ public class Mineralogy {
                     "xxx", 'x', new ItemStack(rock, 1, 0));
 
             registerBlock(
-                    new DoubleSlab((float) hardness, (float) blastResistance, toolHardnessLevel, SoundType.STONE, rockSlab),
+                    new DoubleSlab((float) hardness, (float) blastResistance, toolHardnessLevel,
+                            SoundType.STONE, rockSlab, rock),
                     name + "_double_slab",  64, false, true);
 
             if (GENERATE_ROCKFURNACES) {
@@ -560,7 +561,8 @@ public class Mineralogy {
                         "xxx", 'x', new ItemStack(brick, 1, 0));
 
                 registerBlock(
-                        new DoubleSlab((float) hardness, (float) blastResistance, toolHardnessLevel, SoundType.STONE, brickSlab),
+                        new DoubleSlab((float) hardness, (float) blastResistance, toolHardnessLevel,
+                                SoundType.STONE, brickSlab, brick),
                         name + "_brick_double_slab",  64, false, true);
 
                 if (GENERATE_BRICKFURNACES) {
@@ -600,7 +602,8 @@ public class Mineralogy {
                         "xxx", 'x', new ItemStack(smooth, 1, 0));
 
                 registerBlock(
-                        new DoubleSlab((float) hardness, (float) blastResistance, toolHardnessLevel, SoundType.STONE, smoothSlab),
+                        new DoubleSlab((float) hardness, (float) blastResistance, toolHardnessLevel,
+                                SoundType.STONE, smoothSlab, smooth),
                         name + "_smooth_double_slab",  64, false, true);
 
                 if (GENERATE_SMOOTHFURNACES) {
@@ -631,7 +634,8 @@ public class Mineralogy {
                             "xxx", 'x', new ItemStack(smoothBrick, 1, 0));
 
                     registerBlock(
-                            new DoubleSlab((float) hardness, (float) blastResistance, toolHardnessLevel, SoundType.STONE, smoothBrickSlab),
+                            new DoubleSlab((float) hardness, (float) blastResistance, toolHardnessLevel,
+                                    SoundType.STONE, smoothBrickSlab, smoothBrick),
                             name + "_smooth_brick_double_slab",  64, false, true);
 
                     if (GENERATE_SMOOTHBRICKFURNACES) {

@@ -108,9 +108,55 @@ targetCompatibility = JavaVersion.VERSION_1_8
 
 eclipse {
   classpath {
+    // ForgeGradle 2.2 launches use the whole Eclipse project classpath. Keep
+    // ordinary client/server runs production-only so Forge never scans JUnit,
+    // Mockito/ByteBuddy, or test-only @Mod fixtures as runtime mods.
+    sourceSets = [sourceSets.main]
     plusConfigurations += [configurations.legacyEclipseLibraries]
+    file.whenMerged { classpath ->
+      classpath.entries.removeAll { entry ->
+        String path = entry.path == null ? '' : entry.path.toString().replace('\\', '/')
+        path == 'src/test/java' || [
+                '/org.junit/', '/org.junit.jupiter/', '/org.junit.platform/',
+                '/org.junit.vintage/', '/junit/', '/junit-', '/mockito-', '/byte-buddy', '/objenesis/',
+                '/opentest4j/', '/org.apiguardian/', '/hamcrest-'
+        ].any { path.contains(it) }
+      }
+    }
   }
 }
+
+task verifyEclipseProductionClasspath {
+  group = 'verification'
+  description = 'Fails if ordinary Eclipse launches can see test sources or test-only libraries.'
+  dependsOn eclipseClasspath
+
+  doLast {
+    File generatedClasspath = file('.classpath')
+    if (!generatedClasspath.isFile()) {
+      throw new GradleException('Eclipse .classpath was not generated')
+    }
+
+    String contents = generatedClasspath.getText('UTF-8').replace('\\', '/')
+    List<String> forbidden = [
+            'path="src/test/', '/org.junit/', '/org.junit.jupiter/',
+            '/org.junit.platform/', '/junit-', '/mockito-', '/byte-buddy',
+            '/objenesis/', '/opentest4j/', '/org.apiguardian/', '/hamcrest-'
+    ]
+    List<String> present = forbidden.findAll { contents.contains(it) }
+    if (!present.isEmpty()) {
+      throw new GradleException('Ordinary Eclipse classpath contains test code/dependencies: ' + present.join(', '))
+    }
+
+    ['src/main/java', 'src/main/resources', 'bin/main'].each { required ->
+      if (!contents.contains(required)) {
+        throw new GradleException('Ordinary Eclipse classpath is missing production entry: ' + required)
+      }
+    }
+  }
+}
+
+tasks.eclipse.finalizedBy verifyEclipseProductionClasspath
 
 idea.module {
   downloadJavadoc = true

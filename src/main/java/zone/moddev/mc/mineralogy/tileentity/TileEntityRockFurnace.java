@@ -1,6 +1,7 @@
 package zone.moddev.mc.mineralogy.tileentity;
 
 import zone.moddev.mc.mineralogy.blocks.RockFurnace;
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
@@ -13,13 +14,57 @@ import scala.actors.Debug;
 * @author SkyBlade1978
 */
 public class TileEntityRockFurnace extends TileEntityFurnace {
+    private static final double DEFAULT_BURN_MODIFIER = 1.0D;
+
     double _burnModifier;
+    private boolean recoverBurnModifierFromBlock;
+
+    /**
+     * Required by Minecraft's reflective tile-entity loader.
+     *
+     * <p>The owning block is not available until after NBT has been read, so
+     * the material-specific burn modifier is recovered lazily on the first
+     * fuel calculation.</p>
+     */
+    public TileEntityRockFurnace()
+    {
+        this(DEFAULT_BURN_MODIFIER, true);
+    }
 
     public TileEntityRockFurnace(double burnModifier)
+    {
+        this(burnModifier, false);
+    }
+
+    private TileEntityRockFurnace(double burnModifier, boolean recoverBurnModifierFromBlock)
     {
         super();
 
         _burnModifier = burnModifier;
+        this.recoverBurnModifierFromBlock = recoverBurnModifierFromBlock;
+    }
+
+    private double getEffectiveBurnModifier()
+    {
+        if (recoverBurnModifierFromBlock && this.getWorld() != null)
+        {
+            _burnModifier = burnModifierFor(
+                    this.getWorld().getBlockState(this.pos).getBlock(),
+                    DEFAULT_BURN_MODIFIER);
+            recoverBurnModifierFromBlock = false;
+        }
+
+        return _burnModifier;
+    }
+
+    static double burnModifierFor(Block block, double fallback)
+    {
+        if (block instanceof RockFurnace)
+        {
+            return ((RockFurnace) block).getBurnModifier();
+        }
+
+        return fallback;
     }
 
 // set / get field keys
@@ -70,7 +115,7 @@ public class TileEntityRockFurnace extends TileEntityFurnace {
                         try {
                             if (!this.isBurning() && this.canSmelt())
                             {
-                                int burnTime = (int) (getItemBurnTime(super.getStackInSlot(1)) * _burnModifier);
+                                int burnTime = (int) (getItemBurnTime(super.getStackInSlot(1)) * getEffectiveBurnModifier());
 
                                 super.setField(0, burnTime);
                                 super.setField(1, super.getField(0));

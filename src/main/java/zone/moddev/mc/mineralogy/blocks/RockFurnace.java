@@ -78,6 +78,10 @@ public class RockFurnace extends BlockFurnace {
         return new TileEntityRockFurnace(_burnModifier);
     }
 
+    public double getBurnModifier() {
+        return _burnModifier;
+    }
+
     public static void setState(boolean active, World worldIn, BlockPos pos)
     {
         IBlockState iblockstate = worldIn.getBlockState(pos);

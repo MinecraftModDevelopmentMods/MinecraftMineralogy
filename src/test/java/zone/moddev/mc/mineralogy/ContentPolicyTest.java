@@ -113,7 +113,7 @@ public class ContentPolicyTest {
         assertEquals(2, countOccurrences(source, "if (contentPolicy.rockSaltLampsEnabled())"));
         assertEquals(1, countOccurrences(source, "if (contentPolicy.mineralDustsEnabled())"));
         assertEquals(1, countOccurrences(source, "if (contentPolicy.mineralFertilizerEnabled())"));
-        assertEquals(3, countOccurrences(source, "new ItemStack(Items.GUNPOWDER, 4)"));
+        assertEquals(4, countOccurrences(source, "new ItemStack(Items.GUNPOWDER, 4)"));
         assertTrue(source.contains("if (enabled) {\n            GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(item, 9)"));
         assertTrue(source.contains("if (enabled) {\n            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(block)"));
     }

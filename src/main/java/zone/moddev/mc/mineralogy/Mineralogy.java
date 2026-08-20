@@ -23,8 +23,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -127,6 +125,7 @@ public class Mineralogy {
     //private static final String salt = "salt";
     private static final String stone = "stone";
     private static final String dustCarbon = "dustCarbon";
+    private static final String dustCoal = "dustCoal";
     //private static final String blockPhosphorous = "blockPhosphorous";
     private static final String dustPhosphorous = "dustPhosphorous";
     private static final String orePhosphorous = "orePhosphorous";
@@ -335,6 +334,7 @@ public class Mineralogy {
         if (contentPolicy.mineralDustsEnabled()) {
             GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.GUNPOWDER, 4), new ItemStack(Items.COAL,1,1), dustNitrate, dustSulfur));
             GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.GUNPOWDER, 4), dustCarbon, dustNitrate, dustSulfur));
+            GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.GUNPOWDER, 4), dustCoal, dustNitrate, dustSulfur));
             GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.GUNPOWDER, 4), Items.SUGAR, dustNitrate, dustSulfur));
         }
         if (contentPolicy.mineralFertilizerEnabled()) {
@@ -351,21 +351,6 @@ public class Mineralogy {
         GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Blocks.COBBLESTONE, 4), stone, stone, Blocks.GRAVEL, Blocks.GRAVEL));
 
         if(SMELTABLE_GRAVEL) GameRegistry.addSmelting(Blocks.GRAVEL, new ItemStack(Blocks.STONE), 0.1F);
-
-        // remove default stone slab recipe (interferes with rock slab recipes)
-        List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList();
-        List<IRecipe> removeList = new ArrayList<>();
-        for(IRecipe r : recipes) {
-            ItemStack item = r.getRecipeOutput();
-            if(item == null || item.getItem() == null) continue;
-            if(item.getItem() == Item.getItemFromBlock(Blocks.STONE_SLAB) && item.getItemDamage() == 0) {
-                // is recipe for stone slab, bookmark for removal
-                removeList.add(r);
-            }
-        }
-        CraftingManager.getInstance().getRecipeList().removeAll(removeList);
-        // less generic stone slab recipe
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Blocks.STONE_SLAB, 6, 0), "xxx", 'x', Blocks.STONE));
 
         // initialize legacy updater
         PatchHandler.getInstance().init(PATCH_UPDATE);
@@ -489,25 +474,25 @@ public class Mineralogy {
      */
     private static Block addStoneType(String name, double hardness, double blastResistance, int toolHardnessLevel, Boolean canBePolished, Block rockOverride) { //, ItemStack drops
         final Block rock;
-        final Block rockStairs;
-        final Block rockSlab;
-        final Block rockWall;
-        final Block rockFurnace;
-        final Block brick;
-        final Block brickStairs;
-        final Block brickSlab;
-        final Block brickWall;
-        final Block brickFurnace;
-        final Block smooth;
-        final Block smoothStairs;
-        final Block smoothSlab;
-        final Block smoothWall;
-        final Block smoothFurnace;
-        final Block smoothBrick;
-        final Block smoothBrickStairs;
-        final Block smoothBrickSlab;
-        final Block smoothBrickWall;
-        final Block smoothBrickFurnace;
+        Block rockStairs = null;
+        Block rockSlab = null;
+        Block rockWall = null;
+        Block rockFurnace = null;
+        Block brick = null;
+        Block brickStairs = null;
+        Block brickSlab = null;
+        Block brickWall = null;
+        Block brickFurnace = null;
+        Block smooth = null;
+        Block smoothStairs = null;
+        Block smoothSlab = null;
+        Block smoothWall = null;
+        Block smoothFurnace = null;
+        Block smoothBrick = null;
+        Block smoothBrickStairs = null;
+        Block smoothBrickSlab = null;
+        Block smoothBrickWall = null;
+        Block smoothBrickFurnace = null;
 
         float burnModifier = (float) (1 + ((hardness - 3) / 10));
 
@@ -530,7 +515,8 @@ public class Mineralogy {
 
         if (GENERATE_ROCKSLAB) {
             rockSlab = registerBlock(new RockSlab((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE, name + "_double_slab"), name + "_slab", 64, true, true);
-            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(rockSlab, 6), "xxx", 'x', rock));
+            GameRegistry.addShapedRecipe(new ItemStack(rockSlab, 6),
+                    "xxx", 'x', new ItemStack(rock, 1, 0));
 
             registerBlock(
                     new DoubleSlab((float) hardness, (float) blastResistance, toolHardnessLevel, SoundType.STONE, rockSlab),
@@ -560,7 +546,8 @@ public class Mineralogy {
 
             if (GENERATE_BRICKSLAB) {
                 brickSlab = registerBlock(new RockSlab((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE, name + "_brick_double_slab"), name + "_brick_slab", 64, true, true);
-                GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(brickSlab, 6), "xxx", 'x', brick));
+                GameRegistry.addShapedRecipe(new ItemStack(brickSlab, 6),
+                        "xxx", 'x', new ItemStack(brick, 1, 0));
 
                 registerBlock(
                         new DoubleSlab((float) hardness, (float) blastResistance, toolHardnessLevel, SoundType.STONE, brickSlab),
@@ -599,7 +586,8 @@ public class Mineralogy {
 
             if (GENERATE_SMOOTHSLAB) {
                 smoothSlab = registerBlock(new RockSlab((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE, name + "_smooth_double_slab"),name + "_smooth_slab", 64, true, true);
-                GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(smoothSlab, 6), "xxx", 'x', smooth));
+                GameRegistry.addShapedRecipe(new ItemStack(smoothSlab, 6),
+                        "xxx", 'x', new ItemStack(smooth, 1, 0));
 
                 registerBlock(
                         new DoubleSlab((float) hardness, (float) blastResistance, toolHardnessLevel, SoundType.STONE, smoothSlab),
@@ -629,7 +617,8 @@ public class Mineralogy {
 
                 if (GENERATE_SMOOTHBRICKSLAB) {
                     smoothBrickSlab = registerBlock(new RockSlab((float)hardness, (float)blastResistance, toolHardnessLevel, SoundType.STONE, name + "_smooth_brick_double_slab"), name + "_smooth_brick_slab", 64, true, true);
-                    GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(smoothBrickSlab, 6), "xxx", 'x', smoothBrick));
+                    GameRegistry.addShapedRecipe(new ItemStack(smoothBrickSlab, 6),
+                            "xxx", 'x', new ItemStack(smoothBrick, 1, 0));
 
                     registerBlock(
                             new DoubleSlab((float) hardness, (float) blastResistance, toolHardnessLevel, SoundType.STONE, smoothBrickSlab),
@@ -649,6 +638,13 @@ public class Mineralogy {
                 }
             }
         }
+
+        ConstructionRecipeHelper.registerConvenienceRecipes(
+                new ConstructionRecipeHelper.Forms(rock, rockStairs, rockSlab, rockWall),
+                new ConstructionRecipeHelper.Forms(brick, brickStairs, brickSlab, brickWall),
+                new ConstructionRecipeHelper.Forms(smooth, smoothStairs, smoothSlab, smoothWall),
+                new ConstructionRecipeHelper.Forms(smoothBrick, smoothBrickStairs,
+                        smoothBrickSlab, smoothBrickWall));
 
         return rock;
     }

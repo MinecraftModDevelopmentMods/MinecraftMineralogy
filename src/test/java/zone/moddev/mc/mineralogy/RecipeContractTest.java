@@ -2,6 +2,7 @@ package zone.moddev.mc.mineralogy;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -20,6 +21,7 @@ import org.junit.Test;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
@@ -92,6 +94,20 @@ public class RecipeContractTest {
         assertNull(CraftingManager.getInstance().findMatchingRecipe(
                 topRow(new ItemStack(Blocks.NETHERRACK), new ItemStack(Blocks.NETHERRACK),
                         new ItemStack(Blocks.NETHERRACK)), null));
+    }
+
+    @Test
+    public void forgeGeneralizedCobblestoneRecipeAcceptsARegisteredRock() {
+        OreDictionary.registerOre("cobblestone", Blocks.NETHERRACK);
+
+        ItemStack result = CraftingManager.getInstance().findMatchingRecipe(
+                grid(new ItemStack(Items.STICK), null, null,
+                        new ItemStack(Blocks.NETHERRACK), null, null,
+                        null, null, null), null);
+
+        assertNotNull(result);
+        assertSame(Item.getItemFromBlock(Blocks.LEVER), result.getItem());
+        assertEquals(1, result.stackSize);
     }
 
     @Test

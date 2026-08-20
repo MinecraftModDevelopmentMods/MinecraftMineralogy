@@ -10,3 +10,4 @@ Mineralogy 6.0.0 for Minecraft 1.10.2
 - Backports the complete 17-locale Mineralogy 6 language set, normalizes translated geology and block-family terminology, removes inherited English fallbacks, and enforces exact 931-key parity and translation-quality checks.
 - Preserves the lossless four-dust gypsum, chalk, and rock-salt conversions and adds Base Metals `dustCoal` support alongside charcoal, `dustCarbon`, and sugar gunpowder recipes.
 - Leaves Minecraft's vanilla stone-slab recipe untouched, gives exact Mineralogy slab recipes precedence over generalized stone recipes, and adds lossless slab recombination plus brick and polished conversions for Mineralogy blocks, stairs, slabs, and walls.
+- Restores the default-enabled `COBBLESTONE_EQUIVILENT` recipe compatibility for all 27 raw rocks and the historical gypsum, chalk, rock-salt block, and rock-salt lamp Ore Dictionary aliases.

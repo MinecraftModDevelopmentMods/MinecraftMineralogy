@@ -92,6 +92,7 @@ public class Mineralogy {
     public static boolean GENERATE_RELIEFS = true;
 
     private static ContentPolicy contentPolicy = ContentPolicy.defaults();
+    private static OreDictionaryPolicy oreDictionaryPolicy = OreDictionaryPolicy.defaults();
 
     public static Block blockChert;
     public static Block blockGypsum;
@@ -163,6 +164,7 @@ public class Mineralogy {
         }
 
         contentPolicy = ContentPolicy.read(config);
+        oreDictionaryPolicy = OreDictionaryPolicy.read(config);
 
         PATCH_UPDATE = config.getBoolean("patch_world", "options", PATCH_UPDATE,
                 "If true, then the world will be patched to fix compatibility-breaking " +
@@ -266,15 +268,20 @@ public class Mineralogy {
         OreDictionary.registerOre(cobblestone, blockChert);
 
         blockGypsum = registerBlock(new Gypsum(), "gypsum");
+        OreDictionary.registerOre("blockGypsum", blockGypsum);
 
         blockChalk = registerBlock(new Chalk(), "chalk");
+        OreDictionary.registerOre("blockChalk", blockChalk);
 
         blockSalt = registerBlock(new RockSalt(), "rock_salt");
+        OreDictionary.registerOre("blockRocksalt", blockSalt);
 
         addStoneType("rock_salt", 1.5, 10, 0, true, blockSalt);// new
 
         blockRockSaltLamp = registerBlock(new RockSaltLamp(), "rocksaltlamp");
         blockRockSaltStreetLamp = registerBlock(new RockSaltStreetLamp(), "rocksaltstreetlamp", 16);
+        OreDictionary.registerOre("lampRocksalt", blockRockSaltLamp);
+        OreDictionary.registerOre("lampRocksaltStreet", blockRockSaltStreetLamp);
         applyCreativeVisibility(blockRockSaltLamp, "rocksaltlamp", contentPolicy.rockSaltLampsEnabled());
         applyCreativeVisibility(blockRockSaltStreetLamp, "rocksaltstreetlamp", contentPolicy.rockSaltLampsEnabled());
 
@@ -505,6 +512,9 @@ public class Mineralogy {
 
         OreDictionary.registerOre("stone", rock);
         OreDictionary.registerOre("stone" + oreDictName, rock);
+        if (oreDictionaryPolicy.cobblestoneEquivalentEnabled()) {
+            OreDictionary.registerOre(cobblestone, rock);
+        }
 
         GameRegistry.addSmelting(rock, new ItemStack(Blocks.STONE), 0.1F);
 

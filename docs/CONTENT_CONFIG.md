@@ -21,10 +21,11 @@ fertilizer item still works when its option is disabled. The dust and
 fertilizer switches are independent, so enabled fertilizer may still use dusts
 obtained from existing ore, OreSpawn-generated ore, or another mod.
 
-A clean installation writes all four keys. Mineralogy deliberately does not
-rewrite an existing `mineralogy.cfg`; missing keys use the enabled default. To
-disable content in an older file, add the required entries to its existing
-`options` block:
+A clean installation writes all four content keys plus the separate recipe-
+compatibility key described below. Mineralogy deliberately does not rewrite an
+existing `mineralogy.cfg`; missing keys use the enabled default. To disable
+content in an older file, add the required entries to its existing `options`
+block:
 
 ```text
 options {
@@ -32,6 +33,31 @@ options {
     B:ENABLE_MINERAL_DUSTS=false
     B:ENABLE_MINERAL_FERTILIZER=false
     B:ENABLE_ROCK_SALT_LAMPS=false
+}
+```
+
+## Rock recipe compatibility
+
+`COBBLESTONE_EQUIVILENT` is a historical `options` key whose spelling is
+preserved for compatibility. It defaults to `true`. When enabled, all 27 raw
+Mineralogy rock families, including rock salt, participate in Ore Dictionary
+`cobblestone` recipes such as levers, pistons, dispensers, droppers, and brewing
+stands. Forge 1.10 already generalizes those applicable vanilla recipes, so
+Mineralogy does not replace or remove them.
+
+Setting the key to `false` removes only that broad recipe identity after a
+restart. The rocks remain registered as `stone`, retain their material-specific
+Ore Dictionary names, still make stone tools and furnaces, and still use their
+exact Mineralogy slab, stair, and wall recipes. Chert and pumice retain their
+historical unconditional `cobblestone` identity.
+
+An existing configuration that does not contain the key remains byte-unchanged
+and uses the enabled default. To opt out, add this line to its existing
+`options` block:
+
+```text
+options {
+    B:COBBLESTONE_EQUIVILENT=false
 }
 ```
 

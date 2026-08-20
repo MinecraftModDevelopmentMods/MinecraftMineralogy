@@ -942,6 +942,11 @@ tile.mineralogy.novaculite_relief_vertical.name=Relieve de Novaculita (vertical)
 
 
 itemGroup.mineralogyTab=Mineralogía
+itemGroup.mineralogy.rock=Rocas de Mineralogía
+itemGroup.mineralogy.stair=Escaleras de Mineralogía
+itemGroup.mineralogy.slab=Losas de Mineralogía
+itemGroup.mineralogy.wall=Muros de Mineralogía
+itemGroup.mineralogy.item=Objetos de Mineralogía
 tile.mineralogy.crude_oil.name=Petróleo crudo
 item.mineralogy.crude_oil_bucket.name=Cubo de petróleo crudo
 fluid.mineralogy.crude_oil=Petróleo crudo

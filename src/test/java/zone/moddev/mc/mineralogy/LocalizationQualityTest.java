@@ -121,42 +121,50 @@ public class LocalizationQualityTest {
         assertEquals("Polierter Ziegelofen aus Andesit",
                 german.get("tile.mineralogy.andesite_smooth_brick_furnace.name"));
         assertEquals("Rohöleimer", german.get("item.mineralogy.crude_oil_bucket.name"));
+        assertEquals("Mineralogie-Stufen", german.get("itemGroup.mineralogy.slab"));
 
         Map<String, String> spanish = read(new File(LANG_DIR, "es_ES.lang"));
         assertEquals("Limolita", spanish.get("tile.mineralogy.siltstone.name"));
         assertEquals("Cubo de petróleo crudo", spanish.get("item.mineralogy.crude_oil_bucket.name"));
+        assertEquals("Rocas de Mineralogía", spanish.get("itemGroup.mineralogy.rock"));
 
         Map<String, String> french = read(new File(LANG_DIR, "fr_FR.lang"));
         assertEquals("Cornéenne", french.get("tile.mineralogy.hornfels.name"));
         assertEquals("Phosphore", french.get("tile.mineralogy.phosphorous_block.name"));
         assertEquals("Seau de pétrole brut", french.get("item.mineralogy.crude_oil_bucket.name"));
+        assertEquals("Murets de Minéralogie", french.get("itemGroup.mineralogy.wall"));
 
         Map<String, String> portuguese = read(new File(LANG_DIR, "pt_BR.lang"));
         assertEquals("Folhelho", portuguese.get("tile.mineralogy.shale.name"));
         assertEquals("Placa de gesso preta", portuguese.get("tile.mineralogy.drywall_black.name"));
         assertEquals("Balde de petróleo bruto", portuguese.get("item.mineralogy.crude_oil_bucket.name"));
+        assertEquals("Lajes da Mineralogia", portuguese.get("itemGroup.mineralogy.slab"));
 
         Map<String, String> japanese = read(new File(LANG_DIR, "ja_JP.lang"));
         assertEquals("礫岩", japanese.get("tile.mineralogy.conglomerate.name"));
         assertEquals("角閃岩", japanese.get("tile.mineralogy.amphibolite.name"));
         assertEquals("原油入りバケツ", japanese.get("item.mineralogy.crude_oil_bucket.name"));
+        assertEquals("鉱物学のアイテム", japanese.get("itemGroup.mineralogy.item"));
 
         Map<String, String> korean = read(new File(LANG_DIR, "ko_KR.lang"));
         assertEquals("역암", korean.get("tile.mineralogy.conglomerate.name"));
         assertEquals("반려암", korean.get("tile.mineralogy.gabbro.name"));
         assertEquals("원유 양동이", korean.get("item.mineralogy.crude_oil_bucket.name"));
+        assertEquals("광물학 반 블록", korean.get("itemGroup.mineralogy.slab"));
 
         Map<String, String> russian = read(new File(LANG_DIR, "ru_RU.lang"));
         assertEquals("Кремень", russian.get("tile.mineralogy.chert.name"));
         assertEquals("Барельеф: Аспидный сланец (знак плюса)",
                 russian.get("tile.mineralogy.slate_relief_plus.name"));
         assertEquals("Ведро сырой нефти", russian.get("item.mineralogy.crude_oil_bucket.name"));
+        assertEquals("Минералогические породы", russian.get("itemGroup.mineralogy.rock"));
 
         Map<String, String> chinese = read(new File(LANG_DIR, "zh_CN.lang"));
         assertEquals("角闪岩", chinese.get("tile.mineralogy.amphibolite.name"));
         assertEquals("磨制凝灰岩", chinese.get("tile.mineralogy.tuff_smooth.name"));
         assertEquals("矿物学", chinese.get("itemGroup.mineralogyTab"));
         assertEquals("原油桶", chinese.get("item.mineralogy.crude_oil_bucket.name"));
+        assertEquals("矿物学物品", chinese.get("itemGroup.mineralogy.item"));
     }
 
     private static Map<String, Set<String>> reviewedEnglishMatches() {

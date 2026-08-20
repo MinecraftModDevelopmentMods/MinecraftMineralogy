@@ -942,6 +942,11 @@ tile.mineralogy.novaculite_relief_vertical.name=Novaculite Vertical Relief
 
 
 itemGroup.mineralogyTab=Mineralogy
+itemGroup.mineralogy.rock=Mineralogy Rocks
+itemGroup.mineralogy.stair=Mineralogy Stairs
+itemGroup.mineralogy.slab=Mineralogy Slabs
+itemGroup.mineralogy.wall=Mineralogy Walls
+itemGroup.mineralogy.item=Mineralogy Items
 tile.mineralogy.crude_oil.name=Crude Oil
 item.mineralogy.crude_oil_bucket.name=Crude Oil Bucket
 fluid.mineralogy.crude_oil=Crude Oil

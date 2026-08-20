@@ -942,6 +942,11 @@ tile.mineralogy.novaculite_relief_vertical.name=노바큘라이트 부조 (세�
 
 
 itemGroup.mineralogyTab=광물학
+itemGroup.mineralogy.rock=광물학 암석
+itemGroup.mineralogy.stair=광물학 계단
+itemGroup.mineralogy.slab=광물학 반 블록
+itemGroup.mineralogy.wall=광물학 담장
+itemGroup.mineralogy.item=광물학 아이템
 tile.mineralogy.crude_oil.name=원유
 item.mineralogy.crude_oil_bucket.name=원유 양동이
 fluid.mineralogy.crude_oil=원유

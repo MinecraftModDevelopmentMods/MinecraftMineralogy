@@ -942,6 +942,11 @@ tile.mineralogy.novaculite_relief_vertical.name=Bas-relief en Novaculite (vertic
 
 
 itemGroup.mineralogyTab=Minéralogie
+itemGroup.mineralogy.rock=Roches de Minéralogie
+itemGroup.mineralogy.stair=Escaliers de Minéralogie
+itemGroup.mineralogy.slab=Dalles de Minéralogie
+itemGroup.mineralogy.wall=Murets de Minéralogie
+itemGroup.mineralogy.item=Objets de Minéralogie
 tile.mineralogy.crude_oil.name=Pétrole brut
 item.mineralogy.crude_oil_bucket.name=Seau de pétrole brut
 fluid.mineralogy.crude_oil=Pétrole brut

@@ -942,6 +942,11 @@ tile.mineralogy.novaculite_relief_vertical.name=均密石英岩浮雕（竖纹�
 
 
 itemGroup.mineralogyTab=矿物学
+itemGroup.mineralogy.rock=矿物学岩石
+itemGroup.mineralogy.stair=矿物学楼梯
+itemGroup.mineralogy.slab=矿物学台阶
+itemGroup.mineralogy.wall=矿物学墙
+itemGroup.mineralogy.item=矿物学物品
 tile.mineralogy.crude_oil.name=原油
 item.mineralogy.crude_oil_bucket.name=原油桶
 fluid.mineralogy.crude_oil=原油

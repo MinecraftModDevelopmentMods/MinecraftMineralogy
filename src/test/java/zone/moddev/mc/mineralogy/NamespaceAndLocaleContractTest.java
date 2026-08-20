@@ -59,7 +59,7 @@ public class NamespaceAndLocaleContractTest {
         assertEquals(expectedFiles, actualFiles);
 
         List<String> expected = keysInOrder(new File(directory, "en_US.lang"));
-        assertEquals(931, expected.size());
+        assertEquals(936, expected.size());
         for (File file : files) {
             assertEquals(file.getName(), expected, keysInOrder(file));
         }
@@ -72,6 +72,11 @@ public class NamespaceAndLocaleContractTest {
         assertTrue(expected.contains("tile.mineralogy.crude_oil.name"));
         assertTrue(expected.contains("item.mineralogy.crude_oil_bucket.name"));
         assertTrue(expected.contains("fluid.mineralogy.crude_oil"));
+        assertTrue(expected.contains("itemGroup.mineralogy.rock"));
+        assertTrue(expected.contains("itemGroup.mineralogy.stair"));
+        assertTrue(expected.contains("itemGroup.mineralogy.slab"));
+        assertTrue(expected.contains("itemGroup.mineralogy.wall"));
+        assertTrue(expected.contains("itemGroup.mineralogy.item"));
     }
 
     @Test

@@ -942,6 +942,11 @@ tile.mineralogy.novaculite_relief_vertical.name=Барельеф: Новакул
 
 
 itemGroup.mineralogyTab=Минералогия
+itemGroup.mineralogy.rock=Минералогические породы
+itemGroup.mineralogy.stair=Минералогические ступеньки
+itemGroup.mineralogy.slab=Минералогические плиты
+itemGroup.mineralogy.wall=Минералогические ограды
+itemGroup.mineralogy.item=Минералогические предметы
 tile.mineralogy.crude_oil.name=Сырая нефть
 item.mineralogy.crude_oil_bucket.name=Ведро сырой нефти
 fluid.mineralogy.crude_oil=Сырая нефть

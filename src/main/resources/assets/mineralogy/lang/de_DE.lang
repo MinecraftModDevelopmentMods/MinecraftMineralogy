@@ -942,6 +942,11 @@ tile.mineralogy.novaculite_relief_vertical.name=Relief aus Novakulit (senkrecht)
 
 
 itemGroup.mineralogyTab=Mineralogie
+itemGroup.mineralogy.rock=Mineralogische Gesteine
+itemGroup.mineralogy.stair=Mineralogie-Treppen
+itemGroup.mineralogy.slab=Mineralogie-Stufen
+itemGroup.mineralogy.wall=Mineralogie-Mauern
+itemGroup.mineralogy.item=Mineralogie-Gegenstände
 tile.mineralogy.crude_oil.name=Rohöl
 item.mineralogy.crude_oil_bucket.name=Rohöleimer
 fluid.mineralogy.crude_oil=Rohöl

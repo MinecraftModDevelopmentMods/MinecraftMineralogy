@@ -7,9 +7,11 @@ Mineralogy 6.0.0 for Minecraft 1.10.2
 - Migrates valid non-default legacy ore settings non-destructively and writes a deterministic upgrade report.
 - Preserves existing mineralogy.cfg files byte-for-byte and writes content-only configuration for clean installations.
 - Removes Mineralogy's internal geology, noise, stone-replacement, and ore-placement implementation.
-- Backports the complete 17-locale Mineralogy 6 language set, normalizes translated geology and block-family terminology, removes inherited English fallbacks, and enforces exact 931-key parity and translation-quality checks.
+- Backports the complete 17-locale Mineralogy 6 language set, normalizes translated geology and block-family terminology, removes inherited English fallbacks, and enforces exact 936-key parity and translation-quality checks.
 - Preserves the lossless four-dust gypsum, chalk, and rock-salt conversions and adds Base Metals `dustCoal` support alongside charcoal, `dustCarbon`, and sugar gunpowder recipes.
 - Leaves Minecraft's vanilla stone-slab recipe untouched, gives exact Mineralogy slab recipes precedence over generalized stone recipes, and adds lossless slab recombination plus brick and polished conversions for Mineralogy blocks, stairs, slabs, and walls.
 - Restores the default-enabled `COBBLESTONE_EQUIVILENT` recipe compatibility for all 27 raw rocks and the historical gypsum, chalk, rock-salt block, and rock-salt lamp Ore Dictionary aliases.
+- Restores the default-disabled `GROUP_TABS_BY_TYPE` option with five translated, searchable Mineralogy content tabs while retaining the legacy single-tab layout by default.
+- Packages and safely exports the target-native player, content, developer, and provider guides plus the exact schema-4 Mineralogy provider on first use.
 - Repairs saved rock-furnace loading so Minecraft can reconstruct the tile entity, restore its inventory and progress, and recover the rock-specific burn rate without changing historical NBT or tile IDs.
 - Aligns novaculite with Mineralogy 6 hardness/resistance and makes double slabs drop two matching slabs normally or one matching full block with Silk Touch.

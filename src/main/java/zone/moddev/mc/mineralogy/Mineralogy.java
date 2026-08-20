@@ -6,6 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import zone.moddev.mc.mineralogy.blocks.*;
+import zone.moddev.mc.mineralogy.documentation.DocumentationExporter;
 import zone.moddev.mc.mineralogy.itemblock.BypassItemBlock;
 import zone.moddev.mc.mineralogy.items.*;
 import zone.moddev.mc.mineralogy.fluids.MineralogyFluids;
@@ -50,16 +51,11 @@ public class Mineralogy {
     public static final String NAME ="Mineralogy";
     public static final String VERSION = "6.0.0";
 
-    public static CreativeTabs mineralogyTab = new CreativeTabs("mineralogyTab"){
-        @Override
-        public Item getTabIconItem(){
-            return Item.getItemFromBlock(Blocks.STONE);
-        }
-
-        public boolean hasSearchBar() {
-            return true;
-        };
-    };
+    /**
+     * Compatibility-facing construction tab. It is initialized from config in
+     * pre-init so grouped mode does not leave an empty legacy main tab behind.
+     */
+    public static CreativeTabs mineralogyTab;
     /** all blocks used in this mod (blockID, block)*/
     public static final Map<String,Block> mineralogyBlockRegistry = new HashMap<String, Block>();
     /** all items used in this mod (blockID, block)*/
@@ -93,6 +89,7 @@ public class Mineralogy {
 
     private static ContentPolicy contentPolicy = ContentPolicy.defaults();
     private static OreDictionaryPolicy oreDictionaryPolicy = OreDictionaryPolicy.defaults();
+    private static CreativeTabPolicy creativeTabPolicy = CreativeTabPolicy.defaults();
 
     public static Block blockChert;
     public static Block blockGypsum;
@@ -165,6 +162,10 @@ public class Mineralogy {
 
         contentPolicy = ContentPolicy.read(config);
         oreDictionaryPolicy = OreDictionaryPolicy.read(config);
+        creativeTabPolicy = CreativeTabPolicy.read(config);
+        MineralogyCreativeTabs.configure(creativeTabPolicy);
+        mineralogyTab = MineralogyCreativeTabs.constructionTab();
+        DocumentationExporter.exportBundledGuide();
 
         PATCH_UPDATE = config.getBoolean("patch_world", "options", PATCH_UPDATE,
                 "If true, then the world will be patched to fix compatibility-breaking " +
@@ -259,7 +260,8 @@ public class Mineralogy {
 
         mineralFertilizer = registerItem(new MineralFertilizer(), "mineral_fertilizer")
                 .setUnlocalizedName(Mineralogy.MODID + "." + "mineral_fertilizer")
-                .setCreativeTab(contentPolicy.mineralFertilizerEnabled() ? CreativeTabs.MATERIALS : null);
+                .setCreativeTab(contentPolicy.mineralFertilizerEnabled()
+                        ? MineralogyCreativeTabs.forItem(CreativeTabs.MATERIALS) : null);
         OreDictionary.registerOre(fertilizer, mineralFertilizer);
 
         // other blocks
@@ -436,6 +438,10 @@ public class Mineralogy {
         GameRegistry.register(b.setRegistryName(MODID, name));
         b.setUnlocalizedName(MODID + "." + name);
 
+        if (createItem) {
+            b.setCreativeTab(MineralogyCreativeTabs.forBlock(b));
+        }
+
         ItemBlock itemBlock;
 
         if (bypassSneak)
@@ -445,8 +451,10 @@ public class Mineralogy {
 
         itemBlock.setMaxStackSize(maxStackSize);
 
-        if (createItem)
+        if (createItem) {
+            itemBlock.setCreativeTab(MineralogyCreativeTabs.forBlock(b));
             registerItem(itemBlock, name);
+        }
 
         mineralogyBlockRegistry.put(name, b);
         return b;

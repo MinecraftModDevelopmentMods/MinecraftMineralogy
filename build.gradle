@@ -339,6 +339,10 @@ processResources {
     exclude 'mcmod.info'
   }
 
+  from('docs') {
+    into 'META-INF/mineralogy/docs'
+  }
+
   rename '(.+_at.cfg)', 'META-INF/$1'
 }
 

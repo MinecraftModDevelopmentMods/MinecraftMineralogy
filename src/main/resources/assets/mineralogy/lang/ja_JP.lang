@@ -942,6 +942,11 @@ tile.mineralogy.novaculite_relief_vertical.name=ノバキュライトのレリ�
 
 
 itemGroup.mineralogyTab=鉱物学
+itemGroup.mineralogy.rock=鉱物学の岩石
+itemGroup.mineralogy.stair=鉱物学の階段
+itemGroup.mineralogy.slab=鉱物学のハーフブロック
+itemGroup.mineralogy.wall=鉱物学の塀
+itemGroup.mineralogy.item=鉱物学のアイテム
 tile.mineralogy.crude_oil.name=原油
 item.mineralogy.crude_oil_bucket.name=原油入りバケツ
 fluid.mineralogy.crude_oil=原油

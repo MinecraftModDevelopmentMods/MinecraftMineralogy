@@ -942,6 +942,11 @@ tile.mineralogy.novaculite_relief_vertical.name=Baixo-relevo de Novaculita (vert
 
 
 itemGroup.mineralogyTab=Mineralogia
+itemGroup.mineralogy.rock=Rochas da Mineralogia
+itemGroup.mineralogy.stair=Escadas da Mineralogia
+itemGroup.mineralogy.slab=Lajes da Mineralogia
+itemGroup.mineralogy.wall=Muros da Mineralogia
+itemGroup.mineralogy.item=Itens da Mineralogia
 tile.mineralogy.crude_oil.name=Petróleo bruto
 item.mineralogy.crude_oil_bucket.name=Balde de petróleo bruto
 fluid.mineralogy.crude_oil=Petróleo bruto

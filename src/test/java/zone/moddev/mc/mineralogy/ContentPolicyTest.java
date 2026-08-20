@@ -101,7 +101,7 @@ public class ContentPolicyTest {
         assertTrue(source.contains("applyCreativeVisibility(drywall[i], \"drywall_\" + colorSuffixes[i], contentPolicy.drywallsEnabled())"));
         assertTrue(source.contains("addDust(\"sulfur_dust\", \"Sulfur\", contentPolicy.mineralDustsEnabled())"));
         assertTrue(source.contains("addBlock(\"sulfur_block\", \"Sulfur\", 0, contentPolicy.mineralDustsEnabled())"));
-        assertTrue(source.contains("contentPolicy.mineralFertilizerEnabled() ? CreativeTabs.MATERIALS : null"));
+        assertTrue(source.contains("MineralogyCreativeTabs.forItem(CreativeTabs.MATERIALS)"));
         assertTrue(source.contains("item.setCreativeTab(null)"));
     }
 

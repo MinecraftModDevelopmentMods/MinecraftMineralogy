@@ -93,6 +93,8 @@ public class Mineralogy {
     public static boolean GENERATE_SMOOTHBRICKFURNACES = true;
     public static boolean GENERATE_RELIEFS = true;
 
+    private static ContentPolicy contentPolicy = ContentPolicy.defaults();
+
     public static Block blockChert;
     public static Block blockGypsum;
     public static Block blockChalk;
@@ -160,6 +162,8 @@ public class Mineralogy {
         if (configWasPresent) {
             LegacyOreConfigMigrator.migrate(configFile, logger);
         }
+
+        contentPolicy = ContentPolicy.read(config);
 
         PATCH_UPDATE = config.getBoolean("patch_world", "options", PATCH_UPDATE,
                 "If true, then the world will be patched to fix compatibility-breaking " +
@@ -242,17 +246,19 @@ public class Mineralogy {
 
         OreDictionary.registerOre("salt", saltPowder);
 
-        sulphurPowder = addDust("sulfur_dust", "Sulfur");
+        sulphurPowder = addDust("sulfur_dust", "Sulfur", contentPolicy.mineralDustsEnabled());
 
         OreDictionary.registerOre(sulfur, sulphurPowder);
         OreDictionary.registerOre(dustSulphur, sulphurPowder);
         OreDictionary.registerOre(sulphur, sulphurPowder);
 
-        phosphorousPowder = addDust("phosphorous_dust", "Phosphorous");
+        phosphorousPowder = addDust("phosphorous_dust", "Phosphorous", contentPolicy.mineralDustsEnabled());
 
-        nitratePowder = addDust("nitrate_dust", "Nitrate");
+        nitratePowder = addDust("nitrate_dust", "Nitrate", contentPolicy.mineralDustsEnabled());
 
-        mineralFertilizer = registerItem(new MineralFertilizer(), "mineral_fertilizer").setUnlocalizedName(Mineralogy.MODID + "." + "mineral_fertilizer").setCreativeTab(CreativeTabs.MATERIALS);
+        mineralFertilizer = registerItem(new MineralFertilizer(), "mineral_fertilizer")
+                .setUnlocalizedName(Mineralogy.MODID + "." + "mineral_fertilizer")
+                .setCreativeTab(contentPolicy.mineralFertilizerEnabled() ? CreativeTabs.MATERIALS : null);
         OreDictionary.registerOre(fertilizer, mineralFertilizer);
 
         // other blocks
@@ -270,6 +276,8 @@ public class Mineralogy {
 
         blockRockSaltLamp = registerBlock(new RockSaltLamp(), "rocksaltlamp");
         blockRockSaltStreetLamp = registerBlock(new RockSaltStreetLamp(), "rocksaltstreetlamp", 16);
+        applyCreativeVisibility(blockRockSaltLamp, "rocksaltlamp", contentPolicy.rockSaltLampsEnabled());
+        applyCreativeVisibility(blockRockSaltStreetLamp, "rocksaltstreetlamp", contentPolicy.rockSaltLampsEnabled());
 
         blockPumice = registerBlock(new Rock(false, 0.5F, 5F, 0, SoundType.STONE), "pumice");
         OreDictionary.registerOre(cobblestone, blockPumice);
@@ -277,11 +285,15 @@ public class Mineralogy {
         GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(gypsumPowder, 4), blockGypsum));
         GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(chalkPowder, 4), blockChalk));
         GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(saltPowder, 4), blockSalt));
-        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(blockRockSaltLamp, 1), blockSalt, Blocks.TORCH, Items.IRON_INGOT));
+        if (contentPolicy.rockSaltLampsEnabled()) {
+            GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(blockRockSaltLamp, 1), blockSalt, Blocks.TORCH, Items.IRON_INGOT));
+        }
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockGypsum), "xx", "xx", 'x', dustGypsum));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockChalk), "xx", "xx", 'x', dustChalk));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockSalt), "xx", "xx", 'x', dustRocksalt));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRockSaltStreetLamp), "x", "y", "y", 'x', blockRockSaltLamp, 'y', Items.IRON_INGOT));
+        if (contentPolicy.rockSaltLampsEnabled()) {
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(blockRockSaltStreetLamp), "x", "y", "y", 'x', blockRockSaltLamp, 'y', Items.IRON_INGOT));
+        }
 
 
         // OreSpawn owns placement; Mineralogy registers only the stable ore content.
@@ -291,9 +303,9 @@ public class Mineralogy {
         addOre("nitrate_ore", oreNitrate, nitratePowder, 1, 4, 0);
 
         // TODO: Finish This
-        addBlock("sulfur_block", "Sulfur", 0);
-        addBlock("phosphorous_block", "Phosphorous", 0);
-        addBlock("nitrate_block", "Nitrate", 0);
+        addBlock("sulfur_block", "Sulfur", 0, contentPolicy.mineralDustsEnabled());
+        addBlock("phosphorous_block", "Phosphorous", 0, contentPolicy.mineralDustsEnabled());
+        addBlock("nitrate_block", "Nitrate", 0, contentPolicy.mineralDustsEnabled());
 
         if (!configWasPresent) {
             config.save();
@@ -301,24 +313,33 @@ public class Mineralogy {
 
         for(int i = 0; i < 16; i++) {
             drywall[i] = registerBlock(new DryWall(colorSuffixes[i]), "drywall_" + colorSuffixes[i]);
+            applyCreativeVisibility(drywall[i], "drywall_" + colorSuffixes[i], contentPolicy.drywallsEnabled());
             OreDictionary.registerOre("drywall", drywall[i]);
         }
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(drywall[7], 3), "pgp", "pgp", "pgp", 'p', Items.PAPER, 'g', dustGypsum));
+        if (contentPolicy.drywallsEnabled()) {
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(drywall[7], 3), "pgp", "pgp", "pgp", 'p', Items.PAPER, 'g', dustGypsum));
+        }
     }
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
 
         // recipes
-        for(int i = 0; i < 16; i++) {
-            GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(drywall[ i] , 1), "drywall", "dye" + colorSuffixesTwo[i]));
+        if (contentPolicy.drywallsEnabled()) {
+            for(int i = 0; i < 16; i++) {
+                GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(drywall[i], 1), "drywall", "dye" + colorSuffixesTwo[i]));
+            }
         }
 
-        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.GUNPOWDER, 4), new ItemStack(Items.COAL,1,1), dustNitrate, dustSulfur));
-        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.GUNPOWDER, 4), dustCarbon, dustNitrate, dustSulfur));
-        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.GUNPOWDER, 4), Items.SUGAR, dustNitrate, dustSulfur));
-        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(mineralFertilizer, 1), dustNitrate, dustPhosphorous));
+        if (contentPolicy.mineralDustsEnabled()) {
+            GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.GUNPOWDER, 4), new ItemStack(Items.COAL,1,1), dustNitrate, dustSulfur));
+            GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.GUNPOWDER, 4), dustCarbon, dustNitrate, dustSulfur));
+            GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(Items.GUNPOWDER, 4), Items.SUGAR, dustNitrate, dustSulfur));
+        }
+        if (contentPolicy.mineralFertilizerEnabled()) {
+            GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(mineralFertilizer, 1), dustNitrate, dustPhosphorous));
+        }
 
         // recipe modifications
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(Items.STONE_AXE), "xx", "xy", " y", 'x', stone, 'y', stickWood));
@@ -368,21 +389,47 @@ public class Mineralogy {
     }
 
     private static Item addDust(String dustName, String oreDictionaryName) {
-        Item item = registerItem(new Item(), dustName).setUnlocalizedName(Mineralogy.MODID + "." + dustName).setCreativeTab(mineralogyTab);
+        return addDust(dustName, oreDictionaryName, true);
+    }
+
+    private static Item addDust(String dustName, String oreDictionaryName, boolean enabled) {
+        Item item = registerItem(new Item(), dustName).setUnlocalizedName(Mineralogy.MODID + "." + dustName)
+                .setCreativeTab(enabled ? mineralogyTab : null);
         OreDictionary.registerOre("dust" + oreDictionaryName, item);
-        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(item, 9), "block" + oreDictionaryName));
+        if (enabled) {
+            GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(item, 9), "block" + oreDictionaryName));
+        }
         return item;
     }
 
     // TODO: Recipes
     private static Block addBlock(String name, String oreDictionaryName, int pickLevel) {
+        return addBlock(name, oreDictionaryName, pickLevel, true);
+    }
+
+    private static Block addBlock(String name, String oreDictionaryName, int pickLevel, boolean enabled) {
         String blockName = Mineralogy.MODID + "." + name;
-        Block block = new Block(Material.ROCK).setUnlocalizedName(blockName).setCreativeTab(mineralogyTab);
+        Block block = new Block(Material.ROCK).setUnlocalizedName(blockName)
+                .setCreativeTab(enabled ? mineralogyTab : null);
         registerBlock(block, name);
+        applyCreativeVisibility(block, name, enabled);
         OreDictionary.registerOre("block" + oreDictionaryName, block);
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(block), "xxx", "xxx", "xxx", 'x', "dust" + oreDictionaryName));
+        if (enabled) {
+            GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(block), "xxx", "xxx", "xxx", 'x', "dust" + oreDictionaryName));
+        }
 
         return block;
+    }
+
+    private static void applyCreativeVisibility(Block block, String name, boolean enabled) {
+        if (enabled) {
+            return;
+        }
+        block.setCreativeTab(null);
+        Item item = mineralogyItemRegistry.get(name);
+        if (item != null) {
+            item.setCreativeTab(null);
+        }
     }
 
     private static Block addOre(String oreName, String oreDictionaryName, Item oreDropItem, int numMin, int numMax, int pickLevel) {

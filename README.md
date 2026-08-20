@@ -20,6 +20,10 @@ New worlds use the Mineralogy 6 geome profile with Stable Layers. Existing world
 
 Content options remain in `config/mineralogy.cfg`. Mineralogy 6 does not delete or rewrite legacy worldgen and ore settings in an existing file.
 
+See [Mineralogy Content Configuration](docs/CONTENT_CONFIG.md) for the
+compatibility-safe drywall, rock-salt lamp, mineral-dust, and fertilizer
+switches, and for instructions on disabling Mineralogy ores through OreSpawn.
+
 On the first upgraded start, valid non-default legacy ore settings are migrated independently to `config/mineralogy-orespawn.json`. Mineralogy never overwrites an existing provider override or established `config/orespawn-worldgen.json`. The deterministic result is recorded in `config/mineralogy-orespawn-upgrade-report.txt`.
 
 OreSpawn owns terrain profiles and worldgen configuration, including geology mode, formations, ore placement, fluid deposits, and the worldgen UI.

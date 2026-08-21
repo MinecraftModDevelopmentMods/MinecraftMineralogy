@@ -115,6 +115,59 @@ natural base-terrain blocks, not machines, containers, or construction blocks.
 Restart after editing. The change affects only chunks generated afterward;
 OreSpawn never retro-generates Mineralogy rock strata into existing chunks.
 
+### Enabling Mineralogy Geology In Another Dimension
+
+OreSpawn can apply Mineralogy rocks to a stone-based mod dimension without a
+separate Mineralogy dimension option. Minecraft 1.10 identifies a custom
+numeric dimension `N` as `legacy:dimension_N`. For example, use
+`legacy:dimension_7` when the installed mod's configuration assigns that
+dimension the numeric ID `7`.
+
+The 1.10 graphical editor does not expose terrain-dimension or rock-membership
+fields. Stop Minecraft or the server and edit the appropriate OreSpawn JSON:
+`config/orespawn-worldgen.json` for defaults inherited by future worlds, or
+`<world>/serverconfig/orespawn-worldgen.json` for an established world.
+
+First, add an enabled entry inside `terrain_dimensions`. This example allows
+Mineralogy to replace vanilla stone throughout custom dimension `7`:
+
+```json
+"legacy:dimension_7": {
+  "enabled": true,
+  "biome_ids": [],
+  "biome_namespaces": [],
+  "host_blocks": ["minecraft:stone"],
+  "host_tags": []
+}
+```
+
+Use the dimension's actual base-stone registry ID instead when it does not use
+vanilla stone. Optional `biome_ids` or `biome_namespaces` can limit replacement
+within the dimension.
+
+Second, add the dimension to every desired entry under `rocks`:
+
+```json
+"dimensions": ["minecraft:overworld", "legacy:dimension_7"]
+```
+
+Keep `minecraft:overworld` in the list when that rule should continue to work
+there. A rock entry with no `dimensions` field is Overworld-only, and OreSpawn
+disables a custom terrain dimension if none of the configured rocks include it.
+Different dimensions can therefore use different rock sets by assigning
+different membership lists.
+
+For advanced packs, the same output block may have separate rules with unique
+rule IDs, different altitude fields, and non-overlapping `dimensions` lists.
+This allows, for example, basalt to use different Preferred Y or hard height
+bounds in the Overworld and a planet dimension. Do not make both rules eligible
+in the same dimension, because duplicate output states are rejected while that
+dimension is baked.
+
+Restart after editing and inspect the OreSpawn startup log to confirm that the
+custom dimension baked with eligible rocks and resolved host blocks. Only new
+chunks receive the geology; existing terrain is not retro-generated.
+
 Each world stores its complete worldgen profile at:
 
 ```text

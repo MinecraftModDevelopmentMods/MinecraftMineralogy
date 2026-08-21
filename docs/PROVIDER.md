@@ -60,6 +60,27 @@ OreSpawn's **Rocks & Ores...** editor while creating a world. Once a world has
 been created, its saved `orespawn-worldgen.json` profile is authoritative and
 provider changes do not rewrite it.
 
+## Dimension Membership
+
+Issue #30's dimension configuration is supplied by OreSpawn. Add the target to
+`terrain_dimensions` with its eligible `host_blocks` or `host_tags`, then add
+that same dimension ID to each desired rock rule's `dimensions` array. A rock
+without `dimensions` is Overworld-only. A configured custom dimension is
+disabled during baking when no valid rock rules include it.
+
+Minecraft 1.10 maps a custom numeric dimension `N` to
+`legacy:dimension_N`; later ports use their target-native dimension registry
+IDs. Rock membership makes different stone sets possible per dimension. To use
+different altitude settings for the same output block, define unique rock rule
+IDs with different `depth_peak`, `depth_spread`, `min_y`, or `max_y` values and
+non-overlapping dimension lists. Duplicate output states within one dimension
+are rejected.
+
+The 1.10 editor does not expose terrain-dimension or rock-membership fields, so
+players edit the stopped world's saved profile and pack authors may provide
+global defaults or a complete provider override. Changes affect newly generated
+chunks only.
+
 ## Terrain Replacement Hosts
 
 Issue #57's replacement blocklist is provided by OreSpawn rather than

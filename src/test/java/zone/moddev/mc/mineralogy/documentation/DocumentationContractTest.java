@@ -57,6 +57,11 @@ public class DocumentationContractTest {
         assertTrue(all.contains("depth_peak"));
         assertTrue(all.contains("depth_spread"));
         assertTrue(all.contains("inclusive hard limits"));
+        assertTrue(all.contains("Enabling Mineralogy Geology In Another Dimension"));
+        assertTrue(all.contains("legacy:dimension_7"));
+        assertTrue(all.contains("rock entry with no `dimensions` field is Overworld-only"));
+        assertTrue(all.contains("non-overlapping `dimensions` lists"));
+        assertTrue(all.contains("custom dimension baked with eligible rocks"));
         assertTrue(all.contains("Choosing Which Terrain Blocks Mineralogy Replaces"));
         assertTrue(all.contains("terrain_dimensions"));
         assertTrue(all.contains("host_blocks"));

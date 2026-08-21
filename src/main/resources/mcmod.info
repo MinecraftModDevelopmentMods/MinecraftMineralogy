@@ -8,11 +8,11 @@
   "url": "https://www.curseforge.com/minecraft/mc-mods/minecraft-mineralogy",
   "updateUrl": "",
   "authorList": ["Cyanobacterium",
-				 "SkyBlade1978,
+				 "SkyBlade1978",
 				 "FoxNekitsune"],
   "credits": "The MMD community, The Forge and FML guys, geologists everywhere, and the mod authors",
   "logoFile": "",
   "screenshots": [],
-  "dependencies": []
+  "dependencies": ["orespawn@[4.0.6,5.0.0)"]
 }
 ]

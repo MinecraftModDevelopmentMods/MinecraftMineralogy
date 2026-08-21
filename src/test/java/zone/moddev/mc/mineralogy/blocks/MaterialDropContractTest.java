@@ -1,0 +1,113 @@
+package zone.moddev.mc.mineralogy.blocks;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.List;
+
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import zone.moddev.mc.mineralogy.MinecraftTestBootstrap;
+
+public class MaterialDropContractTest {
+    @BeforeClass
+    public static void registerVanilla() {
+        MinecraftTestBootstrap.registerVanilla();
+    }
+
+    @Test
+    public void novaculiteUsesMineralogySixMaterialProperties() throws Exception {
+        String source = mineralogySource();
+
+        assertTrue(source.contains("addStoneType(\"novaculite\", 3, 15, 1)"));
+        assertFalse(source.contains("addStoneType(\"novaculite\", 2.5, 10, 1)"));
+    }
+
+    @Test
+    public void normalDoubleSlabHarvestAlwaysReturnsTwoMatchingSlabs() {
+        DoubleSlab doubleSlab = doubleSlab(Blocks.STONE_SLAB, Blocks.STONE);
+
+        assertDrop(doubleSlab.getDrops(null, BlockPos.ORIGIN,
+                doubleSlab.getDefaultState(), 0), Blocks.STONE_SLAB, 2);
+        assertDrop(doubleSlab.getDrops(null, BlockPos.ORIGIN,
+                doubleSlab.getDefaultState(), 3), Blocks.STONE_SLAB, 2);
+    }
+
+    @Test
+    public void silkTouchReturnsOneMatchingFullBlockAndPickBlockReturnsOneSlab() {
+        DoubleSlab doubleSlab = doubleSlab(Blocks.STONE_SLAB, Blocks.STONE);
+
+        assertTrue(doubleSlab.canSilkHarvest());
+        assertStack(doubleSlab.createStackedBlock(doubleSlab.getDefaultState()),
+                Blocks.STONE, 1);
+        assertStack(doubleSlab.getItem(null, BlockPos.ORIGIN,
+                doubleSlab.getDefaultState()), Blocks.STONE_SLAB, 1);
+    }
+
+    @Test
+    public void compatibilityConstructorKeepsAFullBlocksWorthOfSlabDrops() {
+        DoubleSlab doubleSlab = new DoubleSlab(1.5F, 10.0F, 0,
+                SoundType.STONE, Blocks.STONE_SLAB);
+
+        assertStack(doubleSlab.createStackedBlock(doubleSlab.getDefaultState()),
+                Blocks.STONE_SLAB, 2);
+    }
+
+    @Test
+    public void everyFinishSuppliesItsExactFullBlockToTheDoubleSlab() throws Exception {
+        String source = mineralogySource();
+
+        assertTrue(source.contains("SoundType.STONE, rockSlab, rock)"));
+        assertTrue(source.contains("SoundType.STONE, brickSlab, brick)"));
+        assertTrue(source.contains("SoundType.STONE, smoothSlab, smooth)"));
+        assertTrue(source.contains("SoundType.STONE, smoothBrickSlab, smoothBrick)"));
+        assertTrue(source.contains("addStoneType(\"rock_salt\""));
+    }
+
+    @Test
+    public void chertAndDropCobblestoneRemainReplacementPolicies() throws Exception {
+        String chert = source("src/main/java/zone/moddev/mc/mineralogy/blocks/Chert.java");
+        String rock = source("src/main/java/zone/moddev/mc/mineralogy/blocks/Rock.java");
+
+        assertTrue(chert.contains("return Arrays.asList(new ItemStack(Items.FLINT"));
+        assertTrue(chert.contains("return super.getDrops(world, pos, state, fortune);"));
+        assertFalse(chert.contains("drops.add(new ItemStack(Items.FLINT"));
+        assertTrue(rock.contains("return Arrays.asList(new ItemStack(Blocks.COBBLESTONE));"));
+        assertFalse(rock.contains("drops.add(new ItemStack(Blocks.COBBLESTONE))"));
+    }
+
+    private static DoubleSlab doubleSlab(Block slab, Block fullBlock) {
+        return new DoubleSlab(1.5F, 10.0F, 0, SoundType.STONE, slab, fullBlock);
+    }
+
+    private static void assertDrop(List<ItemStack> drops, Block block, int count) {
+        assertEquals(1, drops.size());
+        assertStack(drops.get(0), block, count);
+    }
+
+    private static void assertStack(ItemStack stack, Block block, int count) {
+        assertSame(Item.getItemFromBlock(block), stack.getItem());
+        assertEquals(count, stack.stackSize);
+    }
+
+    private static String mineralogySource() throws Exception {
+        return source("src/main/java/zone/moddev/mc/mineralogy/Mineralogy.java");
+    }
+
+    private static String source(String path) throws Exception {
+        return new String(Files.readAllBytes(new File(path).toPath()),
+                StandardCharsets.UTF_8);
+    }
+}

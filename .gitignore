@@ -22,6 +22,10 @@ build
 run/*
 classes
 
+# local agent context
+/AGENTS.md
+/agent-notes/
+
 /README.txt
 /forge-*-changelog.txt
 

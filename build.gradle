@@ -35,6 +35,13 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle.forge'
 //apply plugin: 'com.jaredsburrows.checkerframework'
 
+configurations {
+  // ForgeGradle 2's Minecraft dependency metadata exposes these client
+  // libraries to Eclipse without reliably materialising their jars in a
+  // modern Gradle cache. Resolve them explicitly for the generated classpath.
+  legacyEclipseLibraries
+}
+
 project.afterEvaluate {
   //final def junitPlatformTestTask = project.tasks.getByName('junitPlatformTest')
   // configure jacoco to analyze the junitPlatformTest task
@@ -81,28 +88,88 @@ javadoc {
 }
 
 
-//project.ext.short_version = '1.0.0'
-//ext.short_version = getModVersion('VERSION', <path to file containing version string)
-project.ext.short_version = getModVersion('VERSION')
-version = (project.hasProperty('mc_version') ? project.mc_version : project.forge_mc_version) + '-' + short_version
-project.ext.display_version = short_version
-
-if ((System.getenv('BUILD_NUMBER')) || (System.getenv('TRAVIS_BUILD_NUMBER')) || (System.getenv('CIRCLE_BUILD_NUM'))) {
-  version += '.' + buildNumber
-  display_version += '.' + buildNumber
+def versionParts = project.mod_version.toString().tokenize('.')
+if (versionParts.size() != 4 || !versionParts.every { it ==~ /\d+/ }) {
+  throw new GradleException("mod_version must use Major.Minor.Bug.Target numeric form: ${project.mod_version}")
 }
 
-static String getBuildNumber() {
-  return System.getenv('BUILD_NUMBER') ?: System.getenv('TRAVIS_BUILD_NUMBER') ?: System.getenv('CIRCLE_BUILD_NUM') ?: '0'
+def minecraftVersionParts = project.mc_version.toString().tokenize('.')
+if (minecraftVersionParts.size() < 2 || minecraftVersionParts.size() > 3
+        || !minecraftVersionParts.every { it ==~ /\d+/ }) {
+  throw new GradleException("mc_version must use major.minor or major.minor.patch numeric form: ${project.mc_version}")
+}
+def minecraftPatch = minecraftVersionParts.size() == 3 ? minecraftVersionParts[2] : '0'
+def expectedTargetVersion = "${minecraftVersionParts[0]}" \
+        + "${minecraftVersionParts[1].padLeft(2, '0')}" \
+        + "${minecraftPatch.padLeft(2, '0')}" \
+        + '1' // Forge loader code
+if (versionParts[3] != expectedTargetVersion) {
+  throw new GradleException("mod_version target ${versionParts[3]} does not match "
+          + "Minecraft ${project.mc_version} Forge target ${expectedTargetVersion}")
+}
+
+version = project.mod_version
+project.ext.functional_version = versionParts[0..2].join('.')
+project.ext.display_version = project.mod_version
+archivesBaseName = "Mineralogy-${project.mc_version}"
+tasks.withType(Jar) {
+  baseName = project.archivesBaseName
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
-eclipse.project {
-  buildCommand 'org.eclipse.buildship.core.gradleprojectbuilder'
-  natures 'org.eclipse.buildship.core.gradleprojectnature'
+eclipse {
+  classpath {
+    // ForgeGradle 2.2 launches use the whole Eclipse project classpath. Keep
+    // ordinary client/server runs production-only so Forge never scans JUnit,
+    // Mockito/ByteBuddy, or test-only @Mod fixtures as runtime mods.
+    sourceSets = [sourceSets.main]
+    plusConfigurations += [configurations.legacyEclipseLibraries]
+    file.whenMerged { classpath ->
+      classpath.entries.removeAll { entry ->
+        String path = entry.path == null ? '' : entry.path.toString().replace('\\', '/')
+        path == 'src/test/java' || [
+                '/org.junit/', '/org.junit.jupiter/', '/org.junit.platform/',
+                '/org.junit.vintage/', '/junit/', '/junit-', '/mockito-', '/byte-buddy', '/objenesis/',
+                '/opentest4j/', '/org.apiguardian/', '/hamcrest-'
+        ].any { path.contains(it) }
+      }
+    }
+  }
 }
+
+task verifyEclipseProductionClasspath {
+  group = 'verification'
+  description = 'Fails if ordinary Eclipse launches can see test sources or test-only libraries.'
+  dependsOn eclipseClasspath
+
+  doLast {
+    File generatedClasspath = file('.classpath')
+    if (!generatedClasspath.isFile()) {
+      throw new GradleException('Eclipse .classpath was not generated')
+    }
+
+    String contents = generatedClasspath.getText('UTF-8').replace('\\', '/')
+    List<String> forbidden = [
+            'path="src/test/', '/org.junit/', '/org.junit.jupiter/',
+            '/org.junit.platform/', '/junit-', '/mockito-', '/byte-buddy',
+            '/objenesis/', '/opentest4j/', '/org.apiguardian/', '/hamcrest-'
+    ]
+    List<String> present = forbidden.findAll { contents.contains(it) }
+    if (!present.isEmpty()) {
+      throw new GradleException('Ordinary Eclipse classpath contains test code/dependencies: ' + present.join(', '))
+    }
+
+    ['src/main/java', 'src/main/resources', 'bin/main'].each { required ->
+      if (!contents.contains(required)) {
+        throw new GradleException('Ordinary Eclipse classpath is missing production entry: ' + required)
+      }
+    }
+  }
+}
+
+tasks.eclipse.finalizedBy verifyEclipseProductionClasspath
 
 idea.module {
   downloadJavadoc = true
@@ -157,8 +224,6 @@ minecraft {
   } else {
     runDir = 'run'
   }
-
-  replace '@MOD_VERSION@', project.short_version
 
   if (project.hasProperty('signSHA1') && getBooleanProperty('do_sign_jar')) {
     replace '@FINGERPRINT@', project.findProperty('signSHA1')
@@ -238,16 +303,33 @@ repositories {
   mavenCentral()
 
   maven {
+    name 'MinecraftLibraries'
+    url 'https://libraries.minecraft.net/'
+  }
+
+  maven {
+    name 'CurseMaven'
+    url 'https://www.cursemaven.com'
+  }
+
+  maven {
     name 'MMD'
     url 'https://maven.mcmoddev.com/'
   }
 }
 
 dependencies {
+  deobfCompile "curse.maven:mmd-orespawn-${project.orespawn_curse_project_id}:${project.orespawn_curse_file_id}"
+
+  legacyEclipseLibraries 'com.paulscode:codecjorbis:20101023@jar'
+  legacyEclipseLibraries 'com.paulscode:codecwav:20101023@jar'
+  legacyEclipseLibraries 'com.paulscode:libraryjavasound:20101123@jar'
+  legacyEclipseLibraries 'java3d:vecmath:1.5.2@jar'
+
   testCompile('org.junit.platform:junit-platform-launcher:1.2.+')
   testCompile('org.junit.jupiter:junit-jupiter-api:5.2.+') // testImplementation
   testRuntime('org.junit.jupiter:junit-jupiter-engine:5.2.+') //testRuntimeOnly
-  testCompileOnly 'junit:junit:4.12'
+  testCompile 'junit:junit:4.13.2'
   testRuntime 'org.junit.vintage:junit-vintage-engine:5.2.+' //testRuntimeOnly
   testCompile('org.mockito:mockito-core:2.+')
   testCompile('org.mockito:mockito-junit-jupiter:2.+') {
@@ -256,16 +338,20 @@ dependencies {
 }
 
 processResources {
-  inputs.property 'version', project.short_version
+  inputs.property 'version', project.version
   inputs.property 'mcversion', project.minecraft.version
 
   from(sourceSets.main.resources.srcDirs) {
     include 'mcmod.info'
-    expand 'version': project.short_version, 'mcversion': project.minecraft.version
+    expand 'version': project.version, 'mcversion': project.minecraft.version
   }
 
   from(sourceSets.main.resources.srcDirs) {
     exclude 'mcmod.info'
+  }
+
+  from('docs') {
+    into 'META-INF/mineralogy/docs'
   }
 
   rename '(.+_at.cfg)', 'META-INF/$1'
@@ -280,7 +366,7 @@ jar {
             'Maven-Artifact': "${project.group}:${project.archivesBaseName}:${project.version}",
             'Timestamp': System.currentTimeMillis(),
             'Implementation-Title': project.archivesBaseName,
-            'Implementation-Version': version,
+            'Implementation-Version': project.version,
             'Built-On-Java': "${System.getProperty('java.vm.version')} (${System.getProperty('java.vm.vendor')})",
             'Built-On': "${project.mc_version}-${project.forge_version}"
     )
@@ -658,41 +744,6 @@ sonarqube {
     property 'sonar.junit.reportPaths', "${project.buildDir}/test-results/junit-platform/*.xml"
     property 'sonar.jacoco.reportPaths', "${project.buildDir}/jacoco/junitPlatformTest.exec"
   }
-}
-
-String getModFile() {
-  String path = ''
-  final FileTree tree = fileTree(dir: 'src/main/java')
-  tree.include '**/*.java'
-  tree.visit { final element ->
-    if (element.file.isFile()) {
-      element.file.eachLine { final String s ->
-        final String sTrim = s.trim()
-        if (sTrim.startsWith('@Mod(')) {
-          path = "src/main/java/${element.relativePath}"
-        }
-      }
-    }
-  }
-  return path
-}
-
-String getModVersion(final String type) {
-  return getModVersion(type, modFile)
-}
-
-String getModVersion(final String type, final String modFile) {
-  if ((modFile != null) && (modFile != '')) {
-    final File file = file(modFile)
-    final def prefix = ~/^(?:\s*)(?:(?<modifier>public|protected|private) )?(?:(?<static>static) )?(?:(?<final>final) )?String $type = "(?:(?<major>\d*)\.)?(?:(?<minor>\d*)\.)?(?:(?<patch>[^."]*)\.?)(?<build>[^"]*)";$/
-    for (final String s in file.readLines()) {
-      final Matcher matcher = (s.trim() =~ prefix)
-      if (matcher.matches()) {
-        return "${matcher.group('major') ?: '0'}.${matcher.group('minor') ?: '0'}.${matcher.group('patch')}"
-      }
-    }
-  }
-  return '0.0.0'
 }
 
 boolean getBooleanProperty(final String property) {

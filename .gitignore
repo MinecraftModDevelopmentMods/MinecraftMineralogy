@@ -21,6 +21,7 @@ build
 # other
 run/*
 classes
+/logs/fml-*.log
 
 # local agent context
 /AGENTS.md

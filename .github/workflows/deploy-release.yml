@@ -4,12 +4,13 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: Validate the selected ref, or publish it after all release gates pass.
+        description: Validate the selected ref, verify release-secret access, or publish after all gates pass.
         required: true
         default: validate-only
         type: choice
         options:
           - validate-only
+          - verify-secrets
           - publish
       release_ref:
         description: Commit, branch, or tag to validate. Publication requires the exact release tag.
@@ -177,6 +178,34 @@ jobs:
     steps:
       - name: Record approval gate
         run: echo "Release environment approval granted for $RELEASE_TAG"
+
+  verify_secrets:
+    name: Verify release-secret access
+    if: inputs.mode == 'verify-secrets'
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Confirm all required release secrets are available
+        env:
+          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
+          MAVEN_UPLOAD_URL: ${{ secrets.MAVEN_UPLOAD_URL }}
+          MAVEN_UPLOAD_USERNAME: ${{ secrets.MAVEN_UPLOAD_USERNAME }}
+          MAVEN_UPLOAD_PASSWORD: ${{ secrets.MAVEN_UPLOAD_PASSWORD }}
+        run: |
+          set -euo pipefail
+          missing=()
+          for name in CURSEFORGE_TOKEN MAVEN_UPLOAD_URL MAVEN_UPLOAD_USERNAME MAVEN_UPLOAD_PASSWORD; do
+            if [[ -z "${!name:-}" ]]; then
+              missing+=("$name")
+            fi
+          done
+          if (( ${#missing[@]} > 0 )); then
+            printf 'Required release secret is unavailable: %s\n' "${missing[@]}" >&2
+            exit 1
+          fi
+          echo "All four required release secrets are available to this repository workflow."
 
   publish_maven:
     name: Publish Maven

@@ -56,6 +56,8 @@ public class VersionContractTest {
         assertTrue(build.contains("id 'net.minecraftforge.renamer' version '1.1.5'"));
         assertTrue(build.contains("JavaLanguageVersion.of(8)"));
         assertTrue(build.contains("tasks.register('verifyReleaseDependencies')"));
+        assertTrue(build.contains("tasks.register('verifyPreparedReleaseArtifacts')"));
+        assertTrue(build.contains("providers.gradleProperty('preparedReleaseDir')"));
         assertTrue(wrapper.contains("gradle-9.6.1-bin.zip"));
         assertEquals("240974", properties.getProperty("cf_project_id"));
         assertEquals("mmd-orespawn", properties.getProperty("cf_requirements"));

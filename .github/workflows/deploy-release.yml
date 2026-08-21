@@ -41,9 +41,9 @@ concurrency:
 env:
   RELEASE_VERSION: 6.0.1.110021
   RELEASE_TAG: 1.10.2-6.0.1.110021
-  MAIN_JAR: Mineralogy-1.10.2-6.0.1.110021.jar
-  SOURCES_JAR: Mineralogy-1.10.2-6.0.1.110021-sources.jar
-  JAVADOC_JAR: Mineralogy-1.10.2-6.0.1.110021-javadoc.jar
+  MAIN_JAR: Mineralogy-6.0.1.110021.jar
+  SOURCES_JAR: Mineralogy-6.0.1.110021-sources.jar
+  JAVADOC_JAR: Mineralogy-6.0.1.110021-javadoc.jar
 
 jobs:
   preflight:
@@ -287,9 +287,9 @@ jobs:
           curseforge-dependencies: 245586(required)
           fail-mode: fail
           files: |
-            ${{ runner.temp }}/release-input/Mineralogy-1.10.2-6.0.1.110021.jar
-            ${{ runner.temp }}/release-input/Mineralogy-1.10.2-6.0.1.110021-sources.jar
-            ${{ runner.temp }}/release-input/Mineralogy-1.10.2-6.0.1.110021-javadoc.jar
+            ${{ runner.temp }}/release-input/Mineralogy-6.0.1.110021.jar
+            ${{ runner.temp }}/release-input/Mineralogy-6.0.1.110021-sources.jar
+            ${{ runner.temp }}/release-input/Mineralogy-6.0.1.110021-javadoc.jar
 
   publish_github:
     name: Publish GitHub Release
@@ -327,7 +327,7 @@ jobs:
           changelog-file: ${{ runner.temp }}/release-input/CHANGELOG.txt
           fail-mode: fail
           files: |
-            ${{ runner.temp }}/release-input/Mineralogy-1.10.2-6.0.1.110021.jar
-            ${{ runner.temp }}/release-input/Mineralogy-1.10.2-6.0.1.110021-sources.jar
-            ${{ runner.temp }}/release-input/Mineralogy-1.10.2-6.0.1.110021-javadoc.jar
+            ${{ runner.temp }}/release-input/Mineralogy-6.0.1.110021.jar
+            ${{ runner.temp }}/release-input/Mineralogy-6.0.1.110021-sources.jar
+            ${{ runner.temp }}/release-input/Mineralogy-6.0.1.110021-javadoc.jar
             ${{ runner.temp }}/release-input/SHA256SUMS

@@ -51,6 +51,12 @@ public class DocumentationContractTest {
         assertTrue(all.contains("config/mineralogy-orespawn.json"));
         assertTrue(all.contains("GROUP_TABS_BY_TYPE"));
         assertTrue(all.contains("COBBLESTONE_EQUIVILENT"));
+        assertTrue(all.contains("Choosing Where Each Rock Is Most Common"));
+        assertTrue(all.contains("Preferred Y"));
+        assertTrue(all.contains("Depth Spread"));
+        assertTrue(all.contains("depth_peak"));
+        assertTrue(all.contains("depth_spread"));
+        assertTrue(all.contains("inclusive hard limits"));
         assertTrue(all.contains("Choosing Which Terrain Blocks Mineralogy Replaces"));
         assertTrue(all.contains("terrain_dimensions"));
         assertTrue(all.contains("host_blocks"));

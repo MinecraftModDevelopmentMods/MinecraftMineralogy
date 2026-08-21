@@ -15,5 +15,6 @@ Mineralogy 6.0.0.110021 for Minecraft 1.10.2 Forge
 - Packages and safely exports the target-native player, content, developer, and provider guides plus the exact schema-4 Mineralogy provider on first use.
 - Adopts the MMD four-component `Major.Minor.Bug.Target` policy, using deterministic Forge target `110021` in mod, Maven, CurseForge-display, manifest, and resource metadata.
 - Documents OreSpawn's `terrain_dimensions` host lists as the resolution for issue #57, including new-world and existing-world configuration, 1.10 metadata matching, and new-chunks-only behavior.
+- Documents OreSpawn's per-rock Preferred Y, Depth Spread, Minimum Y, and Maximum Y controls as the resolution for issue #55, including soft preferences, hard bounds, and saved-world scope.
 - Repairs saved rock-furnace loading so Minecraft can reconstruct the tile entity, restore its inventory and progress, and recover the rock-specific burn rate without changing historical NBT or tile IDs.
 - Aligns novaculite with Mineralogy 6 hardness/resistance and makes double slabs drop two matching slabs normally or one matching full block with Silk Touch.

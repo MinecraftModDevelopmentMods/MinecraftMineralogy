@@ -40,6 +40,31 @@ walls.
 OreSpawn's UI and JSON profile control terrain and deposits. Settings require a
 restart.
 
+### Choosing Where Each Rock Is Most Common
+
+While creating a world, open **OreSpawn World Generation**, choose **Rocks &
+Ores...**, select the appropriate rock-family tab, and then select the rock.
+Its **Rock Settings** screen provides four altitude controls:
+
+- **Preferred Y** (`depth_peak`) is the level where that rock has its strongest
+  depth preference. It is a preference, not a hard placement level.
+- **Depth Spread** (`depth_spread`) controls how gradually that preference
+  falls away above and below Preferred Y. A larger value makes the rock common
+  across a broader vertical range.
+- **Minimum Y** (`min_y`) and **Maximum Y** (`max_y`) are inclusive hard limits.
+  The rock cannot replace terrain outside them.
+
+Minecraft 1.10 accepts Y `0` through `255`; Depth Spread accepts `1` through
+`512`. The saved fields are independent of the rock's geological family,
+overall weight, and geome weights, which also affect where it is selected.
+
+For defaults inherited by newly created worlds, the same fields can be edited
+in `config/orespawn-worldgen.json`. For an established world, stop the game or
+server and edit its authoritative
+`<world>/serverconfig/orespawn-worldgen.json` instead. Restart after changing
+the profile. Changes affect only chunks generated afterward; OreSpawn does not
+retro-generate different rock strata into existing chunks.
+
 ### Choosing Which Terrain Blocks Mineralogy Replaces
 
 Mineralogy does not maintain a separate replacement blocklist. OreSpawn owns

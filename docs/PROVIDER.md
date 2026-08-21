@@ -45,6 +45,21 @@ Existing worlds use their own profile at
 established world choices. See `config/orespawn-guide/` for the complete schema,
 field, template, dimension, API, and performance references.
 
+## Rock Altitude Defaults
+
+Each entry in `rocks` may set a soft altitude preference with `depth_peak` and
+`depth_spread`, then constrain it with the inclusive hard bounds `min_y` and
+`max_y`. A larger spread keeps more of the rock's weight farther above and
+below its peak. These fields combine with the rule's overall `weight`, family,
+and per-geome weights; they do not guarantee that one rock occupies every block
+at its preferred level.
+
+Pack authors can establish different defaults in a complete
+`config/mineralogy-orespawn.json` provider override. Players can use
+OreSpawn's **Rocks & Ores...** editor while creating a world. Once a world has
+been created, its saved `orespawn-worldgen.json` profile is authoritative and
+provider changes do not rewrite it.
+
 ## Terrain Replacement Hosts
 
 Issue #57's replacement blocklist is provided by OreSpawn rather than

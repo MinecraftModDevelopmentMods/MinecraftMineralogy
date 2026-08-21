@@ -23,7 +23,7 @@ public class NamespaceAndLocaleContractTest {
     public void namespaceVersionAndOilIdentitiesAreStable() {
         assertEquals("zone.moddev.mc.mineralogy", Mineralogy.class.getPackage().getName());
         assertEquals("mineralogy", Mineralogy.MODID);
-        assertEquals("6.0.0", Mineralogy.VERSION);
+        assertEquals("6.0.0.110021", Mineralogy.VERSION);
         assertEquals("mineralogy_crude_oil", MineralogyFluids.FLUID_NAME);
         assertEquals("crude_oil", MineralogyFluids.BLOCK_NAME);
         assertEquals("crude_oil_bucket", MineralogyFluids.BUCKET_NAME);

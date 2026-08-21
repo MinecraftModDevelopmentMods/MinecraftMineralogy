@@ -21,6 +21,7 @@ public final class DocumentationExporter {
             guide("DEVELOPER_GUIDE.md"),
             guide("CONTENT_CONFIG.md"),
             guide("PROVIDER.md"),
+            guide("VERSIONS.md"),
             new GuideFile("examples/mineralogy-provider.json",
                     "/assets/mineralogy/orespawn/provider.json")
     };

@@ -44,3 +44,24 @@ Existing worlds use their own profile at
 `<world>/serverconfig/orespawn-worldgen.json`. Provider updates do not replace
 established world choices. See `config/orespawn-guide/` for the complete schema,
 field, template, dimension, API, and performance references.
+
+## Terrain Replacement Hosts
+
+Issue #57's replacement blocklist is provided by OreSpawn rather than
+`mineralogy.cfg`. The packaged profile enables
+`terrain_dimensions.minecraft:overworld` with `minecraft:stone` in
+`host_blocks`. Pack authors may add installed natural-terrain registry IDs or
+appropriate host tags to that dimension.
+
+Use `config/orespawn-worldgen.json` for installed-pack defaults applied to new
+worlds. Once a world exists, its
+`<world>/serverconfig/orespawn-worldgen.json` snapshot is authoritative and
+must be edited directly while the game or server is stopped. A complete
+`config/mineralogy-orespawn.json` override is appropriate only when a pack
+intends to replace the whole packaged Mineralogy provider; it is unnecessary
+for an ordinary per-world host-list change and does not rewrite established
+world profiles.
+
+On Minecraft 1.10, terrain hosts are baked as block identities. Listing a
+block therefore opts in all of its metadata states. Changes affect only newly
+generated chunks because Mineralogy strata are never retro-generated.

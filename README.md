@@ -23,7 +23,9 @@ Content options remain in `config/mineralogy.cfg`. Mineralogy 6 does not delete 
 See the [player guide](docs/PLAYER_GUIDE.md),
 [content configuration](docs/CONTENT_CONFIG.md),
 [developer guide](docs/DEVELOPER_GUIDE.md), and
-[provider reference](docs/PROVIDER.md). On first start, Mineralogy exports the
+[provider reference](docs/PROVIDER.md). The
+[versioning guide](docs/VERSIONS.md) explains why this build is
+`6.0.0.110021`. On first start, Mineralogy exports the
 complete guide and its exact packaged provider to `config/mineralogy-guide/`
 without overwriting existing files.
 

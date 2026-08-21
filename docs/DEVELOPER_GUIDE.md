@@ -70,3 +70,7 @@ $env:GRADLE_USER_HOME='D:\MinecraftMineralogy\.gradle-verify-cache'
 Inspect complete client/server logs and test the reobfuscated jar with released
 OreSpawn in a launcher-like Forge installation. The normal jar packages this
 guide under `META-INF/mineralogy/docs/`.
+
+The complete release version is `Major.Minor.Bug.Target`; see
+[Mineralogy Versioning](VERSIONS.md). This branch validates target `110021`
+for Minecraft 1.10.2 Forge and does not append CI build numbers.

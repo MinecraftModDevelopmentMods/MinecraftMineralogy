@@ -12,6 +12,8 @@ engine.
   integration, builds, and compatibility rules.
 - [Provider Reference](PROVIDER.md): Mineralogy's packaged OreSpawn declaration
   and pack override.
+- [Versioning](VERSIONS.md): how functional releases and exact Minecraft/loader
+  targets form Mineralogy's four-component version.
 
 The exact provider shipped by this build is also exported as
 `examples/mineralogy-provider.json`.

@@ -20,15 +20,16 @@ public class DocumentationExporterTest {
     public final TemporaryFolder temporary = new TemporaryFolder();
 
     @Test
-    public void exportsAllSixFilesAndTheExactProviderBytes() throws Exception {
+    public void exportsAllSevenFilesAndTheExactProviderBytes() throws Exception {
         Path target = temporary.getRoot().toPath();
 
-        assertEquals(6, DocumentationExporter.exportMissing(target));
+        assertEquals(7, DocumentationExporter.exportMissing(target));
         assertTrue(Files.isRegularFile(target.resolve("README.md")));
         assertTrue(Files.isRegularFile(target.resolve("PLAYER_GUIDE.md")));
         assertTrue(Files.isRegularFile(target.resolve("DEVELOPER_GUIDE.md")));
         assertTrue(Files.isRegularFile(target.resolve("CONTENT_CONFIG.md")));
         assertTrue(Files.isRegularFile(target.resolve("PROVIDER.md")));
+        assertTrue(Files.isRegularFile(target.resolve("VERSIONS.md")));
         Path example = target.resolve("examples/mineralogy-provider.json");
         assertTrue(Files.isRegularFile(example));
         assertArrayEquals(Files.readAllBytes(Paths.get(
@@ -39,7 +40,7 @@ public class DocumentationExporterTest {
     @Test
     public void repeatedExportsPreserveEditsAndRestoreOnlyMissingFiles() throws Exception {
         Path target = temporary.getRoot().toPath();
-        assertEquals(6, DocumentationExporter.exportMissing(target));
+        assertEquals(7, DocumentationExporter.exportMissing(target));
 
         Path readme = target.resolve("README.md");
         byte[] localNote = "local pack note\n".getBytes(StandardCharsets.UTF_8);

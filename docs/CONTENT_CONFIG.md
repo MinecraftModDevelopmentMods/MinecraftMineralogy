@@ -4,6 +4,11 @@ Mineralogy writes content options to `config/mineralogy.cfg`. Changes require
 a restart. OreSpawn owns terrain, rock, ore, and fluid-deposit placement; its
 world settings are separate from these content and recipe switches.
 
+To add modded terrain blocks that Mineralogy rock may replace, do not add a
+Mineralogy option. Configure OreSpawn's `terrain_dimensions` host list as
+described under **Choosing Which Terrain Blocks Mineralogy Replaces** in the
+[Player Guide](PLAYER_GUIDE.md).
+
 ## General options
 
 | Key | Default | Purpose |

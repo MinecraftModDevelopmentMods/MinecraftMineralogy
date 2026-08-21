@@ -88,19 +88,32 @@ javadoc {
 }
 
 
-//project.ext.short_version = '1.0.0'
-//ext.short_version = getModVersion('VERSION', <path to file containing version string)
-project.ext.short_version = getModVersion('VERSION')
-version = (project.hasProperty('mc_version') ? project.mc_version : project.forge_mc_version) + '-' + short_version
-project.ext.display_version = short_version
-
-if ((System.getenv('BUILD_NUMBER')) || (System.getenv('TRAVIS_BUILD_NUMBER')) || (System.getenv('CIRCLE_BUILD_NUM'))) {
-  version += '.' + buildNumber
-  display_version += '.' + buildNumber
+def versionParts = project.mod_version.toString().tokenize('.')
+if (versionParts.size() != 4 || !versionParts.every { it ==~ /\d+/ }) {
+  throw new GradleException("mod_version must use Major.Minor.Bug.Target numeric form: ${project.mod_version}")
 }
 
-static String getBuildNumber() {
-  return System.getenv('BUILD_NUMBER') ?: System.getenv('TRAVIS_BUILD_NUMBER') ?: System.getenv('CIRCLE_BUILD_NUM') ?: '0'
+def minecraftVersionParts = project.mc_version.toString().tokenize('.')
+if (minecraftVersionParts.size() < 2 || minecraftVersionParts.size() > 3
+        || !minecraftVersionParts.every { it ==~ /\d+/ }) {
+  throw new GradleException("mc_version must use major.minor or major.minor.patch numeric form: ${project.mc_version}")
+}
+def minecraftPatch = minecraftVersionParts.size() == 3 ? minecraftVersionParts[2] : '0'
+def expectedTargetVersion = "${minecraftVersionParts[0]}" \
+        + "${minecraftVersionParts[1].padLeft(2, '0')}" \
+        + "${minecraftPatch.padLeft(2, '0')}" \
+        + '1' // Forge loader code
+if (versionParts[3] != expectedTargetVersion) {
+  throw new GradleException("mod_version target ${versionParts[3]} does not match "
+          + "Minecraft ${project.mc_version} Forge target ${expectedTargetVersion}")
+}
+
+version = project.mod_version
+project.ext.functional_version = versionParts[0..2].join('.')
+project.ext.display_version = project.mod_version
+archivesBaseName = "Mineralogy-${project.mc_version}"
+tasks.withType(Jar) {
+  baseName = project.archivesBaseName
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -211,8 +224,6 @@ minecraft {
   } else {
     runDir = 'run'
   }
-
-  replace '@MOD_VERSION@', project.short_version
 
   if (project.hasProperty('signSHA1') && getBooleanProperty('do_sign_jar')) {
     replace '@FINGERPRINT@', project.findProperty('signSHA1')
@@ -327,12 +338,12 @@ dependencies {
 }
 
 processResources {
-  inputs.property 'version', project.short_version
+  inputs.property 'version', project.version
   inputs.property 'mcversion', project.minecraft.version
 
   from(sourceSets.main.resources.srcDirs) {
     include 'mcmod.info'
-    expand 'version': project.short_version, 'mcversion': project.minecraft.version
+    expand 'version': project.version, 'mcversion': project.minecraft.version
   }
 
   from(sourceSets.main.resources.srcDirs) {
@@ -355,7 +366,7 @@ jar {
             'Maven-Artifact': "${project.group}:${project.archivesBaseName}:${project.version}",
             'Timestamp': System.currentTimeMillis(),
             'Implementation-Title': project.archivesBaseName,
-            'Implementation-Version': version,
+            'Implementation-Version': project.version,
             'Built-On-Java': "${System.getProperty('java.vm.version')} (${System.getProperty('java.vm.vendor')})",
             'Built-On': "${project.mc_version}-${project.forge_version}"
     )
@@ -733,41 +744,6 @@ sonarqube {
     property 'sonar.junit.reportPaths', "${project.buildDir}/test-results/junit-platform/*.xml"
     property 'sonar.jacoco.reportPaths', "${project.buildDir}/jacoco/junitPlatformTest.exec"
   }
-}
-
-String getModFile() {
-  String path = ''
-  final FileTree tree = fileTree(dir: 'src/main/java')
-  tree.include '**/*.java'
-  tree.visit { final element ->
-    if (element.file.isFile()) {
-      element.file.eachLine { final String s ->
-        final String sTrim = s.trim()
-        if (sTrim.startsWith('@Mod(')) {
-          path = "src/main/java/${element.relativePath}"
-        }
-      }
-    }
-  }
-  return path
-}
-
-String getModVersion(final String type) {
-  return getModVersion(type, modFile)
-}
-
-String getModVersion(final String type, final String modFile) {
-  if ((modFile != null) && (modFile != '')) {
-    final File file = file(modFile)
-    final def prefix = ~/^(?:\s*)(?:(?<modifier>public|protected|private) )?(?:(?<static>static) )?(?:(?<final>final) )?String $type = "(?:(?<major>\d*)\.)?(?:(?<minor>\d*)\.)?(?:(?<patch>[^."]*)\.?)(?<build>[^"]*)";$/
-    for (final String s in file.readLines()) {
-      final Matcher matcher = (s.trim() =~ prefix)
-      if (matcher.matches()) {
-        return "${matcher.group('major') ?: '0'}.${matcher.group('minor') ?: '0'}.${matcher.group('patch')}"
-      }
-    }
-  }
-  return '0.0.0'
 }
 
 boolean getBooleanProperty(final String property) {

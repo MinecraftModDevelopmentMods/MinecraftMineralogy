@@ -24,7 +24,7 @@ public class DocumentationContractTest {
         }
         assertEquals(new HashSet<String>(Arrays.asList(
                 "README.md", "PLAYER_GUIDE.md", "DEVELOPER_GUIDE.md",
-                "CONTENT_CONFIG.md", "PROVIDER.md")), actual);
+                "CONTENT_CONFIG.md", "PROVIDER.md", "VERSIONS.md")), actual);
 
         String build = read(new File("build.gradle"));
         assertTrue(build.contains("into 'META-INF/mineralogy/docs'"));
@@ -33,8 +33,13 @@ public class DocumentationContractTest {
     @Test
     public void guidesDescribeTheTargetNative110Contract() throws Exception {
         String all = "";
+        String targetNativeGuides = "";
         for (File file : new File("docs").listFiles((dir, name) -> name.endsWith(".md"))) {
-            all += read(file) + "\n";
+            String content = read(file) + "\n";
+            all += content;
+            if (!"VERSIONS.md".equals(file.getName())) {
+                targetNativeGuides += content;
+            }
         }
 
         assertTrue(all.contains("Minecraft 1.10.2"));
@@ -46,13 +51,20 @@ public class DocumentationContractTest {
         assertTrue(all.contains("config/mineralogy-orespawn.json"));
         assertTrue(all.contains("GROUP_TABS_BY_TYPE"));
         assertTrue(all.contains("COBBLESTONE_EQUIVILENT"));
+        assertTrue(all.contains("Choosing Which Terrain Blocks Mineralogy Replaces"));
+        assertTrue(all.contains("terrain_dimensions"));
+        assertTrue(all.contains("host_blocks"));
+        assertTrue(all.contains("config/orespawn-worldgen.json"));
+        assertTrue(all.contains("<world>/serverconfig/orespawn-worldgen.json"));
+        assertTrue(all.contains("every metadata state"));
+        assertTrue(all.contains("newly generated chunks"));
 
-        assertFalse(all.contains("mineralogy-common.toml"));
-        assertFalse(all.contains("data/mineralogy/orespawn/provider.json"));
-        assertFalse(all.contains("Minecraft 1.18.2"));
-        assertFalse(all.contains("Java 17"));
-        assertFalse(all.toLowerCase().contains("deepslate"));
-        assertFalse(all.contains("Y -48"));
+        assertFalse(targetNativeGuides.contains("mineralogy-common.toml"));
+        assertFalse(targetNativeGuides.contains("data/mineralogy/orespawn/provider.json"));
+        assertFalse(targetNativeGuides.contains("Minecraft 1.18.2"));
+        assertFalse(targetNativeGuides.contains("Java 17"));
+        assertFalse(targetNativeGuides.toLowerCase().contains("deepslate"));
+        assertFalse(targetNativeGuides.contains("Y -48"));
     }
 
     private static String read(File file) throws Exception {

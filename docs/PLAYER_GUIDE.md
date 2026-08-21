@@ -40,6 +40,56 @@ walls.
 OreSpawn's UI and JSON profile control terrain and deposits. Settings require a
 restart.
 
+### Choosing Which Terrain Blocks Mineralogy Replaces
+
+Mineralogy does not maintain a separate replacement blocklist. OreSpawn owns
+terrain replacement through each dimension's `host_blocks` and `host_tags`.
+The packaged Mineralogy profile initially uses `minecraft:stone` in the
+Overworld.
+
+The terrain-host list is not exposed by OreSpawn's 1.10 graphical editor. Stop
+Minecraft or the server before editing the JSON. For defaults inherited by
+worlds created afterward, edit:
+
+```text
+config/orespawn-worldgen.json
+```
+
+For a world that already exists, edit its authoritative saved profile instead:
+
+```text
+<world>/serverconfig/orespawn-worldgen.json
+```
+
+Find `terrain_dimensions`, retain `minecraft:stone`, and add the registry ID of
+each natural terrain block that Mineralogy rock may replace:
+
+```json
+"terrain_dimensions": {
+  "minecraft:overworld": {
+    "enabled": true,
+    "biome_ids": [],
+    "biome_namespaces": [],
+    "host_blocks": [
+      "minecraft:stone",
+      "examplemod:custom_stone"
+    ],
+    "host_tags": []
+  }
+}
+```
+
+Use `host_tags` when an OreSpawn/pack-provided group is more appropriate; on
+Minecraft 1.10 these resolve through OreSpawn's compatibility mapping and Ore
+Dictionary names. Exact `host_blocks` entries are the clearest choice for one
+modded stone.
+
+Minecraft 1.10 matches a `host_blocks` entry by block registry identity, not by
+metadata, so every metadata state of that block becomes eligible. Add only
+natural base-terrain blocks, not machines, containers, or construction blocks.
+Restart after editing. The change affects only chunks generated afterward;
+OreSpawn never retro-generates Mineralogy rock strata into existing chunks.
+
 Each world stores its complete worldgen profile at:
 
 ```text

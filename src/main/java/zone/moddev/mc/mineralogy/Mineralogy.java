@@ -44,7 +44,7 @@ import java.util.*;
         version = Mineralogy.VERSION,
         acceptedMinecraftVersions = "[1.10.2]",
         dependencies = "required-after:orespawn@[4.0.6,5.0.0)",
-        certificateFingerprint = "@FINGERPRINT@")
+        certificateFingerprint = "")
 public class Mineralogy {
 
     public static final String MODID = "mineralogy";

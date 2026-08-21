@@ -33,13 +33,47 @@ public class VersionContractTest {
     public void gradlePublishesTheQualifiedVersionWithoutCiSuffixes() throws Exception {
         String build = read(new File("build.gradle"));
         assertTrue(build.contains("version = project.mod_version"));
-        assertTrue(build.contains("archivesBaseName = \"Mineralogy-${project.mc_version}\""));
-        assertTrue(build.contains("baseName = project.archivesBaseName"));
+        assertTrue(build.contains("base.archivesName = 'Mineralogy'"));
+        assertFalse(build.contains("Mineralogy-${project.mc_version}"));
+        assertTrue(build.contains("artifact(releaseJar)"));
         assertTrue(build.contains("versionParts[3] != expectedTargetVersion"));
+        assertTrue(build.contains("ext.release_tag = \"${project.mc_version}-${project.mod_version}\""));
         assertFalse(build.contains("BUILD_NUMBER"));
         assertFalse(build.contains("TRAVIS_BUILD_NUMBER"));
         assertFalse(build.contains("CIRCLE_BUILD_NUM"));
         assertFalse(build.contains("getModVersion"));
+    }
+
+    @Test
+    public void modernBuildAndReleaseMetadataKeepTheRequiredOreSpawnContract() throws Exception {
+        Properties properties = new Properties();
+        try (FileInputStream input = new FileInputStream("gradle.properties")) {
+            properties.load(input);
+        }
+
+        String build = read(new File("build.gradle"));
+        String wrapper = read(new File("gradle/wrapper/gradle-wrapper.properties"));
+        assertTrue(build.contains("id 'net.minecraftforge.gradle' version '7.0.34'"));
+        assertTrue(build.contains("id 'net.minecraftforge.renamer' version '1.1.5'"));
+        assertTrue(build.contains("JavaLanguageVersion.of(8)"));
+        assertTrue(build.contains("tasks.register('verifyReleaseDependencies')"));
+        assertTrue(build.contains("tasks.register('verifyPreparedReleaseArtifacts')"));
+        assertTrue(build.contains("providers.gradleProperty('preparedReleaseDir')"));
+        assertTrue(wrapper.contains("gradle-9.6.1-bin.zip"));
+        assertEquals("240974", properties.getProperty("cf_project_id"));
+        assertEquals("mmd-orespawn", properties.getProperty("cf_requirements"));
+        assertEquals("245586", properties.getProperty("orespawn_curse_project_id"));
+        assertEquals("8681675", properties.getProperty("orespawn_curse_file_id"));
+        assertEquals("4.0.6.110021", properties.getProperty("orespawn_version"));
+        assertFalse(properties.containsKey("create_api_jar"));
+        assertFalse(properties.containsKey("create_deobf_jar"));
+    }
+
+    @Test
+    public void productionMetadataDoesNotRetainTheLegacyFingerprintToken() throws Exception {
+        String source = read(new File("src/main/java/zone/moddev/mc/mineralogy/Mineralogy.java"));
+        assertTrue(source.contains("certificateFingerprint = \"\""));
+        assertFalse(source.contains("@FINGERPRINT@"));
     }
 
     @Test

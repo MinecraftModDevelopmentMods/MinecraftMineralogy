@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import net.minecraft.block.SoundType;
@@ -12,9 +13,18 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import zone.moddev.mc.mineralogy.MinecraftTestBootstrap;
 import zone.moddev.mc.mineralogy.blocks.RockFurnace;
 
 public class FurnacePersistenceContractTest {
+    @BeforeClass
+    public static void registerVanilla() {
+        MinecraftTestBootstrap.registerVanilla();
+        GameRegistry.registerTileEntity(TileEntityRockFurnace.class,
+                "rock_salt_smooth_brick_furnace");
+    }
+
     @Test
     public void reflectiveLoaderCanConstructAndRestoreFurnaceContents() throws Exception {
         TileEntityRockFurnace original = new TileEntityRockFurnace(1.2D);

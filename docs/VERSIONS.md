@@ -9,14 +9,14 @@ exact Minecraft/loader target are both visible in one number.
 Major.Minor.Bug.Target
 ```
 
-The first three components are the **functional version**. Mineralogy `6.0.0`
-means major generation 6, minor release 0, and bug revision 0.
+The first three components are the **functional version**. Mineralogy `6.0.1`
+means major generation 6, minor release 0, and bug revision 1.
 
 The fourth component identifies the target build. The complete version for
 this Minecraft 1.10.2 Forge release is therefore:
 
 ```text
-6.0.0.110021
+6.0.1.110021
 ```
 
 This expanded numeric form is compatible with Maven version ordering, but it
@@ -39,15 +39,19 @@ To calculate it:
 It can be decoded from right to left: one loader digit, two patch digits, two
 minor digits, and all remaining digits for the Minecraft major version.
 
-| Minecraft | Loader | Target | Mineralogy 6.0.0 release |
+| Minecraft | Loader | Target | Example complete version |
 | --- | --- | ---: | --- |
-| 1.10.2 | Forge | `110021` | `6.0.0.110021` |
+| 1.10.2 | Forge | `110021` | `6.0.1.110021` |
 | 1.12.2 | Forge | `112021` | `6.0.0.112021` |
 | 1.18.2 | Forge | `118021` | `6.0.0.118021` |
 | 1.20.6 | Forge | `120061` | `6.0.0.120061` |
 | 1.21.11 | Forge | `121111` | `6.0.0.121111` |
 | 26.2 | Forge | `2602001` | `6.0.0.2602001` |
 | 26.2 | NeoForge | `2602002` | `6.0.0.2602002` |
+
+The 1.10.2 row records this branch's current release. The other rows illustrate
+target encoding only; they do not claim that the 6.0.1 changes have already
+been forward-ported.
 
 Historical Mineralogy releases may also have four numeric components that used
 the last number as an ordinary build sequence. The target policy applies to
@@ -146,7 +150,7 @@ feature generation, not the exact jar.
 The Gradle build reads the complete version from `mod_version`, verifies that
 it has four numeric components, and checks that its Target matches the declared
 Minecraft version and Forge loader. CI build numbers are not appended. For this
-branch, published metadata and artifacts therefore use `6.0.0.110021`.
+branch, published metadata and artifacts therefore use `6.0.1.110021`.
 
 Every release note should state:
 

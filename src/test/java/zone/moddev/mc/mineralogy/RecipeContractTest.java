@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import net.minecraft.block.Block;
@@ -35,6 +36,11 @@ import net.minecraftforge.oredict.RecipeSorter;
 import zone.moddev.mc.mineralogy.blocks.Gypsum;
 
 public class RecipeContractTest {
+    @BeforeClass
+    public static void registerVanilla() {
+        MinecraftTestBootstrap.registerVanilla();
+    }
+
     @Test
     public void gypsumKeepsHistoricalMiningAndFourDustConversion() throws Exception {
         Item originalPowder = Mineralogy.gypsumPowder;
@@ -78,7 +84,7 @@ public class RecipeContractTest {
     }
 
     @Test
-    public void vanillaStoneSlabRecipeRemainsExactAndUnmodified() throws Exception {
+    public void vanillaStoneSlabRecipeRemainsAvailableAndUnmodified() throws Exception {
         String source = mineralogySource();
         assertFalse(source.contains("CraftingManager.getInstance().getRecipeList()"));
         assertFalse(source.contains("remove default stone slab recipe"));
@@ -91,9 +97,12 @@ public class RecipeContractTest {
         assertEquals(6, vanillaResult.stackSize);
 
         OreDictionary.registerOre("stone", Blocks.NETHERRACK);
-        assertNull(CraftingManager.getInstance().findMatchingRecipe(
+        ItemStack generalizedResult = CraftingManager.getInstance().findMatchingRecipe(
                 topRow(new ItemStack(Blocks.NETHERRACK), new ItemStack(Blocks.NETHERRACK),
-                        new ItemStack(Blocks.NETHERRACK)), null));
+                        new ItemStack(Blocks.NETHERRACK)), null);
+        assertSame(Item.getItemFromBlock(Blocks.STONE_SLAB), generalizedResult.getItem());
+        assertEquals(0, generalizedResult.getItemDamage());
+        assertEquals(6, generalizedResult.stackSize);
     }
 
     @Test

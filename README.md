@@ -25,7 +25,7 @@ See the [player guide](docs/PLAYER_GUIDE.md),
 [developer guide](docs/DEVELOPER_GUIDE.md), and
 [provider reference](docs/PROVIDER.md). The
 [versioning guide](docs/VERSIONS.md) explains why this build is
-`6.0.0.110021`. On first start, Mineralogy exports the
+`6.0.1.110021`. On first start, Mineralogy exports the
 complete guide and its exact packaged provider to `config/mineralogy-guide/`
 without overwriting existing files.
 

@@ -24,7 +24,7 @@ public class VersionContractTest {
         String modVersion = properties.getProperty("mod_version");
         assertEquals("1.10.2", minecraftVersion);
         assertEquals("110021", targetFor(minecraftVersion, 1));
-        assertEquals("6.0.0.110021", modVersion);
+        assertEquals("6.0.1.110021", modVersion);
         assertEquals(modVersion, Mineralogy.VERSION);
         assertTrue(modVersion.matches("\\d+\\.\\d+\\.\\d+\\.\\d+"));
     }
@@ -46,7 +46,7 @@ public class VersionContractTest {
     public void humanGuideExplainsFunctionalAndTargetVersions() throws Exception {
         String guide = read(new File("docs/VERSIONS.md"));
         assertTrue(guide.contains("Major.Minor.Bug.Target"));
-        assertTrue(guide.contains("6.0.0.110021"));
+        assertTrue(guide.contains("6.0.1.110021"));
         assertTrue(guide.contains("1.10.2 | Forge | `110021`"));
         assertTrue(guide.contains("loader code `1` for Forge"));
         assertTrue(guide.contains("[6.0.0,7.0.0)"));

@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import net.minecraft.block.Block;
@@ -18,8 +19,14 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import zone.moddev.mc.mineralogy.MinecraftTestBootstrap;
 
 public class MaterialDropContractTest {
+    @BeforeClass
+    public static void registerVanilla() {
+        MinecraftTestBootstrap.registerVanilla();
+    }
+
     @Test
     public void novaculiteUsesMineralogySixMaterialProperties() throws Exception {
         String source = mineralogySource();

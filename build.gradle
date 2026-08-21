@@ -3,6 +3,7 @@ import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
 import java.util.jar.Manifest
 import java.util.zip.ZipFile
+import org.apache.tools.ant.filters.FixCrLfFilter
 
 plugins {
     id 'java'
@@ -69,6 +70,18 @@ tasks.withType(Javadoc).configureEach {
 tasks.withType(AbstractArchiveTask).configureEach {
     preserveFileTimestamps = false
     reproducibleFileOrder = true
+}
+
+def archiveTextSuffixes = [
+        '.cfg', '.css', '.html', '.info', '.java', '.js', '.json', '.lang',
+        '.mcmeta', '.md', '.properties', '.txt', '.xml'
+]
+def archiveTextPatterns = archiveTextSuffixes.collect { "**/*${it}".toString() }
+archiveTextPatterns.addAll(['**/element-list', '**/package-list'])
+def normalizeArchiveLineEndings = { details ->
+    details.filter(FixCrLfFilter,
+            eol: FixCrLfFilter.CrLf.newInstance('lf'),
+            eof: FixCrLfFilter.AddAsisRemove.newInstance('asis'))
 }
 
 minecraft {
@@ -156,6 +169,8 @@ tasks.named('processResources', ProcessResources) {
     }
 
     rename '(.+_at.cfg)', 'META-INF/$1'
+
+    filesMatching(archiveTextPatterns, normalizeArchiveLineEndings)
 }
 
 tasks.named('jar', Jar) {
@@ -179,6 +194,7 @@ def releaseJar = renamer.classes(tasks.named('jar', Jar)) {
 
 tasks.named('sourcesJar', Jar) {
     archiveClassifier = 'sources'
+    filesMatching(archiveTextPatterns, normalizeArchiveLineEndings)
     manifest {
         attributes([
                 'Maven-Artifact'        : "${project.group}:${base.archivesName.get()}:${project.version}:sources",
@@ -190,6 +206,12 @@ tasks.named('sourcesJar', Jar) {
 
 tasks.named('javadocJar', Jar) {
     archiveClassifier = 'javadoc'
+    filesMatching('**/*.html') {
+        filter { line ->
+            line.replaceFirst(/^ +(?=[^<].*&nbsp;.*(?:,|\)<\/pre>)$)/, '    ')
+        }
+    }
+    filesMatching(archiveTextPatterns, normalizeArchiveLineEndings)
     manifest {
         attributes([
                 'Maven-Artifact'        : "${project.group}:${base.archivesName.get()}:${project.version}:javadoc",
@@ -325,6 +347,26 @@ tasks.register('verifyReleaseArtifacts') {
         jars.each { candidate ->
             if (candidate.length() == 0L) {
                 throw new GradleException("Empty release artifact: ${candidate.name}")
+            }
+
+            ZipFile candidateZip = new ZipFile(candidate)
+            try {
+                candidateZip.entries().findAll { entry ->
+                    !entry.isDirectory()
+                            && (archiveTextSuffixes.any { entry.name.endsWith(it) }
+                            || entry.name.endsWith('/element-list')
+                            || entry.name.endsWith('/package-list'))
+                }.each { entry ->
+                    boolean containsCarriageReturn = candidateZip.getInputStream(entry).withCloseable { input ->
+                        input.bytes.any { value -> value == 13 }
+                    }
+                    if (containsCarriageReturn) {
+                        throw new GradleException(
+                                "${candidate.name}!/${entry.name} does not use canonical LF line endings")
+                    }
+                }
+            } finally {
+                candidateZip.close()
             }
         }
 

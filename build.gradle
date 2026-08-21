@@ -157,6 +157,7 @@ dependencies {
 }
 
 tasks.named('processResources', ProcessResources) {
+    filteringCharset = 'UTF-8'
     inputs.property('version', project.version)
     inputs.property('mcversion', project.mc_version)
 
@@ -193,6 +194,8 @@ def releaseJar = renamer.classes(tasks.named('jar', Jar)) {
 }
 
 tasks.named('sourcesJar', Jar) {
+    filteringCharset = 'UTF-8'
+    includeEmptyDirs = false
     archiveClassifier = 'sources'
     filesMatching(archiveTextPatterns, normalizeArchiveLineEndings)
     manifest {
@@ -205,6 +208,7 @@ tasks.named('sourcesJar', Jar) {
 }
 
 tasks.named('javadocJar', Jar) {
+    filteringCharset = 'UTF-8'
     archiveClassifier = 'javadoc'
     filesMatching('**/*.html') {
         filter { line ->

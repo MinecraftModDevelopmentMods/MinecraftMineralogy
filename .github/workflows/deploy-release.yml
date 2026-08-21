@@ -26,7 +26,7 @@ on:
           - beta
           - alpha
       confirm_version:
-        description: Publication confirmation; enter 6.0.1.110021. Not required for validation.
+        description: Publication confirmation; enter the version declared by the selected release tag.
         required: false
         default: ''
         type: string
@@ -40,11 +40,7 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  RELEASE_VERSION: 6.0.1.110021
-  RELEASE_TAG: 1.10.2-6.0.1.110021
-  MAIN_JAR: Mineralogy-6.0.1.110021.jar
-  SOURCES_JAR: Mineralogy-6.0.1.110021-sources.jar
-  JAVADOC_JAR: Mineralogy-6.0.1.110021-javadoc.jar
+  MINECRAFT_VERSION: 1.10.2
 
 jobs:
   preflight:
@@ -53,6 +49,11 @@ jobs:
     timeout-minutes: 10
     outputs:
       release_sha: ${{ steps.validate.outputs.release_sha }}
+      release_version: ${{ steps.validate.outputs.release_version }}
+      release_tag: ${{ steps.validate.outputs.release_tag }}
+      main_jar: ${{ steps.validate.outputs.main_jar }}
+      sources_jar: ${{ steps.validate.outputs.sources_jar }}
+      javadoc_jar: ${{ steps.validate.outputs.javadoc_jar }}
 
     steps:
       - name: Check out selected release ref
@@ -72,32 +73,38 @@ jobs:
           set -euo pipefail
 
           actual_version="$(sed -n 's/^mod_version=//p' gradle.properties)"
-          if [[ "$actual_version" != "$RELEASE_VERSION" ]]; then
-            echo "Selected ref declares mod_version=$actual_version; expected $RELEASE_VERSION" >&2
+          if [[ ! "$actual_version" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.110021$ ]]; then
+            echo "Selected ref declares invalid 1.10.2 Forge mod_version=$actual_version" >&2
             exit 1
           fi
 
           release_sha="$(git rev-parse HEAD)"
+          release_tag="$MINECRAFT_VERSION-$actual_version"
           echo "release_sha=$release_sha" >> "$GITHUB_OUTPUT"
+          echo "release_version=$actual_version" >> "$GITHUB_OUTPUT"
+          echo "release_tag=$release_tag" >> "$GITHUB_OUTPUT"
+          echo "main_jar=Mineralogy-$actual_version.jar" >> "$GITHUB_OUTPUT"
+          echo "sources_jar=Mineralogy-$actual_version-sources.jar" >> "$GITHUB_OUTPUT"
+          echo "javadoc_jar=Mineralogy-$actual_version-javadoc.jar" >> "$GITHUB_OUTPUT"
 
           if [[ "$MODE" != "publish" ]]; then
             exit 0
           fi
 
-          if [[ "$RELEASE_REF" != "$RELEASE_TAG" ]]; then
-            echo "Publication requires release_ref=$RELEASE_TAG" >&2
+          if [[ "$RELEASE_REF" != "$release_tag" ]]; then
+            echo "Publication requires release_ref=$release_tag" >&2
             exit 1
           fi
-          if [[ "$CONFIRM_VERSION" != "$RELEASE_VERSION" ]]; then
-            echo "confirm_version must equal $RELEASE_VERSION" >&2
+          if [[ "$CONFIRM_VERSION" != "$actual_version" ]]; then
+            echo "confirm_version must equal $actual_version" >&2
             exit 1
           fi
-          if ! git show-ref --verify --quiet "refs/tags/$RELEASE_TAG"; then
+          if ! git show-ref --verify --quiet "refs/tags/$release_tag"; then
             echo "The exact release tag does not exist" >&2
             exit 1
           fi
 
-          tag_sha="$(git rev-list -n 1 "refs/tags/$RELEASE_TAG")"
+          tag_sha="$(git rev-list -n 1 "refs/tags/$release_tag")"
           if [[ "$tag_sha" != "$release_sha" ]]; then
             echo "The release tag does not resolve to the checked-out commit" >&2
             exit 1
@@ -116,6 +123,12 @@ jobs:
     needs: preflight
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    env:
+      RELEASE_VERSION: ${{ needs.preflight.outputs.release_version }}
+      RELEASE_TAG: ${{ needs.preflight.outputs.release_tag }}
+      MAIN_JAR: ${{ needs.preflight.outputs.main_jar }}
+      SOURCES_JAR: ${{ needs.preflight.outputs.sources_jar }}
+      JAVADOC_JAR: ${{ needs.preflight.outputs.javadoc_jar }}
     outputs:
       artifact_name: ${{ steps.artifact.outputs.name }}
 
@@ -170,11 +183,15 @@ jobs:
   release_approval:
     name: Approve live publication
     if: inputs.mode == 'publish'
-    needs: build
+    needs:
+      - preflight
+      - build
     runs-on: ubuntu-latest
     timeout-minutes: 10
     environment:
       name: release
+    env:
+      RELEASE_TAG: ${{ needs.preflight.outputs.release_tag }}
     steps:
       - name: Record approval gate
         run: echo "Release environment approval granted for $RELEASE_TAG"
@@ -276,6 +293,7 @@ jobs:
     name: Publish CurseForge
     if: inputs.mode == 'publish'
     needs:
+      - preflight
       - build
       - publish_maven
     runs-on: ubuntu-latest
@@ -304,8 +322,8 @@ jobs:
         with:
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
           curseforge-id: 240974
-          name: Mineralogy 6.0.1.110021 for Minecraft 1.10.2
-          version: 6.0.1.110021
+          name: Mineralogy ${{ needs.preflight.outputs.release_version }} for Minecraft 1.10.2
+          version: ${{ needs.preflight.outputs.release_version }}
           version-type: ${{ inputs.curseforge_channel }}
           changelog-file: ${{ runner.temp }}/release-input/CHANGELOG.txt
           loaders: forge
@@ -316,9 +334,9 @@ jobs:
           curseforge-dependencies: 245586(required)
           fail-mode: fail
           files: |
-            ${{ runner.temp }}/release-input/Mineralogy-6.0.1.110021.jar
-            ${{ runner.temp }}/release-input/Mineralogy-6.0.1.110021-sources.jar
-            ${{ runner.temp }}/release-input/Mineralogy-6.0.1.110021-javadoc.jar
+            ${{ runner.temp }}/release-input/${{ needs.preflight.outputs.main_jar }}
+            ${{ runner.temp }}/release-input/${{ needs.preflight.outputs.sources_jar }}
+            ${{ runner.temp }}/release-input/${{ needs.preflight.outputs.javadoc_jar }}
 
   publish_github:
     name: Publish GitHub Release
@@ -346,17 +364,17 @@ jobs:
         uses: Kira-NT/mc-publish@52307b03863581dec6b652b83e597aec02ebb075 # v3.3.1
         with:
           github-token: ${{ github.token }}
-          github-tag: ${{ env.RELEASE_TAG }}
+          github-tag: ${{ needs.preflight.outputs.release_tag }}
           github-commitish: ${{ needs.preflight.outputs.release_sha }}
           github-draft: false
           github-prerelease: ${{ inputs.curseforge_channel != 'release' }}
-          name: Mineralogy 6.0.1.110021 for Minecraft 1.10.2
-          version: 6.0.1.110021
+          name: Mineralogy ${{ needs.preflight.outputs.release_version }} for Minecraft 1.10.2
+          version: ${{ needs.preflight.outputs.release_version }}
           version-type: ${{ inputs.curseforge_channel }}
           changelog-file: ${{ runner.temp }}/release-input/CHANGELOG.txt
           fail-mode: fail
           files: |
-            ${{ runner.temp }}/release-input/Mineralogy-6.0.1.110021.jar
-            ${{ runner.temp }}/release-input/Mineralogy-6.0.1.110021-sources.jar
-            ${{ runner.temp }}/release-input/Mineralogy-6.0.1.110021-javadoc.jar
+            ${{ runner.temp }}/release-input/${{ needs.preflight.outputs.main_jar }}
+            ${{ runner.temp }}/release-input/${{ needs.preflight.outputs.sources_jar }}
+            ${{ runner.temp }}/release-input/${{ needs.preflight.outputs.javadoc_jar }}
             ${{ runner.temp }}/release-input/SHA256SUMS

@@ -33,7 +33,8 @@ public class VersionContractTest {
     public void gradlePublishesTheQualifiedVersionWithoutCiSuffixes() throws Exception {
         String build = read(new File("build.gradle"));
         assertTrue(build.contains("version = project.mod_version"));
-        assertTrue(build.contains("base.archivesName = \"Mineralogy-${project.mc_version}\""));
+        assertTrue(build.contains("base.archivesName = 'Mineralogy'"));
+        assertFalse(build.contains("Mineralogy-${project.mc_version}"));
         assertTrue(build.contains("artifact(releaseJar)"));
         assertTrue(build.contains("versionParts[3] != expectedTargetVersion"));
         assertTrue(build.contains("ext.release_tag = \"${project.mc_version}-${project.mod_version}\""));

@@ -16,7 +16,7 @@ plugins {
 
 group = project.mod_group
 version = project.mod_version
-base.archivesName = "Mineralogy-${project.mc_version}"
+base.archivesName = 'Mineralogy'
 
 def versionParts = project.mod_version.toString().tokenize('.')
 if (versionParts.size() != 4 || !versionParts.every { it ==~ /\d+/ }) {

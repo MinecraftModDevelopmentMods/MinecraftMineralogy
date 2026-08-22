@@ -26,5 +26,9 @@ Mineralogy 6.0.1.112021 for Minecraft 1.12.2
 - Upgraded the build to ForgeGradle 7.0.34 and Gradle 9.6.1 with Java 8
   bytecode, reproducible three-jar release audits, and guarded 1.12 CI/release
   automation while retaining the default-branch 1.10 maintenance dispatcher.
+- Generate and verify the Buildship project preferences required by the
+  ForgeGradle 7 Eclipse launches, including alignment with the active Gradle
+  cache and a merged production output for legacy FML resource discovery, so
+  regenerated Eclipse and Gradle development launches load normally.
 - Included the pre-existing rock-salt lamp and street-lamp inventory model
   transform fixes.

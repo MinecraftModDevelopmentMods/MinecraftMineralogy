@@ -63,7 +63,7 @@ public class VersionContractTest {
         assertTrue(build.contains("tasks.register('prepareDevelopmentMod', Sync)"));
         assertTrue(build.contains("environment 'MOD_CLASSES', developmentModOutput.get().asFile.absolutePath"));
         assertFalse(build.contains("developmentLauncher"));
-        assertFalse(build.contains("setClasspath("));
+        assertTrue(build.contains("after ForgeGradle has finalized its run"));
         assertTrue(build.contains("tasks.register('verifyPreparedReleaseArtifacts')"));
         assertTrue(build.contains("inputs.files(providers.provider"));
         assertTrue(build.contains("tasks.register('writeReleaseChecksums')"));
@@ -85,6 +85,24 @@ public class VersionContractTest {
         String source = read(new File("src/main/java/zone/moddev/mc/mineralogy/Mineralogy.java"));
         assertFalse(source.contains("certificateFingerprint"));
         assertFalse(source.contains("@FINGERPRINT@"));
+    }
+
+    @Test
+    public void eclipseSetupCreatesAndVerifiesTheRequiredBuildshipProjectConfiguration() throws Exception {
+        String build = read(new File("build.gradle"));
+        assertTrue(build.contains("tasks.register('configureEclipseBuildship')"));
+        assertTrue(build.contains(".settings/org.eclipse.buildship.core.prefs"));
+        assertTrue(build.contains("connection.gradle.distribution"));
+        assertTrue(build.contains("GRADLE_DISTRIBUTION(WRAPPER)"));
+        assertTrue(build.contains("connection.gradle.user.home"));
+        assertTrue(build.contains("finalizedBy configureEclipseBuildship"));
+        assertTrue(build.contains("finalizedBy configureEclipseBuildship, 'isolateEclipseProductionRuns'"));
+        assertTrue(build.contains("dependsOn tasks.named('genEclipseRuns')"));
+        assertTrue(build.contains("Missing Eclipse Buildship project configuration"));
+        assertTrue(build.contains("Eclipse Buildship Gradle home is not"));
+        assertTrue(build.contains("splitProductionOutputs"));
+        assertTrue(build.contains("setClasspath(project.files("));
+        assertTrue(build.contains("developmentModOutput.get().asFile"));
     }
 
     @Test

@@ -1,1 +1,30 @@
-Mineralogy 1.12.x
+Mineralogy 6.0.1.112021 for Minecraft 1.12.2
+
+- Delegated terrain, strata, ore, and covered fluid-deposit generation to the
+  required OreSpawn 4.0.7 provider engine; removed Mineralogy's parallel
+  generators and historical OS3 shim.
+- Preserved all world-facing registry, tile, NBT, asset, patch, recipe, and
+  OreDictionary identities while moving production packages to
+  zone.moddev.mc.mineralogy.
+- Restored the registered `mineralogy:saprolite` and `mineralogy:pummice`
+  legacy patch blocks so established worlds resolve those historical IDs.
+- Added compatibility-safe controls for drywall, rock-salt lamps, mineral
+  dusts, and fertilizer, plus stable five-way grouped creative tabs. Disabled
+  lamp recipes retain inert hidden identities so their 1.12 advancements load
+  without errors while neither recipe remains craftable.
+- Added Mineralogy crude oil, its source-only bucket integration, and the
+  covered Ocean deposit declaration.
+- Repaired saved rock-furnace construction and burn-rate recovery, replacement
+  drop semantics, and exact full-block Silk Touch results for double slabs.
+- Corrected gypsum packing, charcoal and Base Metals dust gunpowder routes,
+  exact slab precedence, slab recombination, construction-form brick
+  conversions, and sand polishing routes.
+- Restored complete cobblestone and specialty OreDictionary compatibility.
+- Added 17 reviewed locales with the same 938 ordered keys, including
+  Brazilian and European Portuguese.
+- Added first-start player, developer, content, provider, and version guides.
+- Upgraded the build to ForgeGradle 7.0.34 and Gradle 9.6.1 with Java 8
+  bytecode, reproducible three-jar release audits, and guarded 1.12 CI/release
+  automation while retaining the default-branch 1.10 maintenance dispatcher.
+- Included the pre-existing rock-salt lamp and street-lamp inventory model
+  transform fixes.

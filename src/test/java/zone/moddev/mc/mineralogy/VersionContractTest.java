@@ -95,6 +95,7 @@ public class VersionContractTest {
         assertTrue(build.contains("connection.gradle.distribution"));
         assertTrue(build.contains("GRADLE_DISTRIBUTION(WRAPPER)"));
         assertTrue(build.contains("connection.gradle.user.home"));
+        assertTrue(build.contains("'override.workspace.settings'     : 'true'"));
         assertTrue(build.contains("finalizedBy configureEclipseBuildship"));
         assertTrue(build.contains("finalizedBy configureEclipseBuildship, 'isolateEclipseProductionRuns'"));
         assertTrue(build.contains("dependsOn tasks.named('genEclipseRuns')"));
@@ -103,6 +104,8 @@ public class VersionContractTest {
         assertTrue(build.contains("splitProductionOutputs"));
         assertTrue(build.contains("setClasspath(project.files("));
         assertTrue(build.contains("developmentModOutput.get().asFile"));
+        assertTrue(build.contains("['cache', 'metadata', 'to-srg', 'to-obf']"));
+        assertTrue(build.contains("does not quote its --${flag} path"));
     }
 
     @Test

@@ -29,6 +29,8 @@ Mineralogy 6.0.1.112021 for Minecraft 1.12.2
 - Generate and verify the Buildship project preferences required by the
   ForgeGradle 7 Eclipse launches, including alignment with the active Gradle
   cache and a merged production output for legacy FML resource discovery, so
-  regenerated Eclipse and Gradle development launches load normally.
+  regenerated Eclipse and Gradle development launches load normally. Quote
+  every generated Slime Launcher path so projects under directories containing
+  spaces also start correctly.
 - Included the pre-existing rock-salt lamp and street-lamp inventory model
   transform fixes.

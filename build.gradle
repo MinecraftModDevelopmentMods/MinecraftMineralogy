@@ -849,7 +849,8 @@ def configureEclipseBuildship = tasks.register('configureEclipseBuildship') {
                 'connection.gradle.distribution'  : 'GRADLE_DISTRIBUTION(WRAPPER)',
                 'connection.gradle.user.home'     : gradle.gradleUserHomeDir.canonicalPath,
                 'connection.project.dir'          : '',
-                'override.workspace.settings'     : 'false'
+                'gradle.user.home'                 : gradle.gradleUserHomeDir.canonicalPath,
+                'override.workspace.settings'     : 'true'
         ]
         if (!preferencesFile.isFile() || requiredPreferences.any { key, value ->
             preferences.getProperty(key) != value
@@ -939,6 +940,11 @@ tasks.register('verifyEclipseProductionClasspath') {
             if (!contents.contains('MOD_CLASSES" value="' + expectedModClasses)) {
                 throw new GradleException("${launch.name} does not use Eclipse's merged production output")
             }
+            ['cache', 'metadata', 'to-srg', 'to-obf'].each { flag ->
+                if (!contents.contains("--${flag} &quot;")) {
+                    throw new GradleException("${launch.name} does not quote its --${flag} path")
+                }
+            }
         }
     }
 }
@@ -966,13 +972,35 @@ tasks.register('isolateEclipseProductionRuns') {
                 throw new GradleException("ForgeGradle did not generate ${name}")
             }
             String contents = launch.getText('UTF-8')
+            def programArguments = contents =~ /(<stringAttribute key="org\.eclipse\.jdt\.launching\.PROGRAM_ARGUMENTS" value=")([^"]*)("\/>)/
+            if (programArguments.count != 1) {
+                throw new GradleException("ForgeGradle generated malformed program arguments in ${name}")
+            }
+            String arguments = programArguments[0][2]
+            ['cache', 'metadata', 'to-srg', 'to-obf'].each { flag ->
+                String prefix = "--${flag} "
+                int valueStart = arguments.indexOf(prefix)
+                if (valueStart < 0) {
+                    throw new GradleException("ForgeGradle omitted --${flag} from ${name}")
+                }
+                valueStart += prefix.length()
+                int valueEnd = arguments.indexOf(' --', valueStart)
+                if (valueEnd < 0) {
+                    throw new GradleException("ForgeGradle generated an unterminated --${flag} path in ${name}")
+                }
+                String value = arguments.substring(valueStart, valueEnd)
+                if (!value.startsWith('&quot;') || !value.endsWith('&quot;')) {
+                    arguments = "${arguments.substring(0, valueStart)}&quot;${value}&quot;${arguments.substring(valueEnd)}"
+                }
+            }
+            contents = contents.replace(
+                    programArguments[0][0],
+                    programArguments[0][1] + arguments + programArguments[0][3])
             if (!contents.contains('org.eclipse.jdt.launching.ATTR_EXCLUDE_TEST_CODE')) {
                 String marker = '</launchConfiguration>'
                 String attribute = '  <booleanAttribute key="org.eclipse.jdt.launching.ATTR_EXCLUDE_TEST_CODE" value="true"/>'
                 contents = contents.replace(marker, attribute + System.lineSeparator() + marker)
-                launch.setText(contents, 'UTF-8')
             }
-            contents = launch.getText('UTF-8')
             String eclipseModClasses = file('bin/main').absolutePath
             if (contents.contains('key="MOD_CLASSES"')) {
                 contents = contents.replaceAll(

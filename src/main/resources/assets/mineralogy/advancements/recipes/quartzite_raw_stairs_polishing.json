@@ -1,0 +1,48 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:quartzite_stairs"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:quartzite_smooth_stairs"
+    }
+  ],
+  "rewards": {
+    "recipes": [
+      "mineralogy:quartzite_raw_stairs_polishing"
+    ]
+  },
+  "criteria": {
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "mineralogy:quartzite_raw_stairs_polishing"
+      }
+    },
+    "has_rock": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "mineralogy:quartzite_stairs"
+          }
+        ]
+      }
+    },
+    "has_material_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "mineralogy:quartzite_stairs"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_rock",
+      "has_material_recipe"
+    ]
+  ]
+}

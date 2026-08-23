@@ -5,7 +5,7 @@
       "item": "mineralogy:andesite_relief_i"
     }
   ],
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "xxx",
     " x ",
@@ -13,8 +13,7 @@
   ],
   "key": {
     "x": {
-      "type": "forge:ore_dict",
-      "ore": "reliefBlankAndesite"
+      "item": "mineralogy:andesite_relief_blank"
     }
   },
   "result": {

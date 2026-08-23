@@ -1,0 +1,48 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:gabbro_smooth_brick_slab"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:gabbro_smooth_brick"
+    }
+  ],
+  "rewards": {
+    "recipes": [
+      "mineralogy:gabbro_polished_brick_slab_recombination"
+    ]
+  },
+  "criteria": {
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "mineralogy:gabbro_polished_brick_slab_recombination"
+      }
+    },
+    "has_rock": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "mineralogy:gabbro_smooth_brick_slab"
+          }
+        ]
+      }
+    },
+    "has_material_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "mineralogy:gabbro_smooth_brick_slab"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_rock",
+      "has_material_recipe"
+    ]
+  ]
+}

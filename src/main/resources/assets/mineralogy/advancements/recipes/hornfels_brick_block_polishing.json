@@ -1,0 +1,48 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:hornfels_brick"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:hornfels_smooth_brick"
+    }
+  ],
+  "rewards": {
+    "recipes": [
+      "mineralogy:hornfels_brick_block_polishing"
+    ]
+  },
+  "criteria": {
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "mineralogy:hornfels_brick_block_polishing"
+      }
+    },
+    "has_rock": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "mineralogy:hornfels_brick"
+          }
+        ]
+      }
+    },
+    "has_material_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "mineralogy:hornfels_brick"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_rock",
+      "has_material_recipe"
+    ]
+  ]
+}

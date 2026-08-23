@@ -1,0 +1,48 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:conglomerate_stairs"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:conglomerate_brick_stairs"
+    }
+  ],
+  "rewards": {
+    "recipes": [
+      "mineralogy:conglomerate_raw_stairs_to_brick"
+    ]
+  },
+  "criteria": {
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "mineralogy:conglomerate_raw_stairs_to_brick"
+      }
+    },
+    "has_rock": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "mineralogy:conglomerate_stairs"
+          }
+        ]
+      }
+    },
+    "has_material_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "mineralogy:conglomerate_stairs"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_rock",
+      "has_material_recipe"
+    ]
+  ]
+}

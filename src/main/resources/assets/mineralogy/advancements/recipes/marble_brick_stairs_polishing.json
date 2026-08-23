@@ -1,0 +1,48 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:marble_brick_stairs"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:marble_smooth_brick_stairs"
+    }
+  ],
+  "rewards": {
+    "recipes": [
+      "mineralogy:marble_brick_stairs_polishing"
+    ]
+  },
+  "criteria": {
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "mineralogy:marble_brick_stairs_polishing"
+      }
+    },
+    "has_rock": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "mineralogy:marble_brick_stairs"
+          }
+        ]
+      }
+    },
+    "has_material_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "mineralogy:marble_brick_stairs"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_rock",
+      "has_material_recipe"
+    ]
+  ]
+}

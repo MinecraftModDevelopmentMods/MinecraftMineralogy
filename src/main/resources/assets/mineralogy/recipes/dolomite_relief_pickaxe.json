@@ -5,39 +5,31 @@
       "item": "mineralogy:dolomite_relief_pickaxe"
     }
   ],
-  "type": "forge:ore_shapeless",
+  "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "type": "forge:ore_dict",
-      "ore": "reliefBlankDolomite"
+      "item": "mineralogy:dolomite_relief_blank"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "reliefBlankDolomite"
+      "item": "mineralogy:dolomite_relief_blank"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "reliefBlankDolomite"
+      "item": "mineralogy:dolomite_relief_blank"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "reliefBlankDolomite"
+      "item": "mineralogy:dolomite_relief_blank"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "reliefBlankDolomite"
+      "item": "mineralogy:dolomite_relief_blank"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "reliefBlankDolomite"
+      "item": "mineralogy:dolomite_relief_blank"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "reliefBlankDolomite"
+      "item": "mineralogy:dolomite_relief_blank"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "reliefBlankDolomite"
+      "item": "mineralogy:dolomite_relief_blank"
     },
     {
       "item": "minecraft:stone_pickaxe",

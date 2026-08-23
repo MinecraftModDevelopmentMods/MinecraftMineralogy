@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:rhyolite_smooth"
+            "item": "mineralogy:rhyolite_relief_left"
           }
         ]
       }
@@ -30,7 +30,7 @@
     "has_material_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:rhyolite_smooth"
+        "recipe": "mineralogy:rhyolite_relief_left"
       }
     }
   },

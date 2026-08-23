@@ -5,7 +5,7 @@
       "item": "mineralogy:marble_relief_hammer"
     }
   ],
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "zxz",
     "zyz",
@@ -13,15 +13,13 @@
   ],
   "key": {
     "x": {
-      "type": "forge:ore_dict",
-      "ore": "stoneMarbleSmooth"
+      "item": "mineralogy:marble_smooth"
     },
     "y": {
       "item": "minecraft:stick"
     },
     "z": {
-      "type": "forge:ore_dict",
-      "ore": "reliefBlankMarble"
+      "item": "mineralogy:marble_relief_blank"
     }
   },
   "result": {

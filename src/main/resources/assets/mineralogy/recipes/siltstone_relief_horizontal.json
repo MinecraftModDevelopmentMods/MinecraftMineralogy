@@ -5,14 +5,13 @@
       "item": "mineralogy:siltstone_relief_horizontal"
     }
   ],
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "xxx"
   ],
   "key": {
     "x": {
-      "type": "forge:ore_dict",
-      "ore": "reliefBlankSiltstone"
+      "item": "mineralogy:siltstone_relief_blank"
     }
   },
   "result": {

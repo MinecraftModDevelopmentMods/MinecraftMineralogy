@@ -5,7 +5,7 @@
       "item": "mineralogy:hornfels_relief_left"
     }
   ],
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "x  ",
     " x ",
@@ -13,8 +13,7 @@
   ],
   "key": {
     "x": {
-      "type": "forge:ore_dict",
-      "ore": "reliefBlankHornfels"
+      "item": "mineralogy:hornfels_relief_blank"
     }
   },
   "result": {

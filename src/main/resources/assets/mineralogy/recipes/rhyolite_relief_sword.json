@@ -5,39 +5,31 @@
       "item": "mineralogy:rhyolite_relief_sword"
     }
   ],
-  "type": "forge:ore_shapeless",
+  "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "type": "forge:ore_dict",
-      "ore": "reliefBlankRhyolite"
+      "item": "mineralogy:rhyolite_relief_blank"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "reliefBlankRhyolite"
+      "item": "mineralogy:rhyolite_relief_blank"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "reliefBlankRhyolite"
+      "item": "mineralogy:rhyolite_relief_blank"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "reliefBlankRhyolite"
+      "item": "mineralogy:rhyolite_relief_blank"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "reliefBlankRhyolite"
+      "item": "mineralogy:rhyolite_relief_blank"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "reliefBlankRhyolite"
+      "item": "mineralogy:rhyolite_relief_blank"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "reliefBlankRhyolite"
+      "item": "mineralogy:rhyolite_relief_blank"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "reliefBlankRhyolite"
+      "item": "mineralogy:rhyolite_relief_blank"
     },
     {
       "item": "minecraft:stone_sword",

@@ -5,39 +5,31 @@
       "item": "mineralogy:basaltic_glass_relief_hoe"
     }
   ],
-  "type": "forge:ore_shapeless",
+  "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "type": "forge:ore_dict",
-      "ore": "reliefBlankBasaltic_glass"
+      "item": "mineralogy:basaltic_glass_relief_blank"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "reliefBlankBasaltic_glass"
+      "item": "mineralogy:basaltic_glass_relief_blank"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "reliefBlankBasaltic_glass"
+      "item": "mineralogy:basaltic_glass_relief_blank"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "reliefBlankBasaltic_glass"
+      "item": "mineralogy:basaltic_glass_relief_blank"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "reliefBlankBasaltic_glass"
+      "item": "mineralogy:basaltic_glass_relief_blank"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "reliefBlankBasaltic_glass"
+      "item": "mineralogy:basaltic_glass_relief_blank"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "reliefBlankBasaltic_glass"
+      "item": "mineralogy:basaltic_glass_relief_blank"
     },
     {
-      "type": "forge:ore_dict",
-      "ore": "reliefBlankBasaltic_glass"
+      "item": "mineralogy:basaltic_glass_relief_blank"
     },
     {
       "item": "minecraft:stone_hoe",

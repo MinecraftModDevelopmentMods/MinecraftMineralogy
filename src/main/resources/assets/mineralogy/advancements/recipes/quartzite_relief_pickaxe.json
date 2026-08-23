@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:quartzite_smooth"
+            "item": "mineralogy:quartzite_relief_blank"
           }
         ]
       }
@@ -30,7 +30,7 @@
     "has_material_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:quartzite_smooth"
+        "recipe": "mineralogy:quartzite_relief_blank"
       }
     }
   },

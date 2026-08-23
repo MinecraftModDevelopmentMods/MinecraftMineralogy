@@ -5,7 +5,7 @@
       "item": "mineralogy:rhyolite_relief_hammer"
     }
   ],
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "zxz",
     "zyz",
@@ -13,15 +13,13 @@
   ],
   "key": {
     "x": {
-      "type": "forge:ore_dict",
-      "ore": "stoneRhyoliteSmooth"
+      "item": "mineralogy:rhyolite_smooth"
     },
     "y": {
       "item": "minecraft:stick"
     },
     "z": {
-      "type": "forge:ore_dict",
-      "ore": "reliefBlankRhyolite"
+      "item": "mineralogy:rhyolite_relief_blank"
     }
   },
   "result": {

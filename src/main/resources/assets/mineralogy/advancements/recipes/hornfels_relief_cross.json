@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:hornfels_smooth"
+            "item": "mineralogy:hornfels_relief_blank"
           }
         ]
       }
@@ -30,7 +30,7 @@
     "has_material_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:hornfels_smooth"
+        "recipe": "mineralogy:hornfels_relief_blank"
       }
     }
   },

@@ -265,6 +265,65 @@ public class RecipeContractTest {
     }
 
     @Test
+    public void reliefRecipesMatchTheExactOneTenBlankFirstContract() throws Exception {
+        for (String family : FAMILIES) {
+            String blank = family + "_relief_blank";
+            JsonObject blankRecipe = json(blank);
+            assertEquals(blank, "minecraft:crafting_shaped", blankRecipe.get("type").getAsString());
+            assertEquals(blank, Arrays.asList("xxx", "xxx", "xxx"),
+                    strings(blankRecipe.getAsJsonArray("pattern")));
+            assertItemIngredient(blankRecipe.getAsJsonObject("key").get("x"),
+                    "mineralogy:" + family + "_smooth", null);
+            assertEquals(blank, "mineralogy:" + blank,
+                    result(blankRecipe).get("item").getAsString());
+            assertEquals(blank, 16, result(blankRecipe).get("count").getAsInt());
+
+            assertReliefShape(family, "cross", Arrays.asList("x x", "   ", "x x"), 4);
+            assertReliefShape(family, "horizontal", Arrays.asList("xxx"), 3);
+            assertReliefShape(family, "left", Arrays.asList("x  ", " x ", "  x"), 3);
+            assertReliefShape(family, "plus", Arrays.asList(" x ", "xxx", " x "), 5);
+            assertReliefShape(family, "i", Arrays.asList("xxx", " x ", "xxx"), 7);
+            assertReliefShape(family, "vertical", Arrays.asList("x", "x", "x"), 3);
+
+            String hammer = family + "_relief_hammer";
+            JsonObject hammerRecipe = json(hammer);
+            assertEquals(hammer, "minecraft:crafting_shaped",
+                    hammerRecipe.get("type").getAsString());
+            assertEquals(hammer, Arrays.asList("zxz", "zyz", "zzz"),
+                    strings(hammerRecipe.getAsJsonArray("pattern")));
+            JsonObject hammerKey = hammerRecipe.getAsJsonObject("key");
+            assertItemIngredient(hammerKey.get("x"), "mineralogy:" + family + "_smooth", null);
+            assertItemIngredient(hammerKey.get("y"), "minecraft:stick", null);
+            assertItemIngredient(hammerKey.get("z"), "mineralogy:" + blank, null);
+            assertEquals(hammer, 7, result(hammerRecipe).get("count").getAsInt());
+
+            String right = family + "_relief_right";
+            JsonObject rightRecipe = json(right);
+            assertEquals(right, "minecraft:crafting_shapeless",
+                    rightRecipe.get("type").getAsString());
+            assertEquals(right, 2, rightRecipe.getAsJsonArray("ingredients").size());
+            for (JsonElement ingredient : rightRecipe.getAsJsonArray("ingredients")) {
+                assertItemIngredient(ingredient, "mineralogy:" + family + "_relief_left", null);
+            }
+            assertEquals(right, 2, result(rightRecipe).get("count").getAsInt());
+
+            for (String tool : new String[] { "axe", "hoe", "pickaxe", "sword" }) {
+                String name = family + "_relief_" + tool;
+                JsonObject recipe = json(name);
+                assertEquals(name, "minecraft:crafting_shapeless",
+                        recipe.get("type").getAsString());
+                JsonArray ingredients = recipe.getAsJsonArray("ingredients");
+                assertEquals(name, 9, ingredients.size());
+                for (int index = 0; index < 8; index++) {
+                    assertItemIngredient(ingredients.get(index), "mineralogy:" + blank, null);
+                }
+                assertItemIngredient(ingredients.get(8), "minecraft:stone_" + tool, 0);
+                assertEquals(name, 8, result(recipe).get("count").getAsInt());
+            }
+        }
+    }
+
+    @Test
     public void optionalRecipeFamiliesUseIndependentForgeConditions() throws Exception {
         assertConfigCondition(json("drywall"), ContentPolicy.ENABLE_DRYWALLS);
         for (String color : new String[] {
@@ -297,22 +356,25 @@ public class RecipeContractTest {
     }
 
     @Test
-    public void recipeAdvancementsMirrorGeneratedRecipeConditions() throws Exception {
+    public void everyRecipeHasAConditionMatchedAdvancement() throws Exception {
         File[] advancements = ADVANCEMENT_ROOT.listFiles(
                 (directory, name) -> name.endsWith(".json") && !name.startsWith("_"));
         assertTrue(ADVANCEMENT_ROOT.isDirectory());
-        assertEquals(866, advancements == null ? 0 : advancements.length);
+        assertEquals(recipeFiles().length, advancements == null ? 0 : advancements.length);
 
+        Set<String> rewardedRecipes = new HashSet<String>();
         for (File file : advancements) {
             JsonObject advancement = json(file);
             JsonArray rewards = advancement.getAsJsonObject("rewards").getAsJsonArray("recipes");
             assertEquals(file.getName(), 1, rewards.size());
             String recipeId = rewards.get(0).getAsString();
             assertTrue(file.getName(), recipeId.startsWith("mineralogy:"));
+            assertTrue(file.getName(), rewardedRecipes.add(recipeId));
             JsonObject recipe = json(recipeId.substring("mineralogy:".length()));
             assertEquals(file.getName(), recipe.getAsJsonArray("conditions"),
                     advancement.getAsJsonArray("conditions"));
         }
+        assertEquals(recipeFiles().length, rewardedRecipes.size());
     }
 
     @Test
@@ -328,14 +390,30 @@ public class RecipeContractTest {
             assertMaterialRecipeUnlock(family + "_smooth_furnace", family + "_smooth");
             assertMaterialRecipeUnlock(family + "_smooth_wall", family + "_smooth");
             assertMaterialRecipeUnlock(family + "_smooth_brick", family + "_smooth");
+            assertSourceUnlock(family + "_relief_blank",
+                    family + "_smooth", family + "_smooth");
             for (String relief : RELIEFS) {
-                assertMaterialRecipeUnlock(family + "_relief_" + relief, family + "_smooth");
+                if (!"blank".equals(relief) && !"right".equals(relief)) {
+                    assertSourceUnlock(family + "_relief_" + relief,
+                            family + "_relief_blank", family + "_relief_blank");
+                }
             }
+            assertSourceUnlock(family + "_relief_right",
+                    family + "_relief_left", family + "_relief_left");
 
             assertMaterialRecipeUnlock(family + "_smooth_brick_stairs", family + "_smooth_brick");
             assertMaterialRecipeUnlock(family + "_smooth_brick_slab", family + "_smooth_brick");
             assertMaterialRecipeUnlock(family + "_smooth_brick_furnace", family + "_smooth_brick");
             assertMaterialRecipeUnlock(family + "_smooth_brick_wall", family + "_smooth_brick");
+
+            assertSourceUnlock(family + "_raw_slab_recombination",
+                    family + "_slab", family + "_slab");
+            assertSourceUnlock(family + "_polished_slab_recombination",
+                    family + "_smooth_slab", family + "_smooth_slab");
+            assertSourceUnlock(family + "_raw_stairs_polishing",
+                    family + "_stairs", family + "_stairs");
+            assertSourceUnlock(family + "_brick_block_polishing",
+                    family + "_brick", family + "_brick");
         }
     }
 
@@ -371,6 +449,32 @@ public class RecipeContractTest {
         assertTrue(advancementName,
                 strings(requirements.get(0).getAsJsonArray()).contains("has_material_recipe"));
         assertTrue(advancementName, new File(RECIPE_ROOT, materialRecipeName + ".json").isFile());
+    }
+
+    private static void assertSourceUnlock(String advancementName,
+            String sourceItemName, String sourceRecipeName) throws Exception {
+        JsonObject advancement = json(new File(ADVANCEMENT_ROOT, advancementName + ".json"));
+        JsonObject inventory = advancement.getAsJsonObject("criteria").getAsJsonObject("has_rock");
+        assertNotNull(advancementName, inventory);
+        assertEquals(advancementName, "minecraft:inventory_changed",
+                inventory.get("trigger").getAsString());
+        JsonArray items = inventory.getAsJsonObject("conditions").getAsJsonArray("items");
+        assertEquals(advancementName, 1, items.size());
+        assertEquals(advancementName, "mineralogy:" + sourceItemName,
+                items.get(0).getAsJsonObject().get("item").getAsString());
+        assertMaterialRecipeUnlock(advancementName, sourceRecipeName);
+    }
+
+    private static void assertReliefShape(String family, String relief,
+            List<String> pattern, int count) throws Exception {
+        String name = family + "_relief_" + relief;
+        JsonObject recipe = json(name);
+        assertEquals(name, "minecraft:crafting_shaped", recipe.get("type").getAsString());
+        assertEquals(name, pattern, strings(recipe.getAsJsonArray("pattern")));
+        assertItemIngredient(recipe.getAsJsonObject("key").get("x"),
+                "mineralogy:" + family + "_relief_blank", null);
+        assertEquals(name, "mineralogy:" + name, result(recipe).get("item").getAsString());
+        assertEquals(name, count, result(recipe).get("count").getAsInt());
     }
 
     private static void assertExactSlabRecipe(String name, String input, String output) throws Exception {

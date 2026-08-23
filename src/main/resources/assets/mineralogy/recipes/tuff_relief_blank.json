@@ -5,7 +5,7 @@
       "item": "mineralogy:tuff_relief_blank"
     }
   ],
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "xxx",
     "xxx",
@@ -13,8 +13,7 @@
   ],
   "key": {
     "x": {
-      "type": "forge:ore_dict",
-      "ore": "stoneTuffSmooth"
+      "item": "mineralogy:tuff_smooth"
     }
   },
   "result": {

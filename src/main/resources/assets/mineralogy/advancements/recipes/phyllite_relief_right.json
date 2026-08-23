@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:phyllite_smooth"
+            "item": "mineralogy:phyllite_relief_left"
           }
         ]
       }
@@ -30,7 +30,7 @@
     "has_material_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:phyllite_smooth"
+        "recipe": "mineralogy:phyllite_relief_left"
       }
     }
   },

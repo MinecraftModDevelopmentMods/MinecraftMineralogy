@@ -47,11 +47,17 @@ material and finish so basalt cannot produce a different rock's slab or wall.
 All Mineralogy crafting recipes are native Minecraft/Forge 1.12 JSON under
 `assets/mineralogy/recipes/`. Run `scripts/generate-recipes.ps1` after changing
 the recipe matrix; it generates the 27 stone families and global recipes, then
-copies each recipe's Forge conditions onto any matching recipe advancement.
-Construction advancements also listen for the recipe that produces their
-brick, polished, or polished-brick material. This avoids Forge 1.12's delayed
-`inventory_changed` trigger for items taken directly from a crafting-output
-slot while retaining direct inventory possession as a fallback.
+ensures every recipe has a matching unlock advancement with the same Forge
+conditions. Dependent recipes also listen for the recipe that produces their
+input form. This avoids Forge 1.12's delayed `inventory_changed` trigger for
+items taken directly from a crafting-output slot while retaining direct
+inventory possession as a fallback.
+
+Reliefs preserve the historical two-stage contract. Nine exact matching
+polished blocks produce 16 blank reliefs; the blank relief is then the input to
+the marked relief recipes. Two matching left reliefs shapelessly produce two
+right reliefs. Do not substitute unregistered or case-sensitive OreDictionary
+aliases for these exact items.
 Do not reintroduce a parallel Java crafting registry.
 
 The only recipe-like Java registrations are furnace smelting through

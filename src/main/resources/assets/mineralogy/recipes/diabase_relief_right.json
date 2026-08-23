@@ -5,20 +5,17 @@
       "item": "mineralogy:diabase_relief_right"
     }
   ],
-  "type": "forge:ore_shaped",
-  "pattern": [
-    "  x",
-    " x ",
-    "x  "
-  ],
-  "key": {
-    "x": {
-      "type": "forge:ore_dict",
-      "ore": "reliefLeftDiabase"
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mineralogy:diabase_relief_left"
+    },
+    {
+      "item": "mineralogy:diabase_relief_left"
     }
-  },
+  ],
   "result": {
     "item": "mineralogy:diabase_relief_right",
-    "count": 3
+    "count": 2
   }
 }

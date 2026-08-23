@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:basaltic_glass_smooth"
+            "item": "mineralogy:basaltic_glass_relief_left"
           }
         ]
       }
@@ -30,7 +30,7 @@
     "has_material_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:basaltic_glass_smooth"
+        "recipe": "mineralogy:basaltic_glass_relief_left"
       }
     }
   },

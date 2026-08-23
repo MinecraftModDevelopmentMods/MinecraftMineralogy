@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:peridotite_smooth"
+            "item": "mineralogy:peridotite_relief_left"
           }
         ]
       }
@@ -30,7 +30,7 @@
     "has_material_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:peridotite_smooth"
+        "recipe": "mineralogy:peridotite_relief_left"
       }
     }
   },

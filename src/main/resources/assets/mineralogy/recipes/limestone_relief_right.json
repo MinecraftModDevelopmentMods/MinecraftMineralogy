@@ -5,20 +5,17 @@
       "item": "mineralogy:limestone_relief_right"
     }
   ],
-  "type": "forge:ore_shaped",
-  "pattern": [
-    "  x",
-    " x ",
-    "x  "
-  ],
-  "key": {
-    "x": {
-      "type": "forge:ore_dict",
-      "ore": "reliefLeftLimestone"
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mineralogy:limestone_relief_left"
+    },
+    {
+      "item": "mineralogy:limestone_relief_left"
     }
-  },
+  ],
   "result": {
     "item": "mineralogy:limestone_relief_right",
-    "count": 3
+    "count": 2
   }
 }

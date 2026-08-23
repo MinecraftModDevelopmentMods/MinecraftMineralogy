@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:shale_smooth"
+            "item": "mineralogy:shale_relief_left"
           }
         ]
       }
@@ -30,7 +30,7 @@
     "has_material_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:shale_smooth"
+        "recipe": "mineralogy:shale_relief_left"
       }
     }
   },

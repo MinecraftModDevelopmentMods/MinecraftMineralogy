@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:conglomerate_smooth"
+            "item": "mineralogy:conglomerate_relief_left"
           }
         ]
       }
@@ -30,7 +30,7 @@
     "has_material_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:conglomerate_smooth"
+        "recipe": "mineralogy:conglomerate_relief_left"
       }
     }
   },

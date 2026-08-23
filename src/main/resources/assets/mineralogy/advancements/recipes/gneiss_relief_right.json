@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:gneiss_smooth"
+            "item": "mineralogy:gneiss_relief_left"
           }
         ]
       }
@@ -30,7 +30,7 @@
     "has_material_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:gneiss_smooth"
+        "recipe": "mineralogy:gneiss_relief_left"
       }
     }
   },

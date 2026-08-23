@@ -22,10 +22,14 @@ Mineralogy 6.0.1.112021 for Minecraft 1.12.2
   generated as native Minecraft/Forge 1.12 JSON; only target-native furnace
   smelting remains registered through Java because 1.12 has no JSON smelting
   loader.
-- Chained construction recipe advancements to their material recipes so
-  crafting a brick, polished, or polished-brick material immediately reveals
-  its matching stairs, slabs, walls, furnaces, and reliefs in the 1.12 recipe
-  book instead of waiting for a later inventory synchronization.
+- Restored the exact 1.10 relief progression: polished rock makes blank reliefs,
+  blanks make each marked relief, and two left reliefs make two right reliefs.
+  Relief recipes now use exact registered items instead of mismatched
+  OreDictionary names.
+- Added a condition-matched unlock advancement for every one of the 1,387
+  crafting recipes. Recipe-producing materials and forms now reveal their
+  dependent recipes immediately, including slab recombination, while reliefs
+  unlock in the intended polished-rock to blank to marked-relief sequence.
 - Restored complete cobblestone and specialty OreDictionary compatibility.
 - Added 17 reviewed locales with the same 938 ordered keys, including
   Brazilian and European Portuguese.

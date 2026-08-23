@@ -5,7 +5,7 @@
       "item": "mineralogy:tuff_relief_cross"
     }
   ],
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "x x",
     "   ",
@@ -13,8 +13,7 @@
   ],
   "key": {
     "x": {
-      "type": "forge:ore_dict",
-      "ore": "reliefBlankTuff"
+      "item": "mineralogy:tuff_relief_blank"
     }
   },
   "result": {

@@ -5,7 +5,7 @@
       "item": "mineralogy:basaltic_glass_relief_blank"
     }
   ],
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     "xxx",
     "xxx",
@@ -13,8 +13,7 @@
   ],
   "key": {
     "x": {
-      "type": "forge:ore_dict",
-      "ore": "stoneBasaltic_glassSmooth"
+      "item": "mineralogy:basaltic_glass_smooth"
     }
   },
   "result": {

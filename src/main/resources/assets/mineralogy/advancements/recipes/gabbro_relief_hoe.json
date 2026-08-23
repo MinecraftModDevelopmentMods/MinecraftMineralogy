@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:gabbro_smooth"
+            "item": "mineralogy:gabbro_relief_blank"
           }
         ]
       }
@@ -30,7 +30,7 @@
     "has_material_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:gabbro_smooth"
+        "recipe": "mineralogy:gabbro_relief_blank"
       }
     }
   },

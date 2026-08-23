@@ -5,7 +5,7 @@
       "item": "mineralogy:novaculite_relief_plus"
     }
   ],
-  "type": "forge:ore_shaped",
+  "type": "minecraft:crafting_shaped",
   "pattern": [
     " x ",
     "xxx",
@@ -13,8 +13,7 @@
   ],
   "key": {
     "x": {
-      "type": "forge:ore_dict",
-      "ore": "reliefBlankNovaculite"
+      "item": "mineralogy:novaculite_relief_blank"
     }
   },
   "result": {

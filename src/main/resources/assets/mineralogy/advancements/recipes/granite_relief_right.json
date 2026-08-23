@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:granite_smooth"
+            "item": "mineralogy:granite_relief_left"
           }
         ]
       }
@@ -30,7 +30,7 @@
     "has_material_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:granite_smooth"
+        "recipe": "mineralogy:granite_relief_left"
       }
     }
   },

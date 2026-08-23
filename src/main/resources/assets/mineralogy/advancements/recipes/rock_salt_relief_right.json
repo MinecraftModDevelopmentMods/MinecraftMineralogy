@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:rock_salt_smooth"
+            "item": "mineralogy:rock_salt_relief_left"
           }
         ]
       }
@@ -30,7 +30,7 @@
     "has_material_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:rock_salt_smooth"
+        "recipe": "mineralogy:rock_salt_relief_left"
       }
     }
   },

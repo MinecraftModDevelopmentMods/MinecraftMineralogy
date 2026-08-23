@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:diabase_smooth"
+            "item": "mineralogy:diabase_relief_left"
           }
         ]
       }
@@ -30,7 +30,7 @@
     "has_material_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:diabase_smooth"
+        "recipe": "mineralogy:diabase_relief_left"
       }
     }
   },

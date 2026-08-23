@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:tuff_smooth"
+            "item": "mineralogy:tuff_relief_blank"
           }
         ]
       }
@@ -30,7 +30,7 @@
     "has_material_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:tuff_smooth"
+        "recipe": "mineralogy:tuff_relief_blank"
       }
     }
   },

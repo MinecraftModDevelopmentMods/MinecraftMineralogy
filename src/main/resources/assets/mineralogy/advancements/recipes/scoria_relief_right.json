@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:scoria_smooth"
+            "item": "mineralogy:scoria_relief_left"
           }
         ]
       }
@@ -30,7 +30,7 @@
     "has_material_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:scoria_smooth"
+        "recipe": "mineralogy:scoria_relief_left"
       }
     }
   },

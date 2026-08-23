@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:pegmatite_smooth"
+            "item": "mineralogy:pegmatite_relief_left"
           }
         ]
       }
@@ -30,7 +30,7 @@
     "has_material_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:pegmatite_smooth"
+        "recipe": "mineralogy:pegmatite_relief_left"
       }
     }
   },

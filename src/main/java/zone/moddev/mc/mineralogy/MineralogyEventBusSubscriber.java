@@ -9,7 +9,6 @@ import zone.moddev.mc.mineralogy.patching.PatchHandler;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -72,9 +71,4 @@ public class MineralogyEventBusSubscriber {
         }
     }
 
-    @SubscribeEvent
-    public static void registerRecipes(RegistryEvent.Register<IRecipe> event) {
-        event.getRegistry().registerAll(MineralogyRegistry.MineralogyRecipeRegistry.values()
-                .toArray(new IRecipe[MineralogyRegistry.MineralogyRecipeRegistry.size()]));
-    }
 }

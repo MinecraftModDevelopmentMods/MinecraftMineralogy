@@ -1,0 +1,24 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:rhyolite_relief_plus"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "pattern": [
+    " x ",
+    "xxx",
+    " x "
+  ],
+  "key": {
+    "x": {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankRhyolite"
+    }
+  },
+  "result": {
+    "item": "mineralogy:rhyolite_relief_plus",
+    "count": 5
+  }
+}

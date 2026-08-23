@@ -1,0 +1,25 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:schist_smooth_slab"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:schist_smooth"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mineralogy:schist_smooth_slab"
+    },
+    {
+      "item": "mineralogy:schist_smooth_slab"
+    }
+  ],
+  "result": {
+    "item": "mineralogy:schist_smooth",
+    "count": 1
+  }
+}

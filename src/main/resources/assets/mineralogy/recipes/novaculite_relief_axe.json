@@ -1,0 +1,51 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:novaculite_relief_axe"
+    }
+  ],
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankNovaculite"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankNovaculite"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankNovaculite"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankNovaculite"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankNovaculite"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankNovaculite"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankNovaculite"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankNovaculite"
+    },
+    {
+      "item": "minecraft:stone_axe",
+      "data": 0
+    }
+  ],
+  "result": {
+    "item": "mineralogy:novaculite_relief_axe",
+    "count": 8
+  }
+}

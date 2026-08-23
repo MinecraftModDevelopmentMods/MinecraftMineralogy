@@ -42,6 +42,19 @@ Use broad `stone` or `cobblestone` inputs only when any matching material is
 valid. Recipes returning a Mineralogy construction form must use the exact
 material and finish so basalt cannot produce a different rock's slab or wall.
 
+## Crafting Data
+
+All Mineralogy crafting recipes are native Minecraft/Forge 1.12 JSON under
+`assets/mineralogy/recipes/`. Run `scripts/generate-recipes.ps1` after changing
+the recipe matrix; it generates the 27 stone families and global recipes, then
+copies each recipe's Forge conditions onto any matching recipe advancement.
+Do not reintroduce a parallel Java crafting registry.
+
+The only recipe-like Java registrations are furnace smelting through
+`GameRegistry.addSmelting`. Forge 1.12 has no target-native JSON smelting
+loader, so moving those entries to JSON would require a custom system and is
+out of scope.
+
 ## Backward Compatibility
 
 Keep the `mineralogy` mod ID, every registry name, tile ID, NBT field, asset

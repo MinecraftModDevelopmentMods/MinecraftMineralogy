@@ -1,0 +1,26 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:andesite_slab"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:andesite_brick_slab"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xx",
+    "xx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:andesite_slab"
+    }
+  },
+  "result": {
+    "item": "mineralogy:andesite_brick_slab",
+    "count": 4
+  }
+}

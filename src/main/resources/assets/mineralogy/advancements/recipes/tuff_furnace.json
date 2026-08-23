@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:tuff_furnace"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:tuff_furnace"

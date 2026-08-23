@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:tuff_relief_cross"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:tuff_relief_cross"

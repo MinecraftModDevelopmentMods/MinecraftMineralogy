@@ -1,0 +1,26 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:tuff_stairs"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:tuff_brick_stairs"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xx",
+    "xx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:tuff_stairs"
+    }
+  },
+  "result": {
+    "item": "mineralogy:tuff_brick_stairs",
+    "count": 4
+  }
+}

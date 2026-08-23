@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:novaculite_relief_pickaxe"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:novaculite_relief_pickaxe"

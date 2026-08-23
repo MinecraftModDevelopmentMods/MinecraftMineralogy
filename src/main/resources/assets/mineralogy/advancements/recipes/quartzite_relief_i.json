@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:quartzite_relief_i"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:quartzite_relief_i"

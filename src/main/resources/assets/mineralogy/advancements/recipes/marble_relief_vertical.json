@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:marble_relief_vertical"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:marble_relief_vertical"

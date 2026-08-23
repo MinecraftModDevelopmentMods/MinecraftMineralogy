@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:basalt_relief_cross"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:basalt_relief_cross"

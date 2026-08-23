@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:diorite_smooth"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:diorite_smooth"

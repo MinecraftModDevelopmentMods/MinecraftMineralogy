@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:gneiss_relief_horizontal"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:gneiss_relief_horizontal"

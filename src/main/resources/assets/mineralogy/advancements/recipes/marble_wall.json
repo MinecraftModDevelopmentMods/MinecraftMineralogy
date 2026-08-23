@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:marble_wall"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:marble_wall"

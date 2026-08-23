@@ -1,0 +1,25 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:limestone_brick_slab"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:limestone_brick"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mineralogy:limestone_brick_slab"
+    },
+    {
+      "item": "mineralogy:limestone_brick_slab"
+    }
+  ],
+  "result": {
+    "item": "mineralogy:limestone_brick",
+    "count": 1
+  }
+}

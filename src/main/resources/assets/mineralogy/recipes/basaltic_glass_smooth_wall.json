@@ -1,0 +1,23 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:basaltic_glass_smooth_wall"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "xxx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "type": "forge:ore_dict",
+      "ore": "stoneBasaltic_glassSmooth"
+    }
+  },
+  "result": {
+    "item": "mineralogy:basaltic_glass_smooth_wall",
+    "count": 6
+  }
+}

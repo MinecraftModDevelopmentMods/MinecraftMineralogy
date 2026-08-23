@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:scoria_relief_hammer"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:scoria_relief_hammer"

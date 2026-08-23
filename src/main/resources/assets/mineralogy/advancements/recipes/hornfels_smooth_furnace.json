@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:hornfels_smooth_furnace"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:hornfels_smooth_furnace"

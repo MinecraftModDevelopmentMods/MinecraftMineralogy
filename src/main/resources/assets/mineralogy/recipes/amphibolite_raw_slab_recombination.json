@@ -1,0 +1,25 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:amphibolite_slab"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:amphibolite"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mineralogy:amphibolite_slab"
+    },
+    {
+      "item": "mineralogy:amphibolite_slab"
+    }
+  ],
+  "result": {
+    "item": "mineralogy:amphibolite",
+    "count": 1
+  }
+}

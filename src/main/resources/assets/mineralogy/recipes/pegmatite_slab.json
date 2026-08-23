@@ -1,0 +1,21 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:pegmatite_slab"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:pegmatite"
+    }
+  },
+  "result": {
+    "item": "mineralogy:pegmatite_slab",
+    "count": 6
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:basalt_relief_horizontal"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankBasalt"
+    }
+  },
+  "result": {
+    "item": "mineralogy:basalt_relief_horizontal",
+    "count": 3
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:hornfels_slab"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:hornfels"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mineralogy:hornfels_slab"
+    },
+    {
+      "item": "mineralogy:hornfels_slab"
+    }
+  ],
+  "result": {
+    "item": "mineralogy:hornfels",
+    "count": 1
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:basaltic_glass_brick_stairs"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:basaltic_glass_smooth_brick_stairs"
+    }
+  ],
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "item": "mineralogy:basaltic_glass_brick_stairs"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "sand"
+    }
+  ],
+  "result": {
+    "item": "mineralogy:basaltic_glass_smooth_brick_stairs",
+    "count": 1
+  }
+}

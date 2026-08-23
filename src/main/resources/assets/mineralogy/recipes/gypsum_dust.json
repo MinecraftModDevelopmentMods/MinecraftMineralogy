@@ -1,0 +1,19 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:gypsum_dust"
+    }
+  ],
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "type": "forge:ore_dict",
+      "ore": "blockGypsum"
+    }
+  ],
+  "result": {
+    "item": "mineralogy:gypsum_dust",
+    "count": 4
+  }
+}

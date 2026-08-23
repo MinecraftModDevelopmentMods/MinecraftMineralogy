@@ -1,0 +1,23 @@
+{
+  "conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "ENABLE_MINERAL_DUSTS"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:sulfur_dust"
+    }
+  ],
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "type": "forge:ore_dict",
+      "ore": "blockSulfur"
+    }
+  ],
+  "result": {
+    "item": "mineralogy:sulfur_dust",
+    "count": 9
+  }
+}

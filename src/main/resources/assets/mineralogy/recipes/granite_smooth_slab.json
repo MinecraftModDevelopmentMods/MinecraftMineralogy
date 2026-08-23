@@ -1,0 +1,21 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:granite_smooth_slab"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:granite_smooth"
+    }
+  },
+  "result": {
+    "item": "mineralogy:granite_smooth_slab",
+    "count": 6
+  }
+}

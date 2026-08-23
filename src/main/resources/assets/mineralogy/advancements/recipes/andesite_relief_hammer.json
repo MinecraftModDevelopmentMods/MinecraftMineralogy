@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:andesite_relief_hammer"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:andesite_relief_hammer"

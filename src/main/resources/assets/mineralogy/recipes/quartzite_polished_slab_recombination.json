@@ -1,0 +1,25 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:quartzite_smooth_slab"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:quartzite_smooth"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mineralogy:quartzite_smooth_slab"
+    },
+    {
+      "item": "mineralogy:quartzite_smooth_slab"
+    }
+  ],
+  "result": {
+    "item": "mineralogy:quartzite_smooth",
+    "count": 1
+  }
+}

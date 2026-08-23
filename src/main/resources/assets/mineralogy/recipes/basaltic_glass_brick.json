@@ -1,0 +1,23 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:basaltic_glass_brick"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "xx",
+    "xx"
+  ],
+  "key": {
+    "x": {
+      "type": "forge:ore_dict",
+      "ore": "stoneBasaltic_glass"
+    }
+  },
+  "result": {
+    "item": "mineralogy:basaltic_glass_brick",
+    "count": 4
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:hornfels_smooth"
+    }
+  ],
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "type": "forge:ore_dict",
+      "ore": "stoneHornfels"
+    },
+    {
+      "item": "minecraft:sand",
+      "data": 0
+    }
+  ],
+  "result": {
+    "item": "mineralogy:hornfels_smooth",
+    "count": 1
+  }
+}

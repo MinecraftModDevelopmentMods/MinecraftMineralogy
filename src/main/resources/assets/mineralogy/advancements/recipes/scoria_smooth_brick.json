@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:scoria_smooth_brick"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:scoria_smooth_brick"

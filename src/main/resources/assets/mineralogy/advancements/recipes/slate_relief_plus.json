@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:slate_relief_plus"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:slate_relief_plus"

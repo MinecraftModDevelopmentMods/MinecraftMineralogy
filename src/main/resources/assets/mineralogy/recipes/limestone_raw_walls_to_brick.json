@@ -1,0 +1,26 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:limestone_wall"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:limestone_brick_wall"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xx",
+    "xx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:limestone_wall"
+    }
+  },
+  "result": {
+    "item": "mineralogy:limestone_brick_wall",
+    "count": 4
+  }
+}

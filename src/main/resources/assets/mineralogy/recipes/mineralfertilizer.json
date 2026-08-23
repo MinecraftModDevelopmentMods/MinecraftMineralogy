@@ -1,0 +1,27 @@
+{
+  "conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "ENABLE_MINERAL_FERTILIZER"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:mineral_fertilizer"
+    }
+  ],
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "type": "forge:ore_dict",
+      "ore": "dustNitrate"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "dustPhosphorous"
+    }
+  ],
+  "result": {
+    "item": "mineralogy:mineral_fertilizer",
+    "count": 1
+  }
+}

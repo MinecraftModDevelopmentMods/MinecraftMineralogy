@@ -1,0 +1,19 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:rock_salt_dust"
+    }
+  ],
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "type": "forge:ore_dict",
+      "ore": "blockRocksalt"
+    }
+  ],
+  "result": {
+    "item": "mineralogy:rock_salt_dust",
+    "count": 4
+  }
+}

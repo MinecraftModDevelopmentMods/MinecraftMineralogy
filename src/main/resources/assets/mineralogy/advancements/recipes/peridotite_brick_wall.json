@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:peridotite_brick_wall"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:peridotite_brick_wall"

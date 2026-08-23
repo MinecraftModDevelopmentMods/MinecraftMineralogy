@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:limestone_smooth_furnace"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:limestone_smooth_furnace"

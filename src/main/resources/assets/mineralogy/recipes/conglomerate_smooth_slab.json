@@ -1,0 +1,21 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:conglomerate_smooth_slab"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:conglomerate_smooth"
+    }
+  },
+  "result": {
+    "item": "mineralogy:conglomerate_smooth_slab",
+    "count": 6
+  }
+}

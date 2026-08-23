@@ -1,0 +1,32 @@
+{
+  "conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "ENABLE_DRYWALLS"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:drywall_white"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "pgp",
+    "pgp",
+    "pgp"
+  ],
+  "key": {
+    "p": {
+      "type": "forge:ore_dict",
+      "ore": "paper"
+    },
+    "g": {
+      "type": "forge:ore_dict",
+      "ore": "dustGypsum"
+    }
+  },
+  "result": {
+    "item": "mineralogy:drywall_white",
+    "count": 3
+  }
+}

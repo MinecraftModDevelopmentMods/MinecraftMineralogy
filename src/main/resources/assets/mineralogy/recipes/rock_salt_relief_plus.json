@@ -1,0 +1,24 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:rock_salt_relief_plus"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "pattern": [
+    " x ",
+    "xxx",
+    " x "
+  ],
+  "key": {
+    "x": {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankRock_salt"
+    }
+  },
+  "result": {
+    "item": "mineralogy:rock_salt_relief_plus",
+    "count": 5
+  }
+}

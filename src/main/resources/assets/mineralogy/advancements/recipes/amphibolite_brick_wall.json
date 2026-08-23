@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:amphibolite_brick_wall"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:amphibolite_brick_wall"

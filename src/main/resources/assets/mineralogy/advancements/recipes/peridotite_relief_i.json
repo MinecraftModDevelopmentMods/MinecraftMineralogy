@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:peridotite_relief_i"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:peridotite_relief_i"

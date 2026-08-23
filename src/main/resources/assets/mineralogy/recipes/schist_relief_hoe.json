@@ -1,0 +1,51 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:schist_relief_hoe"
+    }
+  ],
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankSchist"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankSchist"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankSchist"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankSchist"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankSchist"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankSchist"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankSchist"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankSchist"
+    },
+    {
+      "item": "minecraft:stone_hoe",
+      "data": 0
+    }
+  ],
+  "result": {
+    "item": "mineralogy:schist_relief_hoe",
+    "count": 8
+  }
+}

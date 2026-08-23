@@ -57,7 +57,6 @@ public class Mineralogy {
         zone.moddev.mc.mineralogy.init.Ores.Init();
         PatchHandler.getInstance().init(MineralogyConfig.patchUpdate());
         MineralogyFluids.register();
-        zone.moddev.mc.mineralogy.init.Recipes.Init();
         DocumentationExporter.exportBundledGuide();
 
         if (event.getSide().isClient()) {

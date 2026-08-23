@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:pegmatite_smooth"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:pegmatite_smooth"

@@ -1,0 +1,24 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:basalt_relief_right"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "  x",
+    " x ",
+    "x  "
+  ],
+  "key": {
+    "x": {
+      "type": "forge:ore_dict",
+      "ore": "reliefLeftBasalt"
+    }
+  },
+  "result": {
+    "item": "mineralogy:basalt_relief_right",
+    "count": 3
+  }
+}

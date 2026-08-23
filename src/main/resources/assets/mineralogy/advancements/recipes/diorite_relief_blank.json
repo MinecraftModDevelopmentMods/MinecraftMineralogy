@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:diorite_relief_blank"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:diorite_relief_blank"

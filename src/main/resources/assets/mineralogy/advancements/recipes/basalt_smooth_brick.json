@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:basalt_smooth_brick"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:basalt_smooth_brick"

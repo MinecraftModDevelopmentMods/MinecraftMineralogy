@@ -1,0 +1,31 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:andesite_relief_hammer"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "zxz",
+    "zyz",
+    "zzz"
+  ],
+  "key": {
+    "x": {
+      "type": "forge:ore_dict",
+      "ore": "stoneAndesiteSmooth"
+    },
+    "y": {
+      "item": "minecraft:stick"
+    },
+    "z": {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankAndesite"
+    }
+  },
+  "result": {
+    "item": "mineralogy:andesite_relief_hammer",
+    "count": 7
+  }
+}

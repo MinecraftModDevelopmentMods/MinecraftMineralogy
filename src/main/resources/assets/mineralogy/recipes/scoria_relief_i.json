@@ -1,0 +1,24 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:scoria_relief_i"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "xxx",
+    " x ",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankScoria"
+    }
+  },
+  "result": {
+    "item": "mineralogy:scoria_relief_i",
+    "count": 7
+  }
+}

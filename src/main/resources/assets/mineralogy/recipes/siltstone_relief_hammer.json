@@ -1,0 +1,31 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:siltstone_relief_hammer"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "zxz",
+    "zyz",
+    "zzz"
+  ],
+  "key": {
+    "x": {
+      "type": "forge:ore_dict",
+      "ore": "stoneSiltstoneSmooth"
+    },
+    "y": {
+      "item": "minecraft:stick"
+    },
+    "z": {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankSiltstone"
+    }
+  },
+  "result": {
+    "item": "mineralogy:siltstone_relief_hammer",
+    "count": 7
+  }
+}

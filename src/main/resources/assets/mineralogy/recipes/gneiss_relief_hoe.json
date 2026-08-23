@@ -1,0 +1,51 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:gneiss_relief_hoe"
+    }
+  ],
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankGneiss"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankGneiss"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankGneiss"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankGneiss"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankGneiss"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankGneiss"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankGneiss"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankGneiss"
+    },
+    {
+      "item": "minecraft:stone_hoe",
+      "data": 0
+    }
+  ],
+  "result": {
+    "item": "mineralogy:gneiss_relief_hoe",
+    "count": 8
+  }
+}

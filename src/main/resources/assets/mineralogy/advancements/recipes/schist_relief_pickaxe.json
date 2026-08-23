@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:schist_relief_pickaxe"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:schist_relief_pickaxe"

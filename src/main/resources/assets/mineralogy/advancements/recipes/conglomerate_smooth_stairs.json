@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:conglomerate_smooth_stairs"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:conglomerate_smooth_stairs"

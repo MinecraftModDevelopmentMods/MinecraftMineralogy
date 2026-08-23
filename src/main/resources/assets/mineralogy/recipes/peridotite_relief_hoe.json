@@ -1,0 +1,51 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:peridotite_relief_hoe"
+    }
+  ],
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankPeridotite"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankPeridotite"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankPeridotite"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankPeridotite"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankPeridotite"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankPeridotite"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankPeridotite"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankPeridotite"
+    },
+    {
+      "item": "minecraft:stone_hoe",
+      "data": 0
+    }
+  ],
+  "result": {
+    "item": "mineralogy:peridotite_relief_hoe",
+    "count": 8
+  }
+}

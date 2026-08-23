@@ -1,0 +1,51 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:diorite_relief_axe"
+    }
+  ],
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankDiorite"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankDiorite"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankDiorite"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankDiorite"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankDiorite"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankDiorite"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankDiorite"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankDiorite"
+    },
+    {
+      "item": "minecraft:stone_axe",
+      "data": 0
+    }
+  ],
+  "result": {
+    "item": "mineralogy:diorite_relief_axe",
+    "count": 8
+  }
+}

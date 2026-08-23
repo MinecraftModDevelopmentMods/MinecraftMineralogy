@@ -1,0 +1,26 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:diorite_smooth_wall"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:diorite_smooth_brick_wall"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xx",
+    "xx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:diorite_smooth_wall"
+    }
+  },
+  "result": {
+    "item": "mineralogy:diorite_smooth_brick_wall",
+    "count": 4
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:granite_relief_sword"
+    }
+  ],
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankGranite"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankGranite"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankGranite"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankGranite"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankGranite"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankGranite"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankGranite"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankGranite"
+    },
+    {
+      "item": "minecraft:stone_sword",
+      "data": 0
+    }
+  ],
+  "result": {
+    "item": "mineralogy:granite_relief_sword",
+    "count": 8
+  }
+}

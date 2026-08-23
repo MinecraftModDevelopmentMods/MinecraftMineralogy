@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:siltstone_relief_pickaxe"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:siltstone_relief_pickaxe"

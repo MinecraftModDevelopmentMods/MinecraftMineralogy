@@ -1,0 +1,51 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:siltstone_relief_sword"
+    }
+  ],
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankSiltstone"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankSiltstone"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankSiltstone"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankSiltstone"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankSiltstone"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankSiltstone"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankSiltstone"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankSiltstone"
+    },
+    {
+      "item": "minecraft:stone_sword",
+      "data": 0
+    }
+  ],
+  "result": {
+    "item": "mineralogy:siltstone_relief_sword",
+    "count": 8
+  }
+}

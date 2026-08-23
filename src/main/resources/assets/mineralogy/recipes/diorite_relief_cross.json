@@ -1,0 +1,24 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:diorite_relief_cross"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "x x",
+    "   ",
+    "x x"
+  ],
+  "key": {
+    "x": {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankDiorite"
+    }
+  },
+  "result": {
+    "item": "mineralogy:diorite_relief_cross",
+    "count": 4
+  }
+}

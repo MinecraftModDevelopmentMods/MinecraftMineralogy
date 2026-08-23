@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:shale_smooth_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:shale_smooth_slab"

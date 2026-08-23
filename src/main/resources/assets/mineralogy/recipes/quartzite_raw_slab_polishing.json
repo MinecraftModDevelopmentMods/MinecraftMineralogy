@@ -1,0 +1,26 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:quartzite_slab"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:quartzite_smooth_slab"
+    }
+  ],
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "item": "mineralogy:quartzite_slab"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "sand"
+    }
+  ],
+  "result": {
+    "item": "mineralogy:quartzite_smooth_slab",
+    "count": 1
+  }
+}

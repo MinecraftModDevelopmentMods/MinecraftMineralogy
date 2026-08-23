@@ -10,15 +10,18 @@ Mineralogy 6.0.1.112021 for Minecraft 1.12.2
   legacy patch blocks so established worlds resolve those historical IDs.
 - Added compatibility-safe controls for drywall, rock-salt lamps, mineral
   dusts, and fertilizer, plus stable five-way grouped creative tabs. Disabled
-  lamp recipes retain inert hidden identities so their 1.12 advancements load
-  without errors while neither recipe remains craftable.
+  recipes and their 1.12 advancements share target-native Forge conditions,
+  so disabled content remains uncraftable without missing-recipe errors.
 - Added Mineralogy crude oil, its source-only bucket integration, and the
   covered Ocean deposit declaration.
 - Repaired saved rock-furnace construction and burn-rate recovery, replacement
   drop semantics, and exact full-block Silk Touch results for double slabs.
 - Corrected gypsum packing, charcoal and Base Metals dust gunpowder routes,
   exact slab precedence, slab recombination, construction-form brick
-  conversions, and sand polishing routes.
+  conversions, and sand polishing routes. All 1,387 crafting recipes are now
+  generated as native Minecraft/Forge 1.12 JSON; only target-native furnace
+  smelting remains registered through Java because 1.12 has no JSON smelting
+  loader.
 - Restored complete cobblestone and specialty OreDictionary compatibility.
 - Added 17 reviewed locales with the same 938 ordered keys, including
   Brazilian and European Portuguese.

@@ -1,0 +1,51 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:hornfels_relief_sword"
+    }
+  ],
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankHornfels"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankHornfels"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankHornfels"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankHornfels"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankHornfels"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankHornfels"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankHornfels"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankHornfels"
+    },
+    {
+      "item": "minecraft:stone_sword",
+      "data": 0
+    }
+  ],
+  "result": {
+    "item": "mineralogy:hornfels_relief_sword",
+    "count": 8
+  }
+}

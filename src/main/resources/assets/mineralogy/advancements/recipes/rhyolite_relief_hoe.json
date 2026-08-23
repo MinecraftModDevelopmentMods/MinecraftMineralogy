@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:rhyolite_relief_hoe"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:rhyolite_relief_hoe"

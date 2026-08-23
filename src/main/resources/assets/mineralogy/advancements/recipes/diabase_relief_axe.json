@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:diabase_relief_axe"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:diabase_relief_axe"

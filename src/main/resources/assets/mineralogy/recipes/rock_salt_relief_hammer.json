@@ -1,0 +1,31 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:rock_salt_relief_hammer"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "zxz",
+    "zyz",
+    "zzz"
+  ],
+  "key": {
+    "x": {
+      "type": "forge:ore_dict",
+      "ore": "stoneRock_saltSmooth"
+    },
+    "y": {
+      "item": "minecraft:stick"
+    },
+    "z": {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankRock_salt"
+    }
+  },
+  "result": {
+    "item": "mineralogy:rock_salt_relief_hammer",
+    "count": 7
+  }
+}

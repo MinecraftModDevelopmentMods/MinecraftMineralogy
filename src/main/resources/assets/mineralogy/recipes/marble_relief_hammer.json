@@ -1,0 +1,31 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:marble_relief_hammer"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "zxz",
+    "zyz",
+    "zzz"
+  ],
+  "key": {
+    "x": {
+      "type": "forge:ore_dict",
+      "ore": "stoneMarbleSmooth"
+    },
+    "y": {
+      "item": "minecraft:stick"
+    },
+    "z": {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankMarble"
+    }
+  },
+  "result": {
+    "item": "mineralogy:marble_relief_hammer",
+    "count": 7
+  }
+}

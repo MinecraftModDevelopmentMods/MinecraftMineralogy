@@ -1,0 +1,51 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:limestone_relief_sword"
+    }
+  ],
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankLimestone"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankLimestone"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankLimestone"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankLimestone"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankLimestone"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankLimestone"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankLimestone"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankLimestone"
+    },
+    {
+      "item": "minecraft:stone_sword",
+      "data": 0
+    }
+  ],
+  "result": {
+    "item": "mineralogy:limestone_relief_sword",
+    "count": 8
+  }
+}

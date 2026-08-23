@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:quartzite_smooth_furnace"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:quartzite_smooth_furnace"

@@ -88,7 +88,7 @@ public class ContentPolicyTest {
 
         assertTrue(blocks.contains("registerBlock(new RockSaltLamp(), \"rocksaltlamp\", \"lampRocksalt\")"));
         assertTrue(blocks.contains("registerBlock(new RockSaltStreetLamp(), \"rocksaltstreetlamp\", \"lampRocksaltStreet\", 16)"));
-        assertTrue(blocks.contains("drywalls[i] = RegistrationHelper.registerBlock(new DryWall"));
+        assertTrue(blocks.contains("BlockItemPair drywall = RegistrationHelper.registerBlock(new DryWall"));
         assertTrue(ores.contains("addOre(Constants.PHOSPHOROUS"));
         assertTrue(items.contains("MineralogyRegistry.ItemsToRegister.put(Constants.DUST + oreDictionaryName, item)"));
         assertTrue(registration.contains("MineralogyRegistry.BlocksToRegister.put(oreDictionaryName, block)"));
@@ -112,19 +112,24 @@ public class ContentPolicyTest {
     }
 
     @Test
-    public void sourceGatesEveryTargetedRecipePlan() throws Exception {
-        String recipes = source("src/main/java/zone/moddev/mc/mineralogy/init/Recipes.java");
-        String ores = source("src/main/java/zone/moddev/mc/mineralogy/init/Ores.java");
+    public void craftingPoliciesUseTheForgeJsonConditionFactory() throws Exception {
+        String factory = source("src/main/java/zone/moddev/mc/mineralogy/recipe/ConfigConditionFactory.java");
+        String generator = source("scripts/generate-recipes.ps1");
 
-        assertEquals(1, countOccurrences(recipes, "contentPolicy().drywallsEnabled()"));
-        assertEquals(1, countOccurrences(recipes, "contentPolicy().rockSaltLampsEnabled()"));
-        assertEquals(1, countOccurrences(recipes, "contentPolicy().mineralDustsEnabled()"));
-        assertEquals(1, countOccurrences(recipes, "contentPolicy().mineralFertilizerEnabled()"));
-        assertEquals(4, countOccurrences(recipes, "new ItemStack(Items.GUNPOWDER, 4)"));
-        assertEquals(2, countOccurrences(recipes, "RecipeHelper.addUnavailableRecipe("));
-        assertEquals(1, countOccurrences(ores, "contentPolicy().mineralDustsEnabled()"));
-        assertTrue(ores.contains("new ItemStack(pair.PairedItem)"));
-        assertTrue(ores.contains("new ItemStack(dust, 9)"));
+        assertTrue(factory.contains("case ContentPolicy.ENABLE_DRYWALLS"));
+        assertTrue(factory.contains("case ContentPolicy.ENABLE_ROCK_SALT_LAMPS"));
+        assertTrue(factory.contains("case ContentPolicy.ENABLE_MINERAL_DUSTS"));
+        assertTrue(factory.contains("case ContentPolicy.ENABLE_MINERAL_FERTILIZER"));
+        assertTrue(factory.contains("Unknown Mineralogy recipe config flag"));
+
+        assertTrue(generator.contains("ConfigCondition 'ENABLE_DRYWALLS'"));
+        assertTrue(generator.contains("ConfigCondition 'ENABLE_ROCK_SALT_LAMPS'"));
+        assertTrue(generator.contains("ConfigCondition 'ENABLE_MINERAL_DUSTS'"));
+        assertTrue(generator.contains("ConfigCondition 'ENABLE_MINERAL_FERTILIZER'"));
+        assertTrue(generator.contains("Synchronize-AdvancementConditions"));
+        assertTrue(new File("src/main/resources/assets/mineralogy/recipes/_factories.json").isFile());
+        assertTrue(new File("src/main/resources/assets/mineralogy/advancements/_factories.json").isFile());
+        assertTrue(!new File("src/main/java/zone/moddev/mc/mineralogy/init/Recipes.java").exists());
     }
 
     @Test

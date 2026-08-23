@@ -6,31 +6,75 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.io.InputStreamReader;
+import java.io.FileInputStream;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.ShapedRecipes;
-import net.minecraftforge.oredict.OreDictionary;
 import zone.moddev.mc.mineralogy.blocks.Gypsum;
-import zone.moddev.mc.mineralogy.init.MineralogyRegistry;
 import zone.moddev.mc.mineralogy.ioc.MinIoC;
-import zone.moddev.mc.mineralogy.util.RecipeHelper;
 
 public class RecipeContractTest {
+    private static final File RECIPE_ROOT = new File("src/main/resources/assets/mineralogy/recipes");
+    private static final File ADVANCEMENT_ROOT =
+            new File("src/main/resources/assets/mineralogy/advancements/recipes");
+
+    private static final String[] FAMILIES = {
+            "andesite", "basalt", "diorite", "granite", "rhyolite", "pegmatite", "diabase",
+            "gabbro", "peridotite", "basaltic_glass", "scoria", "tuff", "shale", "conglomerate",
+            "dolomite", "limestone", "marble", "siltstone", "slate", "schist", "gneiss",
+            "phyllite", "amphibolite", "hornfels", "quartzite", "novaculite", "rock_salt"
+    };
+
+    private static final String[] FAMILY_RECIPE_SUFFIXES = {
+            "cobblestone", "stairs", "slab", "furnace", "wall",
+            "brick", "brick_stairs", "brick_slab", "brick_furnace", "brick_wall",
+            "smooth", "smooth_stairs", "smooth_slab", "smooth_furnace", "smooth_wall",
+            "smooth_brick", "smooth_brick_stairs", "smooth_brick_slab",
+            "smooth_brick_furnace", "smooth_brick_wall",
+            "relief_blank", "relief_cross", "relief_hammer", "relief_horizontal", "relief_left",
+            "relief_plus", "relief_right", "relief_i", "relief_vertical", "relief_axe",
+            "relief_hoe", "relief_pickaxe", "relief_sword",
+            "raw_slab_recombination", "brick_slab_recombination",
+            "polished_slab_recombination", "polished_brick_slab_recombination",
+            "raw_stairs_to_brick", "raw_slabs_to_brick", "raw_walls_to_brick",
+            "polished_stairs_to_brick", "polished_slabs_to_brick", "polished_walls_to_brick",
+            "raw_stairs_polishing", "raw_slab_polishing", "raw_wall_polishing",
+            "brick_stairs_polishing", "brick_slab_polishing", "brick_wall_polishing",
+            "brick_block_polishing"
+    };
+
+    private static final String[] GLOBAL_RECIPE_NAMES = {
+            "drywall_black", "drywall_red", "drywall_green", "drywall_brown",
+            "drywall_blue", "drywall_purple", "drywall_cyan", "drywall_silver",
+            "drywall_gray", "drywall_pink", "drywall_lime", "drywall_yellow",
+            "drywall_light_blue", "drywall_magenta", "drywall_orange", "drywall_white",
+            "gunpowder_from_sugar", "gunpowder_from_charcoal",
+            "gunpowder_from_carbon_dust", "gunpowder_from_coal_dust",
+            "mineralfertilizer", "cobblestone", "gypsum", "gypsum_dust",
+            "chalk", "chalk_dust", "rock_salt", "rock_salt_dust", "drywall",
+            "rocksaltlamp", "rocksaltstreetlamp", "sulfur_block", "sulfur_dust",
+            "phosphorous_block", "phosphorous_dust", "nitrate_block", "nitrate_dust"
+    };
+
     @BeforeClass
     public static void registerVanilla() {
         MinecraftTestBootstrap.registerVanilla();
@@ -54,163 +98,383 @@ public class RecipeContractTest {
         }
         assertTrue(gypsum.canSilkHarvest(null, null, gypsum.getDefaultState(), null));
 
-        String recipes = source("src/main/java/zone/moddev/mc/mineralogy/init/Recipes.java");
-        assertTrue(recipes.contains("new ItemStack(blockGypsum, 1), \"xx\", \"xx\""));
-        assertTrue(recipes.contains("new ItemStack(dustGypsum, 4)"));
-        assertFalse(recipes.contains("new ItemStack(dustGypsum, 9)"));
+        assertFourDustStoragePair("gypsum", "dustGypsum", "blockGypsum", "gypsum_dust");
+        assertFourDustStoragePair("chalk", "dustChalk", "blockChalk", "chalk_dust");
+        assertFourDustStoragePair("rock_salt", "dustRock_salt", "blockRocksalt", "rock_salt_dust");
     }
 
     @Test
     public void gunpowderUsesSugarTwoDustAliasesAndExactCharcoal() throws Exception {
-        String recipes = source("src/main/java/zone/moddev/mc/mineralogy/init/Recipes.java");
-        assertEquals(4, occurrences(recipes, "new ItemStack(Items.GUNPOWDER, 4)"));
-        assertTrue(recipes.contains("new ItemStack(Items.COAL, 1, 1)"));
-        assertTrue(recipes.contains("Constants.DUST_CARBON"));
-        assertTrue(recipes.contains("\"dustCoal\""));
-        assertTrue(recipes.contains("new ItemStack(Items.SUGAR)"));
-        assertFalse(recipes.contains("new ItemStack(Items.COAL, 1, 0)"));
-    }
+        JsonObject sugar = json("gunpowder_from_sugar");
+        JsonObject charcoal = json("gunpowder_from_charcoal");
+        JsonObject carbon = json("gunpowder_from_carbon_dust");
+        JsonObject coalDust = json("gunpowder_from_coal_dust");
 
-    @Test
-    public void exactNativeSlabRecipeRejectsWrongBlockAndMetadata() {
-        MineralogyRegistry.MineralogyRecipeRegistry.clear();
-        ShapedRecipes recipe = RecipeHelper.addExactHorizontalThreeRecipe("exact_test_slab",
-                new ItemStack(Blocks.STONE_SLAB, 6), new ItemStack(Blocks.STONE, 1, 0));
-
-        assertTrue(recipe.matches(topRow(new ItemStack(Blocks.STONE, 1, 0),
-                new ItemStack(Blocks.STONE, 1, 0), new ItemStack(Blocks.STONE, 1, 0)), null));
-        assertFalse(recipe.matches(topRow(new ItemStack(Blocks.STONE, 1, 0),
-                new ItemStack(Blocks.COBBLESTONE), new ItemStack(Blocks.STONE, 1, 0)), null));
-        assertFalse(recipe.matches(topRow(new ItemStack(Blocks.STONE, 1, 1),
-                new ItemStack(Blocks.STONE, 1, 1), new ItemStack(Blocks.STONE, 1, 1)), null));
-        assertSame(Item.getItemFromBlock(Blocks.STONE_SLAB), recipe.getRecipeOutput().getItem());
-        assertEquals(6, recipe.getRecipeOutput().getCount());
-    }
-
-    @Test
-    public void unavailableAdvancementRecipeIdentityIsInertAndHidden() {
-        MineralogyRegistry.MineralogyRecipeRegistry.clear();
-        IRecipe recipe = RecipeHelper.addUnavailableRecipe("unavailable_test");
-
-        assertFalse(recipe.matches(shapeless(new ItemStack(Blocks.STONE)), null));
-        assertFalse(recipe.canFit(3, 3));
-        assertTrue(recipe.getCraftingResult(shapeless(new ItemStack(Blocks.STONE))).isEmpty());
-        assertTrue(recipe.getRecipeOutput().isEmpty());
-        assertTrue(recipe.isDynamic());
-        assertSame(recipe, MineralogyRegistry.MineralogyRecipeRegistry.get("unavailable_test"));
-    }
-
-    @Test
-    public void completeConstructionFamilyRegistersExactlySeventeenRecipes() {
-        MineralogyRegistry.MineralogyRecipeRegistry.clear();
-        ConstructionRecipeHelper.registerConvenienceRecipes("test",
-                forms(Blocks.STONE, Blocks.STONE_STAIRS, Blocks.STONE_SLAB, Blocks.COBBLESTONE_WALL),
-                forms(Blocks.BRICK_BLOCK, Blocks.BRICK_STAIRS, Blocks.PURPUR_SLAB, Blocks.NETHER_BRICK_FENCE),
-                forms(Blocks.QUARTZ_BLOCK, Blocks.QUARTZ_STAIRS, Blocks.STONE_SLAB2, Blocks.OAK_FENCE),
-                forms(Blocks.NETHER_BRICK, Blocks.NETHER_BRICK_STAIRS, Blocks.WOODEN_SLAB, Blocks.SPRUCE_FENCE));
-
-        assertEquals(17, MineralogyRegistry.MineralogyRecipeRegistry.size());
-    }
-
-    @Test
-    public void constructionRecipesRequireMatchingFormsAndAcceptBothSands() {
-        MineralogyRegistry.MineralogyRecipeRegistry.clear();
-        OreDictionary.registerOre("sand", new ItemStack(Blocks.SAND, 1, OreDictionary.WILDCARD_VALUE));
-        ConstructionRecipeHelper.registerConvenienceRecipes("test",
-                forms(Blocks.STONE, Blocks.STONE_STAIRS, Blocks.STONE_SLAB, Blocks.COBBLESTONE_WALL),
-                forms(Blocks.BRICK_BLOCK, Blocks.BRICK_STAIRS, Blocks.PURPUR_SLAB, Blocks.NETHER_BRICK_FENCE),
-                forms(Blocks.QUARTZ_BLOCK, Blocks.QUARTZ_STAIRS, Blocks.STONE_SLAB2, Blocks.OAK_FENCE),
-                forms(Blocks.NETHER_BRICK, Blocks.NETHER_BRICK_STAIRS, Blocks.WOODEN_SLAB, Blocks.SPRUCE_FENCE));
-
-        IRecipe recombine = recipe("test_raw_slab_recombination");
-        assertTrue(recombine.matches(shapeless(new ItemStack(Blocks.STONE_SLAB),
-                new ItemStack(Blocks.STONE_SLAB)), null));
-        assertFalse(recombine.matches(shapeless(new ItemStack(Blocks.STONE_SLAB),
-                new ItemStack(Blocks.WOODEN_SLAB)), null));
-
-        IRecipe brickStairs = recipe("test_raw_stairs_to_brick");
-        assertTrue(brickStairs.matches(square(Blocks.STONE_STAIRS, Blocks.STONE_STAIRS,
-                Blocks.STONE_STAIRS, Blocks.STONE_STAIRS), null));
-        assertFalse(brickStairs.matches(square(Blocks.STONE_STAIRS, Blocks.STONE_STAIRS,
-                Blocks.STONE_STAIRS, Blocks.QUARTZ_STAIRS), null));
-        assertEquals(4, brickStairs.getRecipeOutput().getCount());
-
-        IRecipe polish = recipe("test_brick_block_polishing");
-        assertTrue(polish.matches(shapeless(new ItemStack(Blocks.BRICK_BLOCK),
-                new ItemStack(Blocks.SAND, 1, 0)), null));
-        assertTrue(polish.matches(shapeless(new ItemStack(Blocks.BRICK_BLOCK),
-                new ItemStack(Blocks.SAND, 1, 1)), null));
-        assertFalse(polish.matches(shapeless(new ItemStack(Blocks.BRICK_BLOCK),
-                new ItemStack(Blocks.GRAVEL)), null));
-        assertSame(Item.getItemFromBlock(Blocks.NETHER_BRICK), polish.getRecipeOutput().getItem());
-    }
-
-    @Test
-    public void missingFormsDoNotCreateDanglingRoutes() {
-        MineralogyRegistry.MineralogyRecipeRegistry.clear();
-        ConstructionRecipeHelper.registerConvenienceRecipes("partial",
-                forms(Blocks.STONE, null, null, null),
-                forms(Blocks.BRICK_BLOCK, null, null, null),
-                forms(Blocks.QUARTZ_BLOCK, null, null, null),
-                forms(Blocks.NETHER_BRICK, null, null, null));
-        assertEquals(1, MineralogyRegistry.MineralogyRecipeRegistry.size());
-        assertTrue(MineralogyRegistry.MineralogyRecipeRegistry.containsKey("partial_brick_block_polishing"));
-    }
-
-    @Test
-    public void optionalRecipeFamiliesAreGuardedByTheirIndependentPolicies() throws Exception {
-        String recipes = source("src/main/java/zone/moddev/mc/mineralogy/init/Recipes.java");
-        String blocks = source("src/main/java/zone/moddev/mc/mineralogy/init/Blocks.java");
-        String ores = source("src/main/java/zone/moddev/mc/mineralogy/init/Ores.java");
-        assertTrue(recipes.contains("contentPolicy().drywallsEnabled()"));
-        assertTrue(recipes.contains("contentPolicy().rockSaltLampsEnabled()"));
-        assertTrue(recipes.contains("contentPolicy().mineralDustsEnabled()"));
-        assertTrue(recipes.contains("contentPolicy().mineralFertilizerEnabled()"));
-        assertTrue(blocks.contains("contentPolicy().drywallsEnabled()"));
-        assertTrue(ores.contains("contentPolicy().mineralDustsEnabled()"));
-    }
-
-    private static ConstructionRecipeHelper.Forms forms(Block full, Block stairs, Block slab, Block wall) {
-        return new ConstructionRecipeHelper.Forms(full, stairs, slab, wall);
-    }
-
-    private static IRecipe recipe(String name) {
-        return MineralogyRegistry.MineralogyRecipeRegistry.get(name);
-    }
-
-    private static InventoryCrafting topRow(ItemStack first, ItemStack second, ItemStack third) {
-        return grid(first, second, third, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY,
-                ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY);
-    }
-
-    private static InventoryCrafting square(Block first, Block second, Block third, Block fourth) {
-        return grid(new ItemStack(first), new ItemStack(second), ItemStack.EMPTY,
-                new ItemStack(third), new ItemStack(fourth), ItemStack.EMPTY,
-                ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY);
-    }
-
-    private static InventoryCrafting shapeless(ItemStack... stacks) {
-        ItemStack[] contents = new ItemStack[9];
-        java.util.Arrays.fill(contents, ItemStack.EMPTY);
-        System.arraycopy(stacks, 0, contents, 0, stacks.length);
-        return grid(contents);
-    }
-
-    private static InventoryCrafting grid(ItemStack... stacks) {
-        InventoryCrafting inventory = new InventoryCrafting(new Container() {
-            @Override
-            public boolean canInteractWith(EntityPlayer playerIn) {
-                return true;
-            }
-        }, 3, 3);
-        for (int index = 0; index < stacks.length; index++) {
-            inventory.setInventorySlotContents(index, stacks[index]);
+        for (JsonObject recipe : Arrays.asList(sugar, charcoal, carbon, coalDust)) {
+            assertEquals("forge:ore_shapeless", recipe.get("type").getAsString());
+            assertEquals("minecraft:gunpowder", result(recipe).get("item").getAsString());
+            assertEquals(4, result(recipe).get("count").getAsInt());
+            assertConfigCondition(recipe, ContentPolicy.ENABLE_MINERAL_DUSTS);
+            assertOreIngredient(recipe.getAsJsonArray("ingredients").get(1), "dustNitrate");
+            assertOreIngredient(recipe.getAsJsonArray("ingredients").get(2), "dustSulfur");
         }
-        return inventory;
+
+        assertItemIngredient(sugar.getAsJsonArray("ingredients").get(0), "minecraft:sugar", null);
+        assertItemIngredient(charcoal.getAsJsonArray("ingredients").get(0), "minecraft:coal", 1);
+        assertOreIngredient(carbon.getAsJsonArray("ingredients").get(0), "dustCarbon");
+        assertOreIngredient(coalDust.getAsJsonArray("ingredients").get(0), "dustCoal");
+        assertFalse(charcoal.toString().contains("\"data\":0"));
     }
 
-    private static String source(String path) throws Exception {
-        return new String(Files.readAllBytes(new File(path).toPath()), StandardCharsets.UTF_8);
+    @Test
+    public void allCraftingRecipesAreNativeTargetJson() throws Exception {
+        File[] recipes = recipeFiles();
+        assertEquals(27 * 50 + 37, recipes.length);
+        assertTrue(new File(RECIPE_ROOT, "_factories.json").isFile());
+        assertTrue(new File("scripts/generate-recipes.ps1").isFile());
+
+        Set<String> allowedTypes = new HashSet<String>(Arrays.asList(
+                "minecraft:crafting_shaped", "minecraft:crafting_shapeless",
+                "forge:ore_shaped", "forge:ore_shapeless"));
+        for (File file : recipes) {
+            JsonObject recipe = json(file);
+            assertTrue(file.getName(), allowedTypes.contains(recipe.get("type").getAsString()));
+            assertTrue(file.getName(), recipe.has("conditions"));
+            assertTrue(file.getName(), recipe.get("conditions").isJsonArray());
+            assertTrue(file.getName(), recipe.has("result"));
+            validateConditions(file.getName(), recipe.getAsJsonArray("conditions"));
+        }
+
+        assertFalse(new File("src/main/java/zone/moddev/mc/mineralogy/ConstructionRecipeHelper.java").exists());
+        assertFalse(new File("src/main/java/zone/moddev/mc/mineralogy/init/Recipes.java").exists());
+        assertFalse(new File("src/main/java/zone/moddev/mc/mineralogy/util/RecipeHelper.java").exists());
+
+        String production = allJavaSource(new File("src/main/java"));
+        assertFalse(production.contains("RecipeHelper"));
+        assertFalse(production.contains("ConstructionRecipeHelper"));
+        assertFalse(production.contains("MineralogyRecipeRegistry"));
+        assertFalse(production.contains("ShapedOreRecipe"));
+        assertFalse(production.contains("ShapelessOreRecipe"));
+        assertFalse(production.contains("addShapedRecipe"));
+        assertFalse(production.contains("addShapelessRecipe"));
+        assertFalse(production.contains("Register<IRecipe>"));
+
+        // Forge 1.12 has no target-native JSON smelting loader. These are the
+        // only recipe-like registrations intentionally retained in Java.
+        assertEquals(2, occurrences(production, "GameRegistry.addSmelting("));
+    }
+
+    @Test
+    public void everyRockFamilyHasTheCompleteFiftyRecipeMatrix() throws Exception {
+        assertEquals(50, FAMILY_RECIPE_SUFFIXES.length);
+        Set<String> expected = new HashSet<String>();
+        for (String family : FAMILIES) {
+            for (String suffix : FAMILY_RECIPE_SUFFIXES) {
+                String name = family + "_" + suffix;
+                expected.add(name);
+                assertTrue(name, new File(RECIPE_ROOT, name + ".json").isFile());
+            }
+        }
+        assertEquals(27 * 50, expected.size());
+
+        Set<String> actualFamilyRecipes = Arrays.stream(recipeFiles())
+                .map(file -> file.getName().substring(0, file.getName().length() - 5))
+                .filter(name -> Arrays.stream(FAMILIES).anyMatch(
+                        family -> name.startsWith(family + "_")))
+                .filter(name -> !"rock_salt_dust".equals(name))
+                .collect(Collectors.toSet());
+        assertEquals(expected, actualFamilyRecipes);
+    }
+
+    @Test
+    public void globalRecipeInventoryIsExact() {
+        assertEquals(37, GLOBAL_RECIPE_NAMES.length);
+        Set<String> expected = new HashSet<String>(Arrays.asList(GLOBAL_RECIPE_NAMES));
+        Set<String> actual = Arrays.stream(recipeFiles())
+                .map(file -> file.getName().substring(0, file.getName().length() - 5))
+                .filter(name -> !Arrays.stream(FAMILIES).anyMatch(
+                        family -> name.startsWith(family + "_")
+                                && !"rock_salt_dust".equals(name)))
+                .collect(Collectors.toSet());
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void exactNativeSlabRecipesPreserveMineralogyAndVanillaSeparation() throws Exception {
+        for (String family : FAMILIES) {
+            assertExactSlabRecipe(family + "_slab", family, family + "_slab");
+            assertExactSlabRecipe(family + "_brick_slab", family + "_brick", family + "_brick_slab");
+            assertExactSlabRecipe(family + "_smooth_slab", family + "_smooth", family + "_smooth_slab");
+            assertExactSlabRecipe(family + "_smooth_brick_slab",
+                    family + "_smooth_brick", family + "_smooth_brick_slab");
+        }
+
+        for (File file : recipeFiles()) {
+            assertFalse(file.getName(), "minecraft:stone_slab".equals(
+                    result(json(file)).get("item").getAsString()));
+        }
+        String production = allJavaSource(new File("src/main/java"));
+        assertFalse(production.contains("ForgeRegistries.RECIPES.getValuesCollection().remove"));
+        assertFalse(production.contains("minecraft:stone_slab"));
+    }
+
+    @Test
+    public void constructionConvenienceMatrixIsExactAndConditional() throws Exception {
+        for (String family : FAMILIES) {
+            assertSlabRecombination(family, "raw", family + "_slab", family);
+            assertSlabRecombination(family, "brick", family + "_brick_slab", family + "_brick");
+            assertSlabRecombination(family, "polished",
+                    family + "_smooth_slab", family + "_smooth");
+            assertSlabRecombination(family, "polished_brick",
+                    family + "_smooth_brick_slab", family + "_smooth_brick");
+
+            assertTwoByTwo(family + "_raw_stairs_to_brick",
+                    family + "_stairs", family + "_brick_stairs");
+            assertTwoByTwo(family + "_raw_slabs_to_brick",
+                    family + "_slab", family + "_brick_slab");
+            assertTwoByTwo(family + "_raw_walls_to_brick",
+                    family + "_wall", family + "_brick_wall");
+            assertTwoByTwo(family + "_polished_stairs_to_brick",
+                    family + "_smooth_stairs", family + "_smooth_brick_stairs");
+            assertTwoByTwo(family + "_polished_slabs_to_brick",
+                    family + "_smooth_slab", family + "_smooth_brick_slab");
+            assertTwoByTwo(family + "_polished_walls_to_brick",
+                    family + "_smooth_wall", family + "_smooth_brick_wall");
+
+            assertSandPolishing(family + "_raw_stairs_polishing",
+                    family + "_stairs", family + "_smooth_stairs");
+            assertSandPolishing(family + "_raw_slab_polishing",
+                    family + "_slab", family + "_smooth_slab");
+            assertSandPolishing(family + "_raw_wall_polishing",
+                    family + "_wall", family + "_smooth_wall");
+            assertSandPolishing(family + "_brick_stairs_polishing",
+                    family + "_brick_stairs", family + "_smooth_brick_stairs");
+            assertSandPolishing(family + "_brick_slab_polishing",
+                    family + "_brick_slab", family + "_smooth_brick_slab");
+            assertSandPolishing(family + "_brick_wall_polishing",
+                    family + "_brick_wall", family + "_smooth_brick_wall");
+            assertSandPolishing(family + "_brick_block_polishing",
+                    family + "_brick", family + "_smooth_brick");
+        }
+    }
+
+    @Test
+    public void optionalRecipeFamiliesUseIndependentForgeConditions() throws Exception {
+        assertConfigCondition(json("drywall"), ContentPolicy.ENABLE_DRYWALLS);
+        for (String color : new String[] {
+                "black", "red", "green", "brown", "blue", "purple", "cyan", "silver",
+                "gray", "pink", "lime", "yellow", "light_blue", "magenta", "orange", "white"
+        }) {
+            assertConfigCondition(json("drywall_" + color), ContentPolicy.ENABLE_DRYWALLS);
+        }
+
+        assertConfigCondition(json("rocksaltlamp"), ContentPolicy.ENABLE_ROCK_SALT_LAMPS);
+        assertConfigCondition(json("rocksaltstreetlamp"), ContentPolicy.ENABLE_ROCK_SALT_LAMPS);
+        assertConfigCondition(json("mineralfertilizer"), ContentPolicy.ENABLE_MINERAL_FERTILIZER);
+
+        for (String name : new String[] {
+                "gunpowder_from_sugar", "gunpowder_from_charcoal",
+                "gunpowder_from_carbon_dust", "gunpowder_from_coal_dust",
+                "sulfur_block", "sulfur_dust", "phosphorous_block", "phosphorous_dust",
+                "nitrate_block", "nitrate_dust"
+        }) {
+            assertConfigCondition(json(name), ContentPolicy.ENABLE_MINERAL_DUSTS);
+        }
+
+        JsonObject factories = json(new File(RECIPE_ROOT, "_factories.json"));
+        assertEquals("zone.moddev.mc.mineralogy.recipe.ConfigConditionFactory",
+                factories.getAsJsonObject("conditions").get("config").getAsString());
+        byte[] recipeFactories = Files.readAllBytes(new File(RECIPE_ROOT, "_factories.json").toPath());
+        byte[] advancementFactories = Files.readAllBytes(
+                new File(ADVANCEMENT_ROOT.getParentFile(), "_factories.json").toPath());
+        assertTrue(Arrays.equals(recipeFactories, advancementFactories));
+    }
+
+    @Test
+    public void recipeAdvancementsMirrorGeneratedRecipeConditions() throws Exception {
+        File[] advancements = ADVANCEMENT_ROOT.listFiles(
+                (directory, name) -> name.endsWith(".json") && !name.startsWith("_"));
+        assertTrue(ADVANCEMENT_ROOT.isDirectory());
+        assertEquals(866, advancements == null ? 0 : advancements.length);
+
+        for (File file : advancements) {
+            JsonObject advancement = json(file);
+            JsonArray rewards = advancement.getAsJsonObject("rewards").getAsJsonArray("recipes");
+            assertEquals(file.getName(), 1, rewards.size());
+            String recipeId = rewards.get(0).getAsString();
+            assertTrue(file.getName(), recipeId.startsWith("mineralogy:"));
+            JsonObject recipe = json(recipeId.substring("mineralogy:".length()));
+            assertEquals(file.getName(), recipe.getAsJsonArray("conditions"),
+                    advancement.getAsJsonArray("conditions"));
+        }
+    }
+
+    private static void assertFourDustStoragePair(String name, String dustOre,
+            String blockOre, String dustItem) throws Exception {
+        JsonObject pack = json(name);
+        assertEquals("forge:ore_shaped", pack.get("type").getAsString());
+        assertEquals(Arrays.asList("xx", "xx"), strings(pack.getAsJsonArray("pattern")));
+        assertOreIngredient(pack.getAsJsonObject("key").get("x"), dustOre);
+        assertEquals(1, result(pack).get("count").getAsInt());
+
+        JsonObject unpack = json(name + "_dust");
+        assertEquals("forge:ore_shapeless", unpack.get("type").getAsString());
+        assertEquals(1, unpack.getAsJsonArray("ingredients").size());
+        assertOreIngredient(unpack.getAsJsonArray("ingredients").get(0), blockOre);
+        assertEquals("mineralogy:" + dustItem, result(unpack).get("item").getAsString());
+        assertEquals(4, result(unpack).get("count").getAsInt());
+    }
+
+    private static void assertExactSlabRecipe(String name, String input, String output) throws Exception {
+        JsonObject recipe = json(name);
+        assertEquals(name, "minecraft:crafting_shaped", recipe.get("type").getAsString());
+        assertEquals(name, Arrays.asList("xxx"), strings(recipe.getAsJsonArray("pattern")));
+        JsonObject ingredient = recipe.getAsJsonObject("key").getAsJsonObject("x");
+        assertEquals(name, "mineralogy:" + input, ingredient.get("item").getAsString());
+        assertFalse(name, ingredient.has("type"));
+        assertFalse(name, ingredient.has("data"));
+        assertEquals(name, "mineralogy:" + output, result(recipe).get("item").getAsString());
+        assertEquals(name, 6, result(recipe).get("count").getAsInt());
+        assertItemExistsCondition(recipe, "mineralogy:" + output);
+    }
+
+    private static void assertSlabRecombination(String family, String finish,
+            String slab, String block) throws Exception {
+        String name = family + "_" + finish + "_slab_recombination";
+        JsonObject recipe = json(name);
+        assertEquals(name, "minecraft:crafting_shapeless", recipe.get("type").getAsString());
+        JsonArray ingredients = recipe.getAsJsonArray("ingredients");
+        assertEquals(name, 2, ingredients.size());
+        assertItemIngredient(ingredients.get(0), "mineralogy:" + slab, null);
+        assertItemIngredient(ingredients.get(1), "mineralogy:" + slab, null);
+        assertEquals(name, "mineralogy:" + block, result(recipe).get("item").getAsString());
+        assertEquals(name, 1, result(recipe).get("count").getAsInt());
+        assertItemExistsCondition(recipe, "mineralogy:" + slab);
+        assertItemExistsCondition(recipe, "mineralogy:" + block);
+    }
+
+    private static void assertTwoByTwo(String name, String input, String output) throws Exception {
+        JsonObject recipe = json(name);
+        assertEquals(name, "minecraft:crafting_shaped", recipe.get("type").getAsString());
+        assertEquals(name, Arrays.asList("xx", "xx"), strings(recipe.getAsJsonArray("pattern")));
+        assertItemIngredient(recipe.getAsJsonObject("key").get("x"), "mineralogy:" + input, null);
+        assertEquals(name, "mineralogy:" + output, result(recipe).get("item").getAsString());
+        assertEquals(name, 4, result(recipe).get("count").getAsInt());
+        assertItemExistsCondition(recipe, "mineralogy:" + input);
+        assertItemExistsCondition(recipe, "mineralogy:" + output);
+    }
+
+    private static void assertSandPolishing(String name, String input, String output) throws Exception {
+        JsonObject recipe = json(name);
+        assertEquals(name, "forge:ore_shapeless", recipe.get("type").getAsString());
+        JsonArray ingredients = recipe.getAsJsonArray("ingredients");
+        assertEquals(name, 2, ingredients.size());
+        assertItemIngredient(ingredients.get(0), "mineralogy:" + input, null);
+        assertOreIngredient(ingredients.get(1), "sand");
+        assertEquals(name, "mineralogy:" + output, result(recipe).get("item").getAsString());
+        assertEquals(name, 1, result(recipe).get("count").getAsInt());
+        assertItemExistsCondition(recipe, "mineralogy:" + input);
+        assertItemExistsCondition(recipe, "mineralogy:" + output);
+    }
+
+    private static void assertItemIngredient(JsonElement element, String item, Integer data) {
+        JsonObject ingredient = element.getAsJsonObject();
+        assertEquals(item, ingredient.get("item").getAsString());
+        if (data == null) {
+            assertFalse(item, ingredient.has("data"));
+        } else {
+            assertEquals(item, data.intValue(), ingredient.get("data").getAsInt());
+        }
+    }
+
+    private static void assertOreIngredient(JsonElement element, String ore) {
+        JsonObject ingredient = element.getAsJsonObject();
+        assertEquals(ore, "forge:ore_dict", ingredient.get("type").getAsString());
+        assertEquals(ore, ore, ingredient.get("ore").getAsString());
+    }
+
+    private static void assertConfigCondition(JsonObject recipe, String flag) {
+        JsonArray conditions = recipe.getAsJsonArray("conditions");
+        for (JsonElement element : conditions) {
+            JsonObject condition = element.getAsJsonObject();
+            if ("mineralogy:config".equals(condition.get("type").getAsString())
+                    && flag.equals(condition.get("flag").getAsString())) {
+                return;
+            }
+        }
+        throw new AssertionError("Missing Mineralogy config condition " + flag + " in " + recipe);
+    }
+
+    private static void assertItemExistsCondition(JsonObject recipe, String item) {
+        for (JsonElement element : recipe.getAsJsonArray("conditions")) {
+            JsonObject condition = element.getAsJsonObject();
+            if ("minecraft:item_exists".equals(condition.get("type").getAsString())
+                    && item.equals(condition.get("item").getAsString())) {
+                return;
+            }
+        }
+        throw new AssertionError("Missing item-exists condition for " + item + " in " + recipe);
+    }
+
+    private static void validateConditions(String name, JsonArray conditions) {
+        for (JsonElement element : conditions) {
+            assertTrue(name, element.isJsonObject());
+            JsonObject condition = element.getAsJsonObject();
+            String type = condition.get("type").getAsString();
+            assertTrue(name, "minecraft:item_exists".equals(type) || "mineralogy:config".equals(type));
+            if ("minecraft:item_exists".equals(type)) {
+                assertFalse(name, condition.get("item").getAsString().trim().isEmpty());
+            } else {
+                assertTrue(name, Arrays.asList(
+                        ContentPolicy.ENABLE_DRYWALLS,
+                        ContentPolicy.ENABLE_ROCK_SALT_LAMPS,
+                        ContentPolicy.ENABLE_MINERAL_DUSTS,
+                        ContentPolicy.ENABLE_MINERAL_FERTILIZER)
+                        .contains(condition.get("flag").getAsString()));
+            }
+        }
+    }
+
+    private static JsonObject result(JsonObject recipe) {
+        return recipe.getAsJsonObject("result");
+    }
+
+    private static List<String> strings(JsonArray array) {
+        java.util.ArrayList<String> strings = new java.util.ArrayList<String>();
+        for (JsonElement element : array) {
+            strings.add(element.getAsString());
+        }
+        return strings;
+    }
+
+    private static File[] recipeFiles() {
+        File[] files = RECIPE_ROOT.listFiles(
+                (directory, name) -> name.endsWith(".json") && !name.startsWith("_"));
+        assertTrue(RECIPE_ROOT.isDirectory());
+        return files == null ? new File[0] : files;
+    }
+
+    private static JsonObject json(String recipeName) throws Exception {
+        return json(new File(RECIPE_ROOT, recipeName + ".json"));
+    }
+
+    private static JsonObject json(File file) throws Exception {
+        assertTrue(file.getPath(), file.isFile());
+        try (InputStreamReader reader = new InputStreamReader(
+                new FileInputStream(file), StandardCharsets.UTF_8)) {
+            return new JsonParser().parse(reader).getAsJsonObject();
+        }
+    }
+
+    private static String allJavaSource(File root) throws Exception {
+        try (Stream<Path> paths = Files.walk(root.toPath())) {
+            StringBuilder source = new StringBuilder();
+            for (Path path : paths.filter(value -> value.toString().endsWith(".java"))
+                    .collect(Collectors.toList())) {
+                source.append(new String(Files.readAllBytes(path), StandardCharsets.UTF_8));
+            }
+            return source.toString();
+        }
     }
 
     private static int occurrences(String source, String search) {

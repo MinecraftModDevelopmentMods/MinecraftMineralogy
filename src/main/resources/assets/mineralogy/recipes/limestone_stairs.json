@@ -1,0 +1,24 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:limestone_stairs"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "x  ",
+    "xx ",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "type": "forge:ore_dict",
+      "ore": "stoneLimestone"
+    }
+  },
+  "result": {
+    "item": "mineralogy:limestone_stairs",
+    "count": 4
+  }
+}

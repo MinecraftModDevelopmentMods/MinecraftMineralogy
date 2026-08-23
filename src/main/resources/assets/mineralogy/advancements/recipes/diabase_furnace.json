@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:diabase_furnace"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:diabase_furnace"

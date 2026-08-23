@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:amphibolite_relief_blank"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:amphibolite_relief_blank"

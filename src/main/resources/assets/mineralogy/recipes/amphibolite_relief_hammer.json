@@ -1,0 +1,31 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:amphibolite_relief_hammer"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "zxz",
+    "zyz",
+    "zzz"
+  ],
+  "key": {
+    "x": {
+      "type": "forge:ore_dict",
+      "ore": "stoneAmphiboliteSmooth"
+    },
+    "y": {
+      "item": "minecraft:stick"
+    },
+    "z": {
+      "type": "forge:ore_dict",
+      "ore": "reliefBlankAmphibolite"
+    }
+  },
+  "result": {
+    "item": "mineralogy:amphibolite_relief_hammer",
+    "count": 7
+  }
+}

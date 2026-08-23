@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:rock_salt_relief_hammer"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:rock_salt_relief_hammer"

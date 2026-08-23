@@ -6,6 +6,7 @@ $recipeRoot = Join-Path $projectRoot 'src\main\resources\assets\mineralogy\recip
 $advancementRoot = Join-Path $projectRoot 'src\main\resources\assets\mineralogy\advancements\recipes'
 $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
 $generatedNames = New-Object 'System.Collections.Generic.HashSet[string]'
+$materialRecipeIds = New-Object 'System.Collections.Generic.HashSet[string]'
 
 $families = @(
     'andesite', 'basalt', 'diorite', 'granite', 'rhyolite', 'pegmatite',
@@ -19,6 +20,12 @@ $colors = @(
     'black', 'red', 'green', 'brown', 'blue', 'purple', 'cyan', 'silver',
     'gray', 'pink', 'lime', 'yellow', 'light_blue', 'magenta', 'orange', 'white'
 )
+
+foreach ($family in $families) {
+    [void] $materialRecipeIds.Add("mineralogy:${family}_brick")
+    [void] $materialRecipeIds.Add("mineralogy:${family}_smooth")
+    [void] $materialRecipeIds.Add("mineralogy:${family}_smooth_brick")
+}
 
 function ItemId([string] $path) {
     return "mineralogy:$path"
@@ -365,9 +372,50 @@ function Synchronize-AdvancementConditions() {
             throw "Advancement $($file.Name) references missing generated recipe $recipeId"
         }
         $recipe = Get-Content -LiteralPath $recipeFile -Raw | ConvertFrom-Json
+        $sourceRecipeId = $null
+        if ($null -ne $advancement.criteria.has_rock) {
+            $sourceItem = [string]$advancement.criteria.has_rock.conditions.items[0].item
+            if ($materialRecipeIds.Contains($sourceItem)) {
+                $sourceName = $sourceItem.Substring('mineralogy:'.Length)
+                $sourceFile = Join-Path $recipeRoot "$sourceName.json"
+                if (-not (Test-Path -LiteralPath $sourceFile)) {
+                    throw "Advancement $($file.Name) requires missing material recipe $sourceItem"
+                }
+                $sourceRecipeId = $sourceItem
+            }
+        }
+
+        $criteria = [ordered]@{}
+        foreach ($criterion in $advancement.criteria.PSObject.Properties) {
+            if ($criterion.Name -ne 'has_material_recipe') {
+                $criteria[$criterion.Name] = $criterion.Value
+            }
+        }
+        if ($null -ne $sourceRecipeId) {
+            $criteria['has_material_recipe'] = [ordered]@{
+                trigger = 'minecraft:recipe_unlocked'
+                conditions = [ordered]@{ recipe = $sourceRecipeId }
+            }
+        }
+
+        $requirements = @()
+        foreach ($group in $advancement.requirements) {
+            $updatedGroup = @($group | Where-Object { $_ -ne 'has_material_recipe' })
+            if ($null -ne $sourceRecipeId) {
+                $updatedGroup += 'has_material_recipe'
+            }
+            $requirements += ,$updatedGroup
+        }
+
         $ordered = [ordered]@{ conditions = @($recipe.conditions) }
         foreach ($property in $advancement.PSObject.Properties) {
-            if ($property.Name -ne 'conditions') {
+            if ($property.Name -eq 'criteria') {
+                $ordered[$property.Name] = $criteria
+            }
+            elseif ($property.Name -eq 'requirements') {
+                $ordered[$property.Name] = $requirements
+            }
+            elseif ($property.Name -ne 'conditions') {
                 $ordered[$property.Name] = $property.Value
             }
         }

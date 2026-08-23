@@ -2,6 +2,7 @@ package zone.moddev.mc.mineralogy;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
@@ -60,6 +61,11 @@ public class RecipeContractTest {
             "raw_stairs_polishing", "raw_slab_polishing", "raw_wall_polishing",
             "brick_stairs_polishing", "brick_slab_polishing", "brick_wall_polishing",
             "brick_block_polishing"
+    };
+
+    private static final String[] RELIEFS = {
+            "blank", "cross", "hammer", "horizontal", "left", "plus", "right", "i",
+            "vertical", "axe", "hoe", "pickaxe", "sword"
     };
 
     private static final String[] GLOBAL_RECIPE_NAMES = {
@@ -309,6 +315,30 @@ public class RecipeContractTest {
         }
     }
 
+    @Test
+    public void constructionAdvancementsAlsoUnlockFromTheirMaterialRecipe() throws Exception {
+        for (String family : FAMILIES) {
+            assertMaterialRecipeUnlock(family + "_brick_stairs", family + "_brick");
+            assertMaterialRecipeUnlock(family + "_brick_slab", family + "_brick");
+            assertMaterialRecipeUnlock(family + "_brick_furnace", family + "_brick");
+            assertMaterialRecipeUnlock(family + "_brick_wall", family + "_brick");
+
+            assertMaterialRecipeUnlock(family + "_smooth_stairs", family + "_smooth");
+            assertMaterialRecipeUnlock(family + "_smooth_slab", family + "_smooth");
+            assertMaterialRecipeUnlock(family + "_smooth_furnace", family + "_smooth");
+            assertMaterialRecipeUnlock(family + "_smooth_wall", family + "_smooth");
+            assertMaterialRecipeUnlock(family + "_smooth_brick", family + "_smooth");
+            for (String relief : RELIEFS) {
+                assertMaterialRecipeUnlock(family + "_relief_" + relief, family + "_smooth");
+            }
+
+            assertMaterialRecipeUnlock(family + "_smooth_brick_stairs", family + "_smooth_brick");
+            assertMaterialRecipeUnlock(family + "_smooth_brick_slab", family + "_smooth_brick");
+            assertMaterialRecipeUnlock(family + "_smooth_brick_furnace", family + "_smooth_brick");
+            assertMaterialRecipeUnlock(family + "_smooth_brick_wall", family + "_smooth_brick");
+        }
+    }
+
     private static void assertFourDustStoragePair(String name, String dustOre,
             String blockOre, String dustItem) throws Exception {
         JsonObject pack = json(name);
@@ -323,6 +353,24 @@ public class RecipeContractTest {
         assertOreIngredient(unpack.getAsJsonArray("ingredients").get(0), blockOre);
         assertEquals("mineralogy:" + dustItem, result(unpack).get("item").getAsString());
         assertEquals(4, result(unpack).get("count").getAsInt());
+    }
+
+    private static void assertMaterialRecipeUnlock(String advancementName,
+            String materialRecipeName) throws Exception {
+        JsonObject advancement = json(new File(ADVANCEMENT_ROOT, advancementName + ".json"));
+        JsonObject criterion = advancement.getAsJsonObject("criteria")
+                .getAsJsonObject("has_material_recipe");
+        assertNotNull(advancementName, criterion);
+        assertEquals(advancementName, "minecraft:recipe_unlocked",
+                criterion.get("trigger").getAsString());
+        assertEquals(advancementName, "mineralogy:" + materialRecipeName,
+                criterion.getAsJsonObject("conditions").get("recipe").getAsString());
+
+        JsonArray requirements = advancement.getAsJsonArray("requirements");
+        assertEquals(advancementName, 1, requirements.size());
+        assertTrue(advancementName,
+                strings(requirements.get(0).getAsJsonArray()).contains("has_material_recipe"));
+        assertTrue(advancementName, new File(RECIPE_ROOT, materialRecipeName + ".json").isFile());
     }
 
     private static void assertExactSlabRecipe(String name, String input, String output) throws Exception {

@@ -26,12 +26,19 @@
           }
         ]
       }
+    },
+    "has_material_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "mineralogy:basaltic_glass_smooth"
+      }
     }
   },
   "requirements": [
     [
       "has_the_recipe",
-      "has_rock"
+      "has_rock",
+      "has_material_recipe"
     ]
   ]
 }

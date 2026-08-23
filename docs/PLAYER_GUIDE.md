@@ -35,6 +35,12 @@ Raw Mineralogy rocks work in broad stone recipes. With
 Exact Mineralogy rocks still make their matching Mineralogy slabs, stairs, and
 walls.
 
+Because raw rocks are cobblestone equivalents, eight raw Mineralogy rocks
+around an empty crafting-grid centre make a normal Minecraft furnace. A
+Mineralogy rock furnace is an upgrade recipe: surround an existing Minecraft
+furnace with eight matching Mineralogy slabs. Brick, polished, and
+polished-brick furnaces use the corresponding slab finish.
+
 ## Configuration And Servers
 
 `config/mineralogy.cfg` controls Mineralogy content and recipe compatibility.

@@ -45,6 +45,10 @@ public class DocumentationContractTest {
         assertTrue(all.contains("Minecraft 1.10.2"));
         assertTrue(all.contains("Forge 12.18.3.2511"));
         assertTrue(all.contains("OreSpawn 4.0.6"));
+        assertTrue(all.contains("JDK 21"));
+        assertTrue(all.contains("Gradle 9.6.1"));
+        assertTrue(all.contains("ForgeGradle `7.0.34`"));
+        assertTrue(all.contains("Java 8 toolchain"));
         assertTrue(all.contains("schema 4"));
         assertTrue(all.contains("provider revision 3"));
         assertTrue(all.contains("assets/mineralogy/orespawn/provider.json"));
@@ -73,7 +77,8 @@ public class DocumentationContractTest {
         assertFalse(targetNativeGuides.contains("mineralogy-common.toml"));
         assertFalse(targetNativeGuides.contains("data/mineralogy/orespawn/provider.json"));
         assertFalse(targetNativeGuides.contains("Minecraft 1.18.2"));
-        assertFalse(targetNativeGuides.contains("Java 17"));
+        assertFalse(targetNativeGuides.contains(".\\gradlew.bat setupDecompWorkspace"));
+        assertFalse(targetNativeGuides.contains("Gradle 4.9"));
         assertFalse(targetNativeGuides.toLowerCase().contains("deepslate"));
         assertFalse(targetNativeGuides.contains("Y -48"));
     }

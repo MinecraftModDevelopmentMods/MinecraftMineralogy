@@ -19,4 +19,5 @@ Mineralogy 6.0.1.110021 for Minecraft 1.10.2 Forge
 - Documents OreSpawn's custom terrain dimensions and per-rock dimension membership as the resolution for issue #30, including Minecraft 1.10 numeric-ID mapping, dimension-specific rock sets and altitudes, and new-chunks-only behavior.
 - Repairs saved rock-furnace loading so Minecraft can reconstruct the tile entity, restore its inventory and progress, and recover the rock-specific burn rate without changing historical NBT or tile IDs.
 - Aligns novaculite with Mineralogy 6 hardness/resistance and makes double slabs drop two matching slabs normally or one matching full block with Silk Touch.
+- Repairs generated ForgeGradle 7 Eclipse launches by restoring their Buildship project/cache configuration, retiring obsolete ForgeGradle 2 launches, quoting Slime Launcher paths that contain spaces, and verifying the result before handoff.
 - Advances the functional bug version to 6.0.1 because this release includes fixes and compatibility improvements not present in Mineralogy 6.0.0.

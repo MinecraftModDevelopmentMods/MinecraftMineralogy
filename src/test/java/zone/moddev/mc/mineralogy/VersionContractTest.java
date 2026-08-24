@@ -70,6 +70,20 @@ public class VersionContractTest {
     }
 
     @Test
+    public void eclipseLaunchNormalizationQuotesWhitespacePathsAndVerifiesThem() throws Exception {
+        String build = read(new File("build.gradle"));
+        String project = read(new File(".project"));
+        assertTrue(build.contains("tasks.register('configureEclipseBuildship')"));
+        assertTrue(build.contains("tasks.register('isolateEclipseProductionRuns')"));
+        assertTrue(build.contains("['--cache', '--metadata', '--to-srg', '--to-obf']"));
+        assertTrue(build.contains("+ '&quot;' + value + '&quot;'"));
+        assertTrue(build.contains("leaves whitespace unquoted"));
+        assertTrue(build.contains("finalizedBy configureEclipseBuildship, 'isolateEclipseProductionRuns'"));
+        assertTrue(project.contains("org.eclipse.buildship.core.gradleprojectnature"));
+        assertTrue(project.contains("org.eclipse.buildship.core.gradleprojectbuilder"));
+    }
+
+    @Test
     public void productionMetadataDoesNotRetainTheLegacyFingerprintToken() throws Exception {
         String source = read(new File("src/main/java/zone/moddev/mc/mineralogy/Mineralogy.java"));
         assertTrue(source.contains("certificateFingerprint = \"\""));

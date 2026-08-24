@@ -1,0 +1,21 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:marble_smooth_slab"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:marble_smooth"
+    }
+  },
+  "result": {
+    "item": "mineralogy:marble_smooth_slab",
+    "count": 6
+  }
+}

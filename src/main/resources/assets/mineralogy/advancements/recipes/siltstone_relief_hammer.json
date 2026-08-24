@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:siltstone_relief_hammer"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:siltstone_relief_hammer"
@@ -16,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:siltstone_smooth"
+            "item": "mineralogy:siltstone_relief_blank"
           }
         ]
       }

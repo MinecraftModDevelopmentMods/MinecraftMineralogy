@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:diabase_relief_cross"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:diabase_relief_cross"
@@ -16,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:diabase_smooth"
+            "item": "mineralogy:diabase_relief_blank"
           }
         ]
       }

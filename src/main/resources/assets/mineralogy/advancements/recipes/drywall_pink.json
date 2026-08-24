@@ -1,0 +1,41 @@
+{
+  "conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "ENABLE_DRYWALLS"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:drywall_pink"
+    }
+  ],
+  "rewards": {
+    "recipes": [
+      "mineralogy:drywall_pink"
+    ]
+  },
+  "criteria": {
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "mineralogy:drywall_pink"
+      }
+    },
+    "has_rock": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "mineralogy:drywall_white"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_rock"
+    ]
+  ]
+}

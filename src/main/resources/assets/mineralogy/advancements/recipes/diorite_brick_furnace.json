@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:diorite_brick_furnace"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:diorite_brick_furnace"

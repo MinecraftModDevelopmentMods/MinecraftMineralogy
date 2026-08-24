@@ -1,0 +1,21 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:scoria_relief_horizontal"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:scoria_relief_blank"
+    }
+  },
+  "result": {
+    "item": "mineralogy:scoria_relief_horizontal",
+    "count": 3
+  }
+}

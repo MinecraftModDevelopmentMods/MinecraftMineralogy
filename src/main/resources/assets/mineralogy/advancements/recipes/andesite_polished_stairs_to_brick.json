@@ -1,0 +1,41 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:andesite_smooth_stairs"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:andesite_smooth_brick_stairs"
+    }
+  ],
+  "rewards": {
+    "recipes": [
+      "mineralogy:andesite_polished_stairs_to_brick"
+    ]
+  },
+  "criteria": {
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "mineralogy:andesite_polished_stairs_to_brick"
+      }
+    },
+    "has_rock": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "mineralogy:andesite_smooth_stairs"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_rock"
+    ]
+  ]
+}

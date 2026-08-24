@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:dolomite_relief_left"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:dolomite_relief_left"
@@ -16,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:dolomite_smooth"
+            "item": "mineralogy:dolomite_relief_blank"
           }
         ]
       }

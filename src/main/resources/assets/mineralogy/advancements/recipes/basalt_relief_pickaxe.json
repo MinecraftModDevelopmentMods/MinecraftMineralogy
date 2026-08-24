@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:basalt_relief_pickaxe"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:basalt_relief_pickaxe"
@@ -16,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:basalt_smooth"
+            "item": "mineralogy:basalt_relief_blank"
           }
         ]
       }

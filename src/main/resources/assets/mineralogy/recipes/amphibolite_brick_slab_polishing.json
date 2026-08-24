@@ -1,0 +1,26 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:amphibolite_brick_slab"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:amphibolite_smooth_brick_slab"
+    }
+  ],
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "item": "mineralogy:amphibolite_brick_slab"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "sand"
+    }
+  ],
+  "result": {
+    "item": "mineralogy:amphibolite_smooth_brick_slab",
+    "count": 1
+  }
+}

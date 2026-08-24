@@ -1,0 +1,43 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:phyllite_relief_hoe"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mineralogy:phyllite_relief_blank"
+    },
+    {
+      "item": "mineralogy:phyllite_relief_blank"
+    },
+    {
+      "item": "mineralogy:phyllite_relief_blank"
+    },
+    {
+      "item": "mineralogy:phyllite_relief_blank"
+    },
+    {
+      "item": "mineralogy:phyllite_relief_blank"
+    },
+    {
+      "item": "mineralogy:phyllite_relief_blank"
+    },
+    {
+      "item": "mineralogy:phyllite_relief_blank"
+    },
+    {
+      "item": "mineralogy:phyllite_relief_blank"
+    },
+    {
+      "item": "minecraft:stone_hoe",
+      "data": 0
+    }
+  ],
+  "result": {
+    "item": "mineralogy:phyllite_relief_hoe",
+    "count": 8
+  }
+}

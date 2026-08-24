@@ -1,0 +1,24 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:amphibolite_stairs"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "x  ",
+    "xx ",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "type": "forge:ore_dict",
+      "ore": "stoneAmphibolite"
+    }
+  },
+  "result": {
+    "item": "mineralogy:amphibolite_stairs",
+    "count": 4
+  }
+}

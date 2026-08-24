@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:schist_relief_right"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:schist_relief_right"
@@ -16,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:schist_smooth"
+            "item": "mineralogy:schist_relief_left"
           }
         ]
       }

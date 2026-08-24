@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:diorite_relief_plus"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:diorite_relief_plus"
@@ -16,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:diorite_smooth"
+            "item": "mineralogy:diorite_relief_blank"
           }
         ]
       }

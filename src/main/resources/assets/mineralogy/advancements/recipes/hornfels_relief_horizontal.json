@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:hornfels_relief_horizontal"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:hornfels_relief_horizontal"
@@ -16,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:hornfels_smooth"
+            "item": "mineralogy:hornfels_relief_blank"
           }
         ]
       }

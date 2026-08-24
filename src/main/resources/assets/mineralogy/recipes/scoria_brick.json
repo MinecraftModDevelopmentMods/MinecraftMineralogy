@@ -1,0 +1,23 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:scoria_brick"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "xx",
+    "xx"
+  ],
+  "key": {
+    "x": {
+      "type": "forge:ore_dict",
+      "ore": "stoneScoria"
+    }
+  },
+  "result": {
+    "item": "mineralogy:scoria_brick",
+    "count": 4
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:diabase_relief_blank"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    "xxx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:diabase_smooth"
+    }
+  },
+  "result": {
+    "item": "mineralogy:diabase_relief_blank",
+    "count": 16
+  }
+}

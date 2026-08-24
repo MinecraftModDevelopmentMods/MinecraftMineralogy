@@ -1,0 +1,21 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:schist_slab"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:schist"
+    }
+  },
+  "result": {
+    "item": "mineralogy:schist_slab",
+    "count": 6
+  }
+}

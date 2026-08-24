@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:amphibolite_smooth_furnace"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:amphibolite_smooth_furnace"

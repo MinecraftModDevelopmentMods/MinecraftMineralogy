@@ -1,0 +1,23 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:conglomerate_brick"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "xx",
+    "xx"
+  ],
+  "key": {
+    "x": {
+      "type": "forge:ore_dict",
+      "ore": "stoneConglomerate"
+    }
+  },
+  "result": {
+    "item": "mineralogy:conglomerate_brick",
+    "count": 4
+  }
+}

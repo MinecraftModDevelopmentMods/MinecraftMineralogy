@@ -1,0 +1,23 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:limestone_smooth_brick"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "xx",
+    "xx"
+  ],
+  "key": {
+    "x": {
+      "type": "forge:ore_dict",
+      "ore": "stoneLimestoneSmooth"
+    }
+  },
+  "result": {
+    "item": "mineralogy:limestone_smooth_brick",
+    "count": 4
+  }
+}

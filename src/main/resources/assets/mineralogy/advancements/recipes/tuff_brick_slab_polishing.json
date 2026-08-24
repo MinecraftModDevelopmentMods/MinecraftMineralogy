@@ -1,0 +1,68 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:tuff_brick_slab"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:tuff_smooth_brick_slab"
+    }
+  ],
+  "rewards": {
+    "recipes": [
+      "mineralogy:tuff_brick_slab_polishing"
+    ]
+  },
+  "criteria": {
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "mineralogy:tuff_brick_slab_polishing"
+      }
+    },
+    "has_rock": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "mineralogy:tuff_brick_slab"
+          }
+        ]
+      }
+    },
+    "has_sand": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:sand",
+            "data": 0
+          }
+        ]
+      }
+    },
+    "has_red_sand": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:sand",
+            "data": 1
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_rock"
+    ],
+    [
+      "has_the_recipe",
+      "has_sand",
+      "has_red_sand"
+    ]
+  ]
+}

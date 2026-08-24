@@ -1,0 +1,21 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:basaltic_glass_slab"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:basaltic_glass"
+    }
+  },
+  "result": {
+    "item": "mineralogy:basaltic_glass_slab",
+    "count": 6
+  }
+}

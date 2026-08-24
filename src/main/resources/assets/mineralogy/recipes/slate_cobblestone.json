@@ -1,0 +1,24 @@
+{
+  "conditions": [],
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "type": "forge:ore_dict",
+      "ore": "stoneSlate"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "stoneSlate"
+    },
+    {
+      "item": "minecraft:gravel"
+    },
+    {
+      "item": "minecraft:gravel"
+    }
+  ],
+  "result": {
+    "item": "minecraft:cobblestone",
+    "count": 4
+  }
+}

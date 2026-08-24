@@ -1,0 +1,68 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:rhyolite_brick_wall"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:rhyolite_smooth_brick_wall"
+    }
+  ],
+  "rewards": {
+    "recipes": [
+      "mineralogy:rhyolite_brick_wall_polishing"
+    ]
+  },
+  "criteria": {
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "mineralogy:rhyolite_brick_wall_polishing"
+      }
+    },
+    "has_rock": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "mineralogy:rhyolite_brick_wall"
+          }
+        ]
+      }
+    },
+    "has_sand": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:sand",
+            "data": 0
+          }
+        ]
+      }
+    },
+    "has_red_sand": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:sand",
+            "data": 1
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_rock"
+    ],
+    [
+      "has_the_recipe",
+      "has_sand",
+      "has_red_sand"
+    ]
+  ]
+}

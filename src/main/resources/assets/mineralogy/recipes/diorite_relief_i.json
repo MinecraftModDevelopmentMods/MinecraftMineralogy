@@ -1,0 +1,23 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:diorite_relief_i"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    " x ",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:diorite_relief_blank"
+    }
+  },
+  "result": {
+    "item": "mineralogy:diorite_relief_i",
+    "count": 7
+  }
+}

@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:shale_relief_hoe"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:shale_relief_hoe"
@@ -16,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:shale_smooth"
+            "item": "mineralogy:shale_relief_blank"
           }
         ]
       }

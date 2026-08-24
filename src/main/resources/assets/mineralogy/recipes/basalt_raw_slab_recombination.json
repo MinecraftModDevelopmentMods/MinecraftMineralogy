@@ -1,0 +1,25 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:basalt_slab"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:basalt"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mineralogy:basalt_slab"
+    },
+    {
+      "item": "mineralogy:basalt_slab"
+    }
+  ],
+  "result": {
+    "item": "mineralogy:basalt",
+    "count": 1
+  }
+}

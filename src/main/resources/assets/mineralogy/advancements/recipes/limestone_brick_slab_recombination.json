@@ -1,0 +1,41 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:limestone_brick_slab"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:limestone_brick"
+    }
+  ],
+  "rewards": {
+    "recipes": [
+      "mineralogy:limestone_brick_slab_recombination"
+    ]
+  },
+  "criteria": {
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "mineralogy:limestone_brick_slab_recombination"
+      }
+    },
+    "has_rock": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "mineralogy:limestone_brick_slab"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_rock"
+    ]
+  ]
+}

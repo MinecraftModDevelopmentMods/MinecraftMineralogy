@@ -1,0 +1,43 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:schist_relief_axe"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mineralogy:schist_relief_blank"
+    },
+    {
+      "item": "mineralogy:schist_relief_blank"
+    },
+    {
+      "item": "mineralogy:schist_relief_blank"
+    },
+    {
+      "item": "mineralogy:schist_relief_blank"
+    },
+    {
+      "item": "mineralogy:schist_relief_blank"
+    },
+    {
+      "item": "mineralogy:schist_relief_blank"
+    },
+    {
+      "item": "mineralogy:schist_relief_blank"
+    },
+    {
+      "item": "mineralogy:schist_relief_blank"
+    },
+    {
+      "item": "minecraft:stone_axe",
+      "data": 0
+    }
+  ],
+  "result": {
+    "item": "mineralogy:schist_relief_axe",
+    "count": 8
+  }
+}

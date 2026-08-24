@@ -1,0 +1,21 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:andesite_relief_horizontal"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:andesite_relief_blank"
+    }
+  },
+  "result": {
+    "item": "mineralogy:andesite_relief_horizontal",
+    "count": 3
+  }
+}

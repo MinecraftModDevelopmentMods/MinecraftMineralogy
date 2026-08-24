@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:phyllite_relief_cross"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:phyllite_relief_cross"
@@ -16,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:phyllite_smooth"
+            "item": "mineralogy:phyllite_relief_blank"
           }
         ]
       }

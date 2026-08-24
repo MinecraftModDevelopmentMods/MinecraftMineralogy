@@ -1,0 +1,23 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:rhyolite_wall"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "xxx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "type": "forge:ore_dict",
+      "ore": "stoneRhyolite"
+    }
+  },
+  "result": {
+    "item": "mineralogy:rhyolite_wall",
+    "count": 6
+  }
+}

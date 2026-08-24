@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:siltstone_brick_furnace"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:siltstone_brick_furnace"

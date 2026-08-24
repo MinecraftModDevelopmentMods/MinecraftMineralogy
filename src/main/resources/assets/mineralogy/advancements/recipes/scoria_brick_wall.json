@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:scoria_brick_wall"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:scoria_brick_wall"

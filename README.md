@@ -1,29 +1,33 @@
-[![](https://img.shields.io/badge/Discord-MMD-green.svg?style=flat&logo=Discord)](https://discord.mcmoddev.com)
-[![](http://cf.way2muchnoise.eu/full_minecraft-mineralogy_downloads.svg)](http://minecraft.curseforge.com/projects/minecraft-mineralogy)
-[![](http://cf.way2muchnoise.eu/versions/Minecraft_minecraft-mineralogy_all.svg)](http://minecraft.curseforge.com/projects/minecraft-mineralogy)
-[![Build Status](https://ci.mcmoddev.com/job/Minecraft%20Mineralogy/job/Minecraft%20Mineralogy%201.12/badge/icon)](https://ci.mcmoddev.com/job/Minecraft%20Mineralogy/job/Minecraft%20Mineralogy%201.12/)
+# Mineralogy 6 for Minecraft 1.12.2
 
-# Mineralogy
-## MMD's Minecraft Mineralogy Mod
-This mod replaces the generic "stone" in Minecraft with real-world rock types.
+Mineralogy adds real-world rock families, matching construction blocks,
+mineral ores and dusts, rock furnaces, drywall, rock-salt lighting, fertilizer,
+and crude oil. OreSpawn 4 is the sole terrain, strata, ore, and deposit engine;
+Mineralogy no longer installs a parallel world generator.
 
-## Texture Packs
-There are three levels of texture resolution available. The default textures are low-resolution (16x16 pixels, same as Minecraft), but I recommend trying the high-resolution (64x64 pixels) textures via the high-res texture pack (available on the Release page).
+This branch builds Mineralogy `6.0.1.112021` for Forge `14.23.5.2859` and
+requires OreSpawn `4.0.7` or another compatible 4.x release. Install both mods
+on clients and servers.
 
-## Q&A
-Q: Why make this mod?
-A: Minecraft is a game that involves a lot of mining, yet it takes very little inspiration from actual geology. We made this mod to give Minecraft more of a geology vibe. After all, there's no mineral called "stone" in the geology textbook.
+## Configuration and help
 
-Q: Where's the cobblestone?!
-A: Many of the stone types can be used as cobblestone or as stone in crafting recipes. If you want "Stone", smelt gravel. If you want "Cobblestone", craft two blocks of rock with 2 blocks of gravel.
+Mineralogy's content and recipe switches remain in `config/mineralogy.cfg`.
+Use OreSpawn's world-creation UI or saved world profile for rock, ore, fluid,
+dimension, altitude, and terrain-host settings. Generation changes apply to
+new chunks only.
 
-Q: There's too much lag when generating new chunks!
-A: Yes, that can happen. Mineralogy puts a lot more computation into world generation, so you don't want to run the server (or play single-player) on a computer with a slow CPU. We tried to improve performance as much as possible, but there's no getting around the fact that the stone type needs to be calculated for every single underground block in the game.
+After the first start, the complete human guide is available under
+`config/mineralogy-guide/`. The maintained source is in [docs](docs/README.md)
+and covers upgrades, content controls, pack overrides, provider data, and
+four-component release versions.
 
-Q: Why do the ores look funny?
-A: We re-textured the ores to better match the appearance of the new rock types. You can change them back by making your own texture pack from the default Minecraft resources.
+## Compatibility
 
-## Notes to Other Modders
-This mod replaces the WorldProvider for the Overworld in Minecraft. There can only be one provider per dimension, so this mod is therefore incompatible with other mods that also replace the same WorldProvider.
+The `mineralogy` mod ID and historical block, item, tile, NBT, recipe, asset,
+patch, and OreDictionary identities are retained. Established Mineralogy 3
+worlds are migrated through OreSpawn's Cyano/Legacy profile unless their owner
+explicitly selects a different engine.
 
-The stone types are all registered with the OreDictionary as Stone and/or Cobblestone. If you use OreDictionary crafting recipes (ShapelessOreRecipe or ShapedOreRecipe), then there shouldn't be any trouble. However, if you manually specify the Stone or Cobblestone blocks in a standard crafting recipe object, then users of the Mineralogy mod will have to craft Cobblestone (2 gravel + 2 rock blocks) to use your recipe.
+[CurseForge](https://www.curseforge.com/minecraft/mc-mods/minecraft-mineralogy) ·
+[Source and issues](https://github.com/MinecraftModDevelopmentMods/MinecraftMineralogy) ·
+[MMD Discord](https://discord.mcmoddev.com)

@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:granite_stairs"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:granite_stairs"

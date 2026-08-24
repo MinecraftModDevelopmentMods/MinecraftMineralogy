@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:limestone_relief_i"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:limestone_relief_i"
@@ -16,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:limestone_smooth"
+            "item": "mineralogy:limestone_relief_blank"
           }
         ]
       }

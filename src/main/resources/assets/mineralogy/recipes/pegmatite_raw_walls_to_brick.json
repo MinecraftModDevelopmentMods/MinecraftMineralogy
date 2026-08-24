@@ -1,0 +1,26 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:pegmatite_wall"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:pegmatite_brick_wall"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xx",
+    "xx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:pegmatite_wall"
+    }
+  },
+  "result": {
+    "item": "mineralogy:pegmatite_brick_wall",
+    "count": 4
+  }
+}

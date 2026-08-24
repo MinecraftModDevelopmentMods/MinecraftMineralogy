@@ -1,0 +1,26 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:basalt_brick"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:basalt_smooth_brick"
+    }
+  ],
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "item": "mineralogy:basalt_brick"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "sand"
+    }
+  ],
+  "result": {
+    "item": "mineralogy:basalt_smooth_brick",
+    "count": 1
+  }
+}

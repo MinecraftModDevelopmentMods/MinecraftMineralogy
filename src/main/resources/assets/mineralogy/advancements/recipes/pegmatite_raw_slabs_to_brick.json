@@ -1,0 +1,41 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:pegmatite_slab"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:pegmatite_brick_slab"
+    }
+  ],
+  "rewards": {
+    "recipes": [
+      "mineralogy:pegmatite_raw_slabs_to_brick"
+    ]
+  },
+  "criteria": {
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "mineralogy:pegmatite_raw_slabs_to_brick"
+      }
+    },
+    "has_rock": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "mineralogy:pegmatite_slab"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_rock"
+    ]
+  ]
+}

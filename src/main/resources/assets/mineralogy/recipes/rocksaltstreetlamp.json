@@ -1,0 +1,31 @@
+{
+  "conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "ENABLE_ROCK_SALT_LAMPS"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:rocksaltstreetlamp"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "x",
+    "y",
+    "y"
+  ],
+  "key": {
+    "x": {
+      "type": "forge:ore_dict",
+      "ore": "lampRocksalt"
+    },
+    "y": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "mineralogy:rocksaltstreetlamp",
+    "count": 1
+  }
+}

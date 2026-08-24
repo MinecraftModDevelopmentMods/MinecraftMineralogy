@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:rhyolite_smooth"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:rhyolite_smooth"
@@ -20,12 +26,27 @@
           }
         ]
       }
+    },
+    "has_sand": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:sand",
+            "data": 0
+          }
+        ]
+      }
     }
   },
   "requirements": [
     [
       "has_the_recipe",
       "has_rock"
+    ],
+    [
+      "has_the_recipe",
+      "has_sand"
     ]
   ]
 }

@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:amphibolite_smooth_stairs"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:amphibolite_smooth_stairs"

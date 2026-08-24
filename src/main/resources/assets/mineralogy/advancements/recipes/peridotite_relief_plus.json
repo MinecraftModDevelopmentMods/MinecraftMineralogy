@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:peridotite_relief_plus"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:peridotite_relief_plus"
@@ -16,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:peridotite_smooth"
+            "item": "mineralogy:peridotite_relief_blank"
           }
         ]
       }

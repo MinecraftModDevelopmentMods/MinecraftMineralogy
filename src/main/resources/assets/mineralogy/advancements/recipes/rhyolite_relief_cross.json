@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:rhyolite_relief_cross"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:rhyolite_relief_cross"
@@ -16,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:rhyolite_smooth"
+            "item": "mineralogy:rhyolite_relief_blank"
           }
         ]
       }

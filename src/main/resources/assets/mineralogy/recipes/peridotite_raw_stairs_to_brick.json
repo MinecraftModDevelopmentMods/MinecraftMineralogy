@@ -1,0 +1,26 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:peridotite_stairs"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:peridotite_brick_stairs"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xx",
+    "xx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:peridotite_stairs"
+    }
+  },
+  "result": {
+    "item": "mineralogy:peridotite_brick_stairs",
+    "count": 4
+  }
+}

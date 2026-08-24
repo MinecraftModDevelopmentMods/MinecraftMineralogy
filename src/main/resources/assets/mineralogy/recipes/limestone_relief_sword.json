@@ -1,0 +1,43 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:limestone_relief_sword"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mineralogy:limestone_relief_blank"
+    },
+    {
+      "item": "mineralogy:limestone_relief_blank"
+    },
+    {
+      "item": "mineralogy:limestone_relief_blank"
+    },
+    {
+      "item": "mineralogy:limestone_relief_blank"
+    },
+    {
+      "item": "mineralogy:limestone_relief_blank"
+    },
+    {
+      "item": "mineralogy:limestone_relief_blank"
+    },
+    {
+      "item": "mineralogy:limestone_relief_blank"
+    },
+    {
+      "item": "mineralogy:limestone_relief_blank"
+    },
+    {
+      "item": "minecraft:stone_sword",
+      "data": 0
+    }
+  ],
+  "result": {
+    "item": "mineralogy:limestone_relief_sword",
+    "count": 8
+  }
+}

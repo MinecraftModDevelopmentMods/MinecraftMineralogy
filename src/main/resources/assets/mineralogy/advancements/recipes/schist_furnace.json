@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:schist_furnace"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:schist_furnace"

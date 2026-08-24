@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:tuff_relief_sword"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:tuff_relief_sword"
@@ -16,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:tuff_smooth"
+            "item": "mineralogy:tuff_relief_blank"
           }
         ]
       }

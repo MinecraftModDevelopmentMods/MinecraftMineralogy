@@ -1,0 +1,23 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:tuff_relief_blank"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    "xxx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:tuff_smooth"
+    }
+  },
+  "result": {
+    "item": "mineralogy:tuff_relief_blank",
+    "count": 16
+  }
+}

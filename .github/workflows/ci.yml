@@ -1,0 +1,74 @@
+name: Mineralogy 1.12 CI
+
+on:
+  push:
+    branches:
+      - master-1.12
+      - 'feature/**'
+  pull_request:
+    branches:
+      - master-1.12
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mineralogy-1.12-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build, test, and audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Install Java 8 toolchain
+        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
+        with:
+          distribution: temurin
+          java-version: '8'
+
+      - name: Install Java 17 for Gradle
+        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
+        with:
+          distribution: microsoft
+          java-version: '17'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@4733eaac7c1b0da527e4206b7671e0061de1ce37 # v6
+
+      - name: Make the wrapper executable
+        run: chmod +x ./gradlew
+
+      - name: Build, test, and audit release artifacts
+        run: >-
+          ./gradlew clean check build javadoc verifyReleaseDependencies verifyReleaseArtifacts
+          writeReleaseChecksums --no-daemon --stacktrace
+
+      - name: Upload audited release candidate
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: Mineralogy-1.12.2-${{ github.sha }}
+          if-no-files-found: error
+          retention-days: 30
+          path: |
+            build/libs/Mineralogy-6.0.1.112021.jar
+            build/libs/Mineralogy-6.0.1.112021-sources.jar
+            build/libs/Mineralogy-6.0.1.112021-javadoc.jar
+            build/release/SHA256SUMS
+
+      - name: Upload test reports on failure
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: Mineralogy-1.12.2-test-reports-${{ github.sha }}
+          if-no-files-found: ignore
+          retention-days: 14
+          path: |
+            build/test-results/test/**
+            build/reports/tests/test/**
+            build/reports/problems/**

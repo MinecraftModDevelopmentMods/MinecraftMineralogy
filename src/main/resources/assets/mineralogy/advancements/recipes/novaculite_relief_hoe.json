@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:novaculite_relief_hoe"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:novaculite_relief_hoe"
@@ -16,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:novaculite_smooth"
+            "item": "mineralogy:novaculite_relief_blank"
           }
         ]
       }

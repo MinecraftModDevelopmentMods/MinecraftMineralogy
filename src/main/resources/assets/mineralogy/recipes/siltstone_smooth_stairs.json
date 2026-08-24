@@ -1,0 +1,24 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:siltstone_smooth_stairs"
+    }
+  ],
+  "type": "forge:ore_shaped",
+  "pattern": [
+    "x  ",
+    "xx ",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "type": "forge:ore_dict",
+      "ore": "stoneSiltstoneSmooth"
+    }
+  },
+  "result": {
+    "item": "mineralogy:siltstone_smooth_stairs",
+    "count": 4
+  }
+}

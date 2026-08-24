@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:novaculite_stairs"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:novaculite_stairs"

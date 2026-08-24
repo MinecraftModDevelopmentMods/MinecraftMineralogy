@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:conglomerate_relief_plus"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:conglomerate_relief_plus"
@@ -16,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:conglomerate_smooth"
+            "item": "mineralogy:conglomerate_relief_blank"
           }
         ]
       }

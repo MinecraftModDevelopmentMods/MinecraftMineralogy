@@ -1,0 +1,21 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:dolomite_brick_slab"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:dolomite_brick"
+    }
+  },
+  "result": {
+    "item": "mineralogy:dolomite_brick_slab",
+    "count": 6
+  }
+}

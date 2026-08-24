@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:dolomite_brick"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:dolomite_brick"

@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:rhyolite_smooth_wall"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:rhyolite_smooth_wall"

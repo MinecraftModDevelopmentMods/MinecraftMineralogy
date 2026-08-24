@@ -39,9 +39,6 @@ concurrency:
   group: mineralogy-release-${{ inputs.release_ref }}
   cancel-in-progress: false
 
-env:
-  MINECRAFT_VERSION: 1.10.2
-
 jobs:
   preflight:
     name: Validate release request
@@ -51,6 +48,7 @@ jobs:
       release_sha: ${{ steps.validate.outputs.release_sha }}
       release_version: ${{ steps.validate.outputs.release_version }}
       release_tag: ${{ steps.validate.outputs.release_tag }}
+      minecraft_version: ${{ steps.validate.outputs.minecraft_version }}
       main_jar: ${{ steps.validate.outputs.main_jar }}
       sources_jar: ${{ steps.validate.outputs.sources_jar }}
       javadoc_jar: ${{ steps.validate.outputs.javadoc_jar }}
@@ -73,16 +71,26 @@ jobs:
           set -euo pipefail
 
           actual_version="$(sed -n 's/^mod_version=//p' gradle.properties)"
-          if [[ ! "$actual_version" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.110021$ ]]; then
-            echo "Selected ref declares invalid 1.10.2 Forge mod_version=$actual_version" >&2
+          minecraft_version="$(sed -n 's/^mc_version=//p' gradle.properties)"
+          case "$minecraft_version" in
+            1.10.2) target_suffix=110021 ;;
+            1.12.2) target_suffix=112021 ;;
+            *)
+              echo "Selected ref declares unsupported release target mc_version=$minecraft_version" >&2
+              exit 1
+              ;;
+          esac
+          if [[ ! "$actual_version" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.${target_suffix}$ ]]; then
+            echo "Selected ref declares invalid Minecraft $minecraft_version Forge mod_version=$actual_version" >&2
             exit 1
           fi
 
           release_sha="$(git rev-parse HEAD)"
-          release_tag="$MINECRAFT_VERSION-$actual_version"
+          release_tag="$actual_version"
           echo "release_sha=$release_sha" >> "$GITHUB_OUTPUT"
           echo "release_version=$actual_version" >> "$GITHUB_OUTPUT"
           echo "release_tag=$release_tag" >> "$GITHUB_OUTPUT"
+          echo "minecraft_version=$minecraft_version" >> "$GITHUB_OUTPUT"
           echo "main_jar=Mineralogy-$actual_version.jar" >> "$GITHUB_OUTPUT"
           echo "sources_jar=Mineralogy-$actual_version-sources.jar" >> "$GITHUB_OUTPUT"
           echo "javadoc_jar=Mineralogy-$actual_version-javadoc.jar" >> "$GITHUB_OUTPUT"
@@ -114,7 +122,7 @@ jobs:
             "repos/$GITHUB_REPOSITORY/commits/$release_sha/check-runs?per_page=100" \
             --jq '[.check_runs[] | select(.name == "Build, test, and audit" and .conclusion == "success")] | length')"
           if [[ "$successful_ci" -lt 1 ]]; then
-            echo "The tagged commit has no successful Mineralogy 1.10 CI check" >&2
+            echo "The tagged commit has no successful Build, test, and audit check" >&2
             exit 1
           fi
 
@@ -170,7 +178,7 @@ jobs:
           cp build/release/SHA256SUMS "$bundle/"
           cp CHANGELOG.txt "$bundle/"
           (cd "$bundle" && sha256sum --check SHA256SUMS)
-          echo "name=Mineralogy-1.10.2-${{ needs.preflight.outputs.release_sha }}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "$GITHUB_OUTPUT"
+          echo "name=Mineralogy-${{ needs.preflight.outputs.minecraft_version }}-${{ needs.preflight.outputs.release_sha }}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "$GITHUB_OUTPUT"
 
       - name: Upload immutable release artifact
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
@@ -322,12 +330,12 @@ jobs:
         with:
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
           curseforge-id: 240974
-          name: Mineralogy ${{ needs.preflight.outputs.release_version }} for Minecraft 1.10.2
+          name: Mineralogy ${{ needs.preflight.outputs.release_version }} for Minecraft ${{ needs.preflight.outputs.minecraft_version }}
           version: ${{ needs.preflight.outputs.release_version }}
           version-type: ${{ inputs.curseforge_channel }}
           changelog-file: ${{ runner.temp }}/release-input/CHANGELOG.txt
           loaders: forge
-          game-versions: 1.10.2
+          game-versions: ${{ needs.preflight.outputs.minecraft_version }}
           game-version-filter: none
           environment: client | server
           java: Java 8
@@ -368,7 +376,7 @@ jobs:
           github-commitish: ${{ needs.preflight.outputs.release_sha }}
           github-draft: false
           github-prerelease: ${{ inputs.curseforge_channel != 'release' }}
-          name: Mineralogy ${{ needs.preflight.outputs.release_version }} for Minecraft 1.10.2
+          name: Mineralogy ${{ needs.preflight.outputs.release_version }} for Minecraft ${{ needs.preflight.outputs.minecraft_version }}
           version: ${{ needs.preflight.outputs.release_version }}
           version-type: ${{ inputs.curseforge_channel }}
           changelog-file: ${{ runner.temp }}/release-input/CHANGELOG.txt

@@ -1,0 +1,21 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:amphibolite_slab"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:amphibolite"
+    }
+  },
+  "result": {
+    "item": "mineralogy:amphibolite_slab",
+    "count": 6
+  }
+}

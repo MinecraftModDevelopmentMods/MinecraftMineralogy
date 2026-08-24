@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:basaltic_glass_relief_pickaxe"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:basaltic_glass_relief_pickaxe"
@@ -16,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:basaltic_glass_smooth"
+            "item": "mineralogy:basaltic_glass_relief_blank"
           }
         ]
       }

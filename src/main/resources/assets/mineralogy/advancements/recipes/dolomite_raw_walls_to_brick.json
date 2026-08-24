@@ -1,0 +1,41 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:dolomite_wall"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:dolomite_brick_wall"
+    }
+  ],
+  "rewards": {
+    "recipes": [
+      "mineralogy:dolomite_raw_walls_to_brick"
+    ]
+  },
+  "criteria": {
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "mineralogy:dolomite_raw_walls_to_brick"
+      }
+    },
+    "has_rock": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "mineralogy:dolomite_wall"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_rock"
+    ]
+  ]
+}

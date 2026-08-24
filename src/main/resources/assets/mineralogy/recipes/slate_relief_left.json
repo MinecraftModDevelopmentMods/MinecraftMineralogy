@@ -1,0 +1,23 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:slate_relief_left"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "x  ",
+    " x ",
+    "  x"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:slate_relief_blank"
+    }
+  },
+  "result": {
+    "item": "mineralogy:slate_relief_left",
+    "count": 3
+  }
+}

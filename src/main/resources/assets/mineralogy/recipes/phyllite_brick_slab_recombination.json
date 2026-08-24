@@ -1,0 +1,25 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:phyllite_brick_slab"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:phyllite_brick"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mineralogy:phyllite_brick_slab"
+    },
+    {
+      "item": "mineralogy:phyllite_brick_slab"
+    }
+  ],
+  "result": {
+    "item": "mineralogy:phyllite_brick",
+    "count": 1
+  }
+}

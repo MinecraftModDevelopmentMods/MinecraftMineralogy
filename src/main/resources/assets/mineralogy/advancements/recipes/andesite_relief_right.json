@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:andesite_relief_right"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:andesite_relief_right"
@@ -16,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:andesite_smooth"
+            "item": "mineralogy:andesite_relief_left"
           }
         ]
       }

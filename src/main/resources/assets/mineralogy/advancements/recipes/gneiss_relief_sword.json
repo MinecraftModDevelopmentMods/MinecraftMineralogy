@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:gneiss_relief_sword"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:gneiss_relief_sword"
@@ -16,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:gneiss_smooth"
+            "item": "mineralogy:gneiss_relief_blank"
           }
         ]
       }

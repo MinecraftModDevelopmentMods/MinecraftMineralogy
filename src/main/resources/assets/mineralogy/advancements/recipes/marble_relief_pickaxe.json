@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:marble_relief_pickaxe"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:marble_relief_pickaxe"
@@ -16,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:marble_smooth"
+            "item": "mineralogy:marble_relief_blank"
           }
         ]
       }

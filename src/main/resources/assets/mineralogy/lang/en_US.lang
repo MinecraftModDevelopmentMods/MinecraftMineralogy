@@ -940,7 +940,15 @@ tile.mineralogy.novaculite_relief_right.name=Novaculite Right Relief
 tile.mineralogy.novaculite_relief_sword.name=Novaculite Sword Relief
 tile.mineralogy.novaculite_relief_vertical.name=Novaculite Vertical Relief
 
-advancements.mineralogy.all_the_rocks.title=Call the rocks Ludo!
-advancements.mineralogy.all_the_rocks.description=Wow, you've found all the standard rock types in Mineralogy!
 
 itemGroup.mineralogy.mineralogy=Mineralogy
+itemGroup.mineralogy.rock=Mineralogy Rocks
+itemGroup.mineralogy.stair=Mineralogy Stairs
+itemGroup.mineralogy.slab=Mineralogy Slabs
+itemGroup.mineralogy.wall=Mineralogy Walls
+itemGroup.mineralogy.item=Mineralogy Items
+tile.mineralogy.crude_oil.name=Crude Oil
+item.mineralogy.crude_oil_bucket.name=Crude Oil Bucket
+fluid.mineralogy.crude_oil=Crude Oil
+advancements.mineralogy.all_the_rocks.title=Call the rocks Ludo!
+advancements.mineralogy.all_the_rocks.description=Wow, you've found all the standard rock types in Mineralogy!

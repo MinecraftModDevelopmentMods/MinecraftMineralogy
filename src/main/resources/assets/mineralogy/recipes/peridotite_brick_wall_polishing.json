@@ -1,0 +1,26 @@
+{
+  "conditions": [
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:peridotite_brick_wall"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:peridotite_smooth_brick_wall"
+    }
+  ],
+  "type": "forge:ore_shapeless",
+  "ingredients": [
+    {
+      "item": "mineralogy:peridotite_brick_wall"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "sand"
+    }
+  ],
+  "result": {
+    "item": "mineralogy:peridotite_smooth_brick_wall",
+    "count": 1
+  }
+}

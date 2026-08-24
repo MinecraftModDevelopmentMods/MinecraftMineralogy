@@ -1,4 +1,14 @@
 {
+  "conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "ENABLE_ROCK_SALT_LAMPS"
+    },
+    {
+      "type": "minecraft:item_exists",
+      "item": "mineralogy:rocksaltlamp"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:rocksaltlamp"

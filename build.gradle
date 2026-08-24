@@ -189,26 +189,57 @@ artifacts {
     archives javadocJar
 }
 
+def mainReleaseName = "Mineralogy-${project.version}.jar"
+def sourcesReleaseName = "Mineralogy-${project.version}-sources.jar"
+def javadocReleaseName = "Mineralogy-${project.version}-javadoc.jar"
+def expectedReleaseNames = [mainReleaseName, sourcesReleaseName, javadocReleaseName]
+def preparedReleaseDir = project.findProperty('preparedReleaseDir')
+def mavenUploadUrl = System.getenv('MAVEN_UPLOAD_URL') ?: 'https://invalid.invalid/missing-maven-upload-url'
+def mavenUploadUsername = System.getenv('MAVEN_UPLOAD_USERNAME') ?: ''
+def mavenUploadPassword = System.getenv('MAVEN_UPLOAD_PASSWORD') ?: ''
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
             groupId = project.group
             artifactId = 'Mineralogy'
             version = project.version
-            artifact jar
-            artifact sourcesJar
-            artifact javadocJar
+            if (preparedReleaseDir != null) {
+                artifact new File(preparedReleaseDir.toString(), mainReleaseName)
+                artifact(new File(preparedReleaseDir.toString(), sourcesReleaseName)) {
+                    classifier = 'sources'
+                }
+                artifact(new File(preparedReleaseDir.toString(), javadocReleaseName)) {
+                    classifier = 'javadoc'
+                }
+            }
+            else {
+                artifact jar
+                artifact sourcesJar
+                artifact javadocJar
+            }
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('name', 'Minecraft Mineralogy')
+                root.appendNode('description', 'Geologically themed rocks, minerals, building blocks, and OreSpawn provider data.')
+                root.appendNode('url', 'https://github.com/MinecraftModDevelopmentMods/MinecraftMineralogy')
+                def license = root.appendNode('licenses').appendNode('license')
+                license.appendNode('name', 'GNU Lesser General Public License, Version 2.1')
+                license.appendNode('url', 'https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt')
+            }
         }
     }
     repositories {
-        maven { url "file:///${project.projectDir}/mcmodsrepo" }
+        maven {
+            name = 'release'
+            url = uri(mavenUploadUrl)
+            credentials {
+                username = mavenUploadUsername
+                password = mavenUploadPassword
+            }
+        }
     }
 }
-
-def mainReleaseName = "Mineralogy-${project.version}.jar"
-def sourcesReleaseName = "Mineralogy-${project.version}-sources.jar"
-def javadocReleaseName = "Mineralogy-${project.version}-javadoc.jar"
-def expectedReleaseNames = [mainReleaseName, sourcesReleaseName, javadocReleaseName]
 
 // ForgeGradle 3's reobfuscator rewrites the main jar after Gradle has applied
 // AbstractArchiveTask's reproducible timestamps. Repack the already-obfuscated
@@ -233,6 +264,17 @@ task verifyReleaseDependencies {
     group = 'verification'
     description = 'Resolves and verifies the exact released OreSpawn dependency.'
     doLast {
+        if (project.mod_version != '6.0.1.113021'
+                || project.minecraft_version != project.mc_version
+                || project.mc_version != '1.13.2'
+                || project.loader_name != 'forge'
+                || project.loader_code != '1'
+                || project.java_version != '8'
+                || project.java_toolchain_version != '8.0.502+7'
+                || project.gradle_java_version != '8'
+                || project.curseforge_project_id != '240974') {
+            throw new GradleException('Unexpected generic release dispatcher metadata')
+        }
         if (project.orespawn_version != '4.0.6.113021' ||
                 project.orespawn_curse_project_id != '245586' ||
                 project.orespawn_curse_file_id != '8681710') {
@@ -321,6 +363,73 @@ task writeReleaseChecksums(dependsOn: verifyReleaseArtifacts) {
             "${hash}  ${name}"
         }.join('\n') + '\n', 'UTF-8')
     }
+}
+
+task verifyPreparedReleaseArtifacts {
+    group = 'verification'
+    description = 'Verifies the immutable artifact bundle supplied to Maven publication.'
+    inputs.files {
+        preparedReleaseDir == null ? [] :
+                (expectedReleaseNames + ['SHA256SUMS', 'CHANGELOG.txt']).collect {
+                    new File(preparedReleaseDir.toString(), it)
+                }
+    }
+    doLast {
+        if (preparedReleaseDir == null) {
+            throw new GradleException('preparedReleaseDir is required for prepared artifact publication')
+        }
+        File prepared = file(preparedReleaseDir.toString())
+        if (!prepared.isDirectory()) {
+            throw new GradleException("Prepared release directory does not exist: ${prepared}")
+        }
+
+        def expectedBundleNames = (expectedReleaseNames + ['SHA256SUMS', 'CHANGELOG.txt']).sort()
+        def actualBundleNames = prepared.listFiles().findAll { it.isFile() }.collect { it.name }.sort()
+        if (actualBundleNames != expectedBundleNames) {
+            throw new GradleException("Expected prepared bundle ${expectedBundleNames}, found ${actualBundleNames}")
+        }
+
+        File checksumFile = new File(prepared, 'SHA256SUMS')
+        def declaredChecksums = [:]
+        checksumFile.readLines('UTF-8').findAll { !it.trim().isEmpty() }.each { line ->
+            def match = line =~ /^([0-9a-fA-F]{64})  (.+)$/
+            if (!match.matches()) {
+                throw new GradleException("Invalid prepared checksum line: ${line}")
+            }
+            declaredChecksums[match[0][2]] = match[0][1].toLowerCase()
+        }
+        if (declaredChecksums.keySet().sort() != expectedReleaseNames.sort()) {
+            throw new GradleException('Prepared checksums do not declare exactly the three release jars')
+        }
+        declaredChecksums.each { name, expectedHash ->
+            File artifact = new File(prepared, name)
+            String actualHash = MessageDigest.getInstance('SHA-256')
+                    .digest(artifact.bytes).encodeHex().toString()
+            if (actualHash != expectedHash) {
+                throw new GradleException("Prepared checksum mismatch for ${name}")
+            }
+        }
+    }
+}
+
+task validateMavenReleaseCredentials {
+    group = 'publishing'
+    description = 'Prevents Maven publication from silently targeting a local or incomplete repository.'
+    doLast {
+        if (!System.getenv('MAVEN_UPLOAD_URL')
+                || !System.getenv('MAVEN_UPLOAD_USERNAME')
+                || !System.getenv('MAVEN_UPLOAD_PASSWORD')) {
+            throw new GradleException('MAVEN_UPLOAD_URL, MAVEN_UPLOAD_USERNAME, and MAVEN_UPLOAD_PASSWORD are required')
+        }
+        if (System.getenv('MAVEN_UPLOAD_URL').startsWith('file:')) {
+            throw new GradleException('Maven release publication must use a remote repository')
+        }
+    }
+}
+
+tasks.matching { it.name == 'publishMavenJavaPublicationToReleaseRepository' }.all {
+    dependsOn validateMavenReleaseCredentials
+    dependsOn(preparedReleaseDir == null ? verifyReleaseArtifacts : verifyPreparedReleaseArtifacts)
 }
 
 task syncForge25EclipseLaunches {

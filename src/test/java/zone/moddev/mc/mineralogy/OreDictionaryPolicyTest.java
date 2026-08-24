@@ -92,7 +92,7 @@ public class OreDictionaryPolicyTest {
     private static String mineralogySource() throws Exception {
         return new String(Files.readAllBytes(new File(
                 "src/main/java/zone/moddev/mc/mineralogy/Mineralogy.java").toPath()),
-                StandardCharsets.UTF_8);
+                StandardCharsets.UTF_8).replace("\r\n", "\n").replace('\r', '\n');
     }
 
     private static int countOccurrences(String value, String search) {

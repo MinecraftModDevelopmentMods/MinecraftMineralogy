@@ -20,7 +20,7 @@ jobs:
   build:
     name: Build, test, and audit
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
 
     steps:
       - name: Check out source
@@ -30,7 +30,7 @@ jobs:
         uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
         with:
           distribution: temurin
-          java-version: '8'
+          java-version: '8.0.502+7'
 
       - name: Install Java 17 for Gradle
         uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
@@ -39,7 +39,7 @@ jobs:
           java-version: '17'
 
       - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@4733eaac7c1b0da527e4206b7671e0061de1ce37 # v6
+        uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6
 
       - name: Make the wrapper executable
         run: chmod +x ./gradlew
@@ -47,7 +47,7 @@ jobs:
       - name: Build, test, and audit release artifacts
         run: >-
           ./gradlew clean check build javadoc verifyReleaseDependencies verifyReleaseArtifacts
-          writeReleaseChecksums --no-daemon --stacktrace
+          writeReleaseChecksums verifyEclipseProductionClasspath --no-daemon --stacktrace
 
       - name: Upload audited release candidate
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
@@ -60,15 +60,17 @@ jobs:
             build/libs/Mineralogy-6.0.1.110021-sources.jar
             build/libs/Mineralogy-6.0.1.110021-javadoc.jar
             build/release/SHA256SUMS
+            CHANGELOG.txt
 
-      - name: Upload test reports on failure
+      - name: Upload diagnostics on failure
         if: failure()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
-          name: Mineralogy-1.10.2-test-reports-${{ github.sha }}
+          name: Mineralogy-1.10.2-diagnostics-${{ github.sha }}
           if-no-files-found: ignore
           retention-days: 14
           path: |
-            build/test-results/test/**
-            build/reports/tests/test/**
-            build/reports/problems/**
+            build/test-results/**
+            build/reports/**
+            build/*-run/logs/**
+            build/problems/**

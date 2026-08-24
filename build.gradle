@@ -40,7 +40,7 @@ if (versionParts[3] != expectedTargetVersion) {
 
 ext.functional_version = versionParts[0..2].join('.')
 ext.display_version = project.mod_version
-ext.release_tag = "${project.mc_version}-${project.mod_version}"
+ext.release_tag = project.mod_version
 
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(8)
@@ -279,6 +279,15 @@ tasks.register('verifyReleaseConfiguration') {
         }
         if (project.mc_version != '1.10.2' || project.forge_version != '12.18.3.2511') {
             throw new GradleException('Unexpected Minecraft or Forge target')
+        }
+        if (project.minecraft_version != project.mc_version
+                || project.loader_name != 'forge'
+                || project.loader_code != '1'
+                || project.java_version != '8'
+                || project.java_toolchain_version != '8.0.502+7'
+                || project.gradle_java_version != '17'
+                || project.curseforge_project_id != project.cf_project_id) {
+            throw new GradleException('Unexpected generic release dispatcher metadata')
         }
         if (project.orespawn_version != '4.0.6.110021'
                 || project.orespawn_curse_project_id != '245586'

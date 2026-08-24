@@ -15,12 +15,16 @@ public class WorkflowContractTest {
         String ci = read(".github/workflows/ci.yml");
         String codeql = read(".github/workflows/codeql-analysis.yml");
         String wrapper = read(".github/workflows/validate-gradle-build.yml");
+        String staging = read("gradle/stage-orespawn-release.sh");
 
         assertTrue(ci.contains("master-1.10.2"));
         assertTrue(ci.contains("name: Build, test, and audit"));
         assertTrue(ci.contains("clean check build javadoc verifyReleaseDependencies verifyReleaseArtifacts"));
         assertTrue(ci.contains("verifyEclipseProductionClasspath"));
         assertTrue(ci.contains("CHANGELOG.txt"));
+        assertTrue(ci.contains("-PorespawnVerificationRepository=${{ steps.orespawn.outputs.repository }}"));
+        assertTrue(staging.contains("https://www.curseforge.com/api/v1/mods/$project_id/files/$file_id/download"));
+        assertTrue(staging.contains("sha256sum"));
         assertTrue(codeql.contains("github/codeql-action/init@db488ddef3bf6cb639b32c2e9a7c0a7ea8271d28"));
         assertTrue(codeql.contains("./gradlew clean classes"));
         assertTrue(codeql.contains("--rerun-tasks --no-build-cache"));

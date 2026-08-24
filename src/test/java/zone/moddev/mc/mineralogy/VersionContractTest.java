@@ -77,6 +77,8 @@ public class VersionContractTest {
         assertEquals("245586", properties.getProperty("orespawn_curse_project_id"));
         assertEquals("8681675", properties.getProperty("orespawn_curse_file_id"));
         assertEquals("4.0.6.110021", properties.getProperty("orespawn_version"));
+        assertEquals("9FD6F2D6C5513A45C2B1CBE62F352A4F804FC7EE3EE30C44A6E5266BBF813E6D",
+                properties.getProperty("orespawn_sha256"));
         assertFalse(properties.containsKey("create_api_jar"));
         assertFalse(properties.containsKey("create_deobf_jar"));
 

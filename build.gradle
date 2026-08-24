@@ -120,6 +120,17 @@ repositories {
     maven fg.forgeMaven
     maven fg.minecraftLibsMaven
 
+    // Optional exact-coordinate mirror populated by CI from the official
+    // CurseForge file endpoint, avoiding transient CurseMaven throttling.
+    if (providers.gradleProperty('orespawnVerificationRepository').isPresent()) {
+        maven {
+            name = 'OreSpawnReleaseVerificationMirror'
+            url = uri(providers.gradleProperty('orespawnVerificationRepository').get())
+            metadataSources { artifact() }
+            content { includeGroup('curse.maven') }
+        }
+    }
+
     exclusiveContent {
         forRepository {
             maven {
@@ -137,10 +148,13 @@ repositories {
         name = 'MinecraftLibraries'
         url = 'https://libraries.minecraft.net/'
     }
-    maven {
-        name = 'CurseMaven'
-        url = 'https://www.cursemaven.com'
-        content { includeGroup('curse.maven') }
+    if (!providers.gradleProperty('orespawnVerificationRepository').isPresent()) {
+        maven {
+            name = 'CurseMaven'
+            url = 'https://www.cursemaven.com'
+            metadataSources { artifact() }
+            content { includeGroup('curse.maven') }
+        }
     }
     maven {
         name = 'ModDevZone'
@@ -291,7 +305,8 @@ tasks.register('verifyReleaseConfiguration') {
         }
         if (project.orespawn_version != '4.0.6.110021'
                 || project.orespawn_curse_project_id != '245586'
-                || project.orespawn_curse_file_id != '8681675') {
+                || project.orespawn_curse_file_id != '8681675'
+                || project.orespawn_sha256 != '9FD6F2D6C5513A45C2B1CBE62F352A4F804FC7EE3EE30C44A6E5266BBF813E6D') {
             throw new GradleException('Unexpected released OreSpawn dependency')
         }
         if (project.cf_project_id != '240974'
@@ -338,6 +353,13 @@ tasks.register('verifyReleaseDependencies') {
                 + "${oreSpawnArtifacts.first().moduleVersion.id.version}" != expectedOreSpawn) {
             throw new GradleException("Expected exactly ${expectedOreSpawn}, found "
                     + oreSpawnArtifacts.collect { it.moduleVersion.id })
+        }
+
+        String actualOreSpawnSha256 = MessageDigest.getInstance('SHA-256')
+                .digest(oreSpawnArtifacts.first().file.bytes).encodeHex().toString().toUpperCase()
+        if (actualOreSpawnSha256 != project.orespawn_sha256) {
+            throw new GradleException("Released OreSpawn SHA-256 is ${actualOreSpawnSha256}, expected "
+                    + project.orespawn_sha256)
         }
 
         ZipFile oreSpawn = new ZipFile(oreSpawnArtifacts.first().file)

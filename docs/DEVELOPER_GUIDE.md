@@ -55,17 +55,37 @@ recipes, so existing content remains loadable.
 
 ## Building
 
-Use JDK 8, Gradle 4.9, and ForgeGradle `2.2-SNAPSHOT` from the nested 1.10
-checkout:
+Use a JDK 21 Gradle runtime with the checked-in Gradle 9.6.1 wrapper and
+ForgeGradle `7.0.34`. The project itself still compiles and packages Java 8
+bytecode through its Java 8 toolchain:
 
 ```powershell
-$env:JAVA_HOME='C:\Program Files\Java\jdk1.8.0_202'
+$env:JAVA_HOME='C:\path\to\jdk-21'
 $env:GRADLE_USER_HOME='D:\MinecraftMineralogy\.gradle-verify-cache'
 .\gradlew.bat test compileJava processResources --no-daemon
 .\gradlew.bat clean build javadoc --no-daemon
-.\gradlew.bat setupDecompWorkspace eclipse verifyEclipseProductionClasspath --no-daemon
+.\gradlew.bat genEclipseRuns isolateEclipseProductionRuns verifyEclipseProductionClasspath --no-daemon
 .\gradlew.bat assemble --no-daemon
 ```
+
+Import the nested checkout into Eclipse as an existing Gradle project. Do not
+run the legacy `setupDecompWorkspace` task. Regenerate the Forge run
+configurations after changing the checkout path or Gradle cache; Mineralogy's
+normalization task keeps the ordinary client/server launches production-only
+and safely quotes Slime Launcher paths containing spaces. It also copies the
+Gradle-processed resources into Eclipse's merged `bin/main`, so expanded
+metadata and the bundled guide are identical to a Gradle development run.
+
+OreSpawn's released jar owns the production access transformer. ForgeGradle 7
+does not remap a dependency transform for Minecraft's mapped development
+classes, so this project mirrors OreSpawn's two rules with mapped field names
+in `gradle/orespawn-development-access-transformer.cfg`. The dependency audit
+keeps those rules aligned with the released jar, and the development-only file
+must never be packaged by Mineralogy.
+
+For a disposable Gradle runtime, pass
+`-PmineralogyRunDirectory=build/<temporary-name>`; Eclipse continues to use the
+normal `run` directory unless that Gradle property is deliberately supplied.
 
 Inspect complete client/server logs and test the reobfuscated jar with released
 OreSpawn in a launcher-like Forge installation. The normal jar packages this

@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.Properties;
 
 import org.junit.Test;
@@ -57,6 +58,9 @@ public class VersionContractTest {
         assertTrue(build.contains("id 'net.minecraftforge.renamer' version '1.1.5'"));
         assertTrue(build.contains("JavaLanguageVersion.of(8)"));
         assertTrue(build.contains("tasks.register('verifyReleaseDependencies')"));
+        assertTrue(build.contains("accessTransformer.from(file('gradle/orespawn-development-access-transformer.cfg'))"));
+        assertTrue(build.contains("Development access transformer no longer matches released OreSpawn semantics"));
+        assertTrue(build.contains("providers.gradleProperty('mineralogyRunDirectory').getOrElse('run')"));
         assertTrue(build.contains("tasks.register('verifyPreparedReleaseArtifacts')"));
         assertTrue(build.contains("providers.gradleProperty('preparedReleaseDir')"));
         assertTrue(wrapper.contains("gradle-9.6.1-bin.zip"));
@@ -67,6 +71,30 @@ public class VersionContractTest {
         assertEquals("4.0.6.110021", properties.getProperty("orespawn_version"));
         assertFalse(properties.containsKey("create_api_jar"));
         assertFalse(properties.containsKey("create_deobf_jar"));
+
+        assertEquals(Arrays.asList(
+                "public-f net.minecraft.world.WorldProvider biomeProvider",
+                "public-f net.minecraft.world.gen.ChunkProviderOverworld oceanBlock"),
+                Files.readAllLines(new File("gradle/orespawn-development-access-transformer.cfg").toPath(),
+                        StandardCharsets.UTF_8));
+    }
+
+    @Test
+    public void eclipseLaunchNormalizationQuotesWhitespacePathsAndVerifiesThem() throws Exception {
+        String build = read(new File("build.gradle"));
+        String project = read(new File(".project"));
+        assertTrue(build.contains("tasks.register('configureEclipseBuildship')"));
+        assertTrue(build.contains("tasks.register('isolateEclipseProductionRuns')"));
+        assertTrue(build.contains("tasks.register('prepareEclipseResources')"));
+        assertTrue(build.contains("dependsOn prepareEclipseResources"));
+        assertTrue(build.contains("Eclipse output contains unexpanded or incorrect mod metadata"));
+        assertTrue(build.contains("Eclipse output is missing bundled guide"));
+        assertTrue(build.contains("['--cache', '--metadata', '--to-srg', '--to-obf']"));
+        assertTrue(build.contains("+ '&quot;' + value + '&quot;'"));
+        assertTrue(build.contains("leaves whitespace unquoted"));
+        assertTrue(build.contains("finalizedBy configureEclipseBuildship, 'isolateEclipseProductionRuns'"));
+        assertTrue(project.contains("org.eclipse.buildship.core.gradleprojectnature"));
+        assertTrue(project.contains("org.eclipse.buildship.core.gradleprojectbuilder"));
     }
 
     @Test

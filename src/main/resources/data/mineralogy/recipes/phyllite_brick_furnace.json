@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:phyllite_brick_furnace"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "xxx",
@@ -7,27 +13,14 @@
   ],
   "key": {
     "x": {
-      "item": "mineralogy:phyllite_brick_slab"
+      "tag": "mineralogy:slabs/phyllite/brick"
     },
     "y": {
       "item": "minecraft:furnace"
     }
   },
   "result": {
-    "item": "mineralogy:phyllite_brick_furnace"
-  },
-  "conditions": [
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_BRICK"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_BRICKSLAB"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_BRICKFURNACE"
-    }
-  ]
+    "item": "mineralogy:phyllite_brick_furnace",
+    "count": 1
+  }
 }

@@ -1,14 +1,25 @@
 {
+  "conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "ENABLE_DRYWALLS"
+    },
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:drywall_black"
+    }
+  ],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "mineralogy:drywall_white"
+      "tag": "mineralogy:drywall/white"
     },
     {
       "tag": "forge:dyes/black"
     }
   ],
   "result": {
-    "item": "mineralogy:drywall_black"
+    "item": "mineralogy:drywall_black",
+    "count": 1
   }
 }

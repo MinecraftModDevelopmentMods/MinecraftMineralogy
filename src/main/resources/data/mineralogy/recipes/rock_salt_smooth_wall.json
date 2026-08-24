@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:rock_salt_smooth_wall"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "xxx",
@@ -6,21 +12,11 @@
   ],
   "key": {
     "x": {
-      "item": "mineralogy:rock_salt_smooth"
+      "tag": "mineralogy:stones/rock_salt/smooth"
     }
   },
   "result": {
     "item": "mineralogy:rock_salt_smooth_wall",
     "count": 6
-  },
-  "conditions": [
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTH"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTHWALL"
-    }
-  ]
+  }
 }

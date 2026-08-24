@@ -1,0 +1,37 @@
+{
+  "conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "ENABLE_MINERAL_DUSTS"
+    }
+  ],
+  "rewards": {
+    "recipes": [
+      "mineralogy:gunpowder_from_charcoal"
+    ]
+  },
+  "criteria": {
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "mineralogy:gunpowder_from_charcoal"
+      }
+    },
+    "has_rock": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "mineralogy:nitrate_dust"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_rock"
+    ]
+  ]
+}

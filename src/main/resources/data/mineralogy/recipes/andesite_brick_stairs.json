@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:andesite_brick_stairs"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "x  ",
@@ -7,21 +13,11 @@
   ],
   "key": {
     "x": {
-      "item": "mineralogy:andesite_brick"
+      "tag": "mineralogy:stones/andesite/brick"
     }
   },
   "result": {
     "item": "mineralogy:andesite_brick_stairs",
     "count": 4
-  },
-  "conditions": [
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_BRICK"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_BRICKSTAIRS"
-    }
-  ]
+  }
 }

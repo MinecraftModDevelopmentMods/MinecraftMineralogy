@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:scoria_brick"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:scoria_brick"

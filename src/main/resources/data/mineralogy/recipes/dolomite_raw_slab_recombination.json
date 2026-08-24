@@ -1,0 +1,25 @@
+{
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:dolomite_slab"
+    },
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:dolomite"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mineralogy:dolomite_slab"
+    },
+    {
+      "item": "mineralogy:dolomite_slab"
+    }
+  ],
+  "result": {
+    "item": "mineralogy:dolomite",
+    "count": 1
+  }
+}

@@ -1,14 +1,25 @@
 {
+  "conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "ENABLE_DRYWALLS"
+    },
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:drywall_orange"
+    }
+  ],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "mineralogy:drywall_white"
+      "tag": "mineralogy:drywall/white"
     },
     {
       "tag": "forge:dyes/orange"
     }
   ],
   "result": {
-    "item": "mineralogy:drywall_orange"
+    "item": "mineralogy:drywall_orange",
+    "count": 1
   }
 }

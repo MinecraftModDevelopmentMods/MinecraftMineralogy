@@ -47,8 +47,7 @@ jobs:
       - name: Compile production code
         run: |
           chmod +x ./gradlew
-          ./gradlew clean classes --no-daemon --stacktrace
+          ./gradlew clean classes --rerun-tasks --no-build-cache --no-daemon --stacktrace
 
       - name: Analyze
         uses: github/codeql-action/analyze@db488ddef3bf6cb639b32c2e9a7c0a7ea8271d28 # v4
-

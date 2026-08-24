@@ -82,9 +82,19 @@ tasks.withType(JavaExec).all { JavaExec runTask ->
 def curseMavenRepository
 repositories {
     mavenCentral()
-    curseMavenRepository = maven {
-        name = 'CurseMaven'
-        url = 'https://www.cursemaven.com'
+    if (project.hasProperty('orespawnVerificationRepository')) {
+        maven {
+            name = 'OreSpawnReleaseVerificationMirror'
+            url = uri(project.property('orespawnVerificationRepository'))
+            metadataSources { artifact() }
+        }
+    }
+    else {
+        curseMavenRepository = maven {
+            name = 'CurseMaven'
+            url = 'https://www.cursemaven.com'
+            metadataSources { artifact() }
+        }
     }
 }
 
@@ -93,8 +103,10 @@ repositories {
 // versions, so add it afterwards and allow ForgeGradle to service mapped requests
 // first. The released numeric CurseForge coordinate still resolves normally.
 afterEvaluate {
-    repositories.remove(curseMavenRepository)
-    repositories.add(curseMavenRepository)
+    if (curseMavenRepository != null) {
+        repositories.remove(curseMavenRepository)
+        repositories.add(curseMavenRepository)
+    }
 }
 
 configurations {

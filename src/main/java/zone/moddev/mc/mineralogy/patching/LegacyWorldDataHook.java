@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.util.Arrays;
@@ -152,24 +151,23 @@ public final class LegacyWorldDataHook implements WorldPersistenceHooks.WorldPer
 			return;
 		}
 
-		String worldKey = worldKey(worldDirectory);
-		if (LEGACY_WORLD_DATA.containsKey(worldKey)) {
-			legacyWorldActive = true;
-			indexLegacyChunks(worldDirectory);
-			return;
-		}
-
 		NBTTagCompound registries = tag.getCompound("Registries");
 		if (!registries.contains(BLOCK_REGISTRY.toString(), 10)) {
 			throw new IllegalStateException("Legacy Mineralogy world has no saved block registry snapshot");
 		}
 
+		String worldKey = worldKey(worldDirectory);
+		boolean firstPreparation = !LEGACY_WORLD_DATA.containsKey(worldKey);
 		int mappedStates = installLegacyBlockStates(registries.getCompound(BLOCK_REGISTRY.toString()));
-		LEGACY_WORLD_DATA.put(worldKey, tag.copy());
+		if (firstPreparation) {
+			LEGACY_WORLD_DATA.put(worldKey, tag.copy());
+		}
 		legacyWorldActive = true;
 		int protectedChunks = indexLegacyChunks(worldDirectory);
-		LOGGER.info("Prepared {} legacy Mineralogy block states and protected {} existing Overworld chunks "
-				+ "from '{}' for safe 1.13 flattening", mappedStates, protectedChunks, worldDirectory);
+		if (firstPreparation) {
+			LOGGER.info("Prepared {} legacy Mineralogy block states and protected {} existing Overworld chunks "
+					+ "from '{}' for safe 1.13 flattening", mappedStates, protectedChunks, worldDirectory);
+		}
 	}
 
 	/** Reads only Anvil location tables so old chunks are protected before their NBT is loaded. */
@@ -249,10 +247,7 @@ public final class LegacyWorldDataHook implements WorldPersistenceHooks.WorldPer
 			mineralogyIds.put(id, numericId);
 			highestStateId = Math.max(highestStateId, (numericId << 4) | 15);
 		}
-		expandFlatteningTable(highestStateId + 1);
-
-		Method addEntry = ObfuscationReflectionHelper.findMethod(BlockStateFlatteningMap.class,
-				"func_199194_a", int.class, String.class, String[].class);
+		Dynamic<?>[] legacyStates = expandFlatteningTable(highestStateId + 1);
 		int mapped = 0;
 		for (Map.Entry<ResourceLocation, Integer> entry : mineralogyIds.entrySet()) {
 			ResourceLocation oldId = entry.getKey();
@@ -265,11 +260,12 @@ public final class LegacyWorldDataHook implements WorldPersistenceHooks.WorldPer
 			for (int meta = 0; meta < 16; ++meta) {
 				IBlockState state = legacyState(block, meta);
 				String stateNbt = NBTUtil.writeBlockState(state).toString();
-				try {
-					addEntry.invoke(null, (entry.getValue() << 4) | meta, stateNbt, new String[0]);
-				} catch (ReflectiveOperationException e) {
-					throw new IllegalStateException("Could not register legacy block state " + oldId + ":" + meta, e);
-				}
+				int stateId = (entry.getValue() << 4) | meta;
+				// addEntry is hot during Minecraft's static initialization and the JVM may
+				// compile its final-array reference before this table is expanded. Writing
+				// the replacement array directly is equivalent here because Mineralogy does
+				// not provide any legacy state aliases to addEntry's auxiliary maps.
+				legacyStates[stateId] = BlockStateFlatteningMap.makeDynamic(stateNbt);
 				++mapped;
 			}
 		}
@@ -393,7 +389,7 @@ public final class LegacyWorldDataHook implements WorldPersistenceHooks.WorldPer
 	}
 
 	@SuppressWarnings("unchecked")
-	private static void expandFlatteningTable(int requiredLength) {
+	private static Dynamic<?>[] expandFlatteningTable(int requiredLength) {
 		try {
 			String fieldName = ObfuscationReflectionHelper.remapName(INameMappingService.Domain.FIELD,
 					"field_199200_b");
@@ -405,9 +401,11 @@ public final class LegacyWorldDataHook implements WorldPersistenceHooks.WorldPer
 
 			Dynamic<?>[] current = (Dynamic<?>[]) valuesField.get(null);
 			if (current.length >= requiredLength) {
-				return;
+				return current;
 			}
-			valuesField.set(null, Arrays.copyOf(current, requiredLength));
+			Dynamic<?>[] expanded = Arrays.copyOf(current, requiredLength);
+			valuesField.set(null, expanded);
+			return expanded;
 		} catch (ReflectiveOperationException e) {
 			throw new IllegalStateException("Could not expand Minecraft's legacy block-state flattening table", e);
 		}

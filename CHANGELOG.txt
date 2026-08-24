@@ -15,8 +15,9 @@ Mineralogy 6.0.1.113021 for Minecraft 1.13.2
   dusts, and fertilizer, plus the stable five-way grouped creative tabs.
   Disabled content remains registered and usable in established worlds.
 - Made the historical `COBBLESTONE_EQUIVILENT` option functional through
-  target-native block and item tags, reapplied after data reloads. Chert and
-  pumice remain unconditional cobblestone equivalents.
+  target-native block and item tags, reapplied after data reloads and reflected
+  in already-parsed recipe ingredients. Chert and pumice remain unconditional
+  cobblestone equivalents.
 - Added isolated Mineralogy crude-oil source and flowing fluids, block, bucket,
   rendering resources, and the covered Ocean deposit declaration.
 - Preserved rock-furnace save recovery and novaculite's 3/15/1 properties;

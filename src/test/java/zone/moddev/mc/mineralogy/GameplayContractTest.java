@@ -82,6 +82,10 @@ public class GameplayContractTest {
         assertTrue(policy.contains("addBlock(blocks, \"pumice\")"));
         assertTrue(policy.contains("addItem(items, \"chert\")"));
         assertTrue(policy.contains("addItem(items, \"pumice\")"));
+        assertTrue(policy.contains("replaceElements(blockTags, blocks)"));
+        assertTrue(policy.contains("replaceElements(itemTags, items)"));
+        assertTrue(policy.contains("Collection<T> elements = tag.getAllElements()"));
+        assertTrue(policy.contains("Ingredient.invalidateAll()"));
         assertTrue(policy.contains("BlockTags.setCollection"));
         assertTrue(policy.contains("ItemTags.setCollection"));
     }

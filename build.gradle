@@ -86,10 +86,17 @@ def normalizeArchiveLineEndings = { details ->
 
 minecraft {
     mappings channel: project.mappings_channel, version: project.mappings_version
+    // Forge applies OreSpawn's SRG FMLAT in an ordinary packaged installation,
+    // but ForgeGradle 7 does not remap a dependency transform for mapped
+    // development Minecraft. Mirror the exact two released rules for
+    // Gradle/Eclipse only. This file is outside main resources and is never
+    // packaged by Mineralogy.
+    accessTransformer.from(file('gradle/orespawn-development-access-transformer.cfg'))
+    String configuredRunDirectory = providers.gradleProperty('mineralogyRunDirectory').getOrElse('run')
 
     runs {
         configureEach {
-            workingDir.convention layout.projectDirectory.dir('run')
+            workingDir.convention layout.projectDirectory.dir(configuredRunDirectory)
             systemProperty 'forge.logging.console.level', 'debug'
         }
 
@@ -172,6 +179,18 @@ tasks.named('processResources', ProcessResources) {
     rename '(.+_at.cfg)', 'META-INF/$1'
 
     filesMatching(archiveTextPatterns, normalizeArchiveLineEndings)
+}
+
+def prepareEclipseResources = tasks.register('prepareEclipseResources') {
+    group = 'ide'
+    description = 'Copies Gradle-processed production resources into Eclipse merged output.'
+    dependsOn tasks.named('processResources')
+    doLast {
+        project.copy {
+            from(layout.buildDirectory.dir('resources/main'))
+            into(layout.projectDirectory.dir('bin/main'))
+        }
+    }
 }
 
 tasks.named('jar', Jar) {
@@ -325,6 +344,29 @@ tasks.register('verifyReleaseDependencies') {
                 throw new GradleException('Resolved OreSpawn file does not contain version '
                         + project.orespawn_version)
             }
+
+            def transformerEntry = oreSpawn.getEntry('META-INF/accesstransformer.cfg')
+            if (transformerEntry == null) {
+                throw new GradleException('Resolved OreSpawn file is missing its access transformer')
+            }
+            List<String> releasedTransformer = oreSpawn.getInputStream(transformerEntry)
+                    .getText(StandardCharsets.UTF_8.name()).readLines()
+                    .findAll { !it.trim().isEmpty() }
+            List<String> expectedReleasedTransformer = [
+                    'public-f net.minecraft.world.WorldProvider field_76578_c # biomeProvider',
+                    'public-f net.minecraft.world.gen.ChunkProviderOverworld field_186001_t # oceanBlock'
+            ]
+            List<String> developmentTransformer = file(
+                    'gradle/orespawn-development-access-transformer.cfg').readLines('UTF-8')
+                    .findAll { !it.trim().isEmpty() }
+            List<String> expectedDevelopmentTransformer = [
+                    'public-f net.minecraft.world.WorldProvider biomeProvider',
+                    'public-f net.minecraft.world.gen.ChunkProviderOverworld oceanBlock'
+            ]
+            if (releasedTransformer != expectedReleasedTransformer
+                    || developmentTransformer != expectedDevelopmentTransformer) {
+                throw new GradleException('Development access transformer no longer matches released OreSpawn semantics')
+            }
         } finally {
             oreSpawn.close()
         }
@@ -385,7 +427,9 @@ tasks.register('verifyReleaseArtifacts') {
                 }
             }
             ['agent-notes/', 'src/test/', 'OilRuntimeProbe', 'org/junit/',
-             'org/mockito/', 'net/bytebuddy/'].each { forbidden ->
+             'org/mockito/', 'net/bytebuddy/',
+             'orespawn-development-access-transformer.cfg',
+             'META-INF/accesstransformer.cfg'].each { forbidden ->
                 if (names.any { it.contains(forbidden) }) {
                     throw new GradleException("Release jar contains forbidden entry matching ${forbidden}")
                 }
@@ -657,6 +701,22 @@ tasks.register('verifyEclipseProductionClasspath') {
             throw new GradleException('Eclipse project metadata is missing its Buildship nature or builder')
         }
 
+        File eclipseModMetadata = file('bin/main/mcmod.info')
+        if (!eclipseModMetadata.isFile()) {
+            throw new GradleException('Eclipse output is missing processed mcmod.info')
+        }
+        def eclipseMetadata = new JsonSlurper().parseText(eclipseModMetadata.getText('UTF-8'))
+        def eclipseMod = eclipseMetadata instanceof List ? eclipseMetadata.first() : eclipseMetadata
+        if (eclipseMod.version != project.mod_version || eclipseMod.mcversion != project.mc_version) {
+            throw new GradleException('Eclipse output contains unexpanded or incorrect mod metadata')
+        }
+        ['README.md', 'PLAYER_GUIDE.md', 'DEVELOPER_GUIDE.md',
+         'CONTENT_CONFIG.md', 'PROVIDER.md', 'VERSIONS.md'].each { guide ->
+            if (!file("bin/main/META-INF/mineralogy/docs/${guide}").isFile()) {
+                throw new GradleException("Eclipse output is missing bundled guide ${guide}")
+            }
+        }
+
         ['MinecraftMineralogy_Client.launch', 'MinecraftMineralogy_Server.launch'].each { name ->
             if (file(name).exists()) {
                 throw new GradleException("Obsolete ForgeGradle 2 Eclipse launch still exists: ${name}")
@@ -720,6 +780,7 @@ tasks.register('verifyEclipseProductionClasspath') {
 tasks.register('isolateEclipseProductionRuns') {
     group = 'ide'
     description = 'Normalizes ordinary ForgeGradle Eclipse launches for production-only execution.'
+    dependsOn prepareEclipseResources
     doLast {
         [
                 'MinecraftMineralogy_Client.launch': 'MAIN_TYPE" value="GradleStart"',

@@ -72,7 +72,20 @@ Import the nested checkout into Eclipse as an existing Gradle project. Do not
 run the legacy `setupDecompWorkspace` task. Regenerate the Forge run
 configurations after changing the checkout path or Gradle cache; Mineralogy's
 normalization task keeps the ordinary client/server launches production-only
-and safely quotes Slime Launcher paths containing spaces.
+and safely quotes Slime Launcher paths containing spaces. It also copies the
+Gradle-processed resources into Eclipse's merged `bin/main`, so expanded
+metadata and the bundled guide are identical to a Gradle development run.
+
+OreSpawn's released jar owns the production access transformer. ForgeGradle 7
+does not remap a dependency transform for Minecraft's mapped development
+classes, so this project mirrors OreSpawn's two rules with mapped field names
+in `gradle/orespawn-development-access-transformer.cfg`. The dependency audit
+keeps those rules aligned with the released jar, and the development-only file
+must never be packaged by Mineralogy.
+
+For a disposable Gradle runtime, pass
+`-PmineralogyRunDirectory=build/<temporary-name>`; Eclipse continues to use the
+normal `run` directory unless that Gradle property is deliberately supplied.
 
 Inspect complete client/server logs and test the reobfuscated jar with released
 OreSpawn in a launcher-like Forge installation. The normal jar packages this

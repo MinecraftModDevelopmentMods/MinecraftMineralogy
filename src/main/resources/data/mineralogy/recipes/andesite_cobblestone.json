@@ -1,11 +1,12 @@
 {
+  "conditions": [],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "mineralogy:andesite"
+      "tag": "mineralogy:stones/andesite"
     },
     {
-      "item": "mineralogy:andesite"
+      "tag": "mineralogy:stones/andesite"
     },
     {
       "item": "minecraft:gravel"

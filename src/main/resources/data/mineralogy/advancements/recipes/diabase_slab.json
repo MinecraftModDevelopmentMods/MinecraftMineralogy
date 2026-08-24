@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:diabase_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:diabase_slab"

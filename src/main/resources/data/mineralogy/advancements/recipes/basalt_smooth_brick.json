@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:basalt_smooth_brick"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:basalt_smooth_brick"
@@ -16,10 +22,6 @@
       "conditions": {
         "items": [
           {
-            "type": "mineralogy:config_item",
-            "flags": [
-              "GENERATE_SMOOTH"
-            ],
             "item": "mineralogy:basalt_smooth"
           }
         ]

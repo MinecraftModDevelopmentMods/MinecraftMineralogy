@@ -1,32 +1,7 @@
 {
   "replace": false,
   "values": [
-    "mineralogy:andesite",
-    "mineralogy:basalt",
-    "mineralogy:diorite",
-    "mineralogy:granite",
-    "mineralogy:rhyolite",
-    "mineralogy:pegmatite",
-    "mineralogy:diabase",
-    "mineralogy:gabbro",
-    "mineralogy:peridotite",
-    "mineralogy:basaltic_glass",
-    "mineralogy:scoria",
-    "mineralogy:tuff",
-    "mineralogy:shale",
-    "mineralogy:conglomerate",
-    "mineralogy:dolomite",
-    "mineralogy:limestone",
-    "mineralogy:siltstone",
-    "mineralogy:marble",
-    "mineralogy:rock_salt",
-    "mineralogy:slate",
-    "mineralogy:schist",
-    "mineralogy:gneiss",
-    "mineralogy:phyllite",
-    "mineralogy:amphibolite",
-    "mineralogy:hornfels",
-    "mineralogy:quartzite",
-    "mineralogy:novaculite"
+    "mineralogy:chert",
+    "mineralogy:pumice"
   ]
 }

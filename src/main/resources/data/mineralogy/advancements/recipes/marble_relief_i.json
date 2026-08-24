@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:marble_relief_i"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:marble_relief_i"
@@ -16,11 +22,7 @@
       "conditions": {
         "items": [
           {
-            "type": "mineralogy:config_item",
-            "flags": [
-              "GENERATE_SMOOTH"
-            ],
-            "item": "mineralogy:marble_smooth"
+            "item": "mineralogy:marble_relief_blank"
           }
         ]
       }

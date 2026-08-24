@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:gneiss_relief_cross"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "x x",
@@ -13,15 +19,5 @@
   "result": {
     "item": "mineralogy:gneiss_relief_cross",
     "count": 4
-  },
-  "conditions": [
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTH"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_RELIEFS"
-    }
-  ]
+  }
 }

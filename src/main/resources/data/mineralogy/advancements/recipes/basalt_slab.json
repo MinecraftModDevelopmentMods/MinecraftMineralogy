@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:basalt_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:basalt_slab"

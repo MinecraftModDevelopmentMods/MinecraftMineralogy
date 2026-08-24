@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:pegmatite_smooth_brick_wall"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "xxx",
@@ -6,25 +12,11 @@
   ],
   "key": {
     "x": {
-      "item": "mineralogy:pegmatite_smooth_brick"
+      "tag": "mineralogy:stones/pegmatite/smooth_brick"
     }
   },
   "result": {
     "item": "mineralogy:pegmatite_smooth_brick_wall",
     "count": 6
-  },
-  "conditions": [
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTH"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTHBRICK"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTHBRICKWALL"
-    }
-  ]
+  }
 }

@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:dolomite_relief_sword"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:dolomite_relief_sword"
@@ -16,11 +22,7 @@
       "conditions": {
         "items": [
           {
-            "type": "mineralogy:config_item",
-            "flags": [
-              "GENERATE_SMOOTH"
-            ],
-            "item": "mineralogy:dolomite_smooth"
+            "item": "mineralogy:dolomite_relief_blank"
           }
         ]
       }

@@ -117,6 +117,21 @@ public class GameplayContractTest {
         assertTrue(transformer.contains("Mineralogy could not patch the Forge 25 legacy-world write guard"));
     }
 
+    @Test
+    public void legacyFlatteningUsesTheExpandedArrayAndReinstallsTheSelectedWorldMapping() throws Exception {
+        String hook = text("src/main/java/zone/moddev/mc/mineralogy/patching/LegacyWorldDataHook.java");
+        assertTrue(hook.contains("Dynamic<?>[] legacyStates = expandFlatteningTable(highestStateId + 1)"));
+        assertTrue(hook.contains("legacyStates[stateId] = BlockStateFlatteningMap.makeDynamic(stateNbt)"));
+        assertFalse(hook.contains("addEntry.invoke"));
+        assertTrue(hook.indexOf("int mappedStates = installLegacyBlockStates")
+                < hook.indexOf("if (firstPreparation) {\n\t\t\tLEGACY_WORLD_DATA.put"));
+
+        String build = text("build.gradle");
+        assertTrue(build.contains("dependsOn processResources"));
+        assertTrue(build.contains("mineralogy%%${resourceOutput}"));
+        assertTrue(build.contains("Eclipse launch is missing processed production resources"));
+    }
+
     private static String text(String path) throws Exception {
         return new String(Files.readAllBytes(new File(path).toPath()), StandardCharsets.UTF_8);
     }

@@ -325,10 +325,12 @@ task writeReleaseChecksums(dependsOn: verifyReleaseArtifacts) {
 
 task syncForge25EclipseLaunches {
     group = 'ide'
+    dependsOn processResources
     doLast {
         String mainClass = 'net.minecraftforge.userdev.LaunchTesting'
         String mainOutput = new File(projectDir, 'bin/main').absolutePath
-        String modClasses = "mineralogy%%${mainOutput};mineralogy%%${mainOutput}"
+        String resourceOutput = sourceSets.main.output.resourcesDir.absolutePath
+        String modClasses = "mineralogy%%${mainOutput};mineralogy%%${resourceOutput}"
         ['Client', 'Server'].each { String runName ->
             File launch = file("run${runName}.launch")
             if (!launch.isFile()) throw new GradleException("Missing generated Eclipse launch ${launch}")
@@ -387,6 +389,9 @@ task verifyEclipseProductionClasspath {
             String launch = file(name).getText('UTF-8')
             if (!launch.contains('ATTR_EXCLUDE_TEST_CODE') || launch =~ /(?i)(junit|mockito|src\/test)/) {
                 throw new GradleException("Eclipse launch is not production-only: ${name}")
+            }
+            if (!launch.contains(sourceSets.main.output.resourcesDir.absolutePath)) {
+                throw new GradleException("Eclipse launch is missing processed production resources: ${name}")
             }
         }
     }

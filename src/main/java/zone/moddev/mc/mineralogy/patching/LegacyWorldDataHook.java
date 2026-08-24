@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
@@ -185,10 +184,7 @@ public final class LegacyWorldDataHook {
 			mineralogyIds.put(id, numericId);
 			highestStateId = Math.max(highestStateId, (numericId << 4) | 15);
 		}
-		expandFlatteningTable(highestStateId + 1);
-
-		Method addEntry = ObfuscationReflectionHelper.findMethod(BlockStateFlatteningMap.class,
-				"func_199194_a", int.class, String.class, String[].class);
+		Dynamic<?>[] legacyStates = expandFlatteningTable(highestStateId + 1);
 		int mapped = 0;
 		for (Map.Entry<ResourceLocation, Integer> entry : mineralogyIds.entrySet()) {
 			ResourceLocation oldId = entry.getKey();
@@ -199,11 +195,11 @@ public final class LegacyWorldDataHook {
 			}
 			for (int meta = 0; meta < 16; ++meta) {
 				String stateNbt = NBTUtil.writeBlockState(legacyState(block, meta)).toString();
-				try {
-					addEntry.invoke(null, (entry.getValue() << 4) | meta, stateNbt, new String[0]);
-				} catch (ReflectiveOperationException e) {
-					throw new IllegalStateException("Could not register legacy block state " + oldId + ":" + meta, e);
-				}
+				int stateId = (entry.getValue() << 4) | meta;
+				// The JVM may compile Minecraft's final-array reference before expansion.
+				// Write the replacement table directly; Mineralogy has no auxiliary
+				// legacy-state aliases for BlockStateFlatteningMap.addEntry to maintain.
+				legacyStates[stateId] = BlockStateFlatteningMap.makeDynamic(stateNbt);
 				++mapped;
 			}
 		}
@@ -311,7 +307,7 @@ public final class LegacyWorldDataHook {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static void expandFlatteningTable(int requiredLength) {
+	private static Dynamic<?>[] expandFlatteningTable(int requiredLength) {
 		try {
 			String fieldName = ObfuscationReflectionHelper.remapName(INameMappingService.Domain.FIELD,
 					"field_199200_b");
@@ -321,9 +317,10 @@ public final class LegacyWorldDataHook {
 			modifiersField.setAccessible(true);
 			modifiersField.setInt(valuesField, valuesField.getModifiers() & ~Modifier.FINAL);
 			Dynamic<?>[] current = (Dynamic<?>[]) valuesField.get(null);
-			if (current.length < requiredLength) {
-				valuesField.set(null, Arrays.copyOf(current, requiredLength));
-			}
+			if (current.length >= requiredLength) return current;
+			Dynamic<?>[] expanded = Arrays.copyOf(current, requiredLength);
+			valuesField.set(null, expanded);
+			return expanded;
 		} catch (ReflectiveOperationException e) {
 			throw new IllegalStateException("Could not expand Minecraft's legacy block-state flattening table", e);
 		}

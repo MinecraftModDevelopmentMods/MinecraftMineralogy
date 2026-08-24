@@ -44,10 +44,19 @@ jobs:
       - name: Make the wrapper executable
         run: chmod +x ./gradlew
 
+      - name: Stage exact OreSpawn release dependency
+        id: orespawn
+        run: |
+          mirror="$RUNNER_TEMP/orespawn-mirror"
+          bash gradle/stage-orespawn-release.sh "$mirror"
+          echo "repository=$mirror" >> "$GITHUB_OUTPUT"
+
       - name: Build, test, and audit release artifacts
         run: >-
           ./gradlew clean check build javadoc verifyReleaseDependencies verifyReleaseArtifacts
-          writeReleaseChecksums verifyEclipseProductionClasspath --no-daemon --stacktrace
+          writeReleaseChecksums verifyEclipseProductionClasspath
+          -PorespawnVerificationRepository=${{ steps.orespawn.outputs.repository }}
+          --no-daemon --stacktrace
 
       - name: Upload audited release candidate
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7

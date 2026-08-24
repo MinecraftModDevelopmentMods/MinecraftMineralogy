@@ -31,18 +31,38 @@
         ]
       }
     },
-    "has_material_recipe": {
-      "trigger": "minecraft:recipe_unlocked",
+    "has_sand": {
+      "trigger": "minecraft:inventory_changed",
       "conditions": {
-        "recipe": "mineralogy:gabbro_brick_stairs"
+        "items": [
+          {
+            "item": "minecraft:sand",
+            "data": 0
+          }
+        ]
+      }
+    },
+    "has_red_sand": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:sand",
+            "data": 1
+          }
+        ]
       }
     }
   },
   "requirements": [
     [
       "has_the_recipe",
-      "has_rock",
-      "has_material_recipe"
+      "has_rock"
+    ],
+    [
+      "has_the_recipe",
+      "has_sand",
+      "has_red_sand"
     ]
   ]
 }

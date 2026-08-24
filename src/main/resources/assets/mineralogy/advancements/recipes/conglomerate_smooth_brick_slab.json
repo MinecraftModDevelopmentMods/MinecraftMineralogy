@@ -26,19 +26,12 @@
           }
         ]
       }
-    },
-    "has_material_recipe": {
-      "trigger": "minecraft:recipe_unlocked",
-      "conditions": {
-        "recipe": "mineralogy:conglomerate_smooth_brick"
-      }
     }
   },
   "requirements": [
     [
       "has_the_recipe",
-      "has_rock",
-      "has_material_recipe"
+      "has_rock"
     ]
   ]
 }

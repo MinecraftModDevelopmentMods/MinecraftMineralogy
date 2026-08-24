@@ -30,19 +30,12 @@
           }
         ]
       }
-    },
-    "has_material_recipe": {
-      "trigger": "minecraft:recipe_unlocked",
-      "conditions": {
-        "recipe": "mineralogy:phyllite_smooth_wall"
-      }
     }
   },
   "requirements": [
     [
       "has_the_recipe",
-      "has_rock",
-      "has_material_recipe"
+      "has_rock"
     ]
   ]
 }

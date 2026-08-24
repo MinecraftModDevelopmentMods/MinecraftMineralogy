@@ -48,10 +48,12 @@ All Mineralogy crafting recipes are native Minecraft/Forge 1.12 JSON under
 `assets/mineralogy/recipes/`. Run `scripts/generate-recipes.ps1` after changing
 the recipe matrix; it generates the 27 stone families and global recipes, then
 ensures every recipe has a matching unlock advancement with the same Forge
-conditions. Dependent recipes also listen for the recipe that produces their
-input form. This avoids Forge 1.12's delayed `inventory_changed` trigger for
-items taken directly from a crafting-output slot while retaining direct
-inventory possession as a fallback.
+conditions. Unlocks use direct inventory ingredients instead of listening to
+other recipe unlocks, which would recursively reveal an entire construction
+tree. Polishing uses Minecraft 1.12's advancement requirements matrix to
+require the matching source plus accepted sand; manually crafting a recipe is
+the target-native fallback for Forge's delayed crafting-output inventory
+trigger.
 
 Reliefs preserve the historical two-stage contract. Nine exact matching
 polished blocks produce 16 blank reliefs; the blank relief is then the input to

@@ -27,9 +27,10 @@ Mineralogy 6.0.1.112021 for Minecraft 1.12.2
   Relief recipes now use exact registered items instead of mismatched
   OreDictionary names.
 - Added a condition-matched unlock advancement for every one of the 1,387
-  crafting recipes. Recipe-producing materials and forms now reveal their
-  dependent recipes immediately, including slab recombination, while reliefs
-  unlock in the intended polished-rock to blank to marked-relief sequence.
+  crafting recipes. Unlocks follow the exact ingredient progression without
+  recursively unlocking consumers: polishing requires its matching source and
+  accepted sand, construction recipes require their direct form, and reliefs
+  progress from polished rock to blank to marked relief.
 - Restored complete cobblestone and specialty OreDictionary compatibility.
 - Added 17 reviewed locales with the same 938 ordered keys, including
   Brazilian and European Portuguese.

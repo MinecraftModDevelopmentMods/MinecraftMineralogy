@@ -378,42 +378,69 @@ public class RecipeContractTest {
     }
 
     @Test
-    public void constructionAdvancementsAlsoUnlockFromTheirMaterialRecipe() throws Exception {
-        for (String family : FAMILIES) {
-            assertMaterialRecipeUnlock(family + "_brick_stairs", family + "_brick");
-            assertMaterialRecipeUnlock(family + "_brick_slab", family + "_brick");
-            assertMaterialRecipeUnlock(family + "_brick_furnace", family + "_brick");
-            assertMaterialRecipeUnlock(family + "_brick_wall", family + "_brick");
+    public void recipeAdvancementsUseDirectInputsWithoutRecursiveRecipeUnlocks() throws Exception {
+        for (File file : advancementFiles()) {
+            JsonObject advancement = json(file);
+            JsonObject criteria = advancement.getAsJsonObject("criteria");
+            assertFalse(file.getName(), criteria.has("has_material_recipe"));
 
-            assertMaterialRecipeUnlock(family + "_smooth_stairs", family + "_smooth");
-            assertMaterialRecipeUnlock(family + "_smooth_slab", family + "_smooth");
-            assertMaterialRecipeUnlock(family + "_smooth_furnace", family + "_smooth");
-            assertMaterialRecipeUnlock(family + "_smooth_wall", family + "_smooth");
-            assertMaterialRecipeUnlock(family + "_smooth_brick", family + "_smooth");
-            assertSourceUnlock(family + "_relief_blank",
-                    family + "_smooth", family + "_smooth");
+            String recipeName = file.getName().substring(0, file.getName().length() - 5);
+            JsonObject ownRecipe = criteria.getAsJsonObject("has_the_recipe");
+            assertNotNull(file.getName(), ownRecipe);
+            assertEquals(file.getName(), "mineralogy:" + recipeName,
+                    ownRecipe.getAsJsonObject("conditions").get("recipe").getAsString());
+            assertNotNull(file.getName(), criteria.getAsJsonObject("has_rock"));
+            if (!criteria.has("has_sand")) {
+                JsonArray requirements = advancement.getAsJsonArray("requirements");
+                assertEquals(file.getName(), 1, requirements.size());
+                assertEquals(file.getName(), Arrays.asList("has_the_recipe", "has_rock"),
+                        strings(requirements.get(0).getAsJsonArray()));
+            }
+        }
+
+        for (String family : FAMILIES) {
+            assertSourceUnlock(family + "_brick_stairs", family + "_brick");
+            assertSourceUnlock(family + "_brick_slab", family + "_brick");
+            assertSourceUnlock(family + "_brick_furnace", family + "_brick");
+            assertSourceUnlock(family + "_brick_wall", family + "_brick");
+
+            assertSourceUnlock(family + "_smooth_stairs", family + "_smooth");
+            assertSourceUnlock(family + "_smooth_slab", family + "_smooth");
+            assertSourceUnlock(family + "_smooth_furnace", family + "_smooth");
+            assertSourceUnlock(family + "_smooth_wall", family + "_smooth");
+            assertSourceUnlock(family + "_smooth_brick", family + "_smooth");
+            assertSourceUnlock(family + "_relief_blank", family + "_smooth");
             for (String relief : RELIEFS) {
                 if (!"blank".equals(relief) && !"right".equals(relief)) {
-                    assertSourceUnlock(family + "_relief_" + relief,
-                            family + "_relief_blank", family + "_relief_blank");
+                    assertSourceUnlock(family + "_relief_" + relief, family + "_relief_blank");
                 }
             }
-            assertSourceUnlock(family + "_relief_right",
-                    family + "_relief_left", family + "_relief_left");
+            assertSourceUnlock(family + "_relief_right", family + "_relief_left");
 
-            assertMaterialRecipeUnlock(family + "_smooth_brick_stairs", family + "_smooth_brick");
-            assertMaterialRecipeUnlock(family + "_smooth_brick_slab", family + "_smooth_brick");
-            assertMaterialRecipeUnlock(family + "_smooth_brick_furnace", family + "_smooth_brick");
-            assertMaterialRecipeUnlock(family + "_smooth_brick_wall", family + "_smooth_brick");
+            assertSourceUnlock(family + "_smooth_brick_stairs", family + "_smooth_brick");
+            assertSourceUnlock(family + "_smooth_brick_slab", family + "_smooth_brick");
+            assertSourceUnlock(family + "_smooth_brick_furnace", family + "_smooth_brick");
+            assertSourceUnlock(family + "_smooth_brick_wall", family + "_smooth_brick");
 
-            assertSourceUnlock(family + "_raw_slab_recombination",
-                    family + "_slab", family + "_slab");
-            assertSourceUnlock(family + "_polished_slab_recombination",
-                    family + "_smooth_slab", family + "_smooth_slab");
-            assertSourceUnlock(family + "_raw_stairs_polishing",
-                    family + "_stairs", family + "_stairs");
-            assertSourceUnlock(family + "_brick_block_polishing",
-                    family + "_brick", family + "_brick");
+            assertSourceUnlock(family + "_raw_slab_recombination", family + "_slab");
+            assertSourceUnlock(family + "_polished_slab_recombination", family + "_smooth_slab");
+            assertSourceUnlock(family + "_raw_stairs_polishing", family + "_stairs");
+            assertSourceUnlock(family + "_brick_block_polishing", family + "_brick");
+        }
+    }
+
+    @Test
+    public void polishingUnlocksRequireTheirSourceAndAcceptedSand() throws Exception {
+        for (String family : FAMILIES) {
+            assertSandGatedUnlock(family + "_smooth", family, false);
+            for (String finish : new String[] { "raw", "brick" }) {
+                for (String shape : new String[] { "stairs", "slab", "wall" }) {
+                    String source = family + ("raw".equals(finish) ? "" : "_brick") + "_" + shape;
+                    assertSandGatedUnlock(family + "_" + finish + "_" + shape + "_polishing",
+                            source, true);
+                }
+            }
+            assertSandGatedUnlock(family + "_brick_block_polishing", family + "_brick", true);
         }
     }
 
@@ -433,26 +460,8 @@ public class RecipeContractTest {
         assertEquals(4, result(unpack).get("count").getAsInt());
     }
 
-    private static void assertMaterialRecipeUnlock(String advancementName,
-            String materialRecipeName) throws Exception {
-        JsonObject advancement = json(new File(ADVANCEMENT_ROOT, advancementName + ".json"));
-        JsonObject criterion = advancement.getAsJsonObject("criteria")
-                .getAsJsonObject("has_material_recipe");
-        assertNotNull(advancementName, criterion);
-        assertEquals(advancementName, "minecraft:recipe_unlocked",
-                criterion.get("trigger").getAsString());
-        assertEquals(advancementName, "mineralogy:" + materialRecipeName,
-                criterion.getAsJsonObject("conditions").get("recipe").getAsString());
-
-        JsonArray requirements = advancement.getAsJsonArray("requirements");
-        assertEquals(advancementName, 1, requirements.size());
-        assertTrue(advancementName,
-                strings(requirements.get(0).getAsJsonArray()).contains("has_material_recipe"));
-        assertTrue(advancementName, new File(RECIPE_ROOT, materialRecipeName + ".json").isFile());
-    }
-
     private static void assertSourceUnlock(String advancementName,
-            String sourceItemName, String sourceRecipeName) throws Exception {
+            String sourceItemName) throws Exception {
         JsonObject advancement = json(new File(ADVANCEMENT_ROOT, advancementName + ".json"));
         JsonObject inventory = advancement.getAsJsonObject("criteria").getAsJsonObject("has_rock");
         assertNotNull(advancementName, inventory);
@@ -462,7 +471,40 @@ public class RecipeContractTest {
         assertEquals(advancementName, 1, items.size());
         assertEquals(advancementName, "mineralogy:" + sourceItemName,
                 items.get(0).getAsJsonObject().get("item").getAsString());
-        assertMaterialRecipeUnlock(advancementName, sourceRecipeName);
+    }
+
+    private static void assertSandGatedUnlock(String advancementName,
+            String sourceItemName, boolean acceptsRedSand) throws Exception {
+        JsonObject advancement = json(new File(ADVANCEMENT_ROOT, advancementName + ".json"));
+        JsonObject criteria = advancement.getAsJsonObject("criteria");
+        assertSourceUnlock(advancementName, sourceItemName);
+        assertInventoryItem(criteria.getAsJsonObject("has_sand"), "minecraft:sand", 0);
+        assertEquals(advancementName, acceptsRedSand, criteria.has("has_red_sand"));
+        if (acceptsRedSand) {
+            assertInventoryItem(criteria.getAsJsonObject("has_red_sand"), "minecraft:sand", 1);
+        }
+
+        JsonArray requirements = advancement.getAsJsonArray("requirements");
+        assertEquals(advancementName, 2, requirements.size());
+        assertEquals(advancementName, Arrays.asList("has_the_recipe", "has_rock"),
+                strings(requirements.get(0).getAsJsonArray()));
+        List<String> sandAlternatives = strings(requirements.get(1).getAsJsonArray());
+        assertEquals(advancementName,
+                acceptsRedSand
+                        ? Arrays.asList("has_the_recipe", "has_sand", "has_red_sand")
+                        : Arrays.asList("has_the_recipe", "has_sand"),
+                sandAlternatives);
+    }
+
+    private static void assertInventoryItem(JsonObject criterion, String expectedItem, int data) {
+        assertNotNull(expectedItem, criterion);
+        assertEquals(expectedItem, "minecraft:inventory_changed", criterion.get("trigger").getAsString());
+        JsonArray items = criterion.getAsJsonObject("conditions").getAsJsonArray("items");
+        assertEquals(expectedItem, 1, items.size());
+        assertEquals(expectedItem, expectedItem,
+                items.get(0).getAsJsonObject().get("item").getAsString());
+        assertEquals(expectedItem, data,
+                items.get(0).getAsJsonObject().get("data").getAsInt());
     }
 
     private static void assertReliefShape(String family, String relief,
@@ -603,6 +645,13 @@ public class RecipeContractTest {
         File[] files = RECIPE_ROOT.listFiles(
                 (directory, name) -> name.endsWith(".json") && !name.startsWith("_"));
         assertTrue(RECIPE_ROOT.isDirectory());
+        return files == null ? new File[0] : files;
+    }
+
+    private static File[] advancementFiles() {
+        File[] files = ADVANCEMENT_ROOT.listFiles(
+                (directory, name) -> name.endsWith(".json") && !name.startsWith("_"));
+        assertTrue(ADVANCEMENT_ROOT.isDirectory());
         return files == null ? new File[0] : files;
     }
 

@@ -35,13 +35,25 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6
 
+      - name: Stage exact OreSpawn release dependency
+        id: orespawn
+        run: |
+          mirror="$RUNNER_TEMP/orespawn-mirror"
+          bash gradle/stage-orespawn-release.sh "$mirror"
+          echo "repository=$mirror" >> "$GITHUB_OUTPUT"
+
       - name: Build, test, and audit release artifacts
         run: |
           chmod +x ./gradlew
-          ./gradlew clean check build javadoc verifyReleaseDependencies verifyReleaseArtifacts writeReleaseChecksums --no-daemon --stacktrace
+          ./gradlew clean check build javadoc verifyReleaseDependencies verifyReleaseArtifacts writeReleaseChecksums \
+            -PorespawnVerificationRepository="${{ steps.orespawn.outputs.repository }}" \
+            --no-daemon --stacktrace
 
       - name: Generate and audit Eclipse production launches
-        run: ./gradlew genEclipseRuns eclipse verifyEclipseProductionClasspath --no-daemon --stacktrace
+        run: >-
+          ./gradlew genEclipseRuns eclipse verifyEclipseProductionClasspath
+          -PorespawnVerificationRepository=${{ steps.orespawn.outputs.repository }}
+          --no-daemon --stacktrace
 
       - name: Upload audited release candidate
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7

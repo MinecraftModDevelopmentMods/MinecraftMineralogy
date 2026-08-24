@@ -1,10 +1,12 @@
 package zone.moddev.mc.mineralogy.compat;
 
+import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
@@ -46,7 +48,7 @@ public final class CobblestoneTagPolicy {
         if (MineralogyConfig.makeRockCobblestoneEquivilent()) blocks.addAll(configuredBlocks);
         addBlock(blocks, "chert");
         addBlock(blocks, "pumice");
-        blockTags.getTagMap().put(COBBLESTONE, Tag.Builder.<Block>create().addAll(blocks).build(COBBLESTONE));
+        replaceElements(blockTags, blocks);
         BlockTags.setCollection(blockTags);
 
         TagCollection<Item> itemTags = ItemTags.getCollection();
@@ -55,8 +57,14 @@ public final class CobblestoneTagPolicy {
         if (MineralogyConfig.makeRockCobblestoneEquivilent()) items.addAll(configuredItems);
         addItem(items, "chert");
         addItem(items, "pumice");
-        itemTags.getTagMap().put(COBBLESTONE, Tag.Builder.<Item>create().addAll(items).build(COBBLESTONE));
+        replaceElements(itemTags, items);
         ItemTags.setCollection(itemTags);
+
+        // Recipes retain the Tag instance resolved while their ingredients are
+        // parsed. Mutating that instance and invalidating Forge's ingredient
+        // caches makes the configured membership effective on first load and
+        // every data reload.
+        Ingredient.invalidateAll();
     }
 
     private static Set<Block> rawRockBlocks() {
@@ -71,6 +79,18 @@ public final class CobblestoneTagPolicy {
     private static <T> Set<T> existing(TagCollection<T> collection, ResourceLocation id) {
         Tag<T> tag = collection.get(id);
         return tag == null ? new LinkedHashSet<>() : new LinkedHashSet<>(tag.getAllElements());
+    }
+
+    private static <T> void replaceElements(TagCollection<T> collection, Set<T> values) {
+        Tag<T> tag = collection.get(COBBLESTONE);
+        if (tag == null) {
+            collection.getTagMap().put(COBBLESTONE,
+                    Tag.Builder.<T>create().addAll(values).build(COBBLESTONE));
+            return;
+        }
+        Collection<T> elements = tag.getAllElements();
+        elements.clear();
+        elements.addAll(values);
     }
 
     private static void addBlock(Set<Block> blocks, String name) {

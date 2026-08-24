@@ -37,7 +37,8 @@ public class VersionContractTest {
         assertFalse(build.contains("Mineralogy-${project.mc_version}"));
         assertTrue(build.contains("artifact(releaseJar)"));
         assertTrue(build.contains("versionParts[3] != expectedTargetVersion"));
-        assertTrue(build.contains("ext.release_tag = \"${project.mc_version}-${project.mod_version}\""));
+        assertTrue(build.contains("ext.release_tag = project.mod_version"));
+        assertFalse(build.contains("${project.mc_version}-${project.mod_version}"));
         assertFalse(build.contains("BUILD_NUMBER"));
         assertFalse(build.contains("TRAVIS_BUILD_NUMBER"));
         assertFalse(build.contains("CIRCLE_BUILD_NUM"));
@@ -113,6 +114,7 @@ public class VersionContractTest {
         String guide = read(new File("docs/VERSIONS.md"));
         assertTrue(guide.contains("Major.Minor.Bug.Target"));
         assertTrue(guide.contains("6.0.1.112021"));
+        assertTrue(guide.contains("The release tag is exactly the complete four-component version"));
         assertTrue(guide.contains("1.12.2 | Forge | `112021`"));
         assertTrue(guide.contains("loader code `1` for Forge"));
         assertTrue(guide.contains("[6.0.0,7.0.0)"));

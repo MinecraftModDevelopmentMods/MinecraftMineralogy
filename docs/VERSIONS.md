@@ -23,6 +23,11 @@ This expanded numeric form is compatible with Maven version ordering, but it
 is not strict Semantic Versioning 2.0 because SemVer defines three numeric core
 components.
 
+The release tag is exactly the complete four-component version, with no
+redundant Minecraft-version prefix. For this branch the tag is therefore
+`6.0.1.112021`, not `1.12.2-6.0.1.112021`. The Target already makes tags unique
+across Minecraft versions and loaders.
+
 ## Reading the target component
 
 The target is deterministic; it is not a CI run number or another feature

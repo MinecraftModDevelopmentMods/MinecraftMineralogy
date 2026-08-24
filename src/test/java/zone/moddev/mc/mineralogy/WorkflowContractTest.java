@@ -1,5 +1,6 @@
 package zone.moddev.mc.mineralogy;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -23,8 +24,10 @@ public class WorkflowContractTest {
     @Test
     public void tagStarterAcceptsOnlyTheExact112TargetTagAfterGreenCi() throws Exception {
         String starter = read(".github/workflows/release-on-tag.yml");
-        assertTrue(starter.contains("'1.12.2-*'"));
+        assertTrue(starter.contains("'*.*.*.112021'"));
         assertTrue(starter.contains("\\.112021$"));
+        assertTrue(starter.contains("expected_tag=\"$release_version\""));
+        assertFalse(starter.contains("expected_tag=\"1.12.2-$release_version\""));
         assertTrue(starter.contains("Build, test, and audit"));
         assertTrue(starter.contains("--ref master-1.12"));
     }
@@ -34,7 +37,8 @@ public class WorkflowContractTest {
         String deploy = read(".github/workflows/deploy-release.yml");
         assertTrue(deploy.contains("1.10.2) target_suffix=110021"));
         assertTrue(deploy.contains("1.12.2) target_suffix=112021"));
-        assertTrue(deploy.contains("release_tag=\"$minecraft_version-$actual_version\""));
+        assertTrue(deploy.contains("release_tag=\"$actual_version\""));
+        assertFalse(deploy.contains("release_tag=\"$minecraft_version-$actual_version\""));
         assertTrue(deploy.contains("minecraft_version: ${{ steps.validate.outputs.minecraft_version }}"));
         assertTrue(deploy.contains("game-versions: ${{ needs.preflight.outputs.minecraft_version }}"));
     }

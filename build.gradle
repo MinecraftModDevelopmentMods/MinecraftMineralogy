@@ -40,7 +40,7 @@ if (versionParts[3] != expectedTargetVersion) {
 
 ext.functional_version = versionParts[0..2].join('.')
 ext.display_version = project.mod_version
-ext.release_tag = "${project.mc_version}-${project.mod_version}"
+ext.release_tag = project.mod_version
 
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(8)

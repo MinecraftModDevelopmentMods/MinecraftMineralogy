@@ -3,7 +3,7 @@ name: Start Mineralogy release from tag
 on:
   push:
     tags:
-      - '1.12.2-*'
+      - '*.*.*.112021'
 
 permissions:
   actions: write
@@ -39,7 +39,7 @@ jobs:
             exit 1
           fi
 
-          expected_tag="1.12.2-$release_version"
+          expected_tag="$release_version"
           if [[ "$GITHUB_REF_NAME" != "$expected_tag" ]]; then
             echo "Release tag must be $expected_tag; found $GITHUB_REF_NAME" >&2
             exit 1

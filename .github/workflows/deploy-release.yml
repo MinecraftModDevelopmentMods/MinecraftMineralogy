@@ -86,7 +86,7 @@ jobs:
           fi
 
           release_sha="$(git rev-parse HEAD)"
-          release_tag="$minecraft_version-$actual_version"
+          release_tag="$actual_version"
           echo "release_sha=$release_sha" >> "$GITHUB_OUTPUT"
           echo "release_version=$actual_version" >> "$GITHUB_OUTPUT"
           echo "release_tag=$release_tag" >> "$GITHUB_OUTPUT"

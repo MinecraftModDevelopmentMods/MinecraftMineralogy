@@ -329,8 +329,14 @@ task syncForge25EclipseLaunches {
     doLast {
         String mainClass = 'net.minecraftforge.userdev.LaunchTesting'
         String mainOutput = new File(projectDir, 'bin/main').absolutePath
-        String resourceOutput = sourceSets.main.output.resourcesDir.absolutePath
-        String modClasses = "mineralogy%%${mainOutput};mineralogy%%${resourceOutput}"
+        String modClasses = "mineralogy%%${mainOutput};mineralogy%%${mainOutput}"
+        File processedDocumentation = new File(sourceSets.main.output.resourcesDir,
+                'META-INF/mineralogy/docs')
+        File eclipseDocumentation = new File(mainOutput, 'META-INF/mineralogy/docs')
+        copy {
+            from processedDocumentation
+            into eclipseDocumentation
+        }
         ['Client', 'Server'].each { String runName ->
             File launch = file("run${runName}.launch")
             if (!launch.isFile()) throw new GradleException("Missing generated Eclipse launch ${launch}")
@@ -390,8 +396,17 @@ task verifyEclipseProductionClasspath {
             if (!launch.contains('ATTR_EXCLUDE_TEST_CODE') || launch =~ /(?i)(junit|mockito|src\/test)/) {
                 throw new GradleException("Eclipse launch is not production-only: ${name}")
             }
-            if (!launch.contains(sourceSets.main.output.resourcesDir.absolutePath)) {
-                throw new GradleException("Eclipse launch is missing processed production resources: ${name}")
+            String mainOutput = new File(projectDir, 'bin/main').absolutePath
+            String expectedModClasses = "mineralogy%%${mainOutput};mineralogy%%${mainOutput}"
+            if (!launch.contains(expectedModClasses)) {
+                throw new GradleException("Eclipse launch is not using Forge 25's merged production output: ${name}")
+            }
+        }
+        ['README.md', 'PLAYER_GUIDE.md', 'DEVELOPER_GUIDE.md', 'CONTENT_CONFIG.md',
+         'PROVIDER.md', 'VERSIONS.md', 'examples/mineralogy-provider.json'].each { name ->
+            File guide = new File(projectDir, "bin/main/META-INF/mineralogy/docs/${name}")
+            if (!guide.isFile()) {
+                throw new GradleException("Eclipse output is missing bundled documentation: ${name}")
             }
         }
     }

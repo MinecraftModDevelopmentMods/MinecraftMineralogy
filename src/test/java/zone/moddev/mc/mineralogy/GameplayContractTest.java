@@ -128,8 +128,10 @@ public class GameplayContractTest {
 
         String build = text("build.gradle");
         assertTrue(build.contains("dependsOn processResources"));
-        assertTrue(build.contains("mineralogy%%${resourceOutput}"));
-        assertTrue(build.contains("Eclipse launch is missing processed production resources"));
+        assertTrue(build.contains("mineralogy%%${mainOutput};mineralogy%%${mainOutput}"));
+        assertTrue(build.contains("from processedDocumentation"));
+        assertTrue(build.contains("examples/mineralogy-provider.json"));
+        assertTrue(build.contains("Eclipse output is missing bundled documentation"));
     }
 
     private static String text(String path) throws Exception {

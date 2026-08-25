@@ -24,6 +24,13 @@ public class VersionContractTest {
         String minecraftVersion = properties.getProperty("mc_version");
         String modVersion = properties.getProperty("mod_version");
         assertEquals("1.10.2", minecraftVersion);
+        assertEquals(minecraftVersion, properties.getProperty("minecraft_version"));
+        assertEquals("forge", properties.getProperty("loader_name"));
+        assertEquals("1", properties.getProperty("loader_code"));
+        assertEquals("8", properties.getProperty("java_version"));
+        assertEquals("8.0.502+7", properties.getProperty("java_toolchain_version"));
+        assertEquals("17", properties.getProperty("gradle_java_version"));
+        assertEquals("240974", properties.getProperty("curseforge_project_id"));
         assertEquals("110021", targetFor(minecraftVersion, 1));
         assertEquals("6.0.1.110021", modVersion);
         assertEquals(modVersion, Mineralogy.VERSION);
@@ -38,7 +45,8 @@ public class VersionContractTest {
         assertFalse(build.contains("Mineralogy-${project.mc_version}"));
         assertTrue(build.contains("artifact(releaseJar)"));
         assertTrue(build.contains("versionParts[3] != expectedTargetVersion"));
-        assertTrue(build.contains("ext.release_tag = \"${project.mc_version}-${project.mod_version}\""));
+        assertTrue(build.contains("ext.release_tag = project.mod_version"));
+        assertFalse(build.contains("${project.mc_version}-${project.mod_version}"));
         assertFalse(build.contains("BUILD_NUMBER"));
         assertFalse(build.contains("TRAVIS_BUILD_NUMBER"));
         assertFalse(build.contains("CIRCLE_BUILD_NUM"));
@@ -69,6 +77,8 @@ public class VersionContractTest {
         assertEquals("245586", properties.getProperty("orespawn_curse_project_id"));
         assertEquals("8681675", properties.getProperty("orespawn_curse_file_id"));
         assertEquals("4.0.6.110021", properties.getProperty("orespawn_version"));
+        assertEquals("9FD6F2D6C5513A45C2B1CBE62F352A4F804FC7EE3EE30C44A6E5266BBF813E6D",
+                properties.getProperty("orespawn_sha256"));
         assertFalse(properties.containsKey("create_api_jar"));
         assertFalse(properties.containsKey("create_deobf_jar"));
 

@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:schist_stairs"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "x  ",
@@ -7,17 +13,11 @@
   ],
   "key": {
     "x": {
-      "item": "mineralogy:schist"
+      "tag": "mineralogy:stones/schist"
     }
   },
   "result": {
     "item": "mineralogy:schist_stairs",
     "count": 4
-  },
-  "conditions": [
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_ROCKSTAIRS"
-    }
-  ]
+  }
 }

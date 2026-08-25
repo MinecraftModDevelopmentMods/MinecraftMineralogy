@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:limestone_smooth_brick"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "xx",
@@ -6,21 +12,11 @@
   ],
   "key": {
     "x": {
-      "item": "mineralogy:limestone_smooth"
+      "tag": "mineralogy:stones/limestone/smooth"
     }
   },
   "result": {
     "item": "mineralogy:limestone_smooth_brick",
     "count": 4
-  },
-  "conditions": [
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTH"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTHBRICK"
-    }
-  ]
+  }
 }

@@ -1,0 +1,25 @@
+{
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:rock_salt_slab"
+    },
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:rock_salt"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mineralogy:rock_salt_slab"
+    },
+    {
+      "item": "mineralogy:rock_salt_slab"
+    }
+  ],
+  "result": {
+    "item": "mineralogy:rock_salt",
+    "count": 1
+  }
+}

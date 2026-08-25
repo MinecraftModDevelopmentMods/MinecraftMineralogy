@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:scoria_brick"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "xx",
@@ -6,17 +12,11 @@
   ],
   "key": {
     "x": {
-      "item": "mineralogy:scoria"
+      "tag": "mineralogy:stones/scoria"
     }
   },
   "result": {
     "item": "mineralogy:scoria_brick",
     "count": 4
-  },
-  "conditions": [
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_BRICK"
-    }
-  ]
+  }
 }

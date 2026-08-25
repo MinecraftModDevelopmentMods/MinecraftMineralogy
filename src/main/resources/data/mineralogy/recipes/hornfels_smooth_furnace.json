@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:hornfels_smooth_furnace"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "xxx",
@@ -7,27 +13,14 @@
   ],
   "key": {
     "x": {
-      "item": "mineralogy:hornfels_smooth_slab"
+      "tag": "mineralogy:slabs/hornfels/smooth"
     },
     "y": {
       "item": "minecraft:furnace"
     }
   },
   "result": {
-    "item": "mineralogy:hornfels_smooth_furnace"
-  },
-  "conditions": [
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTH"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTHSLAB"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTHFURNACE"
-    }
-  ]
+    "item": "mineralogy:hornfels_smooth_furnace",
+    "count": 1
+  }
 }

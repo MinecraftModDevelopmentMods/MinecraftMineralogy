@@ -1,0 +1,26 @@
+{
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:schist_wall"
+    },
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:schist_brick_wall"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xx",
+    "xx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:schist_wall"
+    }
+  },
+  "result": {
+    "item": "mineralogy:schist_brick_wall",
+    "count": 4
+  }
+}

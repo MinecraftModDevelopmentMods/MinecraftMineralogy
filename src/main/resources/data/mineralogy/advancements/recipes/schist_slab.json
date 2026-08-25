@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:schist_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:schist_slab"

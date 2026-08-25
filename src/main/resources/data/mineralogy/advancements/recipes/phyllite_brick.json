@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:phyllite_brick"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:phyllite_brick"

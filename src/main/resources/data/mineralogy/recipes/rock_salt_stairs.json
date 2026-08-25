@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:rock_salt_stairs"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "x  ",
@@ -7,17 +13,11 @@
   ],
   "key": {
     "x": {
-      "item": "mineralogy:rock_salt"
+      "tag": "mineralogy:stones/rock_salt"
     }
   },
   "result": {
     "item": "mineralogy:rock_salt_stairs",
     "count": 4
-  },
-  "conditions": [
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_ROCKSTAIRS"
-    }
-  ]
+  }
 }

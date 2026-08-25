@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:tuff_relief_pickaxe"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:tuff_relief_pickaxe"
@@ -16,11 +22,7 @@
       "conditions": {
         "items": [
           {
-            "type": "mineralogy:config_item",
-            "flags": [
-              "GENERATE_SMOOTH"
-            ],
-            "item": "mineralogy:tuff_smooth"
+            "item": "mineralogy:tuff_relief_blank"
           }
         ]
       }

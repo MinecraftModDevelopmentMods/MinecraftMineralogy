@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:tuff_smooth"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:tuff_smooth"
@@ -20,12 +26,26 @@
           }
         ]
       }
+    },
+    "has_sand": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:sand"
+          }
+        ]
+      }
     }
   },
   "requirements": [
     [
       "has_the_recipe",
       "has_rock"
+    ],
+    [
+      "has_the_recipe",
+      "has_sand"
     ]
   ]
 }

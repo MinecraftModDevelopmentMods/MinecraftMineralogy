@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:rhyolite_stairs"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "x  ",
@@ -7,17 +13,11 @@
   ],
   "key": {
     "x": {
-      "item": "mineralogy:rhyolite"
+      "tag": "mineralogy:stones/rhyolite"
     }
   },
   "result": {
     "item": "mineralogy:rhyolite_stairs",
     "count": 4
-  },
-  "conditions": [
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_ROCKSTAIRS"
-    }
-  ]
+  }
 }

@@ -1,3 +1,10 @@
+import groovy.json.JsonSlurper
+import groovy.util.XmlSlurper
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
+import java.security.MessageDigest
+import java.util.zip.ZipFile
+
 buildscript {
     repositories {
         maven { url = 'https://maven.minecraftforge.net/' }
@@ -7,124 +14,598 @@ buildscript {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
     }
 }
+
 apply plugin: 'net.minecraftforge.gradle'
-// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
 version = project.mod_version
-group = 'com.mcmoddev'
-archivesBaseName = "Mineralogy-${project.mc_version}"
+group = project.mod_group
+archivesBaseName = 'Mineralogy'
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
+// Eclipse imports this nested checkout under its folder name. Keep the
+// generated project and Forge launch configurations aligned with that stable
+// workspace identity rather than Gradle's publication-facing root name.
+def eclipseWorkspaceProjectName = projectDir.name
+eclipse {
+    project {
+        name = eclipseWorkspaceProjectName
+    }
+}
+
+def versionParts = project.mod_version.toString().tokenize('.')
+if (versionParts.size() != 4 || !versionParts.every { it ==~ /\d+/ }) {
+    throw new GradleException("mod_version must use Major.Minor.Bug.Target numeric form: ${project.mod_version}")
+}
+if (versionParts[3] != '113021') {
+    throw new GradleException("Mineralogy 1.13.2 Forge releases must use target 113021: ${project.mod_version}")
+}
+
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-    // The mappings can be changed at any time, and must be in the following format.
-    // snapshot_YYYYMMDD   Snapshot are built nightly.
-    // stable_#            Stables are built at the discretion of the MCP team.
-    // Use non-default mappings at your own risk. they may not always work.
-    // Simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: 'snapshot', version: project.mcp_mappings_version
-    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
-    
-    // accessTransformer = file('build/resources/main/META-INF/accesstransformer.cfg')
+    mappings channel: project.mcp_mappings_channel, version: project.mcp_mappings_version
+    def developmentRunDirectory = project.file(project.findProperty('runDirectory') ?: 'run')
 
-    // Default run configurations.
-    // These can be tweaked, removed, or duplicated as needed.
     runs {
         client {
-            workingDirectory project.file('run')
-
-            // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
+            workingDirectory developmentRunDirectory
+            property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
-
-            mods {
-                mineralogy {
-                    source sourceSets.main
-                }
-            }
+            mods { mineralogy { source sourceSets.main } }
         }
-
         server {
-            workingDirectory project.file('run')
-
-            // Recommended logging data for a userdev environment
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-
-            // Recommended logging level for the console
+            workingDirectory developmentRunDirectory
+            property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
-
-            mods {
-                mineralogy {
-                    source sourceSets.main
-                }
-            }
+            args '--nogui'
+            mods { mineralogy { source sourceSets.main } }
         }
     }
+}
+
+def configureForge25Run = { JavaExec runTask, String launchTarget ->
+    runTask.main = 'net.minecraftforge.userdev.LaunchTesting'
+    runTask.environment 'target', launchTarget
+    runTask.environment 'MCP_MAPPINGS', "${mcp_mappings_channel}_${mcp_mappings_version}"
+    runTask.environment 'MCP_VERSION', mcp_version
+    runTask.environment 'FORGE_VERSION', forge_version
+    runTask.environment 'FORGE_GROUP', 'net.minecraftforge'
+    runTask.environment 'MC_VERSION', mc_version
+    runTask.environment 'MOD_CLASSES', "mineralogy%%${sourceSets.main.output.classesDirs.singleFile};" +
+            "mineralogy%%${sourceSets.main.output.resourcesDir}"
+    runTask.doFirst {
+        // Forge 25 scans the mods directory before FML creates it and logs an
+        // otherwise harmless ERROR on a completely fresh run directory.
+        File modsDirectory = new File(runTask.workingDir, 'mods')
+        if (!modsDirectory.isDirectory() && !modsDirectory.mkdirs()) {
+            throw new GradleException("Could not create development mods directory: ${modsDirectory}")
+        }
+    }
+}
+
+tasks.withType(JavaExec).all { JavaExec runTask ->
+    String launchTarget = [runClient: 'fmluserdevclient', runServer: 'fmluserdevserver'][runTask.name]
+    if (launchTarget != null) configureForge25Run(runTask, launchTarget)
+}
+
+def curseMavenRepository
+repositories {
+    mavenCentral()
+    if (project.hasProperty('orespawnVerificationRepository')) {
+        maven {
+            name = 'OreSpawnReleaseVerificationMirror'
+            url = uri(project.property('orespawnVerificationRepository'))
+            metadataSources { artifact() }
+        }
+    }
+    else {
+        curseMavenRepository = maven {
+            name = 'CurseMaven'
+            url = 'https://www.cursemaven.com'
+            metadataSources { artifact() }
+        }
+    }
+}
+
+// ForgeGradle 3 appends its deobfuscating repository during project evaluation.
+// CurseMaven returns the raw artifact for otherwise-valid synthetic `_mapped_`
+// versions, so add it afterwards and allow ForgeGradle to service mapped requests
+// first. The released numeric CurseForge coordinate still resolves normally.
+afterEvaluate {
+    if (curseMavenRepository != null) {
+        repositories.remove(curseMavenRepository)
+        repositories.add(curseMavenRepository)
+    }
+}
+
+configurations {
+    orespawnRelease
 }
 
 dependencies {
-    // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
-    // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
-    // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft "net.minecraftforge:forge:${project.mc_version}-${project.forge_version}"
-
-    // You may put jars on which you depend on in ./libs or you may define them like so..
-    // compile "some.group:artifact:version:classifier"
-    // compile "some.group:artifact:version"
-
-    // Real examples
-    // compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
-    // compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
-
-    // The 'provided' configuration is for optional dependencies that exist at compile-time but might not at runtime.
-    // provided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-
-    // These dependencies get remapped to your current MCP mappings
-    // deobf 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-
-    // For more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
-
+    runtime fg.deobf("curse.maven:mmd-orespawn-${project.orespawn_curse_project_id}:${project.orespawn_curse_file_id}")
+    orespawnRelease "curse.maven:mmd-orespawn-${project.orespawn_curse_project_id}:${project.orespawn_curse_file_id}"
+    testCompile 'junit:junit:4.13.2'
 }
 
-// Example for how to get properties into the manifest for reading by the runtime..
-jar {
-    manifest {
-        attributes([
-            "Specification-Title": "Mineralogy",
-            "Specification-Vendor": "SkyBlade1978",
-            "Specification-Version": "1", // We are version 1 of ourselves
-            "Implementation-Title": project.name,
-            "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"SkyBlade1978",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-        ])
+configurations.testRuntime {
+    exclude group: 'curse.maven', module: "mmd-orespawn-${project.orespawn_curse_project_id}"
+}
+
+tasks.withType(JavaCompile) {
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
+    options.encoding = 'UTF-8'
+    options.compilerArgs += ['-Xlint:deprecation', '-Xmaxerrs', '1000']
+}
+
+tasks.withType(Test) {
+    workingDir = project.projectDir
+}
+
+javadoc {
+    failOnError = false
+    options.encoding = 'UTF-8'
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.addBooleanOption('notimestamp', true)
+}
+
+tasks.withType(AbstractArchiveTask) {
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+}
+
+processResources {
+    inputs.property 'version', project.version
+    inputs.property 'mc_version', project.mc_version
+    inputs.property 'forge_version', project.forge_version
+
+    filesMatching('META-INF/mods.toml') {
+        expand version: project.version,
+                mc_version: project.mc_version,
+                forge_version: project.forge_version
+    }
+
+    from('docs') {
+        into 'META-INF/mineralogy/docs'
+    }
+    from('src/main/resources/data/mineralogy/orespawn/provider.json') {
+        into 'META-INF/mineralogy/docs/examples'
+        rename 'provider.json', 'mineralogy-provider.json'
     }
 }
 
-// Example configuration to allow publishing using the maven-publish task
-// we define a custom artifact that is sourced from the reobfJar output task
-// and then declare that to be published
-// Note you'll need to add a repository here
-def reobfFile = file("$buildDir/reobfJar/output.jar")
-def reobfArtifact = artifacts.add('default', reobfFile) {
-    type 'jar'
-    builtBy 'reobfJar'
+jar {
+    manifest {
+        attributes([
+                'Maven-Artifact'        : "${project.group}:${archivesBaseName}:${project.version}",
+                'Specification-Title'   : 'Mineralogy',
+                'Specification-Vendor'  : 'SkyBlade1978',
+                'Specification-Version' : '1',
+                'Implementation-Title'  : 'Mineralogy',
+                'Implementation-Version': project.version,
+                'Implementation-Vendor' : 'SkyBlade1978',
+                'Built-On-Java'         : '8',
+                'Built-On'              : "${project.mc_version}-${project.forge_version}"
+        ])
+    }
+    finalizedBy 'reobfJar'
 }
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+    destinationDir = file("${buildDir}/libs")
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+    destinationDir = file("${buildDir}/libs")
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+def mainReleaseName = "Mineralogy-${project.version}.jar"
+def sourcesReleaseName = "Mineralogy-${project.version}-sources.jar"
+def javadocReleaseName = "Mineralogy-${project.version}-javadoc.jar"
+def expectedReleaseNames = [mainReleaseName, sourcesReleaseName, javadocReleaseName]
+def preparedReleaseDir = project.findProperty('preparedReleaseDir')
+def mavenUploadUrl = System.getenv('MAVEN_UPLOAD_URL') ?: 'https://invalid.invalid/missing-maven-upload-url'
+def mavenUploadUsername = System.getenv('MAVEN_UPLOAD_USERNAME') ?: ''
+def mavenUploadPassword = System.getenv('MAVEN_UPLOAD_PASSWORD') ?: ''
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifact reobfArtifact
+            groupId = project.group
+            artifactId = 'Mineralogy'
+            version = project.version
+            if (preparedReleaseDir != null) {
+                artifact new File(preparedReleaseDir.toString(), mainReleaseName)
+                artifact(new File(preparedReleaseDir.toString(), sourcesReleaseName)) {
+                    classifier = 'sources'
+                }
+                artifact(new File(preparedReleaseDir.toString(), javadocReleaseName)) {
+                    classifier = 'javadoc'
+                }
+            }
+            else {
+                artifact jar
+                artifact sourcesJar
+                artifact javadocJar
+            }
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('name', 'Minecraft Mineralogy')
+                root.appendNode('description', 'Geologically themed rocks, minerals, building blocks, and OreSpawn provider data.')
+                root.appendNode('url', 'https://github.com/MinecraftModDevelopmentMods/MinecraftMineralogy')
+                def license = root.appendNode('licenses').appendNode('license')
+                license.appendNode('name', 'GNU Lesser General Public License, Version 2.1')
+                license.appendNode('url', 'https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt')
+            }
         }
     }
     repositories {
         maven {
-            url "file:///${project.projectDir}/mcmodsrepo"
+            name = 'release'
+            url = uri(mavenUploadUrl)
+            credentials {
+                username = mavenUploadUsername
+                password = mavenUploadPassword
+            }
         }
     }
 }
+
+// ForgeGradle 3's reobfuscator rewrites the main jar after Gradle has applied
+// AbstractArchiveTask's reproducible timestamps. Repack the already-obfuscated
+// bytes once through Gradle's deterministic Zip task so clean builds are
+// byte-for-byte repeatable without altering any class or resource content.
+task normalizeReobfuscatedJar(type: Zip, dependsOn: 'reobfJar') {
+    archiveName = mainReleaseName
+    destinationDir = file("${buildDir}/reproducible")
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from { zipTree(tasks.jar.archivePath) }
+    doLast {
+        Files.move(archivePath.toPath(), tasks.jar.archivePath.toPath(),
+                StandardCopyOption.REPLACE_EXISTING)
+    }
+}
+
+assemble.dependsOn normalizeReobfuscatedJar
+
+task verifyReleaseDependencies {
+    group = 'verification'
+    description = 'Resolves and verifies the exact released OreSpawn dependency.'
+    doLast {
+        if (project.mod_version != '6.0.1.113021'
+                || project.minecraft_version != project.mc_version
+                || project.mc_version != '1.13.2'
+                || project.loader_name != 'forge'
+                || project.loader_code != '1'
+                || project.java_version != '8'
+                || project.java_toolchain_version != '8.0.502+7'
+                || project.gradle_java_version != '8'
+                || project.curseforge_project_id != '240974') {
+            throw new GradleException('Unexpected generic release dispatcher metadata')
+        }
+        if (project.orespawn_version != '4.0.6.113021' ||
+                project.orespawn_curse_project_id != '245586' ||
+                project.orespawn_curse_file_id != '8681710') {
+            throw new GradleException('Unexpected OreSpawn release coordinates')
+        }
+        File artifact = configurations.orespawnRelease.resolvedConfiguration.resolvedArtifacts
+                .find { it.moduleVersion.id.group == 'curse.maven' && it.file.name.endsWith('.jar') }?.file
+        if (artifact == null || !artifact.isFile()) {
+            throw new GradleException('Released OreSpawn artifact did not resolve')
+        }
+        String sha = MessageDigest.getInstance('SHA-256').digest(artifact.bytes).encodeHex().toString().toUpperCase()
+        if (sha != project.orespawn_sha256) {
+            throw new GradleException("OreSpawn SHA-256 mismatch: ${sha}")
+        }
+    }
+}
+
+task verifyReleaseArtifacts(dependsOn: [build, javadocJar, normalizeReobfuscatedJar]) {
+    group = 'verification'
+    description = 'Audits the three distributable jars and their production contents.'
+    doLast {
+        File libs = file("${buildDir}/libs")
+        def actual = fileTree(libs) { include 'Mineralogy-*.jar' }.files.collect { it.name }.sort()
+        def expectedSorted = expectedReleaseNames.collect().sort()
+        if (actual != expectedSorted) {
+            throw new GradleException("Expected exactly ${expectedSorted}, found ${actual}")
+        }
+        File main = new File(libs, mainReleaseName)
+        ZipFile zip = new ZipFile(main)
+        try {
+            def names = zip.entries().collect { it.name } as Set
+            [
+                    'META-INF/mods.toml',
+                    'data/mineralogy/orespawn/provider.json',
+                    'META-INF/mineralogy/docs/README.md',
+                    'META-INF/mineralogy/docs/examples/mineralogy-provider.json',
+                    'assets/mineralogy/lang/en_us.json'
+            ].each { required ->
+                if (!names.contains(required)) throw new GradleException("Release jar is missing ${required}")
+            }
+            if (names.any { it.startsWith('com/mcmoddev/mineralogy/') ||
+                    it.startsWith('zone/moddev/mc/mineralogy/worldgen/') ||
+                    it.startsWith('zone/moddev/mc/mineralogy/probe/') ||
+                    it.startsWith('zone/moddev/mc/mineralogy/test/') ||
+                    it == 'AGENTS.md' || it.contains('/agent-notes/') }) {
+                throw new GradleException('Release jar contains a retired, test, probe, or agent-only path')
+            }
+            def locales = names.findAll { it ==~ /assets\/mineralogy\/lang\/[a-z_]+\.json/ }
+            if (locales.size() != 17) {
+                throw new GradleException("Release jar must contain 17 locales, found ${locales.size()}")
+            }
+            zip.entries().findAll { !it.directory && it.name.endsWith('.class') }.each { entry ->
+                byte[] header = new byte[8]
+                def stream = zip.getInputStream(entry)
+                try {
+                    if (stream.read(header) != 8 || header[0..3] != [(byte) 0xca, (byte) 0xfe, (byte) 0xba, (byte) 0xbe]) {
+                        throw new GradleException("Invalid class header in ${entry.name}")
+                    }
+                    int major = ((header[6] & 0xff) << 8) | (header[7] & 0xff)
+                    if (major != 52) throw new GradleException("${entry.name} is class version ${major}, expected Java 8 (52)")
+                }
+                finally {
+                    stream.close()
+                }
+            }
+            def provider = new JsonSlurper().parse(zip.getInputStream(zip.getEntry('data/mineralogy/orespawn/provider.json')))
+            if (provider.schema_version != 4 || provider.provider_revision != 3 ||
+                    provider.rocks.size() != 32 || provider.ores.size() != 3 || provider.fluid_deposits.size() != 1) {
+                throw new GradleException('Packaged provider contract is invalid')
+            }
+        }
+        finally {
+            zip.close()
+        }
+    }
+}
+
+task writeReleaseChecksums(dependsOn: verifyReleaseArtifacts) {
+    group = 'verification'
+    doLast {
+        File output = file("${buildDir}/release/SHA256SUMS")
+        output.parentFile.mkdirs()
+        output.setText(expectedReleaseNames.collect().sort().collect { name ->
+            File artifact = file("${buildDir}/libs/${name}")
+            String hash = MessageDigest.getInstance('SHA-256').digest(artifact.bytes).encodeHex().toString()
+            "${hash}  ${name}"
+        }.join('\n') + '\n', 'UTF-8')
+    }
+}
+
+task verifyPreparedReleaseArtifacts {
+    group = 'verification'
+    description = 'Verifies the immutable artifact bundle supplied to Maven publication.'
+    inputs.files {
+        preparedReleaseDir == null ? [] :
+                (expectedReleaseNames + ['SHA256SUMS', 'CHANGELOG.txt']).collect {
+                    new File(preparedReleaseDir.toString(), it)
+                }
+    }
+    doLast {
+        if (preparedReleaseDir == null) {
+            throw new GradleException('preparedReleaseDir is required for prepared artifact publication')
+        }
+        File prepared = file(preparedReleaseDir.toString())
+        if (!prepared.isDirectory()) {
+            throw new GradleException("Prepared release directory does not exist: ${prepared}")
+        }
+
+        def expectedBundleNames = (expectedReleaseNames + ['SHA256SUMS', 'CHANGELOG.txt']).sort()
+        def actualBundleNames = prepared.listFiles().findAll { it.isFile() }.collect { it.name }.sort()
+        if (actualBundleNames != expectedBundleNames) {
+            throw new GradleException("Expected prepared bundle ${expectedBundleNames}, found ${actualBundleNames}")
+        }
+
+        File checksumFile = new File(prepared, 'SHA256SUMS')
+        def declaredChecksums = [:]
+        checksumFile.readLines('UTF-8').findAll { !it.trim().isEmpty() }.each { line ->
+            def match = line =~ /^([0-9a-fA-F]{64})  (.+)$/
+            if (!match.matches()) {
+                throw new GradleException("Invalid prepared checksum line: ${line}")
+            }
+            declaredChecksums[match[0][2]] = match[0][1].toLowerCase()
+        }
+        if (declaredChecksums.keySet().sort() != expectedReleaseNames.sort()) {
+            throw new GradleException('Prepared checksums do not declare exactly the three release jars')
+        }
+        declaredChecksums.each { name, expectedHash ->
+            File artifact = new File(prepared, name)
+            String actualHash = MessageDigest.getInstance('SHA-256')
+                    .digest(artifact.bytes).encodeHex().toString()
+            if (actualHash != expectedHash) {
+                throw new GradleException("Prepared checksum mismatch for ${name}")
+            }
+        }
+    }
+}
+
+task validateMavenReleaseCredentials {
+    group = 'publishing'
+    description = 'Prevents Maven publication from silently targeting a local or incomplete repository.'
+    doLast {
+        if (!System.getenv('MAVEN_UPLOAD_URL')
+                || !System.getenv('MAVEN_UPLOAD_USERNAME')
+                || !System.getenv('MAVEN_UPLOAD_PASSWORD')) {
+            throw new GradleException('MAVEN_UPLOAD_URL, MAVEN_UPLOAD_USERNAME, and MAVEN_UPLOAD_PASSWORD are required')
+        }
+        if (System.getenv('MAVEN_UPLOAD_URL').startsWith('file:')) {
+            throw new GradleException('Maven release publication must use a remote repository')
+        }
+    }
+}
+
+tasks.matching { it.name == 'publishMavenJavaPublicationToReleaseRepository' }.all {
+    dependsOn validateMavenReleaseCredentials
+    dependsOn(preparedReleaseDir == null ? verifyReleaseArtifacts : verifyPreparedReleaseArtifacts)
+}
+
+task syncForge25EclipseLaunches {
+    group = 'ide'
+    dependsOn processResources
+    doLast {
+        String mainClass = 'net.minecraftforge.userdev.LaunchTesting'
+        String mainOutput = new File(projectDir, 'bin/main').absolutePath
+        String modClasses = "mineralogy%%${mainOutput};mineralogy%%${mainOutput}"
+        String eclipseGradleJavaHome = System.getenv('JAVA_HOME') ?: System.getProperty('java.home')
+        def escapePreference = { String value ->
+            value.replace('\\', '\\\\').replace(':', '\\:')
+        }
+        File buildshipPreferences = file('.settings/org.eclipse.buildship.core.prefs')
+        if (!buildshipPreferences.parentFile.isDirectory()
+                && !buildshipPreferences.parentFile.mkdirs()) {
+            throw new GradleException("Could not create ${buildshipPreferences.parentFile}")
+        }
+        buildshipPreferences.setText([
+                'arguments=',
+                'auto.sync=false',
+                'build.scans.enabled=false',
+                'connection.gradle.distribution=GRADLE_DISTRIBUTION(WRAPPER)',
+                "connection.gradle.user.home=${escapePreference(gradle.gradleUserHomeDir.absolutePath)}",
+                'connection.project.dir=',
+                'eclipse.preferences.version=1',
+                "gradle.user.home=${escapePreference(gradle.gradleUserHomeDir.absolutePath)}",
+                "java.home=${escapePreference(eclipseGradleJavaHome)}",
+                'jvm.arguments=',
+                'offline.mode=false',
+                'override.workspace.settings=true',
+                'show.console.view=false',
+                'show.executions.view=false',
+                ''
+        ].join('\r\n'), 'UTF-8')
+        // Forge 25 loads the mod solely from Eclipse's merged bin/main output.
+        // Copy the processed production resources as a normal doLast action so
+        // token-expanded metadata and externally edited JSON cannot lag behind
+        // the source tree without making bin/main a Gradle-owned task output.
+        File processedResources = sourceSets.main.output.resourcesDir
+        delete new File(mainOutput, 'data/mineralogy/tags/items/vanilla_furnace_materials.json')
+        copy {
+            from processedResources
+            into mainOutput
+        }
+        ['Client', 'Server'].each { String runName ->
+            File launch = file("run${runName}.launch")
+            if (!launch.isFile()) throw new GradleException("Missing generated Eclipse launch ${launch}")
+            String text = launch.getText('UTF-8')
+            text = text.replace('<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value=""/>',
+                    "<stringAttribute key=\"org.eclipse.jdt.launching.MAIN_TYPE\" value=\"${mainClass}\"/>")
+            text = text.replaceFirst(
+                    /<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="[^"]*"\/>/,
+                    java.util.regex.Matcher.quoteReplacement(
+                            "<stringAttribute key=\"org.eclipse.jdt.launching.PROJECT_ATTR\" value=\"${eclipseWorkspaceProjectName}\"/>"))
+            text = text.replaceFirst(/<mapEntry key="MOD_CLASSES" value="[^"]*"\/>/,
+                    java.util.regex.Matcher.quoteReplacement("<mapEntry key=\"MOD_CLASSES\" value=\"${modClasses}\"/>"))
+            if (!text.contains('key="target"')) {
+                String target = runName == 'Client' ? 'fmluserdevclient' : 'fmluserdevserver'
+                String entries =
+                        "    <mapEntry key=\"MCP_MAPPINGS\" value=\"${mcp_mappings_channel}_${mcp_mappings_version}\"/>\r\n" +
+                        "    <mapEntry key=\"MCP_VERSION\" value=\"${mcp_version}\"/>\r\n" +
+                        "    <mapEntry key=\"FORGE_VERSION\" value=\"${forge_version}\"/>\r\n" +
+                        "    <mapEntry key=\"FORGE_GROUP\" value=\"net.minecraftforge\"/>\r\n" +
+                        "    <mapEntry key=\"target\" value=\"${target}\"/>\r\n" +
+                        "    <mapEntry key=\"MC_VERSION\" value=\"${mc_version}\"/>\r\n"
+                text = text.replace('    <mapEntry key="MOD_CLASSES"', entries + '    <mapEntry key="MOD_CLASSES"')
+            }
+            if (!text.contains('ATTR_EXCLUDE_TEST_CODE')) {
+                text = text.replace('</launchConfiguration>',
+                        '    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_EXCLUDE_TEST_CODE" value="true"/>\r\n' +
+                        '</launchConfiguration>')
+            }
+            launch.setText(text, 'UTF-8')
+        }
+    }
+}
+
+task verifyEclipseProductionClasspath {
+    group = 'verification'
+    dependsOn syncForge25EclipseLaunches
+    doLast {
+        File classpath = file('.classpath')
+        if (!classpath.isFile()) throw new GradleException('Eclipse .classpath was not generated')
+        File eclipseProject = file('.project')
+        if (!eclipseProject.isFile()
+                || !eclipseProject.getText('UTF-8').contains("<name>${eclipseWorkspaceProjectName}</name>")) {
+            throw new GradleException("Eclipse project is not named ${eclipseWorkspaceProjectName}")
+        }
+        File buildshipPreferences = file('.settings/org.eclipse.buildship.core.prefs')
+        String expectedJavaHome = (System.getenv('JAVA_HOME') ?: System.getProperty('java.home'))
+                .replace('\\', '\\\\').replace(':', '\\:')
+        if (!buildshipPreferences.isFile()
+                || !buildshipPreferences.getText('UTF-8').contains("java.home=${expectedJavaHome}")
+                || !buildshipPreferences.getText('UTF-8').contains('override.workspace.settings=true')) {
+            throw new GradleException('Eclipse Buildship is not bound to the Gradle-compatible Java runtime')
+        }
+        String cp = classpath.getText('UTF-8')
+        def classpathXml = new XmlSlurper(false, false).parse(classpath)
+        classpathXml.classpathentry.each { entry ->
+            String path = entry.@path.text()
+            boolean testSource = path.replace('\\', '/').startsWith('src/test/')
+            boolean testLibrary = path ==~ /(?i).*\/(junit|hamcrest|mockito|byte-buddy)[^\/]*\/.*\.jar/
+            if (testSource) {
+                String scope = entry.attributes.attribute.find { it.@name.text() == 'gradle_scope' }?.@value?.text()
+                if (entry.@output.text() != 'bin/test' || scope != 'test') {
+                    throw new GradleException("Eclipse test source is not isolated: ${path}")
+                }
+            }
+            if (testLibrary) {
+                String scope = entry.attributes.attribute.find { it.@name.text() == 'gradle_used_by_scope' }?.@value?.text()
+                if (scope != 'test') {
+                    throw new GradleException("Eclipse production classpath exposes test dependency: ${path}")
+                }
+            }
+        }
+        ['runClient.launch', 'runServer.launch'].each { name ->
+            String launch = file(name).getText('UTF-8')
+            if (!launch.contains('ATTR_EXCLUDE_TEST_CODE') || launch =~ /(?i)(junit|mockito|src\/test)/) {
+                throw new GradleException("Eclipse launch is not production-only: ${name}")
+            }
+            if (!launch.contains("key=\"org.eclipse.jdt.launching.PROJECT_ATTR\" value=\"${eclipseWorkspaceProjectName}\"")) {
+                throw new GradleException("Eclipse launch targets the wrong workspace project: ${name}")
+            }
+            String mainOutput = new File(projectDir, 'bin/main').absolutePath
+            String expectedModClasses = "mineralogy%%${mainOutput};mineralogy%%${mainOutput}"
+            if (!launch.contains(expectedModClasses)) {
+                throw new GradleException("Eclipse launch is not using Forge 25's merged production output: ${name}")
+            }
+        }
+        ['README.md', 'PLAYER_GUIDE.md', 'DEVELOPER_GUIDE.md', 'CONTENT_CONFIG.md',
+         'PROVIDER.md', 'VERSIONS.md', 'examples/mineralogy-provider.json'].each { name ->
+            File guide = new File(projectDir, "bin/main/META-INF/mineralogy/docs/${name}")
+            if (!guide.isFile()) {
+                throw new GradleException("Eclipse output is missing bundled documentation: ${name}")
+            }
+        }
+        File processedFurnaceRecipe = new File(sourceSets.main.output.resourcesDir,
+                'data/minecraft/recipes/furnace.json')
+        File eclipseFurnaceRecipe = new File(projectDir,
+                'bin/main/data/minecraft/recipes/furnace.json')
+        if (!eclipseFurnaceRecipe.isFile()
+                || !java.util.Arrays.equals(eclipseFurnaceRecipe.getBytes(), processedFurnaceRecipe.getBytes())) {
+            throw new GradleException('Eclipse output contains stale processed production resources')
+        }
+    }
+}
+
+tasks.matching { it.name == 'genEclipseRuns' }.all {
+    finalizedBy syncForge25EclipseLaunches
+}
+
+tasks.matching { it.name == 'eclipse' }.all {
+    finalizedBy syncForge25EclipseLaunches
+}
+
+check.dependsOn verifyReleaseDependencies

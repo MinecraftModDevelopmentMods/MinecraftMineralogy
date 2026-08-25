@@ -28,6 +28,12 @@ Mineralogy 6.0.1.113021 for Minecraft 1.13.2
   gunpowder routes, exact slabs, slab recombination, construction-form brick
   conversions, progressive sand polishing, matching-slab rock furnaces, and
   blank-to-marked relief progression.
+- Restored the vanilla furnace recipe for every enabled Forge cobblestone
+  equivalent, including all 27 Mineralogy rock families, without conflicting
+  with the matching-slab rock-furnace upgrade recipes.
+- Prevented Forge 25 from silently reducing optional carbon- or coal-dust
+  gunpowder recipes to nitrate plus sulfur when their compatibility tag is
+  empty; every loaded gunpowder recipe now requires all three components.
 - Added 17 reviewed UTF-8 JSON locales with the same 938 ordered keys, including
   Brazilian and European Portuguese, Canadian French, Japanese, Korean, and
   Russian.

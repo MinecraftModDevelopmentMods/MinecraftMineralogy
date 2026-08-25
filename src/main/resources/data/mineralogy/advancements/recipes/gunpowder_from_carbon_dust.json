@@ -3,6 +3,10 @@
     {
       "type": "mineralogy:config",
       "flag": "ENABLE_MINERAL_DUSTS"
+    },
+    {
+      "type": "mineralogy:item_tag_not_empty",
+      "tag": "forge:dusts/carbon"
     }
   ],
   "rewards": {

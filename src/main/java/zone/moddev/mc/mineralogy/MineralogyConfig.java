@@ -22,6 +22,8 @@ import com.google.gson.JsonSyntaxException;
 import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.Tag;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.IRegistry;
@@ -235,8 +237,18 @@ public final class MineralogyConfig {
         if (!recipeConditionsRegistered) {
             CraftingHelper.register(new ResourceLocation(Mineralogy.MODID, "config"),
                     json -> configFlagCondition(JsonUtils.getString(json, "flag")));
+            CraftingHelper.register(new ResourceLocation(Mineralogy.MODID, "item_tag_not_empty"),
+                    json -> itemTagNotEmptyCondition(JsonUtils.getString(json, "tag")));
             recipeConditionsRegistered = true;
         }
+    }
+
+    private static BooleanSupplier itemTagNotEmptyCondition(String name) {
+        ResourceLocation tagName = new ResourceLocation(name);
+        return () -> {
+            Tag<Item> tag = ItemTags.getCollection().get(tagName);
+            return tag != null && !tag.getAllElements().isEmpty();
+        };
     }
 
     public static void registerAdvancementPredicates() {

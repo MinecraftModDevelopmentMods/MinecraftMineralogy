@@ -91,6 +91,18 @@ public class GameplayContractTest {
     }
 
     @Test
+    public void optionalGunpowderDustsCannotCollapseToTwoIngredients() throws Exception {
+        String config = text("src/main/java/zone/moddev/mc/mineralogy/MineralogyConfig.java");
+        assertTrue(config.contains("item_tag_not_empty"));
+        assertTrue(config.contains("Tag<Item> tag = ItemTags.getCollection().get(tagName)"));
+        assertTrue(config.contains("tag != null && !tag.getAllElements().isEmpty()"));
+
+        String generator = text("scripts/generate-recipes.ps1");
+        assertTrue(generator.contains("ItemTagNotEmptyCondition 'forge:dusts/carbon'"));
+        assertTrue(generator.contains("ItemTagNotEmptyCondition 'forge:dusts/coal'"));
+    }
+
+    @Test
     public void forge25OilRendererHookIsBoundedToMineralogyOil() throws Exception {
         String renderer = text("src/main/java/zone/moddev/mc/mineralogy/client/ClientOilRenderer.java");
         assertTrue(renderer.contains("state.getFluid().isEquivalentTo(MineralogyFluids.CRUDE_OIL)"));
@@ -133,7 +145,9 @@ public class GameplayContractTest {
         String build = text("build.gradle");
         assertTrue(build.contains("dependsOn processResources"));
         assertTrue(build.contains("mineralogy%%${mainOutput};mineralogy%%${mainOutput}"));
-        assertTrue(build.contains("from processedDocumentation"));
+        assertTrue(build.contains("from processedResources"));
+        assertTrue(build.contains("data/minecraft/recipes/furnace.json"));
+        assertTrue(build.contains("Eclipse output contains stale processed production resources"));
         assertTrue(build.contains("examples/mineralogy-provider.json"));
         assertTrue(build.contains("Eclipse output is missing bundled documentation"));
     }

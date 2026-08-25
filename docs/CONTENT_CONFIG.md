@@ -42,6 +42,12 @@ drops, Forge tag entries, and integrations remain valid. The dust and
 fertilizer switches are independent, so enabled fertilizer may use dusts from
 existing ore, OreSpawn-generated ore, or another mod.
 
+Every Mineralogy gunpowder route requires three components: nitrate dust,
+sulfur dust, and one of sugar, charcoal, `forge:dusts/carbon`, or
+`forge:dusts/coal`. The two compatibility-tag recipes are loaded only when
+another installed mod supplies the corresponding nonempty tag; an absent
+optional dust never reduces the recipe to nitrate plus sulfur.
+
 A clean installation writes these keys. Mineralogy deliberately does not save
 an existing `mineralogy-common.toml`, so missing keys retain their documented defaults.
 To change them in an older file, add entries to its existing `options` block:

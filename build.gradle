@@ -164,8 +164,8 @@ repositories {
     maven fg.forgeMaven
     maven fg.minecraftLibsMaven
 
-    // Optional exact-coordinate mirror for offline/local release verification.
-    // CI and ordinary builds do not set this property and resolve CurseMaven.
+    // Optional exact-coordinate mirror populated by CI from the official
+    // CurseForge file endpoint. Ordinary developer builds resolve CurseMaven.
     if (providers.gradleProperty('orespawnVerificationRepository').isPresent()) {
         maven {
             name = 'OreSpawnReleaseVerificationMirror'
@@ -192,13 +192,15 @@ repositories {
         name = 'MinecraftLibraries'
         url = 'https://libraries.minecraft.net/'
     }
-    maven {
-        name = 'CurseMaven'
-        url = 'https://www.cursemaven.com'
-        metadataSources {
-            artifact()
+    if (!providers.gradleProperty('orespawnVerificationRepository').isPresent()) {
+        maven {
+            name = 'CurseMaven'
+            url = 'https://www.cursemaven.com'
+            metadataSources {
+                artifact()
+            }
+            content { includeGroup('curse.maven') }
         }
-        content { includeGroup('curse.maven') }
     }
     maven {
         name = 'ModDevZone'
@@ -366,6 +368,15 @@ tasks.register('verifyReleaseConfiguration') {
         }
         if (project.mc_version != '1.12.2' || project.forge_version != '14.23.5.2859') {
             throw new GradleException('Unexpected Minecraft or Forge target')
+        }
+        if (project.minecraft_version != project.mc_version
+                || project.loader_name != 'forge'
+                || project.loader_code != '1'
+                || project.java_version != '8'
+                || project.java_toolchain_version != '8.0.502+7'
+                || project.gradle_java_version != '17'
+                || project.curseforge_project_id != project.cf_project_id) {
+            throw new GradleException('Unexpected generic release dispatcher metadata')
         }
         if (project.orespawn_version != '4.0.7.112021'
                 || project.orespawn_curse_project_id != '245586'

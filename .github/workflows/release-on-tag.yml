@@ -1,21 +1,21 @@
-name: Start Mineralogy release from tag
+name: Validate Mineralogy release tag
 
 on:
   push:
     tags:
-      - '*.*.*.112021'
+      - '*.*.*.*'
 
 permissions:
-  actions: write
+  actions: read
   contents: read
 
 concurrency:
-  group: mineralogy-release-starter-${{ github.ref_name }}
+  group: mineralogy-release-tag-${{ github.ref_name }}
   cancel-in-progress: false
 
 jobs:
-  dispatch-release:
-    name: Validate tag and start guarded release
+  validate-release-tag:
+    name: Validate tag for manual release confirmation
     if: github.repository == 'MinecraftModDevelopmentMods/MinecraftMineralogy'
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -26,22 +26,42 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Validate release tag and prior CI
-        id: validate
+      - name: Validate release tag, target metadata, and prior CI
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
 
-          release_version="$(sed -n 's/^mod_version=//p' gradle.properties)"
-          if [[ ! "$release_version" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.112021$ ]]; then
-            echo "mod_version must use the four-part 1.12.2 Forge target format; found $release_version" >&2
+          value() { sed -n "s/^$1=//p" gradle.properties; }
+          release_version="$(value mod_version)"
+          minecraft_version="$(value minecraft_version)"
+          loader_name="$(value loader_name)"
+          loader_code="$(value loader_code)"
+
+          IFS=. read -r mc_major mc_minor mc_patch extra <<<"$minecraft_version"
+          if [[ -n "${extra:-}" || -z "${mc_major:-}" || -z "${mc_minor:-}" ]]; then
+            echo "Invalid minecraft_version=$minecraft_version" >&2
             exit 1
           fi
+          mc_patch="${mc_patch:-0}"
+          if [[ ! "$mc_major" =~ ^[0-9]+$ || ! "$mc_minor" =~ ^[0-9]+$ || ! "$mc_patch" =~ ^[0-9]+$ ]]; then
+            echo "Invalid minecraft_version=$minecraft_version" >&2
+            exit 1
+          fi
+          case "$loader_name:$loader_code" in
+            forge:1|neoforge:2) ;;
+            *) echo "Invalid loader metadata $loader_name/$loader_code" >&2; exit 1 ;;
+          esac
+          printf -v minor_padded '%02d' "$((10#$mc_minor))"
+          printf -v patch_padded '%02d' "$((10#$mc_patch))"
+          target_suffix="${mc_major}${minor_padded}${patch_padded}${loader_code}"
 
-          expected_tag="$release_version"
-          if [[ "$GITHUB_REF_NAME" != "$expected_tag" ]]; then
-            echo "Release tag must be $expected_tag; found $GITHUB_REF_NAME" >&2
+          if [[ ! "$release_version" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.${target_suffix}$ ]]; then
+            echo "mod_version $release_version does not match $minecraft_version $loader_name target $target_suffix" >&2
+            exit 1
+          fi
+          if [[ "$GITHUB_REF_NAME" != "$release_version" ]]; then
+            echo "Release tag must equal mod_version $release_version; found $GITHUB_REF_NAME" >&2
             exit 1
           fi
 
@@ -49,21 +69,24 @@ jobs:
             "repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/check-runs?per_page=100" \
             --jq '[.check_runs[] | select(.name == "Build, test, and audit" and .conclusion == "success")] | length')"
           if [[ "$successful_ci" -lt 1 ]]; then
-            echo "The tagged commit has no successful Mineralogy 1.12 CI check" >&2
+            echo "The tagged commit has no successful Build, test, and audit check" >&2
             exit 1
           fi
 
-          echo "version=$release_version" >> "$GITHUB_OUTPUT"
-
-      - name: Start default-branch release workflow
+      - name: Record the manual publication interface
         env:
-          GH_TOKEN: ${{ github.token }}
-          RELEASE_VERSION: ${{ steps.validate.outputs.version }}
+          RELEASE_WORKFLOW_URL: https://github.com/${{ github.repository }}/actions/workflows/deploy-release.yml
         run: |
-          gh workflow run deploy-release.yml \
-            --repo "$GITHUB_REPOSITORY" \
-            --ref master-1.12 \
-            -f mode=publish \
-            -f release_ref="$GITHUB_REF_NAME" \
-            -f curseforge_channel=release \
-            -f confirm_version="$RELEASE_VERSION"
+          {
+            echo "## Release tag validated"
+            echo
+            echo "Tag \`$GITHUB_REF_NAME\` matches the selected target and has a successful Build, test, and audit check."
+            echo
+            echo "If this tag was created outside the release workflow, nothing has been published."
+            echo
+            echo "To start or recover publication, open [Release Mineralogy]($RELEASE_WORKFLOW_URL), select **Run workflow**, and enter:"
+            echo
+            echo "- release version: \`$GITHUB_REF_NAME\`"
+            echo "- CurseForge release level: \`release\`, \`beta\`, or \`alpha\`"
+            echo "- confirm live publication: checked"
+          } >> "$GITHUB_STEP_SUMMARY"

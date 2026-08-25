@@ -106,6 +106,6 @@ public class MaterialDropContractTest {
 
     private static String source(String path) throws Exception {
         return new String(Files.readAllBytes(new File(path).toPath()),
-                StandardCharsets.UTF_8);
+                StandardCharsets.UTF_8).replace("\r\n", "\n").replace('\r', '\n');
     }
 }

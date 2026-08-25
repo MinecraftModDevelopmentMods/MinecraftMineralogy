@@ -1,23 +1,16 @@
-name: Deploy Mineralogy release
+name: Release Mineralogy
+
+run-name: Release Mineralogy ${{ inputs.release_version }} (CurseForge ${{ inputs.curseforge_release_level }})
 
 on:
   workflow_dispatch:
     inputs:
-      mode:
-        description: Validate the selected ref, verify release-secret access, or publish after all gates pass.
-        required: true
-        default: validate-only
-        type: choice
-        options:
-          - validate-only
-          - verify-secrets
-          - publish
-      release_ref:
-        description: Commit, branch, or tag to validate. Publication requires the exact release tag.
+      release_version:
+        description: Four-component Mineralogy version; the target branch is derived from its fourth component.
         required: true
         type: string
-      curseforge_channel:
-        description: CurseForge release level; beta and alpha also create GitHub prereleases.
+      curseforge_release_level:
+        description: CurseForge release level only; this does not change the GitHub Release type.
         required: true
         default: release
         type: choice
@@ -25,18 +18,18 @@ on:
           - release
           - beta
           - alpha
-      confirm_version:
-        description: Publication confirmation; enter the version declared by the selected release tag.
-        required: false
-        default: ''
-        type: string
+      confirm_live_publication:
+        description: Confirm publication to Maven, CurseForge, and GitHub after the build passes.
+        required: true
+        default: false
+        type: boolean
 
 permissions:
   actions: read
   contents: read
 
 concurrency:
-  group: mineralogy-release-${{ inputs.release_ref }}
+  group: mineralogy-release-${{ inputs.release_version }}
   cancel-in-progress: false
 
 jobs:
@@ -45,84 +38,193 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     outputs:
+      target_branch: ${{ steps.route.outputs.target_branch }}
       release_sha: ${{ steps.validate.outputs.release_sha }}
       release_version: ${{ steps.validate.outputs.release_version }}
       release_tag: ${{ steps.validate.outputs.release_tag }}
       minecraft_version: ${{ steps.validate.outputs.minecraft_version }}
+      loader_name: ${{ steps.validate.outputs.loader_name }}
+      loader_display: ${{ steps.validate.outputs.loader_display }}
+      java_version: ${{ steps.validate.outputs.java_version }}
+      java_toolchain_version: ${{ steps.validate.outputs.java_toolchain_version }}
+      gradle_java_version: ${{ steps.validate.outputs.gradle_java_version }}
+      curseforge_project_id: ${{ steps.validate.outputs.curseforge_project_id }}
       main_jar: ${{ steps.validate.outputs.main_jar }}
       sources_jar: ${{ steps.validate.outputs.sources_jar }}
       javadoc_jar: ${{ steps.validate.outputs.javadoc_jar }}
 
     steps:
-      - name: Check out selected release ref
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-        with:
-          ref: ${{ inputs.release_ref }}
-          fetch-depth: 0
-
-      - name: Validate version, tag, and prior CI
-        id: validate
+      - name: Resolve target branch from version
+        id: route
         env:
           GH_TOKEN: ${{ github.token }}
-          MODE: ${{ inputs.mode }}
-          RELEASE_REF: ${{ inputs.release_ref }}
-          CONFIRM_VERSION: ${{ inputs.confirm_version }}
+          RELEASE_VERSION: ${{ inputs.release_version }}
         run: |
           set -euo pipefail
 
-          actual_version="$(sed -n 's/^mod_version=//p' gradle.properties)"
-          minecraft_version="$(sed -n 's/^mc_version=//p' gradle.properties)"
-          case "$minecraft_version" in
-            1.10.2) target_suffix=110021 ;;
-            1.12.2) target_suffix=112021 ;;
-            *)
-              echo "Selected ref declares unsupported release target mc_version=$minecraft_version" >&2
-              exit 1
-              ;;
+          if [[ "$GITHUB_REPOSITORY" != "MinecraftModDevelopmentMods/MinecraftMineralogy" ]]; then
+            echo "Releases can only run in MinecraftModDevelopmentMods/MinecraftMineralogy" >&2
+            exit 1
+          fi
+          if [[ ! "$RELEASE_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.([0-9]+)$ ]]; then
+            echo "release_version must contain four numeric components" >&2
+            exit 1
+          fi
+
+          target_suffix="${BASH_REMATCH[1]}"
+          if (( ${#target_suffix} < 6 )); then
+            echo "Invalid target suffix $target_suffix" >&2
+            exit 1
+          fi
+
+          loader_code="${target_suffix: -1}"
+          target_digits="${target_suffix::-1}"
+          mc_patch_padded="${target_digits: -2}"
+          without_patch="${target_digits::-2}"
+          mc_minor_padded="${without_patch: -2}"
+          mc_major="${without_patch::-2}"
+
+          if [[ -z "$mc_major" || ! "$mc_major" =~ ^[0-9]+$ ]]; then
+            echo "Invalid Minecraft major version in target suffix $target_suffix" >&2
+            exit 1
+          fi
+          mc_minor="$((10#$mc_minor_padded))"
+          mc_patch="$((10#$mc_patch_padded))"
+          case "$loader_code" in
+            1) loader_suffix= ;;
+            2) loader_suffix=-neo ;;
+            *) echo "Unknown loader code $loader_code in target suffix $target_suffix" >&2; exit 1 ;;
           esac
-          if [[ ! "$actual_version" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.${target_suffix}$ ]]; then
-            echo "Selected ref declares invalid Minecraft $minecraft_version Forge mod_version=$actual_version" >&2
+
+          candidates=(
+            "master-$mc_major.$mc_minor.$mc_patch$loader_suffix"
+            "master-$mc_major.$mc_minor$loader_suffix"
+          )
+          target_branch=
+          for candidate in "${candidates[@]}"; do
+            if gh api "repos/$GITHUB_REPOSITORY/branches/$candidate" >/dev/null 2>&1; then
+              target_branch="$candidate"
+              break
+            fi
+          done
+          if [[ -z "$target_branch" ]]; then
+            echo "No MMD release branch matches target suffix $target_suffix" >&2
+            printf 'Checked branch %s\n' "${candidates[@]}" >&2
+            exit 1
+          fi
+
+          echo "target_branch=$target_branch" >> "$GITHUB_OUTPUT"
+          echo "Resolved $RELEASE_VERSION to $target_branch"
+
+      - name: Check out derived release branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ steps.route.outputs.target_branch }}
+          fetch-depth: 0
+
+      - name: Validate version, target, tag, and prior CI
+        id: validate
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REQUESTED_VERSION: ${{ inputs.release_version }}
+        run: |
+          set -euo pipefail
+
+          value() { sed -n "s/^$1=//p" gradle.properties; }
+          release_version="$(value mod_version)"
+          minecraft_version="$(value minecraft_version)"
+          loader_name="$(value loader_name)"
+          loader_code="$(value loader_code)"
+          java_version="$(value java_version)"
+          java_toolchain_version="$(value java_toolchain_version)"
+          gradle_java_version="$(value gradle_java_version)"
+          curseforge_project_id="$(value curseforge_project_id)"
+
+          for required in release_version minecraft_version loader_name loader_code \
+              java_version gradle_java_version curseforge_project_id; do
+            if [[ -z "${!required}" ]]; then
+              echo "Selected ref is missing required release metadata: $required" >&2
+              exit 1
+            fi
+          done
+          java_toolchain_version="${java_toolchain_version:-$java_version}"
+
+          IFS=. read -r mc_major mc_minor mc_patch extra <<<"$minecraft_version"
+          if [[ -n "${extra:-}" || -z "${mc_major:-}" || -z "${mc_minor:-}" ]]; then
+            echo "Invalid minecraft_version=$minecraft_version" >&2
+            exit 1
+          fi
+          mc_patch="${mc_patch:-0}"
+          if [[ ! "$mc_major" =~ ^[0-9]+$ || ! "$mc_minor" =~ ^[0-9]+$ || ! "$mc_patch" =~ ^[0-9]+$ ]]; then
+            echo "Invalid minecraft_version=$minecraft_version" >&2
+            exit 1
+          fi
+          case "$loader_name:$loader_code" in
+            forge:1) loader_display=Forge ;;
+            neoforge:2) loader_display=NeoForge ;;
+            *) echo "Invalid loader metadata $loader_name/$loader_code" >&2; exit 1 ;;
+          esac
+          if [[ ! "$java_version" =~ ^[0-9]+$ || ! "$gradle_java_version" =~ ^[0-9]+$ ]]; then
+            echo "Invalid Java metadata $java_version/$gradle_java_version" >&2
+            exit 1
+          fi
+          if [[ "$curseforge_project_id" != "240974" ]]; then
+            echo "Unexpected Mineralogy CurseForge project $curseforge_project_id" >&2
+            exit 1
+          fi
+
+          printf -v minor_padded '%02d' "$((10#$mc_minor))"
+          printf -v patch_padded '%02d' "$((10#$mc_patch))"
+          target_suffix="${mc_major}${minor_padded}${patch_padded}${loader_code}"
+          if [[ ! "$release_version" =~ ^[0-9]+\.[0-9]+\.[0-9]+\.${target_suffix}$ ]]; then
+            echo "mod_version $release_version does not match $minecraft_version $loader_display target $target_suffix" >&2
+            exit 1
+          fi
+          if [[ "$REQUESTED_VERSION" != "$release_version" ]]; then
+            echo "Requested version $REQUESTED_VERSION does not match ${{ steps.route.outputs.target_branch }} mod_version $release_version" >&2
             exit 1
           fi
 
           release_sha="$(git rev-parse HEAD)"
-          release_tag="$actual_version"
+          release_tag="$release_version"
           echo "release_sha=$release_sha" >> "$GITHUB_OUTPUT"
-          echo "release_version=$actual_version" >> "$GITHUB_OUTPUT"
+          echo "release_version=$release_version" >> "$GITHUB_OUTPUT"
           echo "release_tag=$release_tag" >> "$GITHUB_OUTPUT"
           echo "minecraft_version=$minecraft_version" >> "$GITHUB_OUTPUT"
-          echo "main_jar=Mineralogy-$actual_version.jar" >> "$GITHUB_OUTPUT"
-          echo "sources_jar=Mineralogy-$actual_version-sources.jar" >> "$GITHUB_OUTPUT"
-          echo "javadoc_jar=Mineralogy-$actual_version-javadoc.jar" >> "$GITHUB_OUTPUT"
-
-          if [[ "$MODE" != "publish" ]]; then
-            exit 0
-          fi
-
-          if [[ "$RELEASE_REF" != "$release_tag" ]]; then
-            echo "Publication requires release_ref=$release_tag" >&2
-            exit 1
-          fi
-          if [[ "$CONFIRM_VERSION" != "$actual_version" ]]; then
-            echo "confirm_version must equal $actual_version" >&2
-            exit 1
-          fi
-          if ! git show-ref --verify --quiet "refs/tags/$release_tag"; then
-            echo "The exact release tag does not exist" >&2
-            exit 1
-          fi
-
-          tag_sha="$(git rev-list -n 1 "refs/tags/$release_tag")"
-          if [[ "$tag_sha" != "$release_sha" ]]; then
-            echo "The release tag does not resolve to the checked-out commit" >&2
-            exit 1
-          fi
+          echo "loader_name=$loader_name" >> "$GITHUB_OUTPUT"
+          echo "loader_display=$loader_display" >> "$GITHUB_OUTPUT"
+          echo "java_version=$java_version" >> "$GITHUB_OUTPUT"
+          echo "java_toolchain_version=$java_toolchain_version" >> "$GITHUB_OUTPUT"
+          echo "gradle_java_version=$gradle_java_version" >> "$GITHUB_OUTPUT"
+          echo "curseforge_project_id=$curseforge_project_id" >> "$GITHUB_OUTPUT"
+          echo "main_jar=Mineralogy-$release_version.jar" >> "$GITHUB_OUTPUT"
+          echo "sources_jar=Mineralogy-$release_version-sources.jar" >> "$GITHUB_OUTPUT"
+          echo "javadoc_jar=Mineralogy-$release_version-javadoc.jar" >> "$GITHUB_OUTPUT"
 
           successful_ci="$(gh api \
             "repos/$GITHUB_REPOSITORY/commits/$release_sha/check-runs?per_page=100" \
             --jq '[.check_runs[] | select(.name == "Build, test, and audit" and .conclusion == "success")] | length')"
           if [[ "$successful_ci" -lt 1 ]]; then
-            echo "The tagged commit has no successful Build, test, and audit check" >&2
+            echo "The selected commit has no successful Build, test, and audit check" >&2
+            exit 1
+          fi
+
+          if tag_json="$(gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$release_tag" 2>/dev/null)"; then
+            tag_sha="$(jq -r '.object.sha' <<<"$tag_json")"
+            if [[ "$tag_sha" != "$release_sha" ]]; then
+              echo "Existing tag $release_tag resolves to $tag_sha instead of $release_sha" >&2
+              exit 1
+            fi
+            if gh api "repos/$GITHUB_REPOSITORY/releases/tags/$release_tag" >/dev/null 2>&1; then
+              echo "Version $release_version already has a GitHub Release for exact tag $release_tag" >&2
+              exit 1
+            fi
+          fi
+
+          legacy_release_tag="$minecraft_version-$release_version"
+          if [[ "$legacy_release_tag" != "$release_tag" ]] \
+              && gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$legacy_release_tag" >/dev/null 2>&1; then
+            echo "Version $release_version was already published under historical tag $legacy_release_tag" >&2
             exit 1
           fi
 
@@ -130,10 +232,8 @@ jobs:
     name: Build immutable release artifact
     needs: preflight
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
     env:
-      RELEASE_VERSION: ${{ needs.preflight.outputs.release_version }}
-      RELEASE_TAG: ${{ needs.preflight.outputs.release_tag }}
       MAIN_JAR: ${{ needs.preflight.outputs.main_jar }}
       SOURCES_JAR: ${{ needs.preflight.outputs.sources_jar }}
       JAVADOC_JAR: ${{ needs.preflight.outputs.javadoc_jar }}
@@ -146,25 +246,34 @@ jobs:
         with:
           ref: ${{ needs.preflight.outputs.release_sha }}
 
-      - name: Install Java 8 toolchain
+      - name: Install target Java toolchain
         uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
         with:
           distribution: temurin
-          java-version: '8'
+          java-version: ${{ needs.preflight.outputs.java_toolchain_version }}
 
-      - name: Install Java 17 for Gradle
+      - name: Install Java for Gradle
         uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
         with:
-          distribution: microsoft
-          java-version: '17'
+          distribution: temurin
+          java-version: ${{ needs.preflight.outputs.gradle_java_version }}
 
       - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@4733eaac7c1b0da527e4206b7671e0061de1ce37 # v6
+        uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6
+
+      - name: Stage exact OreSpawn release dependency
+        id: orespawn
+        run: |
+          mirror="$RUNNER_TEMP/orespawn-mirror"
+          bash gradle/stage-orespawn-release.sh "$mirror"
+          echo "repository=$mirror" >> "$GITHUB_OUTPUT"
 
       - name: Build, test, and audit once
         run: |
           chmod +x ./gradlew
-          ./gradlew clean check build javadoc verifyReleaseDependencies verifyReleaseArtifacts writeReleaseChecksums --no-daemon --stacktrace
+          ./gradlew clean check build javadoc verifyReleaseDependencies verifyReleaseArtifacts writeReleaseChecksums \
+            -PorespawnVerificationRepository="${{ steps.orespawn.outputs.repository }}" \
+            --no-daemon --stacktrace
 
       - name: Stage the immutable release artifact
         id: artifact
@@ -178,7 +287,7 @@ jobs:
           cp build/release/SHA256SUMS "$bundle/"
           cp CHANGELOG.txt "$bundle/"
           (cd "$bundle" && sha256sum --check SHA256SUMS)
-          echo "name=Mineralogy-${{ needs.preflight.outputs.minecraft_version }}-${{ needs.preflight.outputs.release_sha }}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "$GITHUB_OUTPUT"
+          echo "name=Mineralogy-${{ needs.preflight.outputs.minecraft_version }}-${{ needs.preflight.outputs.loader_name }}-${{ needs.preflight.outputs.release_sha }}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "$GITHUB_OUTPUT"
 
       - name: Upload immutable release artifact
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
@@ -188,38 +297,50 @@ jobs:
           retention-days: 90
           path: ${{ runner.temp }}/release-bundle/*
 
-  release_approval:
-    name: Approve live publication
-    if: inputs.mode == 'publish'
+      - name: Summarize the prepared release candidate
+        env:
+          RELEASE_BRANCH: ${{ needs.preflight.outputs.target_branch }}
+          RELEASE_LEVEL: ${{ inputs.curseforge_release_level }}
+          RELEASE_SHA: ${{ needs.preflight.outputs.release_sha }}
+          RELEASE_VERSION: ${{ needs.preflight.outputs.release_version }}
+        run: |
+          {
+            echo "## Prepared release candidate"
+            echo
+            echo "- Version: \`$RELEASE_VERSION\`"
+            echo "- Target branch: \`$RELEASE_BRANCH\`"
+            echo "- Commit: \`$RELEASE_SHA\`"
+            echo "- CurseForge release level: \`$RELEASE_LEVEL\`"
+            echo "- GitHub Release type: ordinary release"
+            echo
+            echo "### Public artifact checksums"
+            echo '```text'
+            cat build/release/SHA256SUMS
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  release_confirmation:
+    name: Confirm ${{ inputs.release_version }} live publication
     needs:
       - preflight
       - build
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    environment:
-      name: release
-    env:
-      RELEASE_TAG: ${{ needs.preflight.outputs.release_tag }}
     steps:
-      - name: Record approval gate
-        run: echo "Release environment approval granted for $RELEASE_TAG"
-
-  verify_secrets:
-    name: Verify release-secret access
-    if: inputs.mode == 'verify-secrets'
-    needs: build
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-
-    steps:
-      - name: Confirm all required release secrets are available
+      - name: Confirm publication and release-secret access
         env:
+          CONFIRM_LIVE_PUBLICATION: ${{ inputs.confirm_live_publication }}
           CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
           MAVEN_UPLOAD_URL: ${{ secrets.MAVEN_UPLOAD_URL }}
           MAVEN_UPLOAD_USERNAME: ${{ secrets.MAVEN_UPLOAD_USERNAME }}
           MAVEN_UPLOAD_PASSWORD: ${{ secrets.MAVEN_UPLOAD_PASSWORD }}
         run: |
           set -euo pipefail
+          if [[ "$CONFIRM_LIVE_PUBLICATION" != "true" ]]; then
+            echo "Confirm live publication in the workflow form before releasing ${{ needs.preflight.outputs.release_tag }}" >&2
+            exit 1
+          fi
+          echo "Live publication confirmed for ${{ needs.preflight.outputs.release_tag }}"
           missing=()
           for name in CURSEFORGE_TOKEN MAVEN_UPLOAD_URL MAVEN_UPLOAD_USERNAME MAVEN_UPLOAD_PASSWORD; do
             if [[ -z "${!name:-}" ]]; then
@@ -230,15 +351,55 @@ jobs:
             printf 'Required release secret is unavailable: %s\n' "${missing[@]}" >&2
             exit 1
           fi
-          echo "All four required release secrets are available to this repository workflow."
+          echo "All four required release secrets are available."
 
-  publish_maven:
-    name: Publish Maven
-    if: inputs.mode == 'publish'
+  create_release_tag:
+    name: Create validated release tag
     needs:
       - preflight
       - build
-      - release_approval
+      - release_confirmation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      actions: read
+      contents: write
+
+    steps:
+      - name: Create or verify the exact tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_SHA: ${{ needs.preflight.outputs.release_sha }}
+          RELEASE_TAG: ${{ needs.preflight.outputs.release_tag }}
+        run: |
+          set -euo pipefail
+
+          if tag_json="$(gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$RELEASE_TAG" 2>/dev/null)"; then
+            tag_sha="$(jq -r '.object.sha' <<<"$tag_json")"
+            if [[ "$tag_sha" != "$RELEASE_SHA" ]]; then
+              echo "Existing tag $RELEASE_TAG resolves to $tag_sha instead of $RELEASE_SHA" >&2
+              exit 1
+            fi
+            echo "Existing tag $RELEASE_TAG already points to $RELEASE_SHA"
+          else
+            gh api --method POST "repos/$GITHUB_REPOSITORY/git/refs" \
+              -f ref="refs/tags/$RELEASE_TAG" \
+              -f sha="$RELEASE_SHA" >/dev/null
+            echo "Created tag $RELEASE_TAG at $RELEASE_SHA"
+          fi
+
+          created_sha="$(gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$RELEASE_TAG" --jq '.object.sha')"
+          if [[ "$created_sha" != "$RELEASE_SHA" ]]; then
+            echo "Tag verification returned $created_sha instead of $RELEASE_SHA" >&2
+            exit 1
+          fi
+
+  publish_maven:
+    name: Publish Maven
+    needs:
+      - preflight
+      - build
+      - create_release_tag
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -248,26 +409,33 @@ jobs:
         with:
           ref: ${{ needs.preflight.outputs.release_sha }}
 
-      - name: Install Java 8 toolchain
+      - name: Install target Java toolchain
         uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
         with:
           distribution: temurin
-          java-version: '8'
+          java-version: ${{ needs.preflight.outputs.java_toolchain_version }}
 
-      - name: Install Java 17 for Gradle
+      - name: Install Java for Gradle
         uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
         with:
-          distribution: microsoft
-          java-version: '17'
+          distribution: temurin
+          java-version: ${{ needs.preflight.outputs.gradle_java_version }}
 
       - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@4733eaac7c1b0da527e4206b7671e0061de1ce37 # v6
+        uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6
 
       - name: Download immutable release artifact
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8
         with:
           name: ${{ needs.build.outputs.artifact_name }}
           path: ${{ runner.temp }}/release-input
+
+      - name: Stage exact OreSpawn release dependency
+        id: orespawn
+        run: |
+          mirror="$RUNNER_TEMP/orespawn-mirror"
+          bash gradle/stage-orespawn-release.sh "$mirror"
+          echo "repository=$mirror" >> "$GITHUB_OUTPUT"
 
       - name: Verify artifact and Maven credentials
         env:
@@ -295,11 +463,11 @@ jobs:
           chmod +x ./gradlew
           ./gradlew publishMavenJavaPublicationToReleaseRepository \
             -PpreparedReleaseDir="$RUNNER_TEMP/release-input" \
+            -PorespawnVerificationRepository="${{ steps.orespawn.outputs.repository }}" \
             --no-daemon --stacktrace
 
   publish_curseforge:
     name: Publish CurseForge
-    if: inputs.mode == 'publish'
     needs:
       - preflight
       - build
@@ -329,16 +497,16 @@ jobs:
         uses: Kira-NT/mc-publish@52307b03863581dec6b652b83e597aec02ebb075 # v3.3.1
         with:
           curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
-          curseforge-id: 240974
-          name: Mineralogy ${{ needs.preflight.outputs.release_version }} for Minecraft ${{ needs.preflight.outputs.minecraft_version }}
+          curseforge-id: ${{ needs.preflight.outputs.curseforge_project_id }}
+          name: Mineralogy ${{ needs.preflight.outputs.release_version }} for Minecraft ${{ needs.preflight.outputs.minecraft_version }} (${{ needs.preflight.outputs.loader_display }})
           version: ${{ needs.preflight.outputs.release_version }}
-          version-type: ${{ inputs.curseforge_channel }}
+          version-type: ${{ inputs.curseforge_release_level }}
           changelog-file: ${{ runner.temp }}/release-input/CHANGELOG.txt
-          loaders: forge
+          loaders: ${{ needs.preflight.outputs.loader_name }}
           game-versions: ${{ needs.preflight.outputs.minecraft_version }}
           game-version-filter: none
           environment: client | server
-          java: Java 8
+          java: Java ${{ needs.preflight.outputs.java_version }}
           curseforge-dependencies: 245586(required)
           fail-mode: fail
           files: |
@@ -348,7 +516,6 @@ jobs:
 
   publish_github:
     name: Publish GitHub Release
-    if: inputs.mode == 'publish'
     needs:
       - preflight
       - build
@@ -356,6 +523,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:
+      actions: read
       contents: write
 
     steps:
@@ -375,10 +543,10 @@ jobs:
           github-tag: ${{ needs.preflight.outputs.release_tag }}
           github-commitish: ${{ needs.preflight.outputs.release_sha }}
           github-draft: false
-          github-prerelease: ${{ inputs.curseforge_channel != 'release' }}
-          name: Mineralogy ${{ needs.preflight.outputs.release_version }} for Minecraft ${{ needs.preflight.outputs.minecraft_version }}
+          github-prerelease: false
+          name: Mineralogy ${{ needs.preflight.outputs.release_version }} for Minecraft ${{ needs.preflight.outputs.minecraft_version }} (${{ needs.preflight.outputs.loader_display }})
           version: ${{ needs.preflight.outputs.release_version }}
-          version-type: ${{ inputs.curseforge_channel }}
+          version-type: release
           changelog-file: ${{ runner.temp }}/release-input/CHANGELOG.txt
           fail-mode: fail
           files: |

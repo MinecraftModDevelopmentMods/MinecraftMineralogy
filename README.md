@@ -1,3 +1,8 @@
+[![Discord](https://img.shields.io/badge/Discord-MMD-green.svg?style=flat&logo=Discord)](https://discord.moddev.zone)
+[![CurseForge downloads](https://cf.way2muchnoise.eu/full_minecraft-mineralogy_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/minecraft-mineralogy)
+[![Supported Minecraft versions](https://cf.way2muchnoise.eu/versions/Minecraft_minecraft-mineralogy_all.svg)](https://www.curseforge.com/minecraft/mc-mods/minecraft-mineralogy)
+[![Build, test, and audit](https://github.com/MinecraftModDevelopmentMods/MinecraftMineralogy/actions/workflows/ci.yml/badge.svg?branch=master-1.12)](https://github.com/MinecraftModDevelopmentMods/MinecraftMineralogy/actions/workflows/ci.yml?query=branch%3Amaster-1.12)
+
 # Mineralogy 6 for Minecraft 1.12.2
 
 Mineralogy adds real-world rock families, matching construction blocks,
@@ -30,4 +35,4 @@ explicitly selects a different engine.
 
 [CurseForge](https://www.curseforge.com/minecraft/mc-mods/minecraft-mineralogy) ·
 [Source and issues](https://github.com/MinecraftModDevelopmentMods/MinecraftMineralogy) ·
-[MMD Discord](https://discord.mcmoddev.com)
+[MMD Discord](https://discord.moddev.zone)

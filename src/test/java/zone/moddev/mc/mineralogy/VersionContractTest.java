@@ -23,6 +23,13 @@ public class VersionContractTest {
         String minecraftVersion = properties.getProperty("mc_version");
         String modVersion = properties.getProperty("mod_version");
         assertEquals("1.12.2", minecraftVersion);
+        assertEquals(minecraftVersion, properties.getProperty("minecraft_version"));
+        assertEquals("forge", properties.getProperty("loader_name"));
+        assertEquals("1", properties.getProperty("loader_code"));
+        assertEquals("8", properties.getProperty("java_version"));
+        assertEquals("8.0.502+7", properties.getProperty("java_toolchain_version"));
+        assertEquals("17", properties.getProperty("gradle_java_version"));
+        assertEquals("240974", properties.getProperty("curseforge_project_id"));
         assertEquals("112021", targetFor(minecraftVersion, 1));
         assertEquals("6.0.1.112021", modVersion);
         assertEquals(modVersion, Mineralogy.VERSION);

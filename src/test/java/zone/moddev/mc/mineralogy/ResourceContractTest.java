@@ -89,6 +89,10 @@ public class ResourceContractTest {
         assertEquals("minecraft:charcoal", json(new File(recipes, "gunpowder_from_charcoal.json"))
                 .getAsJsonArray("ingredients").get(0).getAsJsonObject().get("item").getAsString());
         assertFalse(new File(recipes, "gunpowder_from_coal.json").exists());
+        assertGunpowderRecipe(recipes, "gunpowder_from_sugar", null);
+        assertGunpowderRecipe(recipes, "gunpowder_from_charcoal", null);
+        assertGunpowderRecipe(recipes, "gunpowder_from_carbon_dust", "forge:dusts/carbon");
+        assertGunpowderRecipe(recipes, "gunpowder_from_coal_dust", "forge:dusts/coal");
         assertEquals("mineralogy:basalt", json(new File(recipes, "basalt_slab.json"))
                 .getAsJsonObject("key").getAsJsonObject("x").get("item").getAsString());
         assertEquals("mineralogy:basalt", json(new File(recipes, "basalt_raw_slab_recombination.json"))
@@ -101,6 +105,10 @@ public class ResourceContractTest {
         assertEquals("minecraft:furnace", furnace.getAsJsonObject("key")
                 .getAsJsonObject("y").get("item").getAsString());
         assertFalse(new File(recipes, "basalt_furnace_from_rock.json").exists());
+        JsonObject vanillaFurnace = json(new File(ROOT, "data/minecraft/recipes/furnace.json"));
+        assertEquals("forge:cobblestone", vanillaFurnace.getAsJsonObject("key")
+                .getAsJsonObject("#").get("tag").getAsString());
+        assertFalse(new File(ROOT, "data/mineralogy/tags/items/vanilla_furnace_materials.json").exists());
         assertEquals("minecraft:rose_red", json(new File(recipes, "drywall_red.json"))
                 .getAsJsonArray("ingredients").get(1).getAsJsonObject().get("item").getAsString());
         assertEquals("minecraft:cactus_green", json(new File(recipes, "drywall_green.json"))
@@ -186,6 +194,27 @@ public class ResourceContractTest {
     private static JsonObject json(File file) throws Exception {
         try (java.io.Reader reader = Files.newBufferedReader(file.toPath(), StandardCharsets.UTF_8)) {
             return new JsonParser().parse(reader).getAsJsonObject();
+        }
+    }
+
+    private static void assertGunpowderRecipe(File recipes, String name, String requiredTag) throws Exception {
+        JsonObject recipe = json(new File(recipes, name + ".json"));
+        assertEquals(name, 3, recipe.getAsJsonArray("ingredients").size());
+        assertGunpowderConditions(name, requiredTag, recipe.getAsJsonArray("conditions"));
+        JsonObject advancement = json(new File(ROOT,
+                "data/mineralogy/advancements/recipes/" + name + ".json"));
+        assertGunpowderConditions(name + " advancement", requiredTag,
+                advancement.getAsJsonArray("conditions"));
+    }
+
+    private static void assertGunpowderConditions(String name, String requiredTag, JsonArray conditions) {
+        assertEquals(name, requiredTag == null ? 1 : 2, conditions.size());
+        assertEquals(name, "mineralogy:config",
+                conditions.get(0).getAsJsonObject().get("type").getAsString());
+        if (requiredTag != null) {
+            JsonObject tagCondition = conditions.get(1).getAsJsonObject();
+            assertEquals(name, "mineralogy:item_tag_not_empty", tagCondition.get("type").getAsString());
+            assertEquals(name, requiredTag, tagCondition.get("tag").getAsString());
         }
     }
 

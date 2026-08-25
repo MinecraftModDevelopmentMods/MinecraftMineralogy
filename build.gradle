@@ -23,6 +23,16 @@ version = project.mod_version
 group = project.mod_group
 archivesBaseName = 'Mineralogy'
 
+// Eclipse imports this nested checkout under its folder name. Keep the
+// generated project and Forge launch configurations aligned with that stable
+// workspace identity rather than Gradle's publication-facing root name.
+def eclipseWorkspaceProjectName = projectDir.name
+eclipse {
+    project {
+        name = eclipseWorkspaceProjectName
+    }
+}
+
 def versionParts = project.mod_version.toString().tokenize('.')
 if (versionParts.size() != 4 || !versionParts.every { it ==~ /\d+/ }) {
     throw new GradleException("mod_version must use Major.Minor.Bug.Target numeric form: ${project.mod_version}")
@@ -451,12 +461,41 @@ task syncForge25EclipseLaunches {
         String mainClass = 'net.minecraftforge.userdev.LaunchTesting'
         String mainOutput = new File(projectDir, 'bin/main').absolutePath
         String modClasses = "mineralogy%%${mainOutput};mineralogy%%${mainOutput}"
-        File processedDocumentation = new File(sourceSets.main.output.resourcesDir,
-                'META-INF/mineralogy/docs')
-        File eclipseDocumentation = new File(mainOutput, 'META-INF/mineralogy/docs')
+        String eclipseGradleJavaHome = System.getenv('JAVA_HOME') ?: System.getProperty('java.home')
+        def escapePreference = { String value ->
+            value.replace('\\', '\\\\').replace(':', '\\:')
+        }
+        File buildshipPreferences = file('.settings/org.eclipse.buildship.core.prefs')
+        if (!buildshipPreferences.parentFile.isDirectory()
+                && !buildshipPreferences.parentFile.mkdirs()) {
+            throw new GradleException("Could not create ${buildshipPreferences.parentFile}")
+        }
+        buildshipPreferences.setText([
+                'arguments=',
+                'auto.sync=false',
+                'build.scans.enabled=false',
+                'connection.gradle.distribution=GRADLE_DISTRIBUTION(WRAPPER)',
+                "connection.gradle.user.home=${escapePreference(gradle.gradleUserHomeDir.absolutePath)}",
+                'connection.project.dir=',
+                'eclipse.preferences.version=1',
+                "gradle.user.home=${escapePreference(gradle.gradleUserHomeDir.absolutePath)}",
+                "java.home=${escapePreference(eclipseGradleJavaHome)}",
+                'jvm.arguments=',
+                'offline.mode=false',
+                'override.workspace.settings=true',
+                'show.console.view=false',
+                'show.executions.view=false',
+                ''
+        ].join('\r\n'), 'UTF-8')
+        // Forge 25 loads the mod solely from Eclipse's merged bin/main output.
+        // Copy the processed production resources as a normal doLast action so
+        // token-expanded metadata and externally edited JSON cannot lag behind
+        // the source tree without making bin/main a Gradle-owned task output.
+        File processedResources = sourceSets.main.output.resourcesDir
+        delete new File(mainOutput, 'data/mineralogy/tags/items/vanilla_furnace_materials.json')
         copy {
-            from processedDocumentation
-            into eclipseDocumentation
+            from processedResources
+            into mainOutput
         }
         ['Client', 'Server'].each { String runName ->
             File launch = file("run${runName}.launch")
@@ -464,6 +503,10 @@ task syncForge25EclipseLaunches {
             String text = launch.getText('UTF-8')
             text = text.replace('<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value=""/>',
                     "<stringAttribute key=\"org.eclipse.jdt.launching.MAIN_TYPE\" value=\"${mainClass}\"/>")
+            text = text.replaceFirst(
+                    /<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="[^"]*"\/>/,
+                    java.util.regex.Matcher.quoteReplacement(
+                            "<stringAttribute key=\"org.eclipse.jdt.launching.PROJECT_ATTR\" value=\"${eclipseWorkspaceProjectName}\"/>"))
             text = text.replaceFirst(/<mapEntry key="MOD_CLASSES" value="[^"]*"\/>/,
                     java.util.regex.Matcher.quoteReplacement("<mapEntry key=\"MOD_CLASSES\" value=\"${modClasses}\"/>"))
             if (!text.contains('key="target"')) {
@@ -493,6 +536,19 @@ task verifyEclipseProductionClasspath {
     doLast {
         File classpath = file('.classpath')
         if (!classpath.isFile()) throw new GradleException('Eclipse .classpath was not generated')
+        File eclipseProject = file('.project')
+        if (!eclipseProject.isFile()
+                || !eclipseProject.getText('UTF-8').contains("<name>${eclipseWorkspaceProjectName}</name>")) {
+            throw new GradleException("Eclipse project is not named ${eclipseWorkspaceProjectName}")
+        }
+        File buildshipPreferences = file('.settings/org.eclipse.buildship.core.prefs')
+        String expectedJavaHome = (System.getenv('JAVA_HOME') ?: System.getProperty('java.home'))
+                .replace('\\', '\\\\').replace(':', '\\:')
+        if (!buildshipPreferences.isFile()
+                || !buildshipPreferences.getText('UTF-8').contains("java.home=${expectedJavaHome}")
+                || !buildshipPreferences.getText('UTF-8').contains('override.workspace.settings=true')) {
+            throw new GradleException('Eclipse Buildship is not bound to the Gradle-compatible Java runtime')
+        }
         String cp = classpath.getText('UTF-8')
         def classpathXml = new XmlSlurper(false, false).parse(classpath)
         classpathXml.classpathentry.each { entry ->
@@ -517,6 +573,9 @@ task verifyEclipseProductionClasspath {
             if (!launch.contains('ATTR_EXCLUDE_TEST_CODE') || launch =~ /(?i)(junit|mockito|src\/test)/) {
                 throw new GradleException("Eclipse launch is not production-only: ${name}")
             }
+            if (!launch.contains("key=\"org.eclipse.jdt.launching.PROJECT_ATTR\" value=\"${eclipseWorkspaceProjectName}\"")) {
+                throw new GradleException("Eclipse launch targets the wrong workspace project: ${name}")
+            }
             String mainOutput = new File(projectDir, 'bin/main').absolutePath
             String expectedModClasses = "mineralogy%%${mainOutput};mineralogy%%${mainOutput}"
             if (!launch.contains(expectedModClasses)) {
@@ -530,10 +589,22 @@ task verifyEclipseProductionClasspath {
                 throw new GradleException("Eclipse output is missing bundled documentation: ${name}")
             }
         }
+        File processedFurnaceRecipe = new File(sourceSets.main.output.resourcesDir,
+                'data/minecraft/recipes/furnace.json')
+        File eclipseFurnaceRecipe = new File(projectDir,
+                'bin/main/data/minecraft/recipes/furnace.json')
+        if (!eclipseFurnaceRecipe.isFile()
+                || !java.util.Arrays.equals(eclipseFurnaceRecipe.getBytes(), processedFurnaceRecipe.getBytes())) {
+            throw new GradleException('Eclipse output contains stale processed production resources')
+        }
     }
 }
 
 tasks.matching { it.name == 'genEclipseRuns' }.all {
+    finalizedBy syncForge25EclipseLaunches
+}
+
+tasks.matching { it.name == 'eclipse' }.all {
     finalizedBy syncForge25EclipseLaunches
 }
 

@@ -34,6 +34,10 @@ function ConfigCondition([string] $flag) {
     return [ordered]@{ type = 'mineralogy:config'; flag = $flag }
 }
 
+function ItemTagNotEmptyCondition([string] $tag) {
+    return [ordered]@{ type = 'mineralogy:item_tag_not_empty'; tag = $tag }
+}
+
 function ItemIngredient([string] $item, [object] $data = $null) {
     if ($null -ne $data) {
         if ($item -eq 'minecraft:sand') {
@@ -419,10 +423,12 @@ function Write-GlobalRecipes() {
         (@((ItemIngredient 'minecraft:coal' 1)) + $gunpowderTail) 'minecraft:gunpowder' 4 @($dustCondition)
     Register-UnlockSource 'gunpowder_from_charcoal' (ItemId 'nitrate_dust')
     Write-ShapelessRecipe 'gunpowder_from_carbon_dust' 'forge:ore_shapeless' `
-        (@((OreIngredient 'dustCarbon')) + $gunpowderTail) 'minecraft:gunpowder' 4 @($dustCondition)
+        (@((OreIngredient 'dustCarbon')) + $gunpowderTail) 'minecraft:gunpowder' 4 `
+        @($dustCondition, (ItemTagNotEmptyCondition 'forge:dusts/carbon'))
     Register-UnlockSource 'gunpowder_from_carbon_dust' (ItemId 'nitrate_dust')
     Write-ShapelessRecipe 'gunpowder_from_coal_dust' 'forge:ore_shapeless' `
-        (@((OreIngredient 'dustCoal')) + $gunpowderTail) 'minecraft:gunpowder' 4 @($dustCondition)
+        (@((OreIngredient 'dustCoal')) + $gunpowderTail) 'minecraft:gunpowder' 4 `
+        @($dustCondition, (ItemTagNotEmptyCondition 'forge:dusts/coal'))
     Register-UnlockSource 'gunpowder_from_coal_dust' (ItemId 'nitrate_dust')
 
     Write-ShapelessRecipe 'mineralfertilizer' 'forge:ore_shapeless' @(

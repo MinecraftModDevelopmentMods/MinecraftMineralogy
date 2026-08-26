@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:diabase_furnace"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "xxx",
@@ -7,23 +13,14 @@
   ],
   "key": {
     "x": {
-      "item": "mineralogy:diabase_slab"
+      "tag": "mineralogy:slabs/diabase"
     },
     "y": {
       "item": "minecraft:furnace"
     }
   },
   "result": {
-    "item": "mineralogy:diabase_furnace"
-  },
-  "conditions": [
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_ROCKSLAB"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_ROCKFURNACE"
-    }
-  ]
+    "item": "mineralogy:diabase_furnace",
+    "count": 1
+  }
 }

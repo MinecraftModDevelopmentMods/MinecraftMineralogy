@@ -1,11 +1,12 @@
 {
+  "conditions": [],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "mineralogy:diorite"
+      "tag": "mineralogy:stones/diorite"
     },
     {
-      "item": "mineralogy:diorite"
+      "tag": "mineralogy:stones/diorite"
     },
     {
       "item": "minecraft:gravel"

@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:rock_salt_furnace"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "xxx",
@@ -7,23 +13,14 @@
   ],
   "key": {
     "x": {
-      "item": "mineralogy:rock_salt_slab"
+      "tag": "mineralogy:slabs/rock_salt"
     },
     "y": {
       "item": "minecraft:furnace"
     }
   },
   "result": {
-    "item": "mineralogy:rock_salt_furnace"
-  },
-  "conditions": [
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_ROCKSLAB"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_ROCKFURNACE"
-    }
-  ]
+    "item": "mineralogy:rock_salt_furnace",
+    "count": 1
+  }
 }

@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:gabbro_smooth_brick_stairs"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:gabbro_smooth_brick_stairs"
@@ -16,11 +22,6 @@
       "conditions": {
         "items": [
           {
-            "type": "mineralogy:config_item",
-            "flags": [
-              "GENERATE_SMOOTH",
-              "GENERATE_SMOOTHBRICK"
-            ],
             "item": "mineralogy:gabbro_smooth_brick"
           }
         ]

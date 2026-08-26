@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:rhyolite_relief_i"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "xxx",
@@ -13,15 +19,5 @@
   "result": {
     "item": "mineralogy:rhyolite_relief_i",
     "count": 7
-  },
-  "conditions": [
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTH"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_RELIEFS"
-    }
-  ]
+  }
 }

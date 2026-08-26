@@ -1,0 +1,25 @@
+{
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:peridotite_brick_stairs"
+    },
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:peridotite_smooth_brick_stairs"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mineralogy:peridotite_brick_stairs"
+    },
+    {
+      "tag": "forge:sand"
+    }
+  ],
+  "result": {
+    "item": "mineralogy:peridotite_smooth_brick_stairs",
+    "count": 1
+  }
+}

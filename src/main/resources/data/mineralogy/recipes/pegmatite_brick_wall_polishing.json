@@ -1,0 +1,25 @@
+{
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:pegmatite_brick_wall"
+    },
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:pegmatite_smooth_brick_wall"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mineralogy:pegmatite_brick_wall"
+    },
+    {
+      "tag": "forge:sand"
+    }
+  ],
+  "result": {
+    "item": "mineralogy:pegmatite_smooth_brick_wall",
+    "count": 1
+  }
+}

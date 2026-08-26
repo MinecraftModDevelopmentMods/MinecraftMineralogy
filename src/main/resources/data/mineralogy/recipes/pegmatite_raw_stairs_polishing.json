@@ -1,0 +1,25 @@
+{
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:pegmatite_stairs"
+    },
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:pegmatite_smooth_stairs"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mineralogy:pegmatite_stairs"
+    },
+    {
+      "tag": "forge:sand"
+    }
+  ],
+  "result": {
+    "item": "mineralogy:pegmatite_smooth_stairs",
+    "count": 1
+  }
+}

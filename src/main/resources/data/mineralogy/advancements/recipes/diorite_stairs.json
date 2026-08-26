@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:diorite_stairs"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:diorite_stairs"

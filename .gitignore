@@ -22,7 +22,7 @@ build
 eclipse
 run
 classes
-logs
+/logs/
 
 # local agent context
 /AGENTS.md

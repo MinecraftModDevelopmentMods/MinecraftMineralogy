@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:granite_brick_furnace"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "xxx",
@@ -7,27 +13,14 @@
   ],
   "key": {
     "x": {
-      "item": "mineralogy:granite_brick_slab"
+      "tag": "mineralogy:slabs/granite/brick"
     },
     "y": {
       "item": "minecraft:furnace"
     }
   },
   "result": {
-    "item": "mineralogy:granite_brick_furnace"
-  },
-  "conditions": [
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_BRICK"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_BRICKSLAB"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_BRICKFURNACE"
-    }
-  ]
+    "item": "mineralogy:granite_brick_furnace",
+    "count": 1
+  }
 }

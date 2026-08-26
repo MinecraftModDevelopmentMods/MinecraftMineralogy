@@ -1,20 +1,21 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:pegmatite_smooth"
+    }
+  ],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "mineralogy:pegmatite"
+      "tag": "mineralogy:stones/pegmatite"
     },
     {
       "item": "minecraft:sand"
     }
   ],
   "result": {
-    "item": "mineralogy:pegmatite_smooth"
-  },
-  "conditions": [
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTH"
-    }
-  ]
+    "item": "mineralogy:pegmatite_smooth",
+    "count": 1
+  }
 }

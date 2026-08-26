@@ -1,20 +1,21 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:diorite_smooth"
+    }
+  ],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "mineralogy:diorite"
+      "tag": "mineralogy:stones/diorite"
     },
     {
       "item": "minecraft:sand"
     }
   ],
   "result": {
-    "item": "mineralogy:diorite_smooth"
-  },
-  "conditions": [
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTH"
-    }
-  ]
+    "item": "mineralogy:diorite_smooth",
+    "count": 1
+  }
 }

@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:diorite_brick"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "xx",
@@ -6,17 +12,11 @@
   ],
   "key": {
     "x": {
-      "item": "mineralogy:diorite"
+      "tag": "mineralogy:stones/diorite"
     }
   },
   "result": {
     "item": "mineralogy:diorite_brick",
     "count": 4
-  },
-  "conditions": [
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_BRICK"
-    }
-  ]
+  }
 }

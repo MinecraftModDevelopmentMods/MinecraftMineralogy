@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:limestone_smooth_brick_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:limestone_smooth_brick_slab"
@@ -16,11 +22,6 @@
       "conditions": {
         "items": [
           {
-            "type": "mineralogy:config_item",
-            "flags": [
-              "GENERATE_SMOOTH",
-              "GENERATE_SMOOTHBRICK"
-            ],
             "item": "mineralogy:limestone_smooth_brick"
           }
         ]

@@ -1,0 +1,26 @@
+{
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:basaltic_glass_stairs"
+    },
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:basaltic_glass_brick_stairs"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xx",
+    "xx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:basaltic_glass_stairs"
+    }
+  },
+  "result": {
+    "item": "mineralogy:basaltic_glass_brick_stairs",
+    "count": 4
+  }
+}

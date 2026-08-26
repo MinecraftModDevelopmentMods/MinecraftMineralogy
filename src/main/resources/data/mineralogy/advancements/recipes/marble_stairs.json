@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:marble_stairs"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:marble_stairs"

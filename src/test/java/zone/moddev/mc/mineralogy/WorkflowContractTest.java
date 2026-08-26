@@ -80,6 +80,15 @@ public class WorkflowContractTest {
         assertFalse(build.contains("file:///${project.projectDir}/mcmodsrepo"));
     }
 
+    @Test
+    public void stagedOreSpawnDependencyCannotFallThroughToPublicRepositories() throws Exception {
+        String build = text("build.gradle");
+        assertTrue(build.contains("exclusiveContent"));
+        assertTrue(build.contains("forRepository"));
+        assertTrue(build.contains("includeModule('curse.maven', orespawnModule)"));
+        assertTrue(build.contains("'OreSpawnReleaseVerificationMirror'"));
+    }
+
     private static String text(String path) throws Exception {
         return new String(Files.readAllBytes(new File(path).toPath()), StandardCharsets.UTF_8)
                 .replace("\r\n", "\n").replace('\r', '\n');

@@ -119,35 +119,32 @@ tasks.withType(JavaExec).configureEach { JavaExec runTask ->
     if (launchTarget != null) configureForge31Run(runTask, launchTarget)
 }
 
-def curseMavenRepository
+def orespawnModule = "mmd-orespawn-${project.orespawn_curse_project_id}"
+def orespawnVerificationRepository = project.findProperty('orespawnVerificationRepository')
 repositories {
     minecraft.mavenizer(it)
     maven fg.forgeMaven
     maven fg.minecraftLibsMaven
     mavenCentral()
-    if (project.hasProperty('orespawnVerificationRepository')) {
-        maven {
-            name = 'OreSpawnReleaseVerificationMirror'
-            url = uri(project.property('orespawnVerificationRepository'))
-            metadataSources { artifact() }
-        }
-    }
-    else {
-        curseMavenRepository = maven {
-            name = 'CurseMaven'
-            url = 'https://www.cursemaven.com'
-            metadataSources { artifact() }
-        }
-    }
-}
 
-// Keep CurseMaven after ForgeGradle's generated repositories. The released
-// numeric CurseForge coordinate still resolves normally, while Forge's own
-// mapped artifacts remain authoritative for the development environment.
-afterEvaluate {
-    if (curseMavenRepository != null) {
-        repositories.remove(curseMavenRepository)
-        repositories.add(curseMavenRepository)
+    // The staged CI mirror is the only permitted source for this exact
+    // OreSpawn module. Without exclusive routing, a transient HTTP error from
+    // Maven Central aborts resolution before Gradle reaches the verified jar.
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = orespawnVerificationRepository == null
+                        ? 'CurseMaven'
+                        : 'OreSpawnReleaseVerificationMirror'
+                url = orespawnVerificationRepository == null
+                        ? uri('https://www.cursemaven.com')
+                        : uri(orespawnVerificationRepository)
+                metadataSources { artifact() }
+            }
+        }
+        filter {
+            includeModule('curse.maven', orespawnModule)
+        }
     }
 }
 

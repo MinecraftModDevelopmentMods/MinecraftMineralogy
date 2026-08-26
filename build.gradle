@@ -566,6 +566,33 @@ tasks.register('syncForge28EclipseLaunches') {
                         "    <mapEntry key=\"MC_VERSION\" value=\"${mc_version}\"/>\r\n"
                 text = text.replace('    <mapEntry key="MOD_CLASSES"', entries + '    <mapEntry key="MOD_CLASSES"')
             }
+            // Slime Launcher tokenizes these program arguments itself. Paths
+            // containing spaces therefore have to be quoted in the launch
+            // file even though Eclipse already treats the whole XML value as
+            // one attribute. ForgeGradle's generated launch omits the quotes.
+            def programArguments = text =~ /(<stringAttribute key="org\.eclipse\.jdt\.launching\.PROGRAM_ARGUMENTS" value=")([^"]*)("\/>)/
+            if (programArguments.count != 1) {
+                throw new GradleException("ForgeGradle generated malformed program arguments in ${launch.name}")
+            }
+            String arguments = programArguments[0][2]
+            ['cache', 'metadata', 'to-srg', 'to-obf'].each { flag ->
+                String prefix = "--${flag} "
+                int valueStart = arguments.indexOf(prefix)
+                if (valueStart < 0) {
+                    throw new GradleException("ForgeGradle omitted --${flag} from ${launch.name}")
+                }
+                valueStart += prefix.length()
+                int valueEnd = arguments.indexOf(' --', valueStart)
+                if (valueEnd < 0) {
+                    throw new GradleException("ForgeGradle generated an unterminated --${flag} path in ${launch.name}")
+                }
+                String value = arguments.substring(valueStart, valueEnd)
+                if (!value.startsWith('&quot;') || !value.endsWith('&quot;')) {
+                    arguments = "${arguments.substring(0, valueStart)}&quot;${value}&quot;${arguments.substring(valueEnd)}"
+                }
+            }
+            text = text.replace(programArguments[0][0],
+                    programArguments[0][1] + arguments + programArguments[0][3])
             if (!text.contains('ATTR_EXCLUDE_TEST_CODE')) {
                 text = text.replace('</launchConfiguration>',
                         '    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_EXCLUDE_TEST_CODE" value="true"/>\r\n' +
@@ -626,6 +653,11 @@ tasks.register('verifyEclipseProductionClasspath') {
             String expectedModClasses = "mineralogy%%${mainOutput};mineralogy%%${mainOutput}"
             if (!launch.contains(expectedModClasses)) {
                 throw new GradleException("Eclipse launch is not using Forge 28's merged production output: ${name}")
+            }
+            ['cache', 'metadata', 'to-srg', 'to-obf'].each { flag ->
+                if (!launch.contains("--${flag} &quot;")) {
+                    throw new GradleException("Eclipse launch does not quote its --${flag} path: ${name}")
+                }
             }
         }
         ['README.md', 'PLAYER_GUIDE.md', 'DEVELOPER_GUIDE.md', 'CONTENT_CONFIG.md',

@@ -1,18 +1,18 @@
 [![Discord](https://img.shields.io/badge/Discord-MMD-green.svg?style=flat&logo=Discord)](https://discord.moddev.zone)
 [![CurseForge downloads](https://cf.way2muchnoise.eu/full_minecraft-mineralogy_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/minecraft-mineralogy)
 [![Supported Minecraft versions](https://cf.way2muchnoise.eu/versions/Minecraft_minecraft-mineralogy_all.svg)](https://www.curseforge.com/minecraft/mc-mods/minecraft-mineralogy)
-[![Build, test, and audit](https://github.com/MinecraftModDevelopmentMods/MinecraftMineralogy/actions/workflows/ci.yml/badge.svg?branch=master-1.13.2)](https://github.com/MinecraftModDevelopmentMods/MinecraftMineralogy/actions/workflows/ci.yml?query=branch%3Amaster-1.13.2)
+[![Build, test, and audit](https://github.com/MinecraftModDevelopmentMods/MinecraftMineralogy/actions/workflows/ci.yml/badge.svg?branch=master-1.14.4)](https://github.com/MinecraftModDevelopmentMods/MinecraftMineralogy/actions/workflows/ci.yml?query=branch%3Amaster-1.14.4)
 
-# Mineralogy 6 for Minecraft 1.13.2
+# Mineralogy 6 for Minecraft 1.14.4
 
 Mineralogy adds real-world rock families, matching construction blocks,
 mineral ores and dusts, rock furnaces, drywall, rock-salt lighting, fertilizer,
 and crude oil. OreSpawn 4 is the sole terrain, strata, ore, and deposit engine;
 Mineralogy no longer installs a parallel world generator.
 
-This branch builds Mineralogy `6.0.1.113021` for Forge `25.0.223` and requires
-OreSpawn `4.0.6` or another compatible 4.x release. Install both mods on clients
-and servers.
+This branch builds Mineralogy `6.0.1.114041` for Forge `28.2.26` and is built
+and tested against OreSpawn `4.0.8.114041`. Its declared compatibility range is
+OreSpawn `[4.0.6,5.0.0)`. Install both mods on clients and servers.
 
 ## Configuration and help
 

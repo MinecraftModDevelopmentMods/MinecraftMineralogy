@@ -15,7 +15,7 @@
       "tag": "mineralogy:drywall/white"
     },
     {
-      "tag": "forge:dyes/blue"
+      "item": "minecraft:lapis_lazuli"
     }
   ],
   "result": {

@@ -160,11 +160,26 @@ public final class LegacyWorldDataHook {
 			return root;
 		}
 		CompoundNBT level = root.getCompound("Level");
+		if (legacyWorldActive) {
+			normalizeLegacyTileEntityIds(level);
+		}
 		if (level.getBoolean(PRESERVE_CHUNK_MARKER)) {
 			level.putString("Status", "full");
 			level.remove(PRESERVE_CHUNK_MARKER);
 		}
 		return root;
+	}
+
+	private static void normalizeLegacyTileEntityIds(CompoundNBT level) {
+		ListNBT tileEntities = level.getList("TileEntities", 10);
+		for (int index = 0; index < tileEntities.size(); ++index) {
+			CompoundNBT tileEntity = tileEntities.getCompound(index);
+			String id = tileEntity.getString("id");
+			String normalized = LegacyTileEntityIdNormalizer.normalize(id);
+			if (!normalized.equals(id)) {
+				tileEntity.putString("id", normalized);
+			}
+		}
 	}
 
 	private static int installLegacyBlockStates(CompoundNBT blockSnapshot) {

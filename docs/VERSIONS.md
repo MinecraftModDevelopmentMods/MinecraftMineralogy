@@ -13,10 +13,10 @@ The first three components are the **functional version**. Mineralogy `6.0.1`
 means major generation 6, minor release 0, and bug revision 1.
 
 The fourth component identifies the target build. The complete version for
-this Minecraft 1.13.2 Forge release is therefore:
+this Minecraft 1.14.4 Forge release is therefore:
 
 ```text
-6.0.1.113021
+6.0.1.114041
 ```
 
 This expanded numeric form is compatible with Maven version ordering, but it
@@ -25,7 +25,7 @@ components.
 
 The release tag is exactly the complete four-component version, with no
 redundant Minecraft-version prefix. For this branch the tag is therefore
-`6.0.1.113021`, not `1.13.2-6.0.1.113021`. The Target already makes tags unique
+`6.0.1.114041`, not `1.14.4-6.0.1.114041`. The Target already makes tags unique
 across Minecraft versions and loaders.
 
 ## Reading the target component
@@ -48,14 +48,14 @@ minor digits, and all remaining digits for the Minecraft major version.
 | --- | --- | ---: | --- |
 | 1.10.2 | Forge | `110021` | `6.0.1.110021` |
 | 1.12.2 | Forge | `112021` | `6.0.1.112021` |
-| 1.13.2 | Forge | `113021` | `6.0.1.113021` |
+| 1.14.4 | Forge | `114041` | `6.0.1.114041` |
 | 1.18.2 | Forge | `118021` | `6.0.0.118021` |
 | 1.20.6 | Forge | `120061` | `6.0.0.120061` |
 | 1.21.11 | Forge | `121111` | `6.0.0.121111` |
 | 26.2 | Forge | `2602001` | `6.0.0.2602001` |
 | 26.2 | NeoForge | `2602002` | `6.0.0.2602002` |
 
-The 1.13.2 row records this branch's current release. The other rows illustrate
+The 1.14.4 row records this branch's current release. The other rows illustrate
 target encoding only; they do not claim that the 6.0.1 changes have already
 been forward-ported.
 
@@ -87,8 +87,8 @@ When Major changes, Minor and Bug reset to zero. When Minor changes, Bug resets
 to zero. The target for the actual build is then appended:
 
 ```text
-6.0.1.113021 -> 6.1.0.113021
-6.1.4.113021 -> 7.0.0.113021
+6.0.1.114041 -> 6.1.0.114041
+6.1.4.114041 -> 7.0.0.114041
 ```
 
 ## Bug version
@@ -110,7 +110,7 @@ be:
 ```text
 Minecraft 1.10.2 / Forge / Mineralogy 6.0.0.110021
 Minecraft 1.12.2 / Forge / Mineralogy 6.0.1.112021
-Minecraft 1.13.2 / Forge / Mineralogy 6.0.1.113021
+Minecraft 1.14.4 / Forge / Mineralogy 6.0.1.114041
 Minecraft 1.18.2 / Forge / Mineralogy 6.0.0.118021
 ```
 
@@ -143,8 +143,8 @@ excluding Mineralogy 7. Minecraft and loader metadata still decide whether a
 particular jar can load on the current game.
 
 Mineralogy 6 also requires OreSpawn `[4.0.6,5.0.0)`. OreSpawn uses the same
-target calculation, so the matching Minecraft 1.13.2 Forge release is
-`4.0.6.113021`. The dependency range deliberately describes the supported
+target calculation, so the matching Minecraft 1.14.4 Forge release is
+`4.0.8.114041`. The dependency range deliberately describes the supported
 functional OreSpawn generation; Forge still prevents jars for another
 Minecraft target from loading together.
 
@@ -157,7 +157,7 @@ feature generation, not the exact jar.
 The Gradle build reads the complete version from `mod_version`, verifies that
 it has four numeric components, and checks that its Target matches the declared
 Minecraft version and Forge loader. CI build numbers are not appended. For this
-branch, published metadata and artifacts therefore use `6.0.1.113021`.
+branch, published metadata and artifacts therefore use `6.0.1.114041`.
 
 Every release note should state:
 

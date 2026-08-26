@@ -59,16 +59,16 @@ public class GameplayContractTest {
     public void dropsSlabsAndFurnacePersistenceFollowAcceptedSemantics() throws Exception {
         String chert = text("src/main/java/zone/moddev/mc/mineralogy/blocks/Chert.java");
         assertTrue(chert.contains("if (prng.nextInt(10) == 0)"));
-        assertTrue(chert.contains("} else {"));
+        assertTrue(chert.contains("return super.getDrops(state, builder);"));
         String rock = text("src/main/java/zone/moddev/mc/mineralogy/blocks/Rock.java");
-        assertTrue(rock.contains("drops.add(new ItemStack(Blocks.COBBLESTONE));"));
-        assertTrue(rock.contains("return;"));
+        assertTrue(rock.contains("return Collections.singletonList(new ItemStack(Blocks.COBBLESTONE));"));
         String slab = text("src/main/java/zone/moddev/mc/mineralogy/blocks/DoubleSlab.java");
-        assertTrue(slab.contains("return 2;"));
-        assertTrue(slab.contains("return new ItemStack(fullBlock);"));
+        assertTrue(slab.contains("new ItemStack(drops, 2)"));
+        assertTrue(slab.contains("Collections.singletonList(new ItemStack(fullBlock))"));
         String furnace = text("src/main/java/zone/moddev/mc/mineralogy/tileentity/TileEntityRockFurnace.java");
         assertTrue(furnace.contains("public TileEntityRockFurnace()"));
-        assertTrue(furnace.contains("getBlockState().getBlock()"));
+        assertTrue(furnace.contains("BlockState state = getBlockState()"));
+        assertTrue(furnace.contains("Block block = state.getBlock()"));
         assertTrue(furnace.contains("getBurnModifier()"));
         assertTrue(furnace.contains("ItemStackHelper.loadAllItems"));
     }
@@ -76,7 +76,9 @@ public class GameplayContractTest {
     @Test
     public void cobblestonePolicyReappliesAfterReloadAndKeepsSpecialCases() throws Exception {
         String policy = text("src/main/java/zone/moddev/mc/mineralogy/compat/CobblestoneTagPolicy.java");
-        assertTrue(policy.contains("addReloadListener"));
+        assertTrue(policy.contains("onTagsUpdated(TagsUpdatedEvent event)"));
+        assertFalse(policy.contains("onServerAboutToStart"));
+        assertTrue(policy.contains("event.getTagManager()"));
         assertTrue(policy.contains("MaterialData.allIncludingRockSalt()"));
         assertTrue(policy.contains("addBlock(blocks, \"chert\")"));
         assertTrue(policy.contains("addBlock(blocks, \"pumice\")"));
@@ -92,45 +94,42 @@ public class GameplayContractTest {
 
     @Test
     public void optionalGunpowderDustsCannotCollapseToTwoIngredients() throws Exception {
-        String config = text("src/main/java/zone/moddev/mc/mineralogy/MineralogyConfig.java");
-        assertTrue(config.contains("item_tag_not_empty"));
-        assertTrue(config.contains("Tag<Item> tag = ItemTags.getCollection().get(tagName)"));
-        assertTrue(config.contains("tag != null && !tag.getAllElements().isEmpty()"));
-
         String generator = text("scripts/generate-recipes.ps1");
         assertTrue(generator.contains("ItemTagNotEmptyCondition 'forge:dusts/carbon'"));
         assertTrue(generator.contains("ItemTagNotEmptyCondition 'forge:dusts/coal'"));
+        assertTrue(generator.contains("type = 'forge:not'"));
+        assertTrue(generator.contains("type = 'forge:tag_empty'"));
     }
 
     @Test
-    public void forge25OilRendererHookIsBoundedToMineralogyOil() throws Exception {
-        String renderer = text("src/main/java/zone/moddev/mc/mineralogy/client/ClientOilRenderer.java");
-        assertTrue(renderer.contains("state.getFluid().isEquivalentTo(MineralogyFluids.CRUDE_OIL)"));
-        assertTrue(renderer.contains("blocks/crude_oil_still"));
-        assertTrue(renderer.contains("blocks/crude_oil_flow"));
-        String transformer = text("src/main/resources/coremods/mineralogy_legacy_leaves_fix.js");
-        assertTrue(transformer.contains("mineralogy_crude_oil_renderer"));
-        assertTrue(transformer.contains("BlockFluidRenderer"));
-        assertTrue(transformer.contains("useOpaqueFluidPath"));
-        assertTrue(transformer.contains("overrideSprites"));
-        assertTrue(transformer.contains("overrideColor"));
+    public void forge28OilUsesNativeFlowingFluidRendering() throws Exception {
+        String fluid = text("src/main/java/zone/moddev/mc/mineralogy/fluids/MineralogyFluids.java");
+        assertTrue(fluid.contains("ForgeFlowingFluid.Source"));
+        assertTrue(fluid.contains("ForgeFlowingFluid.Flowing"));
+        assertTrue(fluid.contains("FlowingFluidBlock"));
+        assertTrue(fluid.contains("BucketItem"));
+        assertTrue(fluid.contains("blocks/crude_oil_still"));
+        assertTrue(fluid.contains("blocks/crude_oil_flow"));
+        assertTrue(fluid.contains("BlockRenderLayer.TRANSLUCENT"));
+        assertFalse(new File("src/main/java/zone/moddev/mc/mineralogy/client/ClientOilRenderer.java").exists());
     }
 
     @Test
-    public void legacyWorldgenGuardProtectsIndexedExistingChunks() throws Exception {
+    public void legacyWorldConversionPreservesIndexedChunksAndFurnaces() throws Exception {
         String hook = text("src/main/java/zone/moddev/mc/mineralogy/patching/LegacyWorldDataHook.java");
-        assertTrue(hook.contains("indexLegacyChunks(worldDirectory)"));
-        assertTrue(hook.contains("new byte[4096]"));
-        assertTrue(hook.contains("LEGACY_MINERALOGY_CHUNKS.add(chunkKey(chunkX, chunkZ))"));
-        assertTrue(hook.contains("shouldBlockWorldgenWrite"));
+        assertTrue(hook.contains("blocks.length != 4096"));
+        assertTrue(hook.contains("MineralogyLegacyPreserveChunk"));
+        assertTrue(hook.contains("TerrainPopulated"));
+        assertTrue(hook.contains("LightPopulated"));
+        assertTrue(hook.contains("rewriteLegacyRockFurnaceTileEntities"));
+		assertTrue(hook.contains("normalizeLegacyTileEntityIds(level)"));
+		assertTrue(new File("src/main/java/zone/moddev/mc/mineralogy/patching/LegacyTileEntityIdNormalizer.java").exists());
 
-        String transformer = text("src/main/resources/coremods/mineralogy_legacy_leaves_fix.js");
-        assertTrue(transformer.contains("previous.desc.endsWith(')Lnet/minecraft/nbt/NBTTagCompound;')"));
-        assertTrue(transformer.contains("Mineralogy could not patch the Forge 25 legacy chunk loader"));
-        assertTrue(transformer.contains("mineralogy_legacy_worldgen_guard"));
-        assertTrue(transformer.contains("net.minecraft.world.gen.WorldGenRegion"));
-        assertTrue(transformer.contains("shouldBlockWorldgenWrite"));
-        assertTrue(transformer.contains("Mineralogy could not patch the Forge 25 legacy-world write guard"));
+        String transformer = text("src/main/resources/coremods/mineralogy_legacy_world_fix.js");
+        assertTrue(transformer.contains("mineralogy_legacy_chunk_data"));
+        assertTrue(transformer.contains("net.minecraft.world.chunk.storage.ChunkLoader"));
+        assertTrue(transformer.contains("prepareLegacyChunk"));
+        assertTrue(transformer.contains("finalizeLegacyChunk"));
     }
 
     @Test
@@ -139,11 +138,11 @@ public class GameplayContractTest {
         assertTrue(hook.contains("Dynamic<?>[] legacyStates = expandFlatteningTable(highestStateId + 1)"));
         assertTrue(hook.contains("legacyStates[stateId] = BlockStateFlatteningMap.makeDynamic(stateNbt)"));
         assertFalse(hook.contains("addEntry.invoke"));
-        assertTrue(hook.indexOf("int mappedStates = installLegacyBlockStates")
-                < hook.indexOf("if (firstPreparation) {\n\t\t\tLEGACY_WORLD_DATA.put"));
+        assertTrue(hook.contains("writeSidecar(levelDat.getParentFile(), blocks)"));
+        assertTrue(hook.contains("install(levelDat.getParentFile(), CompressedStreamTools.readCompressed(input)"));
 
         String build = text("build.gradle");
-        assertTrue(build.contains("dependsOn processResources"));
+        assertTrue(build.contains("dependsOn tasks.named('processResources')"));
         assertTrue(build.contains("mineralogy%%${mainOutput};mineralogy%%${mainOutput}"));
         assertTrue(build.contains("from processedResources"));
         assertTrue(build.contains("data/minecraft/recipes/furnace.json"));

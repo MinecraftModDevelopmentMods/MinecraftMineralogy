@@ -15,7 +15,7 @@
       "tag": "mineralogy:drywall/white"
     },
     {
-      "tag": "forge:dyes/light_blue"
+      "item": "minecraft:light_blue_dye"
     }
   ],
   "result": {

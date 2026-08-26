@@ -2,8 +2,8 @@
 
 ## Installing
 
-Mineralogy 6 needs Minecraft 1.13.2, Forge 25.0.223, and OreSpawn
-4.0.6.113021.
+Mineralogy 6 needs Minecraft 1.14.4, Forge 28.2.26, and OreSpawn
+4.0.8.114041.
 Install matching Mineralogy and OreSpawn jars on both clients and servers. Do
 not open a world containing Mineralogy blocks without Mineralogy installed.
 
@@ -19,12 +19,14 @@ Cyano/`LEGACY` engine with their established family order and layer settings.
 It does not silently convert old terrain to Stable Layers. Back up an important
 world before changing its profile or upgrading mods.
 
-On the first 1.13 start, Mineralogy recognizes the old saved registry and
+On the first 1.14.4 start, Mineralogy recognizes the old saved registry and
 protects existing Overworld chunks while Minecraft converts them to flattened
 block states. Rock furnaces are converted when their chunk is first loaded;
-their inventory and cooking progress are retained. Let the game or server stop
-normally after the upgrade so converted chunks can be saved. A complete copied
-world test is strongly recommended before upgrading the original.
+their inventory and cooking progress are retained. Old vanilla tile IDs are
+also normalized so a legacy chest or furnace cannot prevent its whole chunk
+from loading. Let the game or server stop normally after the upgrade so
+converted chunks can be saved. A complete copied world test is strongly
+recommended before upgrading the original.
 
 ## What Mineralogy Adds
 
@@ -69,7 +71,7 @@ Its **Rock Settings** screen provides four altitude controls:
 - **Minimum Y** (`min_y`) and **Maximum Y** (`max_y`) are inclusive hard limits.
   The rock cannot replace terrain outside them.
 
-Minecraft 1.13 accepts Y `0` through `255`; Depth Spread accepts `1` through
+Minecraft 1.14.4 accepts Y `0` through `255`; Depth Spread accepts `1` through
 `512`. The saved fields are independent of the rock's geological family,
 overall weight, and geome weights, which also affect where it is selected.
 
@@ -87,7 +89,7 @@ terrain replacement through each dimension's `host_blocks` and `host_tags`.
 The packaged Mineralogy profile initially uses `minecraft:stone` in the
 Overworld.
 
-The terrain-host list is not exposed by OreSpawn's 1.13 graphical editor. Stop
+The terrain-host list is not exposed by OreSpawn's 1.14.4 graphical editor. Stop
 Minecraft or the server before editing the JSON. For defaults inherited by
 worlds created afterward, edit:
 
@@ -120,11 +122,11 @@ each natural terrain block that Mineralogy rock may replace:
 ```
 
 Use `host_tags` when an OreSpawn/pack-provided group is more appropriate; on
-Minecraft 1.13 these resolve through target-native block tags. Exact
+Minecraft 1.14.4 these resolve through target-native block tags. Exact
 `host_blocks` entries are the clearest choice for one
 modded stone.
 
-Minecraft 1.13 matches a `host_blocks` entry by flattened block registry
+Minecraft 1.14.4 matches a `host_blocks` entry by flattened block registry
 identity. Add only
 natural base-terrain blocks, not machines, containers, or construction blocks.
 Restart after editing. The change affects only chunks generated afterward;
@@ -133,21 +135,20 @@ OreSpawn never retro-generates Mineralogy rock strata into existing chunks.
 ### Enabling Mineralogy Geology In Another Dimension
 
 OreSpawn can apply Mineralogy rocks to a stone-based mod dimension without a
-separate Mineralogy dimension option. Minecraft 1.13 identifies a custom
-numeric dimension `N` as `legacy:dimension_N`. For example, use
-`legacy:dimension_7` when the installed mod's configuration assigns that
-dimension the numeric ID `7`.
+separate Mineralogy dimension option. Minecraft 1.14.4 uses the dimension
+type's registered ID. For example, use `examplemod:moon` when that is the ID
+documented by the installed dimension mod.
 
-The 1.13 graphical editor does not expose terrain-dimension or rock-membership
+The 1.14.4 graphical editor does not expose terrain-dimension or rock-membership
 fields. Stop Minecraft or the server and edit the appropriate OreSpawn JSON:
 `config/orespawn-worldgen.json` for defaults inherited by future worlds, or
 `<world>/serverconfig/orespawn-worldgen.json` for an established world.
 
 First, add an enabled entry inside `terrain_dimensions`. This example allows
-Mineralogy to replace vanilla stone throughout custom dimension `7`:
+Mineralogy to replace vanilla stone throughout a custom moon dimension:
 
 ```json
-"legacy:dimension_7": {
+"examplemod:moon": {
   "enabled": true,
   "biome_ids": [],
   "biome_namespaces": [],
@@ -163,7 +164,7 @@ within the dimension.
 Second, add the dimension to every desired entry under `rocks`:
 
 ```json
-"dimensions": ["minecraft:overworld", "legacy:dimension_7"]
+"dimensions": ["minecraft:overworld", "examplemod:moon"]
 ```
 
 Keep `minecraft:overworld` in the list when that rule should continue to work

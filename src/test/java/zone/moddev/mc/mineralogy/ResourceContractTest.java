@@ -65,6 +65,13 @@ public class ResourceContractTest {
                     advancement.getAsJsonObject("rewards").getAsJsonArray("recipes").get(0).getAsString());
             assertTrue(advancement.getAsJsonObject("criteria").has("has_the_recipe"));
             assertTrue(advancement.getAsJsonObject("criteria").has("has_rock"));
+            if (recipe.has("conditions")) {
+                assertTrue(recipeFile.getName(), recipe.get("conditions").isJsonArray());
+                assertTrue(recipeFile.getName(), advancement.has("conditions"));
+                assertEquals(recipeFile.getName(), recipe.get("conditions"), advancement.get("conditions"));
+            } else {
+                assertFalse(recipeFile.getName(), advancement.has("conditions"));
+            }
         }
 
         JsonObject smooth = json(new File(advancementDir, "basalt_smooth.json"));
@@ -109,11 +116,11 @@ public class ResourceContractTest {
         assertEquals("forge:cobblestone", vanillaFurnace.getAsJsonObject("key")
                 .getAsJsonObject("#").get("tag").getAsString());
         assertFalse(new File(ROOT, "data/mineralogy/tags/items/vanilla_furnace_materials.json").exists());
-        assertEquals("minecraft:rose_red", json(new File(recipes, "drywall_red.json"))
+        assertEquals("minecraft:red_dye", json(new File(recipes, "drywall_red.json"))
                 .getAsJsonArray("ingredients").get(1).getAsJsonObject().get("item").getAsString());
-        assertEquals("minecraft:cactus_green", json(new File(recipes, "drywall_green.json"))
+        assertEquals("minecraft:green_dye", json(new File(recipes, "drywall_green.json"))
                 .getAsJsonArray("ingredients").get(1).getAsJsonObject().get("item").getAsString());
-        assertEquals("minecraft:dandelion_yellow", json(new File(recipes, "drywall_yellow.json"))
+        assertEquals("minecraft:yellow_dye", json(new File(recipes, "drywall_yellow.json"))
                 .getAsJsonArray("ingredients").get(1).getAsJsonObject().get("item").getAsString());
     }
 
@@ -155,14 +162,14 @@ public class ResourceContractTest {
     @Test
     public void oilAndBuildMetadataUseStableTargetIdentities() throws Exception {
         String properties = new String(Files.readAllBytes(new File("gradle.properties").toPath()), StandardCharsets.UTF_8);
-        assertTrue(properties.contains("mod_version=6.0.1.113021"));
-        assertTrue(properties.contains("orespawn_curse_file_id=8681710"));
+        assertTrue(properties.contains("mod_version=6.0.1.114041"));
+        assertTrue(properties.contains("orespawn_curse_file_id=8737819"));
         String build = new String(Files.readAllBytes(new File("build.gradle").toPath()), StandardCharsets.UTF_8);
-        assertTrue(build.contains("runtime fg.deobf"));
+        assertTrue(build.contains("runtimeOnly renamer.dependency(\"curse.maven:mmd-orespawn-"));
         assertTrue(build.contains("orespawnRelease"));
         String metadata = new String(Files.readAllBytes(new File(ROOT, "META-INF/mods.toml").toPath()), StandardCharsets.UTF_8);
-        assertTrue(metadata.contains("loaderVersion=\"[25,)\""));
-        assertTrue(metadata.contains("versionRange=\"[25.0.223,26)\""));
+        assertTrue(metadata.contains("loaderVersion=\"[28,)\""));
+        assertTrue(metadata.contains("versionRange=\"[28.2.26,29)\""));
         assertTrue(metadata.contains("versionRange=\"[4.0.6,5.0.0)\""));
         assertTrue(metadata.contains("ordering=\"AFTER\""));
         assertTrue(new File(ROOT, "assets/mineralogy/textures/items/crude_oil_bucket.png").isFile());
@@ -213,8 +220,10 @@ public class ResourceContractTest {
                 conditions.get(0).getAsJsonObject().get("type").getAsString());
         if (requiredTag != null) {
             JsonObject tagCondition = conditions.get(1).getAsJsonObject();
-            assertEquals(name, "mineralogy:item_tag_not_empty", tagCondition.get("type").getAsString());
-            assertEquals(name, requiredTag, tagCondition.get("tag").getAsString());
+            assertEquals(name, "forge:not", tagCondition.get("type").getAsString());
+            JsonObject value = tagCondition.getAsJsonObject("value");
+            assertEquals(name, "forge:tag_empty", value.get("type").getAsString());
+            assertEquals(name, requiredTag, value.get("tag").getAsString());
         }
     }
 

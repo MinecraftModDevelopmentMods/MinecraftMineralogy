@@ -35,7 +35,10 @@ function ConfigCondition([string] $flag) {
 }
 
 function ItemTagNotEmptyCondition([string] $tag) {
-    return [ordered]@{ type = 'mineralogy:item_tag_not_empty'; tag = $tag }
+    return [ordered]@{
+        type = 'forge:not'
+        value = [ordered]@{ type = 'forge:tag_empty'; tag = $tag }
+    }
 }
 
 function ItemIngredient([string] $item, [object] $data = $null) {
@@ -47,9 +50,9 @@ function ItemIngredient([string] $item, [object] $data = $null) {
             $item = 'minecraft:charcoal'
         }
         elseif ($item -eq 'minecraft:dye') {
-            $dyes = @('ink_sac', 'rose_red', 'cactus_green', 'cocoa_beans', 'lapis_lazuli',
+            $dyes = @('ink_sac', 'red_dye', 'green_dye', 'cocoa_beans', 'lapis_lazuli',
                 'purple_dye', 'cyan_dye', 'light_gray_dye', 'gray_dye', 'pink_dye',
-                'lime_dye', 'dandelion_yellow', 'light_blue_dye', 'magenta_dye',
+                'lime_dye', 'yellow_dye', 'light_blue_dye', 'magenta_dye',
                 'orange_dye', 'bone_meal')
             $item = "minecraft:$($dyes[[int]$data])"
         }
@@ -81,7 +84,7 @@ function OreIngredient([string] $ore) {
         $finish = if ($Matches[2]) { '/' + (Convert-CamelToSnake $Matches[2]) } else { '' }
         return [ordered]@{ tag = "mineralogy:slabs/$family$finish" }
     }
-    throw "No Minecraft 1.13 tag mapping for legacy OreDictionary key $ore"
+    throw "No Minecraft 1.14.4 tag mapping for legacy OreDictionary key $ore"
 }
 
 function Convert-CamelToSnake([string] $value) {
@@ -540,12 +543,14 @@ function Ensure-MissingRecipeAdvancements() {
             $requirements += ,@('has_the_recipe', 'has_furnace')
         }
 
-        Write-Json $advancementFile ([ordered]@{
-            conditions = @($recipe.conditions)
-            rewards = [ordered]@{ recipes = @("mineralogy:$recipeName") }
-            criteria = $criteria
-            requirements = $requirements
-        })
+        $generatedAdvancement = [ordered]@{}
+        if ($null -ne $recipe.conditions) {
+            $generatedAdvancement.conditions = @($recipe.conditions)
+        }
+        $generatedAdvancement.rewards = [ordered]@{ recipes = @("mineralogy:$recipeName") }
+        $generatedAdvancement.criteria = $criteria
+        $generatedAdvancement.requirements = $requirements
+        Write-Json $advancementFile $generatedAdvancement
         $created++
     }
     return $created
@@ -595,7 +600,10 @@ function Synchronize-AdvancementConditions() {
             $requirements += ,@('has_the_recipe', 'has_furnace')
         }
 
-        $ordered = [ordered]@{ conditions = @($recipe.conditions) }
+        $ordered = [ordered]@{}
+        if ($null -ne $recipe.conditions) {
+            $ordered.conditions = @($recipe.conditions)
+        }
         foreach ($property in $advancement.PSObject.Properties) {
             if ($property.Name -eq 'criteria') {
                 $ordered[$property.Name] = $criteria

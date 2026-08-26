@@ -1,19 +1,19 @@
-name: Mineralogy 1.13 CI
+name: Mineralogy 1.14.4 CI
 
 on:
   push:
     branches:
-      - master-1.13.2
+      - master-1.14.4
       - 'feature/**'
   pull_request:
     branches:
-      - master-1.13.2
+      - master-1.14.4
 
 permissions:
   contents: read
 
 concurrency:
-  group: mineralogy-1.13-${{ github.workflow }}-${{ github.ref }}
+  group: mineralogy-1.14-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -26,11 +26,17 @@ jobs:
       - name: Check out source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
-      - name: Install Java 8
+      - name: Install Java 8 toolchain
         uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
         with:
           distribution: temurin
           java-version: '8.0.502+7'
+
+      - name: Install Java 17 for Gradle
+        uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
+        with:
+          distribution: microsoft
+          java-version: '17'
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@9c971963bec38e04b3d30dcc455b5382be2fdbfb # v6
@@ -51,20 +57,20 @@ jobs:
 
       - name: Generate and audit Eclipse production launches
         run: >-
-          ./gradlew genEclipseRuns eclipse verifyEclipseProductionClasspath
+          ./gradlew genEclipseRuns eclipse isolateEclipseProductionRuns verifyEclipseProductionClasspath
           -PorespawnVerificationRepository=${{ steps.orespawn.outputs.repository }}
           --no-daemon --stacktrace
 
       - name: Upload audited release candidate
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
-          name: Mineralogy-1.13.2-${{ github.sha }}
+          name: Mineralogy-1.14.4-${{ github.sha }}
           if-no-files-found: error
           retention-days: 30
           path: |
-            build/libs/Mineralogy-6.0.1.113021.jar
-            build/libs/Mineralogy-6.0.1.113021-sources.jar
-            build/libs/Mineralogy-6.0.1.113021-javadoc.jar
+            build/libs/Mineralogy-6.0.1.114041.jar
+            build/libs/Mineralogy-6.0.1.114041-sources.jar
+            build/libs/Mineralogy-6.0.1.114041-javadoc.jar
             build/release/SHA256SUMS
             CHANGELOG.txt
 
@@ -72,7 +78,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
-          name: Mineralogy-1.13.2-diagnostics-${{ github.sha }}
+          name: Mineralogy-1.14.4-diagnostics-${{ github.sha }}
           if-no-files-found: ignore
           retention-days: 14
           path: |

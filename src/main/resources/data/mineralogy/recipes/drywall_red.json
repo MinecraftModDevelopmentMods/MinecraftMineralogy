@@ -15,7 +15,7 @@
       "tag": "mineralogy:drywall/white"
     },
     {
-      "tag": "forge:dyes/red"
+      "item": "minecraft:red_dye"
     }
   ],
   "result": {

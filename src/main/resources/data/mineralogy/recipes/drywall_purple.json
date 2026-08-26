@@ -15,7 +15,7 @@
       "tag": "mineralogy:drywall/white"
     },
     {
-      "tag": "forge:dyes/purple"
+      "item": "minecraft:purple_dye"
     }
   ],
   "result": {

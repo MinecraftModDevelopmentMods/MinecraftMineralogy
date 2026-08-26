@@ -15,7 +15,7 @@
       "tag": "mineralogy:drywall/white"
     },
     {
-      "tag": "forge:dyes/magenta"
+      "item": "minecraft:magenta_dye"
     }
   ],
   "result": {

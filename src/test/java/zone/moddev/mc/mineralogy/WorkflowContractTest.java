@@ -19,14 +19,14 @@ public class WorkflowContractTest {
         try (FileInputStream input = new FileInputStream("gradle.properties")) {
             properties.load(input);
         }
-        assertEquals("6.0.1.113021", properties.getProperty("mod_version"));
-        assertEquals("1.13.2", properties.getProperty("minecraft_version"));
+        assertEquals("6.0.1.114041", properties.getProperty("mod_version"));
+        assertEquals("1.14.4", properties.getProperty("minecraft_version"));
         assertEquals(properties.getProperty("mc_version"), properties.getProperty("minecraft_version"));
         assertEquals("forge", properties.getProperty("loader_name"));
         assertEquals("1", properties.getProperty("loader_code"));
         assertEquals("8", properties.getProperty("java_version"));
         assertEquals("8.0.502+7", properties.getProperty("java_toolchain_version"));
-        assertEquals("8", properties.getProperty("gradle_java_version"));
+        assertEquals("17", properties.getProperty("gradle_java_version"));
         assertEquals("240974", properties.getProperty("curseforge_project_id"));
     }
 
@@ -37,10 +37,11 @@ public class WorkflowContractTest {
         String wrapper = text(".github/workflows/validate-gradle-build.yml");
         String staging = text("gradle/stage-orespawn-release.sh");
         assertTrue(ci.contains("name: Build, test, and audit"));
-        assertTrue(ci.contains("master-1.13.2"));
+        assertTrue(ci.contains("master-1.14.4"));
         assertTrue(ci.contains("java-version: '8.0.502+7'"));
+        assertTrue(ci.contains("Install Java 17 for Gradle"));
         assertTrue(ci.contains("verifyReleaseDependencies verifyReleaseArtifacts writeReleaseChecksums"));
-        assertTrue(ci.contains("genEclipseRuns eclipse verifyEclipseProductionClasspath"));
+        assertTrue(ci.contains("genEclipseRuns eclipse isolateEclipseProductionRuns verifyEclipseProductionClasspath"));
         assertTrue(ci.contains("CHANGELOG.txt"));
         assertTrue(ci.contains("-PorespawnVerificationRepository=${{ steps.orespawn.outputs.repository }}"));
         assertTrue(staging.contains("https://www.curseforge.com/api/v1/mods/$project_id/files/$file_id/download"));
@@ -67,12 +68,13 @@ public class WorkflowContractTest {
     public void buildPublishesOnlyThePreparedRemoteBundle() throws Exception {
         String build = text("build.gradle");
         assertTrue(build.contains("options.addBooleanOption('notimestamp', true)"));
-        assertTrue(build.contains("task normalizeReobfuscatedJar(type: Zip, dependsOn: 'reobfJar')"));
+        assertTrue(build.contains("id 'net.minecraftforge.renamer' version '1.1.5'"));
+        assertTrue(build.contains("def releaseJar = renamer.classes"));
         assertTrue(build.contains("preserveFileTimestamps = false"));
         assertTrue(build.contains("reproducibleFileOrder = true"));
         assertTrue(build.contains("def preparedReleaseDir = project.findProperty('preparedReleaseDir')"));
-        assertTrue(build.contains("task verifyPreparedReleaseArtifacts"));
-        assertTrue(build.contains("publishMavenJavaPublicationToReleaseRepository"));
+        assertTrue(build.contains("tasks.register('verifyPreparedReleaseArtifacts')"));
+        assertTrue(build.contains("tasks.withType(PublishToMavenRepository).configureEach"));
         assertTrue(build.contains("Maven release publication must use a remote repository"));
         assertTrue(build.contains("name = 'release'"));
         assertFalse(build.contains("file:///${project.projectDir}/mcmodsrepo"));

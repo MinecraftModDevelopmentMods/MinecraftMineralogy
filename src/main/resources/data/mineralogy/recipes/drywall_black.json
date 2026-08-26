@@ -15,7 +15,7 @@
       "tag": "mineralogy:drywall/white"
     },
     {
-      "tag": "forge:dyes/black"
+      "item": "minecraft:ink_sac"
     }
   ],
   "result": {

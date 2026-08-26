@@ -5,8 +5,11 @@
       "flag": "ENABLE_MINERAL_DUSTS"
     },
     {
-      "type": "mineralogy:item_tag_not_empty",
-      "tag": "forge:dusts/coal"
+      "type": "forge:not",
+      "value": {
+        "type": "forge:tag_empty",
+        "tag": "forge:dusts/coal"
+      }
     }
   ],
   "type": "minecraft:crafting_shapeless",

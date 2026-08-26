@@ -7,13 +7,13 @@ import java.util.Set;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.resources.IResourceManager;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.NetworkTagManager;
 import net.minecraft.tags.Tag;
 import net.minecraft.tags.TagCollection;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.event.server.FMLServerAboutToStartEvent;
+import net.minecraftforge.event.TagsUpdatedEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import zone.moddev.mc.mineralogy.Mineralogy;
@@ -28,21 +28,17 @@ public final class CobblestoneTagPolicy {
     private CobblestoneTagPolicy() {
     }
 
-    public static void onServerAboutToStart(FMLServerAboutToStartEvent event) {
-        apply();
-        event.getServer().getResourceManager().addReloadListener(CobblestoneTagPolicy::onReload);
+    /** Apply after the initial server tag load and after every data reload. */
+    public static void onTagsUpdated(TagsUpdatedEvent event) {
+        apply(event.getTagManager());
     }
 
-    private static void onReload(IResourceManager resources) {
-        apply();
-    }
-
-    public static void apply() {
+    static void apply(NetworkTagManager manager) {
         Set<Block> configuredBlocks = rawRockBlocks();
         Set<Item> configuredItems = new LinkedHashSet<>();
         for (Block block : configuredBlocks) configuredItems.add(block.asItem());
 
-        TagCollection<Block> blockTags = BlockTags.getCollection();
+        TagCollection<Block> blockTags = manager.getBlocks();
         Set<Block> blocks = existing(blockTags, COBBLESTONE);
         blocks.removeAll(configuredBlocks);
         if (MineralogyConfig.makeRockCobblestoneEquivilent()) blocks.addAll(configuredBlocks);
@@ -51,7 +47,7 @@ public final class CobblestoneTagPolicy {
         replaceElements(blockTags, blocks);
         BlockTags.setCollection(blockTags);
 
-        TagCollection<Item> itemTags = ItemTags.getCollection();
+        TagCollection<Item> itemTags = manager.getItems();
         Set<Item> items = existing(itemTags, COBBLESTONE);
         items.removeAll(configuredItems);
         if (MineralogyConfig.makeRockCobblestoneEquivilent()) items.addAll(configuredItems);
@@ -84,9 +80,7 @@ public final class CobblestoneTagPolicy {
     private static <T> void replaceElements(TagCollection<T> collection, Set<T> values) {
         Tag<T> tag = collection.get(COBBLESTONE);
         if (tag == null) {
-            collection.getTagMap().put(COBBLESTONE,
-                    Tag.Builder.<T>create().addAll(values).build(COBBLESTONE));
-            return;
+            throw new IllegalStateException("Missing required tag " + COBBLESTONE);
         }
         Collection<T> elements = tag.getAllElements();
         elements.clear();

@@ -22,13 +22,13 @@ import com.google.gson.JsonSyntaxException;
 import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
-import net.minecraft.util.JsonUtils;
+import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.IRegistry;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.common.crafting.conditions.ICondition;
+import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
 import net.minecraftforge.fml.loading.FMLPaths;
+import net.minecraftforge.registries.ForgeRegistries;
 
 /**
  * Content-only Mineralogy configuration.
@@ -38,6 +38,8 @@ import net.minecraftforge.fml.loading.FMLPaths;
  */
 public final class MineralogyConfig {
     public static final String FILE_NAME = "mineralogy-common.toml";
+    private static final ResourceLocation CONFIG_CONDITION_ID =
+            new ResourceLocation(Mineralogy.MODID, "config");
 
     private static boolean smeltableGravel = true;
     private static boolean dropCobblestone;
@@ -235,20 +237,9 @@ public final class MineralogyConfig {
 
     public static void registerRecipeConditions() {
         if (!recipeConditionsRegistered) {
-            CraftingHelper.register(new ResourceLocation(Mineralogy.MODID, "config"),
-                    json -> configFlagCondition(JsonUtils.getString(json, "flag")));
-            CraftingHelper.register(new ResourceLocation(Mineralogy.MODID, "item_tag_not_empty"),
-                    json -> itemTagNotEmptyCondition(JsonUtils.getString(json, "tag")));
+            CraftingHelper.register(new ConfigConditionSerializer());
             recipeConditionsRegistered = true;
         }
-    }
-
-    private static BooleanSupplier itemTagNotEmptyCondition(String name) {
-        ResourceLocation tagName = new ResourceLocation(name);
-        return () -> {
-            Tag<Item> tag = ItemTags.getCollection().get(tagName);
-            return tag != null && !tag.getAllElements().isEmpty();
-        };
     }
 
     public static void registerAdvancementPredicates() {
@@ -262,12 +253,12 @@ public final class MineralogyConfig {
     private static ItemPredicate configItemPredicate(JsonObject json) {
         List<BooleanSupplier> flags = new ArrayList<>();
         if (json.has("flags")) {
-            JsonArray array = JsonUtils.getJsonArray(json, "flags");
-            for (JsonElement flag : array) flags.add(configFlagCondition(JsonUtils.getString(flag, "flag")));
+            JsonArray array = JSONUtils.getJsonArray(json, "flags");
+            for (JsonElement flag : array) flags.add(configFlagCondition(JSONUtils.getString(flag, "flag")));
         } else {
-            flags.add(configFlagCondition(JsonUtils.getString(json, "flag")));
+            flags.add(configFlagCondition(JSONUtils.getString(json, "flag")));
         }
-        return new ConfigItemPredicate(flags, new ResourceLocation(JsonUtils.getString(json, "item")));
+        return new ConfigItemPredicate(flags, new ResourceLocation(JSONUtils.getString(json, "item")));
     }
 
     private static BooleanSupplier configFlagCondition(String flag) {
@@ -341,6 +332,31 @@ public final class MineralogyConfig {
         return !"mineral_fertilizer".equals(name) || contentPolicy.mineralFertilizerEnabled();
     }
 
+    private static final class ConfigCondition implements ICondition {
+        private final String flagName;
+        private final BooleanSupplier flag;
+
+        private ConfigCondition(String flagName) {
+            this.flagName = flagName;
+            this.flag = configFlagCondition(flagName);
+        }
+
+        @Override public ResourceLocation getID() { return CONFIG_CONDITION_ID; }
+        @Override public boolean test() { return flag.getAsBoolean(); }
+    }
+
+    private static final class ConfigConditionSerializer implements IConditionSerializer<ConfigCondition> {
+        @Override public void write(JsonObject json, ConfigCondition value) {
+            json.addProperty("flag", value.flagName);
+        }
+
+        @Override public ConfigCondition read(JsonObject json) {
+            return new ConfigCondition(JSONUtils.getString(json, "flag"));
+        }
+
+        @Override public ResourceLocation getID() { return CONFIG_CONDITION_ID; }
+    }
+
     private static final class ConfigItemPredicate extends ItemPredicate {
         private final List<BooleanSupplier> flags;
         private final ResourceLocation itemName;
@@ -350,7 +366,7 @@ public final class MineralogyConfig {
         }
         @Override public boolean test(ItemStack stack) {
             for (BooleanSupplier flag : flags) if (!flag.getAsBoolean()) return false;
-            Item item = IRegistry.field_212630_s.func_212608_b(itemName);
+            Item item = ForgeRegistries.ITEMS.getValue(itemName);
             return item != null && stack.getItem() == item;
         }
     }

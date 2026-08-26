@@ -15,7 +15,7 @@
       "tag": "mineralogy:drywall/white"
     },
     {
-      "tag": "forge:dyes/green"
+      "item": "minecraft:green_dye"
     }
   ],
   "result": {

@@ -15,7 +15,7 @@
       "tag": "mineralogy:drywall/white"
     },
     {
-      "tag": "forge:dyes/lime"
+      "item": "minecraft:lime_dye"
     }
   ],
   "result": {

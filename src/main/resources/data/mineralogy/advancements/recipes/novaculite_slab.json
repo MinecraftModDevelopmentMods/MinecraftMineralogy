@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:novaculite_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:novaculite_slab"

@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:siltstone_stairs"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:siltstone_stairs"

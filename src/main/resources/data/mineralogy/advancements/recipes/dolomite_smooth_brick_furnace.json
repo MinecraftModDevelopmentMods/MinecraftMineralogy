@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:dolomite_smooth_brick_furnace"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:dolomite_smooth_brick_furnace"
@@ -16,12 +22,17 @@
       "conditions": {
         "items": [
           {
-            "type": "mineralogy:config_item",
-            "flags": [
-              "GENERATE_SMOOTH",
-              "GENERATE_SMOOTHBRICK"
-            ],
-            "item": "mineralogy:dolomite_smooth_brick"
+            "item": "mineralogy:dolomite_smooth_brick_slab"
+          }
+        ]
+      }
+    },
+    "has_furnace": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:furnace"
           }
         ]
       }
@@ -31,6 +42,10 @@
     [
       "has_the_recipe",
       "has_rock"
+    ],
+    [
+      "has_the_recipe",
+      "has_furnace"
     ]
   ]
 }

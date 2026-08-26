@@ -22,7 +22,7 @@ function initializeCoreMod() {
                     prefix.add(new VarInsnNode(Opcodes.ALOAD, 3));
                     prefix.add(new MethodInsnNode(
                             Opcodes.INVOKESTATIC,
-                            'com/mcmoddev/mineralogy/patching/LegacyWorldDataHook',
+                            'zone/moddev/mc/mineralogy/patching/LegacyWorldDataHook',
                             'prepareLegacyChunk',
                             '(Lnet/minecraft/nbt/CompoundNBT;)V',
                             false));
@@ -33,7 +33,7 @@ function initializeCoreMod() {
                         if (instruction.getOpcode() === Opcodes.ARETURN) {
                             method.instructions.insertBefore(instruction, new MethodInsnNode(
                                     Opcodes.INVOKESTATIC,
-                                    'com/mcmoddev/mineralogy/patching/LegacyWorldDataHook',
+                                    'zone/moddev/mc/mineralogy/patching/LegacyWorldDataHook',
                                     'finalizeLegacyChunk',
                                     '(Lnet/minecraft/nbt/CompoundNBT;)Lnet/minecraft/nbt/CompoundNBT;',
                                     false));

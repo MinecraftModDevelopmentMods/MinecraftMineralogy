@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:rhyolite_smooth_wall"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:rhyolite_smooth_wall"
@@ -16,10 +22,6 @@
       "conditions": {
         "items": [
           {
-            "type": "mineralogy:config_item",
-            "flags": [
-              "GENERATE_SMOOTH"
-            ],
             "item": "mineralogy:rhyolite_smooth"
           }
         ]

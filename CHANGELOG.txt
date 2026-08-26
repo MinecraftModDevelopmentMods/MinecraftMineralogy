@@ -1,1 +1,53 @@
-Mineralogy 1.12.x
+Mineralogy 6.0.1.114041 for Minecraft 1.14.4
+
+- Delegated terrain, strata, ore, and covered fluid-deposit generation to the
+  released OreSpawn 4.0.8.114041 provider engine, retaining the supported
+  `[4.0.6,5.0.0)` range; removed Mineralogy's parallel
+  geology, geome, ore, noise, and stone-replacement generators.
+- Preserved all world-facing registry, tile, NBT, recipe, asset, patch, and
+  pre-flattening conversion identities while moving production packages to
+  zone.moddev.mc.mineralogy. Existing 1.10/1.12 chunks are protected during
+  1.14.4's flattening conversion. Legacy rock-furnace IDs are established
+  before Mojang data fixing, then all pre-namespaced tile IDs are made safe
+  before Forge constructs tile entities, so inventories and progress survive
+  and an uppercase vanilla ID cannot abort the complete chunk load.
+  Legacy state tables now support the complete 12-bit mod block-ID range in
+  both development and packaged runtimes, and each selected save reinstalls
+  its own numeric mapping after the client enumerates multiple old worlds.
+- Added compatibility-safe controls for drywall, rock-salt lamps, mineral
+  dusts, and fertilizer, plus the stable five-way grouped creative tabs.
+  Disabled content remains registered and usable in established worlds.
+- Made the historical `COBBLESTONE_EQUIVILENT` option functional through
+  target-native block and item tags, reapplied after data reloads and reflected
+  in already-parsed recipe ingredients. Chert and pumice remain unconditional
+  cobblestone equivalents.
+- Added isolated Mineralogy crude-oil source and flowing fluids, block, bucket,
+  rendering resources, and the covered Ocean deposit declaration.
+- Preserved rock-furnace save recovery and novaculite's 3/15/1 properties;
+  corrected replacement drop semantics and exact full-block Silk Touch results
+  for double slabs.
+- Ported the accepted recipe contract as 1,415 native JSON recipes and matching
+  advancements: safe 4-to-1 mineral packing, charcoal and Base Metals dust
+  gunpowder routes, exact slabs, slab recombination, construction-form brick
+  conversions, progressive sand polishing, matching-slab rock furnaces, and
+  blank-to-marked relief progression.
+- Restored the vanilla furnace recipe for every enabled Forge cobblestone
+  equivalent, including all 27 Mineralogy rock families, without conflicting
+  with the matching-slab rock-furnace upgrade recipes.
+- Prevented Forge 28 from silently reducing optional carbon- or coal-dust
+  gunpowder recipes to nitrate plus sulfur when their compatibility tag is
+  empty; every loaded gunpowder recipe now requires all three components.
+- Added 17 reviewed UTF-8 JSON locales with the same 938 ordered keys, including
+  Brazilian and European Portuguese, Canadian French, Japanese, Korean, and
+  Russian.
+- Added first-start player, developer, content, provider, and version guides,
+  plus an exact provider example. Existing exported guides are never
+  overwritten. Forge 28 Eclipse launches keep their required merged
+  `bin/main` mod output while synchronizing the same processed guide resources
+  used by ordinary Gradle and packaged launches.
+- Added independent, atomic migration of valid non-default legacy ore settings
+  into a Mineralogy OreSpawn provider override, including deterministic reports
+  and exclusive-to-inclusive maximum-height conversion.
+- Added reproducible Java 8 main, sources, and Javadoc artifacts, exact released
+  OreSpawn dependency verification, guarded 1.14.4 CI, and the four-component
+  release tag `6.0.1.114041`.

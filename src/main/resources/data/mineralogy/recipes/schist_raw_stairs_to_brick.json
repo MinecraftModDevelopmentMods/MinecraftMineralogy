@@ -1,0 +1,26 @@
+{
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:schist_stairs"
+    },
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:schist_brick_stairs"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xx",
+    "xx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:schist_stairs"
+    }
+  },
+  "result": {
+    "item": "mineralogy:schist_brick_stairs",
+    "count": 4
+  }
+}

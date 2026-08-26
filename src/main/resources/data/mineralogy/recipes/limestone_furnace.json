@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:limestone_furnace"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "xxx",
@@ -7,23 +13,14 @@
   ],
   "key": {
     "x": {
-      "item": "mineralogy:limestone_slab"
+      "tag": "mineralogy:slabs/limestone"
     },
     "y": {
       "item": "minecraft:furnace"
     }
   },
   "result": {
-    "item": "mineralogy:limestone_furnace"
-  },
-  "conditions": [
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_ROCKSLAB"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_ROCKFURNACE"
-    }
-  ]
+    "item": "mineralogy:limestone_furnace",
+    "count": 1
+  }
 }

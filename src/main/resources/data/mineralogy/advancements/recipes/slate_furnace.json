@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:slate_furnace"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:slate_furnace"
@@ -16,7 +22,17 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:slate"
+            "item": "mineralogy:slate_slab"
+          }
+        ]
+      }
+    },
+    "has_furnace": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:furnace"
           }
         ]
       }
@@ -26,6 +42,10 @@
     [
       "has_the_recipe",
       "has_rock"
+    ],
+    [
+      "has_the_recipe",
+      "has_furnace"
     ]
   ]
 }

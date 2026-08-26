@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:scoria_smooth_brick_stairs"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "x  ",
@@ -7,25 +13,11 @@
   ],
   "key": {
     "x": {
-      "item": "mineralogy:scoria_smooth_brick"
+      "tag": "mineralogy:stones/scoria/smooth_brick"
     }
   },
   "result": {
     "item": "mineralogy:scoria_smooth_brick_stairs",
     "count": 4
-  },
-  "conditions": [
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTH"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTHBRICK"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTHBRICKSTAIRS"
-    }
-  ]
+  }
 }

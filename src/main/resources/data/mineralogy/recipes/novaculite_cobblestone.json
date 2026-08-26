@@ -1,11 +1,12 @@
 {
+  "conditions": [],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "mineralogy:novaculite"
+      "tag": "mineralogy:stones/novaculite"
     },
     {
-      "item": "mineralogy:novaculite"
+      "tag": "mineralogy:stones/novaculite"
     },
     {
       "item": "minecraft:gravel"

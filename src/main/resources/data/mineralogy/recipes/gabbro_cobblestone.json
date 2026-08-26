@@ -1,11 +1,12 @@
 {
+  "conditions": [],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "mineralogy:gabbro"
+      "tag": "mineralogy:stones/gabbro"
     },
     {
-      "item": "mineralogy:gabbro"
+      "tag": "mineralogy:stones/gabbro"
     },
     {
       "item": "minecraft:gravel"

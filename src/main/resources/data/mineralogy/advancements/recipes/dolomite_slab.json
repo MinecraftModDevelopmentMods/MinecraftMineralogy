@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:dolomite_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:dolomite_slab"

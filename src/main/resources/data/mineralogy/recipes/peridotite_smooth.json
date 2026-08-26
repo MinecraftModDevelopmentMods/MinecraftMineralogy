@@ -1,20 +1,21 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:peridotite_smooth"
+    }
+  ],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "mineralogy:peridotite"
+      "tag": "mineralogy:stones/peridotite"
     },
     {
       "item": "minecraft:sand"
     }
   ],
   "result": {
-    "item": "mineralogy:peridotite_smooth"
-  },
-  "conditions": [
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTH"
-    }
-  ]
+    "item": "mineralogy:peridotite_smooth",
+    "count": 1
+  }
 }

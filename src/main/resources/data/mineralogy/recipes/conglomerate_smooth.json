@@ -1,20 +1,21 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:conglomerate_smooth"
+    }
+  ],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "mineralogy:conglomerate"
+      "tag": "mineralogy:stones/conglomerate"
     },
     {
       "item": "minecraft:sand"
     }
   ],
   "result": {
-    "item": "mineralogy:conglomerate_smooth"
-  },
-  "conditions": [
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTH"
-    }
-  ]
+    "item": "mineralogy:conglomerate_smooth",
+    "count": 1
+  }
 }

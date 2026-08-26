@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:tuff_furnace"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "xxx",
@@ -7,23 +13,14 @@
   ],
   "key": {
     "x": {
-      "item": "mineralogy:tuff_slab"
+      "tag": "mineralogy:slabs/tuff"
     },
     "y": {
       "item": "minecraft:furnace"
     }
   },
   "result": {
-    "item": "mineralogy:tuff_furnace"
-  },
-  "conditions": [
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_ROCKSLAB"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_ROCKFURNACE"
-    }
-  ]
+    "item": "mineralogy:tuff_furnace",
+    "count": 1
+  }
 }

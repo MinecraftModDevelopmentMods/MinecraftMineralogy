@@ -1,7 +1,7 @@
 modLoader="javafml"
 loaderVersion="[31,)"
 license="LGPL-2.1"
-issueTrackerURL="https://github.com/SkyBlade1978/MinecraftMineralogy/issues"
+issueTrackerURL="https://github.com/MinecraftModDevelopmentMods/MinecraftMineralogy/issues"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/minecraft-mineralogy"
 logoFile=""
 credits="Cyanobacterium, SkyBlade1978, JRIwanek, FoxNekitsune, Proxy, the MMD Team, Forge, FML, and the mod authors"
@@ -9,7 +9,7 @@ authors="Cyanobacterium, SkyBlade1978, JRIwanek"
 
 [[mods]]
 modId="mineralogy"
-version="${file.jarVersion}"
+version="${version}"
 displayName="Minecraft Mineralogy"
 description='''
 Fills the world with real-world rocks.
@@ -18,8 +18,15 @@ Fills the world with real-world rocks.
 [[dependencies.mineralogy]]
     modId="forge"
     mandatory=true
-    versionRange="[31,)"
+    versionRange="[31.2.57,32)"
     ordering="NONE"
+    side="BOTH"
+
+[[dependencies.mineralogy]]
+    modId="orespawn"
+    mandatory=true
+    versionRange="[4.0.6,5.0.0)"
+    ordering="AFTER"
     side="BOTH"
 
 [[dependencies.mineralogy]]

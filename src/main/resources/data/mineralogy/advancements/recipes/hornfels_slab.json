@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:hornfels_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:hornfels_slab"

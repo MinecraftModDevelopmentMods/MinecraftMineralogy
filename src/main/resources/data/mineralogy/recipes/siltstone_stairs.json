@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:siltstone_stairs"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "x  ",
@@ -7,17 +13,11 @@
   ],
   "key": {
     "x": {
-      "item": "mineralogy:siltstone"
+      "tag": "mineralogy:stones/siltstone"
     }
   },
   "result": {
     "item": "mineralogy:siltstone_stairs",
     "count": 4
-  },
-  "conditions": [
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_ROCKSTAIRS"
-    }
-  ]
+  }
 }

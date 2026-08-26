@@ -1,0 +1,25 @@
+{
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:shale_brick_stairs"
+    },
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:shale_smooth_brick_stairs"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mineralogy:shale_brick_stairs"
+    },
+    {
+      "tag": "forge:sand"
+    }
+  ],
+  "result": {
+    "item": "mineralogy:shale_smooth_brick_stairs",
+    "count": 1
+  }
+}

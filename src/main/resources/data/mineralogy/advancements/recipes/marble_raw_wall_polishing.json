@@ -1,0 +1,66 @@
+{
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:marble_wall"
+    },
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:marble_smooth_wall"
+    }
+  ],
+  "rewards": {
+    "recipes": [
+      "mineralogy:marble_raw_wall_polishing"
+    ]
+  },
+  "criteria": {
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "mineralogy:marble_raw_wall_polishing"
+      }
+    },
+    "has_rock": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "mineralogy:marble_wall"
+          }
+        ]
+      }
+    },
+    "has_sand": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:sand"
+          }
+        ]
+      }
+    },
+    "has_red_sand": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:red_sand"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_rock"
+    ],
+    [
+      "has_the_recipe",
+      "has_sand",
+      "has_red_sand"
+    ]
+  ]
+}

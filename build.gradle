@@ -44,6 +44,11 @@ java {
     withJavadocJar()
 }
 
+tasks.named('sourcesJar', Jar) {
+    includeEmptyDirs = false
+    exclude 'com/mcmoddev/mineralogy/**'
+}
+
 tasks.withType(JavaCompile).configureEach {
     javaCompiler = javaToolchains.compilerFor {
         languageVersion = JavaLanguageVersion.of(8)
@@ -366,6 +371,23 @@ tasks.register('verifyReleaseArtifacts') {
         def expectedSorted = expectedReleaseNames.collect().sort()
         if (actual != expectedSorted) {
             throw new GradleException("Expected exactly ${expectedSorted}, found ${actual}")
+        }
+        expectedReleaseNames.each { artifactName ->
+            ZipFile artifactZip = new ZipFile(new File(libs, artifactName))
+            try {
+                def artifactNames = artifactZip.entries().collect { it.name }
+                if (artifactNames.any { it.startsWith('com/mcmoddev/mineralogy/') ||
+                        it.startsWith('zone/moddev/mc/mineralogy/worldgen/') ||
+                        it.startsWith('zone/moddev/mc/mineralogy/probe/') ||
+                        it.startsWith('zone/moddev/mc/mineralogy/test/') ||
+                        it.startsWith('src/test/') ||
+                        it == 'AGENTS.md' || it.contains('/agent-notes/') }) {
+                    throw new GradleException("${artifactName} contains a retired, test, probe, or agent-only path")
+                }
+            }
+            finally {
+                artifactZip.close()
+            }
         }
         File main = new File(libs, mainReleaseName)
         ZipFile zip = new ZipFile(main)

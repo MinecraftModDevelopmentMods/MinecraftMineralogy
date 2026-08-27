@@ -263,6 +263,9 @@ def mainReleaseName = "Mineralogy-${project.version}.jar"
 def sourcesReleaseName = "Mineralogy-${project.version}-sources.jar"
 def javadocReleaseName = "Mineralogy-${project.version}-javadoc.jar"
 def expectedReleaseNames = [mainReleaseName, sourcesReleaseName, javadocReleaseName]
+def expectedMavenGroup = 'zone.moddev.mc.mineralogy'
+def expectedMavenArtifact = 'Mineralogy'
+def expectedMavenCoordinate = "${expectedMavenGroup}:${expectedMavenArtifact}:${project.version}"
 def preparedReleaseDir = project.findProperty('preparedReleaseDir')
 def mavenUploadUrl = System.getenv('MAVEN_UPLOAD_URL') ?: 'https://invalid.invalid/missing-maven-upload-url'
 def mavenUploadUsername = System.getenv('MAVEN_UPLOAD_USERNAME') ?: ''
@@ -272,7 +275,7 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             groupId = project.group
-            artifactId = 'Mineralogy'
+            artifactId = expectedMavenArtifact
             version = project.version
             if (preparedReleaseDir != null) {
                 artifact new File(preparedReleaseDir.toString(), mainReleaseName)
@@ -311,11 +314,30 @@ publishing {
     }
 }
 
+tasks.register('verifyMavenCoordinates') {
+    group = 'verification'
+    description = 'Verifies the generated POM uses Mineralogy\'s mod-specific Maven namespace.'
+    dependsOn tasks.named('generatePomFileForMavenJavaPublication')
+    doLast {
+        File pomFile = file("${buildDir}/publications/mavenJava/pom-default.xml")
+        if (!pomFile.isFile()) {
+            throw new GradleException("Generated Maven POM does not exist: ${pomFile}")
+        }
+        def pom = new XmlSlurper(false, false).parse(pomFile)
+        def actual = [pom.groupId.text(), pom.artifactId.text(), pom.version.text()]
+        def expected = [expectedMavenGroup, expectedMavenArtifact, project.version.toString()]
+        if (project.group.toString() != expectedMavenGroup || actual != expected) {
+            throw new GradleException("Expected Maven coordinate ${expected.join(':')}, found ${actual.join(':')}")
+        }
+    }
+}
+
 tasks.register('verifyReleaseConfiguration') {
     group = 'verification'
     description = 'Verifies the exact Mineralogy 1.15 release identity.'
     doLast {
         if (project.mod_version != '6.0.1.115021'
+                || project.mod_group != expectedMavenGroup
                 || project.minecraft_version != '1.15.2'
                 || project.forge_version != '31.2.57'
                 || project.mcp_mappings_channel != 'snapshot'
@@ -398,6 +420,19 @@ tasks.register('verifyReleaseArtifacts') {
                     'assets/mineralogy/lang/en_us.json'
             ].each { required ->
                 if (!names.contains(required)) throw new GradleException("Release jar is missing ${required}")
+            }
+            def manifestEntry = zip.getEntry('META-INF/MANIFEST.MF')
+            if (manifestEntry == null) throw new GradleException('Release jar is missing META-INF/MANIFEST.MF')
+            def manifestStream = zip.getInputStream(manifestEntry)
+            try {
+                def manifest = new java.util.jar.Manifest(manifestStream)
+                def actualMavenCoordinate = manifest.mainAttributes.getValue('Maven-Artifact')
+                if (actualMavenCoordinate != expectedMavenCoordinate) {
+                    throw new GradleException("Expected manifest Maven-Artifact ${expectedMavenCoordinate}, found ${actualMavenCoordinate}")
+                }
+            }
+            finally {
+                manifestStream.close()
             }
             if (names.any { it.startsWith('com/mcmoddev/mineralogy/') ||
                     it.startsWith('zone/moddev/mc/mineralogy/worldgen/') ||
@@ -514,6 +549,7 @@ tasks.register('validateMavenReleaseCredentials') {
 
 tasks.withType(PublishToMavenRepository).configureEach {
     dependsOn tasks.named('validateMavenReleaseCredentials')
+    dependsOn tasks.named('verifyMavenCoordinates')
     dependsOn(preparedReleaseDir == null
             ? tasks.named('verifyReleaseArtifacts')
             : tasks.named('verifyPreparedReleaseArtifacts'))
@@ -713,4 +749,5 @@ tasks.matching { it.name == 'eclipse' }.configureEach {
 
 tasks.named('check') {
     dependsOn tasks.named('verifyReleaseDependencies')
+    dependsOn tasks.named('verifyMavenCoordinates')
 }

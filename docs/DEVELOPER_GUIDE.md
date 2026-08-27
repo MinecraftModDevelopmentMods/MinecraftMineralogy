@@ -40,12 +40,17 @@ specialty aliases.
 
 Minecraft 1.16's `minecraft:stone_crafting_materials` and
 `minecraft:stone_tool_materials` item tags include `#forge:cobblestone`, so
-enabled Mineralogy rocks work in native tool and furnace-style recipes without
-overriding Minecraft recipe files. Forge 36 exposes immutable tag snapshots;
-Mineralogy rebuilds only the block and item tag collections after initial tag
-loading and every data reload, preserves other mods' members, then invalidates
-recipe ingredient caches. Do not replace this with startup-only mutation or
-restore the retired `data/minecraft/recipes` overrides.
+enabled Mineralogy rocks work in native tool recipes. Forge 36 exposes
+immutable tag snapshots; Mineralogy rebuilds only the block and item tag
+collections after initial tag loading and every data reload, preserves other
+mods' members, then invalidates recipe ingredient caches.
+
+The vanilla furnace recipe is the one required exception: it is packaged at
+`data/minecraft/recipes/furnace.json` with a direct `forge:cobblestone`
+ingredient. Forge 36's already-resolved nested crafting-material tag does not
+observe the configured runtime membership reliably, while the direct tag does.
+Do not broaden vanilla slab, stair, or wall recipes; Mineralogy owns exact
+material variants for those outputs.
 
 Use broad `stone` or `cobblestone` inputs only when any matching material is
 valid. Recipes returning a Mineralogy construction form must use the exact

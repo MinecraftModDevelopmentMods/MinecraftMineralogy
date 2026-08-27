@@ -484,26 +484,89 @@ tasks.register('verifyReleaseArtifacts') {
                 throw new GradleException("Release jar must contain 1415 recipes and advancements, found ${recipes.size()} and ${advancements.size()}")
             }
             def minecraftRecipes = names.findAll { it.startsWith('data/minecraft/recipes/') && it.endsWith('.json') }
-            def expectedMinecraftRecipes = [
-                'data/minecraft/recipes/furnace.json',
-                'data/minecraft/recipes/polished_andesite.json',
-                'data/minecraft/recipes/polished_basalt.json',
-                'data/minecraft/recipes/polished_diorite.json',
-                'data/minecraft/recipes/polished_granite.json'
-            ] as Set
-            if ((minecraftRecipes as Set) != expectedMinecraftRecipes ||
-                    names.any { it.contains('/stonecutting/') }) {
-                throw new GradleException('Release jar must contain only the required furnace/polished-block overrides and no stonecutting recipes')
+            def cobblestoneOverrides = ['furnace', 'brewing_stand', 'lever', 'piston',
+                    'dispenser', 'dropper', 'observer', 'mossy_cobblestone', 'andesite',
+                    'diorite', 'stone_axe', 'stone_hoe', 'stone_pickaxe', 'stone_shovel',
+                    'stone_sword']
+            def slabOverrides = ['andesite', 'diorite', 'granite'].collectMany { family ->
+                ["${family}_slab", "polished_${family}_slab",
+                 "${family}_slab_from_${family}_stonecutting",
+                 "polished_${family}_slab_from_${family}_stonecutting",
+                 "polished_${family}_slab_from_polished_${family}_stonecutting"]
             }
-            def expectedMinecraftAdvancements = ['andesite', 'basalt', 'diorite', 'granite'].collect {
-                "data/minecraft/advancements/recipes/building_blocks/polished_${it}.json"
+            def polishedOverrides = ['andesite', 'basalt', 'diorite', 'granite'].collect {
+                "polished_${it}"
+            }
+            def expectedMinecraftRecipes = (cobblestoneOverrides + slabOverrides + polishedOverrides).collect {
+                "data/minecraft/recipes/${it}.json"
             } as Set
+            if ((minecraftRecipes as Set) != expectedMinecraftRecipes || minecraftRecipes.size() != 34) {
+                throw new GradleException('Release jar must contain exactly 15 cobblestone, 15 slab, and four polished-block recipe overrides')
+            }
+            cobblestoneOverrides.each { recipe ->
+                def data = new JsonSlurper().parse(zip.getInputStream(zip.getEntry("data/minecraft/recipes/${recipe}.json")))
+                if (data.type != 'forge:conditional' || data.recipes?.size() != 2 ||
+                        data.recipes[0].conditions?.getAt(0)?.type != 'mineralogy:config' ||
+                        data.recipes[0].conditions?.getAt(0)?.flag != 'COBBLESTONE_EQUIVILENT' ||
+                        data.recipes[1].conditions?.getAt(0)?.type != 'forge:not') {
+                    throw new GradleException("Invalid conditional cobblestone override: ${recipe}")
+                }
+            }
+            slabOverrides.each { recipe ->
+                def data = new JsonSlurper().parse(zip.getInputStream(zip.getEntry("data/minecraft/recipes/${recipe}.json")))
+                if (data.type != 'forge:conditional' || data.recipes?.size() != 2 ||
+                        data.recipes[0].conditions?.getAt(0)?.type != 'forge:item_exists' ||
+                        data.recipes[1].conditions?.getAt(0)?.type != 'forge:not') {
+                    throw new GradleException("Invalid conditional Mineralogy slab override: ${recipe}")
+                }
+            }
+            def families = ['andesite', 'basalt', 'diorite', 'granite', 'rhyolite',
+                    'pegmatite', 'diabase', 'gabbro', 'peridotite', 'basaltic_glass',
+                    'scoria', 'tuff', 'shale', 'conglomerate', 'dolomite', 'limestone',
+                    'siltstone', 'marble', 'slate', 'schist', 'gneiss', 'phyllite',
+                    'amphibolite', 'hornfels', 'quartzite', 'novaculite', 'rock_salt']
+            def unionTags = [
+                cobblestone_equivalents: '#forge:cobblestone',
+                stone_crafting_materials: '#minecraft:stone_crafting_materials',
+                stone_tool_materials: '#minecraft:stone_tool_materials'
+            ]
+            unionTags.each { tag, base ->
+                def entry = zip.getEntry("data/mineralogy/tags/items/${tag}.json")
+                def values = entry == null ? [] : new JsonSlurper().parse(zip.getInputStream(entry)).values
+                def expected = [base] + families.collect { "#mineralogy:stones/${it}" }
+                if (values != expected) throw new GradleException("Invalid Mineralogy recipe union tag: ${tag}")
+            }
+            if (!families.every { names.contains("data/mineralogy/tags/blocks/stones/${it}.json".toString()) }) {
+                throw new GradleException('Release jar must contain all 27 raw-rock family block tags')
+            }
+            def advancementCategories = [
+                furnace: 'decorations', brewing_stand: 'brewing', lever: 'redstone',
+                piston: 'redstone', dispenser: 'redstone', dropper: 'redstone',
+                observer: 'redstone', mossy_cobblestone: 'building_blocks',
+                andesite: 'building_blocks', diorite: 'building_blocks',
+                stone_axe: 'tools', stone_hoe: 'tools', stone_pickaxe: 'tools',
+                stone_shovel: 'tools', stone_sword: 'combat'
+            ]
+            def expectedMinecraftAdvancements = advancementCategories.collect { recipe, category ->
+                "data/minecraft/advancements/recipes/${category}/${recipe}.json"
+            } as Set
+            expectedMinecraftAdvancements.addAll(['andesite', 'basalt', 'diorite', 'granite'].collect {
+                "data/minecraft/advancements/recipes/building_blocks/polished_${it}.json"
+            })
             def minecraftAdvancements = names.findAll {
-                it.startsWith('data/minecraft/advancements/recipes/building_blocks/polished_') &&
-                    it.endsWith('.json')
+                it.startsWith('data/minecraft/advancements/recipes/') && it.endsWith('.json')
             } as Set
             if (minecraftAdvancements != expectedMinecraftAdvancements) {
-                throw new GradleException('Release jar must contain the four native polished-block advancement overrides')
+                throw new GradleException('Release jar must contain exactly 15 cobblestone and four polished-block advancement overrides')
+            }
+            advancementCategories.each { recipe, category ->
+                def data = new JsonSlurper().parse(zip.getInputStream(zip.getEntry(
+                        "data/minecraft/advancements/recipes/${category}/${recipe}.json")))
+                if (data.advancements?.size() != 2 ||
+                        data.advancements[0].conditions?.getAt(0)?.type != 'mineralogy:config' ||
+                        data.advancements[1].conditions?.getAt(0)?.type != 'forge:not') {
+                    throw new GradleException("Invalid conditional advancement override: ${recipe}")
+                }
             }
             def wallBlockstates = names.findAll { it ==~ /assets\/mineralogy\/blockstates\/.+_wall\.json/ }
             def tallWallModels = names.findAll { it ==~ /assets\/mineralogy\/models\/block\/.+_wall_side_tall\.json/ }

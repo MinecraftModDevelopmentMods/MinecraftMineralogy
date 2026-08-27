@@ -284,6 +284,7 @@ public final class MineralogyConfig {
             case "GENERATE_SMOOTHBRICKSTAIRS": return () -> generateSmoothBrickStairs;
             case "GENERATE_SMOOTHBRICKSLAB": return () -> generateSmoothBrickSlab;
             case "GENERATE_SMOOTHBRICKWALL": return () -> generateSmoothBrickWall;
+            case "COBBLESTONE_EQUIVILENT": return () -> cobblestoneEquivalent;
             case ContentPolicy.ENABLE_DRYWALLS: return () -> contentPolicy.drywallsEnabled();
             case ContentPolicy.ENABLE_ROCK_SALT_LAMPS: return () -> contentPolicy.rockSaltLampsEnabled();
             case ContentPolicy.ENABLE_MINERAL_DUSTS: return () -> contentPolicy.mineralDustsEnabled();

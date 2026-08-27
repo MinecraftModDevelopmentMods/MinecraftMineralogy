@@ -84,6 +84,10 @@ public class GameplayContractTest {
         assertFalse(policy.contains("onServerAboutToStart"));
         assertTrue(policy.contains("event.getTagManager()"));
         assertTrue(policy.contains("MaterialData.allIncludingRockSalt()"));
+        assertTrue(policy.contains("familyTag(material)"));
+        assertTrue(policy.contains("\"stones/\" + material.id()"));
+        assertTrue(policy.contains("rawRockBlocks(blockTags)"));
+        assertTrue(policy.contains("rawRockItems(itemTags)"));
         assertTrue(policy.contains("addBlock(blocks, \"chert\")"));
         assertTrue(policy.contains("addBlock(blocks, \"pumice\")"));
         assertTrue(policy.contains("addItem(items, \"chert\")"));

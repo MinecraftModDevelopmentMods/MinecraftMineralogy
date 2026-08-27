@@ -13,15 +13,18 @@
         "pattern": [
           "###",
           "# #",
-          "###"
+          "#R#"
         ],
         "key": {
+          "R": {
+            "item": "minecraft:redstone"
+          },
           "#": {
-            "tag": "mineralogy:stone_crafting_materials"
+            "tag": "mineralogy:cobblestone_equivalents"
           }
         },
         "result": {
-          "item": "minecraft:furnace"
+          "item": "minecraft:dropper"
         }
       }
     },
@@ -40,15 +43,18 @@
         "pattern": [
           "###",
           "# #",
-          "###"
+          "#R#"
         ],
         "key": {
+          "R": {
+            "item": "minecraft:redstone"
+          },
           "#": {
-            "tag": "minecraft:stone_crafting_materials"
+            "tag": "forge:cobblestone"
           }
         },
         "result": {
-          "item": "minecraft:furnace"
+          "item": "minecraft:dropper"
         }
       }
     }

@@ -41,13 +41,13 @@ public final class CobblestoneTagPolicy {
     }
 
     static void apply(ITagCollectionSupplier manager) {
-        Set<Block> configuredBlocks = rawRockBlocks();
-        Set<Item> configuredItems = new LinkedHashSet<>();
-        for (Block block : configuredBlocks) configuredItems.add(block.asItem());
+        ITagCollection<Block> blockTags = manager.getBlockTags();
+        ITagCollection<Item> itemTags = manager.getItemTags();
+        Set<Block> configuredBlocks = rawRockBlocks(blockTags);
+        Set<Item> configuredItems = rawRockItems(itemTags);
 
         boolean enabled = MineralogyConfig.makeRockCobblestoneEquivilent();
 
-        ITagCollection<Block> blockTags = manager.getBlockTags();
         Set<Block> blocks = existing(blockTags, COBBLESTONE);
         blocks.removeAll(configuredBlocks);
         if (enabled) blocks.addAll(configuredBlocks);
@@ -55,7 +55,6 @@ public final class CobblestoneTagPolicy {
         addBlock(blocks, "pumice");
         replaceElementsInPlace(required(blockTags, COBBLESTONE), blocks);
 
-        ITagCollection<Item> itemTags = manager.getItemTags();
         Set<Item> items = existing(itemTags, COBBLESTONE);
         items.removeAll(configuredItems);
         if (enabled) items.addAll(configuredItems);
@@ -80,13 +79,24 @@ public final class CobblestoneTagPolicy {
         Ingredient.invalidateAll();
     }
 
-    private static Set<Block> rawRockBlocks() {
+    private static Set<Block> rawRockBlocks(ITagCollection<Block> tags) {
         Set<Block> blocks = new LinkedHashSet<>();
         for (Material material : MaterialData.allIncludingRockSalt()) {
-            Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(Mineralogy.MODID, material.id()));
-            if (block != null) blocks.add(block);
+            blocks.addAll(required(tags, familyTag(material)).getAllElements());
         }
         return blocks;
+    }
+
+    private static Set<Item> rawRockItems(ITagCollection<Item> tags) {
+        Set<Item> items = new LinkedHashSet<>();
+        for (Material material : MaterialData.allIncludingRockSalt()) {
+            items.addAll(required(tags, familyTag(material)).getAllElements());
+        }
+        return items;
+    }
+
+    private static ResourceLocation familyTag(Material material) {
+        return new ResourceLocation(Mineralogy.MODID, "stones/" + material.id());
     }
 
     private static <T> Set<T> existing(ITagCollection<T> collection, ResourceLocation id) {

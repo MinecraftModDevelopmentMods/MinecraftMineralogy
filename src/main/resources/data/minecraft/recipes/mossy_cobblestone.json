@@ -9,19 +9,17 @@
         }
       ],
       "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "###",
-          "# #",
-          "###"
-        ],
-        "key": {
-          "#": {
-            "tag": "mineralogy:stone_crafting_materials"
+        "type": "minecraft:crafting_shapeless",
+        "ingredients": [
+          {
+            "tag": "mineralogy:cobblestone_equivalents"
+          },
+          {
+            "item": "minecraft:vine"
           }
-        },
+        ],
         "result": {
-          "item": "minecraft:furnace"
+          "item": "minecraft:mossy_cobblestone"
         }
       }
     },
@@ -36,19 +34,17 @@
         }
       ],
       "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "###",
-          "# #",
-          "###"
-        ],
-        "key": {
-          "#": {
-            "tag": "minecraft:stone_crafting_materials"
+        "type": "minecraft:crafting_shapeless",
+        "ingredients": [
+          {
+            "tag": "forge:cobblestone"
+          },
+          {
+            "item": "minecraft:vine"
           }
-        },
+        ],
         "result": {
-          "item": "minecraft:furnace"
+          "item": "minecraft:mossy_cobblestone"
         }
       }
     }

@@ -11,17 +11,20 @@
       "recipe": {
         "type": "minecraft:crafting_shaped",
         "pattern": [
-          "###",
-          "# #",
-          "###"
+          "XXX",
+          " # ",
+          " # "
         ],
         "key": {
           "#": {
-            "tag": "mineralogy:stone_crafting_materials"
+            "item": "minecraft:stick"
+          },
+          "X": {
+            "tag": "mineralogy:stone_tool_materials"
           }
         },
         "result": {
-          "item": "minecraft:furnace"
+          "item": "minecraft:stone_pickaxe"
         }
       }
     },
@@ -38,17 +41,20 @@
       "recipe": {
         "type": "minecraft:crafting_shaped",
         "pattern": [
-          "###",
-          "# #",
-          "###"
+          "XXX",
+          " # ",
+          " # "
         ],
         "key": {
           "#": {
-            "tag": "minecraft:stone_crafting_materials"
+            "item": "minecraft:stick"
+          },
+          "X": {
+            "tag": "minecraft:stone_tool_materials"
           }
         },
         "result": {
-          "item": "minecraft:furnace"
+          "item": "minecraft:stone_pickaxe"
         }
       }
     }

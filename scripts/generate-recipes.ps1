@@ -7,8 +7,9 @@ $projectRoot = Split-Path -Parent $PSScriptRoot
 $recipeRoot = Join-Path $projectRoot 'src\main\resources\data\mineralogy\recipes'
 $advancementRoot = Join-Path $projectRoot 'src\main\resources\data\mineralogy\advancements\recipes'
 $minecraftRecipeRoot = Join-Path $projectRoot 'src\main\resources\data\minecraft\recipes'
-$minecraftBuildingAdvancementRoot = Join-Path $projectRoot 'src\main\resources\data\minecraft\advancements\recipes\building_blocks'
+$minecraftAdvancementRoot = Join-Path $projectRoot 'src\main\resources\data\minecraft\advancements\recipes'
 $itemTagRoot = Join-Path $projectRoot 'src\main\resources\data\mineralogy\tags\items'
+$blockTagRoot = Join-Path $projectRoot 'src\main\resources\data\mineralogy\tags\blocks'
 $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
 $generatedNames = New-Object 'System.Collections.Generic.HashSet[string]'
 $unlockSources = @{}
@@ -61,6 +62,10 @@ function ItemCondition([string] $item) {
 
 function ConfigCondition([string] $flag) {
     return [ordered]@{ type = 'mineralogy:config'; flag = $flag }
+}
+
+function NotCondition([System.Collections.IDictionary] $condition) {
+    return [ordered]@{ type = 'forge:not'; value = $condition }
 }
 
 function ItemTagNotEmptyCondition([string] $tag) {
@@ -122,6 +127,66 @@ function Convert-CamelToSnake([string] $value) {
 
 function RecipeResult([string] $item, [int] $count) {
     return [ordered]@{ item = $item; count = $count }
+}
+
+function VanillaResult([string] $item, [int] $count = 1) {
+    $result = [ordered]@{ item = $item }
+    if ($count -ne 1) { $result.count = $count }
+    return $result
+}
+
+function VanillaShapedRecipe(
+    [string[]] $pattern,
+    [System.Collections.IDictionary] $key,
+    [string] $result,
+    [int] $count = 1
+) {
+    return [ordered]@{
+        type = 'minecraft:crafting_shaped'
+        pattern = $pattern
+        key = $key
+        result = VanillaResult $result $count
+    }
+}
+
+function VanillaShapelessRecipe(
+    [object[]] $ingredients,
+    [string] $result,
+    [int] $count = 1
+) {
+    return [ordered]@{
+        type = 'minecraft:crafting_shapeless'
+        ingredients = $ingredients
+        result = VanillaResult $result $count
+    }
+}
+
+function VanillaStonecuttingRecipe(
+    [object] $ingredient,
+    [string] $result,
+    [int] $count
+) {
+    return [ordered]@{
+        type = 'minecraft:stonecutting'
+        ingredient = $ingredient
+        result = $result
+        count = $count
+    }
+}
+
+function Write-ConditionalMinecraftRecipe(
+    [string] $name,
+    [System.Collections.IDictionary] $condition,
+    [System.Collections.IDictionary] $enabledRecipe,
+    [System.Collections.IDictionary] $fallbackRecipe
+) {
+    Write-Json (Join-Path $minecraftRecipeRoot "$name.json") ([ordered]@{
+        type = 'forge:conditional'
+        recipes = @(
+            [ordered]@{ conditions = @($condition); recipe = $enabledRecipe },
+            [ordered]@{ conditions = @((NotCondition $condition)); recipe = $fallbackRecipe }
+        )
+    })
 }
 
 function ConditionsFor([string] $result, [object[]] $extra = @()) {
@@ -714,6 +779,8 @@ function Synchronize-AdvancementConditions() {
 function Prepare-TargetDirectories() {
     New-Item -ItemType Directory -Force -Path $recipeRoot | Out-Null
     New-Item -ItemType Directory -Force -Path $advancementRoot | Out-Null
+    New-Item -ItemType Directory -Force -Path $minecraftRecipeRoot | Out-Null
+    New-Item -ItemType Directory -Force -Path $minecraftAdvancementRoot | Out-Null
 
     foreach ($file in Get-ChildItem -LiteralPath $recipeRoot -Filter '*.json') {
         $recipe = Get-Content -LiteralPath $file.FullName -Raw | ConvertFrom-Json
@@ -728,6 +795,12 @@ function Prepare-TargetDirectories() {
         }
     }
     foreach ($file in Get-ChildItem -LiteralPath $advancementRoot -Filter '*.json') {
+        Remove-Item -LiteralPath $file.FullName
+    }
+    foreach ($file in Get-ChildItem -LiteralPath $minecraftRecipeRoot -Filter '*.json') {
+        Remove-Item -LiteralPath $file.FullName
+    }
+    foreach ($file in Get-ChildItem -LiteralPath $minecraftAdvancementRoot -Filter '*.json' -Recurse) {
         Remove-Item -LiteralPath $file.FullName
     }
 }
@@ -751,11 +824,220 @@ function Write-TargetTags() {
                 Write-Json $destination ([ordered]@{ replace = $false; values = $values })
             }
         }
+
+        $blockDestination = Join-Path $blockTagRoot "stones\$family.json"
+        New-Item -ItemType Directory -Force -Path (Split-Path -Parent $blockDestination) | Out-Null
+        $blockValues = @("mineralogy:$family")
+        $blockValues += @(NativeTagAliases 'stones' $family '')
+        Write-Json $blockDestination ([ordered]@{ replace = $false; values = $blockValues })
+    }
+}
+
+function Write-CobblestoneRecipeTags() {
+    $familyTags = @($families | ForEach-Object { "#mineralogy:stones/$_" })
+    Write-Json (Join-Path $itemTagRoot 'cobblestone_equivalents.json') ([ordered]@{
+        replace = $false
+        values = @('#forge:cobblestone') + $familyTags
+    })
+    Write-Json (Join-Path $itemTagRoot 'stone_crafting_materials.json') ([ordered]@{
+        replace = $false
+        values = @('#minecraft:stone_crafting_materials') + $familyTags
+    })
+    Write-Json (Join-Path $itemTagRoot 'stone_tool_materials.json') ([ordered]@{
+        replace = $false
+        values = @('#minecraft:stone_tool_materials') + $familyTags
+    })
+}
+
+function VanillaRecipeAdvancement(
+    [string] $recipeName,
+    [string] $criterionName,
+    [System.Collections.IDictionary] $criterionIngredient
+) {
+    return [ordered]@{
+        parent = 'minecraft:recipes/root'
+        rewards = [ordered]@{ recipes = @("minecraft:$recipeName") }
+        criteria = [ordered]@{
+            $criterionName = [ordered]@{
+                trigger = 'minecraft:inventory_changed'
+                conditions = [ordered]@{ items = @($criterionIngredient) }
+            }
+            has_the_recipe = [ordered]@{
+                trigger = 'minecraft:recipe_unlocked'
+                conditions = [ordered]@{ recipe = "minecraft:$recipeName" }
+            }
+        }
+        requirements = ,@($criterionName, 'has_the_recipe')
+    }
+}
+
+function Write-ConditionalMinecraftAdvancement(
+    [string] $category,
+    [string] $recipeName,
+    [System.Collections.IDictionary] $condition,
+    [string] $criterionName,
+    [System.Collections.IDictionary] $enabledIngredient,
+    [System.Collections.IDictionary] $fallbackIngredient
+) {
+    $directory = Join-Path $minecraftAdvancementRoot $category
+    New-Item -ItemType Directory -Force -Path $directory | Out-Null
+    Write-Json (Join-Path $directory "$recipeName.json") ([ordered]@{
+        advancements = @(
+            [ordered]@{
+                conditions = @($condition)
+                advancement = VanillaRecipeAdvancement $recipeName $criterionName $enabledIngredient
+            },
+            [ordered]@{
+                conditions = @((NotCondition $condition))
+                advancement = VanillaRecipeAdvancement $recipeName $criterionName $fallbackIngredient
+            }
+        )
+    })
+}
+
+function Write-CobblestoneRecipeOverrides() {
+    $condition = ConfigCondition 'COBBLESTONE_EQUIVILENT'
+    $enabledCobblestone = [ordered]@{ tag = 'mineralogy:cobblestone_equivalents' }
+    $fallbackCobblestone = [ordered]@{ tag = 'forge:cobblestone' }
+    $enabledCrafting = [ordered]@{ tag = 'mineralogy:stone_crafting_materials' }
+    $fallbackCrafting = [ordered]@{ tag = 'minecraft:stone_crafting_materials' }
+    $enabledTools = [ordered]@{ tag = 'mineralogy:stone_tool_materials' }
+    $fallbackTools = [ordered]@{ tag = 'minecraft:stone_tool_materials' }
+
+    Write-ConditionalMinecraftRecipe 'furnace' $condition `
+        (VanillaShapedRecipe @('###', '# #', '###') ([ordered]@{ '#' = $enabledCrafting }) 'minecraft:furnace') `
+        (VanillaShapedRecipe @('###', '# #', '###') ([ordered]@{ '#' = $fallbackCrafting }) 'minecraft:furnace')
+    Write-ConditionalMinecraftRecipe 'brewing_stand' $condition `
+        (VanillaShapedRecipe @(' B ', '###') ([ordered]@{
+            B = ItemIngredient 'minecraft:blaze_rod'; '#' = $enabledCrafting
+        }) 'minecraft:brewing_stand') `
+        (VanillaShapedRecipe @(' B ', '###') ([ordered]@{
+            B = ItemIngredient 'minecraft:blaze_rod'; '#' = $fallbackCrafting
+        }) 'minecraft:brewing_stand')
+    Write-ConditionalMinecraftRecipe 'lever' $condition `
+        (VanillaShapedRecipe @('X', '#') ([ordered]@{
+            '#' = $enabledCobblestone; X = ItemIngredient 'minecraft:stick'
+        }) 'minecraft:lever') `
+        (VanillaShapedRecipe @('X', '#') ([ordered]@{
+            '#' = $fallbackCobblestone; X = ItemIngredient 'minecraft:stick'
+        }) 'minecraft:lever')
+    Write-ConditionalMinecraftRecipe 'piston' $condition `
+        (VanillaShapedRecipe @('TTT', '#X#', '#R#') ([ordered]@{
+            R = ItemIngredient 'minecraft:redstone'; '#' = $enabledCobblestone
+            T = [ordered]@{ tag = 'minecraft:planks' }; X = ItemIngredient 'minecraft:iron_ingot'
+        }) 'minecraft:piston') `
+        (VanillaShapedRecipe @('TTT', '#X#', '#R#') ([ordered]@{
+            R = ItemIngredient 'minecraft:redstone'; '#' = $fallbackCobblestone
+            T = [ordered]@{ tag = 'minecraft:planks' }; X = ItemIngredient 'minecraft:iron_ingot'
+        }) 'minecraft:piston')
+    Write-ConditionalMinecraftRecipe 'dispenser' $condition `
+        (VanillaShapedRecipe @('###', '#X#', '#R#') ([ordered]@{
+            R = ItemIngredient 'minecraft:redstone'; '#' = $enabledCobblestone
+            X = ItemIngredient 'minecraft:bow'
+        }) 'minecraft:dispenser') `
+        (VanillaShapedRecipe @('###', '#X#', '#R#') ([ordered]@{
+            R = ItemIngredient 'minecraft:redstone'; '#' = $fallbackCobblestone
+            X = ItemIngredient 'minecraft:bow'
+        }) 'minecraft:dispenser')
+    Write-ConditionalMinecraftRecipe 'dropper' $condition `
+        (VanillaShapedRecipe @('###', '# #', '#R#') ([ordered]@{
+            R = ItemIngredient 'minecraft:redstone'; '#' = $enabledCobblestone
+        }) 'minecraft:dropper') `
+        (VanillaShapedRecipe @('###', '# #', '#R#') ([ordered]@{
+            R = ItemIngredient 'minecraft:redstone'; '#' = $fallbackCobblestone
+        }) 'minecraft:dropper')
+    Write-ConditionalMinecraftRecipe 'observer' $condition `
+        (VanillaShapedRecipe @('###', 'RRQ', '###') ([ordered]@{
+            Q = ItemIngredient 'minecraft:quartz'; R = ItemIngredient 'minecraft:redstone'
+            '#' = $enabledCobblestone
+        }) 'minecraft:observer') `
+        (VanillaShapedRecipe @('###', 'RRQ', '###') ([ordered]@{
+            Q = ItemIngredient 'minecraft:quartz'; R = ItemIngredient 'minecraft:redstone'
+            '#' = $fallbackCobblestone
+        }) 'minecraft:observer')
+    Write-ConditionalMinecraftRecipe 'mossy_cobblestone' $condition `
+        (VanillaShapelessRecipe @($enabledCobblestone, (ItemIngredient 'minecraft:vine')) 'minecraft:mossy_cobblestone') `
+        (VanillaShapelessRecipe @($fallbackCobblestone, (ItemIngredient 'minecraft:vine')) 'minecraft:mossy_cobblestone')
+    Write-ConditionalMinecraftRecipe 'andesite' $condition `
+        (VanillaShapelessRecipe @((ItemIngredient 'minecraft:diorite'), $enabledCobblestone) 'minecraft:andesite' 2) `
+        (VanillaShapelessRecipe @((ItemIngredient 'minecraft:diorite'), $fallbackCobblestone) 'minecraft:andesite' 2)
+    Write-ConditionalMinecraftRecipe 'diorite' $condition `
+        (VanillaShapedRecipe @('CQ', 'QC') ([ordered]@{
+            Q = ItemIngredient 'minecraft:quartz'; C = $enabledCobblestone
+        }) 'minecraft:diorite' 2) `
+        (VanillaShapedRecipe @('CQ', 'QC') ([ordered]@{
+            Q = ItemIngredient 'minecraft:quartz'; C = $fallbackCobblestone
+        }) 'minecraft:diorite' 2)
+
+    $toolRecipes = [ordered]@{
+        stone_axe = @('XX', 'X#', ' #')
+        stone_hoe = @('XX', ' #', ' #')
+        stone_pickaxe = @('XXX', ' # ', ' # ')
+        stone_shovel = @('X', '#', '#')
+        stone_sword = @('X', 'X', '#')
+    }
+    foreach ($recipeName in $toolRecipes.Keys) {
+        Write-ConditionalMinecraftRecipe $recipeName $condition `
+            (VanillaShapedRecipe $toolRecipes[$recipeName] ([ordered]@{
+                '#' = ItemIngredient 'minecraft:stick'; X = $enabledTools
+            }) "minecraft:$recipeName") `
+            (VanillaShapedRecipe $toolRecipes[$recipeName] ([ordered]@{
+                '#' = ItemIngredient 'minecraft:stick'; X = $fallbackTools
+            }) "minecraft:$recipeName")
+    }
+
+    $advancements = @(
+        @('decorations', 'furnace', 'has_cobblestone', $enabledCrafting, $fallbackCrafting),
+        @('brewing', 'brewing_stand', 'has_blaze_rod', (ItemIngredient 'minecraft:blaze_rod'), (ItemIngredient 'minecraft:blaze_rod')),
+        @('redstone', 'lever', 'has_cobblestone', $enabledCobblestone, $fallbackCobblestone),
+        @('redstone', 'piston', 'has_redstone', (ItemIngredient 'minecraft:redstone'), (ItemIngredient 'minecraft:redstone')),
+        @('redstone', 'dispenser', 'has_bow', (ItemIngredient 'minecraft:bow'), (ItemIngredient 'minecraft:bow')),
+        @('redstone', 'dropper', 'has_redstone', (ItemIngredient 'minecraft:redstone'), (ItemIngredient 'minecraft:redstone')),
+        @('redstone', 'observer', 'has_quartz', (ItemIngredient 'minecraft:quartz'), (ItemIngredient 'minecraft:quartz')),
+        @('building_blocks', 'mossy_cobblestone', 'has_vine', (ItemIngredient 'minecraft:vine'), (ItemIngredient 'minecraft:vine')),
+        @('building_blocks', 'andesite', 'has_stone', (ItemIngredient 'minecraft:diorite'), (ItemIngredient 'minecraft:diorite')),
+        @('building_blocks', 'diorite', 'has_quartz', (ItemIngredient 'minecraft:quartz'), (ItemIngredient 'minecraft:quartz')),
+        @('tools', 'stone_axe', 'has_cobblestone', $enabledTools, $fallbackTools),
+        @('tools', 'stone_hoe', 'has_cobblestone', $enabledTools, $fallbackTools),
+        @('tools', 'stone_pickaxe', 'has_cobblestone', $enabledTools, $fallbackTools),
+        @('tools', 'stone_shovel', 'has_cobblestone', $enabledTools, $fallbackTools),
+        @('combat', 'stone_sword', 'has_cobblestone', $enabledTools, $fallbackTools)
+    )
+    foreach ($entry in $advancements) {
+        Write-ConditionalMinecraftAdvancement $entry[0] $entry[1] $condition $entry[2] $entry[3] $entry[4]
+    }
+}
+
+function Write-NativeSlabOverrides() {
+    foreach ($family in @('andesite', 'diorite', 'granite')) {
+        $raw = $nativeFullBlocks[$family].raw
+        $smooth = $nativeFullBlocks[$family].smooth
+        foreach ($finish in @(
+                @{ recipe = "${family}_slab"; source = $raw; mineralogy = "mineralogy:${family}_slab"; vanilla = "minecraft:${family}_slab" },
+                @{ recipe = "polished_${family}_slab"; source = $smooth; mineralogy = "mineralogy:${family}_smooth_slab"; vanilla = "minecraft:polished_${family}_slab" }
+            )) {
+            $condition = ItemCondition $finish.mineralogy
+            Write-ConditionalMinecraftRecipe $finish.recipe $condition `
+                (VanillaShapedRecipe @('###') ([ordered]@{ '#' = ItemIngredient $finish.source }) $finish.mineralogy 6) `
+                (VanillaShapedRecipe @('###') ([ordered]@{ '#' = ItemIngredient $finish.source }) $finish.vanilla 6)
+        }
+
+        foreach ($route in @(
+                @{ recipe = "${family}_slab_from_${family}_stonecutting"; source = $raw; mineralogy = "mineralogy:${family}_slab"; vanilla = "minecraft:${family}_slab" },
+                @{ recipe = "polished_${family}_slab_from_${family}_stonecutting"; source = $raw; mineralogy = "mineralogy:${family}_smooth_slab"; vanilla = "minecraft:polished_${family}_slab" },
+                @{ recipe = "polished_${family}_slab_from_polished_${family}_stonecutting"; source = $smooth; mineralogy = "mineralogy:${family}_smooth_slab"; vanilla = "minecraft:polished_${family}_slab" }
+            )) {
+            $condition = ItemCondition $route.mineralogy
+            Write-ConditionalMinecraftRecipe $route.recipe $condition `
+                (VanillaStonecuttingRecipe (ItemIngredient $route.source) $route.mineralogy 2) `
+                (VanillaStonecuttingRecipe (ItemIngredient $route.source) $route.vanilla 2)
+        }
     }
 }
 
 function Write-NativePolishedOverrides() {
     New-Item -ItemType Directory -Force -Path $minecraftRecipeRoot | Out-Null
+    $minecraftBuildingAdvancementRoot = Join-Path $minecraftAdvancementRoot 'building_blocks'
     New-Item -ItemType Directory -Force -Path $minecraftBuildingAdvancementRoot | Out-Null
     foreach ($family in $nativeFullBlocks.Keys) {
         $raw = $nativeFullBlocks[$family].raw
@@ -793,6 +1075,9 @@ function Write-NativePolishedOverrides() {
 
 Prepare-TargetDirectories
 Write-TargetTags
+Write-CobblestoneRecipeTags
+Write-CobblestoneRecipeOverrides
+Write-NativeSlabOverrides
 Write-NativePolishedOverrides
 New-Item -ItemType Directory -Force -Path $recipeRoot | Out-Null
 

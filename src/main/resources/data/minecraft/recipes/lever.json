@@ -11,17 +11,19 @@
       "recipe": {
         "type": "minecraft:crafting_shaped",
         "pattern": [
-          "###",
-          "# #",
-          "###"
+          "X",
+          "#"
         ],
         "key": {
           "#": {
-            "tag": "mineralogy:stone_crafting_materials"
+            "tag": "mineralogy:cobblestone_equivalents"
+          },
+          "X": {
+            "item": "minecraft:stick"
           }
         },
         "result": {
-          "item": "minecraft:furnace"
+          "item": "minecraft:lever"
         }
       }
     },
@@ -38,17 +40,19 @@
       "recipe": {
         "type": "minecraft:crafting_shaped",
         "pattern": [
-          "###",
-          "# #",
-          "###"
+          "X",
+          "#"
         ],
         "key": {
           "#": {
-            "tag": "minecraft:stone_crafting_materials"
+            "tag": "forge:cobblestone"
+          },
+          "X": {
+            "item": "minecraft:stick"
           }
         },
         "result": {
-          "item": "minecraft:furnace"
+          "item": "minecraft:lever"
         }
       }
     }

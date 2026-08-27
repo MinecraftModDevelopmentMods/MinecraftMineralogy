@@ -4,24 +4,23 @@
     {
       "conditions": [
         {
-          "type": "mineralogy:config",
-          "flag": "COBBLESTONE_EQUIVILENT"
+          "type": "forge:item_exists",
+          "item": "mineralogy:granite_slab"
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
         "pattern": [
-          "###",
-          "# #",
           "###"
         ],
         "key": {
           "#": {
-            "tag": "mineralogy:stone_crafting_materials"
+            "item": "minecraft:granite"
           }
         },
         "result": {
-          "item": "minecraft:furnace"
+          "item": "mineralogy:granite_slab",
+          "count": 6
         }
       }
     },
@@ -30,25 +29,24 @@
         {
           "type": "forge:not",
           "value": {
-            "type": "mineralogy:config",
-            "flag": "COBBLESTONE_EQUIVILENT"
+            "type": "forge:item_exists",
+            "item": "mineralogy:granite_slab"
           }
         }
       ],
       "recipe": {
         "type": "minecraft:crafting_shaped",
         "pattern": [
-          "###",
-          "# #",
           "###"
         ],
         "key": {
           "#": {
-            "tag": "minecraft:stone_crafting_materials"
+            "item": "minecraft:granite"
           }
         },
         "result": {
-          "item": "minecraft:furnace"
+          "item": "minecraft:granite_slab",
+          "count": 6
         }
       }
     }

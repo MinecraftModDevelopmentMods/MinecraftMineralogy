@@ -28,6 +28,7 @@ public class WorkflowContractTest {
         assertEquals("8.0.502+7", properties.getProperty("java_toolchain_version"));
         assertEquals("17", properties.getProperty("gradle_java_version"));
         assertEquals("240974", properties.getProperty("curseforge_project_id"));
+        assertEquals("zone.moddev.mc.mineralogy", properties.getProperty("mod_group"));
     }
 
     @Test
@@ -75,6 +76,9 @@ public class WorkflowContractTest {
         assertTrue(build.contains("def preparedReleaseDir = project.findProperty('preparedReleaseDir')"));
         assertTrue(build.contains("tasks.register('verifyPreparedReleaseArtifacts')"));
         assertTrue(build.contains("tasks.withType(PublishToMavenRepository).configureEach"));
+        assertTrue(build.contains("tasks.register('verifyMavenCoordinates')"));
+        assertTrue(build.contains("generatePomFileForMavenJavaPublication"));
+        assertTrue(build.contains("dependsOn tasks.named('verifyMavenCoordinates')"));
         assertTrue(build.contains("Maven release publication must use a remote repository"));
         assertTrue(build.contains("name = 'release'"));
         assertFalse(build.contains("file:///${project.projectDir}/mcmodsrepo"));

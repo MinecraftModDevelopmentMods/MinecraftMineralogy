@@ -71,7 +71,9 @@ other recipe unlocks, which would recursively reveal an entire construction
 tree. Polishing uses Minecraft 1.16.5's advancement requirements matrix to
 require the matching source plus accepted sand; manually crafting a recipe is
 the target-native fallback for Forge's delayed crafting-output inventory
-trigger.
+trigger. Rock-furnace advancements use the exact matching slab as their sole
+material criterion. They deliberately do not require an already-owned vanilla
+furnace, so the upgrade route is visible before that intermediate is crafted.
 
 Reliefs preserve the historical two-stage contract. Nine exact matching
 polished blocks produce 16 blank reliefs; the blank relief is then the input to

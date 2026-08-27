@@ -26,26 +26,12 @@
           }
         ]
       }
-    },
-    "has_furnace": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "item": "minecraft:furnace"
-          }
-        ]
-      }
     }
   },
   "requirements": [
     [
       "has_the_recipe",
       "has_rock"
-    ],
-    [
-      "has_the_recipe",
-      "has_furnace"
     ]
   ]
 }

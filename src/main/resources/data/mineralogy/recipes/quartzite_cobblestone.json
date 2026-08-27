@@ -1,11 +1,12 @@
 {
+  "conditions": [],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "mineralogy:crafting_materials/quartzite"
+      "tag": "mineralogy:stones/quartzite"
     },
     {
-      "tag": "mineralogy:crafting_materials/quartzite"
+      "tag": "mineralogy:stones/quartzite"
     },
     {
       "item": "minecraft:gravel"

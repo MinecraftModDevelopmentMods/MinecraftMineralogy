@@ -1,11 +1,12 @@
 {
+  "conditions": [],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "mineralogy:crafting_materials/scoria"
+      "tag": "mineralogy:stones/scoria"
     },
     {
-      "tag": "mineralogy:crafting_materials/scoria"
+      "tag": "mineralogy:stones/scoria"
     },
     {
       "item": "minecraft:gravel"

@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:gypsum_dust"
+    }
+  ],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
@@ -7,6 +13,6 @@
   ],
   "result": {
     "item": "mineralogy:gypsum_dust",
-    "count": 9
+    "count": 4
   }
 }

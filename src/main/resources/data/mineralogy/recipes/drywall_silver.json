@@ -1,14 +1,25 @@
 {
+  "conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "ENABLE_DRYWALLS"
+    },
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:drywall_silver"
+    }
+  ],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "mineralogy:drywall_white"
+      "tag": "mineralogy:drywall/white"
     },
     {
-      "tag": "forge:dyes/light_gray"
+      "item": "minecraft:light_gray_dye"
     }
   ],
   "result": {
-    "item": "mineralogy:drywall_silver"
+    "item": "mineralogy:drywall_silver",
+    "count": 1
   }
 }

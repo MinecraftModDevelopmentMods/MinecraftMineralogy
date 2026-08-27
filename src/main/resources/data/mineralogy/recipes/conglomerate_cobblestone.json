@@ -1,11 +1,12 @@
 {
+  "conditions": [],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "mineralogy:crafting_materials/conglomerate"
+      "tag": "mineralogy:stones/conglomerate"
     },
     {
-      "tag": "mineralogy:crafting_materials/conglomerate"
+      "tag": "mineralogy:stones/conglomerate"
     },
     {
       "item": "minecraft:gravel"

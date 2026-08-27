@@ -1,11 +1,12 @@
 {
+  "conditions": [],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "mineralogy:crafting_materials/shale"
+      "tag": "mineralogy:stones/shale"
     },
     {
-      "tag": "mineralogy:crafting_materials/shale"
+      "tag": "mineralogy:stones/shale"
     },
     {
       "item": "minecraft:gravel"

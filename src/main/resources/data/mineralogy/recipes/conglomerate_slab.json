@@ -1,28 +1,21 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
+  "conditions": [
     {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_ROCKSLAB"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "xxx"
-        ],
-        "key": {
-          "x": {
-            "tag": "mineralogy:crafting_materials/conglomerate"
-          }
-        },
-        "result": {
-          "item": "mineralogy:conglomerate_slab",
-          "count": 6
-        }
-      }
+      "type": "forge:item_exists",
+      "item": "mineralogy:conglomerate_slab"
     }
-  ]
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:conglomerate"
+    }
+  },
+  "result": {
+    "item": "mineralogy:conglomerate_slab",
+    "count": 6
+  }
 }

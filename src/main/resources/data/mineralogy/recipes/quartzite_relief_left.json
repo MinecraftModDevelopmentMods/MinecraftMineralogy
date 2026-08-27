@@ -1,34 +1,23 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
+  "conditions": [
     {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_SMOOTH"
-        },
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_RELIEFS"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "x  ",
-          " x ",
-          "  x"
-        ],
-        "key": {
-          "x": {
-            "item": "mineralogy:quartzite_relief_blank"
-          }
-        },
-        "result": {
-          "item": "mineralogy:quartzite_relief_left",
-          "count": 3
-        }
-      }
+      "type": "forge:item_exists",
+      "item": "mineralogy:quartzite_relief_left"
     }
-  ]
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "x  ",
+    " x ",
+    "  x"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:quartzite_relief_blank"
+    }
+  },
+  "result": {
+    "item": "mineralogy:quartzite_relief_left",
+    "count": 3
+  }
 }

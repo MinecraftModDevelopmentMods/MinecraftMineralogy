@@ -1,0 +1,44 @@
+{
+  "conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "ENABLE_MINERAL_DUSTS"
+    },
+    {
+      "type": "forge:not",
+      "value": {
+        "type": "forge:tag_empty",
+        "tag": "forge:dusts/carbon"
+      }
+    }
+  ],
+  "rewards": {
+    "recipes": [
+      "mineralogy:gunpowder_from_carbon_dust"
+    ]
+  },
+  "criteria": {
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "mineralogy:gunpowder_from_carbon_dust"
+      }
+    },
+    "has_rock": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "mineralogy:nitrate_dust"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_rock"
+    ]
+  ]
+}

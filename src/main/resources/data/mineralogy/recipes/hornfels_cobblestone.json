@@ -1,11 +1,12 @@
 {
+  "conditions": [],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "mineralogy:crafting_materials/hornfels"
+      "tag": "mineralogy:stones/hornfels"
     },
     {
-      "tag": "mineralogy:crafting_materials/hornfels"
+      "tag": "mineralogy:stones/hornfels"
     },
     {
       "item": "minecraft:gravel"

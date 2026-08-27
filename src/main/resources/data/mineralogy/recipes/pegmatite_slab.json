@@ -1,28 +1,21 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
+  "conditions": [
     {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_ROCKSLAB"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "xxx"
-        ],
-        "key": {
-          "x": {
-            "tag": "mineralogy:crafting_materials/pegmatite"
-          }
-        },
-        "result": {
-          "item": "mineralogy:pegmatite_slab",
-          "count": 6
-        }
-      }
+      "type": "forge:item_exists",
+      "item": "mineralogy:pegmatite_slab"
     }
-  ]
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:pegmatite"
+    }
+  },
+  "result": {
+    "item": "mineralogy:pegmatite_slab",
+    "count": 6
+  }
 }

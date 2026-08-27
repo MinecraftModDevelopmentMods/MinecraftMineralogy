@@ -1,0 +1,26 @@
+{
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:dolomite_stairs"
+    },
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:dolomite_brick_stairs"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xx",
+    "xx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:dolomite_stairs"
+    }
+  },
+  "result": {
+    "item": "mineralogy:dolomite_brick_stairs",
+    "count": 4
+  }
+}

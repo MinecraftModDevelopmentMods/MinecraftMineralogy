@@ -1,4 +1,14 @@
 {
+  "conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "ENABLE_MINERAL_DUSTS"
+    },
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:sulfur_dust"
+    }
+  ],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {

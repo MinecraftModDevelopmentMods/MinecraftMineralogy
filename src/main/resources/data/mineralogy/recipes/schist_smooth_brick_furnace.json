@@ -1,44 +1,26 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
+  "conditions": [
     {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_SMOOTH"
-        },
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_SMOOTHBRICK"
-        },
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_SMOOTHBRICKSLAB"
-        },
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_SMOOTHBRICKFURNACE"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "xxx",
-          "xyx",
-          "xxx"
-        ],
-        "key": {
-          "x": {
-            "item": "mineralogy:schist_smooth_brick_slab"
-          },
-          "y": {
-            "item": "minecraft:furnace"
-          }
-        },
-        "result": {
-          "item": "mineralogy:schist_smooth_brick_furnace"
-        }
-      }
+      "type": "forge:item_exists",
+      "item": "mineralogy:schist_smooth_brick_furnace"
     }
-  ]
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    "xyx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "tag": "mineralogy:slabs/schist/smooth_brick"
+    },
+    "y": {
+      "item": "minecraft:furnace"
+    }
+  },
+  "result": {
+    "item": "mineralogy:schist_smooth_brick_furnace",
+    "count": 1
+  }
 }

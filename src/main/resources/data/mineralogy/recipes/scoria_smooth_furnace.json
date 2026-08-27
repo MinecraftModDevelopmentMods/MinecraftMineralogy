@@ -1,40 +1,26 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
+  "conditions": [
     {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_SMOOTH"
-        },
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_SMOOTHSLAB"
-        },
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_SMOOTHFURNACE"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "xxx",
-          "xyx",
-          "xxx"
-        ],
-        "key": {
-          "x": {
-            "item": "mineralogy:scoria_smooth_slab"
-          },
-          "y": {
-            "item": "minecraft:furnace"
-          }
-        },
-        "result": {
-          "item": "mineralogy:scoria_smooth_furnace"
-        }
-      }
+      "type": "forge:item_exists",
+      "item": "mineralogy:scoria_smooth_furnace"
     }
-  ]
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    "xyx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "tag": "mineralogy:slabs/scoria/smooth"
+    },
+    "y": {
+      "item": "minecraft:furnace"
+    }
+  },
+  "result": {
+    "item": "mineralogy:scoria_smooth_furnace",
+    "count": 1
+  }
 }

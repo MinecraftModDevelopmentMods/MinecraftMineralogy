@@ -1,34 +1,23 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
+  "conditions": [
     {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_SMOOTH"
-        },
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_RELIEFS"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "x x",
-          "   ",
-          "x x"
-        ],
-        "key": {
-          "x": {
-            "item": "mineralogy:novaculite_relief_blank"
-          }
-        },
-        "result": {
-          "item": "mineralogy:novaculite_relief_cross",
-          "count": 4
-        }
-      }
+      "type": "forge:item_exists",
+      "item": "mineralogy:novaculite_relief_cross"
     }
-  ]
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "x x",
+    "   ",
+    "x x"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:novaculite_relief_blank"
+    }
+  },
+  "result": {
+    "item": "mineralogy:novaculite_relief_cross",
+    "count": 4
+  }
 }

@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:shale_wall"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:shale_wall"

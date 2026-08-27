@@ -1,11 +1,12 @@
 {
+  "conditions": [],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "mineralogy:crafting_materials/rock_salt"
+      "tag": "mineralogy:stones/rock_salt"
     },
     {
-      "tag": "mineralogy:crafting_materials/rock_salt"
+      "tag": "mineralogy:stones/rock_salt"
     },
     {
       "item": "minecraft:gravel"

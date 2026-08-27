@@ -1,4 +1,14 @@
 {
+  "conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "ENABLE_DRYWALLS"
+    },
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:drywall_white"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "pgp",
@@ -7,7 +17,7 @@
   ],
   "key": {
     "p": {
-      "item": "minecraft:paper"
+      "tag": "forge:paper"
     },
     "g": {
       "tag": "forge:dusts/gypsum"

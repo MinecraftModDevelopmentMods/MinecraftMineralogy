@@ -1,11 +1,12 @@
 {
+  "conditions": [],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "mineralogy:crafting_materials/basalt"
+      "tag": "mineralogy:stones/basalt"
     },
     {
-      "tag": "mineralogy:crafting_materials/basalt"
+      "tag": "mineralogy:stones/basalt"
     },
     {
       "item": "minecraft:gravel"

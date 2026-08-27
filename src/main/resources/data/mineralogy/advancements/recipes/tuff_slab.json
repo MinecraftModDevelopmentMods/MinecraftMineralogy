@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:tuff_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:tuff_slab"

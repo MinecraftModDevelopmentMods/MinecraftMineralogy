@@ -1,29 +1,22 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
+  "conditions": [
     {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_BRICK"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "xx",
-          "xx"
-        ],
-        "key": {
-          "x": {
-            "item": "mineralogy:basalt"
-          }
-        },
-        "result": {
-          "item": "mineralogy:basalt_brick",
-          "count": 4
-        }
-      }
+      "type": "forge:item_exists",
+      "item": "mineralogy:basalt_brick"
     }
-  ]
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xx",
+    "xx"
+  ],
+  "key": {
+    "x": {
+      "tag": "mineralogy:stones/basalt"
+    }
+  },
+  "result": {
+    "item": "mineralogy:basalt_brick",
+    "count": 4
+  }
 }

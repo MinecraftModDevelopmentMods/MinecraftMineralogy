@@ -1,29 +1,22 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
+  "conditions": [
     {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_BRICK"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "xx",
-          "xx"
-        ],
-        "key": {
-          "x": {
-            "tag": "mineralogy:crafting_materials/shale"
-          }
-        },
-        "result": {
-          "item": "mineralogy:shale_brick",
-          "count": 4
-        }
-      }
+      "type": "forge:item_exists",
+      "item": "mineralogy:shale_brick"
     }
-  ]
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xx",
+    "xx"
+  ],
+  "key": {
+    "x": {
+      "tag": "mineralogy:stones/shale"
+    }
+  },
+  "result": {
+    "item": "mineralogy:shale_brick",
+    "count": 4
+  }
 }

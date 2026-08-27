@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:chalk"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "xx",
@@ -10,6 +16,7 @@
     }
   },
   "result": {
-    "item": "mineralogy:chalk"
+    "item": "mineralogy:chalk",
+    "count": 1
   }
 }

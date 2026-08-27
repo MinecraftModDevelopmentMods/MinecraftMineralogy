@@ -1,34 +1,23 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
+  "conditions": [
     {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_SMOOTH"
-        },
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_SMOOTHSTAIRS"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "x  ",
-          "xx ",
-          "xxx"
-        ],
-        "key": {
-          "x": {
-            "item": "mineralogy:basaltic_glass_smooth"
-          }
-        },
-        "result": {
-          "item": "mineralogy:basaltic_glass_smooth_stairs",
-          "count": 4
-        }
-      }
+      "type": "forge:item_exists",
+      "item": "mineralogy:basaltic_glass_smooth_stairs"
     }
-  ]
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "x  ",
+    "xx ",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "tag": "mineralogy:stones/basaltic_glass/smooth"
+    }
+  },
+  "result": {
+    "item": "mineralogy:basaltic_glass_smooth_stairs",
+    "count": 4
+  }
 }

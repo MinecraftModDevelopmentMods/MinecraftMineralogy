@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "ENABLE_MINERAL_DUSTS"
+    }
+  ],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {

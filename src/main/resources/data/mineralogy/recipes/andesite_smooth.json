@@ -1,27 +1,21 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
+  "conditions": [
     {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_SMOOTH"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shapeless",
-        "ingredients": [
-          {
-            "tag": "mineralogy:crafting_materials/andesite"
-          },
-          {
-            "item": "minecraft:sand"
-          }
-        ],
-        "result": {
-          "item": "mineralogy:andesite_smooth"
-        }
-      }
+      "type": "forge:item_exists",
+      "item": "mineralogy:andesite_smooth"
     }
-  ]
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "mineralogy:stones/andesite"
+    },
+    {
+      "item": "minecraft:sand"
+    }
+  ],
+  "result": {
+    "item": "mineralogy:andesite_smooth",
+    "count": 1
+  }
 }

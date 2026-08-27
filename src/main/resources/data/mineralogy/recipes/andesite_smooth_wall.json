@@ -1,33 +1,22 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
+  "conditions": [
     {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_SMOOTH"
-        },
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_SMOOTHWALL"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "xxx",
-          "xxx"
-        ],
-        "key": {
-          "x": {
-            "item": "mineralogy:andesite_smooth"
-          }
-        },
-        "result": {
-          "item": "mineralogy:andesite_smooth_wall",
-          "count": 6
-        }
-      }
+      "type": "forge:item_exists",
+      "item": "mineralogy:andesite_smooth_wall"
     }
-  ]
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "tag": "mineralogy:stones/andesite/smooth"
+    }
+  },
+  "result": {
+    "item": "mineralogy:andesite_smooth_wall",
+    "count": 6
+  }
 }

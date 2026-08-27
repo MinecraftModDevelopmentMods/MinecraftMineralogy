@@ -1,37 +1,22 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
+  "conditions": [
     {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_SMOOTH"
-        },
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_SMOOTHBRICK"
-        },
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_SMOOTHBRICKWALL"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "xxx",
-          "xxx"
-        ],
-        "key": {
-          "x": {
-            "item": "mineralogy:hornfels_smooth_brick"
-          }
-        },
-        "result": {
-          "item": "mineralogy:hornfels_smooth_brick_wall",
-          "count": 6
-        }
-      }
+      "type": "forge:item_exists",
+      "item": "mineralogy:hornfels_smooth_brick_wall"
     }
-  ]
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "tag": "mineralogy:stones/hornfels/smooth_brick"
+    }
+  },
+  "result": {
+    "item": "mineralogy:hornfels_smooth_brick_wall",
+    "count": 6
+  }
 }

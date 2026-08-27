@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:schist_brick"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:schist_brick"

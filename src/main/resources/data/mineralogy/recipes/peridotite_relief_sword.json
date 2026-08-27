@@ -1,53 +1,42 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
+  "conditions": [
     {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_SMOOTH"
-        },
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_RELIEFS"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shapeless",
-        "ingredients": [
-          {
-            "item": "mineralogy:peridotite_relief_blank"
-          },
-          {
-            "item": "mineralogy:peridotite_relief_blank"
-          },
-          {
-            "item": "mineralogy:peridotite_relief_blank"
-          },
-          {
-            "item": "mineralogy:peridotite_relief_blank"
-          },
-          {
-            "item": "mineralogy:peridotite_relief_blank"
-          },
-          {
-            "item": "mineralogy:peridotite_relief_blank"
-          },
-          {
-            "item": "mineralogy:peridotite_relief_blank"
-          },
-          {
-            "item": "mineralogy:peridotite_relief_blank"
-          },
-          {
-            "item": "minecraft:stone_sword"
-          }
-        ],
-        "result": {
-          "item": "mineralogy:peridotite_relief_sword",
-          "count": 8
-        }
-      }
+      "type": "forge:item_exists",
+      "item": "mineralogy:peridotite_relief_sword"
     }
-  ]
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mineralogy:peridotite_relief_blank"
+    },
+    {
+      "item": "mineralogy:peridotite_relief_blank"
+    },
+    {
+      "item": "mineralogy:peridotite_relief_blank"
+    },
+    {
+      "item": "mineralogy:peridotite_relief_blank"
+    },
+    {
+      "item": "mineralogy:peridotite_relief_blank"
+    },
+    {
+      "item": "mineralogy:peridotite_relief_blank"
+    },
+    {
+      "item": "mineralogy:peridotite_relief_blank"
+    },
+    {
+      "item": "mineralogy:peridotite_relief_blank"
+    },
+    {
+      "item": "minecraft:stone_sword"
+    }
+  ],
+  "result": {
+    "item": "mineralogy:peridotite_relief_sword",
+    "count": 8
+  }
 }

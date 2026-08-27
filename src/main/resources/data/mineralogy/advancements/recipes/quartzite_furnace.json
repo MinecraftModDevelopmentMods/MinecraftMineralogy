@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:quartzite_furnace"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:quartzite_furnace"
@@ -16,9 +22,17 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "mineralogy:quartzite"
-            ]
+            "item": "mineralogy:quartzite_slab"
+          }
+        ]
+      }
+    },
+    "has_furnace": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:furnace"
           }
         ]
       }
@@ -28,6 +42,10 @@
     [
       "has_the_recipe",
       "has_rock"
+    ],
+    [
+      "has_the_recipe",
+      "has_furnace"
     ]
   ]
 }

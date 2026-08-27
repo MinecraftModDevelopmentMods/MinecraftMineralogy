@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:chalk_dust"
+    }
+  ],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {

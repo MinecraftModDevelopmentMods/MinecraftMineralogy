@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:pegmatite_relief_left"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:pegmatite_relief_left"
@@ -16,11 +22,7 @@
       "conditions": {
         "items": [
           {
-            "type": "mineralogy:config_item",
-            "flags": [
-              "GENERATE_SMOOTH"
-            ],
-            "item": "mineralogy:pegmatite_smooth"
+            "item": "mineralogy:pegmatite_relief_blank"
           }
         ]
       }

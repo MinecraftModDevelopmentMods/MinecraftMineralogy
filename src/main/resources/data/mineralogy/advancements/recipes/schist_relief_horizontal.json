@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:schist_relief_horizontal"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:schist_relief_horizontal"
@@ -16,11 +22,7 @@
       "conditions": {
         "items": [
           {
-            "type": "mineralogy:config_item",
-            "flags": [
-              "GENERATE_SMOOTH"
-            ],
-            "item": "mineralogy:schist_smooth"
+            "item": "mineralogy:schist_relief_blank"
           }
         ]
       }

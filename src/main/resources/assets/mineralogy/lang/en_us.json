@@ -926,12 +926,15 @@
   "block.mineralogy.novaculite_relief_right": "Novaculite Right Relief",
   "block.mineralogy.novaculite_relief_sword": "Novaculite Sword Relief",
   "block.mineralogy.novaculite_relief_vertical": "Novaculite Vertical Relief",
-  "advancements.mineralogy.all_the_rocks.title": "Call the rocks Ludo!",
-  "advancements.mineralogy.all_the_rocks.description": "Wow, you've found all the standard rock types in Mineralogy!",
   "itemGroup.mineralogy.mineralogy": "Mineralogy",
   "itemGroup.mineralogy.rock": "Mineralogy Rocks",
   "itemGroup.mineralogy.stair": "Mineralogy Stairs",
   "itemGroup.mineralogy.slab": "Mineralogy Slabs",
   "itemGroup.mineralogy.wall": "Mineralogy Walls",
-  "itemGroup.mineralogy.item": "Mineralogy Items"
+  "itemGroup.mineralogy.item": "Mineralogy Items",
+  "block.mineralogy.crude_oil": "Crude Oil",
+  "item.mineralogy.crude_oil_bucket": "Crude Oil Bucket",
+  "fluid.mineralogy.crude_oil": "Crude Oil",
+  "advancements.mineralogy.all_the_rocks.title": "Call the rocks Ludo!",
+  "advancements.mineralogy.all_the_rocks.description": "Wow, you've found all the standard rock types in Mineralogy!"
 }

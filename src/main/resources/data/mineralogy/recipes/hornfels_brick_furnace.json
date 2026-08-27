@@ -1,40 +1,26 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
+  "conditions": [
     {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_BRICK"
-        },
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_BRICKSLAB"
-        },
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_BRICKFURNACE"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "xxx",
-          "xyx",
-          "xxx"
-        ],
-        "key": {
-          "x": {
-            "item": "mineralogy:hornfels_brick_slab"
-          },
-          "y": {
-            "item": "minecraft:furnace"
-          }
-        },
-        "result": {
-          "item": "mineralogy:hornfels_brick_furnace"
-        }
-      }
+      "type": "forge:item_exists",
+      "item": "mineralogy:hornfels_brick_furnace"
     }
-  ]
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    "xyx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "tag": "mineralogy:slabs/hornfels/brick"
+    },
+    "y": {
+      "item": "minecraft:furnace"
+    }
+  },
+  "result": {
+    "item": "mineralogy:hornfels_brick_furnace",
+    "count": 1
+  }
 }

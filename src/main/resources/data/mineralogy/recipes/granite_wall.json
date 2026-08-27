@@ -1,29 +1,22 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
+  "conditions": [
     {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_ROCKWALL"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "xxx",
-          "xxx"
-        ],
-        "key": {
-          "x": {
-            "item": "mineralogy:granite"
-          }
-        },
-        "result": {
-          "item": "mineralogy:granite_wall",
-          "count": 6
-        }
-      }
+      "type": "forge:item_exists",
+      "item": "mineralogy:granite_wall"
     }
-  ]
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "tag": "mineralogy:stones/granite"
+    }
+  },
+  "result": {
+    "item": "mineralogy:granite_wall",
+    "count": 6
+  }
 }

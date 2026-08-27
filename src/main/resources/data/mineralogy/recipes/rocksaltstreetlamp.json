@@ -1,4 +1,14 @@
 {
+  "conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "ENABLE_ROCK_SALT_LAMPS"
+    },
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:rocksaltstreetlamp"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "x",
@@ -14,6 +24,7 @@
     }
   },
   "result": {
-    "item": "mineralogy:rocksaltstreetlamp"
+    "item": "mineralogy:rocksaltstreetlamp",
+    "count": 1
   }
 }

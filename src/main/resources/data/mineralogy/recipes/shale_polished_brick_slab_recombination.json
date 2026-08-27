@@ -1,0 +1,25 @@
+{
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:shale_smooth_brick_slab"
+    },
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:shale_smooth_brick"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mineralogy:shale_smooth_brick_slab"
+    },
+    {
+      "item": "mineralogy:shale_smooth_brick_slab"
+    }
+  ],
+  "result": {
+    "item": "mineralogy:shale_smooth_brick",
+    "count": 1
+  }
+}

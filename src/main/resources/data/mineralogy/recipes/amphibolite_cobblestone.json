@@ -1,11 +1,12 @@
 {
+  "conditions": [],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "mineralogy:crafting_materials/amphibolite"
+      "tag": "mineralogy:stones/amphibolite"
     },
     {
-      "tag": "mineralogy:crafting_materials/amphibolite"
+      "tag": "mineralogy:stones/amphibolite"
     },
     {
       "item": "minecraft:gravel"

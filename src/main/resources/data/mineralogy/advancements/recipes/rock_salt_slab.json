@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:rock_salt_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:rock_salt_slab"

@@ -1,4 +1,14 @@
 {
+  "conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "ENABLE_MINERAL_DUSTS"
+    },
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:phosphorous_block"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "xxx",
@@ -7,10 +17,11 @@
   ],
   "key": {
     "x": {
-      "tag": "forge:dusts/phosphorous"
+      "item": "mineralogy:phosphorous_dust"
     }
   },
   "result": {
-    "item": "mineralogy:phosphorous_block"
+    "item": "mineralogy:phosphorous_block",
+    "count": 1
   }
 }

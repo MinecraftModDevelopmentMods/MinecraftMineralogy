@@ -1,11 +1,12 @@
 {
+  "conditions": [],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "mineralogy:crafting_materials/tuff"
+      "tag": "mineralogy:stones/tuff"
     },
     {
-      "tag": "mineralogy:crafting_materials/tuff"
+      "tag": "mineralogy:stones/tuff"
     },
     {
       "item": "minecraft:gravel"

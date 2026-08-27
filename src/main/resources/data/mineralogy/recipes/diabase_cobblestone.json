@@ -1,11 +1,12 @@
 {
+  "conditions": [],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "mineralogy:crafting_materials/diabase"
+      "tag": "mineralogy:stones/diabase"
     },
     {
-      "tag": "mineralogy:crafting_materials/diabase"
+      "tag": "mineralogy:stones/diabase"
     },
     {
       "item": "minecraft:gravel"

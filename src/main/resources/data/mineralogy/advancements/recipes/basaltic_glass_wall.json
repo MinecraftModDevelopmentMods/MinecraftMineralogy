@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:basaltic_glass_wall"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:basaltic_glass_wall"

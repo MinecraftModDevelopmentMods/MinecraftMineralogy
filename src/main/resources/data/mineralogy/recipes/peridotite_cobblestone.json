@@ -1,11 +1,12 @@
 {
+  "conditions": [],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "mineralogy:crafting_materials/peridotite"
+      "tag": "mineralogy:stones/peridotite"
     },
     {
-      "tag": "mineralogy:crafting_materials/peridotite"
+      "tag": "mineralogy:stones/peridotite"
     },
     {
       "item": "minecraft:gravel"

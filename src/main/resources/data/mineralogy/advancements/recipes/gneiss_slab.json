@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:gneiss_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:gneiss_slab"

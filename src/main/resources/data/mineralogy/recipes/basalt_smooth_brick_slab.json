@@ -1,36 +1,21 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
+  "conditions": [
     {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_SMOOTH"
-        },
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_SMOOTHBRICK"
-        },
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_SMOOTHBRICKSLAB"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "xxx"
-        ],
-        "key": {
-          "x": {
-            "item": "mineralogy:basalt_smooth_brick"
-          }
-        },
-        "result": {
-          "item": "mineralogy:basalt_smooth_brick_slab",
-          "count": 6
-        }
-      }
+      "type": "forge:item_exists",
+      "item": "mineralogy:basalt_smooth_brick_slab"
     }
-  ]
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:basalt_smooth_brick"
+    }
+  },
+  "result": {
+    "item": "mineralogy:basalt_smooth_brick_slab",
+    "count": 6
+  }
 }

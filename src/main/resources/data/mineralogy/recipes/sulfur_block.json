@@ -1,4 +1,14 @@
 {
+  "conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "ENABLE_MINERAL_DUSTS"
+    },
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:sulfur_block"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "xxx",
@@ -7,10 +17,11 @@
   ],
   "key": {
     "x": {
-      "tag": "forge:dusts/sulfur"
+      "item": "mineralogy:sulfur_dust"
     }
   },
   "result": {
-    "item": "mineralogy:sulfur_block"
+    "item": "mineralogy:sulfur_block",
+    "count": 1
   }
 }

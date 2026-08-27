@@ -1,9 +1,13 @@
 [CmdletBinding()]
 param()
 
+$ErrorActionPreference = 'Stop'
+
 $projectRoot = Split-Path -Parent $PSScriptRoot
 $recipeRoot = Join-Path $projectRoot 'src\main\resources\data\mineralogy\recipes'
 $advancementRoot = Join-Path $projectRoot 'src\main\resources\data\mineralogy\advancements\recipes'
+$minecraftRecipeRoot = Join-Path $projectRoot 'src\main\resources\data\minecraft\recipes'
+$minecraftBuildingAdvancementRoot = Join-Path $projectRoot 'src\main\resources\data\minecraft\advancements\recipes\building_blocks'
 $itemTagRoot = Join-Path $projectRoot 'src\main\resources\data\mineralogy\tags\items'
 $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
 $generatedNames = New-Object 'System.Collections.Generic.HashSet[string]'
@@ -21,6 +25,31 @@ $colors = @(
     'black', 'red', 'green', 'brown', 'blue', 'purple', 'cyan', 'silver',
     'gray', 'pink', 'lime', 'yellow', 'light_blue', 'magenta', 'orange', 'white'
 )
+
+# Minecraft owns these full-block identities in 1.16.5. Mineralogy keeps its
+# legacy blocks registered, but recipes may accept either identity where doing
+# so cannot compete with a native recipe.
+$nativeFullBlocks = @{
+    andesite = @{ raw = 'minecraft:andesite'; smooth = 'minecraft:polished_andesite' }
+    basalt = @{ raw = 'minecraft:basalt'; smooth = 'minecraft:polished_basalt' }
+    diorite = @{ raw = 'minecraft:diorite'; smooth = 'minecraft:polished_diorite' }
+    granite = @{ raw = 'minecraft:granite'; smooth = 'minecraft:polished_granite' }
+}
+
+$nativeConstructionForms = @{
+    andesite = @{ raw = @('stairs', 'slab', 'wall'); smooth = @('stairs', 'slab') }
+    diorite = @{ raw = @('stairs', 'slab', 'wall'); smooth = @('stairs', 'slab') }
+    granite = @{ raw = @('stairs', 'slab', 'wall'); smooth = @('stairs', 'slab') }
+}
+
+$nativeExactRecipeInputs = @{
+    # Raw-to-smooth remains exact because the native polished override uses
+    # the same block-plus-sand route. Native construction forms remain native.
+    andesite = @{ raw = @('smooth', 'stairs', 'slab', 'wall'); smooth = @('stairs', 'slab') }
+    basalt = @{ raw = @('smooth') }
+    diorite = @{ raw = @('smooth', 'stairs', 'slab', 'wall'); smooth = @('stairs', 'slab') }
+    granite = @{ raw = @('smooth', 'stairs', 'slab', 'wall'); smooth = @('stairs', 'slab') }
+}
 
 function ItemId([string] $path) {
     return "mineralogy:$path"
@@ -113,12 +142,17 @@ function Write-Recipe([string] $name, [System.Collections.IDictionary] $recipe) 
 
 function Register-UnlockSource(
     [string] $name,
-    [string] $sourceItem
+    [object] $sourceIngredient
 ) {
     if ($unlockSources.ContainsKey($name)) {
         throw "Duplicate recipe-book unlock source: $name"
     }
-    $unlockSources[$name] = $sourceItem
+    $unlockSources[$name] = if ($sourceIngredient -is [string]) {
+        ItemIngredient ([string]$sourceIngredient)
+    }
+    else {
+        $sourceIngredient
+    }
 }
 
 function Get-SandUnlockMode([string] $recipeName) {
@@ -168,31 +202,79 @@ function Get-UnlockRequirements([string] $sandMode) {
     return ,$requirements
 }
 
-function Resolve-IngredientItem([object] $ingredient) {
-    if ($null -ne $ingredient.item) { return [string]$ingredient.item }
-    $tag = [string]$ingredient.tag
-    if ($tag -match '^mineralogy:(stones|slabs)/([^/]+)(?:/(brick|smooth|smooth_brick))?$') {
-        $family = $Matches[2]
-        $finish = [string]$Matches[3]
-        if ($Matches[1] -eq 'slabs') {
-            return "mineralogy:${family}_$(if ($finish) { "${finish}_" })slab"
-        }
-        return "mineralogy:${family}$(if ($finish) { "_${finish}" })"
+function Resolve-UnlockIngredient([object] $ingredient) {
+    if ($null -ne $ingredient.item) {
+        return [ordered]@{ item = [string]$ingredient.item }
     }
-    return ''
+    if ($null -ne $ingredient.tag) {
+        return [ordered]@{ tag = [string]$ingredient.tag }
+    }
+    return $null
 }
 
 function Infer-UnlockSource([string] $recipeName, [object] $recipe) {
-    if ($unlockSources.ContainsKey($recipeName)) { return [string]$unlockSources[$recipeName] }
+    if ($unlockSources.ContainsKey($recipeName)) { return $unlockSources[$recipeName] }
     if ($null -ne $recipe.ingredients -and $recipe.ingredients.Count -gt 0) {
-        return Resolve-IngredientItem $recipe.ingredients[0]
+        return Resolve-UnlockIngredient $recipe.ingredients[0]
     }
-    if ($null -ne $recipe.ingredient) { return Resolve-IngredientItem $recipe.ingredient }
+    if ($null -ne $recipe.ingredient) { return Resolve-UnlockIngredient $recipe.ingredient }
     if ($null -ne $recipe.key) {
         $first = $recipe.key.PSObject.Properties | Select-Object -First 1
-        if ($null -ne $first) { return Resolve-IngredientItem $first.Value }
+        if ($null -ne $first) { return Resolve-UnlockIngredient $first.Value }
     }
-    return ''
+    return $null
+}
+
+function Matrix-Contains(
+    [System.Collections.IDictionary] $matrix,
+    [string] $family,
+    [string] $finish,
+    [string] $form
+) {
+    return $matrix.ContainsKey($family) -and
+        $matrix[$family].ContainsKey($finish) -and
+        $matrix[$family][$finish] -contains $form
+}
+
+function ConstructionFormIngredient(
+    [string] $family,
+    [string] $finish,
+    [string] $form,
+    [string] $mineralogyItem,
+    [string] $familyOreName
+) {
+    if (Matrix-Contains $nativeExactRecipeInputs $family $finish $form) {
+        return ItemIngredient $mineralogyItem
+    }
+    # Slabs historically use exact inputs. Widen only a native family whose
+    # matching vanilla block has no target-native slab recipe (basalt here).
+    if ($form -eq 'slab' -and -not $nativeFullBlocks.ContainsKey($family)) {
+        return ItemIngredient $mineralogyItem
+    }
+    return OreIngredient $familyOreName
+}
+
+function NativeTagAliases(
+    [string] $kind,
+    [string] $family,
+    [string] $finish
+) {
+    if (-not $nativeFullBlocks.ContainsKey($family)) {
+        return @()
+    }
+    $nativeFinish = if ([string]::IsNullOrWhiteSpace($finish)) { 'raw' } else { $finish }
+    if ($nativeFinish -notin @('raw', 'smooth')) {
+        return @()
+    }
+    if ($kind -eq 'stones') {
+        return @($nativeFullBlocks[$family][$nativeFinish])
+    }
+    if ($kind -eq 'slabs' -and
+            (Matrix-Contains $nativeConstructionForms $family $nativeFinish 'slab')) {
+        $prefix = if ($nativeFinish -eq 'smooth') { 'polished_' } else { '' }
+        return @("minecraft:${prefix}${family}_slab")
+    }
+    return @()
 }
 
 function Write-ShapedRecipe(
@@ -250,23 +332,26 @@ function Write-BaseFamilyRecipes([string] $family) {
         (OreIngredient $rawOre), (OreIngredient $rawOre),
         (ItemIngredient 'minecraft:gravel'), (ItemIngredient 'minecraft:gravel')
     ) 'minecraft:cobblestone' 4 @()
-    Register-UnlockSource "${family}_cobblestone" $raw
 
     Write-ShapedRecipe "${family}_stairs" 'forge:ore_shaped' @('x  ', 'xx ', 'xxx') `
-        ([ordered]@{ x = OreIngredient $rawOre }) (ItemId "${family}_stairs") 4 `
+        ([ordered]@{ x = ConstructionFormIngredient $family 'raw' 'stairs' $raw $rawOre }) `
+        (ItemId "${family}_stairs") 4 `
         (ConditionsFor (ItemId "${family}_stairs"))
     Write-ShapedRecipe "${family}_slab" 'minecraft:crafting_shaped' @('xxx') `
-        ([ordered]@{ x = ItemIngredient $raw }) (ItemId "${family}_slab") 6 `
+        ([ordered]@{ x = ConstructionFormIngredient $family 'raw' 'slab' $raw $rawOre }) `
+        (ItemId "${family}_slab") 6 `
         (ConditionsFor (ItemId "${family}_slab"))
     Write-ShapedRecipe "${family}_furnace" 'forge:ore_shaped' @('xxx', 'xyx', 'xxx') `
         ([ordered]@{ x = OreIngredient (FamilyOreName 'slab' $family); y = ItemIngredient 'minecraft:furnace' }) `
         (ItemId "${family}_furnace") 1 (ConditionsFor (ItemId "${family}_furnace"))
     Write-ShapedRecipe "${family}_wall" 'forge:ore_shaped' @('xxx', 'xxx') `
-        ([ordered]@{ x = OreIngredient $rawOre }) (ItemId "${family}_wall") 6 `
+        ([ordered]@{ x = ConstructionFormIngredient $family 'raw' 'wall' $raw $rawOre }) `
+        (ItemId "${family}_wall") 6 `
         (ConditionsFor (ItemId "${family}_wall"))
 
     Write-ShapedRecipe "${family}_brick" 'forge:ore_shaped' @('xx', 'xx') `
-        ([ordered]@{ x = OreIngredient $rawOre }) $brick 4 (ConditionsFor $brick)
+        ([ordered]@{ x = ConstructionFormIngredient $family 'raw' 'brick' $raw $rawOre }) `
+        $brick 4 (ConditionsFor $brick)
     Write-ShapedRecipe "${family}_brick_stairs" 'forge:ore_shaped' @('x  ', 'xx ', 'xxx') `
         ([ordered]@{ x = OreIngredient $brickOre }) (ItemId "${family}_brick_stairs") 4 `
         (ConditionsFor (ItemId "${family}_brick_stairs"))
@@ -281,19 +366,23 @@ function Write-BaseFamilyRecipes([string] $family) {
         (ConditionsFor (ItemId "${family}_brick_wall"))
 
     Write-ShapelessRecipe "${family}_smooth" 'forge:ore_shapeless' @(
-        (OreIngredient $rawOre), (ItemIngredient 'minecraft:sand' 0)
+        (ConstructionFormIngredient $family 'raw' 'smooth' $raw $rawOre),
+        (ItemIngredient 'minecraft:sand' 0)
     ) $smooth 1 (ConditionsFor $smooth)
     Write-ShapedRecipe "${family}_smooth_stairs" 'forge:ore_shaped' @('x  ', 'xx ', 'xxx') `
-        ([ordered]@{ x = OreIngredient $smoothOre }) (ItemId "${family}_smooth_stairs") 4 `
+        ([ordered]@{ x = ConstructionFormIngredient $family 'smooth' 'stairs' $smooth $smoothOre }) `
+        (ItemId "${family}_smooth_stairs") 4 `
         (ConditionsFor (ItemId "${family}_smooth_stairs"))
     Write-ShapedRecipe "${family}_smooth_slab" 'minecraft:crafting_shaped' @('xxx') `
-        ([ordered]@{ x = ItemIngredient $smooth }) (ItemId "${family}_smooth_slab") 6 `
+        ([ordered]@{ x = ConstructionFormIngredient $family 'smooth' 'slab' $smooth $smoothOre }) `
+        (ItemId "${family}_smooth_slab") 6 `
         (ConditionsFor (ItemId "${family}_smooth_slab"))
     Write-ShapedRecipe "${family}_smooth_furnace" 'forge:ore_shaped' @('xxx', 'xyx', 'xxx') `
         ([ordered]@{ x = OreIngredient (FamilyOreName 'slab' $family 'Smooth'); y = ItemIngredient 'minecraft:furnace' }) `
         (ItemId "${family}_smooth_furnace") 1 (ConditionsFor (ItemId "${family}_smooth_furnace"))
     Write-ShapedRecipe "${family}_smooth_wall" 'forge:ore_shaped' @('xxx', 'xxx') `
-        ([ordered]@{ x = OreIngredient $smoothOre }) (ItemId "${family}_smooth_wall") 6 `
+        ([ordered]@{ x = ConstructionFormIngredient $family 'smooth' 'wall' $smooth $smoothOre }) `
+        (ItemId "${family}_smooth_wall") 6 `
         (ConditionsFor (ItemId "${family}_smooth_wall"))
 
     Write-ShapedRecipe "${family}_smooth_brick" 'forge:ore_shaped' @('xx', 'xx') `
@@ -314,11 +403,18 @@ function Write-BaseFamilyRecipes([string] $family) {
 
 function Write-ReliefRecipes([string] $family) {
     $smooth = ItemId "${family}_smooth"
+    $smoothOre = FamilyOreName 'stone' $family 'Smooth'
+    $smoothIngredient = if ($nativeFullBlocks.ContainsKey($family)) {
+        OreIngredient $smoothOre
+    }
+    else {
+        ItemIngredient $smooth
+    }
     $blank = ItemId "${family}_relief_blank"
     $left = ItemId "${family}_relief_left"
 
     Write-ShapedRecipe "${family}_relief_blank" 'minecraft:crafting_shaped' @('xxx', 'xxx', 'xxx') `
-        ([ordered]@{ x = ItemIngredient $smooth }) $blank 16 (ConditionsFor $blank)
+        ([ordered]@{ x = $smoothIngredient }) $blank 16 (ConditionsFor $blank)
     Write-ShapedRecipe "${family}_relief_cross" 'minecraft:crafting_shaped' @('x x', '   ', 'x x') `
         ([ordered]@{ x = ItemIngredient $blank }) (ItemId "${family}_relief_cross") 4 `
         (ConditionsFor (ItemId "${family}_relief_cross"))
@@ -516,8 +612,8 @@ function Ensure-MissingRecipeAdvancements() {
             continue
         }
         $recipe = Get-Content -LiteralPath $recipeFile.FullName -Raw | ConvertFrom-Json
-        $sourceItem = Infer-UnlockSource $recipeName $recipe
-        if ([string]::IsNullOrWhiteSpace($sourceItem)) {
+        $sourceIngredient = Infer-UnlockSource $recipeName $recipe
+        if ($null -eq $sourceIngredient) {
             throw "Generated recipe $recipeName has no direct recipe-book unlock source"
         }
         $criteria = [ordered]@{
@@ -528,7 +624,7 @@ function Ensure-MissingRecipeAdvancements() {
             has_rock = [ordered]@{
                 trigger = 'minecraft:inventory_changed'
                 conditions = [ordered]@{
-                    items = @([ordered]@{ item = $sourceItem })
+                    items = @($sourceIngredient)
                 }
             }
         }
@@ -567,15 +663,20 @@ function Synchronize-AdvancementConditions() {
             $family = $Matches[1]
             $relief = $Matches[2]
             if ($relief -eq 'blank') {
-                $sourceItem = "mineralogy:${family}_smooth"
+                $sourceIngredient = if ($nativeFullBlocks.ContainsKey($family)) {
+                    OreIngredient (FamilyOreName 'stone' $family 'Smooth')
+                }
+                else {
+                    ItemIngredient "mineralogy:${family}_smooth"
+                }
             }
             elseif ($relief -eq 'right') {
-                $sourceItem = "mineralogy:${family}_relief_left"
+                $sourceIngredient = ItemIngredient "mineralogy:${family}_relief_left"
             }
             else {
-                $sourceItem = "mineralogy:${family}_relief_blank"
+                $sourceIngredient = ItemIngredient "mineralogy:${family}_relief_blank"
             }
-            $advancement.criteria.has_rock.conditions.items[0].item = $sourceItem
+            $advancement.criteria.has_rock.conditions.items = @($sourceIngredient)
         }
         if ($null -eq $advancement.criteria.has_the_recipe -or $null -eq $advancement.criteria.has_rock) {
             throw "Advancement $($file.Name) must have self-recipe and direct-input criteria"
@@ -645,14 +746,54 @@ function Write-TargetTags() {
                 }
                 $destination = Join-Path $itemTagRoot "$kind\$family$pathSuffix.json"
                 New-Item -ItemType Directory -Force -Path (Split-Path -Parent $destination) | Out-Null
-                Write-Json $destination ([ordered]@{ replace = $false; values = @($item) })
+                $values = @($item)
+                $values += @(NativeTagAliases $kind $family $finish)
+                Write-Json $destination ([ordered]@{ replace = $false; values = $values })
             }
         }
     }
 }
 
+function Write-NativePolishedOverrides() {
+    New-Item -ItemType Directory -Force -Path $minecraftRecipeRoot | Out-Null
+    New-Item -ItemType Directory -Force -Path $minecraftBuildingAdvancementRoot | Out-Null
+    foreach ($family in $nativeFullBlocks.Keys) {
+        $raw = $nativeFullBlocks[$family].raw
+        $smooth = $nativeFullBlocks[$family].smooth
+        $recipeName = "polished_$family"
+        Write-Json (Join-Path $minecraftRecipeRoot "$recipeName.json") ([ordered]@{
+            type = 'minecraft:crafting_shapeless'
+            ingredients = @((ItemIngredient $raw), (ItemIngredient 'minecraft:sand'))
+            result = RecipeResult $smooth 1
+        })
+        Write-Json (Join-Path $minecraftBuildingAdvancementRoot "$recipeName.json") ([ordered]@{
+            parent = 'minecraft:recipes/root'
+            rewards = [ordered]@{ recipes = @("minecraft:$recipeName") }
+            criteria = [ordered]@{
+                has_rock = [ordered]@{
+                    trigger = 'minecraft:inventory_changed'
+                    conditions = [ordered]@{ items = @((ItemIngredient $raw)) }
+                }
+                has_sand = [ordered]@{
+                    trigger = 'minecraft:inventory_changed'
+                    conditions = [ordered]@{ items = @((ItemIngredient 'minecraft:sand')) }
+                }
+                has_the_recipe = [ordered]@{
+                    trigger = 'minecraft:recipe_unlocked'
+                    conditions = [ordered]@{ recipe = "minecraft:$recipeName" }
+                }
+            }
+            requirements = @(
+                @('has_the_recipe', 'has_rock'),
+                @('has_the_recipe', 'has_sand')
+            )
+        })
+    }
+}
+
 Prepare-TargetDirectories
 Write-TargetTags
+Write-NativePolishedOverrides
 New-Item -ItemType Directory -Force -Path $recipeRoot | Out-Null
 
 foreach ($family in $families) {

@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:granite_smooth_slab"
+            "tag": "mineralogy:slabs/granite/smooth"
           }
         ]
       }

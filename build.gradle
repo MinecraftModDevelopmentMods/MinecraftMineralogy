@@ -484,9 +484,26 @@ tasks.register('verifyReleaseArtifacts') {
                 throw new GradleException("Release jar must contain 1415 recipes and advancements, found ${recipes.size()} and ${advancements.size()}")
             }
             def minecraftRecipes = names.findAll { it.startsWith('data/minecraft/recipes/') && it.endsWith('.json') }
-            if (minecraftRecipes.size() != 1 || !minecraftRecipes.contains('data/minecraft/recipes/furnace.json') ||
+            def expectedMinecraftRecipes = [
+                'data/minecraft/recipes/furnace.json',
+                'data/minecraft/recipes/polished_andesite.json',
+                'data/minecraft/recipes/polished_basalt.json',
+                'data/minecraft/recipes/polished_diorite.json',
+                'data/minecraft/recipes/polished_granite.json'
+            ] as Set
+            if ((minecraftRecipes as Set) != expectedMinecraftRecipes ||
                     names.any { it.contains('/stonecutting/') }) {
-                throw new GradleException('Release jar must contain only the required vanilla furnace override and no stonecutting recipes')
+                throw new GradleException('Release jar must contain only the required furnace/polished-block overrides and no stonecutting recipes')
+            }
+            def expectedMinecraftAdvancements = ['andesite', 'basalt', 'diorite', 'granite'].collect {
+                "data/minecraft/advancements/recipes/building_blocks/polished_${it}.json"
+            } as Set
+            def minecraftAdvancements = names.findAll {
+                it.startsWith('data/minecraft/advancements/recipes/building_blocks/polished_') &&
+                    it.endsWith('.json')
+            } as Set
+            if (minecraftAdvancements != expectedMinecraftAdvancements) {
+                throw new GradleException('Release jar must contain the four native polished-block advancement overrides')
             }
             def wallBlockstates = names.findAll { it ==~ /assets\/mineralogy\/blockstates\/.+_wall\.json/ }
             def tallWallModels = names.findAll { it ==~ /assets\/mineralogy\/models\/block\/.+_wall_side_tall\.json/ }

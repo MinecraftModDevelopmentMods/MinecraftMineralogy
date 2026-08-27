@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:scoria_smooth_brick_slab"
+            "tag": "mineralogy:slabs/scoria/smooth_brick"
           }
         ]
       }

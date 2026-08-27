@@ -13,7 +13,7 @@
   ],
   "key": {
     "x": {
-      "tag": "mineralogy:stones/andesite/smooth"
+      "item": "mineralogy:andesite_smooth"
     }
   },
   "result": {

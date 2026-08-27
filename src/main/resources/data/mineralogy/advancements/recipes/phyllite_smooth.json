@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:phyllite"
+            "tag": "mineralogy:stones/phyllite"
           }
         ]
       }

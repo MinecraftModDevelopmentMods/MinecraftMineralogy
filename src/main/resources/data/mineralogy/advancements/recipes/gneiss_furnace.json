@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:gneiss_slab"
+            "tag": "mineralogy:slabs/gneiss"
           }
         ]
       }

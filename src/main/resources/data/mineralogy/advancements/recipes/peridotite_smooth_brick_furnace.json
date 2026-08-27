@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:peridotite_smooth_brick_slab"
+            "tag": "mineralogy:slabs/peridotite/smooth_brick"
           }
         ]
       }

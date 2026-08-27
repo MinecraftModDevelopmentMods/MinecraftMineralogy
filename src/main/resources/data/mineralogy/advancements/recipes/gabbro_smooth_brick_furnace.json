@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:gabbro_smooth_brick_slab"
+            "tag": "mineralogy:slabs/gabbro/smooth_brick"
           }
         ]
       }

@@ -8,7 +8,7 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "mineralogy:stones/granite"
+      "item": "mineralogy:granite"
     },
     {
       "item": "minecraft:sand"

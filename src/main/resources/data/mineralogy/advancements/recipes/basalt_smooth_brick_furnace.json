@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:basalt_smooth_brick_slab"
+            "tag": "mineralogy:slabs/basalt/smooth_brick"
           }
         ]
       }

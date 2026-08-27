@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "mineralogy:basalt_smooth"
+    "mineralogy:basalt_smooth",
+    "minecraft:polished_basalt"
   ]
 }

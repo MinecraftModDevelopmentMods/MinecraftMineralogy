@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:andesite"
+            "tag": "mineralogy:stones/andesite"
           }
         ]
       }

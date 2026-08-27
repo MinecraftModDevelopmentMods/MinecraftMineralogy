@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:novaculite_smooth"
+            "tag": "mineralogy:stones/novaculite/smooth"
           }
         ]
       }

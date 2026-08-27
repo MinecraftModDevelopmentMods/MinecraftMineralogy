@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "mineralogy:diorite"
+    "mineralogy:diorite",
+    "minecraft:diorite"
   ]
 }

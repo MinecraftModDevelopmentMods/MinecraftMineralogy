@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:scoria"
+            "tag": "mineralogy:stones/scoria"
           }
         ]
       }

@@ -84,10 +84,10 @@ public class ResourceContractTest {
         JsonObject smooth = json(new File(advancementDir, "basalt_smooth.json"));
         assertEquals("mineralogy:basalt", criterionItem(smooth, "has_rock"));
         assertTrue(smooth.getAsJsonObject("criteria").has("has_sand"));
-        JsonObject stairs = json(new File(advancementDir, "basalt_smooth_stairs.json"));
-        assertEquals("mineralogy:basalt_smooth", criterionItem(stairs, "has_rock"));
-        JsonObject blank = json(new File(advancementDir, "basalt_relief_blank.json"));
-        assertEquals("mineralogy:basalt_smooth", criterionItem(blank, "has_rock"));
+        assertAdvancementIngredient("basalt_smooth_stairs", "tag",
+                "mineralogy:stones/basalt/smooth");
+        assertAdvancementIngredient("basalt_relief_blank", "tag",
+                "mineralogy:stones/basalt/smooth");
         JsonObject marked = json(new File(advancementDir, "basalt_relief_pickaxe.json"));
         assertEquals("mineralogy:basalt_relief_blank", criterionItem(marked, "has_rock"));
         JsonObject right = json(new File(advancementDir, "basalt_relief_right.json"));
@@ -106,9 +106,8 @@ public class ResourceContractTest {
             JsonObject criteria = advancement.getAsJsonObject("criteria");
             assertTrue(file.getName(), criteria.has("has_rock"));
             assertFalse(file.getName(), criteria.has("has_furnace"));
-            String expectedSlab = "mineralogy:"
-                    + stripJson(file.getName()).replaceFirst("_furnace$", "_slab");
-            assertEquals(file.getName(), expectedSlab, criterionItem(advancement, "has_rock"));
+            String expectedSlabTag = expectedSlabTag(stripJson(file.getName()));
+            assertAdvancementIngredient(stripJson(file.getName()), "tag", expectedSlabTag);
 
             JsonArray requirements = advancement.getAsJsonArray("requirements");
             assertEquals(file.getName(), 1, requirements.size());
@@ -117,6 +116,88 @@ public class ResourceContractTest {
             assertEquals(file.getName(), "has_the_recipe", unlockAlternatives.get(0).getAsString());
             assertEquals(file.getName(), "has_rock", unlockAlternatives.get(1).getAsString());
         }
+    }
+
+    @Test
+    public void nativeRockAliasesDriveRecipesAndAdvancementsWithoutStealingVanillaForms() throws Exception {
+        File tags = new File(ROOT, "data/mineralogy/tags/items");
+        for (String family : Arrays.asList("andesite", "basalt", "diorite", "granite")) {
+            assertTagValues(new File(tags, "stones/" + family + ".json"),
+                    "mineralogy:" + family, "minecraft:" + family);
+            assertTagValues(new File(tags, "stones/" + family + "/smooth.json"),
+                    "mineralogy:" + family + "_smooth", "minecraft:polished_" + family);
+        }
+        for (String family : Arrays.asList("andesite", "diorite", "granite")) {
+            assertTagValues(new File(tags, "slabs/" + family + ".json"),
+                    "mineralogy:" + family + "_slab", "minecraft:" + family + "_slab");
+            assertTagValues(new File(tags, "slabs/" + family + "/smooth.json"),
+                    "mineralogy:" + family + "_smooth_slab",
+                    "minecraft:polished_" + family + "_slab");
+        }
+        assertTagValues(new File(tags, "slabs/basalt.json"), "mineralogy:basalt_slab");
+        assertTagValues(new File(tags, "slabs/basalt/smooth.json"),
+                "mineralogy:basalt_smooth_slab");
+
+        assertRecipeIngredient("basalt_slab", "tag", "mineralogy:stones/basalt");
+        assertRecipeIngredient("basalt_stairs", "tag", "mineralogy:stones/basalt");
+        assertRecipeIngredient("basalt_wall", "tag", "mineralogy:stones/basalt");
+        assertRecipeIngredient("basalt_smooth_slab", "tag", "mineralogy:stones/basalt/smooth");
+        assertRecipeIngredient("basalt_smooth_stairs", "tag", "mineralogy:stones/basalt/smooth");
+        assertRecipeIngredient("basalt_smooth_wall", "tag", "mineralogy:stones/basalt/smooth");
+
+        for (String family : Arrays.asList("andesite", "diorite", "granite")) {
+            assertRecipeIngredient(family + "_slab", "item", "mineralogy:" + family);
+            assertRecipeIngredient(family + "_stairs", "item", "mineralogy:" + family);
+            assertRecipeIngredient(family + "_wall", "item", "mineralogy:" + family);
+            assertRecipeIngredient(family + "_smooth_slab", "item",
+                    "mineralogy:" + family + "_smooth");
+            assertRecipeIngredient(family + "_smooth_stairs", "item",
+                    "mineralogy:" + family + "_smooth");
+            assertRecipeIngredient(family + "_smooth_wall", "tag",
+                    "mineralogy:stones/" + family + "/smooth");
+        }
+        for (String family : Arrays.asList("andesite", "basalt", "diorite", "granite")) {
+            assertRecipeIngredient(family + "_brick", "tag", "mineralogy:stones/" + family);
+            assertAdvancementIngredient(family + "_brick", "tag", "mineralogy:stones/" + family);
+            assertRecipeIngredient(family + "_smooth", "item", "mineralogy:" + family);
+            assertAdvancementIngredient(family + "_smooth", "item", "mineralogy:" + family);
+            assertAdvancementIngredient(family + "_relief_blank", "tag",
+                    "mineralogy:stones/" + family + "/smooth");
+
+            JsonObject vanillaPolished = json(new File(ROOT,
+                    "data/minecraft/recipes/polished_" + family + ".json"));
+            assertEquals("minecraft:crafting_shapeless",
+                    vanillaPolished.get("type").getAsString());
+            assertEquals("minecraft:" + family, vanillaPolished.getAsJsonArray("ingredients")
+                    .get(0).getAsJsonObject().get("item").getAsString());
+            assertEquals("minecraft:sand", vanillaPolished.getAsJsonArray("ingredients")
+                    .get(1).getAsJsonObject().get("item").getAsString());
+            assertEquals("minecraft:polished_" + family, vanillaPolished
+                    .getAsJsonObject("result").get("item").getAsString());
+            assertEquals(1, vanillaPolished.getAsJsonObject("result").get("count").getAsInt());
+
+            JsonObject nativeAdvancement = json(new File(ROOT,
+                    "data/minecraft/advancements/recipes/building_blocks/polished_"
+                            + family + ".json"));
+            assertEquals("minecraft:" + family, nativeAdvancement.getAsJsonObject("criteria")
+                    .getAsJsonObject("has_rock").getAsJsonObject("conditions")
+                    .getAsJsonArray("items").get(0).getAsJsonObject().get("item").getAsString());
+            assertEquals("minecraft:sand", nativeAdvancement.getAsJsonObject("criteria")
+                    .getAsJsonObject("has_sand").getAsJsonObject("conditions")
+                    .getAsJsonArray("items").get(0).getAsJsonObject().get("item").getAsString());
+            assertEquals(2, nativeAdvancement.getAsJsonArray("requirements").size());
+        }
+
+        assertAdvancementIngredient("basalt_slab", "tag", "mineralogy:stones/basalt");
+        assertAdvancementIngredient("andesite_slab", "item", "mineralogy:andesite");
+        assertAdvancementIngredient("andesite_furnace", "tag", "mineralogy:slabs/andesite");
+
+        String allResources = new String(Files.readAllBytes(
+                new File(tags, "slabs/basalt.json").toPath()), StandardCharsets.UTF_8)
+                + new String(Files.readAllBytes(
+                        new File(tags, "slabs/basalt/smooth.json").toPath()), StandardCharsets.UTF_8);
+        assertFalse(allResources.contains("minecraft:basalt_slab"));
+        assertFalse(allResources.contains("minecraft:polished_basalt_slab"));
     }
 
     @Test
@@ -132,8 +213,8 @@ public class ResourceContractTest {
         assertGunpowderRecipe(recipes, "gunpowder_from_charcoal", null);
         assertGunpowderRecipe(recipes, "gunpowder_from_carbon_dust", "forge:dusts/carbon");
         assertGunpowderRecipe(recipes, "gunpowder_from_coal_dust", "forge:dusts/coal");
-        assertEquals("mineralogy:basalt", json(new File(recipes, "basalt_slab.json"))
-                .getAsJsonObject("key").getAsJsonObject("x").get("item").getAsString());
+        assertEquals("mineralogy:stones/basalt", json(new File(recipes, "basalt_slab.json"))
+                .getAsJsonObject("key").getAsJsonObject("x").get("tag").getAsString());
         assertEquals("mineralogy:basalt", json(new File(recipes, "basalt_raw_slab_recombination.json"))
                 .getAsJsonObject("result").get("item").getAsString());
         assertEquals("forge:sand", json(new File(recipes, "basalt_brick_block_polishing.json"))
@@ -221,8 +302,12 @@ public class ResourceContractTest {
         File minecraftRecipes = new File(ROOT, "data/minecraft/recipes");
         File[] overrides = minecraftRecipes.listFiles((dir, name) -> name.endsWith(".json"));
         assertNotNull(overrides);
-        assertEquals(1, overrides.length);
-        assertEquals("furnace.json", overrides[0].getName());
+        assertEquals(5, overrides.length);
+        Set<String> overrideNames = new HashSet<String>();
+        for (File override : overrides) overrideNames.add(override.getName());
+        assertEquals(new HashSet<String>(Arrays.asList("furnace.json",
+                "polished_andesite.json", "polished_basalt.json",
+                "polished_diorite.json", "polished_granite.json")), overrideNames);
         File[] stonecutting = new File(ROOT, "data/mineralogy/recipes")
                 .listFiles((dir, name) -> name.contains("stonecutting"));
         assertNotNull(stonecutting);
@@ -266,6 +351,48 @@ public class ResourceContractTest {
         return advancement.getAsJsonObject("criteria").getAsJsonObject(criterion)
                 .getAsJsonObject("conditions").getAsJsonArray("items").get(0)
                 .getAsJsonObject().get("item").getAsString();
+    }
+
+    private static String expectedSlabTag(String furnaceRecipe) {
+        String stem = furnaceRecipe.replaceFirst("_furnace$", "");
+        for (String finish : Arrays.asList("smooth_brick", "smooth", "brick")) {
+            String suffix = "_" + finish;
+            if (stem.endsWith(suffix)) {
+                return "mineralogy:slabs/" + stem.substring(0, stem.length() - suffix.length())
+                        + "/" + finish;
+            }
+        }
+        return "mineralogy:slabs/" + stem;
+    }
+
+    private static void assertTagValues(File file, String... expected) throws Exception {
+        JsonArray values = json(file).getAsJsonArray("values");
+        assertEquals(file.getPath(), expected.length, values.size());
+        for (int index = 0; index < expected.length; index++) {
+            assertEquals(file.getPath(), expected[index], values.get(index).getAsString());
+        }
+    }
+
+    private static void assertRecipeIngredient(String recipeName, String key, String value)
+            throws Exception {
+        JsonObject recipe = json(new File(ROOT,
+                "data/mineralogy/recipes/" + recipeName + ".json"));
+        JsonObject ingredient = recipe.has("key")
+                ? recipe.getAsJsonObject("key").getAsJsonObject("x")
+                : recipe.getAsJsonArray("ingredients").get(0).getAsJsonObject();
+        assertEquals(recipeName, value, ingredient.get(key).getAsString());
+        assertEquals(recipeName, 1, ingredient.size());
+    }
+
+    private static void assertAdvancementIngredient(String recipeName, String key, String value)
+            throws Exception {
+        JsonObject advancement = json(new File(ROOT,
+                "data/mineralogy/advancements/recipes/" + recipeName + ".json"));
+        JsonObject ingredient = advancement.getAsJsonObject("criteria")
+                .getAsJsonObject("has_rock").getAsJsonObject("conditions")
+                .getAsJsonArray("items").get(0).getAsJsonObject();
+        assertEquals(recipeName, value, ingredient.get(key).getAsString());
+        assertEquals(recipeName, 1, ingredient.size());
     }
 
     private static JsonObject json(File file) throws Exception {

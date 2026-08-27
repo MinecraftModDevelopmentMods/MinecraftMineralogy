@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:siltstone_brick"
+            "tag": "mineralogy:stones/siltstone/brick"
           }
         ]
       }

@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "mineralogy:andesite"
+    "mineralogy:andesite",
+    "minecraft:andesite"
   ]
 }

@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:siltstone_smooth_brick_slab"
+            "tag": "mineralogy:slabs/siltstone/smooth_brick"
           }
         ]
       }

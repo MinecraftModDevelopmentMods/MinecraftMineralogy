@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:amphibolite_smooth_brick"
+            "tag": "mineralogy:stones/amphibolite/smooth_brick"
           }
         ]
       }

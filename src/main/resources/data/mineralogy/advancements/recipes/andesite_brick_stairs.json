@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:andesite_brick"
+            "tag": "mineralogy:stones/andesite/brick"
           }
         ]
       }

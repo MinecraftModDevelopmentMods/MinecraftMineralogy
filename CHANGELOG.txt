@@ -37,6 +37,13 @@ Mineralogy 6.0.1.116051 for Minecraft 1.16.5
   conversions, progressive sand polishing, matching-slab rock furnaces, and
   blank-to-marked relief progression. Each rock-furnace recipe is revealed as
   soon as its matching slab is acquired, before a vanilla furnace is crafted.
+- Reconciled Minecraft's native andesite, basalt, diorite, and granite with
+  their retained Mineralogy world-compatibility blocks. Native blocks now
+  unlock and feed every non-conflicting matching Mineralogy recipe. The four
+  vanilla 2x2 polished-block recipes are replaced by block-plus-sand routes so
+  the 2x2 recipes remain available for Mineralogy bricks; matching vanilla
+  slabs/stairs/walls keep their native recipes, and recipe advancements use the
+  same exact item or family tag as the recipe they reveal.
 - Extended Minecraft 1.16's native stone crafting and tool-material tags so
   every enabled Forge cobblestone equivalent, including all 27 Mineralogy rock
   families, works in vanilla tools. The vanilla furnace recipe is also

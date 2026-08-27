@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:amphibolite_brick_slab"
+            "tag": "mineralogy:slabs/amphibolite/brick"
           }
         ]
       }

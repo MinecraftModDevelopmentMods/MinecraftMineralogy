@@ -8,7 +8,7 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "mineralogy:stones/basalt"
+      "item": "mineralogy:basalt"
     },
     {
       "item": "minecraft:sand"

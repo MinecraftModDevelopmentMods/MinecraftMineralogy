@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:dolomite_smooth_brick"
+            "tag": "mineralogy:stones/dolomite/smooth_brick"
           }
         ]
       }

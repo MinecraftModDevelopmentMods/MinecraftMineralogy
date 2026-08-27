@@ -47,13 +47,27 @@ mods' members, updates the exact tag instances retained by parsed recipes,
 then invalidates recipe ingredient caches. The nested Minecraft crafting and
 tool tags are updated alongside the direct Forge tag.
 
-The vanilla furnace recipe is the one required exception: it is packaged at
+The vanilla furnace recipe is one required exception: it is packaged at
 `data/minecraft/recipes/furnace.json` with a direct `forge:cobblestone`
 ingredient. Forge 36's already-resolved nested crafting-material tag does not
 observe a replacement tag collection, so Mineralogy mutates retained tag
-instances rather than swapping the collection. Do not broaden vanilla slab,
-stair, or wall recipes; Mineralogy owns exact material variants for those
-outputs.
+instances rather than swapping the collection.
+
+Minecraft 1.16 also owns andesite, basalt, diorite, granite, and their polished
+full blocks. Mineralogy's family tags include both native and retained legacy
+identities. Four `data/minecraft/recipes/polished_*.json` overrides move the
+native polished-block route from 2x2 crafting to one exact native block plus
+sand. That leaves 2x2 matching raw blocks available for Mineralogy bricks.
+The matching vanilla advancements are overridden too, so native polishing is
+revealed only after the player has both the exact native rock and sand.
+
+Do not broaden vanilla slab, stair, or wall recipes. Where Minecraft already
+owns a matching form (raw and polished andesite/diorite/granite slabs and
+stairs, plus their raw walls), the Mineralogy-output recipe keeps an exact
+legacy Mineralogy input. Basalt has no native construction forms in 1.16.5, so
+its raw and polished family tags safely feed Mineralogy slabs, stairs, and
+walls. Polished andesite/diorite/granite have no native walls, so those three
+Mineralogy wall recipes may also accept the matching family tag.
 
 Use broad `stone` or `cobblestone` inputs only when any matching material is
 valid. Recipes returning a Mineralogy construction form must use the exact
@@ -63,22 +77,25 @@ material and finish so basalt cannot produce a different rock's slab or wall.
 
 All Mineralogy recipes are native Minecraft/Forge 1.16.5 JSON under
 `data/mineralogy/recipes/`. Run `scripts/generate-recipes.ps1` after changing
-the recipe matrix; it generates the 27 stone families and global recipes, then
-retains the target-native smelting data, and ensures every recipe has a matching
-unlock advancement with the same Forge
-conditions. Unlocks use direct inventory ingredients instead of listening to
-other recipe unlocks, which would recursively reveal an entire construction
-tree. Polishing uses Minecraft 1.16.5's advancement requirements matrix to
-require the matching source plus accepted sand; manually crafting a recipe is
-the target-native fallback for Forge's delayed crafting-output inventory
-trigger. Rock-furnace advancements use the exact matching slab as their sole
-material criterion. They deliberately do not require an already-owned vanilla
-furnace, so the upgrade route is visible before that intermediate is crafted.
+the recipe matrix; it generates the 27 stone families and global recipes, the
+four target-native polished-block recipe/advancement overrides, then retains
+the target-native smelting data. Every Mineralogy recipe has a matching unlock
+advancement with the same Forge conditions and the same exact-item or
+family-tag material predicate as the recipe. Unlocks use direct inventory
+ingredients instead of listening to other recipe unlocks, which would
+recursively reveal an entire construction tree. Polishing uses Minecraft
+1.16.5's advancement requirements matrix to require the matching source plus
+accepted sand; manually crafting a recipe is the target-native fallback for
+Forge's delayed crafting-output inventory trigger. Rock-furnace advancements
+use the matching slab-family tag as their sole material criterion. They
+deliberately do not require an already-owned vanilla furnace, so the upgrade
+route is visible before that intermediate is crafted.
 
-Reliefs preserve the historical two-stage contract. Nine exact matching
-polished blocks produce 16 blank reliefs; the blank relief is then the input to
-the marked relief recipes. Two matching left reliefs shapelessly produce two
-right reliefs. Do not substitute unrelated tags for these exact items.
+Reliefs preserve the historical two-stage contract. Nine matching polished
+blocks produce 16 blank reliefs; a target-native synonym may satisfy the exact
+rock-family tag. The blank relief is then the exact input to the marked relief
+recipes. Two matching left reliefs shapelessly produce two right reliefs. Do
+not substitute unrelated materials or broad stone tags for these inputs.
 Do not reintroduce a parallel Java crafting registry.
 
 ## Backward Compatibility

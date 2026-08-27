@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:peridotite_brick"
+            "tag": "mineralogy:stones/peridotite/brick"
           }
         ]
       }

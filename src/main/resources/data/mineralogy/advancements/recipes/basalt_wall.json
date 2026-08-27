@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:basalt"
+            "tag": "mineralogy:stones/basalt"
           }
         ]
       }

@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:slate_smooth_brick"
+            "tag": "mineralogy:stones/slate/smooth_brick"
           }
         ]
       }

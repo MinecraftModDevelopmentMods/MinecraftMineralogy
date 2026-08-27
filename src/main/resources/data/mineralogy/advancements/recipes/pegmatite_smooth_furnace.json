@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:pegmatite_smooth_slab"
+            "tag": "mineralogy:slabs/pegmatite/smooth"
           }
         ]
       }

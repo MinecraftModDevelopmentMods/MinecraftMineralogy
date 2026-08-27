@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:hornfels_smooth_brick_slab"
+            "tag": "mineralogy:slabs/hornfels/smooth_brick"
           }
         ]
       }

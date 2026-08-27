@@ -22,9 +22,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "mineralogy:dolomite"
-            ]
+            "tag": "mineralogy:stones/dolomite"
           }
         ]
       }

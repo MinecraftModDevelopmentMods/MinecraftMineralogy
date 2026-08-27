@@ -22,9 +22,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "mineralogy:limestone"
-            ]
+            "tag": "mineralogy:stones/limestone"
           }
         ]
       }

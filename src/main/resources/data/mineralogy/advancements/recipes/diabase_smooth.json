@@ -22,9 +22,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "mineralogy:diabase"
-            ]
+            "tag": "mineralogy:stones/diabase"
           }
         ]
       }

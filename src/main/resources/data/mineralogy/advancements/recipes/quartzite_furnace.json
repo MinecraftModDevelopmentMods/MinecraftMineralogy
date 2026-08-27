@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:quartzite_slab"
+            "tag": "mineralogy:slabs/quartzite"
           }
         ]
       }

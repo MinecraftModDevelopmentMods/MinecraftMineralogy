@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:gabbro_brick"
+            "tag": "mineralogy:stones/gabbro/brick"
           }
         ]
       }

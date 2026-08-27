@@ -22,9 +22,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "mineralogy:basaltic_glass"
-            ]
+            "tag": "mineralogy:stones/basaltic_glass"
           }
         ]
       }

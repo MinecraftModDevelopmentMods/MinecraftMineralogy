@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "mineralogy:basalt"
+    "mineralogy:basalt",
+    "minecraft:basalt"
   ]
 }

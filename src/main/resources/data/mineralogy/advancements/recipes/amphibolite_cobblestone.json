@@ -17,7 +17,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:amphibolite"
+            "tag": "mineralogy:stones/amphibolite"
           }
         ]
       }

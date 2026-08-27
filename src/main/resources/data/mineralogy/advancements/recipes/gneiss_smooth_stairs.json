@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:gneiss_smooth"
+            "tag": "mineralogy:stones/gneiss/smooth"
           }
         ]
       }

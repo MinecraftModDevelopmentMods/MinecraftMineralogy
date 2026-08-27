@@ -22,9 +22,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "mineralogy:hornfels"
-            ]
+            "tag": "mineralogy:stones/hornfels"
           }
         ]
       }

@@ -22,9 +22,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "mineralogy:gabbro"
-            ]
+            "tag": "mineralogy:stones/gabbro"
           }
         ]
       }

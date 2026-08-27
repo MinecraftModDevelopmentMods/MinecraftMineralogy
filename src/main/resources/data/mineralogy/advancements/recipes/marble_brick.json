@@ -22,9 +22,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "mineralogy:marble"
-            ]
+            "tag": "mineralogy:stones/marble"
           }
         ]
       }

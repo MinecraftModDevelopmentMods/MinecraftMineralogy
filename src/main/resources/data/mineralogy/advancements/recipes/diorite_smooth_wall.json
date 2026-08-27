@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:diorite_smooth"
+            "tag": "mineralogy:stones/diorite/smooth"
           }
         ]
       }

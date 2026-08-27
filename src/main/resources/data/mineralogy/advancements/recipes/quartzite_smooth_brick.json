@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:quartzite_smooth"
+            "tag": "mineralogy:stones/quartzite/smooth"
           }
         ]
       }

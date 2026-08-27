@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:phyllite_smooth_brick_slab"
+            "tag": "mineralogy:slabs/phyllite/smooth_brick"
           }
         ]
       }

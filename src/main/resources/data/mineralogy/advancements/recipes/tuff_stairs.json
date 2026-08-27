@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "mineralogy:crafting_materials/tuff"
+            "tag": "mineralogy:stones/tuff"
           }
         ]
       }

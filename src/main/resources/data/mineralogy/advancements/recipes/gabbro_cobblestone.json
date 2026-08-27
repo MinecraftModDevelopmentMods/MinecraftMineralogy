@@ -17,7 +17,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:gabbro"
+            "tag": "mineralogy:stones/gabbro"
           }
         ]
       }

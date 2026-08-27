@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:rhyolite_brick"
+            "tag": "mineralogy:stones/rhyolite/brick"
           }
         ]
       }

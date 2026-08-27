@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:marble_smooth"
+            "tag": "mineralogy:stones/marble/smooth"
           }
         ]
       }

@@ -22,9 +22,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "mineralogy:novaculite"
-            ]
+            "tag": "mineralogy:stones/novaculite"
           }
         ]
       }

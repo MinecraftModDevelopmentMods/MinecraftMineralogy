@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:conglomerate_smooth_brick"
+            "tag": "mineralogy:stones/conglomerate/smooth_brick"
           }
         ]
       }

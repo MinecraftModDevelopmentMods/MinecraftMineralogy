@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:rhyolite_smooth"
+            "tag": "mineralogy:stones/rhyolite/smooth"
           }
         ]
       }

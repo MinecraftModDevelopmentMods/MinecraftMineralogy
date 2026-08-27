@@ -22,9 +22,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "mineralogy:diorite"
-            ]
+            "tag": "mineralogy:stones/diorite"
           }
         ]
       }

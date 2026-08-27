@@ -8,7 +8,7 @@
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "tag": "mineralogy:stones/andesite"
+      "item": "mineralogy:andesite"
     },
     {
       "item": "minecraft:sand"

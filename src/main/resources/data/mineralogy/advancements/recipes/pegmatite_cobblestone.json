@@ -17,7 +17,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:pegmatite"
+            "tag": "mineralogy:stones/pegmatite"
           }
         ]
       }

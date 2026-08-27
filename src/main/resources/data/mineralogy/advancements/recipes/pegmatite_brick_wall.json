@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:pegmatite_brick"
+            "tag": "mineralogy:stones/pegmatite/brick"
           }
         ]
       }

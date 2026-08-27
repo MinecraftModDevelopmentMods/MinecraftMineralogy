@@ -22,9 +22,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "mineralogy:rock_salt"
-            ]
+            "tag": "mineralogy:stones/rock_salt"
           }
         ]
       }

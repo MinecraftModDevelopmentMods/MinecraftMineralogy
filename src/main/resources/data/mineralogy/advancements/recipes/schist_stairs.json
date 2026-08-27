@@ -22,9 +22,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "mineralogy:schist"
-            ]
+            "tag": "mineralogy:stones/schist"
           }
         ]
       }

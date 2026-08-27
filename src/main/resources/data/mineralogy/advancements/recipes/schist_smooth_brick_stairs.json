@@ -22,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:schist_smooth_brick"
+            "tag": "mineralogy:stones/schist/smooth_brick"
           }
         ]
       }

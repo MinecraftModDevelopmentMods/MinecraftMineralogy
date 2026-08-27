@@ -22,9 +22,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "mineralogy:peridotite"
-            ]
+            "tag": "mineralogy:stones/peridotite"
           }
         ]
       }

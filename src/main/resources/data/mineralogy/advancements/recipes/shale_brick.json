@@ -22,9 +22,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "mineralogy:shale"
-            ]
+            "tag": "mineralogy:stones/shale"
           }
         ]
       }

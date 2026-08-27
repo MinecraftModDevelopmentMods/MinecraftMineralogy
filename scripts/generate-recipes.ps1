@@ -535,13 +535,6 @@ function Ensure-MissingRecipeAdvancements() {
         $sandMode = Get-SandUnlockMode $recipeName
         Add-SandUnlockCriteria $criteria $sandMode
         $requirements = Get-UnlockRequirements $sandMode
-        if ($recipeName -match '_furnace$') {
-            $criteria['has_furnace'] = [ordered]@{
-                trigger = 'minecraft:inventory_changed'
-                conditions = [ordered]@{ items = @([ordered]@{ item = 'minecraft:furnace' }) }
-            }
-            $requirements += ,@('has_the_recipe', 'has_furnace')
-        }
 
         $generatedAdvancement = [ordered]@{}
         if ($null -ne $recipe.conditions) {
@@ -589,16 +582,13 @@ function Synchronize-AdvancementConditions() {
         }
         $criteria = [ordered]@{}
         foreach ($criterion in $advancement.criteria.PSObject.Properties) {
-            if ($criterion.Name -notin @('has_material_recipe', 'has_sand', 'has_red_sand')) {
+            if ($criterion.Name -notin @('has_material_recipe', 'has_sand', 'has_red_sand', 'has_furnace')) {
                 $criteria[$criterion.Name] = $criterion.Value
             }
         }
         $sandMode = Get-SandUnlockMode $recipeName
         Add-SandUnlockCriteria $criteria $sandMode
         $requirements = Get-UnlockRequirements $sandMode
-        if ($recipeName -match '_furnace$') {
-            $requirements += ,@('has_the_recipe', 'has_furnace')
-        }
 
         $ordered = [ordered]@{}
         if ($null -ne $recipe.conditions) {

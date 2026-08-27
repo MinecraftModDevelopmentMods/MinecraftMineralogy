@@ -95,6 +95,31 @@ public class ResourceContractTest {
     }
 
     @Test
+    public void rockFurnacesUnlockFromTheirMatchingSlabs() throws Exception {
+        File advancementDir = new File(ROOT, "data/mineralogy/advancements/recipes");
+        File[] furnaces = advancementDir.listFiles((dir, name) -> name.endsWith("_furnace.json"));
+        assertNotNull(furnaces);
+        assertEquals(108, furnaces.length);
+
+        for (File file : furnaces) {
+            JsonObject advancement = json(file);
+            JsonObject criteria = advancement.getAsJsonObject("criteria");
+            assertTrue(file.getName(), criteria.has("has_rock"));
+            assertFalse(file.getName(), criteria.has("has_furnace"));
+            String expectedSlab = "mineralogy:"
+                    + stripJson(file.getName()).replaceFirst("_furnace$", "_slab");
+            assertEquals(file.getName(), expectedSlab, criterionItem(advancement, "has_rock"));
+
+            JsonArray requirements = advancement.getAsJsonArray("requirements");
+            assertEquals(file.getName(), 1, requirements.size());
+            JsonArray unlockAlternatives = requirements.get(0).getAsJsonArray();
+            assertEquals(file.getName(), 2, unlockAlternatives.size());
+            assertEquals(file.getName(), "has_the_recipe", unlockAlternatives.get(0).getAsString());
+            assertEquals(file.getName(), "has_rock", unlockAlternatives.get(1).getAsString());
+        }
+    }
+
+    @Test
     public void acceptedRecipeDetailsArePresent() throws Exception {
         File recipes = new File(ROOT, "data/mineralogy/recipes");
         assertEquals(4, json(new File(recipes, "gypsum_dust.json"))

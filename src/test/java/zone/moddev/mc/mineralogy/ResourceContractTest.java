@@ -58,8 +58,8 @@ public class ResourceContractTest {
         File[] advancements = advancementDir.listFiles((dir, name) -> name.endsWith(".json"));
         assertNotNull(recipes);
         assertNotNull(advancements);
-        assertEquals(1415, recipes.length);
-        assertEquals(1415, advancements.length);
+        assertEquals(1427, recipes.length);
+        assertEquals(1427, advancements.length);
 
         Set<String> advancementNames = new HashSet<String>();
         for (File file : advancements) advancementNames.add(file.getName());
@@ -356,6 +356,16 @@ public class ResourceContractTest {
                     + family + "_stonecutting", "minecraft:polished_" + family,
                     "mineralogy:" + family + "_smooth_slab",
                     "minecraft:polished_" + family + "_slab");
+            assertNativeSlabConversion(family + "_slab_to_vanilla",
+                    "mineralogy:" + family + "_slab", "minecraft:" + family + "_slab");
+            assertNativeSlabConversion(family + "_slab_from_vanilla",
+                    "minecraft:" + family + "_slab", "mineralogy:" + family + "_slab");
+            assertNativeSlabConversion(family + "_smooth_slab_to_vanilla",
+                    "mineralogy:" + family + "_smooth_slab",
+                    "minecraft:polished_" + family + "_slab");
+            assertNativeSlabConversion(family + "_smooth_slab_from_vanilla",
+                    "minecraft:polished_" + family + "_slab",
+                    "mineralogy:" + family + "_smooth_slab");
         }
 
         assertCompositeRockTag("cobblestone_equivalents", "#forge:cobblestone");
@@ -517,6 +527,27 @@ public class ResourceContractTest {
         assertEquals(recipeName, mineralogyResult, enabled.get("result").getAsString());
         assertEquals(recipeName, vanillaResult, fallback.get("result").getAsString());
         assertEquals(recipeName, 2, enabled.get("count").getAsInt());
+    }
+
+    private static void assertNativeSlabConversion(String recipeName, String source,
+            String result) throws Exception {
+        JsonObject recipe = json(new File(ROOT,
+                "data/mineralogy/recipes/" + recipeName + ".json"));
+        assertEquals(recipeName, "minecraft:crafting_shapeless", recipe.get("type").getAsString());
+        assertEquals(recipeName, 1, recipe.getAsJsonArray("ingredients").size());
+        assertEquals(recipeName, source, recipe.getAsJsonArray("ingredients").get(0)
+                .getAsJsonObject().get("item").getAsString());
+        assertEquals(recipeName, result, recipe.getAsJsonObject("result").get("item").getAsString());
+        assertEquals(recipeName, 1, recipe.getAsJsonObject("result").get("count").getAsInt());
+        assertEquals(recipeName, 2, recipe.getAsJsonArray("conditions").size());
+
+        JsonObject advancement = json(new File(ROOT,
+                "data/mineralogy/advancements/recipes/" + recipeName + ".json"));
+        assertEquals(recipeName, recipe.get("conditions"), advancement.get("conditions"));
+        assertEquals(recipeName, source, criterionItem(advancement, "has_rock"));
+        assertEquals(recipeName, "mineralogy:" + recipeName,
+                advancement.getAsJsonObject("rewards").getAsJsonArray("recipes")
+                        .get(0).getAsString());
     }
 
     private static void assertCompositeRockTag(String name, String baseTag) throws Exception {

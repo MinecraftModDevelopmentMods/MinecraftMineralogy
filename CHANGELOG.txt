@@ -32,7 +32,7 @@ Mineralogy 6.0.1.116051 for Minecraft 1.16.5
 - Preserved rock-furnace save recovery and novaculite's 3/15/1 properties;
   corrected replacement drop semantics and exact full-block Silk Touch results
   for double slabs.
-- Ported the accepted recipe contract as 1,415 native JSON recipes and matching
+- Ported the accepted recipe contract as 1,427 native JSON recipes and matching
   advancements: safe 4-to-1 mineral packing, charcoal and Base Metals dust
   gunpowder routes, exact slabs, slab recombination, construction-form brick
   conversions, progressive sand polishing, matching-slab rock furnaces, and
@@ -45,8 +45,11 @@ Mineralogy 6.0.1.116051 for Minecraft 1.16.5
   the 2x2 recipes remain available for Mineralogy bricks. The six shared
   andesite, diorite and granite slab recipes plus all nine matching stonecutter
   routes now produce Mineralogy's more capable slabs, while the vanilla slabs
-  remain registered and tag-compatible. Recipe advancements use the same exact
-  item or family tag as the recipe they reveal.
+  remain registered and tag-compatible. Twelve exact shapeless compatibility
+  recipes convert each raw or polished Mineralogy slab to its matching vanilla
+  slab and back at a lossless 1:1 ratio for modpacks that require an exact
+  vanilla item. Recipe advancements use the same exact item or family tag as
+  the recipe they reveal.
 - Extended Minecraft 1.16's native stone crafting and tool-material tags so
   every enabled cobblestone equivalent, including all 27 legacy rock families
   and target-native aliases, works in the complete vanilla contract. Fifteen

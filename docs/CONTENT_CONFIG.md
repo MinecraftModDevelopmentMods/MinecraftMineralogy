@@ -67,10 +67,16 @@ GROUP_TABS_BY_TYPE = true
 With `COBBLESTONE_EQUIVILENT=true`, all 27 raw Mineralogy rock families,
 including rock salt, participate in Forge `cobblestone` tag recipes such
 as levers, pistons, dispensers, droppers, and brewing stands. Setting it to
-`false` removes only that broad identity. Rocks remain `stone`, retain their
-material-specific tags, make stone tools and furnaces, and use exact
+`false` removes ordinary rocks from the fifteen covered cobblestone, stone-tool,
+and stone-crafting recipes while restoring their target-native ingredients.
+Rocks remain `stone`, retain their material-specific tags, and use exact
 Mineralogy slab, stair, and wall recipes. Chert and pumice remain historical
-unconditional cobblestone equivalents.
+unconditional cobblestone equivalents and therefore keep those recipe roles.
+
+The configurable cobblestone identity does not affect the exact 1:1 conversion
+between Mineralogy and vanilla andesite, diorite, granite, and matching polished
+slabs. These reversible recipes preserve modpack compatibility with recipes that
+require either registry identity.
 
 ## Disabling Mineralogy ores
 

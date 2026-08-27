@@ -1035,6 +1035,26 @@ function Write-NativeSlabOverrides() {
     }
 }
 
+function Write-NativeSlabConversions() {
+    foreach ($family in @('andesite', 'diorite', 'granite')) {
+        foreach ($finish in @(
+                @{ name = 'raw'; mineralogy = "mineralogy:${family}_slab"; vanilla = "minecraft:${family}_slab" },
+                @{ name = 'smooth'; mineralogy = "mineralogy:${family}_smooth_slab"; vanilla = "minecraft:polished_${family}_slab" }
+            )) {
+            $prefix = if ($finish.name -eq 'raw') { "${family}_slab" } else { "${family}_smooth_slab" }
+            $conditions = @((ItemCondition $finish.mineralogy), (ItemCondition $finish.vanilla))
+
+            Write-ShapelessRecipe "${prefix}_to_vanilla" 'minecraft:crafting_shapeless' `
+                @((ItemIngredient $finish.mineralogy)) $finish.vanilla 1 $conditions
+            Register-UnlockSource "${prefix}_to_vanilla" $finish.mineralogy
+
+            Write-ShapelessRecipe "${prefix}_from_vanilla" 'minecraft:crafting_shapeless' `
+                @((ItemIngredient $finish.vanilla)) $finish.mineralogy 1 $conditions
+            Register-UnlockSource "${prefix}_from_vanilla" $finish.vanilla
+        }
+    }
+}
+
 function Write-NativePolishedOverrides() {
     New-Item -ItemType Directory -Force -Path $minecraftRecipeRoot | Out-Null
     $minecraftBuildingAdvancementRoot = Join-Path $minecraftAdvancementRoot 'building_blocks'
@@ -1086,9 +1106,10 @@ foreach ($family in $families) {
     Write-ReliefRecipes $family
     Write-ConstructionRecipes $family
 }
+Write-NativeSlabConversions
 Write-GlobalRecipes
 
-$expectedRecipeCount = ($families.Count * 50) + 37
+$expectedRecipeCount = ($families.Count * 50) + 49
 if ($generatedNames.Count -ne $expectedRecipeCount) {
     throw "Expected $expectedRecipeCount generated recipes, produced $($generatedNames.Count)"
 }

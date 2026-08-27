@@ -480,8 +480,29 @@ tasks.register('verifyReleaseArtifacts') {
                     !it.substring(recipePrefix.length()).contains('/') }
             def advancements = names.findAll { it.startsWith(advancementPrefix) && it.endsWith('.json') &&
                     !it.substring(advancementPrefix.length()).contains('/') }
-            if (recipes.size() != 1415 || advancements.size() != 1415) {
-                throw new GradleException("Release jar must contain 1415 recipes and advancements, found ${recipes.size()} and ${advancements.size()}")
+            if (recipes.size() != 1427 || advancements.size() != 1427) {
+                throw new GradleException("Release jar must contain 1427 recipes and advancements, found ${recipes.size()} and ${advancements.size()}")
+            }
+            def slabBridges = ['andesite', 'diorite', 'granite'].collectMany { family ->
+                [
+                        [name: "${family}_slab_to_vanilla", source: "mineralogy:${family}_slab", result: "minecraft:${family}_slab"],
+                        [name: "${family}_slab_from_vanilla", source: "minecraft:${family}_slab", result: "mineralogy:${family}_slab"],
+                        [name: "${family}_smooth_slab_to_vanilla", source: "mineralogy:${family}_smooth_slab", result: "minecraft:polished_${family}_slab"],
+                        [name: "${family}_smooth_slab_from_vanilla", source: "minecraft:polished_${family}_slab", result: "mineralogy:${family}_smooth_slab"]
+                ]
+            }
+            slabBridges.each { bridge ->
+                def recipe = new JsonSlurper().parse(zip.getInputStream(zip.getEntry(
+                        "data/mineralogy/recipes/${bridge.name}.json")))
+                def advancement = new JsonSlurper().parse(zip.getInputStream(zip.getEntry(
+                        "data/mineralogy/advancements/recipes/${bridge.name}.json")))
+                if (recipe.type != 'minecraft:crafting_shapeless' || recipe.ingredients?.size() != 1 ||
+                        recipe.ingredients[0].item != bridge.source || recipe.result?.item != bridge.result ||
+                        recipe.result?.count != 1 || recipe.conditions?.size() != 2 ||
+                        advancement.conditions != recipe.conditions ||
+                        advancement.criteria?.has_rock?.conditions?.items?.getAt(0)?.item != bridge.source) {
+                    throw new GradleException("Invalid native/Mineralogy slab conversion: ${bridge.name}")
+                }
             }
             def minecraftRecipes = names.findAll { it.startsWith('data/minecraft/recipes/') && it.endsWith('.json') }
             def cobblestoneOverrides = ['furnace', 'brewing_stand', 'lever', 'piston',

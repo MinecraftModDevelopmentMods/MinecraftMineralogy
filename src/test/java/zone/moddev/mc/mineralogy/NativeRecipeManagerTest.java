@@ -43,6 +43,8 @@ import org.junit.Test;
 /** Exercises generated overrides through Forge conditions and Minecraft's recipe deserializers. */
 public class NativeRecipeManagerTest {
     private static final File RECIPE_ROOT = new File("src/main/resources/data/minecraft/recipes");
+    private static final File MINERALOGY_RECIPE_ROOT = new File(
+            "src/main/resources/data/mineralogy/recipes");
     private static final Container DUMMY_CONTAINER = new Container(null, -1) {
         @Override
         public boolean canInteractWith(PlayerEntity playerIn) {
@@ -96,6 +98,38 @@ public class NativeRecipeManagerTest {
         }
     }
 
+    @Test
+    public void nativeAndMineralogySlabsConvertExactlyOneForOneInBothDirections()
+            throws Exception {
+        Object[][] bridges = {
+                { "andesite_slab", Blocks.ANDESITE_SLAB.asItem() },
+                { "andesite_smooth_slab", Blocks.POLISHED_ANDESITE_SLAB.asItem() },
+                { "diorite_slab", Blocks.DIORITE_SLAB.asItem() },
+                { "diorite_smooth_slab", Blocks.POLISHED_DIORITE_SLAB.asItem() },
+                { "granite_slab", Blocks.GRANITE_SLAB.asItem() },
+                { "granite_smooth_slab", Blocks.POLISHED_GRANITE_SLAB.asItem() }
+        };
+        for (Object[] bridge : bridges) {
+            assertSlabConversion((String) bridge[0], (Item) bridge[1]);
+        }
+    }
+
+    private static void assertSlabConversion(String prefix, Item vanilla)
+            throws Exception {
+        Item standIn = Blocks.COBBLESTONE.asItem();
+        ICraftingRecipe toVanilla = mineralogyRecipe(prefix + "_to_vanilla", standIn);
+        assertTrue(prefix, toVanilla.matches(shapeless(new ItemStack(standIn)), null));
+        assertFalse(prefix, toVanilla.matches(shapeless(new ItemStack(vanilla)), null));
+        assertEquals(prefix, vanilla, toVanilla.getRecipeOutput().getItem());
+        assertEquals(prefix, 1, toVanilla.getRecipeOutput().getCount());
+
+        ICraftingRecipe fromVanilla = mineralogyRecipe(prefix + "_from_vanilla", standIn);
+        assertTrue(prefix, fromVanilla.matches(shapeless(new ItemStack(vanilla)), null));
+        assertFalse(prefix, fromVanilla.matches(shapeless(new ItemStack(standIn)), null));
+        assertEquals(prefix, standIn, fromVanilla.getRecipeOutput().getItem());
+        assertEquals(prefix, 1, fromVanilla.getRecipeOutput().getCount());
+    }
+
     private static void installRecipeTags() {
         Map<ResourceLocation, ITag<Item>> tags = new LinkedHashMap<ResourceLocation, ITag<Item>>();
         tags.put(id("forge:cobblestone"), tag(Blocks.COBBLESTONE.asItem()));
@@ -142,6 +176,24 @@ public class NativeRecipeManagerTest {
         }
         assertTrue(name + " has no selected conditional branch", selected != null);
         IRecipe<?> deserialized = RecipeManager.deserializeRecipe(new ResourceLocation("minecraft", name), selected);
+        assertTrue(name, deserialized instanceof ICraftingRecipe);
+        return (ICraftingRecipe) deserialized;
+    }
+
+    private static ICraftingRecipe mineralogyRecipe(String name, Item mineralogyStandIn)
+            throws Exception {
+        JsonObject data = json(new File(MINERALOGY_RECIPE_ROOT, name + ".json"));
+        String standInId = mineralogyStandIn.getRegistryName().toString();
+        JsonObject ingredient = data.getAsJsonArray("ingredients").get(0).getAsJsonObject();
+        if (ingredient.get("item").getAsString().startsWith("mineralogy:")) {
+            ingredient.addProperty("item", standInId);
+        }
+        JsonObject result = data.getAsJsonObject("result");
+        if (result.get("item").getAsString().startsWith("mineralogy:")) {
+            result.addProperty("item", standInId);
+        }
+        IRecipe<?> deserialized = RecipeManager.deserializeRecipe(
+                new ResourceLocation("mineralogy", name), data);
         assertTrue(name, deserialized instanceof ICraftingRecipe);
         return (ICraftingRecipe) deserialized;
     }

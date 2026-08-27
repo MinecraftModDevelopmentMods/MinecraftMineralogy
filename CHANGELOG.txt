@@ -20,9 +20,9 @@ Mineralogy 6.0.1.116051 for Minecraft 1.16.5
 - Preserved vertically mounted legacy rock-salt lamps on torch-supporting
   blocks such as fences during pre-flattening world conversion.
 - Made the historical `COBBLESTONE_EQUIVILENT` option functional through
-  target-native block and item tags, reapplied after data reloads and reflected
-  in already-parsed recipe ingredients. Chert and pumice remain unconditional
-  cobblestone equivalents.
+  target-native block and item tags, reapplied after data reloads by updating
+  the exact immutable tag objects retained by already-parsed Forge 36 recipe
+  ingredients. Chert and pumice remain unconditional cobblestone equivalents.
 - Added isolated Mineralogy crude-oil source and flowing fluids, block, bucket,
   rendering resources, and the covered Ocean deposit declaration.
 - Uses Minecraft 1.16's native basalt for new OreSpawn terrain while retaining
@@ -39,10 +39,9 @@ Mineralogy 6.0.1.116051 for Minecraft 1.16.5
 - Extended Minecraft 1.16's native stone crafting and tool-material tags so
   every enabled Forge cobblestone equivalent, including all 27 Mineralogy rock
   families, works in vanilla tools. The vanilla furnace recipe is also
-  data-overridden to consume the live `forge:cobblestone` tag because Forge 36
-  does not refresh its nested crafting-material tag after Mineralogy applies
-  the configured membership. Matching-slab rock-furnace upgrades remain
-  distinct.
+  data-overridden to consume the live `forge:cobblestone` tag; both it and the
+  nested vanilla crafting/tool tags now observe the configured membership.
+  Matching-slab rock-furnace upgrades remain distinct.
 - Prevented Forge 36 from silently reducing optional carbon- or coal-dust
   gunpowder recipes to nitrate plus sulfur when their compatibility tag is
   empty; every loaded gunpowder recipe now requires all three components.
@@ -52,8 +51,9 @@ Mineralogy 6.0.1.116051 for Minecraft 1.16.5
 - Added first-start player, developer, content, provider, and version guides,
   plus an exact provider example. Existing exported guides are never
   overwritten. Forge 36 Eclipse launches keep their required merged
-  `bin/main` mod output while synchronizing the same processed guide resources
-  used by ordinary Gradle and packaged launches.
+  `bin/main` mod output; if Eclipse removes Gradle's staged guide copies, the
+  exporter reads the authoritative source-checkout guides without weakening
+  packaged-jar validation.
 - Added independent, atomic migration of valid non-default legacy ore settings
   into a Mineralogy OreSpawn provider override, including deterministic reports
   and exclusive-to-inclusive maximum-height conversion.

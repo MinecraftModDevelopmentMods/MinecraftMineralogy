@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 import org.apache.logging.log4j.LogManager;
@@ -18,7 +19,8 @@ public final class DocumentationExporter {
     private static final GuideFile[] FILES = {
             guide("README.md"), guide("PLAYER_GUIDE.md"), guide("DEVELOPER_GUIDE.md"),
             guide("CONTENT_CONFIG.md"), guide("PROVIDER.md"), guide("VERSIONS.md"),
-            new GuideFile("examples/mineralogy-provider.json", "/data/mineralogy/orespawn/provider.json")
+            new GuideFile("examples/mineralogy-provider.json", "/data/mineralogy/orespawn/provider.json",
+                    "src/main/resources/data/mineralogy/orespawn/provider.json")
     };
 
     private DocumentationExporter() {
@@ -39,8 +41,7 @@ public final class DocumentationExporter {
         for (GuideFile file : FILES) {
             Path target = targetRoot.resolve(file.target);
             if (Files.exists(target)) continue;
-            try (InputStream source = DocumentationExporter.class.getResourceAsStream(file.resource)) {
-                if (source == null) throw new IOException("Missing bundled documentation resource " + file.resource);
+            try (InputStream source = openSource(file)) {
                 Files.createDirectories(target.getParent());
                 Path temporary = Files.createTempFile(target.getParent(), target.getFileName().toString(), ".tmp");
                 try {
@@ -55,6 +56,36 @@ public final class DocumentationExporter {
         return exported;
     }
 
+    private static InputStream openSource(GuideFile file) throws IOException {
+        return openSource(file.resource, file.developmentSource);
+    }
+
+    static InputStream openSource(String resource, String developmentSource) throws IOException {
+        InputStream bundled = DocumentationExporter.class.getResourceAsStream(resource);
+        if (bundled != null) return bundled;
+
+        // Eclipse rebuilds bin/main from source folders and removes the guide
+        // files Gradle stages there. In an actual source checkout, recover from
+        // the authoritative files without weakening packaged-jar validation.
+        Path source = findDevelopmentSource(Paths.get("").toAbsolutePath(), developmentSource);
+        if (source != null) {
+            LOGGER.debug("Using source-checkout Mineralogy guide resource {}", source);
+            return Files.newInputStream(source);
+        }
+        throw new IOException("Missing bundled documentation resource " + resource);
+    }
+
+    static Path findDevelopmentSource(Path start, String relative) {
+        Path root = start.toAbsolutePath().normalize();
+        for (int depth = 0; root != null && depth < 3; depth++, root = root.getParent()) {
+            Path candidate = root.resolve(relative).normalize();
+            if (Files.isRegularFile(root.resolve("build.gradle")) && Files.isRegularFile(candidate)) {
+                return candidate;
+            }
+        }
+        return null;
+    }
+
     private static void moveIntoPlace(Path source, Path target) throws IOException {
         try {
             Files.move(source, target, StandardCopyOption.ATOMIC_MOVE);
@@ -64,12 +95,17 @@ public final class DocumentationExporter {
     }
 
     private static GuideFile guide(String name) {
-        return new GuideFile(name, "/META-INF/mineralogy/docs/" + name);
+        return new GuideFile(name, "/META-INF/mineralogy/docs/" + name, "docs/" + name);
     }
 
     private static final class GuideFile {
         private final String target;
         private final String resource;
-        private GuideFile(String target, String resource) { this.target = target; this.resource = resource; }
+        private final String developmentSource;
+        private GuideFile(String target, String resource, String developmentSource) {
+            this.target = target;
+            this.resource = resource;
+            this.developmentSource = developmentSource;
+        }
     }
 }

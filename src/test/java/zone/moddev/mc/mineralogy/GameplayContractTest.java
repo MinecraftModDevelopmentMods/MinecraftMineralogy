@@ -88,13 +88,13 @@ public class GameplayContractTest {
         assertTrue(policy.contains("addBlock(blocks, \"pumice\")"));
         assertTrue(policy.contains("addItem(items, \"chert\")"));
         assertTrue(policy.contains("addItem(items, \"pumice\")"));
-        assertTrue(policy.contains("ITagCollectionSupplier configured"));
-        assertTrue(policy.contains("return replace(blockTags, blocks)"));
-        assertTrue(policy.contains("return replace(itemTags, items)"));
-        assertTrue(policy.contains("ITagCollection.getTagCollectionFromMap(tags)"));
-        assertTrue(policy.contains("TagRegistryManager.fetchTags(configured)"));
+        assertTrue(policy.contains("replaceElementsInPlace(required(blockTags, COBBLESTONE), blocks)"));
+        assertTrue(policy.contains("replaceElementsInPlace(required(itemTags, COBBLESTONE), items)"));
+        assertTrue(policy.contains("STONE_CRAFTING_MATERIALS"));
+        assertTrue(policy.contains("STONE_TOOL_MATERIALS"));
+        assertTrue(policy.contains("setRetainedField"));
+        assertFalse(policy.contains("TagRegistryManager.fetchTags"));
         assertTrue(policy.contains("Ingredient.invalidateAll()"));
-        assertTrue(policy.contains("return manager.getCustomTagTypes()"));
     }
 
     @Test

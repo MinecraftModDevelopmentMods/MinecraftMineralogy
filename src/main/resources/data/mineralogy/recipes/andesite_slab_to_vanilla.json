@@ -1,0 +1,22 @@
+{
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:andesite_slab"
+    },
+    {
+      "type": "forge:item_exists",
+      "item": "minecraft:andesite_slab"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mineralogy:andesite_slab"
+    }
+  ],
+  "result": {
+    "item": "minecraft:andesite_slab",
+    "count": 1
+  }
+}

@@ -47,11 +47,13 @@ mods' members, updates the exact tag instances retained by parsed recipes,
 then invalidates recipe ingredient caches. The nested Minecraft crafting and
 tool tags are updated alongside the direct Forge tag.
 
-The vanilla furnace recipe is one required exception: it is packaged at
-`data/minecraft/recipes/furnace.json` with a direct `forge:cobblestone`
-ingredient. Forge 36's already-resolved nested crafting-material tag does not
-observe a replacement tag collection, so Mineralogy mutates retained tag
-instances rather than swapping the collection.
+Fifteen vanilla recipes and their advancements use conditional JSON overrides
+for the complete exact-cobblestone, stone-crafting-material, and
+stone-tool-material contracts. Enabled branches use stable Mineralogy union
+tags; disabled branches restore the target-native ingredients. Forge 36's
+already-resolved nested tags do not observe a replacement tag collection, so
+Mineralogy also mutates retained tag instances rather than swapping the
+collection.
 
 Minecraft 1.16 also owns andesite, basalt, diorite, granite, and their polished
 full blocks. Mineralogy's family tags include both native and retained legacy
@@ -69,6 +71,13 @@ its raw and polished family tags safely feed Mineralogy slabs, stairs, and
 walls. Polished andesite/diorite/granite have no native walls, so those three
 Mineralogy wall recipes may also accept the matching family tag.
 
+The six shared raw/polished slab crafting recipes and nine corresponding
+stonecutting routes deliberately output Mineralogy's upright-capable slabs.
+Twelve exact shapeless recipes provide reversible 1:1 conversion between those
+Mineralogy slabs and their retained vanilla counterparts. This preserves exact
+item compatibility for other mods without allowing a normal crafting or
+stonecutting route to prefer the less capable slab.
+
 Use broad `stone` or `cobblestone` inputs only when any matching material is
 valid. Recipes returning a Mineralogy construction form must use the exact
 material and finish so basalt cannot produce a different rock's slab or wall.
@@ -78,8 +87,9 @@ material and finish so basalt cannot produce a different rock's slab or wall.
 All Mineralogy recipes are native Minecraft/Forge 1.16.5 JSON under
 `data/mineralogy/recipes/`. Run `scripts/generate-recipes.ps1` after changing
 the recipe matrix; it generates the 27 stone families and global recipes, the
-four target-native polished-block recipe/advancement overrides, then retains
-the target-native smelting data. Every Mineralogy recipe has a matching unlock
+native slab/stonecutting overrides and compatibility conversions, and the four
+target-native polished-block recipe/advancement overrides, then retains the
+target-native smelting data. Every Mineralogy recipe has a matching unlock
 advancement with the same Forge conditions and the same exact-item or
 family-tag material predicate as the recipe. Unlocks use direct inventory
 ingredients instead of listening to other recipe unlocks, which would

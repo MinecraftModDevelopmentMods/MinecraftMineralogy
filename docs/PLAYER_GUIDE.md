@@ -45,6 +45,13 @@ Raw Mineralogy rocks work in broad stone recipes. With
 Exact Mineralogy rocks still make their matching Mineralogy slabs, stairs, and
 walls.
 
+Minecraft also has its own andesite, diorite, granite, polished-andesite,
+polished-diorite, and polished-granite slabs. Normal crafting and stonecutting
+produce Mineralogy's upright-capable versions. If another mod requires the
+exact Minecraft slab item, place one matching Mineralogy slab by itself in a
+crafting grid to convert it 1:1; placing the vanilla slab by itself converts it
+back without loss.
+
 Because raw rocks are cobblestone equivalents, eight raw Mineralogy rocks
 around an empty crafting-grid centre make a normal Minecraft furnace. A
 Mineralogy rock furnace is an upgrade recipe: surround an existing Minecraft

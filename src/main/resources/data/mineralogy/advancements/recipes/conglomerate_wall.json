@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:conglomerate_wall"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:conglomerate_wall"

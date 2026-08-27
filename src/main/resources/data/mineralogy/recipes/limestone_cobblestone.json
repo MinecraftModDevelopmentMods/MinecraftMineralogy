@@ -1,11 +1,12 @@
 {
+  "conditions": [],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "mineralogy:limestone"
+      "tag": "mineralogy:stones/limestone"
     },
     {
-      "item": "mineralogy:limestone"
+      "tag": "mineralogy:stones/limestone"
     },
     {
       "item": "minecraft:gravel"

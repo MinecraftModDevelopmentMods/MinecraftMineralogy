@@ -1,0 +1,25 @@
+{
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:granite_brick"
+    },
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:granite_smooth_brick"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mineralogy:granite_brick"
+    },
+    {
+      "tag": "forge:sand"
+    }
+  ],
+  "result": {
+    "item": "mineralogy:granite_smooth_brick",
+    "count": 1
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:basalt_stairs"
+    },
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:basalt_brick_stairs"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xx",
+    "xx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:basalt_stairs"
+    }
+  },
+  "result": {
+    "item": "mineralogy:basalt_brick_stairs",
+    "count": 4
+  }
+}

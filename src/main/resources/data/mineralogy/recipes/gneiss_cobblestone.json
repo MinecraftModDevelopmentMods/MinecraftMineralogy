@@ -1,11 +1,12 @@
 {
+  "conditions": [],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "mineralogy:gneiss"
+      "tag": "mineralogy:stones/gneiss"
     },
     {
-      "item": "mineralogy:gneiss"
+      "tag": "mineralogy:stones/gneiss"
     },
     {
       "item": "minecraft:gravel"

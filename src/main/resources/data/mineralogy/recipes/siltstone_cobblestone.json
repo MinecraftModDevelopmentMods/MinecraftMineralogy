@@ -1,11 +1,12 @@
 {
+  "conditions": [],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "mineralogy:siltstone"
+      "tag": "mineralogy:stones/siltstone"
     },
     {
-      "item": "mineralogy:siltstone"
+      "tag": "mineralogy:stones/siltstone"
     },
     {
       "item": "minecraft:gravel"

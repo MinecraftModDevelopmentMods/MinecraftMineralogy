@@ -1,0 +1,25 @@
+{
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:schist_slab"
+    },
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:schist"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mineralogy:schist_slab"
+    },
+    {
+      "item": "mineralogy:schist_slab"
+    }
+  ],
+  "result": {
+    "item": "mineralogy:schist",
+    "count": 1
+  }
+}

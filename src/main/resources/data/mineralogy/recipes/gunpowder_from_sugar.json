@@ -1,18 +1,24 @@
 {
-    "type":  "minecraft:crafting_shapeless",
-    "ingredients":  [
-                        {
-                            "item":  "minecraft:sugar"
-                        },
-                        {
-                            "tag":  "forge:dusts/nitrate"
-                        },
-                        {
-                            "tag":  "forge:dusts/sulfur"
-                        }
-                    ],
-    "result":  {
-                   "item":  "minecraft:gunpowder",
-                   "count":  4
-               }
+  "conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "ENABLE_MINERAL_DUSTS"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "minecraft:sugar"
+    },
+    {
+      "tag": "forge:dusts/nitrate"
+    },
+    {
+      "tag": "forge:dusts/sulfur"
+    }
+  ],
+  "result": {
+    "item": "minecraft:gunpowder",
+    "count": 4
+  }
 }

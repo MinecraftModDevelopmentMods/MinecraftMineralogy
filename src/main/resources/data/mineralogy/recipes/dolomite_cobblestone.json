@@ -1,11 +1,12 @@
 {
+  "conditions": [],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "mineralogy:dolomite"
+      "tag": "mineralogy:stones/dolomite"
     },
     {
-      "item": "mineralogy:dolomite"
+      "tag": "mineralogy:stones/dolomite"
     },
     {
       "item": "minecraft:gravel"

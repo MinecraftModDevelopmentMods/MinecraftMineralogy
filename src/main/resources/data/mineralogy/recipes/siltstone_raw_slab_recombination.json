@@ -1,0 +1,25 @@
+{
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:siltstone_slab"
+    },
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:siltstone"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mineralogy:siltstone_slab"
+    },
+    {
+      "item": "mineralogy:siltstone_slab"
+    }
+  ],
+  "result": {
+    "item": "mineralogy:siltstone",
+    "count": 1
+  }
+}

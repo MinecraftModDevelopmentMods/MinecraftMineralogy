@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:amphibolite_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:amphibolite_slab"

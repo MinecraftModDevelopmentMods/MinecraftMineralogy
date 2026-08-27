@@ -483,8 +483,10 @@ tasks.register('verifyReleaseArtifacts') {
             if (recipes.size() != 1415 || advancements.size() != 1415) {
                 throw new GradleException("Release jar must contain 1415 recipes and advancements, found ${recipes.size()} and ${advancements.size()}")
             }
-            if (names.any { it.startsWith('data/minecraft/recipes/') || it.contains('/stonecutting/') }) {
-                throw new GradleException('Release jar contains retired vanilla overrides or stonecutting recipes')
+            def minecraftRecipes = names.findAll { it.startsWith('data/minecraft/recipes/') && it.endsWith('.json') }
+            if (minecraftRecipes.size() != 1 || !minecraftRecipes.contains('data/minecraft/recipes/furnace.json') ||
+                    names.any { it.contains('/stonecutting/') }) {
+                throw new GradleException('Release jar must contain only the required vanilla furnace override and no stonecutting recipes')
             }
             def wallBlockstates = names.findAll { it ==~ /assets\/mineralogy\/blockstates\/.+_wall\.json/ }
             def tallWallModels = names.findAll { it ==~ /assets\/mineralogy\/models\/block\/.+_wall_side_tall\.json/ }

@@ -119,7 +119,9 @@ public class ResourceContractTest {
         assertEquals("minecraft:furnace", furnace.getAsJsonObject("key")
                 .getAsJsonObject("y").get("item").getAsString());
         assertFalse(new File(recipes, "basalt_furnace_from_rock.json").exists());
-        assertFalse(new File(ROOT, "data/minecraft/recipes/furnace.json").exists());
+        JsonObject vanillaFurnace = json(new File(ROOT, "data/minecraft/recipes/furnace.json"));
+        assertEquals("forge:cobblestone", vanillaFurnace.getAsJsonObject("key")
+                .getAsJsonObject("#").get("tag").getAsString());
         assertFalse(new File(ROOT, "data/minecraft/recipes/stone_pickaxe.json").exists());
         assertEquals("#forge:cobblestone", json(new File(ROOT,
                 "data/minecraft/tags/items/stone_crafting_materials.json"))
@@ -193,7 +195,9 @@ public class ResourceContractTest {
         assertTrue(new File(ROOT, "data/minecraft/tags/items/walls.json").isFile());
         File minecraftRecipes = new File(ROOT, "data/minecraft/recipes");
         File[] overrides = minecraftRecipes.listFiles((dir, name) -> name.endsWith(".json"));
-        assertTrue(overrides == null || overrides.length == 0);
+        assertNotNull(overrides);
+        assertEquals(1, overrides.length);
+        assertEquals("furnace.json", overrides[0].getName());
         File[] stonecutting = new File(ROOT, "data/mineralogy/recipes")
                 .listFiles((dir, name) -> name.contains("stonecutting"));
         assertNotNull(stonecutting);

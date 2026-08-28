@@ -336,7 +336,7 @@ tasks.register('verifyReleaseConfiguration') {
     group = 'verification'
     description = 'Verifies the exact Mineralogy 1.16 release identity.'
     doLast {
-        if (project.mod_version != '6.0.1.116051'
+        if (project.mod_version != '6.1.0.116051'
                 || project.mod_group != expectedMavenGroup
                 || project.minecraft_version != '1.16.5'
                 || project.forge_version != '36.2.34'
@@ -351,7 +351,7 @@ tasks.register('verifyReleaseDependencies') {
     group = 'verification'
     description = 'Resolves and verifies the exact released OreSpawn dependency.'
     doLast {
-        if (project.mod_version != '6.0.1.116051'
+        if (project.mod_version != '6.1.0.116051'
                 || project.minecraft_version != project.mc_version
                 || project.mc_version != '1.16.5'
                 || project.loader_name != 'forge'

@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:scoria_furnace"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:scoria_furnace"
@@ -16,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:scoria"
+            "tag": "mineralogy:slabs/scoria"
           }
         ]
       }

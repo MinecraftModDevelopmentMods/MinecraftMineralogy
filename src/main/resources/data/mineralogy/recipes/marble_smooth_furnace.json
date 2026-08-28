@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:marble_smooth_furnace"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "xxx",
@@ -7,27 +13,14 @@
   ],
   "key": {
     "x": {
-      "item": "mineralogy:marble_smooth_slab"
+      "tag": "mineralogy:slabs/marble/smooth"
     },
     "y": {
       "item": "minecraft:furnace"
     }
   },
   "result": {
-    "item": "mineralogy:marble_smooth_furnace"
-  },
-  "conditions": [
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTH"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTHSLAB"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTHFURNACE"
-    }
-  ]
+    "item": "mineralogy:marble_smooth_furnace",
+    "count": 1
+  }
 }

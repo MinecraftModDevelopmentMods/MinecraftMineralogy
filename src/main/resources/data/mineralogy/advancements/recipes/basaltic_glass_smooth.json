@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:basaltic_glass_smooth"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:basaltic_glass_smooth"
@@ -16,7 +22,17 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:basaltic_glass"
+            "tag": "mineralogy:stones/basaltic_glass"
+          }
+        ]
+      }
+    },
+    "has_sand": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:sand"
           }
         ]
       }
@@ -26,6 +42,10 @@
     [
       "has_the_recipe",
       "has_rock"
+    ],
+    [
+      "has_the_recipe",
+      "has_sand"
     ]
   ]
 }

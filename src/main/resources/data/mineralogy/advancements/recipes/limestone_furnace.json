@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:limestone_furnace"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:limestone_furnace"
@@ -16,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:limestone"
+            "tag": "mineralogy:slabs/limestone"
           }
         ]
       }

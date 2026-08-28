@@ -1,0 +1,26 @@
+{
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:rhyolite_slab"
+    },
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:rhyolite_brick_slab"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xx",
+    "xx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:rhyolite_slab"
+    }
+  },
+  "result": {
+    "item": "mineralogy:rhyolite_brick_slab",
+    "count": 4
+  }
+}

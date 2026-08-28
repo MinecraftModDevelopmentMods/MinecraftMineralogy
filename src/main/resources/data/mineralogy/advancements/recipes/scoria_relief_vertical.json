@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:scoria_relief_vertical"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:scoria_relief_vertical"
@@ -16,11 +22,7 @@
       "conditions": {
         "items": [
           {
-            "type": "mineralogy:config_item",
-            "flags": [
-              "GENERATE_SMOOTH"
-            ],
-            "item": "mineralogy:scoria_smooth"
+            "item": "mineralogy:scoria_relief_blank"
           }
         ]
       }

@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:siltstone_brick_wall"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:siltstone_brick_wall"
@@ -16,11 +22,7 @@
       "conditions": {
         "items": [
           {
-            "type": "mineralogy:config_item",
-            "flags": [
-              "GENERATE_BRICK"
-            ],
-            "item": "mineralogy:siltstone_brick"
+            "tag": "mineralogy:stones/siltstone/brick"
           }
         ]
       }

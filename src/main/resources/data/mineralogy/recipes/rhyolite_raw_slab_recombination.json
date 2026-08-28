@@ -1,0 +1,25 @@
+{
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:rhyolite_slab"
+    },
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:rhyolite"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mineralogy:rhyolite_slab"
+    },
+    {
+      "item": "mineralogy:rhyolite_slab"
+    }
+  ],
+  "result": {
+    "item": "mineralogy:rhyolite",
+    "count": 1
+  }
+}

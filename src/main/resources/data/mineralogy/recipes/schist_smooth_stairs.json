@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:schist_smooth_stairs"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "x  ",
@@ -7,21 +13,11 @@
   ],
   "key": {
     "x": {
-      "item": "mineralogy:schist_smooth"
+      "tag": "mineralogy:stones/schist/smooth"
     }
   },
   "result": {
     "item": "mineralogy:schist_smooth_stairs",
     "count": 4
-  },
-  "conditions": [
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTH"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTHSTAIRS"
-    }
-  ]
+  }
 }

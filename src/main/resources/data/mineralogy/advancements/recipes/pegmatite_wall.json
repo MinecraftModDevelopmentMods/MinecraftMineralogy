@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:pegmatite_wall"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:pegmatite_wall"
@@ -16,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:pegmatite"
+            "tag": "mineralogy:stones/pegmatite"
           }
         ]
       }

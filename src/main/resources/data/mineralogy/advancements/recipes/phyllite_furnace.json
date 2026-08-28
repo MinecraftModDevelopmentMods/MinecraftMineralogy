@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:phyllite_furnace"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:phyllite_furnace"
@@ -16,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:phyllite"
+            "tag": "mineralogy:slabs/phyllite"
           }
         ]
       }

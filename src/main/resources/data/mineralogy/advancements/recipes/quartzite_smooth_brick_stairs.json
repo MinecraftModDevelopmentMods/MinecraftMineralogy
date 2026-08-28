@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:quartzite_smooth_brick_stairs"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:quartzite_smooth_brick_stairs"
@@ -16,12 +22,7 @@
       "conditions": {
         "items": [
           {
-            "type": "mineralogy:config_item",
-            "flags": [
-              "GENERATE_SMOOTH",
-              "GENERATE_SMOOTHBRICK"
-            ],
-            "item": "mineralogy:quartzite_smooth_brick"
+            "tag": "mineralogy:stones/quartzite/smooth_brick"
           }
         ]
       }

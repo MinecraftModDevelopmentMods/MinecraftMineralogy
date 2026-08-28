@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:rock_salt_smooth_wall"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:rock_salt_smooth_wall"
@@ -16,11 +22,7 @@
       "conditions": {
         "items": [
           {
-            "type": "mineralogy:config_item",
-            "flags": [
-              "GENERATE_SMOOTH"
-            ],
-            "item": "mineralogy:rock_salt_smooth"
+            "tag": "mineralogy:stones/rock_salt/smooth"
           }
         ]
       }

@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:diorite_furnace"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:diorite_furnace"
@@ -16,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:diorite"
+            "tag": "mineralogy:slabs/diorite"
           }
         ]
       }

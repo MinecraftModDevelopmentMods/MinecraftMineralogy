@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:siltstone_smooth_brick"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:siltstone_smooth_brick"
@@ -16,11 +22,7 @@
       "conditions": {
         "items": [
           {
-            "type": "mineralogy:config_item",
-            "flags": [
-              "GENERATE_SMOOTH"
-            ],
-            "item": "mineralogy:siltstone_smooth"
+            "tag": "mineralogy:stones/siltstone/smooth"
           }
         ]
       }

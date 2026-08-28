@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:hornfels_smooth_wall"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:hornfels_smooth_wall"
@@ -16,11 +22,7 @@
       "conditions": {
         "items": [
           {
-            "type": "mineralogy:config_item",
-            "flags": [
-              "GENERATE_SMOOTH"
-            ],
-            "item": "mineralogy:hornfels_smooth"
+            "tag": "mineralogy:stones/hornfels/smooth"
           }
         ]
       }

@@ -1,11 +1,12 @@
 {
+  "conditions": [],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "mineralogy:phyllite"
+      "tag": "mineralogy:stones/phyllite"
     },
     {
-      "item": "mineralogy:phyllite"
+      "tag": "mineralogy:stones/phyllite"
     },
     {
       "item": "minecraft:gravel"

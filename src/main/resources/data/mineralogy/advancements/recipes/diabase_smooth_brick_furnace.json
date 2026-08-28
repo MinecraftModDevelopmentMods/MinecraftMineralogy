@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:diabase_smooth_brick_furnace"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:diabase_smooth_brick_furnace"
@@ -16,12 +22,7 @@
       "conditions": {
         "items": [
           {
-            "type": "mineralogy:config_item",
-            "flags": [
-              "GENERATE_SMOOTH",
-              "GENERATE_SMOOTHBRICK"
-            ],
-            "item": "mineralogy:diabase_smooth_brick"
+            "tag": "mineralogy:slabs/diabase/smooth_brick"
           }
         ]
       }

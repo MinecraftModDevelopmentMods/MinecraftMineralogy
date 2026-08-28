@@ -1,11 +1,12 @@
 {
+  "conditions": [],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "mineralogy:slate"
+      "tag": "mineralogy:stones/slate"
     },
     {
-      "item": "mineralogy:slate"
+      "tag": "mineralogy:stones/slate"
     },
     {
       "item": "minecraft:gravel"

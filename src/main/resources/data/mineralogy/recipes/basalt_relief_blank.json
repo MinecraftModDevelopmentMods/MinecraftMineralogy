@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:basalt_relief_blank"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "xxx",
@@ -7,21 +13,11 @@
   ],
   "key": {
     "x": {
-      "item": "mineralogy:basalt_smooth"
+      "tag": "mineralogy:stones/basalt/smooth"
     }
   },
   "result": {
     "item": "mineralogy:basalt_relief_blank",
     "count": 16
-  },
-  "conditions": [
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTH"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_RELIEFS"
-    }
-  ]
+  }
 }

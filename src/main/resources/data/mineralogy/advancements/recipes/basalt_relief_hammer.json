@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:basalt_relief_hammer"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:basalt_relief_hammer"
@@ -16,11 +22,7 @@
       "conditions": {
         "items": [
           {
-            "type": "mineralogy:config_item",
-            "flags": [
-              "GENERATE_SMOOTH"
-            ],
-            "item": "mineralogy:basalt_smooth"
+            "item": "mineralogy:basalt_relief_blank"
           }
         ]
       }

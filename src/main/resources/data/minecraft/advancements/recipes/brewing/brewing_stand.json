@@ -1,0 +1,87 @@
+{
+  "advancements": [
+    {
+      "conditions": [
+        {
+          "type": "mineralogy:config",
+          "flag": "COBBLESTONE_EQUIVILENT"
+        }
+      ],
+      "advancement": {
+        "parent": "minecraft:recipes/root",
+        "rewards": {
+          "recipes": [
+            "minecraft:brewing_stand"
+          ]
+        },
+        "criteria": {
+          "has_blaze_rod": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+              "items": [
+                {
+                  "item": "minecraft:blaze_rod"
+                }
+              ]
+            }
+          },
+          "has_the_recipe": {
+            "trigger": "minecraft:recipe_unlocked",
+            "conditions": {
+              "recipe": "minecraft:brewing_stand"
+            }
+          }
+        },
+        "requirements": [
+          [
+            "has_blaze_rod",
+            "has_the_recipe"
+          ]
+        ]
+      }
+    },
+    {
+      "conditions": [
+        {
+          "type": "forge:not",
+          "value": {
+            "type": "mineralogy:config",
+            "flag": "COBBLESTONE_EQUIVILENT"
+          }
+        }
+      ],
+      "advancement": {
+        "parent": "minecraft:recipes/root",
+        "rewards": {
+          "recipes": [
+            "minecraft:brewing_stand"
+          ]
+        },
+        "criteria": {
+          "has_blaze_rod": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+              "items": [
+                {
+                  "item": "minecraft:blaze_rod"
+                }
+              ]
+            }
+          },
+          "has_the_recipe": {
+            "trigger": "minecraft:recipe_unlocked",
+            "conditions": {
+              "recipe": "minecraft:brewing_stand"
+            }
+          }
+        },
+        "requirements": [
+          [
+            "has_blaze_rod",
+            "has_the_recipe"
+          ]
+        ]
+      }
+    }
+  ]
+}

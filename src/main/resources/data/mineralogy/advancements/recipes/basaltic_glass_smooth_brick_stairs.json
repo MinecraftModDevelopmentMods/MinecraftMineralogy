@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:basaltic_glass_smooth_brick_stairs"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:basaltic_glass_smooth_brick_stairs"
@@ -16,12 +22,7 @@
       "conditions": {
         "items": [
           {
-            "type": "mineralogy:config_item",
-            "flags": [
-              "GENERATE_SMOOTH",
-              "GENERATE_SMOOTHBRICK"
-            ],
-            "item": "mineralogy:basaltic_glass_smooth_brick"
+            "tag": "mineralogy:stones/basaltic_glass/smooth_brick"
           }
         ]
       }

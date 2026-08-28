@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:diorite_brick_stairs"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:diorite_brick_stairs"
@@ -16,11 +22,7 @@
       "conditions": {
         "items": [
           {
-            "type": "mineralogy:config_item",
-            "flags": [
-              "GENERATE_BRICK"
-            ],
-            "item": "mineralogy:diorite_brick"
+            "tag": "mineralogy:stones/diorite/brick"
           }
         ]
       }

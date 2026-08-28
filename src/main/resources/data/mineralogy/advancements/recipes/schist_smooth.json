@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:schist_smooth"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:schist_smooth"
@@ -16,7 +22,17 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:schist"
+            "tag": "mineralogy:stones/schist"
+          }
+        ]
+      }
+    },
+    "has_sand": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:sand"
           }
         ]
       }
@@ -26,6 +42,10 @@
     [
       "has_the_recipe",
       "has_rock"
+    ],
+    [
+      "has_the_recipe",
+      "has_sand"
     ]
   ]
 }

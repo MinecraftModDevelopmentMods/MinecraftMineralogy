@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:siltstone_furnace"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:siltstone_furnace"
@@ -16,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:siltstone"
+            "tag": "mineralogy:slabs/siltstone"
           }
         ]
       }

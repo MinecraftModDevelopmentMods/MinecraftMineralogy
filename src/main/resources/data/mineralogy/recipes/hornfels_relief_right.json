@@ -1,27 +1,21 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "  x",
-    " x ",
-    "x  "
-  ],
-  "key": {
-    "x": {
-      "item": "mineralogy:hornfels_relief_left"
-    }
-  },
-  "result": {
-    "item": "mineralogy:hornfels_relief_right",
-    "count": 3
-  },
   "conditions": [
     {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTH"
+      "type": "forge:item_exists",
+      "item": "mineralogy:hornfels_relief_right"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mineralogy:hornfels_relief_left"
     },
     {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_RELIEFS"
+      "item": "mineralogy:hornfels_relief_left"
     }
-  ]
+  ],
+  "result": {
+    "item": "mineralogy:hornfels_relief_right",
+    "count": 2
+  }
 }

@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:peridotite_brick"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:peridotite_brick"
@@ -16,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:peridotite"
+            "tag": "mineralogy:stones/peridotite"
           }
         ]
       }

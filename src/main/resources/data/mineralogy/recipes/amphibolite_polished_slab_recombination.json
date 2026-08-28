@@ -1,0 +1,25 @@
+{
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:amphibolite_smooth_slab"
+    },
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:amphibolite_smooth"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "mineralogy:amphibolite_smooth_slab"
+    },
+    {
+      "item": "mineralogy:amphibolite_smooth_slab"
+    }
+  ],
+  "result": {
+    "item": "mineralogy:amphibolite_smooth",
+    "count": 1
+  }
+}

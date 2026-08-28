@@ -1,0 +1,26 @@
+{
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:conglomerate_wall"
+    },
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:conglomerate_brick_wall"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xx",
+    "xx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:conglomerate_wall"
+    }
+  },
+  "result": {
+    "item": "mineralogy:conglomerate_brick_wall",
+    "count": 4
+  }
+}

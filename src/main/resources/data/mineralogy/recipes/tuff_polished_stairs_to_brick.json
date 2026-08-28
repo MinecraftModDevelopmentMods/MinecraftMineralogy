@@ -1,0 +1,26 @@
+{
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:tuff_smooth_stairs"
+    },
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:tuff_smooth_brick_stairs"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xx",
+    "xx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:tuff_smooth_stairs"
+    }
+  },
+  "result": {
+    "item": "mineralogy:tuff_smooth_brick_stairs",
+    "count": 4
+  }
+}

@@ -1,20 +1,21 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:gneiss_smooth"
+    }
+  ],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "mineralogy:gneiss"
+      "tag": "mineralogy:stones/gneiss"
     },
     {
       "item": "minecraft:sand"
     }
   ],
   "result": {
-    "item": "mineralogy:gneiss_smooth"
-  },
-  "conditions": [
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTH"
-    }
-  ]
+    "item": "mineralogy:gneiss_smooth",
+    "count": 1
+  }
 }

@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:gneiss_relief_hammer"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:gneiss_relief_hammer"
@@ -16,11 +22,7 @@
       "conditions": {
         "items": [
           {
-            "type": "mineralogy:config_item",
-            "flags": [
-              "GENERATE_SMOOTH"
-            ],
-            "item": "mineralogy:gneiss_smooth"
+            "item": "mineralogy:gneiss_relief_blank"
           }
         ]
       }

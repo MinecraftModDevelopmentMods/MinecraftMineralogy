@@ -1,0 +1,26 @@
+{
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:slate_slab"
+    },
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:slate_brick_slab"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xx",
+    "xx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:slate_slab"
+    }
+  },
+  "result": {
+    "item": "mineralogy:slate_brick_slab",
+    "count": 4
+  }
+}

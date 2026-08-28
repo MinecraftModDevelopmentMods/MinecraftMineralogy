@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:gneiss_brick_wall"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:gneiss_brick_wall"
@@ -16,11 +22,7 @@
       "conditions": {
         "items": [
           {
-            "type": "mineralogy:config_item",
-            "flags": [
-              "GENERATE_BRICK"
-            ],
-            "item": "mineralogy:gneiss_brick"
+            "tag": "mineralogy:stones/gneiss/brick"
           }
         ]
       }

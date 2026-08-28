@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:quartzite_furnace"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:quartzite_furnace"
@@ -16,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:quartzite"
+            "tag": "mineralogy:slabs/quartzite"
           }
         ]
       }

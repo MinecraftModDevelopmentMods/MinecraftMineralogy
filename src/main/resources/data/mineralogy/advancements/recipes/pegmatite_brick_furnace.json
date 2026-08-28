@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:pegmatite_brick_furnace"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:pegmatite_brick_furnace"
@@ -16,11 +22,7 @@
       "conditions": {
         "items": [
           {
-            "type": "mineralogy:config_item",
-            "flags": [
-              "GENERATE_BRICK"
-            ],
-            "item": "mineralogy:pegmatite_brick"
+            "tag": "mineralogy:slabs/pegmatite/brick"
           }
         ]
       }

@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:tuff_stairs"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:tuff_stairs"
@@ -16,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:tuff"
+            "tag": "mineralogy:stones/tuff"
           }
         ]
       }

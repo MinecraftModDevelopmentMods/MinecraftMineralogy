@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "mineralogy:diorite_smooth_slab",
+    "minecraft:polished_diorite_slab"
+  ]
+}

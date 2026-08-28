@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:gabbro_brick"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:gabbro_brick"
@@ -16,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:gabbro"
+            "tag": "mineralogy:stones/gabbro"
           }
         ]
       }

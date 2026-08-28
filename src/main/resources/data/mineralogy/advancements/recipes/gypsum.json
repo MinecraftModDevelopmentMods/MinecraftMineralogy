@@ -1,0 +1,37 @@
+{
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:gypsum"
+    }
+  ],
+  "rewards": {
+    "recipes": [
+      "mineralogy:gypsum"
+    ]
+  },
+  "criteria": {
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "mineralogy:gypsum"
+      }
+    },
+    "has_rock": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "mineralogy:gypsum_dust"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_rock"
+    ]
+  ]
+}

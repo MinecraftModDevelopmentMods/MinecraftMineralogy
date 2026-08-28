@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:schist_stairs"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:schist_stairs"
@@ -16,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:schist"
+            "tag": "mineralogy:stones/schist"
           }
         ]
       }

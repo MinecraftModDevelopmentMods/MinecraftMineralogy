@@ -1,0 +1,41 @@
+{
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:andesite_slab"
+    },
+    {
+      "type": "forge:item_exists",
+      "item": "minecraft:andesite_slab"
+    }
+  ],
+  "rewards": {
+    "recipes": [
+      "mineralogy:andesite_slab_to_vanilla"
+    ]
+  },
+  "criteria": {
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "mineralogy:andesite_slab_to_vanilla"
+      }
+    },
+    "has_rock": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "mineralogy:andesite_slab"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_rock"
+    ]
+  ]
+}

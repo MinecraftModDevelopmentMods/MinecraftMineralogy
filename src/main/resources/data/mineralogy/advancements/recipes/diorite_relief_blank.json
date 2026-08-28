@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:diorite_relief_blank"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:diorite_relief_blank"
@@ -16,11 +22,7 @@
       "conditions": {
         "items": [
           {
-            "type": "mineralogy:config_item",
-            "flags": [
-              "GENERATE_SMOOTH"
-            ],
-            "item": "mineralogy:diorite_smooth"
+            "tag": "mineralogy:stones/diorite/smooth"
           }
         ]
       }

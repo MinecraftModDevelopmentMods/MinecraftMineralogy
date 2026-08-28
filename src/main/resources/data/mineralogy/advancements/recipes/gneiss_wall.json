@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:gneiss_wall"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:gneiss_wall"
@@ -16,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:gneiss"
+            "tag": "mineralogy:stones/gneiss"
           }
         ]
       }

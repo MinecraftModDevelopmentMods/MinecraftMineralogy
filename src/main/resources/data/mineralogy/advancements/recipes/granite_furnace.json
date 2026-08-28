@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:granite_furnace"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:granite_furnace"
@@ -16,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:granite"
+            "tag": "mineralogy:slabs/granite"
           }
         ]
       }

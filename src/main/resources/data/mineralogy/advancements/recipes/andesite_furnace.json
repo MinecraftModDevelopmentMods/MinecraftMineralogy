@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:andesite_furnace"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:andesite_furnace"
@@ -16,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:andesite"
+            "tag": "mineralogy:slabs/andesite"
           }
         ]
       }

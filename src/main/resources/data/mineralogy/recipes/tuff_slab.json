@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:tuff_slab"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "xxx"
@@ -11,11 +17,5 @@
   "result": {
     "item": "mineralogy:tuff_slab",
     "count": 6
-  },
-  "conditions": [
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_ROCKSLAB"
-    }
-  ]
+  }
 }

@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:novaculite_relief_sword"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:novaculite_relief_sword"
@@ -16,11 +22,7 @@
       "conditions": {
         "items": [
           {
-            "type": "mineralogy:config_item",
-            "flags": [
-              "GENERATE_SMOOTH"
-            ],
-            "item": "mineralogy:novaculite_smooth"
+            "item": "mineralogy:novaculite_relief_blank"
           }
         ]
       }

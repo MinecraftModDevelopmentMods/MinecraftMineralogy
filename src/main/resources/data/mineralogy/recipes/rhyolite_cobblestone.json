@@ -1,11 +1,12 @@
 {
+  "conditions": [],
   "type": "minecraft:crafting_shapeless",
   "ingredients": [
     {
-      "item": "mineralogy:rhyolite"
+      "tag": "mineralogy:stones/rhyolite"
     },
     {
-      "item": "mineralogy:rhyolite"
+      "tag": "mineralogy:stones/rhyolite"
     },
     {
       "item": "minecraft:gravel"

@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:rock_salt_brick"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:rock_salt_brick"
@@ -16,7 +22,7 @@
       "conditions": {
         "items": [
           {
-            "item": "mineralogy:rock_salt"
+            "tag": "mineralogy:stones/rock_salt"
           }
         ]
       }

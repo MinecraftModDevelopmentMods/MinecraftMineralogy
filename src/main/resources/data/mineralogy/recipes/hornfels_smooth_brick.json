@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:hornfels_smooth_brick"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "xx",
@@ -6,21 +12,11 @@
   ],
   "key": {
     "x": {
-      "item": "mineralogy:hornfels_smooth"
+      "tag": "mineralogy:stones/hornfels/smooth"
     }
   },
   "result": {
     "item": "mineralogy:hornfels_smooth_brick",
     "count": 4
-  },
-  "conditions": [
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTH"
-    },
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_SMOOTHBRICK"
-    }
-  ]
+  }
 }

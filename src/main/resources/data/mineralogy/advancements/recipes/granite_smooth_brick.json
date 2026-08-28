@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:granite_smooth_brick"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:granite_smooth_brick"
@@ -16,11 +22,7 @@
       "conditions": {
         "items": [
           {
-            "type": "mineralogy:config_item",
-            "flags": [
-              "GENERATE_SMOOTH"
-            ],
-            "item": "mineralogy:granite_smooth"
+            "tag": "mineralogy:stones/granite/smooth"
           }
         ]
       }

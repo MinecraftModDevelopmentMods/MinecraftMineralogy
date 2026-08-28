@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:rock_salt_wall"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "xxx",
@@ -6,17 +12,11 @@
   ],
   "key": {
     "x": {
-      "item": "mineralogy:rock_salt"
+      "tag": "mineralogy:stones/rock_salt"
     }
   },
   "result": {
     "item": "mineralogy:rock_salt_wall",
     "count": 6
-  },
-  "conditions": [
-    {
-      "type": "mineralogy:config",
-      "flag": "GENERATE_ROCKWALL"
-    }
-  ]
+  }
 }

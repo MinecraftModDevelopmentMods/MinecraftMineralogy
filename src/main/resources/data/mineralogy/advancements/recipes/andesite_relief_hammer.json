@@ -1,4 +1,10 @@
 {
+  "conditions": [
+    {
+      "type": "forge:item_exists",
+      "item": "mineralogy:andesite_relief_hammer"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:andesite_relief_hammer"
@@ -16,11 +22,7 @@
       "conditions": {
         "items": [
           {
-            "type": "mineralogy:config_item",
-            "flags": [
-              "GENERATE_SMOOTH"
-            ],
-            "item": "mineralogy:andesite_smooth"
+            "item": "mineralogy:andesite_relief_blank"
           }
         ]
       }

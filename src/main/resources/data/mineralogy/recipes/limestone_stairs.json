@@ -1,23 +1,23 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:limestone_stairs"
-    }
-  ],
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "x  ",
-    "xx ",
-    "xxx"
-  ],
-  "key": {
-    "x": {
-      "tag": "mineralogy:stones/limestone"
-    }
-  },
-  "result": {
-    "item": "mineralogy:limestone_stairs",
-    "count": 4
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:limestone_stairs"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "x  ",
+                    "xx ",
+                    "xxx"
+                ],
+    "key":  {
+                "x":  {
+                          "tag":  "mineralogy:stones/limestone"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:limestone_stairs",
+                   "count":  4
+               }
 }

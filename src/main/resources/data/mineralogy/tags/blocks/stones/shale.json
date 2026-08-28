@@ -1,6 +1,6 @@
 {
-  "replace": false,
-  "values": [
-    "mineralogy:shale"
-  ]
+    "replace":  false,
+    "values":  [
+                   "mineralogy:shale"
+               ]
 }

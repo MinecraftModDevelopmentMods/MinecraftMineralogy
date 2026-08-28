@@ -27,7 +27,7 @@ $colors = @(
     'gray', 'pink', 'lime', 'yellow', 'light_blue', 'magenta', 'orange', 'white'
 )
 
-# Minecraft owns these full-block identities in 1.16.5. Mineralogy keeps its
+# Minecraft owns these full-block identities in 1.17.1. Mineralogy keeps its
 # legacy blocks registered, but recipes may accept either identity where doing
 # so cannot compete with a native recipe.
 $nativeFullBlocks = @{
@@ -35,6 +35,7 @@ $nativeFullBlocks = @{
     basalt = @{ raw = 'minecraft:basalt'; smooth = 'minecraft:polished_basalt' }
     diorite = @{ raw = 'minecraft:diorite'; smooth = 'minecraft:polished_diorite' }
     granite = @{ raw = 'minecraft:granite'; smooth = 'minecraft:polished_granite' }
+    tuff = @{ raw = 'minecraft:tuff' }
 }
 
 $nativeConstructionForms = @{
@@ -95,6 +96,30 @@ function ItemIngredient([string] $item, [object] $data = $null) {
     return $ingredient
 }
 
+function AdvancementPredicate([object] $ingredient) {
+    if ($ingredient -is [System.Collections.IDictionary]) {
+        if ($ingredient.Contains('item')) {
+            return [ordered]@{ items = @([string]$ingredient['item']) }
+        }
+        if ($ingredient.Contains('tag')) {
+            return [ordered]@{ tag = [string]$ingredient['tag'] }
+        }
+        if ($ingredient.Contains('items')) {
+            return [ordered]@{ items = @($ingredient['items']) }
+        }
+    }
+    if ($null -ne $ingredient.PSObject.Properties['item']) {
+        return [ordered]@{ items = @([string]$ingredient.item) }
+    }
+    if ($null -ne $ingredient.PSObject.Properties['tag']) {
+        return [ordered]@{ tag = [string]$ingredient.tag }
+    }
+    if ($null -ne $ingredient.PSObject.Properties['items']) {
+        return [ordered]@{ items = @($ingredient.items) }
+    }
+    throw "Cannot convert recipe ingredient into a Minecraft 1.17 advancement predicate"
+}
+
 function OreIngredient([string] $ore) {
     if ($ore -eq 'sand') { return [ordered]@{ tag = 'forge:sand' } }
     if ($ore -eq 'paper') { return [ordered]@{ tag = 'forge:paper' } }
@@ -118,7 +143,7 @@ function OreIngredient([string] $ore) {
         $finish = if ($Matches[2]) { '/' + (Convert-CamelToSnake $Matches[2]) } else { '' }
         return [ordered]@{ tag = "mineralogy:slabs/$family$finish" }
     }
-    throw "No Minecraft 1.16.5 tag mapping for legacy OreDictionary key $ore"
+    throw "No Minecraft 1.17.1 tag mapping for legacy OreDictionary key $ore"
 }
 
 function Convert-CamelToSnake([string] $value) {
@@ -152,13 +177,18 @@ function VanillaShapedRecipe(
 function VanillaShapelessRecipe(
     [object[]] $ingredients,
     [string] $result,
-    [int] $count = 1
+    [int] $count = 1,
+    [string] $group = ''
 ) {
-    return [ordered]@{
+    $recipe = [ordered]@{
         type = 'minecraft:crafting_shapeless'
         ingredients = $ingredients
         result = VanillaResult $result $count
     }
+    if (-not [string]::IsNullOrWhiteSpace($group)) {
+        $recipe.Insert(1, 'group', $group)
+    }
+    return $recipe
 }
 
 function VanillaStonecuttingRecipe(
@@ -242,14 +272,14 @@ function Add-SandUnlockCriteria(
     $criteria['has_sand'] = [ordered]@{
         trigger = 'minecraft:inventory_changed'
         conditions = [ordered]@{
-            items = @([ordered]@{ item = 'minecraft:sand' })
+            items = @([ordered]@{ items = @('minecraft:sand') })
         }
     }
     if ($sandMode -eq 'ore_dictionary') {
         $criteria['has_red_sand'] = [ordered]@{
             trigger = 'minecraft:inventory_changed'
             conditions = [ordered]@{
-                items = @([ordered]@{ item = 'minecraft:red_sand' })
+                items = @([ordered]@{ items = @('minecraft:red_sand') })
             }
         }
     }
@@ -331,7 +361,13 @@ function NativeTagAliases(
     if ($nativeFinish -notin @('raw', 'smooth')) {
         return @()
     }
+    if (-not $nativeFullBlocks[$family].ContainsKey($nativeFinish)) {
+        return @()
+    }
     if ($kind -eq 'stones') {
+        if ($family -eq 'basalt' -and $nativeFinish -eq 'smooth') {
+            return @($nativeFullBlocks[$family][$nativeFinish], 'minecraft:smooth_basalt')
+        }
         return @($nativeFullBlocks[$family][$nativeFinish])
     }
     if ($kind -eq 'slabs' -and
@@ -689,7 +725,7 @@ function Ensure-MissingRecipeAdvancements() {
             has_rock = [ordered]@{
                 trigger = 'minecraft:inventory_changed'
                 conditions = [ordered]@{
-                    items = @($sourceIngredient)
+                    items = @((AdvancementPredicate $sourceIngredient))
                 }
             }
         }
@@ -741,7 +777,7 @@ function Synchronize-AdvancementConditions() {
             else {
                 $sourceIngredient = ItemIngredient "mineralogy:${family}_relief_blank"
             }
-            $advancement.criteria.has_rock.conditions.items = @($sourceIngredient)
+            $advancement.criteria.has_rock.conditions.items = @((AdvancementPredicate $sourceIngredient))
         }
         if ($null -eq $advancement.criteria.has_the_recipe -or $null -eq $advancement.criteria.has_rock) {
             throw "Advancement $($file.Name) must have self-recipe and direct-input criteria"
@@ -860,7 +896,7 @@ function VanillaRecipeAdvancement(
         criteria = [ordered]@{
             $criterionName = [ordered]@{
                 trigger = 'minecraft:inventory_changed'
-                conditions = [ordered]@{ items = @($criterionIngredient) }
+                conditions = [ordered]@{ items = @((AdvancementPredicate $criterionIngredient)) }
             }
             has_the_recipe = [ordered]@{
                 trigger = 'minecraft:recipe_unlocked'
@@ -955,9 +991,12 @@ function Write-CobblestoneRecipeOverrides() {
             Q = ItemIngredient 'minecraft:quartz'; R = ItemIngredient 'minecraft:redstone'
             '#' = $fallbackCobblestone
         }) 'minecraft:observer')
-    Write-ConditionalMinecraftRecipe 'mossy_cobblestone' $condition `
-        (VanillaShapelessRecipe @($enabledCobblestone, (ItemIngredient 'minecraft:vine')) 'minecraft:mossy_cobblestone') `
-        (VanillaShapelessRecipe @($fallbackCobblestone, (ItemIngredient 'minecraft:vine')) 'minecraft:mossy_cobblestone')
+    Write-ConditionalMinecraftRecipe 'mossy_cobblestone_from_vine' $condition `
+        (VanillaShapelessRecipe @($enabledCobblestone, (ItemIngredient 'minecraft:vine')) 'minecraft:mossy_cobblestone' 1 'mossy_cobblestone') `
+        (VanillaShapelessRecipe @($fallbackCobblestone, (ItemIngredient 'minecraft:vine')) 'minecraft:mossy_cobblestone' 1 'mossy_cobblestone')
+    Write-ConditionalMinecraftRecipe 'mossy_cobblestone_from_moss_block' $condition `
+        (VanillaShapelessRecipe @($enabledCobblestone, (ItemIngredient 'minecraft:moss_block')) 'minecraft:mossy_cobblestone' 1 'mossy_cobblestone') `
+        (VanillaShapelessRecipe @($fallbackCobblestone, (ItemIngredient 'minecraft:moss_block')) 'minecraft:mossy_cobblestone' 1 'mossy_cobblestone')
     Write-ConditionalMinecraftRecipe 'andesite' $condition `
         (VanillaShapelessRecipe @((ItemIngredient 'minecraft:diorite'), $enabledCobblestone) 'minecraft:andesite' 2) `
         (VanillaShapelessRecipe @((ItemIngredient 'minecraft:diorite'), $fallbackCobblestone) 'minecraft:andesite' 2)
@@ -994,7 +1033,8 @@ function Write-CobblestoneRecipeOverrides() {
         @('redstone', 'dispenser', 'has_bow', (ItemIngredient 'minecraft:bow'), (ItemIngredient 'minecraft:bow')),
         @('redstone', 'dropper', 'has_redstone', (ItemIngredient 'minecraft:redstone'), (ItemIngredient 'minecraft:redstone')),
         @('redstone', 'observer', 'has_quartz', (ItemIngredient 'minecraft:quartz'), (ItemIngredient 'minecraft:quartz')),
-        @('building_blocks', 'mossy_cobblestone', 'has_vine', (ItemIngredient 'minecraft:vine'), (ItemIngredient 'minecraft:vine')),
+        @('building_blocks', 'mossy_cobblestone_from_vine', 'has_vine', (ItemIngredient 'minecraft:vine'), (ItemIngredient 'minecraft:vine')),
+        @('building_blocks', 'mossy_cobblestone_from_moss_block', 'has_moss_block', (ItemIngredient 'minecraft:moss_block'), (ItemIngredient 'minecraft:moss_block')),
         @('building_blocks', 'andesite', 'has_stone', (ItemIngredient 'minecraft:diorite'), (ItemIngredient 'minecraft:diorite')),
         @('building_blocks', 'diorite', 'has_quartz', (ItemIngredient 'minecraft:quartz'), (ItemIngredient 'minecraft:quartz')),
         @('tools', 'stone_axe', 'has_cobblestone', $enabledTools, $fallbackTools),
@@ -1059,7 +1099,7 @@ function Write-NativePolishedOverrides() {
     New-Item -ItemType Directory -Force -Path $minecraftRecipeRoot | Out-Null
     $minecraftBuildingAdvancementRoot = Join-Path $minecraftAdvancementRoot 'building_blocks'
     New-Item -ItemType Directory -Force -Path $minecraftBuildingAdvancementRoot | Out-Null
-    foreach ($family in $nativeFullBlocks.Keys) {
+    foreach ($family in @($nativeFullBlocks.Keys | Where-Object { $nativeFullBlocks[$_].ContainsKey('smooth') })) {
         $raw = $nativeFullBlocks[$family].raw
         $smooth = $nativeFullBlocks[$family].smooth
         $recipeName = "polished_$family"
@@ -1074,11 +1114,11 @@ function Write-NativePolishedOverrides() {
             criteria = [ordered]@{
                 has_rock = [ordered]@{
                     trigger = 'minecraft:inventory_changed'
-                    conditions = [ordered]@{ items = @((ItemIngredient $raw)) }
+                    conditions = [ordered]@{ items = @((AdvancementPredicate (ItemIngredient $raw))) }
                 }
                 has_sand = [ordered]@{
                     trigger = 'minecraft:inventory_changed'
-                    conditions = [ordered]@{ items = @((ItemIngredient 'minecraft:sand')) }
+                    conditions = [ordered]@{ items = @((AdvancementPredicate (ItemIngredient 'minecraft:sand'))) }
                 }
                 has_the_recipe = [ordered]@{
                     trigger = 'minecraft:recipe_unlocked'

@@ -41,7 +41,9 @@ public class GameplayContractTest {
         assertTrue(groups.contains("create(\"slab\", \"basalt_slab\")"));
         assertTrue(groups.contains("create(\"wall\", \"basalt_wall\")"));
         assertTrue(groups.contains("create(\"item\", \"sulfur_dust\")"));
-        assertTrue(groups.contains("ItemGroup.MATERIALS"));
+        assertTrue(groups.contains("CreativeModeTab.TAB_MATERIALS"));
+        assertTrue(groups.contains("public boolean hasSearchBar()"));
+        assertTrue(groups.contains("textures/gui/container/creative_inventory/tab_item_search.png"));
 
         CreativeTabPolicy grouped = new CreativeTabPolicy(true);
         assertTrue(grouped.groupTabsByType());
@@ -66,15 +68,15 @@ public class GameplayContractTest {
         assertTrue(slab.contains("new ItemStack(drops, 2)"));
         assertTrue(slab.contains("Collections.singletonList(new ItemStack(fullBlock))"));
         String furnace = text("src/main/java/zone/moddev/mc/mineralogy/tileentity/TileEntityRockFurnace.java");
-        assertTrue(furnace.contains("public TileEntityRockFurnace()"));
+        assertTrue(furnace.contains("public TileEntityRockFurnace(BlockPos pos, BlockState state)"));
         assertTrue(furnace.contains("BlockState state = getBlockState()"));
         assertTrue(furnace.contains("Block block = state.getBlock()"));
         assertTrue(furnace.contains("getBurnModifier()"));
-        assertTrue(furnace.contains("ItemStackHelper.loadAllItems"));
+        assertTrue(furnace.contains("ContainerHelper.loadAllItems"));
 
 		String lamp = text("src/main/java/zone/moddev/mc/mineralogy/blocks/RockSaltLamp.java");
 		assertTrue(lamp.contains("facing.getAxis().isVertical()"));
-		assertTrue(lamp.contains("Block.hasEnoughSolidSide(world, supportPos, facing)"));
+		assertTrue(lamp.contains("Block.canSupportCenter(world, supportPos, facing)"));
     }
 
     @Test
@@ -96,8 +98,9 @@ public class GameplayContractTest {
         assertTrue(policy.contains("replaceElementsInPlace(required(itemTags, COBBLESTONE), items)"));
         assertTrue(policy.contains("STONE_CRAFTING_MATERIALS"));
         assertTrue(policy.contains("STONE_TOOL_MATERIALS"));
-        assertTrue(policy.contains("setRetainedField"));
-        assertFalse(policy.contains("TagRegistryManager.fetchTags"));
+        assertTrue(policy.contains("SetTag.create(values)"));
+        assertTrue(policy.contains("field.set(tag, field.get(replacement))"));
+        assertFalse(policy.contains("TagCollectionManager"));
         assertTrue(policy.contains("Ingredient.invalidateAll()"));
     }
 
@@ -111,17 +114,17 @@ public class GameplayContractTest {
     }
 
     @Test
-    public void forge36OilUsesNativeFlowingFluidRendering() throws Exception {
+    public void forge37OilUsesNativeFlowingFluidRendering() throws Exception {
         String fluid = text("src/main/java/zone/moddev/mc/mineralogy/fluids/MineralogyFluids.java");
         assertTrue(fluid.contains("ForgeFlowingFluid.Source"));
         assertTrue(fluid.contains("ForgeFlowingFluid.Flowing"));
-        assertTrue(fluid.contains("FlowingFluidBlock"));
+        assertTrue(fluid.contains("LiquidBlock"));
         assertTrue(fluid.contains("BucketItem"));
         assertTrue(fluid.contains("blocks/crude_oil_still"));
         assertTrue(fluid.contains("blocks/crude_oil_flow"));
         String client = text("src/main/java/zone/moddev/mc/mineralogy/client/ClientSetup.java");
-        assertTrue(client.contains("RenderTypeLookup.setRenderLayer(MineralogyFluids.CRUDE_OIL"));
-        assertTrue(client.contains("RenderType.getTranslucent()"));
+        assertTrue(client.contains("ItemBlockRenderTypes.setRenderLayer(MineralogyFluids.CRUDE_OIL"));
+        assertTrue(client.contains("RenderType.translucent()"));
         assertFalse(new File("src/main/java/zone/moddev/mc/mineralogy/client/ClientOilRenderer.java").exists());
     }
 
@@ -133,29 +136,38 @@ public class GameplayContractTest {
         assertTrue(hook.contains("TerrainPopulated"));
         assertTrue(hook.contains("LightPopulated"));
         assertTrue(hook.contains("rewriteLegacyRockFurnaceTileEntities"));
-		assertTrue(hook.contains("normalizeLegacyTileEntityIds(level)"));
-		assertTrue(new File("src/main/java/zone/moddev/mc/mineralogy/patching/LegacyTileEntityIdNormalizer.java").exists());
+		assertTrue(hook.contains("tileEntity.putString(\"id\", ROCK_FURNACE_TILE_ENTITY)"));
 
         String transformer = text("src/main/resources/coremods/mineralogy_legacy_world_fix.js");
         assertTrue(transformer.contains("mineralogy_legacy_chunk_data"));
-        assertTrue(transformer.contains("net.minecraft.world.chunk.storage.ChunkLoader"));
+        assertTrue(transformer.contains("net.minecraft.world.level.chunk.storage.ChunkStorage"));
         assertTrue(transformer.contains("prepareLegacyChunk"));
         assertTrue(transformer.contains("finalizeLegacyChunk"));
+
+		String mappings = text("src/main/java/zone/moddev/mc/mineralogy/patching/PatchHandler.java");
+		assertTrue(mappings.contains("GRASS_PATH"));
+		assertTrue(mappings.contains("DIRT_PATH"));
+		assertTrue(mappings.contains("SWEET_BERRIES_PICK"));
+		assertTrue(mappings.contains("SWEET_BERRY_BUSH_PICK"));
+		assertTrue(mappings.contains("ForgeRegistries.SOUND_EVENTS"));
+		assertTrue(mappings.contains("bus = Mod.EventBusSubscriber.Bus.FORGE"));
+		assertTrue(mappings.contains("event.getAllMappings()"));
     }
 
     @Test
     public void legacyFlatteningUsesTheExpandedArrayAndReinstallsTheSelectedWorldMapping() throws Exception {
         String hook = text("src/main/java/zone/moddev/mc/mineralogy/patching/LegacyWorldDataHook.java");
         assertTrue(hook.contains("expandFlatteningTable(highestStateId + 1)"));
-        assertTrue(hook.contains("valuesField.getType().getComponentType() != Dynamic.class"));
-        assertTrue(hook.contains("addEntry.invoke"));
+        assertTrue(hook.contains("type.getComponentType() != Dynamic.class"));
+        assertTrue(hook.contains("legacyStates[stateId] = BlockStateData.parse(stateNbt)"));
+        assertTrue(hook.contains("unsafe.putObjectVolatile(base, offset, expanded)"));
         assertTrue(hook.contains("WorldPersistenceHooks.addHook"));
         assertTrue(hook.contains("writeSidecar(levelDat.getParentFile(), blocks)"));
-        assertTrue(hook.contains("install(levelDat.getParentFile(), CompressedStreamTools.readCompressed(input)"));
+        assertTrue(hook.contains("prepareLegacyWorld(levelDat)"));
 
         String build = text("build.gradle");
         assertTrue(build.contains("dependsOn tasks.named('processResources')"));
-        assertTrue(build.contains("mineralogy%%${mainOutput}${File.pathSeparator}"));
+        assertTrue(build.contains("mineralogy%%${mainOutput}"));
         assertTrue(build.contains("from processedResources"));
         assertTrue(build.contains("data/mineralogy/orespawn/provider.json"));
         assertTrue(build.contains("Eclipse output contains stale processed production resources"));

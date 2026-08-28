@@ -1,25 +1,25 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:shale_slab"
-    },
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:shale"
-    }
-  ],
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "mineralogy:shale_slab"
-    },
-    {
-      "item": "mineralogy:shale_slab"
-    }
-  ],
-  "result": {
-    "item": "mineralogy:shale",
-    "count": 1
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:shale_slab"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:shale"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "ingredients":  [
+                        {
+                            "item":  "mineralogy:shale_slab"
+                        },
+                        {
+                            "item":  "mineralogy:shale_slab"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:shale",
+                   "count":  1
+               }
 }

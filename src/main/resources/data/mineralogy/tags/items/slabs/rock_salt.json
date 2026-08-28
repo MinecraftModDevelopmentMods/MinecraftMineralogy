@@ -1,6 +1,6 @@
 {
-  "replace": false,
-  "values": [
-    "mineralogy:rock_salt_slab"
-  ]
+    "replace":  false,
+    "values":  [
+                   "mineralogy:rock_salt_slab"
+               ]
 }

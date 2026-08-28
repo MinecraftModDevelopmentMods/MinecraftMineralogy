@@ -17,10 +17,10 @@ import zone.moddev.mc.mineralogy.blocks.RockStairs;
 import zone.moddev.mc.mineralogy.blocks.RockWall;
 import zone.moddev.mc.mineralogy.items.MineralFertilizer;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.BlockItem;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -85,12 +85,12 @@ public class Items {
 		ResourceLocation name = block.getRegistryName();
 		Item.Properties properties = new Item.Properties();
 		if (name != null && MineralogyConfig.isCreativeVisible(name.getPath())) {
-			properties.group(MineralogyItemGroups.forBlock(block));
+			properties.tab(MineralogyItemGroups.forBlock(block));
 		}
 		if (block instanceof RockFurnace) {
-			properties.maxStackSize(1);
+			properties.stacksTo(1);
 		} else if (block instanceof RockSaltStreetLamp) {
-			properties.maxStackSize(16);
+			properties.stacksTo(16);
 		}
 
 		BlockItem item = new BlockItem(block, properties);
@@ -107,7 +107,7 @@ public class Items {
 
 	private static Item createItem(String name) {
 		Item.Properties properties = new Item.Properties();
-		if (MineralogyConfig.isCreativeVisible(name)) properties.group(MineralogyItemGroups.forItem());
+		if (MineralogyConfig.isCreativeVisible(name)) properties.tab(MineralogyItemGroups.forItem());
 		Item item = new Item(properties);
 		item.setRegistryName(Mineralogy.MODID, name);
 		return item;

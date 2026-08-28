@@ -1,25 +1,25 @@
 {
-  "conditions": [
-    {
-      "type": "mineralogy:config",
-      "flag": "ENABLE_DRYWALLS"
-    },
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:drywall_white"
-    }
-  ],
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "tag": "mineralogy:drywall/white"
-    },
-    {
-      "item": "minecraft:bone_meal"
-    }
-  ],
-  "result": {
-    "item": "mineralogy:drywall_white",
-    "count": 1
-  }
+    "conditions":  [
+                       {
+                           "type":  "mineralogy:config",
+                           "flag":  "ENABLE_DRYWALLS"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:drywall_white"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "ingredients":  [
+                        {
+                            "tag":  "mineralogy:drywall/white"
+                        },
+                        {
+                            "item":  "minecraft:bone_meal"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:drywall_white",
+                   "count":  1
+               }
 }

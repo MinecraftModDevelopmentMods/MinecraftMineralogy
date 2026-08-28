@@ -1,21 +1,21 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:rhyolite_smooth"
-    }
-  ],
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "tag": "mineralogy:stones/rhyolite"
-    },
-    {
-      "item": "minecraft:sand"
-    }
-  ],
-  "result": {
-    "item": "mineralogy:rhyolite_smooth",
-    "count": 1
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:rhyolite_smooth"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "ingredients":  [
+                        {
+                            "tag":  "mineralogy:stones/rhyolite"
+                        },
+                        {
+                            "item":  "minecraft:sand"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:rhyolite_smooth",
+                   "count":  1
+               }
 }

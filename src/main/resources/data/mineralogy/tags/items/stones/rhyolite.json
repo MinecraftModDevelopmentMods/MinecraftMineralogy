@@ -1,6 +1,6 @@
 {
-  "replace": false,
-  "values": [
-    "mineralogy:rhyolite"
-  ]
+    "replace":  false,
+    "values":  [
+                   "mineralogy:rhyolite"
+               ]
 }

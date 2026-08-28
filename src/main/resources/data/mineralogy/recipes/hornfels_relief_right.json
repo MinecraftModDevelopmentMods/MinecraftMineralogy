@@ -1,21 +1,21 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:hornfels_relief_right"
-    }
-  ],
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "mineralogy:hornfels_relief_left"
-    },
-    {
-      "item": "mineralogy:hornfels_relief_left"
-    }
-  ],
-  "result": {
-    "item": "mineralogy:hornfels_relief_right",
-    "count": 2
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:hornfels_relief_right"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "ingredients":  [
+                        {
+                            "item":  "mineralogy:hornfels_relief_left"
+                        },
+                        {
+                            "item":  "mineralogy:hornfels_relief_left"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:hornfels_relief_right",
+                   "count":  2
+               }
 }

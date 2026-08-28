@@ -1,23 +1,23 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:conglomerate_stairs"
-    }
-  ],
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "x  ",
-    "xx ",
-    "xxx"
-  ],
-  "key": {
-    "x": {
-      "tag": "mineralogy:stones/conglomerate"
-    }
-  },
-  "result": {
-    "item": "mineralogy:conglomerate_stairs",
-    "count": 4
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:conglomerate_stairs"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "x  ",
+                    "xx ",
+                    "xxx"
+                ],
+    "key":  {
+                "x":  {
+                          "tag":  "mineralogy:stones/conglomerate"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:conglomerate_stairs",
+                   "count":  4
+               }
 }

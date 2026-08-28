@@ -1,26 +1,26 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:diorite_furnace"
-    }
-  ],
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xxx",
-    "xyx",
-    "xxx"
-  ],
-  "key": {
-    "x": {
-      "tag": "mineralogy:slabs/diorite"
-    },
-    "y": {
-      "item": "minecraft:furnace"
-    }
-  },
-  "result": {
-    "item": "mineralogy:diorite_furnace",
-    "count": 1
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:diorite_furnace"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "xxx",
+                    "xyx",
+                    "xxx"
+                ],
+    "key":  {
+                "x":  {
+                          "tag":  "mineralogy:slabs/diorite"
+                      },
+                "y":  {
+                          "item":  "minecraft:furnace"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:diorite_furnace",
+                   "count":  1
+               }
 }

@@ -1,21 +1,21 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:dolomite_slab"
-    }
-  ],
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xxx"
-  ],
-  "key": {
-    "x": {
-      "item": "mineralogy:dolomite"
-    }
-  },
-  "result": {
-    "item": "mineralogy:dolomite_slab",
-    "count": 6
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:dolomite_slab"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "xxx"
+                ],
+    "key":  {
+                "x":  {
+                          "item":  "mineralogy:dolomite"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:dolomite_slab",
+                   "count":  6
+               }
 }

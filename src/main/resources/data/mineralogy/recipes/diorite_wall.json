@@ -1,22 +1,22 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:diorite_wall"
-    }
-  ],
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xxx",
-    "xxx"
-  ],
-  "key": {
-    "x": {
-      "item": "mineralogy:diorite"
-    }
-  },
-  "result": {
-    "item": "mineralogy:diorite_wall",
-    "count": 6
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:diorite_wall"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "xxx",
+                    "xxx"
+                ],
+    "key":  {
+                "x":  {
+                          "item":  "mineralogy:diorite"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:diorite_wall",
+                   "count":  6
+               }
 }

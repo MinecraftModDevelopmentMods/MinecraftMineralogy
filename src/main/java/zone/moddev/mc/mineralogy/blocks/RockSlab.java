@@ -2,27 +2,27 @@ package zone.moddev.mc.mineralogy.blocks;
 
 import zone.moddev.mc.mineralogy.Mineralogy;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ToolType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class RockSlab extends Block {
@@ -31,12 +31,12 @@ public class RockSlab extends Block {
 	private static final VoxelShape[] SHAPES = new VoxelShape[Direction.values().length];
 
 	static {
-		SHAPES[Direction.DOWN.ordinal()] = Block.makeCuboidShape(0.0D, THICKNESS, 0.0D, 16.0D, 16.0D, 16.0D);
-		SHAPES[Direction.UP.ordinal()] = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, THICKNESS, 16.0D);
-		SHAPES[Direction.NORTH.ordinal()] = Block.makeCuboidShape(0.0D, 0.0D, THICKNESS, 16.0D, 16.0D, 16.0D);
-		SHAPES[Direction.SOUTH.ordinal()] = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, THICKNESS);
-		SHAPES[Direction.WEST.ordinal()] = Block.makeCuboidShape(THICKNESS, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
-		SHAPES[Direction.EAST.ordinal()] = Block.makeCuboidShape(0.0D, 0.0D, 0.0D, THICKNESS, 16.0D, 16.0D);
+		SHAPES[Direction.DOWN.ordinal()] = Block.box(0.0D, THICKNESS, 0.0D, 16.0D, 16.0D, 16.0D);
+		SHAPES[Direction.UP.ordinal()] = Block.box(0.0D, 0.0D, 0.0D, 16.0D, THICKNESS, 16.0D);
+		SHAPES[Direction.NORTH.ordinal()] = Block.box(0.0D, 0.0D, THICKNESS, 16.0D, 16.0D, 16.0D);
+		SHAPES[Direction.SOUTH.ordinal()] = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, THICKNESS);
+		SHAPES[Direction.WEST.ordinal()] = Block.box(THICKNESS, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
+		SHAPES[Direction.EAST.ordinal()] = Block.box(0.0D, 0.0D, 0.0D, THICKNESS, 16.0D, 16.0D);
 	}
 
 	private final String doubleSlabName;
@@ -52,10 +52,11 @@ public class RockSlab extends Block {
 
 	public RockSlab(float hardness, float blastResistance, int toolHardnessLevel, SoundType sound, String name,
 			String doubleSlabName) {
-		super(Block.Properties.create(Material.ROCK).hardnessAndResistance(hardness, blastResistance).sound(sound));
+		super(BlockBehaviour.Properties.of(Material.STONE).strength(hardness, blastResistance).sound(sound)
+				.requiresCorrectToolForDrops());
 		this.toolHardnessLevel = toolHardnessLevel;
 		this.doubleSlabName = doubleSlabName;
-		this.setDefaultState(this.getStateContainer().getBaseState().with(FACING, Direction.UP));
+		this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.UP));
 
 		if (name != null) {
 			this.setRegistryName(name);
@@ -63,86 +64,75 @@ public class RockSlab extends Block {
 	}
 
 	@Override
-	public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
-		return SHAPES[state.get(FACING).ordinal()];
+	public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+		return SHAPES[state.getValue(FACING).ordinal()];
 	}
 
 	@Override
-	public VoxelShape getCollisionShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context) {
+	public VoxelShape getCollisionShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
 		return getShape(state, world, pos, context);
 	}
 
-	public boolean isNormalCube(BlockState state, IBlockReader world, BlockPos pos) {
+	public boolean isCollisionShapeFullBlock(BlockState state, BlockGetter world, BlockPos pos) {
 		return false;
 	}
 
 	@Override
-	public boolean propagatesSkylightDown(BlockState state, IBlockReader world, BlockPos pos) {
+	public boolean propagatesSkylightDown(BlockState state, BlockGetter world, BlockPos pos) {
 		return false;
 	}
 
 	@Override
-	public BlockState getStateForPlacement(net.minecraft.item.BlockItemUseContext context) {
-		BlockState state = this.getDefaultState().with(FACING, getPlacementFacing(context));
-		return state.isValidPosition(context.getWorld(), context.getPos()) ? state : null;
+	public BlockState getStateForPlacement(net.minecraft.world.item.context.BlockPlaceContext context) {
+		BlockState state = this.defaultBlockState().setValue(FACING, getPlacementFacing(context));
+		return state.canSurvive(context.getLevel(), context.getClickedPos()) ? state : null;
 	}
 
 	@Override
-	public boolean isValidPosition(BlockState state, IWorldReader world, BlockPos pos) {
+	public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
 		return canPlaceAtAnyFace(world, pos);
 	}
 
 	@Override
-	public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player,
-			Hand hand, BlockRayTraceResult hit) {
-		Direction facing = hit.getFace();
-		if (this.doubleSlabName == null || this.doubleSlabName.isEmpty() || facing != state.get(FACING)) {
-			return super.onBlockActivated(state, world, pos, player, hand, hit);
+	public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player,
+			InteractionHand hand, BlockHitResult hit) {
+		Direction facing = hit.getDirection();
+		if (this.doubleSlabName == null || this.doubleSlabName.isEmpty() || facing != state.getValue(FACING)) {
+			return super.use(state, world, pos, player, hand, hit);
 		}
 
-		ItemStack held = player.getHeldItem(hand);
+		ItemStack held = player.getItemInHand(hand);
 		ResourceLocation slabItemName = held.isEmpty() ? null : held.getItem().getRegistryName();
 
 		if (!this.getRegistryName().equals(slabItemName)) {
-			return super.onBlockActivated(state, world, pos, player, hand, hit);
+			return super.use(state, world, pos, player, hand, hit);
 		}
 
 		Block doubleSlab = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(Mineralogy.MODID, this.doubleSlabName));
 		if (!(doubleSlab instanceof DoubleSlab)) {
-			return super.onBlockActivated(state, world, pos, player, hand, hit);
+			return super.use(state, world, pos, player, hand, hit);
 		}
 
-		world.setBlockState(pos, doubleSlab.getDefaultState());
+		world.setBlock(pos, doubleSlab.defaultBlockState(), 3);
 		if (!player.isCreative()) {
 			held.shrink(1);
 		}
 
-		return ActionResultType.SUCCESS;
+		return InteractionResult.SUCCESS;
 	}
-
-	@Override
-	public ToolType getHarvestTool(BlockState state) {
-		return ToolType.PICKAXE;
-	}
-
-	@Override
-	public int getHarvestLevel(BlockState state) {
-		return toolHardnessLevel;
-	}
-
-	@Override
-	protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder) {
+@Override
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
 		builder.add(FACING);
 	}
 
-	private static boolean canPlaceAt(IBlockReader world, BlockPos pos, Direction facing) {
-		BlockPos supportPos = pos.offset(facing.getOpposite());
+	private static boolean canPlaceAt(BlockGetter world, BlockPos pos, Direction facing) {
+		BlockPos supportPos = pos.relative(facing.getOpposite());
 		BlockState support = world.getBlockState(supportPos);
-		return support.isSolidSide(world, supportPos, facing);
+		return support.isFaceSturdy(world, supportPos, facing);
 	}
 
-	private static boolean canPlaceAtAnyFace(IBlockReader world, BlockPos pos) {
-		for (Direction facing : FACING.getAllowedValues()) {
+	private static boolean canPlaceAtAnyFace(BlockGetter world, BlockPos pos) {
+		for (Direction facing : FACING.getPossibleValues()) {
 			if (canPlaceAt(world, pos, facing)) {
 				return true;
 			}
@@ -151,10 +141,10 @@ public class RockSlab extends Block {
 		return false;
 	}
 
-	private static Direction getPlacementFacing(net.minecraft.item.BlockItemUseContext context) {
-		Direction face = context.getFace();
-		Vector3d hitVec = context.getHitVec();
-		BlockPos pos = context.getPos();
+	private static Direction getPlacementFacing(net.minecraft.world.item.context.BlockPlaceContext context) {
+		Direction face = context.getClickedFace();
+		Vec3 hitVec = context.getClickLocation();
+		BlockPos pos = context.getClickedPos();
 		float hitX = (float) (hitVec.x - (double) pos.getX());
 		float hitY = (float) (hitVec.y - (double) pos.getY());
 		float hitZ = (float) (hitVec.z - (double) pos.getZ());
@@ -231,7 +221,7 @@ public class RockSlab extends Block {
 				if (face == Direction.UP || face == Direction.DOWN) {
 					return face;
 				}
-				return face.rotateY();
+				return face.getClockWise();
 			case Z:
 				if (face == Direction.NORTH || face == Direction.SOUTH) {
 					return face;

@@ -1,22 +1,22 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:rhyolite_brick"
-    }
-  ],
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xx",
-    "xx"
-  ],
-  "key": {
-    "x": {
-      "tag": "mineralogy:stones/rhyolite"
-    }
-  },
-  "result": {
-    "item": "mineralogy:rhyolite_brick",
-    "count": 4
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:rhyolite_brick"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "xx",
+                    "xx"
+                ],
+    "key":  {
+                "x":  {
+                          "tag":  "mineralogy:stones/rhyolite"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:rhyolite_brick",
+                   "count":  4
+               }
 }

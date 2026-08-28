@@ -1,26 +1,26 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:shale_brick_furnace"
-    }
-  ],
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xxx",
-    "xyx",
-    "xxx"
-  ],
-  "key": {
-    "x": {
-      "tag": "mineralogy:slabs/shale/brick"
-    },
-    "y": {
-      "item": "minecraft:furnace"
-    }
-  },
-  "result": {
-    "item": "mineralogy:shale_brick_furnace",
-    "count": 1
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:shale_brick_furnace"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "xxx",
+                    "xyx",
+                    "xxx"
+                ],
+    "key":  {
+                "x":  {
+                          "tag":  "mineralogy:slabs/shale/brick"
+                      },
+                "y":  {
+                          "item":  "minecraft:furnace"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:shale_brick_furnace",
+                   "count":  1
+               }
 }

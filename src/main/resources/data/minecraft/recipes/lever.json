@@ -1,60 +1,60 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
-    {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "COBBLESTONE_EQUIVILENT"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "X",
-          "#"
-        ],
-        "key": {
-          "#": {
-            "tag": "mineralogy:cobblestone_equivalents"
-          },
-          "X": {
-            "item": "minecraft:stick"
-          }
-        },
-        "result": {
-          "item": "minecraft:lever"
-        }
-      }
-    },
-    {
-      "conditions": [
-        {
-          "type": "forge:not",
-          "value": {
-            "type": "mineralogy:config",
-            "flag": "COBBLESTONE_EQUIVILENT"
-          }
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "X",
-          "#"
-        ],
-        "key": {
-          "#": {
-            "tag": "forge:cobblestone"
-          },
-          "X": {
-            "item": "minecraft:stick"
-          }
-        },
-        "result": {
-          "item": "minecraft:lever"
-        }
-      }
-    }
-  ]
+    "type":  "forge:conditional",
+    "recipes":  [
+                    {
+                        "conditions":  [
+                                           {
+                                               "type":  "mineralogy:config",
+                                               "flag":  "COBBLESTONE_EQUIVILENT"
+                                           }
+                                       ],
+                        "recipe":  {
+                                       "type":  "minecraft:crafting_shaped",
+                                       "pattern":  [
+                                                       "X",
+                                                       "#"
+                                                   ],
+                                       "key":  {
+                                                   "#":  {
+                                                             "tag":  "mineralogy:cobblestone_equivalents"
+                                                         },
+                                                   "X":  {
+                                                             "item":  "minecraft:stick"
+                                                         }
+                                               },
+                                       "result":  {
+                                                      "item":  "minecraft:lever"
+                                                  }
+                                   }
+                    },
+                    {
+                        "conditions":  [
+                                           {
+                                               "type":  "forge:not",
+                                               "value":  {
+                                                             "type":  "mineralogy:config",
+                                                             "flag":  "COBBLESTONE_EQUIVILENT"
+                                                         }
+                                           }
+                                       ],
+                        "recipe":  {
+                                       "type":  "minecraft:crafting_shaped",
+                                       "pattern":  [
+                                                       "X",
+                                                       "#"
+                                                   ],
+                                       "key":  {
+                                                   "#":  {
+                                                             "tag":  "forge:cobblestone"
+                                                         },
+                                                   "X":  {
+                                                             "item":  "minecraft:stick"
+                                                         }
+                                               },
+                                       "result":  {
+                                                      "item":  "minecraft:lever"
+                                                  }
+                                   }
+                    }
+                ]
 }

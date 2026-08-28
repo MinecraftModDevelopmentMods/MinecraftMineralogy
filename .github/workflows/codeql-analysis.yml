@@ -3,11 +3,11 @@ name: CodeQL
 on:
   push:
     branches:
-      - master-1.16.5
+      - master-1.17.1
       - 'feature/**'
   pull_request:
     branches:
-      - master-1.16.5
+      - master-1.17.1
 
 permissions:
   actions: read
@@ -24,11 +24,11 @@ jobs:
       - name: Check out source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
-      - name: Install Java 8 toolchain
+      - name: Install Java 16 toolchain
         uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
         with:
           distribution: temurin
-          java-version: '8.0.502+7'
+          java-version: '16.0.2+7'
 
       - name: Install Java 17 for Gradle
         uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5

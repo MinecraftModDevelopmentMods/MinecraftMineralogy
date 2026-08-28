@@ -1,43 +1,43 @@
 {
-  "conditions": [
-    {
-      "type": "mineralogy:config",
-      "flag": "ENABLE_ROCK_SALT_LAMPS"
-    },
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:rocksaltlamp"
-    }
-  ],
-  "rewards": {
-    "recipes": [
-      "mineralogy:rocksaltlamp"
-    ]
-  },
-  "criteria": {
-    "has_the_recipe": {
-      "trigger": "minecraft:recipe_unlocked",
-      "conditions": {
-        "recipe": "mineralogy:rocksaltlamp"
-      }
-    },
-    "has_rock": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "mineralogy:rock_salt"
-            ]
-          }
-        ]
-      }
-    }
-  },
-  "requirements": [
-    [
-      "has_the_recipe",
-      "has_rock"
-    ]
-  ]
+    "conditions":  [
+                       {
+                           "type":  "mineralogy:config",
+                           "flag":  "ENABLE_ROCK_SALT_LAMPS"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:rocksaltlamp"
+                       }
+                   ],
+    "rewards":  {
+                    "recipes":  [
+                                    "mineralogy:rocksaltlamp"
+                                ]
+                },
+    "criteria":  {
+                     "has_the_recipe":  {
+                                            "trigger":  "minecraft:recipe_unlocked",
+                                            "conditions":  {
+                                                               "recipe":  "mineralogy:rocksaltlamp"
+                                                           }
+                                        },
+                     "has_rock":  {
+                                      "trigger":  "minecraft:inventory_changed",
+                                      "conditions":  {
+                                                         "items":  [
+                                                                       {
+                                                                           "items":  [
+                                                                                         "mineralogy:rock_salt"
+                                                                                     ]
+                                                                       }
+                                                                   ]
+                                                     }
+                                  }
+                 },
+    "requirements":  [
+                         [
+                             "has_the_recipe",
+                             "has_rock"
+                         ]
+                     ]
 }

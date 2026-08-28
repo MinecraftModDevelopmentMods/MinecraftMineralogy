@@ -1,25 +1,25 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:gabbro_slab"
-    },
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:gabbro"
-    }
-  ],
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "mineralogy:gabbro_slab"
-    },
-    {
-      "item": "mineralogy:gabbro_slab"
-    }
-  ],
-  "result": {
-    "item": "mineralogy:gabbro",
-    "count": 1
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:gabbro_slab"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:gabbro"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "ingredients":  [
+                        {
+                            "item":  "mineralogy:gabbro_slab"
+                        },
+                        {
+                            "item":  "mineralogy:gabbro_slab"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:gabbro",
+                   "count":  1
+               }
 }

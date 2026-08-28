@@ -1,6 +1,6 @@
 {
-  "replace": false,
-  "values": [
-    "mineralogy:conglomerate"
-  ]
+    "replace":  false,
+    "values":  [
+                   "mineralogy:conglomerate"
+               ]
 }

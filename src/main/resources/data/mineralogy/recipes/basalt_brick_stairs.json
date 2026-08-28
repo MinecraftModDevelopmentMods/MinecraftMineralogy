@@ -1,23 +1,23 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:basalt_brick_stairs"
-    }
-  ],
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "x  ",
-    "xx ",
-    "xxx"
-  ],
-  "key": {
-    "x": {
-      "tag": "mineralogy:stones/basalt/brick"
-    }
-  },
-  "result": {
-    "item": "mineralogy:basalt_brick_stairs",
-    "count": 4
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:basalt_brick_stairs"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "x  ",
+                    "xx ",
+                    "xxx"
+                ],
+    "key":  {
+                "x":  {
+                          "tag":  "mineralogy:stones/basalt/brick"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:basalt_brick_stairs",
+                   "count":  4
+               }
 }

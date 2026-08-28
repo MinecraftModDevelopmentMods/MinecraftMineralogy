@@ -1,23 +1,23 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:gabbro_smooth_stairs"
-    }
-  ],
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "x  ",
-    "xx ",
-    "xxx"
-  ],
-  "key": {
-    "x": {
-      "tag": "mineralogy:stones/gabbro/smooth"
-    }
-  },
-  "result": {
-    "item": "mineralogy:gabbro_smooth_stairs",
-    "count": 4
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:gabbro_smooth_stairs"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "x  ",
+                    "xx ",
+                    "xxx"
+                ],
+    "key":  {
+                "x":  {
+                          "tag":  "mineralogy:stones/gabbro/smooth"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:gabbro_smooth_stairs",
+                   "count":  4
+               }
 }

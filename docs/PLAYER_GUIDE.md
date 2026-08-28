@@ -2,8 +2,8 @@
 
 ## Installing
 
-Mineralogy 6 needs Minecraft 1.16.5, Forge 36.2.34, and OreSpawn
-4.0.9.116051.
+Mineralogy 6 needs Minecraft 1.17.1, Forge 37.1.1, and OreSpawn
+4.0.9.117011.
 Install matching Mineralogy and OreSpawn jars on both clients and servers. Do
 not open a world containing Mineralogy blocks without Mineralogy installed.
 
@@ -19,7 +19,7 @@ Cyano/`LEGACY` engine with their established family order and layer settings.
 It does not silently convert old terrain to Stable Layers. Back up an important
 world before changing its profile or upgrading mods.
 
-On the first 1.16.5 start, Mineralogy recognizes the old saved registry and
+On the first 1.17.1 start, Mineralogy recognizes the old saved registry and
 protects existing Overworld chunks while Minecraft converts them to flattened
 block states. Rock furnaces are converted when their chunk is first loaded;
 their inventory and cooking progress are retained. Old vanilla tile IDs are
@@ -52,6 +52,12 @@ exact Minecraft slab item, place one matching Mineralogy slab by itself in a
 crafting grid to convert it 1:1; placing the vanilla slab by itself converts it
 back without loss.
 
+Minecraft's native basalt and tuff work as members of their matching Mineralogy
+families. Native smooth basalt also works wherever Mineralogy expects smooth
+basalt, while Minecraft's normal basalt-smelting recipe is left unchanged.
+Deepslate is used as terrain and an ore host, but is not a Mineralogy
+construction family.
+
 Because raw rocks are cobblestone equivalents, eight raw Mineralogy rocks
 around an empty crafting-grid centre make a normal Minecraft furnace. A
 Mineralogy rock furnace is an upgrade recipe: surround an existing Minecraft
@@ -78,7 +84,7 @@ Its **Rock Settings** screen provides four altitude controls:
 - **Minimum Y** (`min_y`) and **Maximum Y** (`max_y`) are inclusive hard limits.
   The rock cannot replace terrain outside them.
 
-Minecraft 1.16.5 accepts Y `0` through `255`; Depth Spread accepts `1` through
+Minecraft 1.17.1 accepts Y `0` through `255`; Depth Spread accepts `1` through
 `512`. The saved fields are independent of the rock's geological family,
 overall weight, and geome weights, which also affect where it is selected.
 
@@ -93,10 +99,10 @@ retro-generate different rock strata into existing chunks.
 
 Mineralogy does not maintain a separate replacement blocklist. OreSpawn owns
 terrain replacement through each dimension's `host_blocks` and `host_tags`.
-The packaged Mineralogy profile initially uses `minecraft:stone` in the
-Overworld.
+The packaged Mineralogy profile initially uses `minecraft:stone` and
+`minecraft:deepslate` in the Overworld.
 
-The terrain-host list is not exposed by OreSpawn's 1.16.5 graphical editor. Stop
+The terrain-host list is not exposed by OreSpawn's 1.17.1 graphical editor. Stop
 Minecraft or the server before editing the JSON. For defaults inherited by
 worlds created afterward, edit:
 
@@ -121,6 +127,7 @@ each natural terrain block that Mineralogy rock may replace:
     "biome_namespaces": [],
     "host_blocks": [
       "minecraft:stone",
+      "minecraft:deepslate",
       "examplemod:custom_stone"
     ],
     "host_tags": []
@@ -129,11 +136,11 @@ each natural terrain block that Mineralogy rock may replace:
 ```
 
 Use `host_tags` when an OreSpawn/pack-provided group is more appropriate; on
-Minecraft 1.16.5 these resolve through target-native block tags. Exact
+Minecraft 1.17.1 these resolve through target-native block tags. Exact
 `host_blocks` entries are the clearest choice for one
 modded stone.
 
-Minecraft 1.16.5 matches a `host_blocks` entry by flattened block registry
+Minecraft 1.17.1 matches a `host_blocks` entry by flattened block registry
 identity. Add only
 natural base-terrain blocks, not machines, containers, or construction blocks.
 Restart after editing. The change affects only chunks generated afterward;
@@ -142,11 +149,11 @@ OreSpawn never retro-generates Mineralogy rock strata into existing chunks.
 ### Enabling Mineralogy Geology In Another Dimension
 
 OreSpawn can apply Mineralogy rocks to a stone-based mod dimension without a
-separate Mineralogy dimension option. Minecraft 1.16.5 uses the dimension
+separate Mineralogy dimension option. Minecraft 1.17.1 uses the dimension
 type's registered ID. For example, use `examplemod:moon` when that is the ID
 documented by the installed dimension mod.
 
-The 1.16.5 graphical editor does not expose terrain-dimension or rock-membership
+The 1.17.1 graphical editor does not expose terrain-dimension or rock-membership
 fields. Stop Minecraft or the server and edit the appropriate OreSpawn JSON:
 `config/orespawn-worldgen.json` for defaults inherited by future worlds, or
 `<world>/serverconfig/orespawn-worldgen.json` for an established world.

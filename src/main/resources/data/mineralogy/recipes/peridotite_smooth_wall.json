@@ -1,22 +1,22 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:peridotite_smooth_wall"
-    }
-  ],
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xxx",
-    "xxx"
-  ],
-  "key": {
-    "x": {
-      "tag": "mineralogy:stones/peridotite/smooth"
-    }
-  },
-  "result": {
-    "item": "mineralogy:peridotite_smooth_wall",
-    "count": 6
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:peridotite_smooth_wall"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "xxx",
+                    "xxx"
+                ],
+    "key":  {
+                "x":  {
+                          "tag":  "mineralogy:stones/peridotite/smooth"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:peridotite_smooth_wall",
+                   "count":  6
+               }
 }

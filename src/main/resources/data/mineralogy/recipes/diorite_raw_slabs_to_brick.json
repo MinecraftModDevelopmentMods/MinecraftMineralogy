@@ -1,26 +1,26 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:diorite_slab"
-    },
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:diorite_brick_slab"
-    }
-  ],
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xx",
-    "xx"
-  ],
-  "key": {
-    "x": {
-      "item": "mineralogy:diorite_slab"
-    }
-  },
-  "result": {
-    "item": "mineralogy:diorite_brick_slab",
-    "count": 4
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:diorite_slab"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:diorite_brick_slab"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "xx",
+                    "xx"
+                ],
+    "key":  {
+                "x":  {
+                          "item":  "mineralogy:diorite_slab"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:diorite_brick_slab",
+                   "count":  4
+               }
 }

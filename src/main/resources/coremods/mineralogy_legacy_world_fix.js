@@ -109,7 +109,7 @@ function initializeCoreMod() {
                     prefix.add(new VarInsnNode(Opcodes.ALOAD, 1));
                     prefix.add(new MethodInsnNode(
                             Opcodes.INVOKESTATIC,
-                            'com/mcmoddev/mineralogy/patching/LegacyWorldDataHook',
+                            'zone/moddev/mc/mineralogy/patching/LegacyWorldDataHook',
                             'shouldBlockWorldgenWrite',
                             '(Lnet/minecraft/core/BlockPos;)Z',
                             false));

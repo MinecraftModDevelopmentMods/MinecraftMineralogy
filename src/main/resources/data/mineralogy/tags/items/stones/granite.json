@@ -1,7 +1,7 @@
 {
-  "replace": false,
-  "values": [
-    "mineralogy:granite",
-    "minecraft:granite"
-  ]
+    "replace":  false,
+    "values":  [
+                   "mineralogy:granite",
+                   "minecraft:granite"
+               ]
 }

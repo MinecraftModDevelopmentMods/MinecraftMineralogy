@@ -1,21 +1,21 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:marble_slab"
-    }
-  ],
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xxx"
-  ],
-  "key": {
-    "x": {
-      "item": "mineralogy:marble"
-    }
-  },
-  "result": {
-    "item": "mineralogy:marble_slab",
-    "count": 6
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:marble_slab"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "xxx"
+                ],
+    "key":  {
+                "x":  {
+                          "item":  "mineralogy:marble"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:marble_slab",
+                   "count":  6
+               }
 }

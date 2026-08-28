@@ -1,23 +1,23 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:granite_relief_blank"
-    }
-  ],
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xxx",
-    "xxx",
-    "xxx"
-  ],
-  "key": {
-    "x": {
-      "tag": "mineralogy:stones/granite/smooth"
-    }
-  },
-  "result": {
-    "item": "mineralogy:granite_relief_blank",
-    "count": 16
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:granite_relief_blank"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "xxx",
+                    "xxx",
+                    "xxx"
+                ],
+    "key":  {
+                "x":  {
+                          "tag":  "mineralogy:stones/granite/smooth"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:granite_relief_blank",
+                   "count":  16
+               }
 }

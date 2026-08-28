@@ -5,7 +5,7 @@ import java.util.Map;
 
 import zone.moddev.mc.mineralogy.util.BlockItemPair;
 
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 
 public class MineralogyRegistry {
 	public static final Map<String, BlockItemPair> MineralogyBlockRegistry = new HashMap<>(); // all blocks used in this mod (blockID, BlockItemPair)

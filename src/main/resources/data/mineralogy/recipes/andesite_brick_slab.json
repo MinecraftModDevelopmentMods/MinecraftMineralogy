@@ -1,21 +1,21 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:andesite_brick_slab"
-    }
-  ],
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xxx"
-  ],
-  "key": {
-    "x": {
-      "item": "mineralogy:andesite_brick"
-    }
-  },
-  "result": {
-    "item": "mineralogy:andesite_brick_slab",
-    "count": 6
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:andesite_brick_slab"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "xxx"
+                ],
+    "key":  {
+                "x":  {
+                          "item":  "mineralogy:andesite_brick"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:andesite_brick_slab",
+                   "count":  6
+               }
 }

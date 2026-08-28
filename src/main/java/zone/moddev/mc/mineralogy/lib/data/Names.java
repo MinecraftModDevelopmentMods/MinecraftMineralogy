@@ -7,9 +7,9 @@ import javax.annotation.Nonnull;
 
 import com.google.common.collect.Maps;
 
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.StringRepresentable;
 
-public enum Names implements IStringSerializable {
+public enum Names implements StringRepresentable {
 	// Items
 	ARROW, AXE, BLEND, BOOTS, BOLT, BOW, CHESTPLATE, CRACKHAMMER, CROSSBOW, FISHING_ROD, GEAR, HELMET, HOE, HORSE_ARMOR, INGOT, LEGGINGS, NUGGET, PICKAXE, POWDER, ROD, SHEARS, SHIELD, SHOVEL, SMALLBLEND, SMALLPOWDER, SWORD, GEM,
 
@@ -37,7 +37,7 @@ public enum Names implements IStringSerializable {
 	}
 
 	@Override
-	public String getString() {
+	public String getSerializedName() {
 		return this.name();
 	}
 
@@ -50,6 +50,6 @@ public enum Names implements IStringSerializable {
 
 	@Override
 	public String toString() {
-		return this.getString().toLowerCase(Locale.ROOT);
+		return this.getSerializedName().toLowerCase(Locale.ROOT);
 	}
 }

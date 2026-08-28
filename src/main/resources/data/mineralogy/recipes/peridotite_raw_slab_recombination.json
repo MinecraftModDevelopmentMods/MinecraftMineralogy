@@ -1,25 +1,25 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:peridotite_slab"
-    },
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:peridotite"
-    }
-  ],
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "mineralogy:peridotite_slab"
-    },
-    {
-      "item": "mineralogy:peridotite_slab"
-    }
-  ],
-  "result": {
-    "item": "mineralogy:peridotite",
-    "count": 1
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:peridotite_slab"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:peridotite"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "ingredients":  [
+                        {
+                            "item":  "mineralogy:peridotite_slab"
+                        },
+                        {
+                            "item":  "mineralogy:peridotite_slab"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:peridotite",
+                   "count":  1
+               }
 }

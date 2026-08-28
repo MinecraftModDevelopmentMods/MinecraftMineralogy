@@ -1,6 +1,6 @@
 {
-  "replace": false,
-  "values": [
-    "mineralogy:siltstone_slab"
-  ]
+    "replace":  false,
+    "values":  [
+                   "mineralogy:siltstone_slab"
+               ]
 }

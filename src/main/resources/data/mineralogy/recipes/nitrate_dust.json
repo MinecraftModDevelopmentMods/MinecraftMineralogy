@@ -1,22 +1,22 @@
 {
-  "conditions": [
-    {
-      "type": "mineralogy:config",
-      "flag": "ENABLE_MINERAL_DUSTS"
-    },
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:nitrate_dust"
-    }
-  ],
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "tag": "forge:storage_blocks/nitrate"
-    }
-  ],
-  "result": {
-    "item": "mineralogy:nitrate_dust",
-    "count": 9
-  }
+    "conditions":  [
+                       {
+                           "type":  "mineralogy:config",
+                           "flag":  "ENABLE_MINERAL_DUSTS"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:nitrate_dust"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "ingredients":  [
+                        {
+                            "tag":  "forge:storage_blocks/nitrate"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:nitrate_dust",
+                   "count":  9
+               }
 }

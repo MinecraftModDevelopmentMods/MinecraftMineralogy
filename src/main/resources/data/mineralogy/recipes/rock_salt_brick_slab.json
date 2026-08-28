@@ -1,21 +1,21 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:rock_salt_brick_slab"
-    }
-  ],
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xxx"
-  ],
-  "key": {
-    "x": {
-      "item": "mineralogy:rock_salt_brick"
-    }
-  },
-  "result": {
-    "item": "mineralogy:rock_salt_brick_slab",
-    "count": 6
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:rock_salt_brick_slab"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "xxx"
+                ],
+    "key":  {
+                "x":  {
+                          "item":  "mineralogy:rock_salt_brick"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:rock_salt_brick_slab",
+                   "count":  6
+               }
 }

@@ -1,26 +1,26 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:scoria_slab"
-    },
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:scoria_brick_slab"
-    }
-  ],
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xx",
-    "xx"
-  ],
-  "key": {
-    "x": {
-      "item": "mineralogy:scoria_slab"
-    }
-  },
-  "result": {
-    "item": "mineralogy:scoria_brick_slab",
-    "count": 4
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:scoria_slab"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:scoria_brick_slab"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "xx",
+                    "xx"
+                ],
+    "key":  {
+                "x":  {
+                          "item":  "mineralogy:scoria_slab"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:scoria_brick_slab",
+                   "count":  4
+               }
 }

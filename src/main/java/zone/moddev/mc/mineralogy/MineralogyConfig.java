@@ -19,11 +19,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
-import net.minecraft.advancements.criterion.ItemPredicate;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
@@ -253,12 +253,12 @@ public final class MineralogyConfig {
     private static ItemPredicate configItemPredicate(JsonObject json) {
         List<BooleanSupplier> flags = new ArrayList<>();
         if (json.has("flags")) {
-            JsonArray array = JSONUtils.getJsonArray(json, "flags");
-            for (JsonElement flag : array) flags.add(configFlagCondition(JSONUtils.getString(flag, "flag")));
+            JsonArray array = GsonHelper.getAsJsonArray(json, "flags");
+            for (JsonElement flag : array) flags.add(configFlagCondition(GsonHelper.convertToString(flag, "flag")));
         } else {
-            flags.add(configFlagCondition(JSONUtils.getString(json, "flag")));
+            flags.add(configFlagCondition(GsonHelper.getAsString(json, "flag")));
         }
-        return new ConfigItemPredicate(flags, new ResourceLocation(JSONUtils.getString(json, "item")));
+        return new ConfigItemPredicate(flags, new ResourceLocation(GsonHelper.getAsString(json, "item")));
     }
 
     private static BooleanSupplier configFlagCondition(String flag) {
@@ -352,7 +352,7 @@ public final class MineralogyConfig {
         }
 
         @Override public ConfigCondition read(JsonObject json) {
-            return new ConfigCondition(JSONUtils.getString(json, "flag"));
+            return new ConfigCondition(GsonHelper.getAsString(json, "flag"));
         }
 
         @Override public ResourceLocation getID() { return CONFIG_CONDITION_ID; }
@@ -365,7 +365,7 @@ public final class MineralogyConfig {
             this.flags = flags;
             this.itemName = itemName;
         }
-        @Override public boolean test(ItemStack stack) {
+        @Override public boolean matches(ItemStack stack) {
             for (BooleanSupplier flag : flags) if (!flag.getAsBoolean()) return false;
             Item item = ForgeRegistries.ITEMS.getValue(itemName);
             return item != null && stack.getItem() == item;

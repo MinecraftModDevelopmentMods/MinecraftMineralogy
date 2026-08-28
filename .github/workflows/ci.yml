@@ -1,19 +1,19 @@
-name: Mineralogy 1.16.5 CI
+name: Mineralogy 1.17.1 CI
 
 on:
   push:
     branches:
-      - master-1.16.5
+      - master-1.17.1
       - 'feature/**'
   pull_request:
     branches:
-      - master-1.16.5
+      - master-1.17.1
 
 permissions:
   contents: read
 
 concurrency:
-  group: mineralogy-1.16-${{ github.workflow }}-${{ github.ref }}
+  group: mineralogy-1.17-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -26,11 +26,11 @@ jobs:
       - name: Check out source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
 
-      - name: Install Java 8 toolchain
+      - name: Install Java 16 toolchain
         uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
         with:
           distribution: temurin
-          java-version: '8.0.502+7'
+          java-version: '16.0.2+7'
 
       - name: Install Java 17 for Gradle
         uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
@@ -64,13 +64,13 @@ jobs:
       - name: Upload audited release candidate
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
-          name: Mineralogy-1.16.5-${{ github.sha }}
+          name: Mineralogy-1.17.1-${{ github.sha }}
           if-no-files-found: error
           retention-days: 30
           path: |
-            build/libs/Mineralogy-6.1.0.116051.jar
-            build/libs/Mineralogy-6.1.0.116051-sources.jar
-            build/libs/Mineralogy-6.1.0.116051-javadoc.jar
+            build/libs/Mineralogy-6.1.0.117011.jar
+            build/libs/Mineralogy-6.1.0.117011-sources.jar
+            build/libs/Mineralogy-6.1.0.117011-javadoc.jar
             build/release/SHA256SUMS
             CHANGELOG.txt
 
@@ -78,7 +78,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
-          name: Mineralogy-1.16.5-diagnostics-${{ github.sha }}
+          name: Mineralogy-1.17.1-diagnostics-${{ github.sha }}
           if-no-files-found: ignore
           retention-days: 14
           path: |

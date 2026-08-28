@@ -1,6 +1,6 @@
 {
-  "replace": false,
-  "values": [
-    "mineralogy:amphibolite_smooth"
-  ]
+    "replace":  false,
+    "values":  [
+                   "mineralogy:amphibolite_smooth"
+               ]
 }

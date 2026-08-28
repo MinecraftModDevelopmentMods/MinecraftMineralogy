@@ -1,42 +1,42 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:pegmatite_relief_hoe"
-    }
-  ],
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "mineralogy:pegmatite_relief_blank"
-    },
-    {
-      "item": "mineralogy:pegmatite_relief_blank"
-    },
-    {
-      "item": "mineralogy:pegmatite_relief_blank"
-    },
-    {
-      "item": "mineralogy:pegmatite_relief_blank"
-    },
-    {
-      "item": "mineralogy:pegmatite_relief_blank"
-    },
-    {
-      "item": "mineralogy:pegmatite_relief_blank"
-    },
-    {
-      "item": "mineralogy:pegmatite_relief_blank"
-    },
-    {
-      "item": "mineralogy:pegmatite_relief_blank"
-    },
-    {
-      "item": "minecraft:stone_hoe"
-    }
-  ],
-  "result": {
-    "item": "mineralogy:pegmatite_relief_hoe",
-    "count": 8
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:pegmatite_relief_hoe"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "ingredients":  [
+                        {
+                            "item":  "mineralogy:pegmatite_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:pegmatite_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:pegmatite_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:pegmatite_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:pegmatite_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:pegmatite_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:pegmatite_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:pegmatite_relief_blank"
+                        },
+                        {
+                            "item":  "minecraft:stone_hoe"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:pegmatite_relief_hoe",
+                   "count":  8
+               }
 }

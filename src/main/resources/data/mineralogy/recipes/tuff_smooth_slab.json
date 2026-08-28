@@ -1,21 +1,21 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:tuff_smooth_slab"
-    }
-  ],
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xxx"
-  ],
-  "key": {
-    "x": {
-      "item": "mineralogy:tuff_smooth"
-    }
-  },
-  "result": {
-    "item": "mineralogy:tuff_smooth_slab",
-    "count": 6
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:tuff_smooth_slab"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "xxx"
+                ],
+    "key":  {
+                "x":  {
+                          "tag":  "mineralogy:stones/tuff/smooth"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:tuff_smooth_slab",
+                   "count":  6
+               }
 }

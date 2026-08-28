@@ -1,21 +1,19 @@
 package zone.moddev.mc.mineralogy.compat;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.ITag;
-import net.minecraft.tags.ITagCollection;
-import net.minecraft.tags.ITagCollectionSupplier;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.SetTag;
 import net.minecraft.tags.Tag;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.tags.TagCollection;
+import net.minecraft.tags.TagContainer;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.event.TagsUpdatedEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -40,9 +38,9 @@ public final class CobblestoneTagPolicy {
         apply(event.getTagManager());
     }
 
-    static void apply(ITagCollectionSupplier manager) {
-        ITagCollection<Block> blockTags = manager.getBlockTags();
-        ITagCollection<Item> itemTags = manager.getItemTags();
+    static void apply(TagContainer manager) {
+        TagCollection<Block> blockTags = manager.getOrEmpty(Registry.BLOCK_REGISTRY);
+        TagCollection<Item> itemTags = manager.getOrEmpty(Registry.ITEM_REGISTRY);
         Set<Block> configuredBlocks = rawRockBlocks(blockTags);
         Set<Item> configuredItems = rawRockItems(itemTags);
 
@@ -68,29 +66,29 @@ public final class CobblestoneTagPolicy {
         updateDerivedItemTag(itemTags, STONE_CRAFTING_MATERIALS, configuredItems, enabled);
         updateDerivedItemTag(itemTags, STONE_TOOL_MATERIALS, configuredItems, enabled);
 
-        Mineralogy.LOGGER.debug("Applied Forge 36 cobblestone policy: enabled={}, rocks={}, "
+        Mineralogy.LOGGER.debug("Applied Forge 37 cobblestone policy: enabled={}, rocks={}, "
                 + "forgeItems={}, craftingItems={}, toolItems={}", enabled, configuredItems.size(),
-                required(itemTags, COBBLESTONE).getAllElements().size(),
-                required(itemTags, STONE_CRAFTING_MATERIALS).getAllElements().size(),
-                required(itemTags, STONE_TOOL_MATERIALS).getAllElements().size());
+                required(itemTags, COBBLESTONE).getValues().size(),
+                required(itemTags, STONE_CRAFTING_MATERIALS).getValues().size(),
+                required(itemTags, STONE_TOOL_MATERIALS).getValues().size());
 
         // Ingredients cache their expanded matching stacks independently of the
         // retained tag object, so invalidate them after every initial load/reload.
         Ingredient.invalidateAll();
     }
 
-    private static Set<Block> rawRockBlocks(ITagCollection<Block> tags) {
+    private static Set<Block> rawRockBlocks(TagCollection<Block> tags) {
         Set<Block> blocks = new LinkedHashSet<>();
         for (Material material : MaterialData.allIncludingRockSalt()) {
-            blocks.addAll(required(tags, familyTag(material)).getAllElements());
+            blocks.addAll(required(tags, familyTag(material)).getValues());
         }
         return blocks;
     }
 
-    private static Set<Item> rawRockItems(ITagCollection<Item> tags) {
+    private static Set<Item> rawRockItems(TagCollection<Item> tags) {
         Set<Item> items = new LinkedHashSet<>();
         for (Material material : MaterialData.allIncludingRockSalt()) {
-            items.addAll(required(tags, familyTag(material)).getAllElements());
+            items.addAll(required(tags, familyTag(material)).getValues());
         }
         return items;
     }
@@ -99,12 +97,12 @@ public final class CobblestoneTagPolicy {
         return new ResourceLocation(Mineralogy.MODID, "stones/" + material.id());
     }
 
-    private static <T> Set<T> existing(ITagCollection<T> collection, ResourceLocation id) {
-        ITag<T> tag = collection.get(id);
-        return tag == null ? new LinkedHashSet<>() : new LinkedHashSet<>(tag.getAllElements());
+    private static <T> Set<T> existing(TagCollection<T> collection, ResourceLocation id) {
+        Tag<T> tag = collection.getTag(id);
+        return tag == null ? new LinkedHashSet<>() : new LinkedHashSet<>(tag.getValues());
     }
 
-    private static void updateDerivedItemTag(ITagCollection<Item> tags, ResourceLocation id,
+    private static void updateDerivedItemTag(TagCollection<Item> tags, ResourceLocation id,
             Set<Item> configuredItems, boolean enabled) {
         Set<Item> values = existing(tags, id);
         values.removeAll(configuredItems);
@@ -114,8 +112,8 @@ public final class CobblestoneTagPolicy {
         replaceElementsInPlace(required(tags, id), values);
     }
 
-    private static <T> ITag<T> required(ITagCollection<T> collection, ResourceLocation id) {
-        ITag<T> tag = collection.get(id);
+    private static <T> Tag<T> required(TagCollection<T> collection, ResourceLocation id) {
+        Tag<T> tag = collection.getTag(id);
         if (tag == null) {
             throw new IllegalStateException("Missing required tag " + id);
         }
@@ -123,49 +121,27 @@ public final class CobblestoneTagPolicy {
     }
 
     /**
-     * Forge 36 recipes retain the concrete tag instance resolved while their
+     * Forge 37 recipes retain the concrete tag instance resolved while their
      * ingredients are parsed. Replacing the surrounding collection therefore
      * leaves recipes pointing at stale immutable contents. Update both fields
      * on that exact instance so membership tests and expanded stack lists agree.
      */
     @SuppressWarnings("unchecked")
-    static <T> void replaceElementsInPlace(ITag<T> tag, Set<T> values) {
-        if (!(tag instanceof Tag)) {
-            throw new IllegalStateException("Unsupported Forge 36 tag implementation "
+    static <T> void replaceElementsInPlace(Tag<T> tag, Set<T> values) {
+        if (!(tag instanceof SetTag)) {
+            throw new IllegalStateException("Unsupported Forge 37 tag implementation "
                     + tag.getClass().getName());
         }
-        Tag<T> retained = (Tag<T>) tag;
-        setRetainedField(retained, "field_241282_b_", List.class, ImmutableList.copyOf(values));
-        setRetainedField(retained, "field_241283_c_", Set.class, ImmutableSet.copyOf(values));
-    }
-
-    private static void setRetainedField(Tag<?> retained, String mappedName,
-            Class<?> fieldType, Object value) {
-        Field selected = null;
-        try {
-            selected = Tag.class.getDeclaredField(mappedName);
-        } catch (NoSuchFieldException ignored) {
-            // The production jar uses obfuscated field names. Their distinct
-            // List/Set types are stable on Forge 36 and identify them safely.
-            for (Field field : Tag.class.getDeclaredFields()) {
-                if (fieldType.isAssignableFrom(field.getType())) {
-                    if (selected != null) {
-                        throw new IllegalStateException("Ambiguous Forge 36 tag "
-                                + fieldType.getSimpleName() + " field");
-                    }
-                    selected = field;
-                }
+        SetTag<T> replacement = SetTag.create(values);
+        for (Field field : SetTag.class.getDeclaredFields()) {
+            if (Modifier.isStatic(field.getModifiers())) continue;
+            try {
+                field.setAccessible(true);
+                field.set(tag, field.get(replacement));
+            } catch (IllegalAccessException ex) {
+                throw new IllegalStateException("Could not update retained Forge 37 tag field "
+                        + field.getName(), ex);
             }
-        }
-        if (selected == null) {
-            throw new IllegalStateException("Missing Forge 36 tag "
-                    + fieldType.getSimpleName() + " field");
-        }
-        try {
-            selected.setAccessible(true);
-            selected.set(retained, value);
-        } catch (IllegalAccessException ex) {
-            throw new IllegalStateException("Could not update retained Forge 36 tag", ex);
         }
     }
 

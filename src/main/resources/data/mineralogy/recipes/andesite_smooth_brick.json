@@ -1,22 +1,22 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:andesite_smooth_brick"
-    }
-  ],
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xx",
-    "xx"
-  ],
-  "key": {
-    "x": {
-      "tag": "mineralogy:stones/andesite/smooth"
-    }
-  },
-  "result": {
-    "item": "mineralogy:andesite_smooth_brick",
-    "count": 4
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:andesite_smooth_brick"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "xx",
+                    "xx"
+                ],
+    "key":  {
+                "x":  {
+                          "tag":  "mineralogy:stones/andesite/smooth"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:andesite_smooth_brick",
+                   "count":  4
+               }
 }

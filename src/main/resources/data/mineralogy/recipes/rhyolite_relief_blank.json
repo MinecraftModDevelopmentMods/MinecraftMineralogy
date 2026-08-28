@@ -1,23 +1,23 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:rhyolite_relief_blank"
-    }
-  ],
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xxx",
-    "xxx",
-    "xxx"
-  ],
-  "key": {
-    "x": {
-      "item": "mineralogy:rhyolite_smooth"
-    }
-  },
-  "result": {
-    "item": "mineralogy:rhyolite_relief_blank",
-    "count": 16
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:rhyolite_relief_blank"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "xxx",
+                    "xxx",
+                    "xxx"
+                ],
+    "key":  {
+                "x":  {
+                          "item":  "mineralogy:rhyolite_smooth"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:rhyolite_relief_blank",
+                   "count":  16
+               }
 }

@@ -1,25 +1,25 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:basalt_brick"
-    },
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:basalt_smooth_brick"
-    }
-  ],
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "mineralogy:basalt_brick"
-    },
-    {
-      "tag": "forge:sand"
-    }
-  ],
-  "result": {
-    "item": "mineralogy:basalt_smooth_brick",
-    "count": 1
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:basalt_brick"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:basalt_smooth_brick"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "ingredients":  [
+                        {
+                            "item":  "mineralogy:basalt_brick"
+                        },
+                        {
+                            "tag":  "forge:sand"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:basalt_smooth_brick",
+                   "count":  1
+               }
 }

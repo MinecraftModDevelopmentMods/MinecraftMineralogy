@@ -1,25 +1,25 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:andesite_slab"
-    },
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:andesite"
-    }
-  ],
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "mineralogy:andesite_slab"
-    },
-    {
-      "item": "mineralogy:andesite_slab"
-    }
-  ],
-  "result": {
-    "item": "mineralogy:andesite",
-    "count": 1
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:andesite_slab"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:andesite"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "ingredients":  [
+                        {
+                            "item":  "mineralogy:andesite_slab"
+                        },
+                        {
+                            "item":  "mineralogy:andesite_slab"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:andesite",
+                   "count":  1
+               }
 }

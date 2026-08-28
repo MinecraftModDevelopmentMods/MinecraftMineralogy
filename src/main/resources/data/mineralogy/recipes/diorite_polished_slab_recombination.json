@@ -1,25 +1,25 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:diorite_smooth_slab"
-    },
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:diorite_smooth"
-    }
-  ],
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "mineralogy:diorite_smooth_slab"
-    },
-    {
-      "item": "mineralogy:diorite_smooth_slab"
-    }
-  ],
-  "result": {
-    "item": "mineralogy:diorite_smooth",
-    "count": 1
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:diorite_smooth_slab"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:diorite_smooth"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "ingredients":  [
+                        {
+                            "item":  "mineralogy:diorite_smooth_slab"
+                        },
+                        {
+                            "item":  "mineralogy:diorite_smooth_slab"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:diorite_smooth",
+                   "count":  1
+               }
 }

@@ -1,25 +1,25 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:basaltic_glass_brick_stairs"
-    },
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:basaltic_glass_smooth_brick_stairs"
-    }
-  ],
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "mineralogy:basaltic_glass_brick_stairs"
-    },
-    {
-      "tag": "forge:sand"
-    }
-  ],
-  "result": {
-    "item": "mineralogy:basaltic_glass_smooth_brick_stairs",
-    "count": 1
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:basaltic_glass_brick_stairs"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:basaltic_glass_smooth_brick_stairs"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "ingredients":  [
+                        {
+                            "item":  "mineralogy:basaltic_glass_brick_stairs"
+                        },
+                        {
+                            "tag":  "forge:sand"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:basaltic_glass_smooth_brick_stairs",
+                   "count":  1
+               }
 }

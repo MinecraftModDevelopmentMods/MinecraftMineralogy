@@ -1,26 +1,26 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:basalt_slab"
-    },
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:basalt_brick_slab"
-    }
-  ],
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xx",
-    "xx"
-  ],
-  "key": {
-    "x": {
-      "item": "mineralogy:basalt_slab"
-    }
-  },
-  "result": {
-    "item": "mineralogy:basalt_brick_slab",
-    "count": 4
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:basalt_slab"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:basalt_brick_slab"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "xx",
+                    "xx"
+                ],
+    "key":  {
+                "x":  {
+                          "item":  "mineralogy:basalt_slab"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:basalt_brick_slab",
+                   "count":  4
+               }
 }

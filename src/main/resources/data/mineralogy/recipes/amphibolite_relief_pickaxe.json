@@ -1,42 +1,42 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:amphibolite_relief_pickaxe"
-    }
-  ],
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "mineralogy:amphibolite_relief_blank"
-    },
-    {
-      "item": "mineralogy:amphibolite_relief_blank"
-    },
-    {
-      "item": "mineralogy:amphibolite_relief_blank"
-    },
-    {
-      "item": "mineralogy:amphibolite_relief_blank"
-    },
-    {
-      "item": "mineralogy:amphibolite_relief_blank"
-    },
-    {
-      "item": "mineralogy:amphibolite_relief_blank"
-    },
-    {
-      "item": "mineralogy:amphibolite_relief_blank"
-    },
-    {
-      "item": "mineralogy:amphibolite_relief_blank"
-    },
-    {
-      "item": "minecraft:stone_pickaxe"
-    }
-  ],
-  "result": {
-    "item": "mineralogy:amphibolite_relief_pickaxe",
-    "count": 8
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:amphibolite_relief_pickaxe"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "ingredients":  [
+                        {
+                            "item":  "mineralogy:amphibolite_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:amphibolite_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:amphibolite_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:amphibolite_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:amphibolite_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:amphibolite_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:amphibolite_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:amphibolite_relief_blank"
+                        },
+                        {
+                            "item":  "minecraft:stone_pickaxe"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:amphibolite_relief_pickaxe",
+                   "count":  8
+               }
 }

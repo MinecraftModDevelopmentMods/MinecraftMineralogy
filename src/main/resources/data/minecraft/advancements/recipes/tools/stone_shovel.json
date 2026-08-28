@@ -1,87 +1,87 @@
 {
-  "advancements": [
-    {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "COBBLESTONE_EQUIVILENT"
-        }
-      ],
-      "advancement": {
-        "parent": "minecraft:recipes/root",
-        "rewards": {
-          "recipes": [
-            "minecraft:stone_shovel"
-          ]
-        },
-        "criteria": {
-          "has_cobblestone": {
-            "trigger": "minecraft:inventory_changed",
-            "conditions": {
-              "items": [
-                {
-                  "tag": "mineralogy:stone_tool_materials"
-                }
-              ]
-            }
-          },
-          "has_the_recipe": {
-            "trigger": "minecraft:recipe_unlocked",
-            "conditions": {
-              "recipe": "minecraft:stone_shovel"
-            }
-          }
-        },
-        "requirements": [
-          [
-            "has_cobblestone",
-            "has_the_recipe"
-          ]
-        ]
-      }
-    },
-    {
-      "conditions": [
-        {
-          "type": "forge:not",
-          "value": {
-            "type": "mineralogy:config",
-            "flag": "COBBLESTONE_EQUIVILENT"
-          }
-        }
-      ],
-      "advancement": {
-        "parent": "minecraft:recipes/root",
-        "rewards": {
-          "recipes": [
-            "minecraft:stone_shovel"
-          ]
-        },
-        "criteria": {
-          "has_cobblestone": {
-            "trigger": "minecraft:inventory_changed",
-            "conditions": {
-              "items": [
-                {
-                  "tag": "minecraft:stone_tool_materials"
-                }
-              ]
-            }
-          },
-          "has_the_recipe": {
-            "trigger": "minecraft:recipe_unlocked",
-            "conditions": {
-              "recipe": "minecraft:stone_shovel"
-            }
-          }
-        },
-        "requirements": [
-          [
-            "has_cobblestone",
-            "has_the_recipe"
-          ]
-        ]
-      }
-    }
-  ]
+    "advancements":  [
+                         {
+                             "conditions":  [
+                                                {
+                                                    "type":  "mineralogy:config",
+                                                    "flag":  "COBBLESTONE_EQUIVILENT"
+                                                }
+                                            ],
+                             "advancement":  {
+                                                 "parent":  "minecraft:recipes/root",
+                                                 "rewards":  {
+                                                                 "recipes":  [
+                                                                                 "minecraft:stone_shovel"
+                                                                             ]
+                                                             },
+                                                 "criteria":  {
+                                                                  "has_cobblestone":  {
+                                                                                          "trigger":  "minecraft:inventory_changed",
+                                                                                          "conditions":  {
+                                                                                                             "items":  [
+                                                                                                                           {
+                                                                                                                               "tag":  "mineralogy:stone_tool_materials"
+                                                                                                                           }
+                                                                                                                       ]
+                                                                                                         }
+                                                                                      },
+                                                                  "has_the_recipe":  {
+                                                                                         "trigger":  "minecraft:recipe_unlocked",
+                                                                                         "conditions":  {
+                                                                                                            "recipe":  "minecraft:stone_shovel"
+                                                                                                        }
+                                                                                     }
+                                                              },
+                                                 "requirements":  [
+                                                                      [
+                                                                          "has_cobblestone",
+                                                                          "has_the_recipe"
+                                                                      ]
+                                                                  ]
+                                             }
+                         },
+                         {
+                             "conditions":  [
+                                                {
+                                                    "type":  "forge:not",
+                                                    "value":  {
+                                                                  "type":  "mineralogy:config",
+                                                                  "flag":  "COBBLESTONE_EQUIVILENT"
+                                                              }
+                                                }
+                                            ],
+                             "advancement":  {
+                                                 "parent":  "minecraft:recipes/root",
+                                                 "rewards":  {
+                                                                 "recipes":  [
+                                                                                 "minecraft:stone_shovel"
+                                                                             ]
+                                                             },
+                                                 "criteria":  {
+                                                                  "has_cobblestone":  {
+                                                                                          "trigger":  "minecraft:inventory_changed",
+                                                                                          "conditions":  {
+                                                                                                             "items":  [
+                                                                                                                           {
+                                                                                                                               "tag":  "minecraft:stone_tool_materials"
+                                                                                                                           }
+                                                                                                                       ]
+                                                                                                         }
+                                                                                      },
+                                                                  "has_the_recipe":  {
+                                                                                         "trigger":  "minecraft:recipe_unlocked",
+                                                                                         "conditions":  {
+                                                                                                            "recipe":  "minecraft:stone_shovel"
+                                                                                                        }
+                                                                                     }
+                                                              },
+                                                 "requirements":  [
+                                                                      [
+                                                                          "has_cobblestone",
+                                                                          "has_the_recipe"
+                                                                      ]
+                                                                  ]
+                                             }
+                         }
+                     ]
 }

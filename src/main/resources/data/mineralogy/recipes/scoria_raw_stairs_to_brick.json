@@ -1,26 +1,26 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:scoria_stairs"
-    },
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:scoria_brick_stairs"
-    }
-  ],
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xx",
-    "xx"
-  ],
-  "key": {
-    "x": {
-      "item": "mineralogy:scoria_stairs"
-    }
-  },
-  "result": {
-    "item": "mineralogy:scoria_brick_stairs",
-    "count": 4
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:scoria_stairs"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:scoria_brick_stairs"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "xx",
+                    "xx"
+                ],
+    "key":  {
+                "x":  {
+                          "item":  "mineralogy:scoria_stairs"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:scoria_brick_stairs",
+                   "count":  4
+               }
 }

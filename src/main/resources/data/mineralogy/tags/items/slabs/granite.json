@@ -1,7 +1,7 @@
 {
-  "replace": false,
-  "values": [
-    "mineralogy:granite_slab",
-    "minecraft:granite_slab"
-  ]
+    "replace":  false,
+    "values":  [
+                   "mineralogy:granite_slab",
+                   "minecraft:granite_slab"
+               ]
 }

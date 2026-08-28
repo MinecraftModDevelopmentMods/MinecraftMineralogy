@@ -1,25 +1,25 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:novaculite_brick"
-    },
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:novaculite_smooth_brick"
-    }
-  ],
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "mineralogy:novaculite_brick"
-    },
-    {
-      "tag": "forge:sand"
-    }
-  ],
-  "result": {
-    "item": "mineralogy:novaculite_smooth_brick",
-    "count": 1
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:novaculite_brick"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:novaculite_smooth_brick"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "ingredients":  [
+                        {
+                            "item":  "mineralogy:novaculite_brick"
+                        },
+                        {
+                            "tag":  "forge:sand"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:novaculite_smooth_brick",
+                   "count":  1
+               }
 }

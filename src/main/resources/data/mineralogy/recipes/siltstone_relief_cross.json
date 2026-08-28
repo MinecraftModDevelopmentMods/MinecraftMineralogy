@@ -1,23 +1,23 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:siltstone_relief_cross"
-    }
-  ],
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "x x",
-    "   ",
-    "x x"
-  ],
-  "key": {
-    "x": {
-      "item": "mineralogy:siltstone_relief_blank"
-    }
-  },
-  "result": {
-    "item": "mineralogy:siltstone_relief_cross",
-    "count": 4
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:siltstone_relief_cross"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "x x",
+                    "   ",
+                    "x x"
+                ],
+    "key":  {
+                "x":  {
+                          "item":  "mineralogy:siltstone_relief_blank"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:siltstone_relief_cross",
+                   "count":  4
+               }
 }

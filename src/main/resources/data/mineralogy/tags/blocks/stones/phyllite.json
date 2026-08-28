@@ -1,6 +1,6 @@
 {
-  "replace": false,
-  "values": [
-    "mineralogy:phyllite"
-  ]
+    "replace":  false,
+    "values":  [
+                   "mineralogy:phyllite"
+               ]
 }

@@ -1,6 +1,6 @@
 {
-  "replace": false,
-  "values": [
-    "mineralogy:dolomite_brick"
-  ]
+    "replace":  false,
+    "values":  [
+                   "mineralogy:dolomite_brick"
+               ]
 }

@@ -1,6 +1,6 @@
 {
-  "replace": false,
-  "values": [
-    "mineralogy:peridotite_smooth_brick"
-  ]
+    "replace":  false,
+    "values":  [
+                   "mineralogy:peridotite_smooth_brick"
+               ]
 }

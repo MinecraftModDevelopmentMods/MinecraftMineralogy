@@ -1,6 +1,6 @@
 {
-  "replace": false,
-  "values": [
-    "mineralogy:schist"
-  ]
+    "replace":  false,
+    "values":  [
+                   "mineralogy:schist"
+               ]
 }

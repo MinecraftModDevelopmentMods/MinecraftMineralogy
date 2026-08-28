@@ -6,9 +6,9 @@ import zone.moddev.mc.mineralogy.blocks.RockSaltLamp;
 import zone.moddev.mc.mineralogy.blocks.RockSaltStreetLamp;
 import zone.moddev.mc.mineralogy.fluids.MineralogyFluids;
 
-import net.minecraft.block.Block;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -22,13 +22,13 @@ public final class ClientSetup {
 
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent event) {
-        RenderType cutout = RenderType.getCutout();
+        RenderType cutout = RenderType.cutout();
         for (Block block : ForgeRegistries.BLOCKS.getValues()) {
             if (block instanceof DryWall || block instanceof RockSaltLamp || block instanceof RockSaltStreetLamp) {
-                RenderTypeLookup.setRenderLayer(block, cutout);
+                ItemBlockRenderTypes.setRenderLayer(block, cutout);
             }
         }
-        RenderTypeLookup.setRenderLayer(MineralogyFluids.CRUDE_OIL, RenderType.getTranslucent());
-        RenderTypeLookup.setRenderLayer(MineralogyFluids.FLOWING_CRUDE_OIL, RenderType.getTranslucent());
+        ItemBlockRenderTypes.setRenderLayer(MineralogyFluids.CRUDE_OIL, RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(MineralogyFluids.FLOWING_CRUDE_OIL, RenderType.translucent());
     }
 }

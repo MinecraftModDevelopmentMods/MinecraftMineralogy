@@ -1,6 +1,6 @@
 {
-  "replace": false,
-  "values": [
-    "mineralogy:quartzite"
-  ]
+    "replace":  false,
+    "values":  [
+                   "mineralogy:quartzite"
+               ]
 }

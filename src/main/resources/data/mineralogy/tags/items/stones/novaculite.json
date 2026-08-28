@@ -1,6 +1,6 @@
 {
-  "replace": false,
-  "values": [
-    "mineralogy:novaculite"
-  ]
+    "replace":  false,
+    "values":  [
+                   "mineralogy:novaculite"
+               ]
 }

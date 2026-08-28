@@ -1,25 +1,25 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:marble_slab"
-    },
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:marble"
-    }
-  ],
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "mineralogy:marble_slab"
-    },
-    {
-      "item": "mineralogy:marble_slab"
-    }
-  ],
-  "result": {
-    "item": "mineralogy:marble",
-    "count": 1
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:marble_slab"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:marble"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "ingredients":  [
+                        {
+                            "item":  "mineralogy:marble_slab"
+                        },
+                        {
+                            "item":  "mineralogy:marble_slab"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:marble",
+                   "count":  1
+               }
 }

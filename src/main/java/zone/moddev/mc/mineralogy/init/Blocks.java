@@ -19,8 +19,8 @@ import zone.moddev.mc.mineralogy.blocks.RockStairs;
 import zone.moddev.mc.mineralogy.blocks.RockWall;
 import zone.moddev.mc.mineralogy.data.MaterialData;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;

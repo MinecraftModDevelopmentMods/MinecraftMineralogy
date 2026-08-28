@@ -1,26 +1,26 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:hornfels_wall"
-    },
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:hornfels_brick_wall"
-    }
-  ],
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xx",
-    "xx"
-  ],
-  "key": {
-    "x": {
-      "item": "mineralogy:hornfels_wall"
-    }
-  },
-  "result": {
-    "item": "mineralogy:hornfels_brick_wall",
-    "count": 4
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:hornfels_wall"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:hornfels_brick_wall"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "xx",
+                    "xx"
+                ],
+    "key":  {
+                "x":  {
+                          "item":  "mineralogy:hornfels_wall"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:hornfels_brick_wall",
+                   "count":  4
+               }
 }

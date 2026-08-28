@@ -1,6 +1,7 @@
 {
-  "replace": false,
-  "values": [
-    "mineralogy:tuff"
-  ]
+    "replace":  false,
+    "values":  [
+                   "mineralogy:tuff",
+                   "minecraft:tuff"
+               ]
 }

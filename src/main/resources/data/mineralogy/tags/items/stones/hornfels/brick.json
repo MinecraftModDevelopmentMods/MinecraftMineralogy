@@ -1,6 +1,6 @@
 {
-  "replace": false,
-  "values": [
-    "mineralogy:hornfels_brick"
-  ]
+    "replace":  false,
+    "values":  [
+                   "mineralogy:hornfels_brick"
+               ]
 }

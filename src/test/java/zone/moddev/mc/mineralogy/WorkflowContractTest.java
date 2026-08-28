@@ -19,19 +19,19 @@ public class WorkflowContractTest {
         try (FileInputStream input = new FileInputStream("gradle.properties")) {
             properties.load(input);
         }
-        assertEquals("6.1.0.116051", properties.getProperty("mod_version"));
-        assertEquals("1.16.5", properties.getProperty("minecraft_version"));
+        assertEquals("6.1.0.117011", properties.getProperty("mod_version"));
+        assertEquals("1.17.1", properties.getProperty("minecraft_version"));
         assertEquals(properties.getProperty("mc_version"), properties.getProperty("minecraft_version"));
         assertEquals("forge", properties.getProperty("loader_name"));
         assertEquals("1", properties.getProperty("loader_code"));
-        assertEquals("8", properties.getProperty("java_version"));
-        assertEquals("8.0.502+7", properties.getProperty("java_toolchain_version"));
+        assertEquals("16", properties.getProperty("java_version"));
+        assertEquals("16.0.2+7", properties.getProperty("java_toolchain_version"));
         assertEquals("17", properties.getProperty("gradle_java_version"));
         assertEquals("240974", properties.getProperty("curseforge_project_id"));
         assertEquals("zone.moddev.mc.mineralogy", properties.getProperty("mod_group"));
-        assertEquals("4.0.9.116051", properties.getProperty("orespawn_version"));
-        assertEquals("8742102", properties.getProperty("orespawn_curse_file_id"));
-        assertEquals("6F5E61E89547BBF779C18EDFCF4D1D47BED8D6FA0FE9EDECE87B376F117D1147",
+        assertEquals("4.0.9.117011", properties.getProperty("orespawn_version"));
+        assertEquals("8748648", properties.getProperty("orespawn_curse_file_id"));
+        assertEquals("945D1601FA3BF195CBF0A941CAC31E640D013B63139CCCCDB3B0A1896A727990",
                 properties.getProperty("orespawn_sha256"));
     }
 
@@ -42,8 +42,8 @@ public class WorkflowContractTest {
         String wrapper = text(".github/workflows/validate-gradle-build.yml");
         String staging = text("gradle/stage-orespawn-release.sh");
         assertTrue(ci.contains("name: Build, test, and audit"));
-        assertTrue(ci.contains("master-1.16.5"));
-        assertTrue(ci.contains("java-version: '8.0.502+7'"));
+        assertTrue(ci.contains("master-1.17.1"));
+        assertTrue(ci.contains("java-version: '16.0.2+7'"));
         assertTrue(ci.contains("Install Java 17 for Gradle"));
         assertTrue(ci.contains("verifyReleaseDependencies verifyReleaseArtifacts writeReleaseChecksums"));
         assertTrue(ci.contains("genEclipseRuns eclipse isolateEclipseProductionRuns verifyEclipseProductionClasspath"));

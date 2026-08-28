@@ -1,6 +1,6 @@
 {
-  "replace": false,
-  "values": [
-    "mineralogy:granite_brick"
-  ]
+    "replace":  false,
+    "values":  [
+                   "mineralogy:granite_brick"
+               ]
 }

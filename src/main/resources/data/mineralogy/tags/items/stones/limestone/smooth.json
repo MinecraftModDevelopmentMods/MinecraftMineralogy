@@ -1,6 +1,6 @@
 {
-  "replace": false,
-  "values": [
-    "mineralogy:limestone_smooth"
-  ]
+    "replace":  false,
+    "values":  [
+                   "mineralogy:limestone_smooth"
+               ]
 }

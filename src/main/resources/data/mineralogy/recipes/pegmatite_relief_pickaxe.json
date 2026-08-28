@@ -1,42 +1,42 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:pegmatite_relief_pickaxe"
-    }
-  ],
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "mineralogy:pegmatite_relief_blank"
-    },
-    {
-      "item": "mineralogy:pegmatite_relief_blank"
-    },
-    {
-      "item": "mineralogy:pegmatite_relief_blank"
-    },
-    {
-      "item": "mineralogy:pegmatite_relief_blank"
-    },
-    {
-      "item": "mineralogy:pegmatite_relief_blank"
-    },
-    {
-      "item": "mineralogy:pegmatite_relief_blank"
-    },
-    {
-      "item": "mineralogy:pegmatite_relief_blank"
-    },
-    {
-      "item": "mineralogy:pegmatite_relief_blank"
-    },
-    {
-      "item": "minecraft:stone_pickaxe"
-    }
-  ],
-  "result": {
-    "item": "mineralogy:pegmatite_relief_pickaxe",
-    "count": 8
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:pegmatite_relief_pickaxe"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "ingredients":  [
+                        {
+                            "item":  "mineralogy:pegmatite_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:pegmatite_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:pegmatite_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:pegmatite_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:pegmatite_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:pegmatite_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:pegmatite_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:pegmatite_relief_blank"
+                        },
+                        {
+                            "item":  "minecraft:stone_pickaxe"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:pegmatite_relief_pickaxe",
+                   "count":  8
+               }
 }

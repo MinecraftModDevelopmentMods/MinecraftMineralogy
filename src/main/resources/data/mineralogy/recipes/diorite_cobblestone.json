@@ -1,22 +1,24 @@
 {
-  "conditions": [],
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "tag": "mineralogy:stones/diorite"
-    },
-    {
-      "tag": "mineralogy:stones/diorite"
-    },
-    {
-      "item": "minecraft:gravel"
-    },
-    {
-      "item": "minecraft:gravel"
-    }
-  ],
-  "result": {
-    "item": "minecraft:cobblestone",
-    "count": 4
-  }
+    "conditions":  [
+
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "ingredients":  [
+                        {
+                            "tag":  "mineralogy:stones/diorite"
+                        },
+                        {
+                            "tag":  "mineralogy:stones/diorite"
+                        },
+                        {
+                            "item":  "minecraft:gravel"
+                        },
+                        {
+                            "item":  "minecraft:gravel"
+                        }
+                    ],
+    "result":  {
+                   "item":  "minecraft:cobblestone",
+                   "count":  4
+               }
 }

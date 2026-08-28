@@ -1,22 +1,22 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:schist_smooth_brick"
-    }
-  ],
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xx",
-    "xx"
-  ],
-  "key": {
-    "x": {
-      "tag": "mineralogy:stones/schist/smooth"
-    }
-  },
-  "result": {
-    "item": "mineralogy:schist_smooth_brick",
-    "count": 4
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:schist_smooth_brick"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "xx",
+                    "xx"
+                ],
+    "key":  {
+                "x":  {
+                          "tag":  "mineralogy:stones/schist/smooth"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:schist_smooth_brick",
+                   "count":  4
+               }
 }

@@ -1,26 +1,26 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:novaculite_wall"
-    },
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:novaculite_brick_wall"
-    }
-  ],
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xx",
-    "xx"
-  ],
-  "key": {
-    "x": {
-      "item": "mineralogy:novaculite_wall"
-    }
-  },
-  "result": {
-    "item": "mineralogy:novaculite_brick_wall",
-    "count": 4
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:novaculite_wall"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:novaculite_brick_wall"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "xx",
+                    "xx"
+                ],
+    "key":  {
+                "x":  {
+                          "item":  "mineralogy:novaculite_wall"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:novaculite_brick_wall",
+                   "count":  4
+               }
 }

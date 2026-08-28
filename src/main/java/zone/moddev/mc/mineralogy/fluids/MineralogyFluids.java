@@ -1,13 +1,14 @@
 package zone.moddev.mc.mineralogy.fluids;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.block.material.Material;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.BucketItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.item.BucketItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidAttributes;
@@ -18,7 +19,7 @@ import zone.moddev.mc.mineralogy.Mineralogy;
 import zone.moddev.mc.mineralogy.MineralogyConfig;
 import zone.moddev.mc.mineralogy.init.MineralogyItemGroups;
 
-/** Forge 36-native source, flowing block and bucket for Mineralogy crude oil. */
+/** Forge 37-native source, flowing block and bucket for Mineralogy crude oil. */
 @Mod.EventBusSubscriber(modid = Mineralogy.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class MineralogyFluids {
     private static final ResourceLocation STILL_TEXTURE =
@@ -28,7 +29,7 @@ public final class MineralogyFluids {
 
     public static ForgeFlowingFluid.Source CRUDE_OIL;
     public static ForgeFlowingFluid.Flowing FLOWING_CRUDE_OIL;
-    public static FlowingFluidBlock CRUDE_OIL_BLOCK;
+    public static LiquidBlock CRUDE_OIL_BLOCK;
     public static Item CRUDE_OIL_BUCKET;
 
     private static final ForgeFlowingFluid.Properties PROPERTIES =
@@ -58,18 +59,18 @@ public final class MineralogyFluids {
 
     @SubscribeEvent
     public static void registerBlock(RegistryEvent.Register<Block> event) {
-        CRUDE_OIL_BLOCK = (FlowingFluidBlock) new FlowingFluidBlock(() -> CRUDE_OIL,
-                Block.Properties.create(Material.WATER).doesNotBlockMovement()
-                        .hardnessAndResistance(100.0F).variableOpacity())
+        CRUDE_OIL_BLOCK = (LiquidBlock) new LiquidBlock(() -> CRUDE_OIL,
+                BlockBehaviour.Properties.of(Material.WATER).noCollission()
+                        .strength(100.0F).noDrops())
                 .setRegistryName(Mineralogy.MODID, "crude_oil");
         event.getRegistry().register(CRUDE_OIL_BLOCK);
     }
 
     @SubscribeEvent
     public static void registerBucket(RegistryEvent.Register<Item> event) {
-        Item.Properties properties = new Item.Properties().maxStackSize(1).containerItem(Items.BUCKET);
+        Item.Properties properties = new Item.Properties().stacksTo(1).craftRemainder(Items.BUCKET);
         if (MineralogyConfig.isCreativeVisible("crude_oil_bucket")) {
-            properties.group(MineralogyItemGroups.forItem());
+            properties.tab(MineralogyItemGroups.forItem());
         }
         CRUDE_OIL_BUCKET = new BucketItem(() -> CRUDE_OIL, properties)
                 .setRegistryName(Mineralogy.MODID, "crude_oil_bucket");

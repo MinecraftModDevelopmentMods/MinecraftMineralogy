@@ -31,7 +31,8 @@
       "mineralogy:andesite": "minecraft:andesite",
       "mineralogy:basalt": "minecraft:basalt",
       "mineralogy:diorite": "minecraft:diorite",
-      "mineralogy:granite": "minecraft:granite"
+      "mineralogy:granite": "minecraft:granite",
+      "mineralogy:tuff": "minecraft:tuff"
     },
     "cyano": {
       "geome_size": 100,
@@ -44,7 +45,8 @@
         "biome_ids": [],
         "biome_namespaces": [],
         "host_blocks": [
-          "minecraft:stone"
+          "minecraft:stone",
+          "minecraft:deepslate"
         ],
         "host_tags": []
       }
@@ -169,7 +171,7 @@
       "min_y": 0,
       "max_y": 255,
       "ore_replaceable": true,
-      "block": "mineralogy:tuff"
+      "block": "minecraft:tuff"
     },
     "mineralogy:rock/mineralogy/pumice": {
       "family": "igneous_volcanic",
@@ -576,7 +578,8 @@
             "igneous_volcanic"
           ],
           "host_tags": [
-            "forge:stone"
+            "minecraft:stone_ore_replaceables",
+            "minecraft:deepslate_ore_replaceables"
           ]
         }
       },
@@ -599,7 +602,8 @@
             "igneous_volcanic"
           ],
           "host_tags": [
-            "forge:stone"
+            "minecraft:stone_ore_replaceables",
+            "minecraft:deepslate_ore_replaceables"
           ]
         }
       },
@@ -622,7 +626,8 @@
             "igneous_volcanic"
           ],
           "host_tags": [
-            "forge:stone"
+            "minecraft:stone_ore_replaceables",
+            "minecraft:deepslate_ore_replaceables"
           ]
         }
       },

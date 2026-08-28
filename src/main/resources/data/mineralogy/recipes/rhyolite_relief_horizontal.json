@@ -1,21 +1,21 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:rhyolite_relief_horizontal"
-    }
-  ],
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xxx"
-  ],
-  "key": {
-    "x": {
-      "item": "mineralogy:rhyolite_relief_blank"
-    }
-  },
-  "result": {
-    "item": "mineralogy:rhyolite_relief_horizontal",
-    "count": 3
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:rhyolite_relief_horizontal"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "xxx"
+                ],
+    "key":  {
+                "x":  {
+                          "item":  "mineralogy:rhyolite_relief_blank"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:rhyolite_relief_horizontal",
+                   "count":  3
+               }
 }

@@ -1,23 +1,23 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:andesite_relief_i"
-    }
-  ],
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xxx",
-    " x ",
-    "xxx"
-  ],
-  "key": {
-    "x": {
-      "item": "mineralogy:andesite_relief_blank"
-    }
-  },
-  "result": {
-    "item": "mineralogy:andesite_relief_i",
-    "count": 7
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:andesite_relief_i"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "xxx",
+                    " x ",
+                    "xxx"
+                ],
+    "key":  {
+                "x":  {
+                          "item":  "mineralogy:andesite_relief_blank"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:andesite_relief_i",
+                   "count":  7
+               }
 }

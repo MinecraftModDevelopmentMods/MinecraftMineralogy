@@ -1,25 +1,25 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:phyllite_brick_wall"
-    },
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:phyllite_smooth_brick_wall"
-    }
-  ],
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "mineralogy:phyllite_brick_wall"
-    },
-    {
-      "tag": "forge:sand"
-    }
-  ],
-  "result": {
-    "item": "mineralogy:phyllite_smooth_brick_wall",
-    "count": 1
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:phyllite_brick_wall"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:phyllite_smooth_brick_wall"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "ingredients":  [
+                        {
+                            "item":  "mineralogy:phyllite_brick_wall"
+                        },
+                        {
+                            "tag":  "forge:sand"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:phyllite_smooth_brick_wall",
+                   "count":  1
+               }
 }

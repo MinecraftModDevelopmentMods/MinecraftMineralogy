@@ -6,10 +6,9 @@ import zone.moddev.mc.mineralogy.blocks.RockStairs;
 import zone.moddev.mc.mineralogy.blocks.RockWall;
 import zone.moddev.mc.mineralogy.init.MineralogyItemGroups;
 
-import net.minecraft.block.SoundType;
-import net.minecraft.item.Item;
-import net.minecraft.item.BlockItem;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.BlockItem;
 
 public class Material {
 	public String materialName;
@@ -98,7 +97,7 @@ public class Material {
 
 	public BlockItem getBlockItem(Rock blockHandle) {
 		BlockItem blockItem = new BlockItem(blockHandle,
-				new Item.Properties().group(MineralogyItemGroups.forBlock(blockHandle)));
+				new Item.Properties().tab(MineralogyItemGroups.forBlock(blockHandle)));
 
 		blockItem.setRegistryName(Mineralogy.MODID, blockHandle.getRegistryName().getPath());
 
@@ -107,7 +106,7 @@ public class Material {
 
 	public BlockItem getBlockItem(RockStairs blockHandle) {
 		BlockItem blockItem = new BlockItem(blockHandle,
-				new Item.Properties().group(MineralogyItemGroups.forBlock(blockHandle)));
+				new Item.Properties().tab(MineralogyItemGroups.forBlock(blockHandle)));
 
 		blockItem.setRegistryName(Mineralogy.MODID, blockHandle.getRegistryName().getPath());
 
@@ -116,7 +115,7 @@ public class Material {
 
 	public BlockItem getBlockItem(RockWall blockHandle) {
 		BlockItem blockItem = new BlockItem(blockHandle,
-				new Item.Properties().group(MineralogyItemGroups.forBlock(blockHandle)));
+				new Item.Properties().tab(MineralogyItemGroups.forBlock(blockHandle)));
 
 		blockItem.setRegistryName(Mineralogy.MODID, blockHandle.getRegistryName().getPath());
 

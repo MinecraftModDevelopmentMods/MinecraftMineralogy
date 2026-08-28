@@ -1,6 +1,6 @@
 {
-  "replace": false,
-  "values": [
-    "mineralogy:slate"
-  ]
+    "replace":  false,
+    "values":  [
+                   "mineralogy:slate"
+               ]
 }

@@ -1,25 +1,25 @@
 {
-  "conditions": [
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:peridotite_smooth_brick_slab"
-    },
-    {
-      "type": "forge:item_exists",
-      "item": "mineralogy:peridotite_smooth_brick"
-    }
-  ],
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "mineralogy:peridotite_smooth_brick_slab"
-    },
-    {
-      "item": "mineralogy:peridotite_smooth_brick_slab"
-    }
-  ],
-  "result": {
-    "item": "mineralogy:peridotite_smooth_brick",
-    "count": 1
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:peridotite_smooth_brick_slab"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:peridotite_smooth_brick"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "ingredients":  [
+                        {
+                            "item":  "mineralogy:peridotite_smooth_brick_slab"
+                        },
+                        {
+                            "item":  "mineralogy:peridotite_smooth_brick_slab"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:peridotite_smooth_brick",
+                   "count":  1
+               }
 }

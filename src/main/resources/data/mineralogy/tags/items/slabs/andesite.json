@@ -1,7 +1,7 @@
 {
-  "replace": false,
-  "values": [
-    "mineralogy:andesite_slab",
-    "minecraft:andesite_slab"
-  ]
+    "replace":  false,
+    "values":  [
+                   "mineralogy:andesite_slab",
+                   "minecraft:andesite_slab"
+               ]
 }

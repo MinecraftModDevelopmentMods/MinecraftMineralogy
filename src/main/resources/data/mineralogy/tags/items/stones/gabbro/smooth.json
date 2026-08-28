@@ -1,6 +1,6 @@
 {
-  "replace": false,
-  "values": [
-    "mineralogy:gabbro_smooth"
-  ]
+    "replace":  false,
+    "values":  [
+                   "mineralogy:gabbro_smooth"
+               ]
 }

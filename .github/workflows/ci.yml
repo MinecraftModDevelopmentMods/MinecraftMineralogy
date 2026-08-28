@@ -68,9 +68,9 @@ jobs:
           if-no-files-found: error
           retention-days: 30
           path: |
-            build/libs/Mineralogy-6.0.1.116051.jar
-            build/libs/Mineralogy-6.0.1.116051-sources.jar
-            build/libs/Mineralogy-6.0.1.116051-javadoc.jar
+            build/libs/Mineralogy-6.1.0.116051.jar
+            build/libs/Mineralogy-6.1.0.116051-sources.jar
+            build/libs/Mineralogy-6.1.0.116051-javadoc.jar
             build/release/SHA256SUMS
             CHANGELOG.txt
 

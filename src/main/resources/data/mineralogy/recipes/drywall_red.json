@@ -1,14 +1,25 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "mineralogy:drywall_white"
-    },
-    {
-      "tag": "forge:dyes/red"
-    }
-  ],
-  "result": {
-    "item": "mineralogy:drywall_red"
-  }
+    "conditions":  [
+                       {
+                           "type":  "mineralogy:config",
+                           "flag":  "ENABLE_DRYWALLS"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:drywall_red"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "ingredients":  [
+                        {
+                            "tag":  "mineralogy:drywall/white"
+                        },
+                        {
+                            "item":  "minecraft:red_dye"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:drywall_red",
+                   "count":  1
+               }
 }

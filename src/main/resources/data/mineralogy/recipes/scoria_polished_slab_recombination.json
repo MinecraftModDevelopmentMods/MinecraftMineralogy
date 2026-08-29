@@ -1,0 +1,25 @@
+{
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:scoria_smooth_slab"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:scoria_smooth"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "ingredients":  [
+                        {
+                            "item":  "mineralogy:scoria_smooth_slab"
+                        },
+                        {
+                            "item":  "mineralogy:scoria_smooth_slab"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:scoria_smooth",
+                   "count":  1
+               }
+}

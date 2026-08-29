@@ -1,0 +1,54 @@
+{
+    "type":  "forge:conditional",
+    "recipes":  [
+                    {
+                        "conditions":  [
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:diorite_slab"
+                                           }
+                                       ],
+                        "recipe":  {
+                                       "type":  "minecraft:crafting_shaped",
+                                       "pattern":  [
+                                                       "###"
+                                                   ],
+                                       "key":  {
+                                                   "#":  {
+                                                             "item":  "minecraft:diorite"
+                                                         }
+                                               },
+                                       "result":  {
+                                                      "item":  "mineralogy:diorite_slab",
+                                                      "count":  6
+                                                  }
+                                   }
+                    },
+                    {
+                        "conditions":  [
+                                           {
+                                               "type":  "forge:not",
+                                               "value":  {
+                                                             "type":  "forge:item_exists",
+                                                             "item":  "mineralogy:diorite_slab"
+                                                         }
+                                           }
+                                       ],
+                        "recipe":  {
+                                       "type":  "minecraft:crafting_shaped",
+                                       "pattern":  [
+                                                       "###"
+                                                   ],
+                                       "key":  {
+                                                   "#":  {
+                                                             "item":  "minecraft:diorite"
+                                                         }
+                                               },
+                                       "result":  {
+                                                      "item":  "minecraft:diorite_slab",
+                                                      "count":  6
+                                                  }
+                                   }
+                    }
+                ]
+}

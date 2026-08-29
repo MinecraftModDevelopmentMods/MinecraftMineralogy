@@ -1,38 +1,23 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
-    {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_SMOOTH"
-        },
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_SMOOTHBRICK"
-        },
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_SMOOTHBRICKSTAIRS"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "x  ",
-          "xx ",
-          "xxx"
-        ],
-        "key": {
-          "x": {
-            "item": "mineralogy:quartzite_smooth_brick"
-          }
-        },
-        "result": {
-          "item": "mineralogy:quartzite_smooth_brick_stairs",
-          "count": 4
-        }
-      }
-    }
-  ]
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:quartzite_smooth_brick_stairs"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "x  ",
+                    "xx ",
+                    "xxx"
+                ],
+    "key":  {
+                "x":  {
+                          "tag":  "mineralogy:stones/quartzite/smooth_brick"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:quartzite_smooth_brick_stairs",
+                   "count":  4
+               }
 }

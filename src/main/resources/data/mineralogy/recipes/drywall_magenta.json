@@ -1,14 +1,25 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "mineralogy:drywall_white"
-    },
-    {
-      "tag": "forge:dyes/magenta"
-    }
-  ],
-  "result": {
-    "item": "mineralogy:drywall_magenta"
-  }
+    "conditions":  [
+                       {
+                           "type":  "mineralogy:config",
+                           "flag":  "ENABLE_DRYWALLS"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:drywall_magenta"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "ingredients":  [
+                        {
+                            "tag":  "mineralogy:drywall/white"
+                        },
+                        {
+                            "item":  "minecraft:magenta_dye"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:drywall_magenta",
+                   "count":  1
+               }
 }

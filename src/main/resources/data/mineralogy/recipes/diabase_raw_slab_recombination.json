@@ -1,0 +1,25 @@
+{
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:diabase_slab"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:diabase"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "ingredients":  [
+                        {
+                            "item":  "mineralogy:diabase_slab"
+                        },
+                        {
+                            "item":  "mineralogy:diabase_slab"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:diabase",
+                   "count":  1
+               }
+}

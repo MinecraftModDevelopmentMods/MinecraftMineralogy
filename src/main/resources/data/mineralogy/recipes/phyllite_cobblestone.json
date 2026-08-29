@@ -1,21 +1,24 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "tag": "mineralogy:crafting_materials/phyllite"
-    },
-    {
-      "tag": "mineralogy:crafting_materials/phyllite"
-    },
-    {
-      "item": "minecraft:gravel"
-    },
-    {
-      "item": "minecraft:gravel"
-    }
-  ],
-  "result": {
-    "item": "minecraft:cobblestone",
-    "count": 4
-  }
+    "conditions":  [
+
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "ingredients":  [
+                        {
+                            "tag":  "mineralogy:stones/phyllite"
+                        },
+                        {
+                            "tag":  "mineralogy:stones/phyllite"
+                        },
+                        {
+                            "item":  "minecraft:gravel"
+                        },
+                        {
+                            "item":  "minecraft:gravel"
+                        }
+                    ],
+    "result":  {
+                   "item":  "minecraft:cobblestone",
+                   "count":  4
+               }
 }

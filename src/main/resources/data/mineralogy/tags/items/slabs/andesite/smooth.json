@@ -1,0 +1,7 @@
+{
+    "replace":  false,
+    "values":  [
+                   "mineralogy:andesite_smooth_slab",
+                   "minecraft:polished_andesite_slab"
+               ]
+}

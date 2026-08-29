@@ -1,16 +1,27 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xxx",
-    "xxx",
-    "xxx"
-  ],
-  "key": {
-    "x": {
-      "tag": "forge:dusts/nitrate"
-    }
-  },
-  "result": {
-    "item": "mineralogy:nitrate_block"
-  }
+    "conditions":  [
+                       {
+                           "type":  "mineralogy:config",
+                           "flag":  "ENABLE_MINERAL_DUSTS"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:nitrate_block"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "xxx",
+                    "xxx",
+                    "xxx"
+                ],
+    "key":  {
+                "x":  {
+                          "item":  "mineralogy:nitrate_dust"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:nitrate_block",
+                   "count":  1
+               }
 }

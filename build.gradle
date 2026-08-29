@@ -832,6 +832,25 @@ tasks.register('syncForge37EclipseLaunches') {
             }
             text = text.replace(programArguments[0][0],
                     programArguments[0][1] + arguments + programArguments[0][3])
+            // Eclipse tokenizes VM arguments too. Quote the complete system
+            // property because this workspace path contains "MinecraftMineralogy 117".
+            String legacyClassPathPrefix = '-DlegacyClassPath.file='
+            int legacyClassPathStart = text.indexOf(legacyClassPathPrefix)
+            int legacyClassPathEnd = text.indexOf(' -DignoreList=', legacyClassPathStart)
+            if (legacyClassPathStart < 0 || legacyClassPathEnd < 0) {
+                throw new GradleException("ForgeGradle omitted -DlegacyClassPath.file from ${launch.name}")
+            }
+            String xmlQuote = '&quot;'
+            boolean legacyClassPathQuoted = legacyClassPathStart >= xmlQuote.length()
+                    && text.substring(legacyClassPathStart - xmlQuote.length(), legacyClassPathStart) == xmlQuote
+                    && legacyClassPathEnd >= xmlQuote.length()
+                    && text.substring(legacyClassPathEnd - xmlQuote.length(), legacyClassPathEnd) == xmlQuote
+            if (!legacyClassPathQuoted) {
+                String beforeLegacyClassPath = text.substring(0, legacyClassPathStart)
+                String legacyClassPathArgument = text.substring(legacyClassPathStart, legacyClassPathEnd)
+                String afterLegacyClassPath = text.substring(legacyClassPathEnd)
+                text = beforeLegacyClassPath + xmlQuote + legacyClassPathArgument + xmlQuote + afterLegacyClassPath
+            }
             if (!text.contains('ATTR_EXCLUDE_TEST_CODE')) {
                 text = text.replace('</launchConfiguration>',
                         '    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_EXCLUDE_TEST_CODE" value="true"/>\r\n' +
@@ -897,6 +916,10 @@ tasks.register('verifyEclipseProductionClasspath') {
                 if (!launch.contains("--${flag} &quot;")) {
                     throw new GradleException("Eclipse launch does not quote its --${flag} path: ${name}")
                 }
+            }
+            if (!launch.contains('&quot;-DlegacyClassPath.file=')
+                    || !launch.contains('minecraft_classpath.txt&quot; -DignoreList=')) {
+                throw new GradleException("Eclipse launch does not quote -DlegacyClassPath.file: ${name}")
             }
         }
         ['README.md', 'PLAYER_GUIDE.md', 'DEVELOPER_GUIDE.md', 'CONTENT_CONFIG.md',

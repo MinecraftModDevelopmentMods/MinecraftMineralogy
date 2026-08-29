@@ -1,0 +1,72 @@
+{
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:amphibolite_stairs"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:amphibolite_smooth_stairs"
+                       }
+                   ],
+    "rewards":  {
+                    "recipes":  [
+                                    "mineralogy:amphibolite_raw_stairs_polishing"
+                                ]
+                },
+    "criteria":  {
+                     "has_the_recipe":  {
+                                            "trigger":  "minecraft:recipe_unlocked",
+                                            "conditions":  {
+                                                               "recipe":  "mineralogy:amphibolite_raw_stairs_polishing"
+                                                           }
+                                        },
+                     "has_rock":  {
+                                      "trigger":  "minecraft:inventory_changed",
+                                      "conditions":  {
+                                                         "items":  [
+                                                                       {
+                                                                           "items":  [
+                                                                                         "mineralogy:amphibolite_stairs"
+                                                                                     ]
+                                                                       }
+                                                                   ]
+                                                     }
+                                  },
+                     "has_sand":  {
+                                      "trigger":  "minecraft:inventory_changed",
+                                      "conditions":  {
+                                                         "items":  [
+                                                                       {
+                                                                           "items":  [
+                                                                                         "minecraft:sand"
+                                                                                     ]
+                                                                       }
+                                                                   ]
+                                                     }
+                                  },
+                     "has_red_sand":  {
+                                          "trigger":  "minecraft:inventory_changed",
+                                          "conditions":  {
+                                                             "items":  [
+                                                                           {
+                                                                               "items":  [
+                                                                                             "minecraft:red_sand"
+                                                                                         ]
+                                                                           }
+                                                                       ]
+                                                         }
+                                      }
+                 },
+    "requirements":  [
+                         [
+                             "has_the_recipe",
+                             "has_rock"
+                         ],
+                         [
+                             "has_the_recipe",
+                             "has_sand",
+                             "has_red_sand"
+                         ]
+                     ]
+}

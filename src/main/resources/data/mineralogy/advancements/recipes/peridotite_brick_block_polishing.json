@@ -1,0 +1,72 @@
+{
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:peridotite_brick"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:peridotite_smooth_brick"
+                       }
+                   ],
+    "rewards":  {
+                    "recipes":  [
+                                    "mineralogy:peridotite_brick_block_polishing"
+                                ]
+                },
+    "criteria":  {
+                     "has_the_recipe":  {
+                                            "trigger":  "minecraft:recipe_unlocked",
+                                            "conditions":  {
+                                                               "recipe":  "mineralogy:peridotite_brick_block_polishing"
+                                                           }
+                                        },
+                     "has_rock":  {
+                                      "trigger":  "minecraft:inventory_changed",
+                                      "conditions":  {
+                                                         "items":  [
+                                                                       {
+                                                                           "items":  [
+                                                                                         "mineralogy:peridotite_brick"
+                                                                                     ]
+                                                                       }
+                                                                   ]
+                                                     }
+                                  },
+                     "has_sand":  {
+                                      "trigger":  "minecraft:inventory_changed",
+                                      "conditions":  {
+                                                         "items":  [
+                                                                       {
+                                                                           "items":  [
+                                                                                         "minecraft:sand"
+                                                                                     ]
+                                                                       }
+                                                                   ]
+                                                     }
+                                  },
+                     "has_red_sand":  {
+                                          "trigger":  "minecraft:inventory_changed",
+                                          "conditions":  {
+                                                             "items":  [
+                                                                           {
+                                                                               "items":  [
+                                                                                             "minecraft:red_sand"
+                                                                                         ]
+                                                                           }
+                                                                       ]
+                                                         }
+                                      }
+                 },
+    "requirements":  [
+                         [
+                             "has_the_recipe",
+                             "has_rock"
+                         ],
+                         [
+                             "has_the_recipe",
+                             "has_sand",
+                             "has_red_sand"
+                         ]
+                     ]
+}

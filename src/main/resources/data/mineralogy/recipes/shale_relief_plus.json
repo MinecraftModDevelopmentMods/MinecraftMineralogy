@@ -1,34 +1,23 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
-    {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_SMOOTH"
-        },
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_RELIEFS"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "pattern": [
-          " x ",
-          "xxx",
-          " x "
-        ],
-        "key": {
-          "x": {
-            "item": "mineralogy:shale_relief_blank"
-          }
-        },
-        "result": {
-          "item": "mineralogy:shale_relief_plus",
-          "count": 5
-        }
-      }
-    }
-  ]
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:shale_relief_plus"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    " x ",
+                    "xxx",
+                    " x "
+                ],
+    "key":  {
+                "x":  {
+                          "item":  "mineralogy:shale_relief_blank"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:shale_relief_plus",
+                   "count":  5
+               }
 }

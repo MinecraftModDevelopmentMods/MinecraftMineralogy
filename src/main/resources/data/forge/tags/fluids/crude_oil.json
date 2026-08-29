@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "mineralogy:crude_oil"
+    "mineralogy:crude_oil",
+    "mineralogy:flowing_crude_oil"
   ]
 }

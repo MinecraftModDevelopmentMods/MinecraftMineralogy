@@ -2,12 +2,6 @@ package zone.moddev.mc.mineralogy.init;
 
 import zone.moddev.mc.mineralogy.Mineralogy;
 import zone.moddev.mc.mineralogy.MineralogyConfig;
-import zone.moddev.mc.mineralogy.blocks.Ore;
-import zone.moddev.mc.mineralogy.blocks.Rock;
-import zone.moddev.mc.mineralogy.blocks.RockRelief;
-import zone.moddev.mc.mineralogy.blocks.RockSlab;
-import zone.moddev.mc.mineralogy.blocks.RockStairs;
-import zone.moddev.mc.mineralogy.blocks.RockWall;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.item.Item;
@@ -28,27 +22,22 @@ public final class MineralogyItemGroups {
 			return MainGroup.MINERALOGY;
 		}
 
-		if (block instanceof RockRelief) {
-			return CreativeModeTabs.ITEM;
+		switch (MineralogyConfig.creativeTabPolicy().groupFor(block.getClass())) {
+			case ROCK: return RockGroup.ROCK;
+			case STAIR: return StairGroup.STAIR;
+			case SLAB: return SlabGroup.SLAB;
+			case WALL: return WallGroup.WALL;
+			default: return CreativeModeTabs.ITEM;
 		}
-		if (block instanceof RockStairs) {
-			return StairGroup.STAIR;
-		}
-		if (block instanceof RockSlab) {
-			return SlabGroup.SLAB;
-		}
-		if (block instanceof RockWall) {
-			return WallGroup.WALL;
-		}
-		if (block instanceof Rock || block instanceof Ore) {
-			return RockGroup.ROCK;
-		}
-
-		return CreativeModeTabs.ITEM;
 	}
 
 	public static CreativeModeTab forItem() {
 		return MineralogyConfig.groupCreativeTabItemsByType() ? CreativeModeTabs.ITEM : MainGroup.MINERALOGY;
+	}
+
+	public static CreativeModeTab forFertilizer() {
+		return MineralogyConfig.groupCreativeTabItemsByType()
+				? CreativeModeTabs.ITEM : CreativeModeTab.TAB_MATERIALS;
 	}
 
 	private static CreativeModeTab create(String name, String iconItemName) {
@@ -59,7 +48,13 @@ public final class MineralogyItemGroups {
 				Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(Mineralogy.MODID, iconItemName));
 				return item != null ? new ItemStack(item) : new ItemStack(net.minecraft.world.item.Items.IRON_PICKAXE);
 			}
-		};
+
+			@Override
+			public boolean hasSearchBar() {
+				return true;
+			}
+		}.setBackgroundImage(new ResourceLocation("minecraft",
+				"textures/gui/container/creative_inventory/tab_item_search.png"));
 	}
 
 	private static final class MainGroup {

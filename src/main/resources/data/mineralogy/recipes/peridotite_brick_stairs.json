@@ -1,34 +1,23 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
-    {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_BRICK"
-        },
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_BRICKSTAIRS"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "x  ",
-          "xx ",
-          "xxx"
-        ],
-        "key": {
-          "x": {
-            "item": "mineralogy:peridotite_brick"
-          }
-        },
-        "result": {
-          "item": "mineralogy:peridotite_brick_stairs",
-          "count": 4
-        }
-      }
-    }
-  ]
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:peridotite_brick_stairs"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "x  ",
+                    "xx ",
+                    "xxx"
+                ],
+    "key":  {
+                "x":  {
+                          "tag":  "mineralogy:stones/peridotite/brick"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:peridotite_brick_stairs",
+                   "count":  4
+               }
 }

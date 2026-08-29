@@ -1,32 +1,21 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
-    {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_BRICK"
-        },
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_BRICKSLAB"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "xxx"
-        ],
-        "key": {
-          "x": {
-            "item": "mineralogy:phyllite_brick"
-          }
-        },
-        "result": {
-          "item": "mineralogy:phyllite_brick_slab",
-          "count": 6
-        }
-      }
-    }
-  ]
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:phyllite_brick_slab"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "xxx"
+                ],
+    "key":  {
+                "x":  {
+                          "item":  "mineralogy:phyllite_brick"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:phyllite_brick_slab",
+                   "count":  6
+               }
 }

@@ -70,7 +70,7 @@ function initializeCoreMod() {
                     prefix.add(new VarInsnNode(Opcodes.ALOAD, 3));
                     prefix.add(new MethodInsnNode(
                             Opcodes.INVOKESTATIC,
-                            'com/mcmoddev/mineralogy/patching/LegacyWorldDataHook',
+                            'zone/moddev/mc/mineralogy/patching/LegacyWorldDataHook',
                             'prepareLegacyChunk',
                             '(Lnet/minecraft/nbt/CompoundTag;)V',
                             false));
@@ -81,7 +81,7 @@ function initializeCoreMod() {
                         if (instruction.getOpcode() === Opcodes.ARETURN) {
                             method.instructions.insertBefore(instruction, new MethodInsnNode(
                                     Opcodes.INVOKESTATIC,
-                                    'com/mcmoddev/mineralogy/patching/LegacyWorldDataHook',
+                                    'zone/moddev/mc/mineralogy/patching/LegacyWorldDataHook',
                                     'finalizeLegacyChunk',
                                     '(Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/nbt/CompoundTag;',
                                     false));
@@ -109,7 +109,7 @@ function initializeCoreMod() {
                     prefix.add(new VarInsnNode(Opcodes.ALOAD, 1));
                     prefix.add(new MethodInsnNode(
                             Opcodes.INVOKESTATIC,
-                            'com/mcmoddev/mineralogy/patching/LegacyWorldDataHook',
+                            'zone/moddev/mc/mineralogy/patching/LegacyWorldDataHook',
                             'shouldBlockWorldgenWrite',
                             '(Lnet/minecraft/core/BlockPos;)Z',
                             false));

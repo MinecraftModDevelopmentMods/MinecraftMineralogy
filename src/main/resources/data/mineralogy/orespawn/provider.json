@@ -1,0 +1,641 @@
+{
+  "schema_version": 4,
+  "provider_modid": "mineralogy",
+  "provider_revision": 3,
+  "profile_defaults": {
+    "geology_mode": "geome",
+    "place_fluid_deposits": true,
+    "manage_vanilla_ores": false,
+    "default_template": "",
+    "geome_scale": 384,
+    "biome_influence": 1.15,
+    "regional_noise_influence": 0.9,
+    "boundary_noise_influence": 0.45,
+    "formations": {
+      "algorithm": "stable_layers",
+      "horizontal_size": "average",
+      "vertical_thickness": "average",
+      "waviness": "average",
+      "edge_irregularity": "average",
+      "formation_continuity": "average",
+      "custom": {
+        "stratum_wavelength": 256,
+        "family_region_wavelength": 100,
+        "vertical_thickness": 8,
+        "waviness_amplitude": 60,
+        "edge_octaves": 4,
+        "continuity": 0.85
+      }
+    },
+    "worldgen_aliases": {
+      "mineralogy:andesite": "minecraft:andesite",
+      "mineralogy:basalt": "minecraft:basalt",
+      "mineralogy:diorite": "minecraft:diorite",
+      "mineralogy:granite": "minecraft:granite",
+      "mineralogy:tuff": "minecraft:tuff"
+    },
+    "cyano": {
+      "geome_size": 100,
+      "rock_layer_noise": 32,
+      "rock_layer_thickness": 8
+    },
+    "terrain_dimensions": {
+      "minecraft:overworld": {
+        "enabled": true,
+        "biome_ids": [],
+        "biome_namespaces": [],
+        "host_blocks": [
+          "minecraft:stone",
+          "minecraft:deepslate"
+        ],
+        "host_tags": []
+      }
+    }
+  },
+  "fluid_deposits": {
+    "mineralogy:fluid_deposit/crude_oil": {
+      "enabled": true,
+      "block": "mineralogy:crude_oil",
+      "dimensions": {
+        "minecraft:overworld": {
+          "enabled": true,
+          "min_y": 0,
+          "max_y": 48,
+          "frequency": 0.08,
+          "min_radius": 5,
+          "max_radius": 12,
+          "min_vertical_radius": 2,
+          "max_vertical_radius": 5,
+          "max_lobes": 4,
+          "min_solid_cover": 2,
+          "host_families": [
+            "sedimentary"
+          ],
+          "host_blocks": [],
+          "host_tags": [],
+          "biome_ids": [],
+          "excluded_biome_ids": [],
+          "biome_dictionary": [
+            "OCEAN"
+          ],
+          "excluded_biome_dictionary": [],
+          "geomes": {}
+        }
+      }
+    }
+  },
+  "rocks": {
+    "mineralogy:rock/minecraft/andesite": {
+      "family": "igneous_volcanic",
+      "depth_peak": 68,
+      "depth_spread": 42,
+      "weight": 1,
+      "geomes": {
+        "volcanic_arc": 3,
+        "mountain_belt": 1.2
+      },
+      "enabled": true,
+      "min_y": 0,
+      "max_y": 255,
+      "ore_replaceable": true,
+      "block": "minecraft:andesite"
+    },
+    "mineralogy:rock/minecraft/basalt": {
+      "family": "igneous_volcanic",
+      "depth_peak": 72,
+      "depth_spread": 36,
+      "weight": 1.2,
+      "geomes": {
+        "volcanic_arc": 4,
+        "coastal_shelf": 0.7
+      },
+      "enabled": true,
+      "min_y": 0,
+      "max_y": 255,
+      "ore_replaceable": true,
+      "block": "minecraft:basalt"
+    },
+    "mineralogy:rock/mineralogy/rhyolite": {
+      "family": "igneous_volcanic",
+      "depth_peak": 70,
+      "depth_spread": 36,
+      "weight": 1,
+      "geomes": {
+        "volcanic_arc": 3.5,
+        "mountain_belt": 0.8
+      },
+      "enabled": true,
+      "min_y": 0,
+      "max_y": 255,
+      "ore_replaceable": true,
+      "block": "mineralogy:rhyolite"
+    },
+    "mineralogy:rock/mineralogy/basaltic_glass": {
+      "family": "igneous_volcanic",
+      "depth_peak": 78,
+      "depth_spread": 24,
+      "weight": 0.75,
+      "geomes": {
+        "volcanic_arc": 4.5
+      },
+      "enabled": true,
+      "min_y": 0,
+      "max_y": 255,
+      "ore_replaceable": true,
+      "block": "mineralogy:basaltic_glass"
+    },
+    "mineralogy:rock/mineralogy/scoria": {
+      "family": "igneous_volcanic",
+      "depth_peak": 80,
+      "depth_spread": 22,
+      "weight": 0.85,
+      "geomes": {
+        "volcanic_arc": 4
+      },
+      "enabled": true,
+      "min_y": 0,
+      "max_y": 255,
+      "ore_replaceable": true,
+      "block": "mineralogy:scoria"
+    },
+    "mineralogy:rock/minecraft/tuff": {
+      "family": "igneous_volcanic",
+      "depth_peak": 74,
+      "depth_spread": 30,
+      "weight": 0.9,
+      "geomes": {
+        "volcanic_arc": 3.5,
+        "arid_basin": 0.8
+      },
+      "enabled": true,
+      "min_y": 0,
+      "max_y": 255,
+      "ore_replaceable": true,
+      "block": "minecraft:tuff"
+    },
+    "mineralogy:rock/mineralogy/pumice": {
+      "family": "igneous_volcanic",
+      "depth_peak": 82,
+      "depth_spread": 20,
+      "weight": 0.65,
+      "geomes": {
+        "volcanic_arc": 4
+      },
+      "enabled": true,
+      "min_y": 0,
+      "max_y": 255,
+      "ore_replaceable": true,
+      "block": "mineralogy:pumice"
+    },
+    "mineralogy:rock/minecraft/diorite": {
+      "family": "igneous_intrusive",
+      "depth_peak": 36,
+      "depth_spread": 42,
+      "weight": 1,
+      "geomes": {
+        "stable_craton": 1.3,
+        "mountain_belt": 1
+      },
+      "enabled": true,
+      "min_y": 0,
+      "max_y": 255,
+      "ore_replaceable": true,
+      "block": "minecraft:diorite"
+    },
+    "mineralogy:rock/minecraft/granite": {
+      "family": "igneous_intrusive",
+      "depth_peak": 30,
+      "depth_spread": 48,
+      "weight": 1.1,
+      "geomes": {
+        "stable_craton": 2,
+        "mountain_belt": 1.4
+      },
+      "enabled": true,
+      "min_y": 0,
+      "max_y": 255,
+      "ore_replaceable": true,
+      "block": "minecraft:granite"
+    },
+    "mineralogy:rock/mineralogy/pegmatite": {
+      "family": "igneous_intrusive",
+      "depth_peak": 26,
+      "depth_spread": 36,
+      "weight": 0.8,
+      "geomes": {
+        "stable_craton": 1.6,
+        "mountain_belt": 1.2
+      },
+      "enabled": true,
+      "min_y": 0,
+      "max_y": 255,
+      "ore_replaceable": true,
+      "block": "mineralogy:pegmatite"
+    },
+    "mineralogy:rock/mineralogy/diabase": {
+      "family": "igneous_intrusive",
+      "depth_peak": 30,
+      "depth_spread": 40,
+      "weight": 1,
+      "geomes": {
+        "stable_craton": 1.2,
+        "volcanic_arc": 1.2
+      },
+      "enabled": true,
+      "min_y": 0,
+      "max_y": 255,
+      "ore_replaceable": true,
+      "block": "mineralogy:diabase"
+    },
+    "mineralogy:rock/mineralogy/gabbro": {
+      "family": "igneous_intrusive",
+      "depth_peak": 20,
+      "depth_spread": 44,
+      "weight": 1.1,
+      "geomes": {
+        "stable_craton": 1.2,
+        "mountain_belt": 1.2
+      },
+      "enabled": true,
+      "min_y": 0,
+      "max_y": 255,
+      "ore_replaceable": true,
+      "block": "mineralogy:gabbro"
+    },
+    "mineralogy:rock/mineralogy/peridotite": {
+      "family": "igneous_intrusive",
+      "depth_peak": 10,
+      "depth_spread": 34,
+      "weight": 0.85,
+      "geomes": {
+        "mountain_belt": 1.5,
+        "volcanic_arc": 1
+      },
+      "enabled": true,
+      "min_y": 0,
+      "max_y": 255,
+      "ore_replaceable": true,
+      "block": "mineralogy:peridotite"
+    },
+    "mineralogy:rock/mineralogy/shale": {
+      "family": "sedimentary",
+      "depth_peak": 62,
+      "depth_spread": 36,
+      "weight": 1.15,
+      "geomes": {
+        "sedimentary_basin": 3.5,
+        "wetland_basin": 2,
+        "coastal_shelf": 1.8
+      },
+      "enabled": true,
+      "min_y": 0,
+      "max_y": 255,
+      "ore_replaceable": true,
+      "block": "mineralogy:shale"
+    },
+    "mineralogy:rock/mineralogy/conglomerate": {
+      "family": "sedimentary",
+      "depth_peak": 58,
+      "depth_spread": 32,
+      "weight": 0.9,
+      "geomes": {
+        "sedimentary_basin": 2.2,
+        "mountain_belt": 0.8
+      },
+      "enabled": true,
+      "min_y": 0,
+      "max_y": 255,
+      "ore_replaceable": true,
+      "block": "mineralogy:conglomerate"
+    },
+    "mineralogy:rock/mineralogy/dolomite": {
+      "family": "sedimentary",
+      "depth_peak": 55,
+      "depth_spread": 38,
+      "weight": 0.9,
+      "geomes": {
+        "coastal_shelf": 2.2,
+        "sedimentary_basin": 1.8
+      },
+      "enabled": true,
+      "min_y": 0,
+      "max_y": 255,
+      "ore_replaceable": true,
+      "block": "mineralogy:dolomite"
+    },
+    "mineralogy:rock/mineralogy/limestone": {
+      "family": "sedimentary",
+      "depth_peak": 60,
+      "depth_spread": 40,
+      "weight": 1,
+      "geomes": {
+        "coastal_shelf": 3,
+        "sedimentary_basin": 1.6
+      },
+      "enabled": true,
+      "min_y": 0,
+      "max_y": 255,
+      "ore_replaceable": true,
+      "block": "mineralogy:limestone"
+    },
+    "mineralogy:rock/mineralogy/siltstone": {
+      "family": "sedimentary",
+      "depth_peak": 66,
+      "depth_spread": 34,
+      "weight": 1,
+      "geomes": {
+        "sedimentary_basin": 2.4,
+        "wetland_basin": 1.8
+      },
+      "enabled": true,
+      "min_y": 0,
+      "max_y": 255,
+      "ore_replaceable": true,
+      "block": "mineralogy:siltstone"
+    },
+    "mineralogy:rock/mineralogy/rock_salt": {
+      "family": "sedimentary",
+      "depth_peak": 54,
+      "depth_spread": 28,
+      "weight": 0.6,
+      "geomes": {
+        "arid_basin": 4,
+        "coastal_shelf": 1.2
+      },
+      "enabled": true,
+      "min_y": 0,
+      "max_y": 255,
+      "ore_replaceable": true,
+      "block": "mineralogy:rock_salt"
+    },
+    "mineralogy:rock/mineralogy/chert": {
+      "family": "sedimentary",
+      "depth_peak": 48,
+      "depth_spread": 32,
+      "weight": 0.65,
+      "geomes": {
+        "coastal_shelf": 2,
+        "sedimentary_basin": 1.4
+      },
+      "enabled": true,
+      "min_y": 0,
+      "max_y": 255,
+      "ore_replaceable": true,
+      "block": "mineralogy:chert"
+    },
+    "mineralogy:rock/mineralogy/gypsum": {
+      "family": "sedimentary",
+      "depth_peak": 52,
+      "depth_spread": 26,
+      "weight": 0.65,
+      "geomes": {
+        "arid_basin": 3.5,
+        "coastal_shelf": 1
+      },
+      "enabled": true,
+      "min_y": 0,
+      "max_y": 255,
+      "ore_replaceable": true,
+      "block": "mineralogy:gypsum"
+    },
+    "mineralogy:rock/mineralogy/chalk": {
+      "family": "sedimentary",
+      "depth_peak": 68,
+      "depth_spread": 24,
+      "weight": 0.65,
+      "geomes": {
+        "coastal_shelf": 3
+      },
+      "enabled": true,
+      "min_y": 0,
+      "max_y": 255,
+      "ore_replaceable": true,
+      "block": "mineralogy:chalk"
+    },
+    "mineralogy:rock/minecraft/sandstone": {
+      "family": "sedimentary",
+      "depth_peak": 72,
+      "depth_spread": 28,
+      "weight": 0.55,
+      "geomes": {
+        "arid_basin": 2.5,
+        "coastal_shelf": 0.8
+      },
+      "enabled": true,
+      "min_y": 0,
+      "max_y": 255,
+      "ore_replaceable": true,
+      "block": "minecraft:sandstone"
+    },
+    "mineralogy:rock/mineralogy/marble": {
+      "family": "metamorphic",
+      "depth_peak": 32,
+      "depth_spread": 36,
+      "weight": 0.85,
+      "geomes": {
+        "mountain_belt": 1.8,
+        "stable_craton": 1.2
+      },
+      "enabled": true,
+      "min_y": 0,
+      "max_y": 255,
+      "ore_replaceable": true,
+      "block": "mineralogy:marble"
+    },
+    "mineralogy:rock/mineralogy/slate": {
+      "family": "metamorphic",
+      "depth_peak": 36,
+      "depth_spread": 34,
+      "weight": 1,
+      "geomes": {
+        "mountain_belt": 2,
+        "sedimentary_basin": 0.7
+      },
+      "enabled": true,
+      "min_y": 0,
+      "max_y": 255,
+      "ore_replaceable": true,
+      "block": "mineralogy:slate"
+    },
+    "mineralogy:rock/mineralogy/schist": {
+      "family": "metamorphic",
+      "depth_peak": 24,
+      "depth_spread": 34,
+      "weight": 1,
+      "geomes": {
+        "mountain_belt": 2.8
+      },
+      "enabled": true,
+      "min_y": 0,
+      "max_y": 255,
+      "ore_replaceable": true,
+      "block": "mineralogy:schist"
+    },
+    "mineralogy:rock/mineralogy/gneiss": {
+      "family": "metamorphic",
+      "depth_peak": 18,
+      "depth_spread": 38,
+      "weight": 1,
+      "geomes": {
+        "mountain_belt": 2.6,
+        "stable_craton": 1.2
+      },
+      "enabled": true,
+      "min_y": 0,
+      "max_y": 255,
+      "ore_replaceable": true,
+      "block": "mineralogy:gneiss"
+    },
+    "mineralogy:rock/mineralogy/phyllite": {
+      "family": "metamorphic",
+      "depth_peak": 34,
+      "depth_spread": 34,
+      "weight": 0.9,
+      "geomes": {
+        "mountain_belt": 2
+      },
+      "enabled": true,
+      "min_y": 0,
+      "max_y": 255,
+      "ore_replaceable": true,
+      "block": "mineralogy:phyllite"
+    },
+    "mineralogy:rock/mineralogy/amphibolite": {
+      "family": "metamorphic",
+      "depth_peak": 18,
+      "depth_spread": 34,
+      "weight": 0.9,
+      "geomes": {
+        "mountain_belt": 2.4,
+        "volcanic_arc": 0.8
+      },
+      "enabled": true,
+      "min_y": 0,
+      "max_y": 255,
+      "ore_replaceable": true,
+      "block": "mineralogy:amphibolite"
+    },
+    "mineralogy:rock/mineralogy/hornfels": {
+      "family": "metamorphic",
+      "depth_peak": 24,
+      "depth_spread": 28,
+      "weight": 0.75,
+      "geomes": {
+        "volcanic_arc": 2,
+        "mountain_belt": 1.4
+      },
+      "enabled": true,
+      "min_y": 0,
+      "max_y": 255,
+      "ore_replaceable": true,
+      "block": "mineralogy:hornfels"
+    },
+    "mineralogy:rock/mineralogy/quartzite": {
+      "family": "metamorphic",
+      "depth_peak": 30,
+      "depth_spread": 34,
+      "weight": 0.85,
+      "geomes": {
+        "mountain_belt": 1.8,
+        "stable_craton": 1
+      },
+      "enabled": true,
+      "min_y": 0,
+      "max_y": 255,
+      "ore_replaceable": true,
+      "block": "mineralogy:quartzite"
+    },
+    "mineralogy:rock/mineralogy/novaculite": {
+      "family": "metamorphic",
+      "depth_peak": 28,
+      "depth_spread": 30,
+      "weight": 0.65,
+      "geomes": {
+        "mountain_belt": 1.6
+      },
+      "enabled": true,
+      "min_y": 0,
+      "max_y": 255,
+      "ore_replaceable": true,
+      "block": "mineralogy:novaculite"
+    }
+  },
+  "ores": {
+    "mineralogy:ore/mineralogy/sulfur_ore": {
+      "enabled": true,
+      "source_mod": "mineralogy",
+      "dimensions": {
+        "minecraft:overworld": {
+          "enabled": true,
+          "min_y": 16,
+          "max_y": 64,
+          "frequency": 1,
+          "quantity": 16,
+          "host_families": [
+            "sedimentary",
+            "metamorphic",
+            "igneous_intrusive",
+            "igneous_volcanic"
+          ],
+          "host_tags": [
+            "minecraft:stone_ore_replaceables",
+            "minecraft:deepslate_ore_replaceables"
+          ]
+        }
+      },
+      "block": "mineralogy:sulfur_ore"
+    },
+    "mineralogy:ore/mineralogy/phosphorous_ore": {
+      "enabled": true,
+      "source_mod": "mineralogy",
+      "dimensions": {
+        "minecraft:overworld": {
+          "enabled": true,
+          "min_y": 16,
+          "max_y": 64,
+          "frequency": 1,
+          "quantity": 16,
+          "host_families": [
+            "sedimentary",
+            "metamorphic",
+            "igneous_intrusive",
+            "igneous_volcanic"
+          ],
+          "host_tags": [
+            "minecraft:stone_ore_replaceables",
+            "minecraft:deepslate_ore_replaceables"
+          ]
+        }
+      },
+      "block": "mineralogy:phosphorous_ore"
+    },
+    "mineralogy:ore/mineralogy/nitrate_ore": {
+      "enabled": true,
+      "source_mod": "mineralogy",
+      "dimensions": {
+        "minecraft:overworld": {
+          "enabled": true,
+          "min_y": 16,
+          "max_y": 64,
+          "frequency": 1,
+          "quantity": 16,
+          "host_families": [
+            "sedimentary",
+            "metamorphic",
+            "igneous_intrusive",
+            "igneous_volcanic"
+          ],
+          "host_tags": [
+            "minecraft:stone_ore_replaceables",
+            "minecraft:deepslate_ore_replaceables"
+          ]
+        }
+      },
+      "block": "mineralogy:nitrate_ore"
+    }
+  },
+  "geomes": {},
+  "biome_rules": {},
+  "terrain_dimensions": {},
+  "templates": {}
+}

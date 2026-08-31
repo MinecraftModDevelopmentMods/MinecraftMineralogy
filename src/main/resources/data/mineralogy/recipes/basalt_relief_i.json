@@ -1,34 +1,23 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
-    {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_SMOOTH"
-        },
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_RELIEFS"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "xxx",
-          " x ",
-          "xxx"
-        ],
-        "key": {
-          "x": {
-            "item": "mineralogy:basalt_relief_blank"
-          }
-        },
-        "result": {
-          "item": "mineralogy:basalt_relief_i",
-          "count": 7
-        }
-      }
-    }
-  ]
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:basalt_relief_i"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "xxx",
+                    " x ",
+                    "xxx"
+                ],
+    "key":  {
+                "x":  {
+                          "item":  "mineralogy:basalt_relief_blank"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:basalt_relief_i",
+                   "count":  7
+               }
 }

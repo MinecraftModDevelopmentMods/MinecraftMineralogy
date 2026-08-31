@@ -1,33 +1,39 @@
 {
-  "rewards": {
-    "recipes": [
-      "mineralogy:hornfels_slab"
-    ]
-  },
-  "criteria": {
-    "has_the_recipe": {
-      "trigger": "minecraft:recipe_unlocked",
-      "conditions": {
-        "recipe": "mineralogy:hornfels_slab"
-      }
-    },
-    "has_rock": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "mineralogy:hornfels"
-            ]
-          }
-        ]
-      }
-    }
-  },
-  "requirements": [
-    [
-      "has_the_recipe",
-      "has_rock"
-    ]
-  ]
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:hornfels_slab"
+                       }
+                   ],
+    "rewards":  {
+                    "recipes":  [
+                                    "mineralogy:hornfels_slab"
+                                ]
+                },
+    "criteria":  {
+                     "has_the_recipe":  {
+                                            "trigger":  "minecraft:recipe_unlocked",
+                                            "conditions":  {
+                                                               "recipe":  "mineralogy:hornfels_slab"
+                                                           }
+                                        },
+                     "has_rock":  {
+                                      "trigger":  "minecraft:inventory_changed",
+                                      "conditions":  {
+                                                         "items":  [
+                                                                       {
+                                                                           "items":  [
+                                                                                         "mineralogy:hornfels"
+                                                                                     ]
+                                                                       }
+                                                                   ]
+                                                     }
+                                  }
+                 },
+    "requirements":  [
+                         [
+                             "has_the_recipe",
+                             "has_rock"
+                         ]
+                     ]
 }

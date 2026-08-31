@@ -1,0 +1,43 @@
+{
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:quartzite_slab"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:quartzite"
+                       }
+                   ],
+    "rewards":  {
+                    "recipes":  [
+                                    "mineralogy:quartzite_raw_slab_recombination"
+                                ]
+                },
+    "criteria":  {
+                     "has_the_recipe":  {
+                                            "trigger":  "minecraft:recipe_unlocked",
+                                            "conditions":  {
+                                                               "recipe":  "mineralogy:quartzite_raw_slab_recombination"
+                                                           }
+                                        },
+                     "has_rock":  {
+                                      "trigger":  "minecraft:inventory_changed",
+                                      "conditions":  {
+                                                         "items":  [
+                                                                       {
+                                                                           "items":  [
+                                                                                         "mineralogy:quartzite_slab"
+                                                                                     ]
+                                                                       }
+                                                                   ]
+                                                     }
+                                  }
+                 },
+    "requirements":  [
+                         [
+                             "has_the_recipe",
+                             "has_rock"
+                         ]
+                     ]
+}

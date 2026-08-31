@@ -1,0 +1,25 @@
+{
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:limestone_slab"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:limestone_smooth_slab"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "ingredients":  [
+                        {
+                            "item":  "mineralogy:limestone_slab"
+                        },
+                        {
+                            "tag":  "forge:sand"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:limestone_smooth_slab",
+                   "count":  1
+               }
+}

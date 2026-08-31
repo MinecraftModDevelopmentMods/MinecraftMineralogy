@@ -1,36 +1,26 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
-    {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_ROCKSLAB"
-        },
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_ROCKFURNACE"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "xxx",
-          "xyx",
-          "xxx"
-        ],
-        "key": {
-          "x": {
-            "item": "mineralogy:andesite_slab"
-          },
-          "y": {
-            "item": "minecraft:furnace"
-          }
-        },
-        "result": {
-          "item": "mineralogy:andesite_furnace"
-        }
-      }
-    }
-  ]
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:andesite_furnace"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "xxx",
+                    "xyx",
+                    "xxx"
+                ],
+    "key":  {
+                "x":  {
+                          "tag":  "mineralogy:slabs/andesite"
+                      },
+                "y":  {
+                          "item":  "minecraft:furnace"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:andesite_furnace",
+                   "count":  1
+               }
 }

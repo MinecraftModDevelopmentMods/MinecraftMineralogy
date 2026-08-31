@@ -1,33 +1,53 @@
 {
-  "rewards": {
-    "recipes": [
-      "mineralogy:shale_smooth"
-    ]
-  },
-  "criteria": {
-    "has_the_recipe": {
-      "trigger": "minecraft:recipe_unlocked",
-      "conditions": {
-        "recipe": "mineralogy:shale_smooth"
-      }
-    },
-    "has_rock": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "mineralogy:shale"
-            ]
-          }
-        ]
-      }
-    }
-  },
-  "requirements": [
-    [
-      "has_the_recipe",
-      "has_rock"
-    ]
-  ]
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:shale_smooth"
+                       }
+                   ],
+    "rewards":  {
+                    "recipes":  [
+                                    "mineralogy:shale_smooth"
+                                ]
+                },
+    "criteria":  {
+                     "has_the_recipe":  {
+                                            "trigger":  "minecraft:recipe_unlocked",
+                                            "conditions":  {
+                                                               "recipe":  "mineralogy:shale_smooth"
+                                                           }
+                                        },
+                     "has_rock":  {
+                                      "trigger":  "minecraft:inventory_changed",
+                                      "conditions":  {
+                                                         "items":  [
+                                                                       {
+                                                                           "tag":  "mineralogy:stones/shale"
+                                                                       }
+                                                                   ]
+                                                     }
+                                  },
+                     "has_sand":  {
+                                      "trigger":  "minecraft:inventory_changed",
+                                      "conditions":  {
+                                                         "items":  [
+                                                                       {
+                                                                           "items":  [
+                                                                                         "minecraft:sand"
+                                                                                     ]
+                                                                       }
+                                                                   ]
+                                                     }
+                                  }
+                 },
+    "requirements":  [
+                         [
+                             "has_the_recipe",
+                             "has_rock"
+                         ],
+                         [
+                             "has_the_recipe",
+                             "has_sand"
+                         ]
+                     ]
 }

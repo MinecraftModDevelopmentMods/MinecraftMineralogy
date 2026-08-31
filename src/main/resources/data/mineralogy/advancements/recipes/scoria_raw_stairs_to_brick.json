@@ -1,0 +1,43 @@
+{
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:scoria_stairs"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:scoria_brick_stairs"
+                       }
+                   ],
+    "rewards":  {
+                    "recipes":  [
+                                    "mineralogy:scoria_raw_stairs_to_brick"
+                                ]
+                },
+    "criteria":  {
+                     "has_the_recipe":  {
+                                            "trigger":  "minecraft:recipe_unlocked",
+                                            "conditions":  {
+                                                               "recipe":  "mineralogy:scoria_raw_stairs_to_brick"
+                                                           }
+                                        },
+                     "has_rock":  {
+                                      "trigger":  "minecraft:inventory_changed",
+                                      "conditions":  {
+                                                         "items":  [
+                                                                       {
+                                                                           "items":  [
+                                                                                         "mineralogy:scoria_stairs"
+                                                                                     ]
+                                                                       }
+                                                                   ]
+                                                     }
+                                  }
+                 },
+    "requirements":  [
+                         [
+                             "has_the_recipe",
+                             "has_rock"
+                         ]
+                     ]
+}

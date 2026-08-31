@@ -13,7 +13,6 @@ public class RockStairs extends StairBlock {
 			SoundType sound, String name) {
 		super(materialBlock.defaultBlockState(), BlockBehaviour.Properties.of(Material.STONE)
 				.strength(hardness, blastResistance).sound(sound).requiresCorrectToolForDrops());
-
 		this.setRegistryName(name);
 		this.toolHardnessLevel = toolHardnessLevel;
 	}

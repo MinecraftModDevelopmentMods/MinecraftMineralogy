@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import zone.moddev.mc.mineralogy.Mineralogy;
+import zone.moddev.mc.mineralogy.MineralogyConfig;
 import zone.moddev.mc.mineralogy.blocks.DryWall;
 import zone.moddev.mc.mineralogy.blocks.Ore;
 import zone.moddev.mc.mineralogy.blocks.Rock;
@@ -81,7 +82,11 @@ public class Items {
 	}
 
 	private static BlockItem createBlockItem(Block block) {
-		Item.Properties properties = new Item.Properties().tab(MineralogyItemGroups.forBlock(block));
+		ResourceLocation name = block.getRegistryName();
+		Item.Properties properties = new Item.Properties();
+		if (name != null && MineralogyConfig.isCreativeVisible(name.getPath())) {
+			properties.tab(MineralogyItemGroups.forBlock(block));
+		}
 		if (block instanceof RockFurnace) {
 			properties.stacksTo(1);
 		} else if (block instanceof RockSaltStreetLamp) {
@@ -101,13 +106,16 @@ public class Items {
 	}
 
 	private static Item createItem(String name) {
-		Item item = new Item(new Item.Properties().tab(MineralogyItemGroups.forItem()));
+		Item.Properties properties = new Item.Properties();
+		if (MineralogyConfig.isCreativeVisible(name)) properties.tab(MineralogyItemGroups.forItem());
+		Item item = new Item(properties);
 		item.setRegistryName(Mineralogy.MODID, name);
 		return item;
 	}
 
 	private static Item createFertilizer() {
-		MineralFertilizer item = new MineralFertilizer(MineralogyItemGroups.forItem());
+		MineralFertilizer item = new MineralFertilizer(MineralogyConfig.isCreativeVisible("mineral_fertilizer")
+				? MineralogyItemGroups.forFertilizer() : null);
 		item.setRegistryName(Mineralogy.MODID, "mineral_fertilizer");
 		return item;
 	}

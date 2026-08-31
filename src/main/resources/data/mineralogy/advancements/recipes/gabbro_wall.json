@@ -1,33 +1,37 @@
 {
-  "rewards": {
-    "recipes": [
-      "mineralogy:gabbro_wall"
-    ]
-  },
-  "criteria": {
-    "has_the_recipe": {
-      "trigger": "minecraft:recipe_unlocked",
-      "conditions": {
-        "recipe": "mineralogy:gabbro_wall"
-      }
-    },
-    "has_rock": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "mineralogy:gabbro"
-            ]
-          }
-        ]
-      }
-    }
-  },
-  "requirements": [
-    [
-      "has_the_recipe",
-      "has_rock"
-    ]
-  ]
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:gabbro_wall"
+                       }
+                   ],
+    "rewards":  {
+                    "recipes":  [
+                                    "mineralogy:gabbro_wall"
+                                ]
+                },
+    "criteria":  {
+                     "has_the_recipe":  {
+                                            "trigger":  "minecraft:recipe_unlocked",
+                                            "conditions":  {
+                                                               "recipe":  "mineralogy:gabbro_wall"
+                                                           }
+                                        },
+                     "has_rock":  {
+                                      "trigger":  "minecraft:inventory_changed",
+                                      "conditions":  {
+                                                         "items":  [
+                                                                       {
+                                                                           "tag":  "mineralogy:stones/gabbro"
+                                                                       }
+                                                                   ]
+                                                     }
+                                  }
+                 },
+    "requirements":  [
+                         [
+                             "has_the_recipe",
+                             "has_rock"
+                         ]
+                     ]
 }

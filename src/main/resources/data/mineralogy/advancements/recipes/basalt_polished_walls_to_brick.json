@@ -1,0 +1,43 @@
+{
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:basalt_smooth_wall"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:basalt_smooth_brick_wall"
+                       }
+                   ],
+    "rewards":  {
+                    "recipes":  [
+                                    "mineralogy:basalt_polished_walls_to_brick"
+                                ]
+                },
+    "criteria":  {
+                     "has_the_recipe":  {
+                                            "trigger":  "minecraft:recipe_unlocked",
+                                            "conditions":  {
+                                                               "recipe":  "mineralogy:basalt_polished_walls_to_brick"
+                                                           }
+                                        },
+                     "has_rock":  {
+                                      "trigger":  "minecraft:inventory_changed",
+                                      "conditions":  {
+                                                         "items":  [
+                                                                       {
+                                                                           "items":  [
+                                                                                         "mineralogy:basalt_smooth_wall"
+                                                                                     ]
+                                                                       }
+                                                                   ]
+                                                     }
+                                  }
+                 },
+    "requirements":  [
+                         [
+                             "has_the_recipe",
+                             "has_rock"
+                         ]
+                     ]
+}

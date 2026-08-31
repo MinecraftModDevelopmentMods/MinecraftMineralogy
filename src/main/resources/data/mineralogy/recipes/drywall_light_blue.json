@@ -1,14 +1,25 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "mineralogy:drywall_white"
-    },
-    {
-      "tag": "forge:dyes/light_blue"
-    }
-  ],
-  "result": {
-    "item": "mineralogy:drywall_light_blue"
-  }
+    "conditions":  [
+                       {
+                           "type":  "mineralogy:config",
+                           "flag":  "ENABLE_DRYWALLS"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:drywall_light_blue"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "ingredients":  [
+                        {
+                            "tag":  "mineralogy:drywall/white"
+                        },
+                        {
+                            "item":  "minecraft:light_blue_dye"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:drywall_light_blue",
+                   "count":  1
+               }
 }

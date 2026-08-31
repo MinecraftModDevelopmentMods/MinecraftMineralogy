@@ -1,0 +1,60 @@
+{
+    "type":  "forge:conditional",
+    "recipes":  [
+                    {
+                        "conditions":  [
+                                           {
+                                               "type":  "mineralogy:config",
+                                               "flag":  "COBBLESTONE_EQUIVILENT"
+                                           }
+                                       ],
+                        "recipe":  {
+                                       "type":  "minecraft:crafting_shaped",
+                                       "pattern":  [
+                                                       " B ",
+                                                       "###"
+                                                   ],
+                                       "key":  {
+                                                   "B":  {
+                                                             "item":  "minecraft:blaze_rod"
+                                                         },
+                                                   "#":  {
+                                                             "tag":  "mineralogy:stone_crafting_materials"
+                                                         }
+                                               },
+                                       "result":  {
+                                                      "item":  "minecraft:brewing_stand"
+                                                  }
+                                   }
+                    },
+                    {
+                        "conditions":  [
+                                           {
+                                               "type":  "forge:not",
+                                               "value":  {
+                                                             "type":  "mineralogy:config",
+                                                             "flag":  "COBBLESTONE_EQUIVILENT"
+                                                         }
+                                           }
+                                       ],
+                        "recipe":  {
+                                       "type":  "minecraft:crafting_shaped",
+                                       "pattern":  [
+                                                       " B ",
+                                                       "###"
+                                                   ],
+                                       "key":  {
+                                                   "B":  {
+                                                             "item":  "minecraft:blaze_rod"
+                                                         },
+                                                   "#":  {
+                                                             "tag":  "minecraft:stone_crafting_materials"
+                                                         }
+                                               },
+                                       "result":  {
+                                                      "item":  "minecraft:brewing_stand"
+                                                  }
+                                   }
+                    }
+                ]
+}

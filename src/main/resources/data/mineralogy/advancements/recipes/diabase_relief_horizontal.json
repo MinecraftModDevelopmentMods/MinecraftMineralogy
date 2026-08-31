@@ -1,35 +1,39 @@
 {
-  "rewards": {
-    "recipes": [
-      "mineralogy:diabase_relief_horizontal"
-    ]
-  },
-  "criteria": {
-    "has_the_recipe": {
-      "trigger": "minecraft:recipe_unlocked",
-      "conditions": {
-        "recipe": "mineralogy:diabase_relief_horizontal"
-      }
-    },
-    "has_rock": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "type": "mineralogy:config_item",
-            "flags": [
-              "GENERATE_SMOOTH"
-            ],
-            "item": "mineralogy:diabase_smooth"
-          }
-        ]
-      }
-    }
-  },
-  "requirements": [
-    [
-      "has_the_recipe",
-      "has_rock"
-    ]
-  ]
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:diabase_relief_horizontal"
+                       }
+                   ],
+    "rewards":  {
+                    "recipes":  [
+                                    "mineralogy:diabase_relief_horizontal"
+                                ]
+                },
+    "criteria":  {
+                     "has_the_recipe":  {
+                                            "trigger":  "minecraft:recipe_unlocked",
+                                            "conditions":  {
+                                                               "recipe":  "mineralogy:diabase_relief_horizontal"
+                                                           }
+                                        },
+                     "has_rock":  {
+                                      "trigger":  "minecraft:inventory_changed",
+                                      "conditions":  {
+                                                         "items":  [
+                                                                       {
+                                                                           "items":  [
+                                                                                         "mineralogy:diabase_relief_blank"
+                                                                                     ]
+                                                                       }
+                                                                   ]
+                                                     }
+                                  }
+                 },
+    "requirements":  [
+                         [
+                             "has_the_recipe",
+                             "has_rock"
+                         ]
+                     ]
 }

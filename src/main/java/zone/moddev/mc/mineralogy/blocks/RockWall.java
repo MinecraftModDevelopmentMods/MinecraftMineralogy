@@ -17,7 +17,6 @@ public class RockWall extends WallBlock {
 	 			SoundType sound, String name) {
 		super(BlockBehaviour.Properties.of(Material.STONE).strength(hardness, blastResistance).sound(sound)
 				.requiresCorrectToolForDrops());
-
 		this.setRegistryName(name);
 		this.toolHardnessLevel = toolHardnessLevel;
 	 }

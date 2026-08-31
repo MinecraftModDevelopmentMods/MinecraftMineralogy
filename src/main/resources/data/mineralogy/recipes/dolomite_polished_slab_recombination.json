@@ -1,0 +1,25 @@
+{
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:dolomite_smooth_slab"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:dolomite_smooth"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "ingredients":  [
+                        {
+                            "item":  "mineralogy:dolomite_smooth_slab"
+                        },
+                        {
+                            "item":  "mineralogy:dolomite_smooth_slab"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:dolomite_smooth",
+                   "count":  1
+               }
+}

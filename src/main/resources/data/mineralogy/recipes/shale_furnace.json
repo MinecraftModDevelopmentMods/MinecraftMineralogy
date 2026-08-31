@@ -1,36 +1,26 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
-    {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_ROCKSLAB"
-        },
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_ROCKFURNACE"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "xxx",
-          "xyx",
-          "xxx"
-        ],
-        "key": {
-          "x": {
-            "item": "mineralogy:shale_slab"
-          },
-          "y": {
-            "item": "minecraft:furnace"
-          }
-        },
-        "result": {
-          "item": "mineralogy:shale_furnace"
-        }
-      }
-    }
-  ]
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:shale_furnace"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "xxx",
+                    "xyx",
+                    "xxx"
+                ],
+    "key":  {
+                "x":  {
+                          "tag":  "mineralogy:slabs/shale"
+                      },
+                "y":  {
+                          "item":  "minecraft:furnace"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:shale_furnace",
+                   "count":  1
+               }
 }

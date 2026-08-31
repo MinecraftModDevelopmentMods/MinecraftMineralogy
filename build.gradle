@@ -812,7 +812,11 @@ tasks.register('syncForge40EclipseLaunches') {
         // Copy the processed production resources as a normal doLast action so
         // token-expanded metadata and externally edited JSON cannot lag behind
         // the source tree without making bin/main a Gradle-owned task output.
-        File processedResources = sourceSets.main.output.resourcesDir
+        // Eclipse rewrites sourceSets.main.output.resourcesDir to bin/main.
+        // Always copy from Gradle's actual processResources destination or the
+        // comparison degenerates into bin/main -> bin/main and leaves raw
+        // ${...} tokens from Eclipse's resource builder in production runs.
+        File processedResources = layout.buildDirectory.dir('resources/main').get().asFile
         copy {
             from processedResources
             into mainOutput
@@ -961,13 +965,24 @@ tasks.register('verifyEclipseProductionClasspath') {
                 throw new GradleException("Eclipse output is missing bundled documentation: ${name}")
             }
         }
-        File processedProvider = new File(sourceSets.main.output.resourcesDir,
+        File processedResources = layout.buildDirectory.dir('resources/main').get().asFile
+        File processedProvider = new File(processedResources,
                 'data/mineralogy/orespawn/provider.json')
         File eclipseProvider = new File(projectDir,
                 'bin/main/data/mineralogy/orespawn/provider.json')
         if (!eclipseProvider.isFile()
                 || !java.util.Arrays.equals(eclipseProvider.getBytes(), processedProvider.getBytes())) {
             throw new GradleException('Eclipse output contains stale processed production resources')
+        }
+        File processedModsToml = new File(processedResources, 'META-INF/mods.toml')
+        File eclipseModsToml = new File(projectDir, 'bin/main/META-INF/mods.toml')
+        if (!processedModsToml.isFile() || !eclipseModsToml.isFile()
+                || !java.util.Arrays.equals(eclipseModsToml.getBytes(), processedModsToml.getBytes())) {
+            throw new GradleException('Eclipse output contains stale or unexpanded mods.toml metadata')
+        }
+        String eclipseMetadata = eclipseModsToml.getText('UTF-8')
+        if (eclipseMetadata.contains('${') || !eclipseMetadata.contains('version="6.1.0.118021"')) {
+            throw new GradleException('Eclipse output contains unresolved or invalid Mineralogy version metadata')
         }
     }
 }

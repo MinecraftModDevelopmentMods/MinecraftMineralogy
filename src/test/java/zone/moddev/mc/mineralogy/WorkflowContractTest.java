@@ -108,6 +108,9 @@ public class WorkflowContractTest {
         assertTrue(build.contains("String legacyClassPathPrefix = '-DlegacyClassPath.file='"));
         assertTrue(build.contains("text = beforeLegacyClassPath + xmlQuote + legacyClassPathArgument"));
         assertTrue(build.contains("Eclipse launch does not quote -DlegacyClassPath.file"));
+        assertTrue(build.contains("layout.buildDirectory.dir('resources/main').get().asFile"));
+        assertTrue(build.contains("Eclipse output contains stale or unexpanded mods.toml metadata"));
+        assertTrue(build.contains("eclipseMetadata.contains('${')"));
     }
 
     private static String text(String path) throws Exception {

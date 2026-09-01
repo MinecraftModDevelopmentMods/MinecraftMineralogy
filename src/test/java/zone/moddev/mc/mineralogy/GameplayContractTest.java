@@ -19,6 +19,14 @@ import static org.junit.Assert.*;
 
 public class GameplayContractTest {
     @Test
+    public void reliefOpenCentreDoesNotCullItsSupportingBlockFace() throws Exception {
+        String relief = text("src/main/java/zone/moddev/mc/mineralogy/blocks/RockRelief.java");
+        assertTrue(relief.contains("VoxelShape getOcclusionShape(BlockState state, BlockGetter world, BlockPos pos)"));
+        assertTrue(relief.contains("VoxelShape getVisualShape(BlockState state, BlockGetter world, BlockPos pos,"));
+        assertTrue(relief.contains("return Shapes.empty();"));
+    }
+
+    @Test
     public void novaculiteAndRockFamilyContractsAreStable() {
         assertEquals(3.0D, MaterialData.NOVACULITE.hardness, 0.0D);
         assertEquals(15.0D, MaterialData.NOVACULITE.blastResistance, 0.0D);

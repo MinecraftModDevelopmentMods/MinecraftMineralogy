@@ -44,6 +44,11 @@ public class RockRelief extends RockSlab {
 	}
 
 	@Override
+	public VoxelShape getOcclusionShape(BlockState state, BlockGetter world, BlockPos pos) {
+		return Shapes.empty();
+	}
+
+	@Override
 	public boolean isCollisionShapeFullBlock(BlockState state, BlockGetter world, BlockPos pos) {
 		return false;
 	}

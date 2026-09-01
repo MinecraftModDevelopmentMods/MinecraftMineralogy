@@ -1,4 +1,8 @@
-Mineralogy 6.1.0.118021 for Minecraft 1.18.2
+Mineralogy 6.1.1.118021 for Minecraft 1.18.2
+
+- Corrected relief occlusion so their intentionally open centres reveal the
+  supporting block face instead of culling it and exposing the sky/void when
+  mounted on floors, walls, or ceilings.
 
 - Delegated terrain, strata, ore, and covered fluid-deposit generation to the
   released OreSpawn 4.0.10.118021 provider engine, retaining the supported
@@ -85,7 +89,7 @@ Mineralogy 6.1.0.118021 for Minecraft 1.18.2
   loot tables, fluid APIs, rendering setup, and pack format 9 resources.
 - Added reproducible Java 17 main, sources, and Javadoc artifacts, exact released
   OreSpawn dependency verification, guarded 1.18.2 CI, and the four-component
-  release tag `6.1.0.118021`.
+  release tag `6.1.1.118021`.
 - Kept ForgeGradle 7 while sealing Forge 40's required Mavenizer compatibility
   fixture by SHA-256. The build-only tool runs on Java 25; Mineralogy compiles
   and ships exclusively as Java 17, and release audits reject fixture leakage.

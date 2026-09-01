@@ -1,29 +1,22 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
-    {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_BRICK"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "xx",
-          "xx"
-        ],
-        "key": {
-          "x": {
-            "tag": "mineralogy:crafting_materials/phyllite"
-          }
-        },
-        "result": {
-          "item": "mineralogy:phyllite_brick",
-          "count": 4
-        }
-      }
-    }
-  ]
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:phyllite_brick"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "xx",
+                    "xx"
+                ],
+    "key":  {
+                "x":  {
+                          "tag":  "mineralogy:stones/phyllite"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:phyllite_brick",
+                   "count":  4
+               }
 }

@@ -1,53 +1,42 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
-    {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_SMOOTH"
-        },
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_RELIEFS"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shapeless",
-        "ingredients": [
-          {
-            "item": "mineralogy:gneiss_relief_blank"
-          },
-          {
-            "item": "mineralogy:gneiss_relief_blank"
-          },
-          {
-            "item": "mineralogy:gneiss_relief_blank"
-          },
-          {
-            "item": "mineralogy:gneiss_relief_blank"
-          },
-          {
-            "item": "mineralogy:gneiss_relief_blank"
-          },
-          {
-            "item": "mineralogy:gneiss_relief_blank"
-          },
-          {
-            "item": "mineralogy:gneiss_relief_blank"
-          },
-          {
-            "item": "mineralogy:gneiss_relief_blank"
-          },
-          {
-            "item": "minecraft:stone_hoe"
-          }
-        ],
-        "result": {
-          "item": "mineralogy:gneiss_relief_hoe",
-          "count": 8
-        }
-      }
-    }
-  ]
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:gneiss_relief_hoe"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "ingredients":  [
+                        {
+                            "item":  "mineralogy:gneiss_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:gneiss_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:gneiss_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:gneiss_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:gneiss_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:gneiss_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:gneiss_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:gneiss_relief_blank"
+                        },
+                        {
+                            "item":  "minecraft:stone_hoe"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:gneiss_relief_hoe",
+                   "count":  8
+               }
 }

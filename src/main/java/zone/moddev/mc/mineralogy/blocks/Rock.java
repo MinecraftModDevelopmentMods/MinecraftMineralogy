@@ -1,6 +1,6 @@
 package zone.moddev.mc.mineralogy.blocks;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -41,13 +41,10 @@ public class Rock extends Block {
 	}
 @Override
 	public List<ItemStack> getDrops(BlockState state, Builder builder) {
-		List<ItemStack> drops = new ArrayList<ItemStack>(super.getDrops(state, builder));
-
-		if (MineralogyConfig.dropCobblestone()) {
-			drops.add(new ItemStack(Blocks.COBBLESTONE));
+		if (isStoneEquivalent && MineralogyConfig.dropCobblestone()) {
+			return Collections.singletonList(new ItemStack(Blocks.COBBLESTONE));
 		}
-
-		return drops;
+		return super.getDrops(state, builder);
 	}
 
 	protected static boolean hasSilkTouch(Builder builder) {

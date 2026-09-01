@@ -1,6 +1,6 @@
 package zone.moddev.mc.mineralogy.blocks;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -19,12 +19,10 @@ public class Chert extends Rock {
 
 	@Override
 	public List<ItemStack> getDrops(BlockState state, Builder builder) {
-		List<ItemStack> drops = new ArrayList<ItemStack>(super.getDrops(state, builder));
-
 		if (prng.nextInt(10) == 0) {
-			drops.add(new ItemStack(Items.FLINT, 1 + Math.max(0, getFortuneLevel(builder))));
+			return Collections.singletonList(
+					new ItemStack(Items.FLINT, 1 + Math.max(0, getFortuneLevel(builder))));
 		}
-
-		return drops;
+		return super.getDrops(state, builder);
 	}
 }

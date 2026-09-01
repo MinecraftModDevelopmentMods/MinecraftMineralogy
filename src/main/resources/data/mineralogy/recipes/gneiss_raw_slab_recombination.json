@@ -1,0 +1,25 @@
+{
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:gneiss_slab"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:gneiss"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "ingredients":  [
+                        {
+                            "item":  "mineralogy:gneiss_slab"
+                        },
+                        {
+                            "item":  "mineralogy:gneiss_slab"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:gneiss",
+                   "count":  1
+               }
+}

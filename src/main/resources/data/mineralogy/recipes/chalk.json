@@ -1,15 +1,22 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xx",
-    "xx"
-  ],
-  "key": {
-    "x": {
-      "tag": "forge:dusts/chalk"
-    }
-  },
-  "result": {
-    "item": "mineralogy:chalk"
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:chalk"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "pattern":  [
+                    "xx",
+                    "xx"
+                ],
+    "key":  {
+                "x":  {
+                          "tag":  "forge:dusts/chalk"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:chalk",
+                   "count":  1
+               }
 }

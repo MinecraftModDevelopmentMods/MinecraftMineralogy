@@ -1,19 +1,62 @@
 {
-    "type":  "minecraft:crafting_shaped",
-    "pattern":  [
-                    "CQ",
-                    "QC"
-                ],
-    "key":  {
-                "Q":  {
-                          "item":  "minecraft:quartz"
-                      },
-                "C":  {
-                          "tag":  "forge:cobblestone"
-                      }
-            },
-    "result":  {
-                   "item":  "minecraft:diorite",
-                   "count":  2
-               }
+    "type":  "forge:conditional",
+    "recipes":  [
+                    {
+                        "conditions":  [
+                                           {
+                                               "type":  "mineralogy:config",
+                                               "flag":  "COBBLESTONE_EQUIVILENT"
+                                           }
+                                       ],
+                        "recipe":  {
+                                       "type":  "minecraft:crafting_shaped",
+                                       "pattern":  [
+                                                       "CQ",
+                                                       "QC"
+                                                   ],
+                                       "key":  {
+                                                   "Q":  {
+                                                             "item":  "minecraft:quartz"
+                                                         },
+                                                   "C":  {
+                                                             "tag":  "mineralogy:cobblestone_equivalents"
+                                                         }
+                                               },
+                                       "result":  {
+                                                      "item":  "minecraft:diorite",
+                                                      "count":  2
+                                                  }
+                                   }
+                    },
+                    {
+                        "conditions":  [
+                                           {
+                                               "type":  "forge:not",
+                                               "value":  {
+                                                             "type":  "mineralogy:config",
+                                                             "flag":  "COBBLESTONE_EQUIVILENT"
+                                                         }
+                                           }
+                                       ],
+                        "recipe":  {
+                                       "type":  "minecraft:crafting_shaped",
+                                       "pattern":  [
+                                                       "CQ",
+                                                       "QC"
+                                                   ],
+                                       "key":  {
+                                                   "Q":  {
+                                                             "item":  "minecraft:quartz"
+                                                         },
+                                                   "C":  {
+                                                             "tag":  "forge:cobblestone"
+                                                         }
+                                               },
+                                       "result":  {
+                                                      "item":  "minecraft:diorite",
+                                                      "count":  2
+                                                  }
+                                   }
+                    }
+                ]
 }

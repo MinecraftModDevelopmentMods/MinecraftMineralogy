@@ -56,8 +56,15 @@ public final class MineralogyFluids {
 					BlockBehaviour.Properties.of(Material.WATER).noCollission().strength(100.0F).noDrops()));
 	public static final RegistryObject<Item> CRUDE_OIL_BUCKET = ITEMS.register("crude_oil_bucket",
 			() -> new MineralogyBucketItem(MineralogyFluids::crudeOil,
-					new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)
-							.tab(MineralogyItemGroups.forItem())));
+					bucketProperties()));
+
+	private static Item.Properties bucketProperties() {
+		Item.Properties properties = new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1);
+		if (zone.moddev.mc.mineralogy.MineralogyConfig.isCreativeVisible("crude_oil_bucket")) {
+			properties.tab(MineralogyItemGroups.forItem());
+		}
+		return properties;
+	}
 
 	public static void register(IEventBus modBus) {
 		FLUIDS.register(modBus);

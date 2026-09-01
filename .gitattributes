@@ -1,3 +1,3 @@
-# The checksum-sealed Mavenizer compatibility patch is an immutable build-tool
-# fixture. Preserve its exact upstream bytes instead of applying text filters.
-ci-fixtures/tools/minecraft-mavenizer-0.5.21-orespawn-compat.patch binary
+# The checksum-sealed Mavenizer compatibility files are immutable build-tool
+# fixtures. Preserve their exact bytes instead of applying platform text filters.
+ci-fixtures/tools/* binary

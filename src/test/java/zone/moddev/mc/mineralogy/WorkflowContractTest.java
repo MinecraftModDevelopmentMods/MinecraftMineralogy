@@ -43,8 +43,11 @@ public class WorkflowContractTest {
         String staging = text("gradle/stage-orespawn-release.sh");
         assertTrue(ci.contains("name: Build, test, and audit"));
         assertTrue(ci.contains("master-1.19"));
+        assertTrue(ci.contains("Install pinned Java 8 launcher toolchain"));
+        assertTrue(ci.contains("java-version: '8.0.502+7'"));
         assertTrue(ci.contains("java-version: '17.0.1+12'"));
         assertTrue(ci.contains("Install pinned Java 17 runtime and toolchain"));
+        assertTrue(ci.contains("$JAVA_HOME,$JAVA_HOME_8_X64,$JAVA_HOME_25_X64"));
         assertTrue(ci.contains("verifyReleaseDependencies verifyReleaseArtifacts writeReleaseChecksums"));
         assertTrue(ci.contains("genEclipseRuns eclipse isolateEclipseProductionRuns verifyEclipseProductionClasspath"));
         assertTrue(ci.contains("CHANGELOG.txt"));
@@ -52,6 +55,9 @@ public class WorkflowContractTest {
         assertTrue(staging.contains("https://www.curseforge.com/api/v1/mods/$project_id/files/$file_id/download"));
         assertTrue(staging.contains("sha256sum"));
         assertTrue(codeql.contains("github/codeql-action/init@db488ddef3bf6cb639b32c2e9a7c0a7ea8271d28"));
+        assertTrue(codeql.contains("Install pinned Java 8 launcher toolchain"));
+        assertTrue(codeql.contains("java-version: '8.0.502+7'"));
+        assertTrue(codeql.contains("$JAVA_HOME,$JAVA_HOME_8_X64,$JAVA_HOME_25_X64"));
         assertTrue(codeql.contains("clean classes --rerun-tasks --no-build-cache"));
         assertTrue(codeql.contains("--rerun-tasks --no-build-cache"));
         assertTrue(wrapper.contains("gradle/actions/wrapper-validation@9c971963bec38e04b3d30dcc455b5382be2fdbfb"));

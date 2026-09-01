@@ -1,4 +1,8 @@
-Mineralogy 6.1.0.117011 for Minecraft 1.17.1
+Mineralogy 6.1.1.117011 for Minecraft 1.17.1
+
+- Corrected relief occlusion so their intentionally open centres reveal the
+  supporting block face instead of culling it and exposing the sky/void when
+  mounted on floors, walls, or ceilings.
 
 - Delegated terrain, strata, ore, and covered fluid-deposit generation to the
   released OreSpawn 4.0.9.117011 provider engine, retaining the supported
@@ -80,7 +84,7 @@ Mineralogy 6.1.0.117011 for Minecraft 1.17.1
   loot tables, fluid APIs, rendering setup, and pack format 7 resources.
 - Added reproducible Java 16 main, sources, and Javadoc artifacts, exact released
   OreSpawn dependency verification, guarded 1.17.1 CI, and the four-component
-  release tag `6.1.0.117011`.
+  release tag `6.1.1.117011`.
 - Isolated CI's verified OreSpawn artifact in an exclusive Gradle repository so
   dependency resolution cannot fall through to an unverified public copy.
   Release verification also enforces Maven coordinate

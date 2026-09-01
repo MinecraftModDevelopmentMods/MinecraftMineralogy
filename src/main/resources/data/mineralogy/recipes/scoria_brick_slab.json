@@ -1,32 +1,23 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
-    {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_BRICK"
-        },
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_BRICKSLAB"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "xxx"
-        ],
-        "key": {
-          "x": {
-            "item": "mineralogy:scoria_brick"
-          }
-        },
-        "result": {
-          "item": "mineralogy:scoria_brick_slab",
-          "count": 6
-        }
-      }
-    }
-  ]
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:scoria_brick_slab"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "category":  "building",
+    "pattern":  [
+                    "xxx"
+                ],
+    "key":  {
+                "x":  {
+                          "item":  "mineralogy:scoria_brick"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:scoria_brick_slab",
+                   "count":  6
+               },
+    "show_notification":  true
 }

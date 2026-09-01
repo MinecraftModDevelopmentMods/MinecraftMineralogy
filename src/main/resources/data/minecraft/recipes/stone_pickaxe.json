@@ -1,0 +1,66 @@
+{
+    "type":  "forge:conditional",
+    "recipes":  [
+                    {
+                        "conditions":  [
+                                           {
+                                               "type":  "mineralogy:config",
+                                               "flag":  "COBBLESTONE_EQUIVILENT"
+                                           }
+                                       ],
+                        "recipe":  {
+                                       "type":  "minecraft:crafting_shaped",
+                                       "category":  "equipment",
+                                       "pattern":  [
+                                                       "XXX",
+                                                       " # ",
+                                                       " # "
+                                                   ],
+                                       "key":  {
+                                                   "#":  {
+                                                             "item":  "minecraft:stick"
+                                                         },
+                                                   "X":  {
+                                                             "tag":  "mineralogy:stone_tool_materials"
+                                                         }
+                                               },
+                                       "result":  {
+                                                      "item":  "minecraft:stone_pickaxe"
+                                                  },
+                                       "show_notification":  true
+                                   }
+                    },
+                    {
+                        "conditions":  [
+                                           {
+                                               "type":  "forge:not",
+                                               "value":  {
+                                                             "type":  "mineralogy:config",
+                                                             "flag":  "COBBLESTONE_EQUIVILENT"
+                                                         }
+                                           }
+                                       ],
+                        "recipe":  {
+                                       "type":  "minecraft:crafting_shaped",
+                                       "category":  "equipment",
+                                       "pattern":  [
+                                                       "XXX",
+                                                       " # ",
+                                                       " # "
+                                                   ],
+                                       "key":  {
+                                                   "#":  {
+                                                             "item":  "minecraft:stick"
+                                                         },
+                                                   "X":  {
+                                                             "tag":  "minecraft:stone_tool_materials"
+                                                         }
+                                               },
+                                       "result":  {
+                                                      "item":  "minecraft:stone_pickaxe"
+                                                  },
+                                       "show_notification":  true
+                                   }
+                    }
+                ]
+}

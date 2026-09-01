@@ -1,21 +1,25 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "tag": "mineralogy:crafting_materials/scoria"
-    },
-    {
-      "tag": "mineralogy:crafting_materials/scoria"
-    },
-    {
-      "item": "minecraft:gravel"
-    },
-    {
-      "item": "minecraft:gravel"
-    }
-  ],
-  "result": {
-    "item": "minecraft:cobblestone",
-    "count": 4
-  }
+    "conditions":  [
+
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "category":  "building",
+    "ingredients":  [
+                        {
+                            "tag":  "mineralogy:stones/scoria"
+                        },
+                        {
+                            "tag":  "mineralogy:stones/scoria"
+                        },
+                        {
+                            "item":  "minecraft:gravel"
+                        },
+                        {
+                            "item":  "minecraft:gravel"
+                        }
+                    ],
+    "result":  {
+                   "item":  "minecraft:cobblestone",
+                   "count":  4
+               }
 }

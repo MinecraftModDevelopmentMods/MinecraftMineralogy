@@ -1,0 +1,26 @@
+{
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:novaculite_brick_slab"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:novaculite_smooth_brick_slab"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "category":  "building",
+    "ingredients":  [
+                        {
+                            "item":  "mineralogy:novaculite_brick_slab"
+                        },
+                        {
+                            "tag":  "forge:sand"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:novaculite_smooth_brick_slab",
+                   "count":  1
+               }
+}

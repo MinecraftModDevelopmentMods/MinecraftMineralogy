@@ -1,0 +1,28 @@
+{
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:basaltic_glass_wall"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:basaltic_glass_brick_wall"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "category":  "building",
+    "pattern":  [
+                    "xx",
+                    "xx"
+                ],
+    "key":  {
+                "x":  {
+                          "item":  "mineralogy:basaltic_glass_wall"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:basaltic_glass_brick_wall",
+                   "count":  4
+               },
+    "show_notification":  true
+}

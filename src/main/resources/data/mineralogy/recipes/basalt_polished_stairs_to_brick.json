@@ -1,0 +1,28 @@
+{
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:basalt_smooth_stairs"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:basalt_smooth_brick_stairs"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "category":  "building",
+    "pattern":  [
+                    "xx",
+                    "xx"
+                ],
+    "key":  {
+                "x":  {
+                          "item":  "mineralogy:basalt_smooth_stairs"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:basalt_smooth_brick_stairs",
+                   "count":  4
+               },
+    "show_notification":  true
+}

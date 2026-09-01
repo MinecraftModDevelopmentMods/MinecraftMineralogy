@@ -5,22 +5,28 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Method;
+import java.lang.reflect.Field;
 import java.nio.file.AtomicMoveNotSupportedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
 import java.util.BitSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.mojang.serialization.Dynamic;
+
+import sun.misc.Unsafe;
+
 import zone.moddev.mc.mineralogy.Mineralogy;
 import zone.moddev.mc.mineralogy.blocks.RockFurnace;
 import zone.moddev.mc.mineralogy.blocks.RockSaltLamp;
 import zone.moddev.mc.mineralogy.blocks.RockSaltStreetLamp;
 import zone.moddev.mc.mineralogy.blocks.RockSlab;
+import zone.moddev.mc.mineralogy.migration.LegacyMineralogy6ConfigMigrator;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -76,6 +82,8 @@ public final class LegacyWorldDataHook {
 	}
 
 	public static void onServerAboutToStart(ServerAboutToStartEvent event) {
+		LegacyMineralogy6ConfigMigrator.migrateWorldProfile(
+				event.getServer().getWorldPath(LevelResource.ROOT), LOGGER);
 		File levelDat = event.getServer().getWorldPath(LevelResource.LEVEL_DATA_FILE).toFile();
 		prepareLegacyWorld(levelDat);
 	}
@@ -261,6 +269,7 @@ public final class LegacyWorldDataHook {
 		LEGACY_ROCK_FURNACE_BLOCK_IDS.clear();
 		Map<ResourceLocation, Integer> mineralogyIds = new HashMap<>();
 		ListTag savedIds = blockSnapshot.getList("ids", 10);
+		int highestStateId = 0;
 		for (int index = 0; index < savedIds.size(); ++index) {
 			CompoundTag savedId = savedIds.getCompound(index);
 			String key = savedId.getString("K");
@@ -270,8 +279,9 @@ public final class LegacyWorldDataHook {
 			ResourceLocation id = new ResourceLocation(key);
 			int numericId = savedId.getInt("V");
 			mineralogyIds.put(id, numericId);
+			highestStateId = Math.max(highestStateId, (numericId << 4) | 15);
 		}
-		Method addEntry = findStateRegistrationMethod();
+		Dynamic<?>[] legacyStates = expandFlatteningTable(highestStateId + 1);
 		int mapped = 0;
 		for (Map.Entry<ResourceLocation, Integer> entry : mineralogyIds.entrySet()) {
 			ResourceLocation oldId = entry.getKey();
@@ -282,15 +292,54 @@ public final class LegacyWorldDataHook {
 			}
 			for (int meta = 0; meta < 16; ++meta) {
 				String stateNbt = NbtUtils.writeBlockState(legacyState(block, meta)).toString();
-				try {
-					addEntry.invoke(null, (entry.getValue() << 4) | meta, stateNbt, new String[0]);
-				} catch (ReflectiveOperationException e) {
-					throw new IllegalStateException("Could not register legacy block state " + oldId + ":" + meta, e);
-				}
+				int stateId = (entry.getValue() << 4) | meta;
+				// The private vanilla register method may retain a JIT-compiled reference to
+				// its original final 4,096-entry array. Write the expanded array directly;
+				// Mineralogy has no legacy aliases that need its auxiliary name maps.
+				legacyStates[stateId] = BlockStateData.parse(stateNbt);
 				++mapped;
 			}
 		}
 		return mapped;
+	}
+
+	/**
+	 * Minecraft 1.19 still fixes the pre-flattening state table at 4,096 entries,
+	 * while Forge 1.12 worlds commonly assign mod blocks higher numeric IDs.
+	 * Replace that exact static-final array before writing any recovered states.
+	 */
+	private static Dynamic<?>[] expandFlatteningTable(int requiredLength) {
+		try {
+			Unsafe unsafe = unsafe();
+			for (Field field : BlockStateData.class.getDeclaredFields()) {
+				Class<?> type = field.getType();
+				if (!java.lang.reflect.Modifier.isStatic(field.getModifiers()) || !type.isArray()
+						|| type.getComponentType() != Dynamic.class) {
+					continue;
+				}
+				Object base = unsafe.staticFieldBase(field);
+				long offset = unsafe.staticFieldOffset(field);
+				Dynamic<?>[] current = (Dynamic<?>[]) unsafe.getObject(base, offset);
+				if (current == null || current.length < 4096) {
+					continue;
+				}
+				if (current.length >= requiredLength) {
+					return current;
+				}
+				Dynamic<?>[] expanded = Arrays.copyOf(current, requiredLength);
+				unsafe.putObjectVolatile(base, offset, expanded);
+				return expanded;
+			}
+		} catch (ReflectiveOperationException e) {
+			throw new IllegalStateException("Could not access Minecraft's legacy block-state flattening table", e);
+		}
+		throw new IllegalStateException("Could not locate Minecraft's legacy block-state flattening table");
+	}
+
+	private static Unsafe unsafe() throws ReflectiveOperationException {
+		Field field = Unsafe.class.getDeclaredField("theUnsafe");
+		field.setAccessible(true);
+		return (Unsafe) field.get(null);
 	}
 
 	private static boolean containsLegacyMineralogyBlock(CompoundTag level) {
@@ -407,14 +456,4 @@ public final class LegacyWorldDataHook {
 		}
 	}
 
-	private static Method findStateRegistrationMethod() {
-		for (Method method : BlockStateData.class.getDeclaredMethods()) {
-			Class<?>[] parameters = method.getParameterTypes();
-			if (parameters.length == 3 && parameters[0] == int.class
-					&& parameters[1] == String.class && parameters[2] == String[].class) {
-				return method;
-			}
-		}
-		throw new IllegalStateException("Could not find Minecraft's legacy block-state registration method");
-	}
 }

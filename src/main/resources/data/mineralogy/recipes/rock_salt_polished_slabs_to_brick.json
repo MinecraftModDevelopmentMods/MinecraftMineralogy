@@ -1,0 +1,28 @@
+{
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:rock_salt_smooth_slab"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:rock_salt_smooth_brick_slab"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "category":  "building",
+    "pattern":  [
+                    "xx",
+                    "xx"
+                ],
+    "key":  {
+                "x":  {
+                          "item":  "mineralogy:rock_salt_smooth_slab"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:rock_salt_smooth_brick_slab",
+                   "count":  4
+               },
+    "show_notification":  true
+}

@@ -1,14 +1,26 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "mineralogy:drywall_white"
-    },
-    {
-      "tag": "forge:dyes/gray"
-    }
-  ],
-  "result": {
-    "item": "mineralogy:drywall_gray"
-  }
+    "conditions":  [
+                       {
+                           "type":  "mineralogy:config",
+                           "flag":  "ENABLE_DRYWALLS"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:drywall_gray"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "category":  "building",
+    "ingredients":  [
+                        {
+                            "tag":  "mineralogy:drywall/white"
+                        },
+                        {
+                            "item":  "minecraft:gray_dye"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:drywall_gray",
+                   "count":  1
+               }
 }

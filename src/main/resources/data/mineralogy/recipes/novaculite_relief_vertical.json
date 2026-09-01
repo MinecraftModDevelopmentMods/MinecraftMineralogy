@@ -1,34 +1,25 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
-    {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_SMOOTH"
-        },
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_RELIEFS"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "x",
-          "x",
-          "x"
-        ],
-        "key": {
-          "x": {
-            "item": "mineralogy:novaculite_relief_blank"
-          }
-        },
-        "result": {
-          "item": "mineralogy:novaculite_relief_vertical",
-          "count": 3
-        }
-      }
-    }
-  ]
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:novaculite_relief_vertical"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "category":  "building",
+    "pattern":  [
+                    "x",
+                    "x",
+                    "x"
+                ],
+    "key":  {
+                "x":  {
+                          "item":  "mineralogy:novaculite_relief_blank"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:novaculite_relief_vertical",
+                   "count":  3
+               },
+    "show_notification":  true
 }

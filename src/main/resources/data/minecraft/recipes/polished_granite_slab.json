@@ -1,0 +1,58 @@
+{
+    "type":  "forge:conditional",
+    "recipes":  [
+                    {
+                        "conditions":  [
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:granite_smooth_slab"
+                                           }
+                                       ],
+                        "recipe":  {
+                                       "type":  "minecraft:crafting_shaped",
+                                       "category":  "building",
+                                       "pattern":  [
+                                                       "###"
+                                                   ],
+                                       "key":  {
+                                                   "#":  {
+                                                             "item":  "minecraft:polished_granite"
+                                                         }
+                                               },
+                                       "result":  {
+                                                      "item":  "mineralogy:granite_smooth_slab",
+                                                      "count":  6
+                                                  },
+                                       "show_notification":  true
+                                   }
+                    },
+                    {
+                        "conditions":  [
+                                           {
+                                               "type":  "forge:not",
+                                               "value":  {
+                                                             "type":  "forge:item_exists",
+                                                             "item":  "mineralogy:granite_smooth_slab"
+                                                         }
+                                           }
+                                       ],
+                        "recipe":  {
+                                       "type":  "minecraft:crafting_shaped",
+                                       "category":  "building",
+                                       "pattern":  [
+                                                       "###"
+                                                   ],
+                                       "key":  {
+                                                   "#":  {
+                                                             "item":  "minecraft:polished_granite"
+                                                         }
+                                               },
+                                       "result":  {
+                                                      "item":  "minecraft:polished_granite_slab",
+                                                      "count":  6
+                                                  },
+                                       "show_notification":  true
+                                   }
+                    }
+                ]
+}

@@ -1,15 +1,24 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xx",
-    "xx"
-  ],
-  "key": {
-    "x": {
-      "tag": "forge:dusts/rock_salt"
-    }
-  },
-  "result": {
-    "item": "mineralogy:rock_salt"
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:rock_salt"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "category":  "building",
+    "pattern":  [
+                    "xx",
+                    "xx"
+                ],
+    "key":  {
+                "x":  {
+                          "tag":  "forge:dusts/rock_salt"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:rock_salt",
+                   "count":  1
+               },
+    "show_notification":  true
 }

@@ -1,63 +1,39 @@
-# Minecraft Mineralogy 6
+[![Discord](https://img.shields.io/badge/Discord-MMD-green.svg?style=flat&logo=Discord)](https://discord.moddev.zone)
+[![CurseForge downloads](https://cf.way2muchnoise.eu/full_minecraft-mineralogy_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/minecraft-mineralogy)
+[![Supported Minecraft versions](https://cf.way2muchnoise.eu/versions/Minecraft_minecraft-mineralogy_all.svg)](https://www.curseforge.com/minecraft/mc-mods/minecraft-mineralogy)
+[![Build, test, and audit](https://github.com/MinecraftModDevelopmentMods/MinecraftMineralogy/actions/workflows/ci.yml/badge.svg?branch=master-1.19)](https://github.com/MinecraftModDevelopmentMods/MinecraftMineralogy/actions/workflows/ci.yml?query=branch%3Amaster-1.19)
 
-Mineralogy adds real-world rock types to Minecraft 1.19.4, together with
-matching slabs, stairs, walls, bricks, polished blocks, reliefs, and furnaces.
-It also supplies sulfur, phosphorous, nitrate, rock salt lighting, and crude
-oil content.
+# Mineralogy 6 for Minecraft 1.19.4
 
-Mineralogy 6 requires **OreSpawn 4**. Mineralogy owns the blocks, items,
-recipes, loot, textures, tags, and old-world compatibility. OreSpawn owns
-terrain replacement, geological regions, formations, ore and fluid-deposit placement,
-world profiles, configuration screens, retrogen, and the public worldgen API.
+Mineralogy adds real-world rock families, matching construction blocks,
+mineral ores and dusts, rock furnaces, drywall, rock-salt lighting, fertilizer,
+and crude oil. OreSpawn 4 is the sole terrain, strata, ore, and deposit engine;
+Mineralogy no longer installs a parallel world generator.
 
-## Players
+This branch builds Mineralogy `6.1.0.119041` for Forge `45.4.0` and is built
+and tested against OreSpawn `4.0.16.119041`. Its declared compatibility range is
+OreSpawn `[4.0.6,5.0.0)`. Install both mods on clients and servers.
 
-Install Mineralogy 6.0.0 and OreSpawn 4.0.1 (or a later compatible 4.x build)
-for Minecraft 1.19.4 on the
-client and server. When creating a world, open **OreSpawn World Generation** to
-choose the recommended settings or tune the geology. Its **Help & Guide**
-button explains the controls in game.
+## Configuration and help
 
-Mineralogy rocks work as stone or cobblestone where appropriate. Matching
-rocks can also make their own furnaces and decorative block families.
+Mineralogy's content and recipe switches remain in
+`config/mineralogy-common.toml`. Use OreSpawn's world-creation UI or saved world
+profile for rock, ore, fluid, dimension, altitude, and terrain-host settings.
+Generation changes apply to new chunks only.
 
-Five names now have vanilla equivalents: andesite, basalt, diorite, granite,
-and tuff. New terrain uses the vanilla blocks by default. Mineralogy's versions
-remain registered so old worlds still load and pack authors can select them.
+After the first start, the complete human guide is available under
+`config/mineralogy-guide/`. The maintained source is in [docs](docs/README.md)
+and covers upgrades, content controls, pack overrides, provider data, and
+four-component release versions.
 
-## Configuration
+## Compatibility
 
-- `config/mineralogy-common.toml` controls Mineralogy content and recipes.
-- `config/orespawn-worldgen.json` controls installed-pack worldgen defaults.
-- `<world>/serverconfig/orespawn-worldgen.json` is the world's complete
-  snapshot and can be copied with the world to a dedicated server.
-- `config/mineralogy-orespawn.json` may override Mineralogy's packaged OreSpawn
-  provider for a modpack.
-- `config/mineralogy-guide/` is written on first load with Mineralogy's player,
-  content, and provider documentation.
-- `config/orespawn-guide/` contains the full engine, API, schema, template, and
-  dimension documentation.
+The `mineralogy` mod ID and historical block, item, tile, NBT, recipe, asset,
+patch, and pre-flattening world-conversion identities are retained. Existing
+Mineralogy 5 configuration is read without being rewritten. Established worlds
+continue through OreSpawn's migrated Cyano/geome profile unless their owner
+explicitly selects a different engine.
 
-Configuration changes affect newly generated chunks. Existing terrain is not
-rewritten.
-
-## Developers
-
-Start with [the developer guide](docs/DEVELOPER_GUIDE.md) and
-[provider notes](docs/PROVIDER.md). Integrations should use OreSpawn's supported
-API and provider format rather than calling Mineralogy internals.
-
-Mineralogy requires Java 17. Build from the repository root with:
-
-```powershell
-.\gradlew.bat build --no-daemon
-```
-
-Private `AGENTS.md` and `agent-notes/` files are local workspace context and are
-ignored. Tracked public guidance lives under `docs/` and is packaged in the jar.
-
-## Links
-
-- [CurseForge](https://www.curseforge.com/minecraft/mc-mods/minecraft-mineralogy)
-- [Issues](https://github.com/SkyBlade1978/MinecraftMineralogy/issues)
-- [Minecraft Mod Development Discord](https://discord.mcmoddev.com)
+[CurseForge](https://www.curseforge.com/minecraft/mc-mods/minecraft-mineralogy) ·
+[Source and issues](https://github.com/MinecraftModDevelopmentMods/MinecraftMineralogy) ·
+[MMD Discord](https://discord.moddev.zone)

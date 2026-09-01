@@ -1,0 +1,26 @@
+{
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:gabbro_brick"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:gabbro_smooth_brick"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "category":  "building",
+    "ingredients":  [
+                        {
+                            "item":  "mineralogy:gabbro_brick"
+                        },
+                        {
+                            "tag":  "forge:sand"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:gabbro_smooth_brick",
+                   "count":  1
+               }
+}

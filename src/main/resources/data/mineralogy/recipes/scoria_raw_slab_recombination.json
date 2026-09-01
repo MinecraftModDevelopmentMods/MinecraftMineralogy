@@ -1,0 +1,26 @@
+{
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:scoria_slab"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:scoria"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "category":  "building",
+    "ingredients":  [
+                        {
+                            "item":  "mineralogy:scoria_slab"
+                        },
+                        {
+                            "item":  "mineralogy:scoria_slab"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:scoria",
+                   "count":  1
+               }
+}

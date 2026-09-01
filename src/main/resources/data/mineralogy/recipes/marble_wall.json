@@ -1,29 +1,24 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
-    {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_ROCKWALL"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "xxx",
-          "xxx"
-        ],
-        "key": {
-          "x": {
-            "tag": "mineralogy:crafting_materials/marble"
-          }
-        },
-        "result": {
-          "item": "mineralogy:marble_wall",
-          "count": 6
-        }
-      }
-    }
-  ]
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:marble_wall"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "category":  "building",
+    "pattern":  [
+                    "xxx",
+                    "xxx"
+                ],
+    "key":  {
+                "x":  {
+                          "tag":  "mineralogy:stones/marble"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:marble_wall",
+                   "count":  6
+               },
+    "show_notification":  true
 }

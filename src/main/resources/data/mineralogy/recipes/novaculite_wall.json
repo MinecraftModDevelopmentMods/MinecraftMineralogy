@@ -1,29 +1,24 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
-    {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_ROCKWALL"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "xxx",
-          "xxx"
-        ],
-        "key": {
-          "x": {
-            "tag": "mineralogy:crafting_materials/novaculite"
-          }
-        },
-        "result": {
-          "item": "mineralogy:novaculite_wall",
-          "count": 6
-        }
-      }
-    }
-  ]
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:novaculite_wall"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "category":  "building",
+    "pattern":  [
+                    "xxx",
+                    "xxx"
+                ],
+    "key":  {
+                "x":  {
+                          "tag":  "mineralogy:stones/novaculite"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:novaculite_wall",
+                   "count":  6
+               },
+    "show_notification":  true
 }

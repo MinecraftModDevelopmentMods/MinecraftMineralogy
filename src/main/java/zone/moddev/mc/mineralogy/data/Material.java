@@ -1,6 +1,5 @@
 package zone.moddev.mc.mineralogy.data;
 
-import zone.moddev.mc.mineralogy.RockType;
 import zone.moddev.mc.mineralogy.blocks.Rock;
 import zone.moddev.mc.mineralogy.blocks.RockStairs;
 import zone.moddev.mc.mineralogy.blocks.RockWall;
@@ -11,7 +10,6 @@ import net.minecraft.world.item.BlockItem;
 
 public class Material {
 	public String materialName;
-	public RockType rockType;
 	public double hardness;
 	public double blastResistance;
 	public int toolHardnessLevel;
@@ -22,9 +20,6 @@ public class Material {
 	/**
 	 * @param materialName
 	 * 			Name of the block (should start with capital letter)
-	 *
-	 * @param rockType
-	 *            Igneous, sedimentary, or metamorphic
 	 *
 	 * @param hardness
 	 *            How hard (time duration) the block is to pick. For reference, dirt
@@ -37,22 +32,25 @@ public class Material {
 	 * @param cobbleEquivilent
 	 *            is material equivalent to cobblestone
 	 */
-	public Material(String materialName, RockType rockType,
+	public Material(String materialName,
 			double hardness, double blastResistance, int toolHardnessLevel,
 			boolean cobbleEquivilent) {
-		this(materialName, rockType, hardness, blastResistance, toolHardnessLevel, cobbleEquivilent, true);
+		this(materialName, hardness, blastResistance, toolHardnessLevel, cobbleEquivilent, true);
 	}
 
-	public Material(String materialName, RockType rockType,
+	public Material(String materialName,
 			double hardness, double blastResistance, int toolHardnessLevel,
 			boolean cobbleEquivilent, boolean standardRockType) {
 		this.materialName = materialName;
-		this.rockType = rockType;
 		this.hardness = hardness;
 		this.blastResistance = blastResistance;
 		this.toolHardnessLevel = toolHardnessLevel;
 		this.cobbleEquivilent = cobbleEquivilent;
 		this.standardRockType = standardRockType;
+	}
+
+	public String id() {
+		return materialName.toLowerCase();
 	}
 
 	public Rock toRock(boolean isSmooth, boolean isBrick) {

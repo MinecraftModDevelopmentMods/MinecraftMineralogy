@@ -1,16 +1,24 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "xxx",
-    "xxx",
-    "xxx"
-  ],
-  "key": {
-    "x": {
-      "tag": "forge:dusts/gypsum"
-    }
-  },
-  "result": {
-    "item": "mineralogy:gypsum"
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:gypsum"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "category":  "building",
+    "pattern":  [
+                    "xx",
+                    "xx"
+                ],
+    "key":  {
+                "x":  {
+                          "tag":  "forge:dusts/gypsum"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:gypsum",
+                   "count":  1
+               },
+    "show_notification":  true
 }

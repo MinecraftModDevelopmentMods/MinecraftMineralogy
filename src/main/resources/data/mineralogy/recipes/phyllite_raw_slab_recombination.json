@@ -1,0 +1,26 @@
+{
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:phyllite_slab"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:phyllite"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "category":  "building",
+    "ingredients":  [
+                        {
+                            "item":  "mineralogy:phyllite_slab"
+                        },
+                        {
+                            "item":  "mineralogy:phyllite_slab"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:phyllite",
+                   "count":  1
+               }
+}

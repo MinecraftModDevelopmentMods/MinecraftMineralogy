@@ -1,0 +1,26 @@
+{
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:basalt_slab"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:basalt"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "category":  "building",
+    "ingredients":  [
+                        {
+                            "item":  "mineralogy:basalt_slab"
+                        },
+                        {
+                            "item":  "mineralogy:basalt_slab"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:basalt",
+                   "count":  1
+               }
+}

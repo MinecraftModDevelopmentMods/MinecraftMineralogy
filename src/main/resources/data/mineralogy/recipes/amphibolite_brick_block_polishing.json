@@ -1,0 +1,26 @@
+{
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:amphibolite_brick"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:amphibolite_smooth_brick"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "category":  "building",
+    "ingredients":  [
+                        {
+                            "item":  "mineralogy:amphibolite_brick"
+                        },
+                        {
+                            "tag":  "forge:sand"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:amphibolite_smooth_brick",
+                   "count":  1
+               }
+}

@@ -13,6 +13,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -36,26 +37,38 @@ public final class MineralogyItemGroups {
 
 	@SubscribeEvent
 	public static void registerTabs(CreativeModeTabEvent.Register event) {
-		mineralogy = register(event, "mineralogy", "basalt");
-		rocks = register(event, "rock", "basalt");
-		stairs = register(event, "stair", "basalt_stairs");
-		slabs = register(event, "slab", "basalt_slab");
-		walls = register(event, "wall", "basalt_wall");
-		items = register(event, "item", "sulfur_dust");
+		if (MineralogyConfig.groupCreativeTabItemsByType()) {
+			rocks = register(event, "rock", "basalt");
+			stairs = register(event, "stair", "basalt_stairs");
+			slabs = register(event, "slab", "basalt_slab");
+			walls = register(event, "wall", "basalt_wall");
+			items = register(event, "item", "sulfur_dust");
+		} else {
+			mineralogy = register(event, "mineralogy", "basalt");
+		}
 	}
 
 	@SubscribeEvent
 	public static void buildTabContents(CreativeModeTabEvent.BuildContents event) {
 		boolean grouped = MineralogyConfig.groupCreativeTabItemsByType();
 		CreativeModeTab tab = event.getTab();
+		if (!grouped && tab == CreativeModeTabs.INGREDIENTS
+				&& MineralogyConfig.isCreativeVisible("mineral_fertilizer")
+				&& Items.mineral_fertilizer != null) {
+			event.accept(Items.mineral_fertilizer);
+			return;
+		}
 
 		for (Item item : ForgeRegistries.ITEMS.getValues()) {
 			ResourceLocation id = ForgeRegistries.ITEMS.getKey(item);
 			if (id == null || !Mineralogy.MODID.equals(id.getNamespace())) {
 				continue;
 			}
+			if (!MineralogyConfig.isCreativeVisible(id.getPath())) {
+				continue;
+			}
 
-			if (!grouped && tab == mineralogy) {
+			if (!grouped && tab == mineralogy && item != Items.mineral_fertilizer) {
 				event.accept(item);
 			} else if (grouped && tab == targetTab(item)) {
 				event.accept(item);
@@ -91,7 +104,8 @@ public final class MineralogyItemGroups {
 			String iconItemName) {
 		return event.registerCreativeModeTab(new ResourceLocation(Mineralogy.MODID, name), builder -> builder
 				.title(Component.translatable("itemGroup." + Mineralogy.MODID + "." + name))
-				.icon(() -> icon(iconItemName)));
+				.icon(() -> icon(iconItemName))
+				.withSearchBar());
 	}
 
 	private static ItemStack icon(String itemName) {

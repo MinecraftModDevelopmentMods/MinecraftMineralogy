@@ -1,0 +1,26 @@
+{
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:dolomite_brick_wall"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:dolomite_smooth_brick_wall"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "category":  "building",
+    "ingredients":  [
+                        {
+                            "item":  "mineralogy:dolomite_brick_wall"
+                        },
+                        {
+                            "tag":  "forge:sand"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:dolomite_smooth_brick_wall",
+                   "count":  1
+               }
+}

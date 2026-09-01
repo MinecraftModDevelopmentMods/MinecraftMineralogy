@@ -1,34 +1,22 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
-    {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_SMOOTH"
-        },
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_RELIEFS"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "  x",
-          " x ",
-          "x  "
-        ],
-        "key": {
-          "x": {
-            "item": "mineralogy:rhyolite_relief_left"
-          }
-        },
-        "result": {
-          "item": "mineralogy:rhyolite_relief_right",
-          "count": 3
-        }
-      }
-    }
-  ]
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:rhyolite_relief_right"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "category":  "building",
+    "ingredients":  [
+                        {
+                            "item":  "mineralogy:rhyolite_relief_left"
+                        },
+                        {
+                            "item":  "mineralogy:rhyolite_relief_left"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:rhyolite_relief_right",
+                   "count":  2
+               }
 }

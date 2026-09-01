@@ -1,12 +1,19 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "tag": "forge:storage_blocks/chalk"
-    }
-  ],
-  "result": {
-    "item": "mineralogy:chalk_dust",
-    "count": 4
-  }
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:chalk_dust"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "category":  "building",
+    "ingredients":  [
+                        {
+                            "tag":  "forge:storage_blocks/chalk"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:chalk_dust",
+                   "count":  4
+               }
 }

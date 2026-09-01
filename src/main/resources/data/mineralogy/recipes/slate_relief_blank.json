@@ -1,34 +1,25 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
-    {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_SMOOTH"
-        },
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_RELIEFS"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "xxx",
-          "xxx",
-          "xxx"
-        ],
-        "key": {
-          "x": {
-            "item": "mineralogy:slate_smooth"
-          }
-        },
-        "result": {
-          "item": "mineralogy:slate_relief_blank",
-          "count": 16
-        }
-      }
-    }
-  ]
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:slate_relief_blank"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "category":  "building",
+    "pattern":  [
+                    "xxx",
+                    "xxx",
+                    "xxx"
+                ],
+    "key":  {
+                "x":  {
+                          "item":  "mineralogy:slate_smooth"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:slate_relief_blank",
+                   "count":  16
+               },
+    "show_notification":  true
 }

@@ -1,21 +1,25 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "tag": "mineralogy:crafting_materials/limestone"
-    },
-    {
-      "tag": "mineralogy:crafting_materials/limestone"
-    },
-    {
-      "item": "minecraft:gravel"
-    },
-    {
-      "item": "minecraft:gravel"
-    }
-  ],
-  "result": {
-    "item": "minecraft:cobblestone",
-    "count": 4
-  }
+    "conditions":  [
+
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "category":  "building",
+    "ingredients":  [
+                        {
+                            "tag":  "mineralogy:stones/limestone"
+                        },
+                        {
+                            "tag":  "mineralogy:stones/limestone"
+                        },
+                        {
+                            "item":  "minecraft:gravel"
+                        },
+                        {
+                            "item":  "minecraft:gravel"
+                        }
+                    ],
+    "result":  {
+                   "item":  "minecraft:cobblestone",
+                   "count":  4
+               }
 }

@@ -1,53 +1,43 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
-    {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_SMOOTH"
-        },
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_RELIEFS"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shapeless",
-        "ingredients": [
-          {
-            "item": "mineralogy:hornfels_relief_blank"
-          },
-          {
-            "item": "mineralogy:hornfels_relief_blank"
-          },
-          {
-            "item": "mineralogy:hornfels_relief_blank"
-          },
-          {
-            "item": "mineralogy:hornfels_relief_blank"
-          },
-          {
-            "item": "mineralogy:hornfels_relief_blank"
-          },
-          {
-            "item": "mineralogy:hornfels_relief_blank"
-          },
-          {
-            "item": "mineralogy:hornfels_relief_blank"
-          },
-          {
-            "item": "mineralogy:hornfels_relief_blank"
-          },
-          {
-            "item": "minecraft:stone_axe"
-          }
-        ],
-        "result": {
-          "item": "mineralogy:hornfels_relief_axe",
-          "count": 8
-        }
-      }
-    }
-  ]
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:hornfels_relief_axe"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "category":  "building",
+    "ingredients":  [
+                        {
+                            "item":  "mineralogy:hornfels_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:hornfels_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:hornfels_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:hornfels_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:hornfels_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:hornfels_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:hornfels_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:hornfels_relief_blank"
+                        },
+                        {
+                            "item":  "minecraft:stone_axe"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:hornfels_relief_axe",
+                   "count":  8
+               }
 }

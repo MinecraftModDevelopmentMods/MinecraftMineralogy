@@ -1,36 +1,28 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
-    {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_ROCKSLAB"
-        },
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_ROCKFURNACE"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "xxx",
-          "xyx",
-          "xxx"
-        ],
-        "key": {
-          "x": {
-            "item": "mineralogy:gabbro_slab"
-          },
-          "y": {
-            "item": "minecraft:furnace"
-          }
-        },
-        "result": {
-          "item": "mineralogy:gabbro_furnace"
-        }
-      }
-    }
-  ]
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:gabbro_furnace"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "category":  "misc",
+    "pattern":  [
+                    "xxx",
+                    "xyx",
+                    "xxx"
+                ],
+    "key":  {
+                "x":  {
+                          "tag":  "mineralogy:slabs/gabbro"
+                      },
+                "y":  {
+                          "item":  "minecraft:furnace"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:gabbro_furnace",
+                   "count":  1
+               },
+    "show_notification":  true
 }

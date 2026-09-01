@@ -1,27 +1,22 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
-    {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_SMOOTH"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shapeless",
-        "ingredients": [
-          {
-            "tag": "mineralogy:crafting_materials/peridotite"
-          },
-          {
-            "item": "minecraft:sand"
-          }
-        ],
-        "result": {
-          "item": "mineralogy:peridotite_smooth"
-        }
-      }
-    }
-  ]
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:peridotite_smooth"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "category":  "building",
+    "ingredients":  [
+                        {
+                            "tag":  "mineralogy:stones/peridotite"
+                        },
+                        {
+                            "item":  "minecraft:sand"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:peridotite_smooth",
+                   "count":  1
+               }
 }

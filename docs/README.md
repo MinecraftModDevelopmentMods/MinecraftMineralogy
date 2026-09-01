@@ -1,22 +1,23 @@
 # Mineralogy Guide
 
-Mineralogy 6 is a content provider for OreSpawn 4. This guide explains the
-Mineralogy content, its small content configuration, and the declaration it
-supplies to OreSpawn.
+Mineralogy 6 for Minecraft 1.19.4 supplies rock, mineral, construction, and
+crude-oil content to OreSpawn 4. OreSpawn is the only terrain and deposit
+engine.
 
 - [Player Guide](PLAYER_GUIDE.md): installation, world creation, content, and
   server copying.
-- [Content Configuration](CONTENT_CONFIG.md): every
-  `mineralogy-common.toml` option.
-- [Developer Guide](DEVELOPER_GUIDE.md): ownership boundaries, tags, builds,
-  and compatibility rules.
+- [Content Configuration](CONTENT_CONFIG.md): every Mineralogy content and
+  compatibility option.
+- [Developer Guide](DEVELOPER_GUIDE.md): ownership boundaries, Forge tag
+  integration, builds, and compatibility rules.
 - [Provider Reference](PROVIDER.md): Mineralogy's packaged OreSpawn declaration
   and pack override.
-- [AGENTS.md](AGENTS.md): short machine-readable orientation for coding agents.
+- [Versioning](VERSIONS.md): how functional releases and exact Minecraft/loader
+  targets form Mineralogy's four-component version.
 
-The actual provider is also exported as
-`examples/mineralogy-provider.json` for inspection.
+The exact provider shipped by this build is also exported as
+`examples/mineralogy-provider.json`.
 
-For general worldgen controls, JSON schemas, templates, dimensions, ore
-patterns, performance constraints, or the Java API, use the OreSpawn guide
-exported to `config/orespawn-guide/`.
+For general worldgen controls, schemas, templates, dimensions, ore patterns,
+performance constraints, or the Java API, use the OreSpawn guide exported to
+`config/orespawn-guide/`.

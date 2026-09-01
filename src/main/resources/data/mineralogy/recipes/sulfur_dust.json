@@ -1,12 +1,23 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "tag": "forge:storage_blocks/sulfur"
-    }
-  ],
-  "result": {
-    "item": "mineralogy:sulfur_dust",
-    "count": 9
-  }
+    "conditions":  [
+                       {
+                           "type":  "mineralogy:config",
+                           "flag":  "ENABLE_MINERAL_DUSTS"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:sulfur_dust"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "category":  "building",
+    "ingredients":  [
+                        {
+                            "tag":  "forge:storage_blocks/sulfur"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:sulfur_dust",
+                   "count":  9
+               }
 }

@@ -1,0 +1,26 @@
+{
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:gneiss_wall"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:gneiss_smooth_wall"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "category":  "building",
+    "ingredients":  [
+                        {
+                            "item":  "mineralogy:gneiss_wall"
+                        },
+                        {
+                            "tag":  "forge:sand"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:gneiss_smooth_wall",
+                   "count":  1
+               }
+}

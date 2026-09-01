@@ -1,40 +1,31 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
-    {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_SMOOTH"
-        },
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_RELIEFS"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "zxz",
-          "zyz",
-          "zzz"
-        ],
-        "key": {
-          "x": {
-            "item": "mineralogy:basalt_smooth"
-          },
-          "y": {
-            "item": "minecraft:stick"
-          },
-          "z": {
-            "item": "mineralogy:basalt_relief_blank"
-          }
-        },
-        "result": {
-          "item": "mineralogy:basalt_relief_hammer",
-          "count": 7
-        }
-      }
-    }
-  ]
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:basalt_relief_hammer"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "category":  "building",
+    "pattern":  [
+                    "zxz",
+                    "zyz",
+                    "zzz"
+                ],
+    "key":  {
+                "x":  {
+                          "item":  "mineralogy:basalt_smooth"
+                      },
+                "y":  {
+                          "item":  "minecraft:stick"
+                      },
+                "z":  {
+                          "item":  "mineralogy:basalt_relief_blank"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:basalt_relief_hammer",
+                   "count":  7
+               },
+    "show_notification":  true
 }

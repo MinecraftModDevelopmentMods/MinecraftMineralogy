@@ -1,0 +1,28 @@
+{
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:quartzite_wall"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:quartzite_brick_wall"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "category":  "building",
+    "pattern":  [
+                    "xx",
+                    "xx"
+                ],
+    "key":  {
+                "x":  {
+                          "item":  "mineralogy:quartzite_wall"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:quartzite_brick_wall",
+                   "count":  4
+               },
+    "show_notification":  true
+}

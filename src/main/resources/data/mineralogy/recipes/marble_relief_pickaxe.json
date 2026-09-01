@@ -1,53 +1,43 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
-    {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_SMOOTH"
-        },
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_RELIEFS"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shapeless",
-        "ingredients": [
-          {
-            "item": "mineralogy:marble_relief_blank"
-          },
-          {
-            "item": "mineralogy:marble_relief_blank"
-          },
-          {
-            "item": "mineralogy:marble_relief_blank"
-          },
-          {
-            "item": "mineralogy:marble_relief_blank"
-          },
-          {
-            "item": "mineralogy:marble_relief_blank"
-          },
-          {
-            "item": "mineralogy:marble_relief_blank"
-          },
-          {
-            "item": "mineralogy:marble_relief_blank"
-          },
-          {
-            "item": "mineralogy:marble_relief_blank"
-          },
-          {
-            "item": "minecraft:stone_pickaxe"
-          }
-        ],
-        "result": {
-          "item": "mineralogy:marble_relief_pickaxe",
-          "count": 8
-        }
-      }
-    }
-  ]
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:marble_relief_pickaxe"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "category":  "building",
+    "ingredients":  [
+                        {
+                            "item":  "mineralogy:marble_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:marble_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:marble_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:marble_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:marble_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:marble_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:marble_relief_blank"
+                        },
+                        {
+                            "item":  "mineralogy:marble_relief_blank"
+                        },
+                        {
+                            "item":  "minecraft:stone_pickaxe"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:marble_relief_pickaxe",
+                   "count":  8
+               }
 }

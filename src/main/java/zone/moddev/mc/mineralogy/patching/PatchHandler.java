@@ -24,6 +24,10 @@ public final class PatchHandler {
 	private static final ResourceLocation PUMMICE = mineralogyId("pummice");
 	private static final ResourceLocation LIMESTONE = mineralogyId("limestone");
 	private static final ResourceLocation PUMICE = mineralogyId("pumice");
+	private static final ResourceLocation GRASS_PATH = minecraftId("grass_path");
+	private static final ResourceLocation DIRT_PATH = minecraftId("dirt_path");
+	private static final ResourceLocation SWEET_BERRIES_PICK = minecraftId("item.sweet_berries.pick_from_bush");
+	private static final ResourceLocation SWEET_BERRY_BUSH_PICK = minecraftId("block.sweet_berry_bush.pick_berries");
 
 	private PatchHandler() {
 		throw new IllegalAccessError("Not an instantiable class");
@@ -43,6 +47,12 @@ public final class PatchHandler {
 				SAPROLITE, ForgeRegistries.ITEMS.getValue(LIMESTONE));
 		remapMissing(event.getMappings(ForgeRegistries.Keys.ITEMS, Mineralogy.MODID),
 				PUMMICE, ForgeRegistries.ITEMS.getValue(PUMICE));
+		remapMissing(event.getMappings(ForgeRegistries.Keys.BLOCKS, "minecraft"),
+				GRASS_PATH, ForgeRegistries.BLOCKS.getValue(DIRT_PATH));
+		remapMissing(event.getMappings(ForgeRegistries.Keys.ITEMS, "minecraft"),
+				GRASS_PATH, ForgeRegistries.ITEMS.getValue(DIRT_PATH));
+		remapMissing(event.getMappings(ForgeRegistries.Keys.SOUND_EVENTS, "minecraft"),
+				SWEET_BERRIES_PICK, ForgeRegistries.SOUND_EVENTS.getValue(SWEET_BERRY_BUSH_PICK));
 	}
 
 	private static <T> void remapMissing(List<MissingMappingsEvent.Mapping<T>> mappings,
@@ -64,5 +74,9 @@ public final class PatchHandler {
 
 	private static ResourceLocation mineralogyId(String path) {
 		return new ResourceLocation(Mineralogy.MODID, path);
+	}
+
+	private static ResourceLocation minecraftId(String path) {
+		return new ResourceLocation("minecraft", path);
 	}
 }

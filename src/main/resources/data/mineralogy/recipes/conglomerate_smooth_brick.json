@@ -1,33 +1,24 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
-    {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_SMOOTH"
-        },
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_SMOOTHBRICK"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "xx",
-          "xx"
-        ],
-        "key": {
-          "x": {
-            "item": "mineralogy:conglomerate_smooth"
-          }
-        },
-        "result": {
-          "item": "mineralogy:conglomerate_smooth_brick",
-          "count": 4
-        }
-      }
-    }
-  ]
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:conglomerate_smooth_brick"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "category":  "building",
+    "pattern":  [
+                    "xx",
+                    "xx"
+                ],
+    "key":  {
+                "x":  {
+                          "tag":  "mineralogy:stones/conglomerate/smooth"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:conglomerate_smooth_brick",
+                   "count":  4
+               },
+    "show_notification":  true
 }

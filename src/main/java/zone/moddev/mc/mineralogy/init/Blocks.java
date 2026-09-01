@@ -8,7 +8,6 @@ import java.util.Map;
 
 import zone.moddev.mc.mineralogy.Mineralogy;
 import zone.moddev.mc.mineralogy.MineralogyConfig;
-import zone.moddev.mc.mineralogy.RockType;
 import zone.moddev.mc.mineralogy.blocks.Chalk;
 import zone.moddev.mc.mineralogy.blocks.Chert;
 import zone.moddev.mc.mineralogy.blocks.DoubleSlab;
@@ -253,10 +252,10 @@ public class Blocks {
 		IForgeRegistry<Block> registry = event.getForgeRegistry();
 
 		for (zone.moddev.mc.mineralogy.data.Material material : MaterialData.toArray()) {
-			registerMaterialFamily(registry, material, material.toRock(false, false), true);
+			registerMaterialFamily(registry, material, material.toRock(false, false));
 		}
 
-		registerMaterialFamily(registry, MaterialData.ROCK_SALT, new RockSalt(), true);
+		registerMaterialFamily(registry, MaterialData.ROCK_SALT, new RockSalt());
 
 		registerSpecialGeologyBlocks(registry);
 		registerDryWalls(registry);
@@ -285,11 +284,6 @@ public class Blocks {
 
 		registerAll(registry, chert, gypsum, chalk, pumice);
 
-		MineralogyRegistry.sedimentaryStones.add(net.minecraft.world.level.block.Blocks.SANDSTONE);
-		MineralogyRegistry.sedimentaryStones.add(chert);
-		MineralogyRegistry.sedimentaryStones.add(gypsum);
-		MineralogyRegistry.sedimentaryStones.add(chalk);
-		MineralogyRegistry.igneousStones.add(pumice);
 	}
 
 	private static void registerDryWalls(IForgeRegistry<Block> registry) {
@@ -299,14 +293,11 @@ public class Blocks {
 	}
 
 	private static void registerMaterialFamily(IForgeRegistry<Block> registry,
-			zone.moddev.mc.mineralogy.data.Material material, Rock baseRock, boolean addToGeology) {
+			zone.moddev.mc.mineralogy.data.Material material, Rock baseRock) {
 		register(registry, baseRock);
-		if (addToGeology) {
-			addStoneType(material.rockType, baseRock);
-		}
 
 		if (MineralogyConfig.generateRockSlab()) {
-			registerSlabPair(registry, createSlab(material, false, false), material, false, false);
+			registerSlabPair(registry, createSlab(material, false, false), baseRock, material, false, false);
 			if (MineralogyConfig.generateRockFurnace()) {
 				registerFurnacePair(registry, material, false, false);
 			}
@@ -327,7 +318,7 @@ public class Blocks {
 				registerReliefs(registry, material);
 			}
 			if (MineralogyConfig.generateSmoothSlab()) {
-				registerSlabPair(registry, createSlab(material, true, false), material, true, false);
+				registerSlabPair(registry, createSlab(material, true, false), smoothRock, material, true, false);
 				if (MineralogyConfig.generateSmoothFurnace()) {
 					registerFurnacePair(registry, material, true, false);
 				}
@@ -346,7 +337,7 @@ public class Blocks {
 			register(registry, brickRock);
 
 			if (MineralogyConfig.generateBrickSlab()) {
-				registerSlabPair(registry, createSlab(material, false, true), material, false, true);
+				registerSlabPair(registry, createSlab(material, false, true), brickRock, material, false, true);
 				if (MineralogyConfig.generateBrickFurnace()) {
 					registerFurnacePair(registry, material, false, true);
 				}
@@ -364,7 +355,7 @@ public class Blocks {
 			register(registry, smoothBrickRock);
 
 			if (MineralogyConfig.generateSmoothBrickSlab()) {
-				registerSlabPair(registry, createSlab(material, true, true), material, true, true);
+				registerSlabPair(registry, createSlab(material, true, true), smoothBrickRock, material, true, true);
 				if (MineralogyConfig.generateSmoothBrickFurnace()) {
 					registerFurnacePair(registry, material, true, true);
 				}
@@ -378,10 +369,10 @@ public class Blocks {
 		}
 	}
 
-	private static void registerSlabPair(IForgeRegistry<Block> registry, RockSlab slab,
+	private static void registerSlabPair(IForgeRegistry<Block> registry, RockSlab slab, Block fullBlock,
 			zone.moddev.mc.mineralogy.data.Material material, boolean isSmooth, boolean isBrick) {
 		register(registry, slab);
-		register(registry, createDoubleSlab(slab, material, isSmooth, isBrick));
+		register(registry, createDoubleSlab(slab, fullBlock, material, isSmooth, isBrick));
 	}
 
 	private static RockStairs createStairs(Block sourceBlock, zone.moddev.mc.mineralogy.data.Material material,
@@ -403,10 +394,11 @@ public class Blocks {
 				material.toolHardnessLevel, SoundType.STONE, name + "_slab", name + "_double_slab");
 	}
 
-	private static DoubleSlab createDoubleSlab(Block sourceBlock, zone.moddev.mc.mineralogy.data.Material material,
+	private static DoubleSlab createDoubleSlab(Block sourceBlock, Block fullBlock,
+			zone.moddev.mc.mineralogy.data.Material material,
 			boolean isSmooth, boolean isBrick) {
 		return new DoubleSlab((float) material.hardness, (float) material.blastResistance,
-				material.toolHardnessLevel, SoundType.STONE, sourceBlock,
+				material.toolHardnessLevel, SoundType.STONE, sourceBlock, fullBlock,
 				getVariantName(material, isSmooth, isBrick) + "_double_slab");
 	}
 
@@ -507,24 +499,4 @@ public class Blocks {
 		return name;
 	}
 
-	private static void addStoneType(RockType rockType, Block block) {
-		switch (rockType) {
-			case IGNEOUS:
-				MineralogyRegistry.igneousStones.add(block);
-				break;
-			case METAMORPHIC:
-				MineralogyRegistry.metamorphicStones.add(block);
-				break;
-			case SEDIMENTARY:
-				MineralogyRegistry.sedimentaryStones.add(block);
-				break;
-			case ANY:
-				MineralogyRegistry.igneousStones.add(block);
-				MineralogyRegistry.metamorphicStones.add(block);
-				MineralogyRegistry.sedimentaryStones.add(block);
-				break;
-			default:
-				break;
-		}
-	}
 }

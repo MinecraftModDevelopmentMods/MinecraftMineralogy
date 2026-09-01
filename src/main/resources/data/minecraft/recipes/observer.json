@@ -1,22 +1,72 @@
 {
-    "type":  "minecraft:crafting_shaped",
-    "pattern":  [
-                    "###",
-                    "RRQ",
-                    "###"
-                ],
-    "key":  {
-                "Q":  {
-                          "item":  "minecraft:quartz"
-                      },
-                "R":  {
-                          "item":  "minecraft:redstone"
-                      },
-                "#":  {
-                          "tag":  "forge:cobblestone"
-                      }
-            },
-    "result":  {
-                   "item":  "minecraft:observer"
-               }
+    "type":  "forge:conditional",
+    "recipes":  [
+                    {
+                        "conditions":  [
+                                           {
+                                               "type":  "mineralogy:config",
+                                               "flag":  "COBBLESTONE_EQUIVILENT"
+                                           }
+                                       ],
+                        "recipe":  {
+                                       "type":  "minecraft:crafting_shaped",
+                                       "category":  "redstone",
+                                       "pattern":  [
+                                                       "###",
+                                                       "RRQ",
+                                                       "###"
+                                                   ],
+                                       "key":  {
+                                                   "Q":  {
+                                                             "item":  "minecraft:quartz"
+                                                         },
+                                                   "R":  {
+                                                             "item":  "minecraft:redstone"
+                                                         },
+                                                   "#":  {
+                                                             "tag":  "mineralogy:cobblestone_equivalents"
+                                                         }
+                                               },
+                                       "result":  {
+                                                      "item":  "minecraft:observer"
+                                                  },
+                                       "show_notification":  true
+                                   }
+                    },
+                    {
+                        "conditions":  [
+                                           {
+                                               "type":  "forge:not",
+                                               "value":  {
+                                                             "type":  "mineralogy:config",
+                                                             "flag":  "COBBLESTONE_EQUIVILENT"
+                                                         }
+                                           }
+                                       ],
+                        "recipe":  {
+                                       "type":  "minecraft:crafting_shaped",
+                                       "category":  "redstone",
+                                       "pattern":  [
+                                                       "###",
+                                                       "RRQ",
+                                                       "###"
+                                                   ],
+                                       "key":  {
+                                                   "Q":  {
+                                                             "item":  "minecraft:quartz"
+                                                         },
+                                                   "R":  {
+                                                             "item":  "minecraft:redstone"
+                                                         },
+                                                   "#":  {
+                                                             "tag":  "forge:cobblestone"
+                                                         }
+                                               },
+                                       "result":  {
+                                                      "item":  "minecraft:observer"
+                                                  },
+                                       "show_notification":  true
+                                   }
+                    }
+                ]
 }

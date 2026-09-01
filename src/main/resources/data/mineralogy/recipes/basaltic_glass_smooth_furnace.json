@@ -1,40 +1,28 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
-    {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_SMOOTH"
-        },
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_SMOOTHSLAB"
-        },
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_SMOOTHFURNACE"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "xxx",
-          "xyx",
-          "xxx"
-        ],
-        "key": {
-          "x": {
-            "item": "mineralogy:basaltic_glass_smooth_slab"
-          },
-          "y": {
-            "item": "minecraft:furnace"
-          }
-        },
-        "result": {
-          "item": "mineralogy:basaltic_glass_smooth_furnace"
-        }
-      }
-    }
-  ]
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:basaltic_glass_smooth_furnace"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "category":  "misc",
+    "pattern":  [
+                    "xxx",
+                    "xyx",
+                    "xxx"
+                ],
+    "key":  {
+                "x":  {
+                          "tag":  "mineralogy:slabs/basaltic_glass/smooth"
+                      },
+                "y":  {
+                          "item":  "minecraft:furnace"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:basaltic_glass_smooth_furnace",
+                   "count":  1
+               },
+    "show_notification":  true
 }

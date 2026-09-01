@@ -1,33 +1,24 @@
 {
-  "type": "forge:conditional",
-  "recipes": [
-    {
-      "conditions": [
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_BRICK"
-        },
-        {
-          "type": "mineralogy:config",
-          "flag": "GENERATE_BRICKWALL"
-        }
-      ],
-      "recipe": {
-        "type": "minecraft:crafting_shaped",
-        "pattern": [
-          "xxx",
-          "xxx"
-        ],
-        "key": {
-          "x": {
-            "item": "mineralogy:granite_brick"
-          }
-        },
-        "result": {
-          "item": "mineralogy:granite_brick_wall",
-          "count": 6
-        }
-      }
-    }
-  ]
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:granite_brick_wall"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shaped",
+    "category":  "building",
+    "pattern":  [
+                    "xxx",
+                    "xxx"
+                ],
+    "key":  {
+                "x":  {
+                          "tag":  "mineralogy:stones/granite/brick"
+                      }
+            },
+    "result":  {
+                   "item":  "mineralogy:granite_brick_wall",
+                   "count":  6
+               },
+    "show_notification":  true
 }

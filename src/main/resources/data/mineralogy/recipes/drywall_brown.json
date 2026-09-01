@@ -1,14 +1,26 @@
 {
-  "type": "minecraft:crafting_shapeless",
-  "ingredients": [
-    {
-      "item": "mineralogy:drywall_white"
-    },
-    {
-      "tag": "forge:dyes/brown"
-    }
-  ],
-  "result": {
-    "item": "mineralogy:drywall_brown"
-  }
+    "conditions":  [
+                       {
+                           "type":  "mineralogy:config",
+                           "flag":  "ENABLE_DRYWALLS"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:drywall_brown"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "category":  "building",
+    "ingredients":  [
+                        {
+                            "tag":  "mineralogy:drywall/white"
+                        },
+                        {
+                            "item":  "minecraft:cocoa_beans"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:drywall_brown",
+                   "count":  1
+               }
 }

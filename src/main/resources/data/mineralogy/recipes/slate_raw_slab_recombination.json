@@ -1,0 +1,26 @@
+{
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:slate_slab"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:slate"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "category":  "building",
+    "ingredients":  [
+                        {
+                            "item":  "mineralogy:slate_slab"
+                        },
+                        {
+                            "item":  "mineralogy:slate_slab"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:slate",
+                   "count":  1
+               }
+}

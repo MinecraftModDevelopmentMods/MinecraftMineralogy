@@ -97,11 +97,10 @@ public class RockSaltLamp extends Block implements NamedMineralogyBlock {
 		BlockPos supportPos = pos.relative(facing.getOpposite());
 		BlockState support = world.getBlockState(supportPos);
 
-		if (facing == Direction.UP) {
-			return support.isFaceSturdy(world, supportPos, Direction.UP);
-		}
-		if (facing == Direction.DOWN) {
-			return support.isFaceSturdy(world, supportPos, Direction.DOWN);
+		if (facing.getAxis().isVertical()) {
+			// Match vanilla standing-torch support, including fences. The legacy
+			// lamp accepted canPlaceTorchOnTop blocks in both vertical orientations.
+			return Block.canSupportCenter(world, supportPos, facing);
 		}
 
 		return support.isFaceSturdy(world, supportPos, facing);

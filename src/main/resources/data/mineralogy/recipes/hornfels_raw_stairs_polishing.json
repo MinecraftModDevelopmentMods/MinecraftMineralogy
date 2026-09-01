@@ -1,0 +1,26 @@
+{
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:hornfels_stairs"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:hornfels_smooth_stairs"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "category":  "building",
+    "ingredients":  [
+                        {
+                            "item":  "mineralogy:hornfels_stairs"
+                        },
+                        {
+                            "tag":  "forge:sand"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:hornfels_smooth_stairs",
+                   "count":  1
+               }
+}

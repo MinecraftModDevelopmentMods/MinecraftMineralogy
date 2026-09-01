@@ -1,25 +1,78 @@
 {
-    "type":  "minecraft:crafting_shaped",
-    "pattern":  [
-                    "TTT",
-                    "#X#",
-                    "#R#"
-                ],
-    "key":  {
-                "R":  {
-                          "item":  "minecraft:redstone"
-                      },
-                "#":  {
-                          "tag":  "forge:cobblestone"
-                      },
-                "T":  {
-                          "tag":  "minecraft:planks"
-                      },
-                "X":  {
-                          "item":  "minecraft:iron_ingot"
-                      }
-            },
-    "result":  {
-                   "item":  "minecraft:piston"
-               }
+    "type":  "forge:conditional",
+    "recipes":  [
+                    {
+                        "conditions":  [
+                                           {
+                                               "type":  "mineralogy:config",
+                                               "flag":  "COBBLESTONE_EQUIVILENT"
+                                           }
+                                       ],
+                        "recipe":  {
+                                       "type":  "minecraft:crafting_shaped",
+                                       "category":  "redstone",
+                                       "pattern":  [
+                                                       "TTT",
+                                                       "#X#",
+                                                       "#R#"
+                                                   ],
+                                       "key":  {
+                                                   "R":  {
+                                                             "item":  "minecraft:redstone"
+                                                         },
+                                                   "#":  {
+                                                             "tag":  "mineralogy:cobblestone_equivalents"
+                                                         },
+                                                   "T":  {
+                                                             "tag":  "minecraft:planks"
+                                                         },
+                                                   "X":  {
+                                                             "item":  "minecraft:iron_ingot"
+                                                         }
+                                               },
+                                       "result":  {
+                                                      "item":  "minecraft:piston"
+                                                  },
+                                       "show_notification":  true
+                                   }
+                    },
+                    {
+                        "conditions":  [
+                                           {
+                                               "type":  "forge:not",
+                                               "value":  {
+                                                             "type":  "mineralogy:config",
+                                                             "flag":  "COBBLESTONE_EQUIVILENT"
+                                                         }
+                                           }
+                                       ],
+                        "recipe":  {
+                                       "type":  "minecraft:crafting_shaped",
+                                       "category":  "redstone",
+                                       "pattern":  [
+                                                       "TTT",
+                                                       "#X#",
+                                                       "#R#"
+                                                   ],
+                                       "key":  {
+                                                   "R":  {
+                                                             "item":  "minecraft:redstone"
+                                                         },
+                                                   "#":  {
+                                                             "tag":  "forge:cobblestone"
+                                                         },
+                                                   "T":  {
+                                                             "tag":  "minecraft:planks"
+                                                         },
+                                                   "X":  {
+                                                             "item":  "minecraft:iron_ingot"
+                                                         }
+                                               },
+                                       "result":  {
+                                                      "item":  "minecraft:piston"
+                                                  },
+                                       "show_notification":  true
+                                   }
+                    }
+                ]
 }

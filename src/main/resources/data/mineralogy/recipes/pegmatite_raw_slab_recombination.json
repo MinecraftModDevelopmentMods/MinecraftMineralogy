@@ -1,0 +1,26 @@
+{
+    "conditions":  [
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:pegmatite_slab"
+                       },
+                       {
+                           "type":  "forge:item_exists",
+                           "item":  "mineralogy:pegmatite"
+                       }
+                   ],
+    "type":  "minecraft:crafting_shapeless",
+    "category":  "building",
+    "ingredients":  [
+                        {
+                            "item":  "mineralogy:pegmatite_slab"
+                        },
+                        {
+                            "item":  "mineralogy:pegmatite_slab"
+                        }
+                    ],
+    "result":  {
+                   "item":  "mineralogy:pegmatite",
+                   "count":  1
+               }
+}

@@ -10,6 +10,7 @@
                                        ],
                         "recipe":  {
                                        "type":  "minecraft:crafting_shaped",
+                                       "category":  "equipment",
                                        "pattern":  [
                                                        "XXX",
                                                        " # ",
@@ -25,7 +26,8 @@
                                                },
                                        "result":  {
                                                       "item":  "minecraft:stone_pickaxe"
-                                                  }
+                                                  },
+                                       "show_notification":  true
                                    }
                     },
                     {
@@ -40,6 +42,7 @@
                                        ],
                         "recipe":  {
                                        "type":  "minecraft:crafting_shaped",
+                                       "category":  "equipment",
                                        "pattern":  [
                                                        "XXX",
                                                        " # ",
@@ -55,7 +58,8 @@
                                                },
                                        "result":  {
                                                       "item":  "minecraft:stone_pickaxe"
-                                                  }
+                                                  },
+                                       "show_notification":  true
                                    }
                     }
                 ]

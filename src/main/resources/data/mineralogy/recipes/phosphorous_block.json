@@ -10,6 +10,7 @@
                        }
                    ],
     "type":  "minecraft:crafting_shaped",
+    "category":  "building",
     "pattern":  [
                     "xxx",
                     "xxx",
@@ -23,5 +24,6 @@
     "result":  {
                    "item":  "mineralogy:phosphorous_block",
                    "count":  1
-               }
+               },
+    "show_notification":  true
 }

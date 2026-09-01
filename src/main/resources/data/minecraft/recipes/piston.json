@@ -10,6 +10,7 @@
                                        ],
                         "recipe":  {
                                        "type":  "minecraft:crafting_shaped",
+                                       "category":  "redstone",
                                        "pattern":  [
                                                        "TTT",
                                                        "#X#",
@@ -31,7 +32,8 @@
                                                },
                                        "result":  {
                                                       "item":  "minecraft:piston"
-                                                  }
+                                                  },
+                                       "show_notification":  true
                                    }
                     },
                     {
@@ -46,6 +48,7 @@
                                        ],
                         "recipe":  {
                                        "type":  "minecraft:crafting_shaped",
+                                       "category":  "redstone",
                                        "pattern":  [
                                                        "TTT",
                                                        "#X#",
@@ -67,7 +70,8 @@
                                                },
                                        "result":  {
                                                       "item":  "minecraft:piston"
-                                                  }
+                                                  },
+                                       "show_notification":  true
                                    }
                     }
                 ]

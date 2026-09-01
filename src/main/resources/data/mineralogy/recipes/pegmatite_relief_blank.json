@@ -6,6 +6,7 @@
                        }
                    ],
     "type":  "minecraft:crafting_shaped",
+    "category":  "building",
     "pattern":  [
                     "xxx",
                     "xxx",
@@ -19,5 +20,6 @@
     "result":  {
                    "item":  "mineralogy:pegmatite_relief_blank",
                    "count":  16
-               }
+               },
+    "show_notification":  true
 }

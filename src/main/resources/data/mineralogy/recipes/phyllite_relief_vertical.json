@@ -6,6 +6,7 @@
                        }
                    ],
     "type":  "minecraft:crafting_shaped",
+    "category":  "building",
     "pattern":  [
                     "x",
                     "x",
@@ -19,5 +20,6 @@
     "result":  {
                    "item":  "mineralogy:phyllite_relief_vertical",
                    "count":  3
-               }
+               },
+    "show_notification":  true
 }

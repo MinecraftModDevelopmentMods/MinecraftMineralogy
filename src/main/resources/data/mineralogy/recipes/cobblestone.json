@@ -3,6 +3,7 @@
 
                    ],
     "type":  "minecraft:crafting_shapeless",
+    "category":  "building",
     "ingredients":  [
                         {
                             "item":  "minecraft:stone"

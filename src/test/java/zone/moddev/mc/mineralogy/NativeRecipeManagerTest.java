@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.Reader;
+import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -23,10 +24,13 @@ import com.google.gson.JsonParser;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.SharedConstants;
+import net.minecraft.server.Bootstrap;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.Bootstrap;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -41,6 +45,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.VanillaIngredientSerializer;
 import net.minecraftforge.common.crafting.conditions.NotCondition;
+import net.minecraftforge.common.crafting.conditions.ICondition;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -53,11 +58,24 @@ public class NativeRecipeManagerTest {
     @BeforeClass
     public static void initializeRegistriesAndConditions() {
         SharedConstants.tryDetectVersion();
-        Bootstrap.bootStrap();
+        bootstrapRegistriesWithoutForgeNetworkInitialization();
         CraftingHelper.register(NotCondition.Serializer.INSTANCE);
         CraftingHelper.register(new ResourceLocation("minecraft", "item"),
                 VanillaIngredientSerializer.INSTANCE);
         MineralogyConfig.registerRecipeConditions();
+    }
+
+    private static void bootstrapRegistriesWithoutForgeNetworkInitialization() {
+        try {
+            Field field = Bootstrap.class.getDeclaredField("isBootstrapped");
+            field.setAccessible(true);
+            if (!field.getBoolean(null)) {
+                field.setBoolean(null, true);
+                BuiltInRegistries.bootStrap();
+            }
+        } catch (ReflectiveOperationException exception) {
+            throw new AssertionError("Unable to initialize the isolated recipe registry", exception);
+        }
     }
 
     @Test
@@ -71,16 +89,17 @@ public class NativeRecipeManagerTest {
                 for (String recipeName : recipeNames()) {
                     CraftingRecipe recipe = recipe(recipeName);
                     CraftingContainer inventory = inventory(recipeName, rock);
-                    assertTrue(recipeName + " with " + Registry.ITEM.getKey(rock),
+                    assertTrue(recipeName + " with " + BuiltInRegistries.ITEM.getKey(rock),
                             recipe.matches(inventory, null));
                     String expectedOutput = recipeName.startsWith("mossy_cobblestone_from_")
                             ? "minecraft:mossy_cobblestone" : "minecraft:" + recipeName;
                     assertEquals(recipeName, expectedOutput,
-                            Registry.ITEM.getKey(recipe.getResultItem().getItem()).toString());
+                            BuiltInRegistries.ITEM.getKey(
+                                    recipe.getResultItem(RegistryAccess.EMPTY).getItem()).toString());
                 }
             }
         } finally {
-            Registry.ITEM.bindTags(previous);
+            BuiltInRegistries.ITEM.bindTags(previous);
         }
     }
 
@@ -94,7 +113,7 @@ public class NativeRecipeManagerTest {
             for (String recipeName : recipeNames()) {
                 CraftingRecipe recipe = recipe(recipeName);
                 for (Item rock : ordinaryRockInputs()) {
-                    assertFalse(recipeName + " with " + Registry.ITEM.getKey(rock),
+                    assertFalse(recipeName + " with " + BuiltInRegistries.ITEM.getKey(rock),
                             recipe.matches(inventory(recipeName, rock), null));
                 }
                 assertTrue(recipeName, recipe.matches(inventory(recipeName, Blocks.COBBLESTONE.asItem()), null));
@@ -112,7 +131,7 @@ public class NativeRecipeManagerTest {
             assertTrue(recipe("stone_pickaxe").matches(
                     inventory("stone_pickaxe", Blocks.COBBLED_DEEPSLATE.asItem()), null));
         } finally {
-            Registry.ITEM.bindTags(previous);
+            BuiltInRegistries.ITEM.bindTags(previous);
         }
     }
 
@@ -138,14 +157,15 @@ public class NativeRecipeManagerTest {
         CraftingRecipe toVanilla = mineralogyRecipe(prefix + "_to_vanilla", standIn);
         assertTrue(prefix, toVanilla.matches(shapeless(new ItemStack(standIn)), null));
         assertFalse(prefix, toVanilla.matches(shapeless(new ItemStack(vanilla)), null));
-        assertEquals(prefix, vanilla, toVanilla.getResultItem().getItem());
-        assertEquals(prefix, 1, toVanilla.getResultItem().getCount());
+        assertEquals(prefix, vanilla, toVanilla.getResultItem(RegistryAccess.EMPTY).getItem());
+        assertEquals(prefix, 1, toVanilla.getResultItem(RegistryAccess.EMPTY).getCount());
 
         CraftingRecipe fromVanilla = mineralogyRecipe(prefix + "_from_vanilla", standIn);
         assertTrue(prefix, fromVanilla.matches(shapeless(new ItemStack(vanilla)), null));
         assertFalse(prefix, fromVanilla.matches(shapeless(new ItemStack(standIn)), null));
-        assertEquals(prefix, standIn, fromVanilla.getResultItem().getItem());
-        assertEquals(prefix, 1, fromVanilla.getResultItem().getCount());
+        assertEquals(prefix, standIn,
+                fromVanilla.getResultItem(RegistryAccess.EMPTY).getItem());
+        assertEquals(prefix, 1, fromVanilla.getResultItem(RegistryAccess.EMPTY).getCount());
     }
 
     private static void installRecipeTags() {
@@ -174,12 +194,12 @@ public class NativeRecipeManagerTest {
                 Blocks.NETHERRACK.asItem(), Blocks.END_STONE.asItem(), Blocks.BASALT.asItem(),
                 Blocks.TUFF.asItem(), Blocks.ANDESITE.asItem(), Blocks.DIORITE.asItem(),
                 Blocks.GRANITE.asItem(), Blocks.CALCITE.asItem()));
-        Registry.ITEM.bindTags(tags);
+        BuiltInRegistries.ITEM.bindTags(tags);
     }
 
     private static Map<TagKey<Item>, List<Holder<Item>>> snapshotItemTags() {
         Map<TagKey<Item>, List<Holder<Item>>> result = new IdentityHashMap<>();
-        Registry.ITEM.getTags().forEach(pair -> {
+        BuiltInRegistries.ITEM.getTags().forEach(pair -> {
             List<Holder<Item>> holders = new ArrayList<>();
             pair.getSecond().forEach(holders::add);
             result.put(pair.getFirst(), holders);
@@ -190,14 +210,14 @@ public class NativeRecipeManagerTest {
     private static List<Holder<Item>> holders(Item... items) {
         List<Holder<Item>> result = new ArrayList<>();
         for (Item item : items) {
-            ResourceKey<Item> key = Registry.ITEM.getResourceKey(item).get();
-            result.add(Registry.ITEM.getHolderOrThrow(key));
+            ResourceKey<Item> key = BuiltInRegistries.ITEM.getResourceKey(item).get();
+            result.add(BuiltInRegistries.ITEM.getHolderOrThrow(key));
         }
         return result;
     }
 
     private static TagKey<Item> tagKey(String value) {
-        return TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(value));
+        return TagKey.create(Registries.ITEM, new ResourceLocation(value));
     }
 
     private static void loadConfig(boolean enabled) throws Exception {
@@ -213,7 +233,8 @@ public class NativeRecipeManagerTest {
         JsonObject selected = null;
         for (JsonElement element : wrapper.getAsJsonArray("recipes")) {
             JsonObject candidate = element.getAsJsonObject();
-            if (CraftingHelper.processConditions(candidate.getAsJsonArray("conditions"))) {
+            if (CraftingHelper.processConditions(candidate.getAsJsonArray("conditions"),
+                    ICondition.IContext.EMPTY)) {
                 selected = candidate.getAsJsonObject("recipe");
                 break;
             }
@@ -227,7 +248,7 @@ public class NativeRecipeManagerTest {
     private static CraftingRecipe mineralogyRecipe(String name, Item mineralogyStandIn)
             throws Exception {
         JsonObject data = json(new File(MINERALOGY_RECIPE_ROOT, name + ".json"));
-        String standInId = Registry.ITEM.getKey(mineralogyStandIn).toString();
+        String standInId = BuiltInRegistries.ITEM.getKey(mineralogyStandIn).toString();
         JsonObject ingredient = data.getAsJsonArray("ingredients").get(0).getAsJsonObject();
         if (ingredient.get("item").getAsString().startsWith("mineralogy:")) {
             ingredient.addProperty("item", standInId);
@@ -320,6 +341,11 @@ public class NativeRecipeManagerTest {
 
     private static AbstractContainerMenu dummyContainer() {
         return new AbstractContainerMenu(null, -1) {
+            @Override
+            public ItemStack quickMoveStack(Player player, int index) {
+                return ItemStack.EMPTY;
+            }
+
             @Override
             public boolean stillValid(Player playerIn) {
                 return false;

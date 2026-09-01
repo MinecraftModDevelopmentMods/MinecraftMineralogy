@@ -4,7 +4,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BoneMealItem;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.InteractionResult;
@@ -15,11 +14,7 @@ public class MineralFertilizer extends Item {
 	private final ItemStack phantomBonemeal = new ItemStack(Items.BONE_MEAL, 27);
 
 	public MineralFertilizer() {
-		this(zone.moddev.mc.mineralogy.init.MineralogyItemGroups.forItem());
-	}
-
-	public MineralFertilizer(CreativeModeTab group) {
-		super(new Item.Properties().tab(group));
+		super(new Item.Properties());
 	}
 
 	@Override

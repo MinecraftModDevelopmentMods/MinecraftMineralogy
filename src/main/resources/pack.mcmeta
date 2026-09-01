@@ -1,7 +1,8 @@
 {
     "pack": {
-        "description": "Minecraft Mineralogy",
-        "pack_format": 9,
-        "_comment": "A pack_format of 9 is required for Minecraft 1.18.2 resource packs."
+        "description": "mineralogy resources",
+        "pack_format": 13,
+        "forge:resource_pack_format": 13,
+        "forge:data_pack_format": 12
     }
 }

@@ -16,7 +16,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
@@ -45,8 +44,8 @@ import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
@@ -140,7 +139,7 @@ public class TileEntityRockFurnace extends BaseContainerBlockEntity
 
 	@Override
 	protected Component getDefaultName() {
-		return new TranslatableComponent("container.furnace");
+		return Component.translatable("container.furnace");
 	}
 
 	public void setCustomInventoryName(Component name) {
@@ -193,7 +192,7 @@ public class TileEntityRockFurnace extends BaseContainerBlockEntity
 
 				if (isBurning()) {
 					dirty = true;
-					ItemStack container = ForgeHooks.getContainerItem(fuel);
+					ItemStack container = fuel.getCraftingRemainingItem();
 					if (!container.isEmpty()) {
 						furnaceItemStacks.set(1, container);
 					} else if (!fuel.isEmpty()) {
@@ -245,7 +244,10 @@ public class TileEntityRockFurnace extends BaseContainerBlockEntity
 			return false;
 		}
 
-		ItemStack result = recipe.getResultItem();
+		if (level == null) {
+			return false;
+		}
+		ItemStack result = recipe.getResultItem(level.registryAccess());
 		if (result.isEmpty()) {
 			return false;
 		}
@@ -271,7 +273,7 @@ public class TileEntityRockFurnace extends BaseContainerBlockEntity
 		}
 
 		ItemStack input = furnaceItemStacks.get(0);
-		ItemStack result = recipe.getResultItem();
+		ItemStack result = recipe.getResultItem(level.registryAccess());
 		ItemStack output = furnaceItemStacks.get(2);
 
 		if (output.isEmpty()) {
@@ -435,7 +437,7 @@ public class TileEntityRockFurnace extends BaseContainerBlockEntity
 
 	@Override
 	public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
-		if (!isRemoved() && facing != null && capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+		if (!isRemoved() && facing != null && capability == ForgeCapabilities.ITEM_HANDLER) {
 			if (facing == Direction.UP) {
 				return handlers[0].cast();
 			}

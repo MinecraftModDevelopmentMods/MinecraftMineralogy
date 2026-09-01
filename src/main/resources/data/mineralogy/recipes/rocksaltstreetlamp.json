@@ -10,6 +10,7 @@
                        }
                    ],
     "type":  "minecraft:crafting_shaped",
+    "category":  "building",
     "pattern":  [
                     "x",
                     "y",
@@ -26,5 +27,6 @@
     "result":  {
                    "item":  "mineralogy:rocksaltstreetlamp",
                    "count":  1
-               }
+               },
+    "show_notification":  true
 }

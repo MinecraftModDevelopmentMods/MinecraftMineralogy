@@ -6,6 +6,7 @@
                        }
                    ],
     "type":  "minecraft:crafting_shaped",
+    "category":  "building",
     "pattern":  [
                     "xx",
                     "xx"
@@ -18,5 +19,6 @@
     "result":  {
                    "item":  "mineralogy:schist_brick",
                    "count":  4
-               }
+               },
+    "show_notification":  true
 }

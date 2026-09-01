@@ -1,0 +1,3 @@
+# The checksum-sealed Mavenizer compatibility files are immutable build-tool
+# fixtures. Preserve their exact bytes instead of applying platform text filters.
+ci-fixtures/tools/* binary

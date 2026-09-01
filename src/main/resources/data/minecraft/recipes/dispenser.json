@@ -10,6 +10,7 @@
                                        ],
                         "recipe":  {
                                        "type":  "minecraft:crafting_shaped",
+                                       "category":  "redstone",
                                        "pattern":  [
                                                        "###",
                                                        "#X#",
@@ -28,7 +29,8 @@
                                                },
                                        "result":  {
                                                       "item":  "minecraft:dispenser"
-                                                  }
+                                                  },
+                                       "show_notification":  true
                                    }
                     },
                     {
@@ -43,6 +45,7 @@
                                        ],
                         "recipe":  {
                                        "type":  "minecraft:crafting_shaped",
+                                       "category":  "redstone",
                                        "pattern":  [
                                                        "###",
                                                        "#X#",
@@ -61,7 +64,8 @@
                                                },
                                        "result":  {
                                                       "item":  "minecraft:dispenser"
-                                                  }
+                                                  },
+                                       "show_notification":  true
                                    }
                     }
                 ]

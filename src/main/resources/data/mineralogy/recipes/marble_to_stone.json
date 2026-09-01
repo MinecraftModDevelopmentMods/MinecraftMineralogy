@@ -1,9 +1,10 @@
 {
-  "type": "minecraft:smelting",
-  "ingredient": {
-    "item": "mineralogy:marble"
-  },
-  "result": "minecraft:stone",
-  "experience": 0.1,
-  "cookingtime": 200
+    "type":  "minecraft:smelting",
+    "category":  "blocks",
+    "ingredient":  {
+                       "item":  "mineralogy:marble"
+                   },
+    "result":  "minecraft:stone",
+    "experience":  0.1,
+    "cookingtime":  200
 }

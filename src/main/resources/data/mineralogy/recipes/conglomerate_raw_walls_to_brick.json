@@ -10,6 +10,7 @@
                        }
                    ],
     "type":  "minecraft:crafting_shaped",
+    "category":  "building",
     "pattern":  [
                     "xx",
                     "xx"
@@ -22,5 +23,6 @@
     "result":  {
                    "item":  "mineralogy:conglomerate_brick_wall",
                    "count":  4
-               }
+               },
+    "show_notification":  true
 }

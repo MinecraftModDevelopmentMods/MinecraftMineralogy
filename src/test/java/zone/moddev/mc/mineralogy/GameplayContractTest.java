@@ -36,14 +36,14 @@ public class GameplayContractTest {
         assertTrue(source.indexOf("RockRelief.class") < source.indexOf("RockSlab.class"));
         assertTrue(source.contains("enum ContentGroup { ROCK, STAIR, SLAB, WALL, ITEM }"));
         String groups = text("src/main/java/zone/moddev/mc/mineralogy/init/MineralogyItemGroups.java");
-        assertTrue(groups.contains("create(\"rock\", \"basalt\")"));
-        assertTrue(groups.contains("create(\"stair\", \"basalt_stairs\")"));
-        assertTrue(groups.contains("create(\"slab\", \"basalt_slab\")"));
-        assertTrue(groups.contains("create(\"wall\", \"basalt_wall\")"));
-        assertTrue(groups.contains("create(\"item\", \"sulfur_dust\")"));
-        assertTrue(groups.contains("CreativeModeTab.TAB_MATERIALS"));
-        assertTrue(groups.contains("public boolean hasSearchBar()"));
-        assertTrue(groups.contains("textures/gui/container/creative_inventory/tab_item_search.png"));
+        assertTrue(groups.contains("register(event, \"rock\", \"basalt\")"));
+        assertTrue(groups.contains("register(event, \"stair\", \"basalt_stairs\")"));
+        assertTrue(groups.contains("register(event, \"slab\", \"basalt_slab\")"));
+        assertTrue(groups.contains("register(event, \"wall\", \"basalt_wall\")"));
+        assertTrue(groups.contains("register(event, \"item\", \"sulfur_dust\")"));
+        assertTrue(groups.contains("CreativeModeTabs.INGREDIENTS"));
+        assertTrue(groups.contains(".withSearchBar()"));
+        assertTrue(groups.contains("CreativeModeTabEvent.Register"));
 
         CreativeTabPolicy grouped = new CreativeTabPolicy(true);
         assertTrue(grouped.groupTabsByType());
@@ -84,7 +84,7 @@ public class GameplayContractTest {
         String policy = text("src/main/java/zone/moddev/mc/mineralogy/compat/CobblestoneTagPolicy.java");
         assertTrue(policy.contains("onTagsUpdated(TagsUpdatedEvent event)"));
         assertFalse(policy.contains("onServerAboutToStart"));
-        assertTrue(policy.contains("event.getTagManager()"));
+        assertTrue(policy.contains("event.getRegistryAccess()"));
         assertTrue(policy.contains("event.shouldUpdateStaticData()"));
         assertTrue(policy.contains("MaterialData.allIncludingRockSalt()"));
         assertTrue(policy.contains("\"stones/\" + material.id()"));
@@ -146,8 +146,8 @@ public class GameplayContractTest {
 		assertTrue(mappings.contains("SWEET_BERRIES_PICK"));
 		assertTrue(mappings.contains("SWEET_BERRY_BUSH_PICK"));
 		assertTrue(mappings.contains("ForgeRegistries.SOUND_EVENTS"));
-		assertTrue(mappings.contains("bus = Mod.EventBusSubscriber.Bus.FORGE"));
-		assertTrue(mappings.contains("event.getAllMappings()"));
+		assertTrue(mappings.contains("@Mod.EventBusSubscriber(modid = Mineralogy.MODID)"));
+		assertTrue(mappings.contains("event.getMappings(ForgeRegistries.Keys.BLOCKS"));
     }
 
     @Test

@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[40,)"
+loaderVersion="[45,)"
 license="LGPL-2.1"
 issueTrackerURL="https://github.com/MinecraftModDevelopmentMods/MinecraftMineralogy/issues"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/minecraft-mineralogy"
@@ -18,7 +18,7 @@ Fills the world with real-world rocks.
 [[dependencies.mineralogy]]
     modId="forge"
     mandatory=true
-    versionRange="[40.3.0,41)"
+    versionRange="[45.4.0,46)"
     ordering="NONE"
     side="BOTH"
 
@@ -32,6 +32,6 @@ Fills the world with real-world rocks.
 [[dependencies.mineralogy]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.18.2]"
+    versionRange="[1.19.4]"
     ordering="NONE"
     side="BOTH"

@@ -20,16 +20,22 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.storage.loot.LootContext.Builder;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
-public class Rock extends Block {
+public class Rock extends Block implements NamedMineralogyBlock {
+	private final String registryPath;
 
 	public Rock(boolean isStoneEquivalent, float hardness, float blastResistance, int toolHardnessLevel,
 			SoundType sound, String name) {
 		super(BlockBehaviour.Properties.of(Material.STONE).strength(hardness, blastResistance).sound(sound)
 				.requiresCorrectToolForDrops());
 
-		this.setRegistryName(name);
+		this.registryPath = name;
 		this.isStoneEquivalent = isStoneEquivalent;
 		this.toolHardnessLevel = toolHardnessLevel;
+	}
+
+	@Override
+	public String mineralogyRegistryPath() {
+		return registryPath;
 	}
 
 	public final boolean isStoneEquivalent;

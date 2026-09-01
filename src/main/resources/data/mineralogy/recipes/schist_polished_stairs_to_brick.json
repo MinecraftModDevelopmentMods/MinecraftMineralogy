@@ -10,6 +10,7 @@
                        }
                    ],
     "type":  "minecraft:crafting_shaped",
+    "category":  "building",
     "pattern":  [
                     "xx",
                     "xx"
@@ -22,5 +23,6 @@
     "result":  {
                    "item":  "mineralogy:schist_smooth_brick_stairs",
                    "count":  4
-               }
+               },
+    "show_notification":  true
 }

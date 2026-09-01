@@ -10,6 +10,7 @@
                        }
                    ],
     "type":  "minecraft:crafting_shaped",
+    "category":  "building",
     "pattern":  [
                     "pgp",
                     "pgp",
@@ -26,5 +27,6 @@
     "result":  {
                    "item":  "mineralogy:drywall_white",
                    "count":  3
-               }
+               },
+    "show_notification":  true
 }

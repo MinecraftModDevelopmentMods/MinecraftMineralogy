@@ -27,7 +27,7 @@ $colors = @(
     'gray', 'pink', 'lime', 'yellow', 'light_blue', 'magenta', 'orange', 'white'
 )
 
-# Minecraft owns these full-block identities in 1.18.2. Mineralogy keeps its
+# Minecraft owns these full-block identities in 1.19.4. Mineralogy keeps its
 # legacy blocks registered, but recipes may accept either identity where doing
 # so cannot compete with a native recipe.
 $nativeFullBlocks = @{
@@ -117,7 +117,7 @@ function AdvancementPredicate([object] $ingredient) {
     if ($null -ne $ingredient.PSObject.Properties['items']) {
         return [ordered]@{ items = @($ingredient.items) }
     }
-    throw "Cannot convert recipe ingredient into a Minecraft 1.18 advancement predicate"
+    throw "Cannot convert recipe ingredient into a Minecraft 1.19 advancement predicate"
 }
 
 function OreIngredient([string] $ore) {
@@ -143,7 +143,7 @@ function OreIngredient([string] $ore) {
         $finish = if ($Matches[2]) { '/' + (Convert-CamelToSnake $Matches[2]) } else { '' }
         return [ordered]@{ tag = "mineralogy:slabs/$family$finish" }
     }
-    throw "No Minecraft 1.18.2 tag mapping for legacy OreDictionary key $ore"
+    throw "No Minecraft 1.19.4 tag mapping for legacy OreDictionary key $ore"
 }
 
 function Convert-CamelToSnake([string] $value) {
@@ -160,6 +160,46 @@ function VanillaResult([string] $item, [int] $count = 1) {
     return $result
 }
 
+function CraftingCategoryForResult([string] $result) {
+    $path = ($result -split ':', 2)[1]
+    if ($result -in @(
+            'minecraft:gunpowder',
+            'mineralogy:fertilizer',
+            'mineralogy:crude_oil_bucket',
+            'mineralogy:sulfur',
+            'mineralogy:phosphorous',
+            'mineralogy:nitrate'
+        ) -or $path.EndsWith('_furnace')) {
+        return 'misc'
+    }
+    return 'building'
+}
+
+function VanillaCraftingCategoryForResult([string] $result) {
+    if ($result -in @(
+            'minecraft:stone_axe',
+            'minecraft:stone_hoe',
+            'minecraft:stone_pickaxe',
+            'minecraft:stone_shovel',
+            'minecraft:stone_sword'
+        )) {
+        return 'equipment'
+    }
+    if ($result -in @(
+            'minecraft:dispenser',
+            'minecraft:dropper',
+            'minecraft:lever',
+            'minecraft:observer',
+            'minecraft:piston'
+        )) {
+        return 'redstone'
+    }
+    if ($result -in @('minecraft:brewing_stand', 'minecraft:furnace')) {
+        return 'misc'
+    }
+    return 'building'
+}
+
 function VanillaShapedRecipe(
     [string[]] $pattern,
     [System.Collections.IDictionary] $key,
@@ -168,9 +208,11 @@ function VanillaShapedRecipe(
 ) {
     return [ordered]@{
         type = 'minecraft:crafting_shaped'
+        category = VanillaCraftingCategoryForResult $result
         pattern = $pattern
         key = $key
         result = VanillaResult $result $count
+        show_notification = $true
     }
 }
 
@@ -182,6 +224,7 @@ function VanillaShapelessRecipe(
 ) {
     $recipe = [ordered]@{
         type = 'minecraft:crafting_shapeless'
+        category = VanillaCraftingCategoryForResult $result
         ingredients = $ingredients
         result = VanillaResult $result $count
     }
@@ -391,9 +434,11 @@ function Write-ShapedRecipe(
     Write-Recipe $name ([ordered]@{
         conditions = $conditions
         type = $type
+        category = CraftingCategoryForResult $result
         pattern = $pattern
         key = $key
         result = RecipeResult $result $count
+        show_notification = $true
     })
 }
 
@@ -409,6 +454,7 @@ function Write-ShapelessRecipe(
     Write-Recipe $name ([ordered]@{
         conditions = $conditions
         type = $type
+        category = CraftingCategoryForResult $result
         ingredients = $ingredients
         result = RecipeResult $result $count
     })
@@ -825,6 +871,16 @@ function Prepare-TargetDirectories() {
                 throw "Smelting recipe $($file.Name) has no direct item ingredient"
             }
             Register-UnlockSource $file.BaseName ([string]$recipe.ingredient.item)
+            $orderedRecipe = [ordered]@{
+                type = [string]$recipe.type
+                category = 'blocks'
+            }
+            foreach ($property in $recipe.PSObject.Properties) {
+                if ($property.Name -notin @('type', 'category')) {
+                    $orderedRecipe[$property.Name] = $property.Value
+                }
+            }
+            Write-Json $file.FullName $orderedRecipe
         }
         else {
             Remove-Item -LiteralPath $file.FullName
@@ -1105,6 +1161,7 @@ function Write-NativePolishedOverrides() {
         $recipeName = "polished_$family"
         Write-Json (Join-Path $minecraftRecipeRoot "$recipeName.json") ([ordered]@{
             type = 'minecraft:crafting_shapeless'
+            category = 'building'
             ingredients = @((ItemIngredient $raw), (ItemIngredient 'minecraft:sand'))
             result = RecipeResult $smooth 1
         })

@@ -10,6 +10,7 @@
                                        ],
                         "recipe":  {
                                        "type":  "minecraft:crafting_shaped",
+                                       "category":  "building",
                                        "pattern":  [
                                                        "###"
                                                    ],
@@ -21,7 +22,8 @@
                                        "result":  {
                                                       "item":  "mineralogy:granite_smooth_slab",
                                                       "count":  6
-                                                  }
+                                                  },
+                                       "show_notification":  true
                                    }
                     },
                     {
@@ -36,6 +38,7 @@
                                        ],
                         "recipe":  {
                                        "type":  "minecraft:crafting_shaped",
+                                       "category":  "building",
                                        "pattern":  [
                                                        "###"
                                                    ],
@@ -47,7 +50,8 @@
                                        "result":  {
                                                       "item":  "minecraft:polished_granite_slab",
                                                       "count":  6
-                                                  }
+                                                  },
+                                       "show_notification":  true
                                    }
                     }
                 ]

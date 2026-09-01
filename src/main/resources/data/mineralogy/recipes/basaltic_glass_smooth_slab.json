@@ -6,6 +6,7 @@
                        }
                    ],
     "type":  "minecraft:crafting_shaped",
+    "category":  "building",
     "pattern":  [
                     "xxx"
                 ],
@@ -17,5 +18,6 @@
     "result":  {
                    "item":  "mineralogy:basaltic_glass_smooth_slab",
                    "count":  6
-               }
+               },
+    "show_notification":  true
 }

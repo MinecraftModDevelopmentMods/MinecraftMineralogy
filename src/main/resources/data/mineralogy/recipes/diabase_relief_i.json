@@ -6,6 +6,7 @@
                        }
                    ],
     "type":  "minecraft:crafting_shaped",
+    "category":  "building",
     "pattern":  [
                     "xxx",
                     " x ",
@@ -19,5 +20,6 @@
     "result":  {
                    "item":  "mineralogy:diabase_relief_i",
                    "count":  7
-               }
+               },
+    "show_notification":  true
 }

@@ -10,6 +10,7 @@
                        }
                    ],
     "type":  "minecraft:crafting_shaped",
+    "category":  "building",
     "pattern":  [
                     "xx",
                     "xx"
@@ -22,5 +23,6 @@
     "result":  {
                    "item":  "mineralogy:conglomerate_smooth_brick_slab",
                    "count":  4
-               }
+               },
+    "show_notification":  true
 }

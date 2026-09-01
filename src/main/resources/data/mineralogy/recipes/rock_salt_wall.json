@@ -6,6 +6,7 @@
                        }
                    ],
     "type":  "minecraft:crafting_shaped",
+    "category":  "building",
     "pattern":  [
                     "xxx",
                     "xxx"
@@ -18,5 +19,6 @@
     "result":  {
                    "item":  "mineralogy:rock_salt_wall",
                    "count":  6
-               }
+               },
+    "show_notification":  true
 }

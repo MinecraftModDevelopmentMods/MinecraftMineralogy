@@ -19,8 +19,8 @@ public class WorkflowContractTest {
         try (FileInputStream input = new FileInputStream("gradle.properties")) {
             properties.load(input);
         }
-        assertEquals("6.1.0.118021", properties.getProperty("mod_version"));
-        assertEquals("1.18.2", properties.getProperty("minecraft_version"));
+        assertEquals("6.1.0.119041", properties.getProperty("mod_version"));
+        assertEquals("1.19.4", properties.getProperty("minecraft_version"));
         assertEquals(properties.getProperty("mc_version"), properties.getProperty("minecraft_version"));
         assertEquals("forge", properties.getProperty("loader_name"));
         assertEquals("1", properties.getProperty("loader_code"));
@@ -29,9 +29,9 @@ public class WorkflowContractTest {
         assertEquals("17", properties.getProperty("gradle_java_version"));
         assertEquals("240974", properties.getProperty("curseforge_project_id"));
         assertEquals("zone.moddev.mc.mineralogy", properties.getProperty("mod_group"));
-        assertEquals("4.0.10.118021", properties.getProperty("orespawn_version"));
-        assertEquals("8750114", properties.getProperty("orespawn_curse_file_id"));
-        assertEquals("BE863C3FDBEC50D36D74D2B06A462CDE1A3C6876BF587F8F52F6AFA0ED77E650",
+        assertEquals("4.0.16.119041", properties.getProperty("orespawn_version"));
+        assertEquals("8780970", properties.getProperty("orespawn_curse_file_id"));
+        assertEquals("C35F60B6FE2BC9782558CAE374C85C4713038AA58BAE7D281969F80468C21E35",
                 properties.getProperty("orespawn_sha256"));
     }
 
@@ -42,9 +42,12 @@ public class WorkflowContractTest {
         String wrapper = text(".github/workflows/validate-gradle-build.yml");
         String staging = text("gradle/stage-orespawn-release.sh");
         assertTrue(ci.contains("name: Build, test, and audit"));
-        assertTrue(ci.contains("master-1.18.2"));
+        assertTrue(ci.contains("master-1.19"));
+        assertTrue(ci.contains("Install pinned Java 8 launcher toolchain"));
+        assertTrue(ci.contains("java-version: '8.0.502+7'"));
         assertTrue(ci.contains("java-version: '17.0.1+12'"));
         assertTrue(ci.contains("Install pinned Java 17 runtime and toolchain"));
+        assertTrue(ci.contains("$JAVA_HOME,$JAVA_HOME_8_X64,$JAVA_HOME_25_X64"));
         assertTrue(ci.contains("verifyReleaseDependencies verifyReleaseArtifacts writeReleaseChecksums"));
         assertTrue(ci.contains("genEclipseRuns eclipse isolateEclipseProductionRuns verifyEclipseProductionClasspath"));
         assertTrue(ci.contains("CHANGELOG.txt"));
@@ -52,7 +55,10 @@ public class WorkflowContractTest {
         assertTrue(staging.contains("https://www.curseforge.com/api/v1/mods/$project_id/files/$file_id/download"));
         assertTrue(staging.contains("sha256sum"));
         assertTrue(codeql.contains("github/codeql-action/init@db488ddef3bf6cb639b32c2e9a7c0a7ea8271d28"));
-        assertTrue(codeql.contains("./gradlew clean classes"));
+        assertTrue(codeql.contains("Install pinned Java 8 launcher toolchain"));
+        assertTrue(codeql.contains("java-version: '8.0.502+7'"));
+        assertTrue(codeql.contains("$JAVA_HOME,$JAVA_HOME_8_X64,$JAVA_HOME_25_X64"));
+        assertTrue(codeql.contains("clean classes --rerun-tasks --no-build-cache"));
         assertTrue(codeql.contains("--rerun-tasks --no-build-cache"));
         assertTrue(wrapper.contains("gradle/actions/wrapper-validation@9c971963bec38e04b3d30dcc455b5382be2fdbfb"));
     }
@@ -98,19 +104,6 @@ public class WorkflowContractTest {
         assertTrue(build.contains("forRepository"));
         assertTrue(build.contains("includeModule('curse.maven', orespawnModule)"));
         assertTrue(build.contains("'OreSpawnReleaseVerificationMirror'"));
-    }
-
-    @Test
-    public void eclipseLaunchGuardQuotesEverySlimeLauncherPathThatMayContainSpaces() throws Exception {
-        String build = text("build.gradle");
-        assertTrue(build.contains("['cache', 'metadata', 'to-srg', 'to-obf'].each"));
-        assertTrue(build.contains("arguments.substring(0, valueStart)}&quot;${value}&quot;"));
-        assertTrue(build.contains("String legacyClassPathPrefix = '-DlegacyClassPath.file='"));
-        assertTrue(build.contains("text = beforeLegacyClassPath + xmlQuote + legacyClassPathArgument"));
-        assertTrue(build.contains("Eclipse launch does not quote -DlegacyClassPath.file"));
-        assertTrue(build.contains("layout.buildDirectory.dir('resources/main').get().asFile"));
-        assertTrue(build.contains("Eclipse output contains stale or unexpanded mods.toml metadata"));
-        assertTrue(build.contains("eclipseMetadata.contains('${')"));
     }
 
     private static String text(String path) throws Exception {

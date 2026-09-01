@@ -6,6 +6,7 @@
                        }
                    ],
     "type":  "minecraft:crafting_shapeless",
+    "category":  "building",
     "ingredients":  [
                         {
                             "item":  "mineralogy:andesite_relief_blank"

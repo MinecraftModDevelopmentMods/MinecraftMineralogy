@@ -6,6 +6,7 @@
                        }
                    ],
     "type":  "minecraft:crafting_shapeless",
+    "category":  "building",
     "ingredients":  [
                         {
                             "item":  "mineralogy:siltstone_relief_left"

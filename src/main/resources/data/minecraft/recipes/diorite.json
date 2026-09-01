@@ -10,6 +10,7 @@
                                        ],
                         "recipe":  {
                                        "type":  "minecraft:crafting_shaped",
+                                       "category":  "building",
                                        "pattern":  [
                                                        "CQ",
                                                        "QC"
@@ -25,7 +26,8 @@
                                        "result":  {
                                                       "item":  "minecraft:diorite",
                                                       "count":  2
-                                                  }
+                                                  },
+                                       "show_notification":  true
                                    }
                     },
                     {
@@ -40,6 +42,7 @@
                                        ],
                         "recipe":  {
                                        "type":  "minecraft:crafting_shaped",
+                                       "category":  "building",
                                        "pattern":  [
                                                        "CQ",
                                                        "QC"
@@ -55,7 +58,8 @@
                                        "result":  {
                                                       "item":  "minecraft:diorite",
                                                       "count":  2
-                                                  }
+                                                  },
+                                       "show_notification":  true
                                    }
                     }
                 ]

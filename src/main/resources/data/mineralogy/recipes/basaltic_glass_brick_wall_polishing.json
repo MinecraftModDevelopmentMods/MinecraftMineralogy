@@ -10,6 +10,7 @@
                        }
                    ],
     "type":  "minecraft:crafting_shapeless",
+    "category":  "building",
     "ingredients":  [
                         {
                             "item":  "mineralogy:basaltic_glass_brick_wall"

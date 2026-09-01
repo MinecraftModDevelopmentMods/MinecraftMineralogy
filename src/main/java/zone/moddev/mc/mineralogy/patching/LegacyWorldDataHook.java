@@ -304,7 +304,7 @@ public final class LegacyWorldDataHook {
 	}
 
 	/**
-	 * Minecraft 1.18 still fixes the pre-flattening state table at 4,096 entries,
+	 * Minecraft 1.19 still fixes the pre-flattening state table at 4,096 entries,
 	 * while Forge 1.12 worlds commonly assign mod blocks higher numeric IDs.
 	 * Replace that exact static-final array before writing any recovered states.
 	 */

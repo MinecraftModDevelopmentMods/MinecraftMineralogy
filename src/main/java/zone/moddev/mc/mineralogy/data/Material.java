@@ -1,10 +1,8 @@
 package zone.moddev.mc.mineralogy.data;
 
-import zone.moddev.mc.mineralogy.Mineralogy;
 import zone.moddev.mc.mineralogy.blocks.Rock;
 import zone.moddev.mc.mineralogy.blocks.RockStairs;
 import zone.moddev.mc.mineralogy.blocks.RockWall;
-import zone.moddev.mc.mineralogy.init.MineralogyItemGroups;
 
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.item.Item;
@@ -34,12 +32,14 @@ public class Material {
 	 * @param cobbleEquivilent
 	 *            is material equivalent to cobblestone
 	 */
-	public Material(String materialName, double hardness, double blastResistance, int toolHardnessLevel,
+	public Material(String materialName,
+			double hardness, double blastResistance, int toolHardnessLevel,
 			boolean cobbleEquivilent) {
 		this(materialName, hardness, blastResistance, toolHardnessLevel, cobbleEquivilent, true);
 	}
 
-	public Material(String materialName, double hardness, double blastResistance, int toolHardnessLevel,
+	public Material(String materialName,
+			double hardness, double blastResistance, int toolHardnessLevel,
 			boolean cobbleEquivilent, boolean standardRockType) {
 		this.materialName = materialName;
 		this.hardness = hardness;
@@ -96,30 +96,15 @@ public class Material {
 	}
 
 	public BlockItem getBlockItem(Rock blockHandle) {
-		BlockItem blockItem = new BlockItem(blockHandle,
-				new Item.Properties().tab(MineralogyItemGroups.forBlock(blockHandle)));
-
-		blockItem.setRegistryName(Mineralogy.MODID, blockHandle.getRegistryName().getPath());
-
-		return blockItem;
+		return new BlockItem(blockHandle, new Item.Properties());
 	}
 
 	public BlockItem getBlockItem(RockStairs blockHandle) {
-		BlockItem blockItem = new BlockItem(blockHandle,
-				new Item.Properties().tab(MineralogyItemGroups.forBlock(blockHandle)));
-
-		blockItem.setRegistryName(Mineralogy.MODID, blockHandle.getRegistryName().getPath());
-
-		return blockItem;
+		return new BlockItem(blockHandle, new Item.Properties());
 	}
 
 	public BlockItem getBlockItem(RockWall blockHandle) {
-		BlockItem blockItem = new BlockItem(blockHandle,
-				new Item.Properties().tab(MineralogyItemGroups.forBlock(blockHandle)));
-
-		blockItem.setRegistryName(Mineralogy.MODID, blockHandle.getRegistryName().getPath());
-
-		return blockItem;
+		return new BlockItem(blockHandle, new Item.Properties());
 	}
 
 	@Override

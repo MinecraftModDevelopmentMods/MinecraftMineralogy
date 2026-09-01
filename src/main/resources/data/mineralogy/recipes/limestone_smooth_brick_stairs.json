@@ -6,6 +6,7 @@
                        }
                    ],
     "type":  "minecraft:crafting_shaped",
+    "category":  "building",
     "pattern":  [
                     "x  ",
                     "xx ",
@@ -19,5 +20,6 @@
     "result":  {
                    "item":  "mineralogy:limestone_smooth_brick_stairs",
                    "count":  4
-               }
+               },
+    "show_notification":  true
 }

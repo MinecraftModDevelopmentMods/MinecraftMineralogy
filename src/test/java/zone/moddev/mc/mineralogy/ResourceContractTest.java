@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import net.minecraft.resources.ResourceLocation;
 import org.junit.Test;
 
 import java.io.File;
@@ -60,6 +61,14 @@ public class ResourceContractTest {
                 .getAsJsonObject("dimensions").getAsJsonObject("minecraft:overworld");
         assertEquals(-48, oil.get("min_y").getAsInt());
         assertEquals(48, oil.get("max_y").getAsInt());
+        assertEquals(new HashSet<String>(Arrays.asList(
+                "minecraft:ocean", "minecraft:deep_ocean", "minecraft:warm_ocean",
+                "minecraft:lukewarm_ocean", "minecraft:deep_lukewarm_ocean",
+                "minecraft:cold_ocean", "minecraft:deep_cold_ocean",
+                "minecraft:frozen_ocean", "minecraft:deep_frozen_ocean")),
+                stringSet(oil.getAsJsonArray("biome_ids")));
+        assertEquals(new HashSet<String>(Arrays.asList("OCEAN")),
+                stringSet(oil.getAsJsonArray("biome_dictionary")));
     }
 
     @Test
@@ -78,6 +87,7 @@ public class ResourceContractTest {
         for (File recipeFile : recipes) {
             JsonObject recipe = json(recipeFile);
             assertFalse(recipeFile.getName(), recipe.get("type").getAsString().startsWith("forge:ore_"));
+            assertRecipeBookFields(recipeFile.getName(), recipe);
             assertTrue(recipeFile.getName(), advancementNames.contains(recipeFile.getName()));
             JsonObject advancement = json(new File(advancementDir, recipeFile.getName()));
             assertEquals("mineralogy:" + stripJson(recipeFile.getName()),
@@ -107,7 +117,7 @@ public class ResourceContractTest {
     }
 
     @Test
-    public void advancementsUseMinecraft117ItemPredicateSchema() throws Exception {
+    public void advancementsUseMinecraft119ItemPredicateSchema() throws Exception {
         File mineralogy = new File(ROOT, "data/mineralogy/advancements");
         for (File file : jsonFiles(mineralogy)) {
             JsonObject advancement = json(file);
@@ -126,6 +136,27 @@ public class ResourceContractTest {
                 }
             } else {
                 assertInventoryPredicates(file.getPath(), wrapper);
+            }
+        }
+    }
+
+    @Test
+    public void minecraftOverridesUseForge45WrappersAndRecipeBookFields() throws Exception {
+        File recipeDirectory = new File(ROOT, "data/minecraft/recipes");
+        File[] recipes = recipeDirectory.listFiles((directory, name) -> name.endsWith(".json"));
+        assertNotNull(recipes);
+        assertEquals(35, recipes.length);
+        for (File file : recipes) {
+            JsonObject outer = json(file);
+            if ("forge:conditional".equals(outer.get("type").getAsString())) {
+                assertEquals(file.getName(), 2, outer.getAsJsonArray("recipes").size());
+                for (JsonElement element : outer.getAsJsonArray("recipes")) {
+                    JsonObject branch = element.getAsJsonObject();
+                    assertTrue(file.getName(), branch.get("conditions").isJsonArray());
+                    assertRecipeBookFields(file.getName(), branch.getAsJsonObject("recipe"));
+                }
+            } else {
+                assertRecipeBookFields(file.getName(), outer);
             }
         }
     }
@@ -348,9 +379,13 @@ public class ResourceContractTest {
     }
 
     @Test
-    public void forge40ResourcesRetainNativeWallsTagsAndPackFormat() throws Exception {
+    public void forge45ResourcesRetainNativeWallsTagsAndPackFormats() throws Exception {
         JsonObject pack = json(new File(ROOT, "pack.mcmeta"));
-        assertEquals(9, pack.getAsJsonObject("pack").get("pack_format").getAsInt());
+        assertEquals(13, pack.getAsJsonObject("pack").get("pack_format").getAsInt());
+        assertEquals(13, pack.getAsJsonObject("pack")
+                .get("forge:resource_pack_format").getAsInt());
+        assertEquals(12, pack.getAsJsonObject("pack")
+                .get("forge:data_pack_format").getAsInt());
 
         File blockstates = new File(ROOT, "assets/mineralogy/blockstates");
         File[] wallStates = blockstates.listFiles((dir, name) -> name.endsWith("_wall.json"));
@@ -482,14 +517,14 @@ public class ResourceContractTest {
     @Test
     public void oilAndBuildMetadataUseStableTargetIdentities() throws Exception {
         String properties = new String(Files.readAllBytes(new File("gradle.properties").toPath()), StandardCharsets.UTF_8);
-        assertTrue(properties.contains("mod_version=6.1.0.118021"));
-        assertTrue(properties.contains("orespawn_curse_file_id=8750114"));
+        assertTrue(properties.contains("mod_version=6.1.0.119041"));
+        assertTrue(properties.contains("orespawn_curse_file_id=8780970"));
         String build = new String(Files.readAllBytes(new File("build.gradle").toPath()), StandardCharsets.UTF_8);
         assertTrue(build.contains("runtimeOnly renamer.dependency(\"curse.maven:mmd-orespawn-"));
         assertTrue(build.contains("orespawnRelease"));
         String metadata = new String(Files.readAllBytes(new File(ROOT, "META-INF/mods.toml").toPath()), StandardCharsets.UTF_8);
-        assertTrue(metadata.contains("loaderVersion=\"[40,)\""));
-        assertTrue(metadata.contains("versionRange=\"[40.3.0,41)\""));
+        assertTrue(metadata.contains("loaderVersion=\"[45,)\""));
+        assertTrue(metadata.contains("versionRange=\"[45.4.0,46)\""));
         assertTrue(metadata.contains("versionRange=\"[4.0.6,5.0.0)\""));
         assertTrue(metadata.contains("ordering=\"AFTER\""));
         assertTrue(new File(ROOT, "assets/mineralogy/textures/items/crude_oil_bucket.png").isFile());
@@ -499,6 +534,23 @@ public class ResourceContractTest {
         assertTrue(fluidSource.contains("\"flowing_crude_oil\""));
         assertTrue(fluidSource.contains("\"crude_oil_bucket\""));
         assertFalse(fluidSource.contains("new ResourceLocation(\"crude_oil\")"));
+
+        // Power Advantage historically registered its oil in its own namespace.  Keep
+        // Mineralogy's registry identity isolated while contributing both fluids to the
+        // shared, non-replacing Forge tag so a future compatible Power Advantage build can
+        // consume either fluid without a registry collision.
+        ResourceLocation mineralogyOil = ResourceLocation.tryParse("mineralogy:crude_oil");
+        ResourceLocation historicalPowerAdvantageOil = ResourceLocation.tryParse("poweradvantage:crude_oil");
+        assertNotEquals(historicalPowerAdvantageOil, mineralogyOil);
+
+        JsonObject fluidTag = json(new File(ROOT, "data/forge/tags/fluids/crude_oil.json"));
+        assertFalse(fluidTag.get("replace").getAsBoolean());
+        assertTrue(fluidTag.getAsJsonArray("values").toString().contains("mineralogy:crude_oil"));
+        assertTrue(fluidTag.getAsJsonArray("values").toString().contains("mineralogy:flowing_crude_oil"));
+
+        JsonObject bucketTag = json(new File(ROOT, "data/forge/tags/items/buckets/crude_oil.json"));
+        assertFalse(bucketTag.get("replace").getAsBoolean());
+        assertTrue(bucketTag.getAsJsonArray("values").toString().contains("mineralogy:crude_oil_bucket"));
     }
 
     @Test
@@ -654,6 +706,26 @@ public class ResourceContractTest {
     private static JsonObject conditionalRecipe(JsonObject wrapper, int index) {
         return wrapper.getAsJsonArray("recipes").get(index).getAsJsonObject()
                 .getAsJsonObject("recipe");
+    }
+
+    private static Set<String> stringSet(JsonArray values) {
+        Set<String> result = new HashSet<String>();
+        for (JsonElement value : values) result.add(value.getAsString());
+        return result;
+    }
+
+    private static void assertRecipeBookFields(String name, JsonObject recipe) {
+        String type = recipe.get("type").getAsString();
+        if ("minecraft:crafting_shaped".equals(type)) {
+            assertTrue(name, recipe.has("category"));
+            assertTrue(name, recipe.has("show_notification"));
+            assertTrue(name, recipe.get("show_notification").getAsBoolean());
+        } else if ("minecraft:crafting_shapeless".equals(type)) {
+            assertTrue(name, recipe.has("category"));
+            assertFalse(name, recipe.has("show_notification"));
+        } else if ("minecraft:smelting".equals(type)) {
+            assertEquals(name, "blocks", recipe.get("category").getAsString());
+        }
     }
 
     private static JsonObject conditionalAdvancement(JsonObject wrapper, int index) {

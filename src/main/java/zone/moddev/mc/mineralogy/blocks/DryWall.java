@@ -7,13 +7,19 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class DryWall extends IronBarsBlock {
+public class DryWall extends IronBarsBlock implements NamedMineralogyBlock {
 	private final int toolHardnessLevel;
+	private final String registryPath;
 
 	public DryWall(String color) {
 		super(BlockBehaviour.Properties.of(Material.STONE).strength(0.75F, 1.0F).sound(SoundType.STONE)
 				.requiresCorrectToolForDrops());
 		this.toolHardnessLevel = 0;
-		this.setRegistryName("drywall_" + color);
+		this.registryPath = "drywall_" + color;
+	}
+
+	@Override
+	public String mineralogyRegistryPath() {
+		return registryPath;
 	}
 }

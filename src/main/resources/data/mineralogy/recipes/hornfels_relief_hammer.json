@@ -6,6 +6,7 @@
                        }
                    ],
     "type":  "minecraft:crafting_shaped",
+    "category":  "building",
     "pattern":  [
                     "zxz",
                     "zyz",
@@ -25,5 +26,6 @@
     "result":  {
                    "item":  "mineralogy:hornfels_relief_hammer",
                    "count":  7
-               }
+               },
+    "show_notification":  true
 }

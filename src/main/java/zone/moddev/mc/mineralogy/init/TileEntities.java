@@ -9,19 +9,23 @@ import zone.moddev.mc.mineralogy.tileentity.TileEntityRockFurnace;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.ObjectHolder;
+import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.RegisterEvent;
+import net.minecraft.resources.ResourceLocation;
 
 @Mod.EventBusSubscriber(modid = Mineralogy.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
-@ObjectHolder(Mineralogy.MODID)
 public class TileEntities {
-	public static final BlockEntityType<TileEntityRockFurnace> rock_furnace = null;
+	public static BlockEntityType<TileEntityRockFurnace> rock_furnace;
 
 	@SubscribeEvent
-	public static void registerTileEntities(RegistryEvent.Register<BlockEntityType<?>> event) {
+	public static void registerTileEntities(RegisterEvent event) {
+		if (!ForgeRegistries.Keys.BLOCK_ENTITY_TYPES.equals(event.getRegistryKey())) {
+			return;
+		}
+		IForgeRegistry<BlockEntityType<?>> registry = event.getForgeRegistry();
 		List<Block> furnaceBlocks = new ArrayList<Block>();
 		for (Block block : ForgeRegistries.BLOCKS.getValues()) {
 			if (block instanceof RockFurnace) {
@@ -29,11 +33,10 @@ public class TileEntities {
 			}
 		}
 
-		BlockEntityType<TileEntityRockFurnace> type = BlockEntityType.Builder
+		rock_furnace = BlockEntityType.Builder
 				.of(TileEntityRockFurnace::new, furnaceBlocks.toArray(new Block[furnaceBlocks.size()]))
 				.build(null);
-		type.setRegistryName(Mineralogy.MODID, "rock_furnace");
-		event.getRegistry().register(type);
+		registry.register(new ResourceLocation(Mineralogy.MODID, "rock_furnace"), rock_furnace);
 	}
 
 	private TileEntities() {

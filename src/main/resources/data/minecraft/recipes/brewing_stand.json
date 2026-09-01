@@ -10,6 +10,7 @@
                                        ],
                         "recipe":  {
                                        "type":  "minecraft:crafting_shaped",
+                                       "category":  "misc",
                                        "pattern":  [
                                                        " B ",
                                                        "###"
@@ -24,7 +25,8 @@
                                                },
                                        "result":  {
                                                       "item":  "minecraft:brewing_stand"
-                                                  }
+                                                  },
+                                       "show_notification":  true
                                    }
                     },
                     {
@@ -39,6 +41,7 @@
                                        ],
                         "recipe":  {
                                        "type":  "minecraft:crafting_shaped",
+                                       "category":  "misc",
                                        "pattern":  [
                                                        " B ",
                                                        "###"
@@ -53,7 +56,8 @@
                                                },
                                        "result":  {
                                                       "item":  "minecraft:brewing_stand"
-                                                  }
+                                                  },
+                                       "show_notification":  true
                                    }
                     }
                 ]

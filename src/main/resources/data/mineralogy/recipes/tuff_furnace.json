@@ -6,6 +6,7 @@
                        }
                    ],
     "type":  "minecraft:crafting_shaped",
+    "category":  "misc",
     "pattern":  [
                     "xxx",
                     "xyx",
@@ -22,5 +23,6 @@
     "result":  {
                    "item":  "mineralogy:tuff_furnace",
                    "count":  1
-               }
+               },
+    "show_notification":  true
 }

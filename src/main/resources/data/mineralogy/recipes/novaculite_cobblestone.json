@@ -3,6 +3,7 @@
 
                    ],
     "type":  "minecraft:crafting_shapeless",
+    "category":  "building",
     "ingredients":  [
                         {
                             "tag":  "mineralogy:stones/novaculite"

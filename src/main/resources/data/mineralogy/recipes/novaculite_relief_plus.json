@@ -6,6 +6,7 @@
                        }
                    ],
     "type":  "minecraft:crafting_shaped",
+    "category":  "building",
     "pattern":  [
                     " x ",
                     "xxx",
@@ -19,5 +20,6 @@
     "result":  {
                    "item":  "mineralogy:novaculite_relief_plus",
                    "count":  5
-               }
+               },
+    "show_notification":  true
 }

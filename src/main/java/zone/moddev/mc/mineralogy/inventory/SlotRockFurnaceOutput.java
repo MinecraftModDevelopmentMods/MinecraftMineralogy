@@ -56,9 +56,9 @@ public class SlotRockFurnaceOutput extends Slot {
 
 	@Override
 	protected void checkTakeAchievements(ItemStack stack) {
-		stack.onCraftedBy(player.level, player, removeCount);
+		stack.onCraftedBy(player.level(), player, removeCount);
 
-		if (!player.level.isClientSide) {
+		if (!player.level().isClientSide) {
 			spawnExperience();
 			furnace.onCrafting(player);
 		}
@@ -69,13 +69,13 @@ public class SlotRockFurnaceOutput extends Slot {
 
 	private void spawnExperience() {
 		for (Map.Entry<ResourceLocation, Integer> entry : furnace.getRecipeUseCounts().entrySet()) {
-			Recipe<?> recipe = player.level.getRecipeManager().byKey(entry.getKey()).orElse(null);
+			Recipe<?> recipe = player.level().getRecipeManager().byKey(entry.getKey()).orElse(null);
 			float experience = recipe instanceof SmeltingRecipe ? ((SmeltingRecipe) recipe).getExperience() : 0.0F;
 			int amount = getExperienceAmount(entry.getValue().intValue(), experience);
 
-			if (amount > 0 && player.level instanceof ServerLevel) {
+			if (amount > 0 && player.level() instanceof ServerLevel) {
 				Vec3 position = player.position().add(0.0D, 0.5D, 0.0D);
-				ExperienceOrb.award((ServerLevel) player.level, position, amount);
+				ExperienceOrb.award((ServerLevel) player.level(), position, amount);
 			}
 		}
 	}

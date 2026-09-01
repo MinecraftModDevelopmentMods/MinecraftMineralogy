@@ -5,7 +5,6 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
@@ -33,7 +32,7 @@ public class RockSaltLamp extends Block implements NamedMineralogyBlock {
 	private static final VoxelShape EAST_SHAPE = Block.box(0.0D, 3.2D, 5.6D, 4.8D, 12.8D, 10.4D);
 
 	public RockSaltLamp() {
-		super(BlockBehaviour.Properties.of(Material.STONE).strength(0.25F)
+		super(BlockBehaviour.Properties.copy(net.minecraft.world.level.block.Blocks.STONE).strength(0.25F)
 				.lightLevel(state -> 15).sound(SoundType.STONE));
 		this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.UP));
 	}

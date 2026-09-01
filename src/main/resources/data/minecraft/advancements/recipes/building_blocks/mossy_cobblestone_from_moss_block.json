@@ -39,7 +39,8 @@
                                                                           "has_moss_block",
                                                                           "has_the_recipe"
                                                                       ]
-                                                                  ]
+                                                                  ],
+                                                 "sends_telemetry_event":  false
                                              }
                          },
                          {
@@ -84,7 +85,8 @@
                                                                           "has_moss_block",
                                                                           "has_the_recipe"
                                                                       ]
-                                                                  ]
+                                                                  ],
+                                                 "sends_telemetry_event":  false
                                              }
                          }
                      ]

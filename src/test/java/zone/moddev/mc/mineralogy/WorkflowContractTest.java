@@ -19,8 +19,8 @@ public class WorkflowContractTest {
         try (FileInputStream input = new FileInputStream("gradle.properties")) {
             properties.load(input);
         }
-        assertEquals("6.1.0.119041", properties.getProperty("mod_version"));
-        assertEquals("1.19.4", properties.getProperty("minecraft_version"));
+        assertEquals("6.1.0.120011", properties.getProperty("mod_version"));
+        assertEquals("1.20.1", properties.getProperty("minecraft_version"));
         assertEquals(properties.getProperty("mc_version"), properties.getProperty("minecraft_version"));
         assertEquals("forge", properties.getProperty("loader_name"));
         assertEquals("1", properties.getProperty("loader_code"));
@@ -29,9 +29,9 @@ public class WorkflowContractTest {
         assertEquals("17", properties.getProperty("gradle_java_version"));
         assertEquals("240974", properties.getProperty("curseforge_project_id"));
         assertEquals("zone.moddev.mc.mineralogy", properties.getProperty("mod_group"));
-        assertEquals("4.0.16.119041", properties.getProperty("orespawn_version"));
-        assertEquals("8780970", properties.getProperty("orespawn_curse_file_id"));
-        assertEquals("C35F60B6FE2BC9782558CAE374C85C4713038AA58BAE7D281969F80468C21E35",
+        assertEquals("4.0.16.120011", properties.getProperty("orespawn_version"));
+        assertEquals("8784008", properties.getProperty("orespawn_curse_file_id"));
+        assertEquals("EE0CE2A00CD883CA270FFE900016D42633B03D50E9AC65FD95797822D95C3A22",
                 properties.getProperty("orespawn_sha256"));
     }
 
@@ -42,7 +42,7 @@ public class WorkflowContractTest {
         String wrapper = text(".github/workflows/validate-gradle-build.yml");
         String staging = text("gradle/stage-orespawn-release.sh");
         assertTrue(ci.contains("name: Build, test, and audit"));
-        assertTrue(ci.contains("master-1.19"));
+        assertTrue(ci.contains("master-1.20.1"));
         assertTrue(ci.contains("Install pinned Java 8 launcher toolchain"));
         assertTrue(ci.contains("java-version: '8.0.502+7'"));
         assertTrue(ci.contains("java-version: '17.0.1+12'"));

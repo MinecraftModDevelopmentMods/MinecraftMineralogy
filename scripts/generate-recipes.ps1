@@ -27,7 +27,7 @@ $colors = @(
     'gray', 'pink', 'lime', 'yellow', 'light_blue', 'magenta', 'orange', 'white'
 )
 
-# Minecraft owns these full-block identities in 1.19.4. Mineralogy keeps its
+# Minecraft owns these full-block identities in 1.20.1. Mineralogy keeps its
 # legacy blocks registered, but recipes may accept either identity where doing
 # so cannot compete with a native recipe.
 $nativeFullBlocks = @{
@@ -117,7 +117,7 @@ function AdvancementPredicate([object] $ingredient) {
     if ($null -ne $ingredient.PSObject.Properties['items']) {
         return [ordered]@{ items = @($ingredient.items) }
     }
-    throw "Cannot convert recipe ingredient into a Minecraft 1.19 advancement predicate"
+    throw "Cannot convert recipe ingredient into a Minecraft 1.20.1 advancement predicate"
 }
 
 function OreIngredient([string] $ore) {
@@ -143,7 +143,7 @@ function OreIngredient([string] $ore) {
         $finish = if ($Matches[2]) { '/' + (Convert-CamelToSnake $Matches[2]) } else { '' }
         return [ordered]@{ tag = "mineralogy:slabs/$family$finish" }
     }
-    throw "No Minecraft 1.19.4 tag mapping for legacy OreDictionary key $ore"
+    throw "No Minecraft 1.20.1 tag mapping for legacy OreDictionary key $ore"
 }
 
 function Convert-CamelToSnake([string] $value) {
@@ -195,6 +195,9 @@ function VanillaCraftingCategoryForResult([string] $result) {
         return 'redstone'
     }
     if ($result -in @('minecraft:brewing_stand', 'minecraft:furnace')) {
+        return 'misc'
+    }
+    if ($result.EndsWith('_armor_trim_smithing_template')) {
         return 'misc'
     }
     return 'building'
@@ -786,6 +789,7 @@ function Ensure-MissingRecipeAdvancements() {
         $generatedAdvancement.rewards = [ordered]@{ recipes = @("mineralogy:$recipeName") }
         $generatedAdvancement.criteria = $criteria
         $generatedAdvancement.requirements = $requirements
+        $generatedAdvancement.sends_telemetry_event = $false
         Write-Json $advancementFile $generatedAdvancement
         $created++
     }
@@ -853,6 +857,7 @@ function Synchronize-AdvancementConditions() {
                 $ordered[$property.Name] = $property.Value
             }
         }
+        $ordered.sends_telemetry_event = $false
         Write-Json $file.FullName $ordered
     }
     return $files.Count
@@ -960,6 +965,7 @@ function VanillaRecipeAdvancement(
             }
         }
         requirements = ,@($criterionName, 'has_the_recipe')
+        sends_telemetry_event = $false
     }
 }
 
@@ -1081,6 +1087,22 @@ function Write-CobblestoneRecipeOverrides() {
             }) "minecraft:$recipeName")
     }
 
+    foreach ($template in @('coast', 'sentry', 'vex')) {
+        $recipeName = "${template}_armor_trim_smithing_template"
+        $templateItem = "minecraft:$recipeName"
+        $enabledRecipe = VanillaShapedRecipe @('#S#', '#C#', '###') ([ordered]@{
+            '#' = ItemIngredient 'minecraft:diamond'
+            C = $enabledCobblestone
+            S = ItemIngredient $templateItem
+        }) $templateItem 2
+        $fallbackRecipe = VanillaShapedRecipe @('#S#', '#C#', '###') ([ordered]@{
+            '#' = ItemIngredient 'minecraft:diamond'
+            C = ItemIngredient 'minecraft:cobblestone'
+            S = ItemIngredient $templateItem
+        }) $templateItem 2
+        Write-ConditionalMinecraftRecipe $recipeName $condition $enabledRecipe $fallbackRecipe
+    }
+
     $advancements = @(
         @('decorations', 'furnace', 'has_cobblestone', $enabledCrafting, $fallbackCrafting),
         @('brewing', 'brewing_stand', 'has_blaze_rod', (ItemIngredient 'minecraft:blaze_rod'), (ItemIngredient 'minecraft:blaze_rod')),
@@ -1186,6 +1208,7 @@ function Write-NativePolishedOverrides() {
                 @('has_the_recipe', 'has_rock'),
                 @('has_the_recipe', 'has_sand')
             )
+            sends_telemetry_event = $false
         })
     }
 }
@@ -1223,4 +1246,4 @@ $advancementCount = Synchronize-AdvancementConditions
 if ($advancementCount -ne $expectedTargetRecipeCount) {
     throw "Expected $expectedTargetRecipeCount recipe advancements, found $advancementCount"
 }
-Write-Output "Generated $expectedRecipeCount crafting recipe JSON files, retained 28 target-native smelting recipes, created $createdAdvancements missing recipe advancements, and conditioned $advancementCount recipe advancements."
+Write-Output "Generated $expectedRecipeCount crafting recipe JSON files, retained 28 target-native smelting recipes, created $createdAdvancements missing recipe advancements, and conditioned $advancementCount Minecraft 1.20.1 recipe advancements."

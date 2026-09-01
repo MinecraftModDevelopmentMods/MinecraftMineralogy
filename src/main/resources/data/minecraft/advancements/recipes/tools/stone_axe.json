@@ -37,7 +37,8 @@
                                                                           "has_cobblestone",
                                                                           "has_the_recipe"
                                                                       ]
-                                                                  ]
+                                                                  ],
+                                                 "sends_telemetry_event":  false
                                              }
                          },
                          {
@@ -80,7 +81,8 @@
                                                                           "has_cobblestone",
                                                                           "has_the_recipe"
                                                                       ]
-                                                                  ]
+                                                                  ],
+                                                 "sends_telemetry_event":  false
                                              }
                          }
                      ]

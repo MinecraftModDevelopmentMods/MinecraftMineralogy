@@ -13,7 +13,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -40,7 +39,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.storage.loot.LootContext.Builder;
+import net.minecraft.world.level.storage.loot.LootParams.Builder;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class RockFurnace extends BaseEntityBlock implements NamedMineralogyBlock {
@@ -54,7 +53,7 @@ public class RockFurnace extends BaseEntityBlock implements NamedMineralogyBlock
 
 	public RockFurnace(float hardness, float blastResistance, int toolHardnessLevel, boolean burning,
 			float burnModifier, String name) {
-		super(BlockBehaviour.Properties.of(Material.STONE).strength(hardness, blastResistance)
+		super(BlockBehaviour.Properties.copy(net.minecraft.world.level.block.Blocks.STONE).strength(hardness, blastResistance)
 				.sound(SoundType.STONE).lightLevel(state -> burning ? 14 : 0).requiresCorrectToolForDrops());
 		this.burning = burning;
 		this.burnModifier = burnModifier;

@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:rhyolite_smooth"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:rhyolite_smooth"
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:rhyolite_smooth"
@@ -22,7 +20,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "tag":  "mineralogy:stones/rhyolite"
+                                                                           "items":  "#mineralogy:stones/rhyolite"
                                                                        }
                                                                    ]
                                                      }

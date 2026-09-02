@@ -1,14 +1,17 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:rock_salt_brick_stairs"
-                       },
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:rock_salt_smooth_brick_stairs"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:and",
+                            "values":  [
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:rock_salt_brick_stairs"
+                                           },
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:rock_salt_smooth_brick_stairs"
+                                           }
+                                       ]
+                        },
     "type":  "minecraft:crafting_shapeless",
     "category":  "building",
     "ingredients":  [
@@ -20,7 +23,7 @@
                         }
                     ],
     "result":  {
-                   "item":  "mineralogy:rock_salt_smooth_brick_stairs",
+                   "id":  "mineralogy:rock_salt_smooth_brick_stairs",
                    "count":  1
                }
 }

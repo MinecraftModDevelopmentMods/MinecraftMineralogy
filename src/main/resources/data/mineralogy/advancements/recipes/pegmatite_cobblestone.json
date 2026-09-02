@@ -1,7 +1,4 @@
 {
-    "conditions":  [
-
-                   ],
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:pegmatite_cobblestone"
@@ -19,7 +16,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "tag":  "mineralogy:stones/pegmatite"
+                                                                           "items":  "#mineralogy:stones/pegmatite"
                                                                        }
                                                                    ]
                                                      }

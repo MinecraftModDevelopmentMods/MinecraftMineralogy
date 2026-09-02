@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:pegmatite_brick_stairs"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:pegmatite_brick_stairs"
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:pegmatite_brick_stairs"
@@ -22,7 +20,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "tag":  "mineralogy:stones/pegmatite/brick"
+                                                                           "items":  "#mineralogy:stones/pegmatite/brick"
                                                                        }
                                                                    ]
                                                      }

@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:gabbro_smooth_brick_furnace"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:gabbro_smooth_brick_furnace"
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:gabbro_smooth_brick_furnace"
@@ -22,7 +20,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "tag":  "mineralogy:slabs/gabbro/smooth_brick"
+                                                                           "items":  "#mineralogy:slabs/gabbro/smooth_brick"
                                                                        }
                                                                    ]
                                                      }

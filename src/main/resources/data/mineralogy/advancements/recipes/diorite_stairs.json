@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:diorite_stairs"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:diorite_stairs"
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:diorite_stairs"
@@ -22,9 +20,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "items":  [
-                                                                                         "mineralogy:diorite"
-                                                                                     ]
+                                                                           "items":  "mineralogy:diorite"
                                                                        }
                                                                    ]
                                                      }

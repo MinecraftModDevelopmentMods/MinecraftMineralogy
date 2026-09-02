@@ -453,7 +453,7 @@ public class Blocks {
 		if (path == null || path.isEmpty()) {
 			throw new IllegalArgumentException("Mineralogy block has an empty registry path: " + block.getClass());
 		}
-		registry.register(new ResourceLocation(Mineralogy.MODID, path), block);
+		registry.register(ResourceLocation.fromNamespaceAndPath(Mineralogy.MODID, path), block);
 		bindLegacyBlockField(path, block);
 		return block;
 	}

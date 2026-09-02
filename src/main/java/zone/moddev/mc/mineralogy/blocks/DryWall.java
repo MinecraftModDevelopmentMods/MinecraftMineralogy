@@ -11,7 +11,7 @@ public class DryWall extends IronBarsBlock implements NamedMineralogyBlock {
 	private final String registryPath;
 
 	public DryWall(String color) {
-		super(BlockBehaviour.Properties.copy(net.minecraft.world.level.block.Blocks.STONE).strength(0.75F, 1.0F).sound(SoundType.STONE)
+		super(BlockBehaviour.Properties.ofFullCopy(net.minecraft.world.level.block.Blocks.STONE).strength(0.75F, 1.0F).sound(SoundType.STONE)
 				.requiresCorrectToolForDrops());
 		this.toolHardnessLevel = 0;
 		this.registryPath = "drywall_" + color;

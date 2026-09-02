@@ -14,7 +14,7 @@ The exact bytes from the installed build are exported as
 - Provider schema 4, mod ID `mineralogy`, and provider revision 3.
 - 32 enabled rock rules across the four geological families.
 - Sulfur, phosphorous, and nitrate ore rules.
-- Minecraft 1.20.1 heights `-64` through `319` and Overworld-only terrain defaults.
+- Minecraft 1.20.6 heights `-64` through `319` and Overworld-only terrain defaults.
 - Minecraft blocks for granite, diorite, andesite, basalt, and tuff. Worldgen
   aliases map the five matching historical Mineralogy rock IDs to their native
   outputs, while all historical Mineralogy blocks remain registered for old
@@ -82,7 +82,7 @@ that same dimension ID to each desired rock rule's `dimensions` array. A rock
 without `dimensions` is Overworld-only. A configured custom dimension is
 disabled during baking when no valid rock rules include it.
 
-Minecraft 1.20.1 uses the registered dimension-type ID, such as
+Minecraft 1.20.6 uses the registered dimension-type ID, such as
 `examplemod:moon`; consult the dimension mod's documentation for its exact ID.
 Rock membership makes different stone sets possible per dimension. To use
 different altitude settings for the same output block, define unique rock rule
@@ -90,7 +90,7 @@ IDs with different `depth_peak`, `depth_spread`, `min_y`, or `max_y` values and
 non-overlapping dimension lists. Duplicate output states within one dimension
 are rejected.
 
-The 1.20.1 editor does not expose terrain-dimension or rock-membership fields, so
+The 1.20.6 editor does not expose terrain-dimension or rock-membership fields, so
 players edit the stopped world's saved profile and pack authors may provide
 global defaults or a complete provider override. Changes affect newly generated
 chunks only.
@@ -112,6 +112,6 @@ intends to replace the whole packaged Mineralogy provider; it is unnecessary
 for an ordinary per-world host-list change and does not rewrite established
 world profiles.
 
-On Minecraft 1.20.1, terrain hosts are baked as flattened block identities.
+On Minecraft 1.20.6, terrain hosts are baked as flattened block identities.
 Changes affect only newly generated chunks because Mineralogy strata are never
 retro-generated.

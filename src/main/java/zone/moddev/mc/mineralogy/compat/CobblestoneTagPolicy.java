@@ -25,13 +25,13 @@ import zone.moddev.mc.mineralogy.MineralogyConfig;
 import zone.moddev.mc.mineralogy.data.Material;
 import zone.moddev.mc.mineralogy.data.MaterialData;
 
-/** Applies the legacy cobblestone option to Forge 47 block and item tags. */
+/** Applies the legacy cobblestone option to Forge 50 block and item tags. */
 public final class CobblestoneTagPolicy {
-    private static final ResourceLocation COBBLESTONE = new ResourceLocation("forge", "cobblestone");
+    private static final ResourceLocation COBBLESTONE = ResourceLocation.fromNamespaceAndPath("forge", "cobblestone");
     private static final ResourceLocation STONE_CRAFTING_MATERIALS =
-            new ResourceLocation("minecraft", "stone_crafting_materials");
+            ResourceLocation.fromNamespaceAndPath("minecraft", "stone_crafting_materials");
     private static final ResourceLocation STONE_TOOL_MATERIALS =
-            new ResourceLocation("minecraft", "stone_tool_materials");
+            ResourceLocation.fromNamespaceAndPath("minecraft", "stone_tool_materials");
 
     private CobblestoneTagPolicy() {
     }
@@ -65,7 +65,7 @@ public final class CobblestoneTagPolicy {
         itemRegistry.bindTags(itemTags);
 
         Ingredient.invalidateAll();
-        Mineralogy.LOGGER.debug("Applied Forge 47 cobblestone policy: enabled={}, rocks={}, "
+        Mineralogy.LOGGER.debug("Applied Forge 50 cobblestone policy: enabled={}, rocks={}, "
                 + "forgeItems={}, craftingItems={}, toolItems={}", enabled, configuredItems.size(),
                 size(itemRegistry, Registries.ITEM, COBBLESTONE),
                 size(itemRegistry, Registries.ITEM, STONE_CRAFTING_MATERIALS),
@@ -89,7 +89,7 @@ public final class CobblestoneTagPolicy {
         Set<Holder<T>> values = new LinkedHashSet<>();
         for (Material material : MaterialData.allIncludingRockSalt()) {
             TagKey<T> tag = TagKey.create(registryKey,
-                    new ResourceLocation(Mineralogy.MODID, "stones/" + material.id()));
+                    ResourceLocation.fromNamespaceAndPath(Mineralogy.MODID, "stones/" + material.id()));
             registry.getTag(tag).ifPresent(named -> named.forEach(values::add));
         }
         return values;
@@ -106,7 +106,7 @@ public final class CobblestoneTagPolicy {
         }
         for (String name : unconditionalNames) {
             ResourceKey<T> valueKey = ResourceKey.create(registryKey,
-                    new ResourceLocation(Mineralogy.MODID, name));
+                    ResourceLocation.fromNamespaceAndPath(Mineralogy.MODID, name));
             registry.getHolder(valueKey).ifPresent(values::add);
         }
         tags.put(key, new ArrayList<>(values));

@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:diabase_relief_sword"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:diabase_relief_sword"
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:diabase_relief_sword"
@@ -22,9 +20,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "items":  [
-                                                                                         "mineralogy:diabase_relief_blank"
-                                                                                     ]
+                                                                           "items":  "mineralogy:diabase_relief_blank"
                                                                        }
                                                                    ]
                                                      }

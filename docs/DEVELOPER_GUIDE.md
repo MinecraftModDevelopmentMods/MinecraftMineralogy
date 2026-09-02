@@ -38,9 +38,9 @@ families additionally use `cobblestone`; chert and pumice always retain that
 identity. Gypsum, chalk, rock salt, and both rock salt lamps retain their
 specialty aliases.
 
-Minecraft 1.20.1's `minecraft:stone_crafting_materials` and
+Minecraft 1.20.6's `minecraft:stone_crafting_materials` and
 `minecraft:stone_tool_materials` item tags include `#forge:cobblestone`, so
-enabled Mineralogy rocks work in native tool recipes. Forge 47 exposes
+enabled Mineralogy rocks work in native tool recipes. Forge 50 exposes
 immutable tag snapshots; Mineralogy rebuilds only the block and item tag
 membership after initial tag loading and every data reload, preserves other
 mods' members, updates the exact tag instances retained by parsed recipes,
@@ -50,18 +50,18 @@ tool tags are updated alongside the direct Forge tag.
 Sixteen established vanilla recipes and their advancements use conditional JSON overrides
 for the complete exact-cobblestone, stone-crafting-material, and
 stone-tool-material contracts. Enabled branches use stable Mineralogy union
-tags; disabled branches restore the target-native ingredients. Forge 47's
+tags; disabled branches restore the target-native ingredients. Forge 50's
 already-resolved nested tags do not observe a replacement tag collection, so
 Mineralogy also mutates retained tag instances rather than swapping the
 collection.
 
-Minecraft 1.20.1 adds three more configurable recipes: coast, sentry, and vex
+Minecraft 1.20.6 retains three additional configurable recipes: coast, sentry, and vex
 armor-trim template duplication. Enabled branches use the Mineralogy
 cobblestone union; disabled branches preserve the recipes' exact vanilla
 cobblestone ingredient. Their vanilla advancements are intentionally untouched
 because those recipes unlock from owning the template, not from cobblestone.
 
-Minecraft 1.20.1 also owns andesite, basalt, diorite, granite, tuff, and several
+Minecraft 1.20.6 also owns andesite, basalt, diorite, granite, tuff, and several
 matching finishes. Mineralogy's family tags include both native and retained
 legacy identities. Four `data/minecraft/recipes/polished_*.json` overrides move
 the native polished-block route from 2x2 crafting to one exact native block plus
@@ -80,7 +80,7 @@ Do not broaden vanilla slab, stair, or wall recipes. Where Minecraft already
 owns a matching form (raw and polished andesite/diorite/granite slabs and
 stairs, plus their raw walls), the Mineralogy-output recipe keeps an exact
 legacy Mineralogy input except for the deliberate slab overrides below. Basalt
-and tuff have no native construction forms in 1.20.1, so their safe family tags
+and tuff have no native construction forms in 1.20.6, so their safe family tags
 feed Mineralogy slabs, stairs, and walls. Polished andesite/diorite/granite have
 no native walls, so those three Mineralogy wall recipes may also accept the
 matching family tag.
@@ -98,7 +98,7 @@ material and finish so basalt cannot produce a different rock's slab or wall.
 
 ## Crafting Data
 
-All Mineralogy recipes are native Minecraft/Forge 1.20.1 JSON under
+All Mineralogy recipes are native Minecraft/Forge 1.20.6 JSON under
 `data/mineralogy/recipes/`. Run `scripts/generate-recipes.ps1` after changing
 the recipe matrix; it generates the 27 stone families and global recipes, the
 native slab/stonecutting overrides and compatibility conversions, and the four
@@ -108,7 +108,7 @@ advancement with the same Forge conditions and the same exact-item or
 family-tag material predicate as the recipe. Unlocks use direct inventory
 ingredients instead of listening to other recipe unlocks, which would
 recursively reveal an entire construction tree. Polishing uses Minecraft
-1.20.1's advancement requirements matrix to require the matching source plus
+1.20.6's advancement requirements matrix to require the matching source plus
 accepted sand; manually crafting a recipe is the target-native fallback for
 Forge's delayed crafting-output inventory trigger. Rock-furnace advancements
 use the matching slab-family tag as their sole material criterion. They
@@ -135,7 +135,7 @@ The legacy `GENERATE_*` flags can remove registrations on the next start. The
 new issue-121 switches only change creative visibility and Mineralogy-owned
 recipes, so existing content remains loadable.
 
-Forge 47 converts pre-flattening chunks lazily. The coremod expands Minecraft's
+Forge 50 converts pre-flattening chunks lazily. The coremod expands Minecraft's
 fixed legacy state tables before conversion, and the selected-world hook
 installs the complete saved block mapping before Mojang's data fixer. It
 reinstalls that mapping after the client enumerates other old saves, normalizes
@@ -148,11 +148,11 @@ reobfuscated jar; a development launch alone cannot prove this path.
 
 ## Building
 
-The build uses ForgeGradle 7.0.34 and the Gradle 9.6.1 wrapper on Java 17,
-while an exact Java 17 toolchain compiles production and test bytecode:
+The build uses ForgeGradle 7.0.34 and the Gradle 9.6.1 wrapper on Java 21,
+while an exact Java 21 toolchain compiles production and test bytecode:
 
 ```powershell
-$env:JAVA_HOME='path-to-a-Java-17-jdk'
+$env:JAVA_HOME='path-to-a-Java-21-jdk'
 $env:GRADLE_USER_HOME='D:\MinecraftMineralogy\.gradle-verify-cache'
 .\gradlew.bat clean check build javadoc verifyReleaseConfiguration verifyReleaseDependencies verifyReleaseArtifacts writeReleaseChecksums --no-daemon
 .\gradlew.bat genEclipseRuns eclipse isolateEclipseProductionRuns verifyEclipseProductionClasspath --no-daemon
@@ -164,5 +164,5 @@ OreSpawn in a launcher-like Forge installation. The normal jar packages this
 guide under `META-INF/mineralogy/docs/`.
 
 The complete release version is `Major.Minor.Bug.Target`; see
-[Mineralogy Versioning](VERSIONS.md). This branch validates target `120011`
-for Minecraft 1.20.1 Forge and does not append CI build numbers.
+[Mineralogy Versioning](VERSIONS.md). This branch validates target `120061`
+for Minecraft 1.20.6 Forge and does not append CI build numbers.

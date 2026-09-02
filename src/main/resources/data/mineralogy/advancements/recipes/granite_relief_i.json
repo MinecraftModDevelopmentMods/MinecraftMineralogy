@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:granite_relief_i"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:granite_relief_i"
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:granite_relief_i"
@@ -22,9 +20,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "items":  [
-                                                                                         "mineralogy:granite_relief_blank"
-                                                                                     ]
+                                                                           "items":  "mineralogy:granite_relief_blank"
                                                                        }
                                                                    ]
                                                      }

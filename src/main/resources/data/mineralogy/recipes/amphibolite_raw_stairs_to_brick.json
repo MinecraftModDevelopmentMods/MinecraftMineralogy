@@ -1,14 +1,17 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:amphibolite_stairs"
-                       },
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:amphibolite_brick_stairs"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:and",
+                            "values":  [
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:amphibolite_stairs"
+                                           },
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:amphibolite_brick_stairs"
+                                           }
+                                       ]
+                        },
     "type":  "minecraft:crafting_shaped",
     "category":  "building",
     "pattern":  [
@@ -21,7 +24,7 @@
                       }
             },
     "result":  {
-                   "item":  "mineralogy:amphibolite_brick_stairs",
+                   "id":  "mineralogy:amphibolite_brick_stairs",
                    "count":  4
                },
     "show_notification":  true

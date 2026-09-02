@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:marble_furnace"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:marble_furnace"
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:marble_furnace"
@@ -22,7 +20,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "tag":  "mineralogy:slabs/marble"
+                                                                           "items":  "#mineralogy:slabs/marble"
                                                                        }
                                                                    ]
                                                      }

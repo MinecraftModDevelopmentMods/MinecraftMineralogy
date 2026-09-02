@@ -1,7 +1,4 @@
 {
-    "conditions":  [
-
-                   ],
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:andesite_cobblestone"
@@ -19,7 +16,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "tag":  "mineralogy:stones/andesite"
+                                                                           "items":  "#mineralogy:stones/andesite"
                                                                        }
                                                                    ]
                                                      }

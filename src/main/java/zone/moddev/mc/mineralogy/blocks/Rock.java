@@ -24,7 +24,7 @@ public class Rock extends Block implements NamedMineralogyBlock {
 
 	public Rock(boolean isStoneEquivalent, float hardness, float blastResistance, int toolHardnessLevel,
 			SoundType sound, String name) {
-		super(BlockBehaviour.Properties.copy(Blocks.STONE).strength(hardness, blastResistance).sound(sound)
+		super(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).strength(hardness, blastResistance).sound(sound)
 				.requiresCorrectToolForDrops());
 
 		this.registryPath = name;
@@ -60,6 +60,6 @@ public class Rock extends Block implements NamedMineralogyBlock {
 
 	protected static int getFortuneLevel(Builder builder) {
 		ItemStack tool = builder.getOptionalParameter(LootContextParams.TOOL);
-		return tool == null || tool.isEmpty() ? 0 : EnchantmentHelper.getItemEnchantmentLevel(Enchantments.BLOCK_FORTUNE, tool);
+		return tool == null || tool.isEmpty() ? 0 : EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FORTUNE, tool);
 	}
 }

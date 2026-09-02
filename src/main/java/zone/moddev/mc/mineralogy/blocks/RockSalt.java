@@ -24,7 +24,7 @@ public class RockSalt extends Rock {
 			return Collections.singletonList(new ItemStack(this));
 		}
 
-		Item dust = ForgeRegistries.ITEMS.getValue(new ResourceLocation(Mineralogy.MODID, "rock_salt_dust"));
+		Item dust = ForgeRegistries.ITEMS.getValue(ResourceLocation.fromNamespaceAndPath(Mineralogy.MODID, "rock_salt_dust"));
 		if (dust != null) {
 			return Collections.singletonList(new ItemStack(dust, 4));
 		}

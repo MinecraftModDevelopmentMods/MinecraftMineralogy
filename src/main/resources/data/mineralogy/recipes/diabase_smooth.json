@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:diabase_smooth"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:diabase_smooth"
+                        },
     "type":  "minecraft:crafting_shapeless",
     "category":  "building",
     "ingredients":  [
@@ -16,7 +14,7 @@
                         }
                     ],
     "result":  {
-                   "item":  "mineralogy:diabase_smooth",
+                   "id":  "mineralogy:diabase_smooth",
                    "count":  1
                }
 }

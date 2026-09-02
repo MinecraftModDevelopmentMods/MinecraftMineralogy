@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:shale_brick"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:shale_brick"
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:shale_brick"
@@ -22,7 +20,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "tag":  "mineralogy:stones/shale"
+                                                                           "items":  "#mineralogy:stones/shale"
                                                                        }
                                                                    ]
                                                      }

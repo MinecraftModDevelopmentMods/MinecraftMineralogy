@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:peridotite_relief_pickaxe"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:peridotite_relief_pickaxe"
+                        },
     "type":  "minecraft:crafting_shapeless",
     "category":  "building",
     "ingredients":  [
@@ -37,7 +35,7 @@
                         }
                     ],
     "result":  {
-                   "item":  "mineralogy:peridotite_relief_pickaxe",
+                   "id":  "mineralogy:peridotite_relief_pickaxe",
                    "count":  8
                }
 }

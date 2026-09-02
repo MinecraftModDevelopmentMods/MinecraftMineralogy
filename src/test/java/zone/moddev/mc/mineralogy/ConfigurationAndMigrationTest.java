@@ -343,7 +343,7 @@ public class ConfigurationAndMigrationTest {
 
     private static JsonObject parse(File file) throws Exception {
         try (Reader reader = Files.newBufferedReader(file.toPath(), StandardCharsets.UTF_8)) {
-            return new JsonParser().parse(reader).getAsJsonObject();
+            return JsonParser.parseReader(reader).getAsJsonObject();
         }
     }
 

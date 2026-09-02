@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:gabbro_smooth_brick_stairs"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:gabbro_smooth_brick_stairs"
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:gabbro_smooth_brick_stairs"
@@ -22,7 +20,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "tag":  "mineralogy:stones/gabbro/smooth_brick"
+                                                                           "items":  "#mineralogy:stones/gabbro/smooth_brick"
                                                                        }
                                                                    ]
                                                      }

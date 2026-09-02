@@ -32,6 +32,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtIo;
+import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.datafix.fixes.BlockStateData;
@@ -61,24 +62,38 @@ public final class LegacyWorldDataHook {
 	private static volatile boolean legacyWorldActive;
 
 	static {
-		BLOCK_ALIASES.put(new ResourceLocation(Mineralogy.MODID, "pummice"),
-				new ResourceLocation(Mineralogy.MODID, "pumice"));
-		BLOCK_ALIASES.put(new ResourceLocation(Mineralogy.MODID, "saprolite"),
-				new ResourceLocation(Mineralogy.MODID, "limestone"));
+		BLOCK_ALIASES.put(ResourceLocation.fromNamespaceAndPath(Mineralogy.MODID, "pummice"),
+				ResourceLocation.fromNamespaceAndPath(Mineralogy.MODID, "pumice"));
+		BLOCK_ALIASES.put(ResourceLocation.fromNamespaceAndPath(Mineralogy.MODID, "saprolite"),
+				ResourceLocation.fromNamespaceAndPath(Mineralogy.MODID, "limestone"));
 	}
 
 	private LegacyWorldDataHook() {
 	}
 
 	/** Called from Forge's raw additional-level-data reader before legacy FML data is discarded. */
-	public static void captureLegacyLevelData(CompoundTag root,
+	public static void captureLegacyLevelData(LevelStorageSource.LevelStorageAccess access,
 			LevelStorageSource.LevelDirectory levelDirectory) {
-		if (root == null || levelDirectory == null) {
+		if (access == null || levelDirectory == null) {
 			return;
+		}
+		CompoundTag root;
+		try {
+			root = access.getDataTagRaw(false);
+		} catch (IOException primaryFailure) {
+			try {
+				root = access.getDataTagRaw(true);
+			} catch (IOException fallbackFailure) {
+				LOGGER.warn("Could not inspect primary or fallback level data in '{}' for legacy Mineralogy mappings",
+						levelDirectory.path(), fallbackFailure);
+				return;
+			}
 		}
 		Path levelPath = levelDirectory.path();
 		if (root.contains("FML", 10)) {
 			prepareLegacyWorld(levelPath.toFile(), root.getCompound("FML"));
+		} else if (root.contains("fml", 10)) {
+			prepareLegacyWorld(levelPath.toFile(), root.getCompound("fml"));
 		} else {
 			prepareLegacyWorld(levelPath.resolve("level.dat").toFile());
 		}
@@ -99,7 +114,7 @@ public final class LegacyWorldDataHook {
 		}
 
 		try (FileInputStream input = new FileInputStream(levelDat)) {
-			CompoundTag root = NbtIo.readCompressed(input);
+			CompoundTag root = NbtIo.readCompressed(input, NbtAccounter.unlimitedHeap());
 			if (root.contains("FML", 10)) {
 				CompoundTag fml = root.getCompound("FML");
 				CompoundTag registries = fml.getCompound("Registries");
@@ -118,7 +133,7 @@ public final class LegacyWorldDataHook {
 		File sidecar = sidecar(levelDat.getParentFile());
 		if (sidecar.isFile()) {
 			try (FileInputStream input = new FileInputStream(sidecar)) {
-				install(levelDat.getParentFile(), NbtIo.readCompressed(input).getCompound("Blocks"));
+				install(levelDat.getParentFile(), NbtIo.readCompressed(input, NbtAccounter.unlimitedHeap()).getCompound("Blocks"));
 			} catch (IOException e) {
 				LOGGER.warn("Could not read legacy Mineralogy registry sidecar '{}'", sidecar, e);
 			}
@@ -141,7 +156,7 @@ public final class LegacyWorldDataHook {
 		File sidecar = sidecar(worldDirectory);
 		if (sidecar.isFile()) {
 			try (FileInputStream input = new FileInputStream(sidecar)) {
-				install(worldDirectory, NbtIo.readCompressed(input).getCompound("Blocks"));
+				install(worldDirectory, NbtIo.readCompressed(input, NbtAccounter.unlimitedHeap()).getCompound("Blocks"));
 			} catch (IOException e) {
 				LOGGER.warn("Could not read legacy Mineralogy registry sidecar '{}'", sidecar, e);
 			}
@@ -279,7 +294,7 @@ public final class LegacyWorldDataHook {
 			if (!key.startsWith(Mineralogy.MODID + ":")) {
 				continue;
 			}
-			ResourceLocation id = new ResourceLocation(key);
+			ResourceLocation id = ResourceLocation.parse(key);
 			int numericId = savedId.getInt("V");
 			mineralogyIds.put(id, numericId);
 			highestStateId = Math.max(highestStateId, (numericId << 4) | 15);
@@ -307,7 +322,7 @@ public final class LegacyWorldDataHook {
 	}
 
 	/**
-	 * Minecraft 1.20.1 still fixes the pre-flattening state table at 4,096 entries,
+	 * Minecraft 1.20.6 still fixes the pre-flattening state table at 4,096 entries,
 	 * while Forge 1.12 worlds commonly assign mod blocks higher numeric IDs.
 	 * Replace that exact static-final array before writing any recovered states.
 	 */

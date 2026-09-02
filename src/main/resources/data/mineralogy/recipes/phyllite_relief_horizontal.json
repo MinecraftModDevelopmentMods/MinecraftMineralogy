@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:phyllite_relief_horizontal"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:phyllite_relief_horizontal"
+                        },
     "type":  "minecraft:crafting_shaped",
     "category":  "building",
     "pattern":  [
@@ -16,7 +14,7 @@
                       }
             },
     "result":  {
-                   "item":  "mineralogy:phyllite_relief_horizontal",
+                   "id":  "mineralogy:phyllite_relief_horizontal",
                    "count":  3
                },
     "show_notification":  true

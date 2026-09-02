@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:rock_salt_brick"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:rock_salt_brick"
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:rock_salt_brick"
@@ -22,7 +20,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "tag":  "mineralogy:stones/rock_salt"
+                                                                           "items":  "#mineralogy:stones/rock_salt"
                                                                        }
                                                                    ]
                                                      }

@@ -1,14 +1,17 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:peridotite_wall"
-                       },
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:peridotite_brick_wall"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:and",
+                            "values":  [
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:peridotite_wall"
+                                           },
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:peridotite_brick_wall"
+                                           }
+                                       ]
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:peridotite_raw_walls_to_brick"
@@ -26,9 +29,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "items":  [
-                                                                                         "mineralogy:peridotite_wall"
-                                                                                     ]
+                                                                           "items":  "mineralogy:peridotite_wall"
                                                                        }
                                                                    ]
                                                      }

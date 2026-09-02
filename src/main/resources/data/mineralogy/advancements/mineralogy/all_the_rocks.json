@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "item": "mineralogy:basalt"
+      "id": "mineralogy:basalt"
     },
     "title": {
       "translate": "advancements.mineralogy.all_the_rocks.title"

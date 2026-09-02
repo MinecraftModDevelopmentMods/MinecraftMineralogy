@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:andesite_smooth"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:andesite_smooth"
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:andesite_smooth"
@@ -22,9 +20,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "items":  [
-                                                                                         "mineralogy:andesite"
-                                                                                     ]
+                                                                           "items":  "mineralogy:andesite"
                                                                        }
                                                                    ]
                                                      }

@@ -72,6 +72,15 @@ public class ResourceContractTest {
     }
 
     @Test
+    public void customAdvancementUsesTheDataComponentItemStackShape() throws Exception {
+        JsonObject advancement = json(new File(ROOT,
+                "data/mineralogy/advancements/mineralogy/all_the_rocks.json"));
+        JsonObject icon = advancement.getAsJsonObject("display").getAsJsonObject("icon");
+        assertEquals("mineralogy:basalt", icon.get("id").getAsString());
+        assertFalse(icon.has("item"));
+    }
+
+    @Test
     public void everyRecipeHasAProgressiveAdvancement() throws Exception {
         File recipeDir = new File(ROOT, "data/mineralogy/recipes");
         File advancementDir = new File(ROOT, "data/mineralogy/advancements/recipes");
@@ -94,12 +103,13 @@ public class ResourceContractTest {
                     advancement.getAsJsonObject("rewards").getAsJsonArray("recipes").get(0).getAsString());
             assertTrue(advancement.getAsJsonObject("criteria").has("has_the_recipe"));
             assertTrue(advancement.getAsJsonObject("criteria").has("has_rock"));
-            if (recipe.has("conditions")) {
-                assertTrue(recipeFile.getName(), recipe.get("conditions").isJsonArray());
-                assertTrue(recipeFile.getName(), advancement.has("conditions"));
-                assertEquals(recipeFile.getName(), recipe.get("conditions"), advancement.get("conditions"));
+            if (recipe.has("forge:condition")) {
+                assertTrue(recipeFile.getName(), recipe.get("forge:condition").isJsonObject());
+                assertTrue(recipeFile.getName(), advancement.has("forge:condition"));
+                assertEquals(recipeFile.getName(), recipe.get("forge:condition"),
+                        advancement.get("forge:condition"));
             } else {
-                assertFalse(recipeFile.getName(), advancement.has("conditions"));
+                assertFalse(recipeFile.getName(), advancement.has("forge:condition"));
             }
         }
 
@@ -117,7 +127,7 @@ public class ResourceContractTest {
     }
 
     @Test
-    public void advancementsUseMinecraft119ItemPredicateSchema() throws Exception {
+    public void advancementsUseMinecraft1206HolderSetPredicateSchema() throws Exception {
         File mineralogy = new File(ROOT, "data/mineralogy/advancements");
         for (File file : jsonFiles(mineralogy)) {
             JsonObject advancement = json(file);
@@ -131,8 +141,7 @@ public class ResourceContractTest {
             JsonObject wrapper = json(file);
             if (wrapper.has("advancements")) {
                 for (JsonElement branch : wrapper.getAsJsonArray("advancements")) {
-                    assertInventoryPredicates(file.getPath(), branch.getAsJsonObject()
-                            .getAsJsonObject("advancement"));
+                    assertInventoryPredicates(file.getPath(), branch.getAsJsonObject());
                 }
             } else {
                 assertInventoryPredicates(file.getPath(), wrapper);
@@ -141,7 +150,7 @@ public class ResourceContractTest {
     }
 
     @Test
-    public void minecraftOverridesUseForge47WrappersAndRecipeBookFields() throws Exception {
+    public void minecraftOverridesUseForge50WrappersAndRecipeBookFields() throws Exception {
         File recipeDirectory = new File(ROOT, "data/minecraft/recipes");
         File[] recipes = recipeDirectory.listFiles((directory, name) -> name.endsWith(".json"));
         assertNotNull(recipes);
@@ -152,7 +161,7 @@ public class ResourceContractTest {
                 assertEquals(file.getName(), 2, outer.getAsJsonArray("recipes").size());
                 for (JsonElement element : outer.getAsJsonArray("recipes")) {
                     JsonObject branch = element.getAsJsonObject();
-                    assertTrue(file.getName(), branch.get("conditions").isJsonArray());
+                    assertTrue(file.getName(), branch.get("forge:condition").isJsonObject());
                     assertRecipeBookFields(file.getName(), branch.getAsJsonObject("recipe"));
                 }
             } else {
@@ -252,7 +261,7 @@ public class ResourceContractTest {
             assertEquals("minecraft:sand", vanillaPolished.getAsJsonArray("ingredients")
                     .get(1).getAsJsonObject().get("item").getAsString());
             assertEquals("minecraft:polished_" + family, vanillaPolished
-                    .getAsJsonObject("result").get("item").getAsString());
+                    .getAsJsonObject("result").get("id").getAsString());
             assertEquals(1, vanillaPolished.getAsJsonObject("result").get("count").getAsInt());
 
             JsonObject nativeAdvancement = json(new File(ROOT,
@@ -261,11 +270,11 @@ public class ResourceContractTest {
             assertEquals("minecraft:" + family, nativeAdvancement.getAsJsonObject("criteria")
                     .getAsJsonObject("has_rock").getAsJsonObject("conditions")
                     .getAsJsonArray("items").get(0).getAsJsonObject()
-                    .getAsJsonArray("items").get(0).getAsString());
+                    .get("items").getAsString());
             assertEquals("minecraft:sand", nativeAdvancement.getAsJsonObject("criteria")
                     .getAsJsonObject("has_sand").getAsJsonObject("conditions")
                     .getAsJsonArray("items").get(0).getAsJsonObject()
-                    .getAsJsonArray("items").get(0).getAsString());
+                    .get("items").getAsString());
             assertEquals(2, nativeAdvancement.getAsJsonArray("requirements").size());
         }
 
@@ -297,7 +306,7 @@ public class ResourceContractTest {
         assertEquals("mineralogy:stones/basalt", json(new File(recipes, "basalt_slab.json"))
                 .getAsJsonObject("key").getAsJsonObject("x").get("tag").getAsString());
         assertEquals("mineralogy:basalt", json(new File(recipes, "basalt_raw_slab_recombination.json"))
-                .getAsJsonObject("result").get("item").getAsString());
+                .getAsJsonObject("result").get("id").getAsString());
         assertEquals("forge:sand", json(new File(recipes, "basalt_brick_block_polishing.json"))
                 .getAsJsonArray("ingredients").get(1).getAsJsonObject().get("tag").getAsString());
         JsonObject furnace = json(new File(recipes, "basalt_furnace.json"));
@@ -313,7 +322,7 @@ public class ResourceContractTest {
         assertEquals("minecraft:stone_crafting_materials", conditionalRecipe(furnaceOverride, 1)
                 .getAsJsonObject("key").getAsJsonObject("#").get("tag").getAsString());
         assertEquals("COBBLESTONE_EQUIVILENT", furnaceOverride.getAsJsonArray("recipes").get(0)
-                .getAsJsonObject().getAsJsonArray("conditions").get(0).getAsJsonObject()
+                .getAsJsonObject().getAsJsonObject("forge:condition")
                 .get("flag").getAsString());
         assertTrue(new File(ROOT, "data/minecraft/recipes/stone_pickaxe.json").isFile());
         assertEquals("#forge:cobblestone", json(new File(ROOT,
@@ -379,13 +388,11 @@ public class ResourceContractTest {
     }
 
     @Test
-    public void forge47ResourcesRetainNativeWallsTagsAndPackFormats() throws Exception {
+    public void forge50ResourcesRetainNativeWallsTagsAndPackFormats() throws Exception {
         JsonObject pack = json(new File(ROOT, "pack.mcmeta"));
-        assertEquals(15, pack.getAsJsonObject("pack").get("pack_format").getAsInt());
-        assertEquals(15, pack.getAsJsonObject("pack")
-                .get("forge:resource_pack_format").getAsInt());
-        assertEquals(15, pack.getAsJsonObject("pack")
-                .get("forge:data_pack_format").getAsInt());
+        assertEquals(32, pack.getAsJsonObject("pack").get("pack_format").getAsInt());
+        assertFalse(pack.getAsJsonObject("pack").has("forge:resource_pack_format"));
+        assertFalse(pack.getAsJsonObject("pack").has("forge:data_pack_format"));
 
         File blockstates = new File(ROOT, "assets/mineralogy/blockstates");
         File[] wallStates = blockstates.listFiles((dir, name) -> name.endsWith("_wall.json"));
@@ -448,7 +455,7 @@ public class ResourceContractTest {
                 assertEquals(id, "minecraft:diamond",
                         branch.getAsJsonObject("key").getAsJsonObject("#").get("item").getAsString());
                 assertEquals(id, "minecraft:" + id,
-                        branch.getAsJsonObject("result").get("item").getAsString());
+                        branch.getAsJsonObject("result").get("id").getAsString());
                 assertEquals(id, 2, branch.getAsJsonObject("result").get("count").getAsInt());
             }
         }
@@ -476,7 +483,7 @@ public class ResourceContractTest {
             JsonObject wrapper = json(file);
             if (wrapper.has("advancements")) {
                 for (JsonElement branch : wrapper.getAsJsonArray("advancements")) {
-                    JsonObject advancement = branch.getAsJsonObject().getAsJsonObject("advancement");
+                    JsonObject advancement = branch.getAsJsonObject();
                     assertTrue(file.getPath(), advancement.has("sends_telemetry_event"));
                     assertFalse(file.getPath(), advancement.get("sends_telemetry_event").getAsBoolean());
                 }
@@ -533,14 +540,14 @@ public class ResourceContractTest {
         File advancementRoot = new File(ROOT, "data/minecraft/advancements/recipes");
         assertEquals(20, countJsonFiles(advancementRoot));
         JsonObject furnace = json(new File(advancementRoot, "decorations/furnace.json"));
-        assertEquals("mineralogy:stone_crafting_materials", conditionalAdvancement(furnace, 0)
+        assertEquals("#mineralogy:stone_crafting_materials", conditionalAdvancement(furnace, 0)
                 .getAsJsonObject("criteria").getAsJsonObject("has_cobblestone")
                 .getAsJsonObject("conditions").getAsJsonArray("items").get(0)
-                .getAsJsonObject().get("tag").getAsString());
-        assertEquals("minecraft:stone_crafting_materials", conditionalAdvancement(furnace, 1)
+                .getAsJsonObject().get("items").getAsString());
+        assertEquals("#minecraft:stone_crafting_materials", conditionalAdvancement(furnace, 1)
                 .getAsJsonObject("criteria").getAsJsonObject("has_cobblestone")
                 .getAsJsonObject("conditions").getAsJsonArray("items").get(0)
-                .getAsJsonObject().get("tag").getAsString());
+                .getAsJsonObject().get("items").getAsString());
 
         Object[][] advancementContracts = {
                 { "decorations/furnace", "has_cobblestone", "tag",
@@ -573,14 +580,14 @@ public class ResourceContractTest {
     @Test
     public void oilAndBuildMetadataUseStableTargetIdentities() throws Exception {
         String properties = new String(Files.readAllBytes(new File("gradle.properties").toPath()), StandardCharsets.UTF_8);
-        assertTrue(properties.contains("mod_version=6.1.1.120011"));
-        assertTrue(properties.contains("orespawn_curse_file_id=8784008"));
+        assertTrue(properties.contains("mod_version=6.1.1.120061"));
+        assertTrue(properties.contains("orespawn_curse_file_id=8786031"));
         String build = new String(Files.readAllBytes(new File("build.gradle").toPath()), StandardCharsets.UTF_8);
-        assertTrue(build.contains("runtimeOnly renamer.dependency(\"curse.maven:mmd-orespawn-"));
+        assertTrue(build.contains("runtimeOnly \"curse.maven:mmd-orespawn-"));
         assertTrue(build.contains("orespawnRelease"));
         String metadata = new String(Files.readAllBytes(new File(ROOT, "META-INF/mods.toml").toPath()), StandardCharsets.UTF_8);
-        assertTrue(metadata.contains("loaderVersion=\"[47,)\""));
-        assertTrue(metadata.contains("versionRange=\"[47.4.10,48)\""));
+        assertTrue(metadata.contains("loaderVersion=\"[50,)\""));
+        assertTrue(metadata.contains("versionRange=\"[50.2.0,51)\""));
         assertTrue(metadata.contains("versionRange=\"[4.0.6,5.0.0)\""));
         assertTrue(metadata.contains("ordering=\"AFTER\""));
         assertTrue(new File(ROOT, "assets/mineralogy/textures/items/crude_oil_bucket.png").isFile());
@@ -623,7 +630,7 @@ public class ResourceContractTest {
     private static String criterionItem(JsonObject advancement, String criterion) {
         return advancement.getAsJsonObject("criteria").getAsJsonObject(criterion)
                 .getAsJsonObject("conditions").getAsJsonArray("items").get(0)
-                .getAsJsonObject().getAsJsonArray("items").get(0).getAsString();
+                .getAsJsonObject().get("items").getAsString();
     }
 
     private static void assertInventoryPredicates(String source, JsonObject advancement) {
@@ -636,10 +643,21 @@ public class ResourceContractTest {
             assertNotNull(source + " " + entry.getKey(), predicates);
             for (JsonElement element : predicates) {
                 JsonObject predicate = element.getAsJsonObject();
-                assertFalse(source + " " + entry.getKey() + " uses the pre-1.17 singular item key",
+                assertFalse(source + " " + entry.getKey() + " uses the obsolete singular item key",
                         predicate.has("item"));
-                assertTrue(source + " " + entry.getKey(), predicate.has("tag")
-                        || (predicate.has("items") && predicate.getAsJsonArray("items").size() > 0));
+                assertEquals(source + " " + entry.getKey(), 1, predicate.size());
+                assertTrue(source + " " + entry.getKey(), predicate.has("items"));
+                JsonElement holderSet = predicate.get("items");
+                if (holderSet.isJsonArray()) {
+                    assertTrue(source + " " + entry.getKey(), holderSet.getAsJsonArray().size() > 0);
+                    for (JsonElement holder : holderSet.getAsJsonArray()) {
+                        assertTrue(source + " " + entry.getKey(), holder.isJsonPrimitive()
+                                && !holder.getAsString().isEmpty());
+                    }
+                } else {
+                    assertTrue(source + " " + entry.getKey(), holderSet.isJsonPrimitive()
+                            && !holderSet.getAsString().isEmpty());
+                }
             }
         }
     }
@@ -682,11 +700,8 @@ public class ResourceContractTest {
         JsonObject ingredient = advancement.getAsJsonObject("criteria")
                 .getAsJsonObject("has_rock").getAsJsonObject("conditions")
                 .getAsJsonArray("items").get(0).getAsJsonObject();
-        if ("item".equals(key)) {
-            assertEquals(recipeName, value, ingredient.getAsJsonArray("items").get(0).getAsString());
-        } else {
-            assertEquals(recipeName, value, ingredient.get(key).getAsString());
-        }
+        String expected = "tag".equals(key) ? "#" + value : value;
+        assertEquals(recipeName, expected, ingredient.get("items").getAsString());
         assertEquals(recipeName, 1, ingredient.size());
     }
 
@@ -699,9 +714,9 @@ public class ResourceContractTest {
         assertEquals(recipeName, source, enabled.getAsJsonObject("key")
                 .getAsJsonObject("#").get("item").getAsString());
         assertEquals(recipeName, mineralogyResult,
-                enabled.getAsJsonObject("result").get("item").getAsString());
+                enabled.getAsJsonObject("result").get("id").getAsString());
         assertEquals(recipeName, vanillaResult,
-                fallback.getAsJsonObject("result").get("item").getAsString());
+                fallback.getAsJsonObject("result").get("id").getAsString());
         assertEquals(recipeName, count,
                 enabled.getAsJsonObject("result").get("count").getAsInt());
     }
@@ -714,9 +729,13 @@ public class ResourceContractTest {
         assertEquals(recipeName, "minecraft:stonecutting", enabled.get("type").getAsString());
         assertEquals(recipeName, source,
                 enabled.getAsJsonObject("ingredient").get("item").getAsString());
-        assertEquals(recipeName, mineralogyResult, enabled.get("result").getAsString());
-        assertEquals(recipeName, vanillaResult, fallback.get("result").getAsString());
-        assertEquals(recipeName, 2, enabled.get("count").getAsInt());
+        assertEquals(recipeName, mineralogyResult,
+                enabled.getAsJsonObject("result").get("id").getAsString());
+        assertEquals(recipeName, vanillaResult,
+                fallback.getAsJsonObject("result").get("id").getAsString());
+        assertEquals(recipeName, 2,
+                enabled.getAsJsonObject("result").get("count").getAsInt());
+        assertFalse(recipeName, enabled.has("count"));
     }
 
     private static void assertNativeSlabConversion(String recipeName, String source,
@@ -727,13 +746,16 @@ public class ResourceContractTest {
         assertEquals(recipeName, 1, recipe.getAsJsonArray("ingredients").size());
         assertEquals(recipeName, source, recipe.getAsJsonArray("ingredients").get(0)
                 .getAsJsonObject().get("item").getAsString());
-        assertEquals(recipeName, result, recipe.getAsJsonObject("result").get("item").getAsString());
+        assertEquals(recipeName, result, recipe.getAsJsonObject("result").get("id").getAsString());
         assertEquals(recipeName, 1, recipe.getAsJsonObject("result").get("count").getAsInt());
-        assertEquals(recipeName, 2, recipe.getAsJsonArray("conditions").size());
+        assertEquals(recipeName, "forge:and",
+                recipe.getAsJsonObject("forge:condition").get("type").getAsString());
+        assertEquals(recipeName, 2, recipe.getAsJsonObject("forge:condition")
+                .getAsJsonArray("values").size());
 
         JsonObject advancement = json(new File(ROOT,
                 "data/mineralogy/advancements/recipes/" + recipeName + ".json"));
-        assertEquals(recipeName, recipe.get("conditions"), advancement.get("conditions"));
+        assertEquals(recipeName, recipe.get("forge:condition"), advancement.get("forge:condition"));
         assertEquals(recipeName, source, criterionItem(advancement, "has_rock"));
         assertEquals(recipeName, "mineralogy:" + recipeName,
                 advancement.getAsJsonObject("rewards").getAsJsonArray("recipes")
@@ -785,8 +807,7 @@ public class ResourceContractTest {
     }
 
     private static JsonObject conditionalAdvancement(JsonObject wrapper, int index) {
-        return wrapper.getAsJsonArray("advancements").get(index).getAsJsonObject()
-                .getAsJsonObject("advancement");
+        return wrapper.getAsJsonArray("advancements").get(index).getAsJsonObject();
     }
 
     private static void assertConditionalAdvancement(File file, String criterion, String key,
@@ -794,20 +815,19 @@ public class ResourceContractTest {
         JsonObject wrapper = json(file);
         assertEquals(file.getPath(), 2, wrapper.getAsJsonArray("advancements").size());
         assertEquals(file.getPath(), "mineralogy:config", wrapper.getAsJsonArray("advancements")
-                .get(0).getAsJsonObject().getAsJsonArray("conditions").get(0)
-                .getAsJsonObject().get("type").getAsString());
+                .get(0).getAsJsonObject().getAsJsonObject("forge:condition")
+                .get("type").getAsString());
         assertEquals(file.getPath(), "forge:not", wrapper.getAsJsonArray("advancements")
-                .get(1).getAsJsonObject().getAsJsonArray("conditions").get(0)
-                .getAsJsonObject().get("type").getAsString());
+                .get(1).getAsJsonObject().getAsJsonObject("forge:condition")
+                .get("type").getAsString());
         for (int branch = 0; branch < 2; branch++) {
             JsonObject advancement = conditionalAdvancement(wrapper, branch);
             JsonObject ingredient = advancement.getAsJsonObject("criteria")
                     .getAsJsonObject(criterion).getAsJsonObject("conditions")
                     .getAsJsonArray("items").get(0).getAsJsonObject();
-            String actual = "item".equals(key)
-                    ? ingredient.getAsJsonArray("items").get(0).getAsString()
-                    : ingredient.get(key).getAsString();
-            assertEquals(file.getPath(), branch == 0 ? enabledValue : fallbackValue, actual);
+            String actual = ingredient.get("items").getAsString();
+            String expected = branch == 0 ? enabledValue : fallbackValue;
+            assertEquals(file.getPath(), "tag".equals(key) ? "#" + expected : expected, actual);
             JsonArray requirements = advancement.getAsJsonArray("requirements");
             assertEquals(file.getPath(), 1, requirements.size());
             assertTrue(file.getPath(), requirements.get(0).isJsonArray());
@@ -839,30 +859,34 @@ public class ResourceContractTest {
 
     private static JsonObject json(File file) throws Exception {
         try (java.io.Reader reader = Files.newBufferedReader(file.toPath(), StandardCharsets.UTF_8)) {
-            return new JsonParser().parse(reader).getAsJsonObject();
+            return JsonParser.parseReader(reader).getAsJsonObject();
         }
     }
 
     private static void assertGunpowderRecipe(File recipes, String name, String requiredTag) throws Exception {
         JsonObject recipe = json(new File(recipes, name + ".json"));
         assertEquals(name, 3, recipe.getAsJsonArray("ingredients").size());
-        assertGunpowderConditions(name, requiredTag, recipe.getAsJsonArray("conditions"));
+        assertGunpowderConditions(name, requiredTag, recipe.getAsJsonObject("forge:condition"));
         JsonObject advancement = json(new File(ROOT,
                 "data/mineralogy/advancements/recipes/" + name + ".json"));
         assertGunpowderConditions(name + " advancement", requiredTag,
-                advancement.getAsJsonArray("conditions"));
+                advancement.getAsJsonObject("forge:condition"));
     }
 
-    private static void assertGunpowderConditions(String name, String requiredTag, JsonArray conditions) {
-        assertEquals(name, requiredTag == null ? 1 : 2, conditions.size());
-        assertEquals(name, "mineralogy:config",
-                conditions.get(0).getAsJsonObject().get("type").getAsString());
+    private static void assertGunpowderConditions(String name, String requiredTag, JsonObject condition) {
         if (requiredTag != null) {
+            assertEquals(name, "forge:and", condition.get("type").getAsString());
+            JsonArray conditions = condition.getAsJsonArray("values");
+            assertEquals(name, 2, conditions.size());
+            assertEquals(name, "mineralogy:config",
+                    conditions.get(0).getAsJsonObject().get("type").getAsString());
             JsonObject tagCondition = conditions.get(1).getAsJsonObject();
             assertEquals(name, "forge:not", tagCondition.get("type").getAsString());
             JsonObject value = tagCondition.getAsJsonObject("value");
             assertEquals(name, "forge:tag_empty", value.get("type").getAsString());
             assertEquals(name, requiredTag, value.get("tag").getAsString());
+        } else {
+            assertEquals(name, "mineralogy:config", condition.get("type").getAsString());
         }
     }
 

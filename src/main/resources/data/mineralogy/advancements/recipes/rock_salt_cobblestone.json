@@ -1,7 +1,4 @@
 {
-    "conditions":  [
-
-                   ],
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:rock_salt_cobblestone"
@@ -19,7 +16,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "tag":  "mineralogy:stones/rock_salt"
+                                                                           "items":  "#mineralogy:stones/rock_salt"
                                                                        }
                                                                    ]
                                                      }

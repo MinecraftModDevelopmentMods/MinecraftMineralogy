@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:scoria_stairs"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:scoria_stairs"
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:scoria_stairs"
@@ -22,7 +20,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "tag":  "mineralogy:stones/scoria"
+                                                                           "items":  "#mineralogy:stones/scoria"
                                                                        }
                                                                    ]
                                                      }

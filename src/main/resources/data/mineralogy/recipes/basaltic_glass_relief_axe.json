@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:basaltic_glass_relief_axe"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:basaltic_glass_relief_axe"
+                        },
     "type":  "minecraft:crafting_shapeless",
     "category":  "building",
     "ingredients":  [
@@ -37,7 +35,7 @@
                         }
                     ],
     "result":  {
-                   "item":  "mineralogy:basaltic_glass_relief_axe",
+                   "id":  "mineralogy:basaltic_glass_relief_axe",
                    "count":  8
                }
 }

@@ -1,14 +1,17 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:conglomerate_brick"
-                       },
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:conglomerate_smooth_brick"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:and",
+                            "values":  [
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:conglomerate_brick"
+                                           },
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:conglomerate_smooth_brick"
+                                           }
+                                       ]
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:conglomerate_brick_block_polishing"
@@ -26,9 +29,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "items":  [
-                                                                                         "mineralogy:conglomerate_brick"
-                                                                                     ]
+                                                                           "items":  "mineralogy:conglomerate_brick"
                                                                        }
                                                                    ]
                                                      }

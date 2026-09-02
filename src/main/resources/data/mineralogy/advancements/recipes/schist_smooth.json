@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:schist_smooth"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:schist_smooth"
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:schist_smooth"
@@ -22,7 +20,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "tag":  "mineralogy:stones/schist"
+                                                                           "items":  "#mineralogy:stones/schist"
                                                                        }
                                                                    ]
                                                      }

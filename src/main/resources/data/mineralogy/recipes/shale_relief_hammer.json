@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:shale_relief_hammer"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:shale_relief_hammer"
+                        },
     "type":  "minecraft:crafting_shaped",
     "category":  "building",
     "pattern":  [
@@ -24,7 +22,7 @@
                       }
             },
     "result":  {
-                   "item":  "mineralogy:shale_relief_hammer",
+                   "id":  "mineralogy:shale_relief_hammer",
                    "count":  7
                },
     "show_notification":  true

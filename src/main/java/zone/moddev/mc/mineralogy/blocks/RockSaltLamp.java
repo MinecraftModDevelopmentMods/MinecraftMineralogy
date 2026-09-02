@@ -32,7 +32,7 @@ public class RockSaltLamp extends Block implements NamedMineralogyBlock {
 	private static final VoxelShape EAST_SHAPE = Block.box(0.0D, 3.2D, 5.6D, 4.8D, 12.8D, 10.4D);
 
 	public RockSaltLamp() {
-		super(BlockBehaviour.Properties.copy(net.minecraft.world.level.block.Blocks.STONE).strength(0.25F)
+		super(BlockBehaviour.Properties.ofFullCopy(net.minecraft.world.level.block.Blocks.STONE).strength(0.25F)
 				.lightLevel(state -> 15).sound(SoundType.STONE));
 		this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.UP));
 	}
@@ -131,7 +131,7 @@ public class RockSaltLamp extends Block implements NamedMineralogyBlock {
 
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirror) {
-		return state.rotate(mirror.getRotation(state.getValue(FACING)));
+		return rotate(state, mirror.getRotation(state.getValue(FACING)));
 	}
 
 	@Override

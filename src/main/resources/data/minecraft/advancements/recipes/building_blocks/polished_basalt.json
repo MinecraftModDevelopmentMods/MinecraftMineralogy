@@ -46,5 +46,6 @@
                              "has_the_recipe",
                              "has_sand"
                          ]
-                     ]
+                     ],
+    "sends_telemetry_event":  false
 }

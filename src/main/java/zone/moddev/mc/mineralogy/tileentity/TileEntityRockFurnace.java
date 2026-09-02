@@ -122,8 +122,7 @@ public class TileEntityRockFurnace extends BaseContainerBlockEntity
 	@Override
 	public void setItem(int index, ItemStack stack) {
 		ItemStack previous = furnaceItemStacks.get(index);
-		boolean sameStack = !stack.isEmpty() && stack.sameItem(previous)
-				&& ItemStack.tagMatches(stack, previous);
+		boolean sameStack = !stack.isEmpty() && ItemStack.isSameItemSameTags(stack, previous);
 		furnaceItemStacks.set(index, stack);
 
 		if (stack.getCount() > getMaxStackSize()) {
@@ -256,7 +255,7 @@ public class TileEntityRockFurnace extends BaseContainerBlockEntity
 		if (output.isEmpty()) {
 			return true;
 		}
-		if (!output.sameItem(result)) {
+		if (!ItemStack.isSameItem(output, result)) {
 			return false;
 		}
 		if (output.getCount() + result.getCount() <= getMaxStackSize()
@@ -421,10 +420,10 @@ public class TileEntityRockFurnace extends BaseContainerBlockEntity
 	}
 
 	public void onCrafting(Player player) {
-		if (!player.level.getGameRules().getBoolean(GameRules.RULE_LIMITED_CRAFTING)) {
+		if (!player.level().getGameRules().getBoolean(GameRules.RULE_LIMITED_CRAFTING)) {
 			List<Recipe<?>> recipes = new ArrayList<Recipe<?>>();
 			for (ResourceLocation id : recipeUseCounts.keySet()) {
-				Recipe<?> recipe = player.level.getRecipeManager().byKey(id).orElse(null);
+				Recipe<?> recipe = player.level().getRecipeManager().byKey(id).orElse(null);
 				if (recipe != null) {
 					recipes.add(recipe);
 				}

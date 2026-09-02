@@ -41,6 +41,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.StairsShape;
 import net.minecraft.world.level.storage.LevelResource;
+import net.minecraft.world.level.storage.LevelStorageSource;
 import net.minecraftforge.event.server.ServerAboutToStartEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -70,10 +71,12 @@ public final class LegacyWorldDataHook {
 	}
 
 	/** Called from Forge's raw additional-level-data reader before legacy FML data is discarded. */
-	public static void captureLegacyLevelData(CompoundTag root, Path levelPath) {
-		if (root == null || levelPath == null) {
+	public static void captureLegacyLevelData(CompoundTag root,
+			LevelStorageSource.LevelDirectory levelDirectory) {
+		if (root == null || levelDirectory == null) {
 			return;
 		}
+		Path levelPath = levelDirectory.path();
 		if (root.contains("FML", 10)) {
 			prepareLegacyWorld(levelPath.toFile(), root.getCompound("FML"));
 		} else {
@@ -304,7 +307,7 @@ public final class LegacyWorldDataHook {
 	}
 
 	/**
-	 * Minecraft 1.19 still fixes the pre-flattening state table at 4,096 entries,
+	 * Minecraft 1.20.1 still fixes the pre-flattening state table at 4,096 entries,
 	 * while Forge 1.12 worlds commonly assign mod blocks higher numeric IDs.
 	 * Replace that exact static-final array before writing any recovered states.
 	 */

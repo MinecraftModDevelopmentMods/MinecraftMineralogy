@@ -39,5 +39,6 @@
                              "has_the_recipe",
                              "has_rock"
                          ]
-                     ]
+                     ],
+    "sends_telemetry_event":  false
 }

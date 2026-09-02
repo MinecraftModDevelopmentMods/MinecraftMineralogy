@@ -35,6 +35,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.inventory.TransientCraftingContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -96,6 +97,10 @@ public class NativeRecipeManagerTest {
                     assertEquals(recipeName, expectedOutput,
                             BuiltInRegistries.ITEM.getKey(
                                     recipe.getResultItem(RegistryAccess.EMPTY).getItem()).toString());
+                    if (isTrimTemplateRecipe(recipeName)) {
+                        assertEquals(recipeName, 2,
+                                recipe.getResultItem(RegistryAccess.EMPTY).getCount());
+                    }
                 }
             }
         } finally {
@@ -117,11 +122,20 @@ public class NativeRecipeManagerTest {
                             recipe.matches(inventory(recipeName, rock), null));
                 }
                 assertTrue(recipeName, recipe.matches(inventory(recipeName, Blocks.COBBLESTONE.asItem()), null));
-                // Stand-ins for always-tagged Mineralogy chert and pumice.
-                assertTrue(recipeName + " with chert stand-in",
-                        recipe.matches(inventory(recipeName, Blocks.NETHERRACK.asItem()), null));
-                assertTrue(recipeName + " with pumice stand-in",
-                        recipe.matches(inventory(recipeName, Blocks.END_STONE.asItem()), null));
+                // The three 1.20 template recipes deliberately retain exact vanilla
+                // cobblestone while equivalence is disabled. Other tag-backed recipes
+                // continue accepting always-cobblestone chert and pumice.
+                if (isTrimTemplateRecipe(recipeName)) {
+                    assertFalse(recipeName + " with chert stand-in",
+                            recipe.matches(inventory(recipeName, Blocks.NETHERRACK.asItem()), null));
+                    assertFalse(recipeName + " with pumice stand-in",
+                            recipe.matches(inventory(recipeName, Blocks.END_STONE.asItem()), null));
+                } else {
+                    assertTrue(recipeName + " with chert stand-in",
+                            recipe.matches(inventory(recipeName, Blocks.NETHERRACK.asItem()), null));
+                    assertTrue(recipeName + " with pumice stand-in",
+                            recipe.matches(inventory(recipeName, Blocks.END_STONE.asItem()), null));
+                }
             }
             assertTrue(recipe("furnace").matches(inventory("furnace", Blocks.BLACKSTONE.asItem()), null));
             assertTrue(recipe("brewing_stand").matches(
@@ -274,6 +288,22 @@ public class NativeRecipeManagerTest {
             return shapeless(new ItemStack(Blocks.DIORITE), new ItemStack(rock));
         }
 
+        if (isTrimTemplateRecipe(name)) {
+            Item template;
+            if ("coast_armor_trim_smithing_template".equals(name)) {
+                template = Items.COAST_ARMOR_TRIM_SMITHING_TEMPLATE;
+            } else if ("sentry_armor_trim_smithing_template".equals(name)) {
+                template = Items.SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE;
+            } else {
+                template = Items.VEX_ARMOR_TRIM_SMITHING_TEMPLATE;
+            }
+            Map<Character, Item> ingredients = new LinkedHashMap<Character, Item>();
+            ingredients.put('#', Items.DIAMOND);
+            ingredients.put('C', rock);
+            ingredients.put('S', template);
+            return shaped(new String[] { "#S#", "#C#", "###" }, ingredients);
+        }
+
         String[] pattern;
         Map<Character, Item> ingredients = new LinkedHashMap<Character, Item>();
         ingredients.put('#', rock);
@@ -323,7 +353,7 @@ public class NativeRecipeManagerTest {
     }
 
     private static CraftingContainer shaped(String[] pattern, Map<Character, Item> ingredients) {
-        CraftingContainer inventory = new CraftingContainer(dummyContainer(), 3, 3);
+        CraftingContainer inventory = new TransientCraftingContainer(dummyContainer(), 3, 3);
         for (int row = 0; row < pattern.length; row++) {
             for (int column = 0; column < pattern[row].length(); column++) {
                 Item item = ingredients.get(pattern[row].charAt(column));
@@ -334,7 +364,7 @@ public class NativeRecipeManagerTest {
     }
 
     private static CraftingContainer shapeless(ItemStack... stacks) {
-        CraftingContainer inventory = new CraftingContainer(dummyContainer(), 3, 3);
+        CraftingContainer inventory = new TransientCraftingContainer(dummyContainer(), 3, 3);
         for (int index = 0; index < stacks.length; index++) inventory.setItem(index, stacks[index]);
         return inventory;
     }
@@ -357,7 +387,13 @@ public class NativeRecipeManagerTest {
         return new String[] { "furnace", "brewing_stand", "lever", "piston", "dispenser",
                 "dropper", "observer", "mossy_cobblestone_from_vine",
                 "mossy_cobblestone_from_moss_block", "andesite", "diorite",
-                "stone_axe", "stone_hoe", "stone_pickaxe", "stone_shovel", "stone_sword" };
+                "stone_axe", "stone_hoe", "stone_pickaxe", "stone_shovel", "stone_sword",
+                "coast_armor_trim_smithing_template", "sentry_armor_trim_smithing_template",
+                "vex_armor_trim_smithing_template" };
+    }
+
+    private static boolean isTrimTemplateRecipe(String name) {
+        return name.endsWith("_armor_trim_smithing_template");
     }
 
     private static Item[] ordinaryRockInputs() {

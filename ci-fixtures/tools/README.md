@@ -2,7 +2,7 @@
 
 This directory contains a build-only derivative of MinecraftForge's
 MinecraftMavenizer `0.5.21`. It is used only while ForgeGradle prepares the
-exact Forge `1.19.4-45.4.0` development dependency and is excluded from every
+exact Forge `1.20.1-47.4.10` development dependency and is excluded from every
 OreSpawn publication artifact.
 
 ## Provenance and licence
@@ -21,7 +21,7 @@ declaration and one accessor in that record. Missing, partial, duplicate or
 ambiguous states fail preparation. Targets without an explicit rule set are
 left unchanged.
 
-For Forge `1.19.4-45.4.0`, the manifest removes the eight explicit accessors
+For Forge `1.20.1-47.4.10`, the manifest removes the eight explicit accessors
 that duplicate compiler-generated record accessors in `Holder.Direct`,
 `OptionInstance` and `MemoryCondition`. The implicit record methods have the
 same public contract. A marker beside Mavenizer's output records the target,
@@ -30,7 +30,7 @@ validated and idempotent.
 
 The derivative also propagates Gradle offline mode when the build sets
 `ORESPAWN_MAVENIZER_OFFLINE=true`. Mavenizer itself runs on Java 25; OreSpawn
-and Minecraft 1.19.4 continue to compile for Java 17.
+and Minecraft 1.20.1 continue to compile for Java 17.
 
 ## Rebuild
 

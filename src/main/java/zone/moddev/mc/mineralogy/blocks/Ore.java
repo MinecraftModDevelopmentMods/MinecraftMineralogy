@@ -8,7 +8,6 @@ import zone.moddev.mc.mineralogy.Mineralogy;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -17,7 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.storage.loot.LootContext.Builder;
+import net.minecraft.world.level.storage.loot.LootParams.Builder;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class Ore extends Block implements NamedMineralogyBlock {
@@ -28,7 +27,7 @@ public class Ore extends Block implements NamedMineralogyBlock {
 	private final int pickLevel;
 
 	public Ore(String name, String dropItemName, int minNumberDropped, int maxNumberDropped, int pickLevel) {
-		super(BlockBehaviour.Properties.of(Material.STONE).strength(1.5F, 5.0F).sound(SoundType.STONE)
+		super(BlockBehaviour.Properties.copy(net.minecraft.world.level.block.Blocks.STONE).strength(1.5F, 5.0F).sound(SoundType.STONE)
 				.requiresCorrectToolForDrops());
 		this.registryPath = name;
 		this.dropItemName = dropItemName;

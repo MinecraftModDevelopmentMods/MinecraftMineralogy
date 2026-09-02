@@ -1095,6 +1095,54 @@ tasks.register('syncForge50EclipseLaunches') {
                             "<stringAttribute key=\"org.eclipse.jdt.launching.PROJECT_ATTR\" value=\"${eclipseWorkspaceProjectName}\"/>"))
             text = text.replaceFirst(/<mapEntry key="MOD_CLASSES" value="[^"]*"\/>/,
                     java.util.regex.Matcher.quoteReplacement("<mapEntry key=\"MOD_CLASSES\" value=\"${modClasses}\"/>"))
+            // Slime Launcher tokenizes these program arguments itself. Quote
+            // every complete path because this workspace name contains spaces.
+            def programArguments = text =~ /(<stringAttribute key="org\.eclipse\.jdt\.launching\.PROGRAM_ARGUMENTS" value=")([^"]*)("\/>)/
+            if (programArguments.count != 1) {
+                throw new GradleException("ForgeGradle generated malformed program arguments in ${launch.name}")
+            }
+            String arguments = programArguments[0][2]
+            ['cache', 'metadata', 'to-srg', 'to-obf'].each { flag ->
+                String prefix = "--${flag} "
+                int valueStart = arguments.indexOf(prefix)
+                if (valueStart < 0) {
+                    throw new GradleException("ForgeGradle omitted --${flag} from ${launch.name}")
+                }
+                valueStart += prefix.length()
+                int valueEnd = arguments.indexOf(' --', valueStart)
+                if (valueEnd < 0) {
+                    throw new GradleException("ForgeGradle generated an unterminated --${flag} path in ${launch.name}")
+                }
+                String value = arguments.substring(valueStart, valueEnd)
+                if (!value.startsWith('&quot;') || !value.endsWith('&quot;')) {
+                    arguments = "${arguments.substring(0, valueStart)}&quot;${value}&quot;${arguments.substring(valueEnd)}"
+                }
+            }
+            text = text.replace(programArguments[0][0],
+                    programArguments[0][1] + arguments + programArguments[0][3])
+
+            // Some ForgeGradle/Slime Launcher combinations emit this VM
+            // argument and some do not. Quote it when present, without making
+            // the Forge 50 launch depend on an obsolete argument.
+            String legacyClassPathPrefix = '-DlegacyClassPath.file='
+            int legacyClassPathStart = text.indexOf(legacyClassPathPrefix)
+            if (legacyClassPathStart >= 0) {
+                int legacyClassPathEnd = text.indexOf(' -DignoreList=', legacyClassPathStart)
+                if (legacyClassPathEnd < 0) {
+                    throw new GradleException("ForgeGradle generated an unterminated -DlegacyClassPath.file in ${launch.name}")
+                }
+                String xmlQuote = '&quot;'
+                boolean legacyClassPathQuoted = legacyClassPathStart >= xmlQuote.length()
+                        && text.substring(legacyClassPathStart - xmlQuote.length(), legacyClassPathStart) == xmlQuote
+                        && legacyClassPathEnd >= xmlQuote.length()
+                        && text.substring(legacyClassPathEnd - xmlQuote.length(), legacyClassPathEnd) == xmlQuote
+                if (!legacyClassPathQuoted) {
+                    String beforeLegacyClassPath = text.substring(0, legacyClassPathStart)
+                    String legacyClassPathArgument = text.substring(legacyClassPathStart, legacyClassPathEnd)
+                    String afterLegacyClassPath = text.substring(legacyClassPathEnd)
+                    text = beforeLegacyClassPath + xmlQuote + legacyClassPathArgument + xmlQuote + afterLegacyClassPath
+                }
+            }
             if (!text.contains('ATTR_EXCLUDE_TEST_CODE')) {
                 text = text.replace('</launchConfiguration>',
                         '    <booleanAttribute key="org.eclipse.jdt.launching.ATTR_EXCLUDE_TEST_CODE" value="true"/>\r\n' +
@@ -1155,6 +1203,16 @@ tasks.register('verifyEclipseProductionClasspath') {
             String expectedModClasses = "mineralogy%%${mainOutput}"
             if (!launch.contains(expectedModClasses)) {
                 throw new GradleException("Eclipse launch is not using Forge 50's merged production output: ${name}")
+            }
+            ['cache', 'metadata', 'to-srg', 'to-obf'].each { flag ->
+                if (!launch.contains("--${flag} &quot;")) {
+                    throw new GradleException("Eclipse launch does not quote its --${flag} path: ${name}")
+                }
+            }
+            if (launch.contains('-DlegacyClassPath.file=')
+                    && (!launch.contains('&quot;-DlegacyClassPath.file=')
+                    || !launch.contains('minecraft_classpath.txt&quot; -DignoreList='))) {
+                throw new GradleException("Eclipse launch does not quote -DlegacyClassPath.file: ${name}")
             }
             if (launch.contains('value=""') || launch.contains('${MC_VERSION}')
                     || launch.contains('${') || launch.contains('src/test')

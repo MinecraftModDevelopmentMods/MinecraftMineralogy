@@ -107,6 +107,15 @@ public class WorkflowContractTest {
         assertTrue(build.contains("'OreSpawnReleaseVerificationMirror'"));
     }
 
+    @Test
+    public void eclipseLaunchesQuoteCompleteSlimeLauncherPaths() throws Exception {
+        String build = text("build.gradle");
+        assertTrue(build.contains("['cache', 'metadata', 'to-srg', 'to-obf'].each"));
+        assertTrue(build.contains("&quot;${value}&quot;"));
+        assertTrue(build.contains("Eclipse launch does not quote its --${flag} path"));
+        assertTrue(build.contains("if (launch.contains('-DlegacyClassPath.file=')"));
+    }
+
     private static String text(String path) throws Exception {
         return new String(Files.readAllBytes(new File(path).toPath()), StandardCharsets.UTF_8)
                 .replace("\r\n", "\n").replace('\r', '\n');

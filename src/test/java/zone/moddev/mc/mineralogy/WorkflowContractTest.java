@@ -114,6 +114,9 @@ public class WorkflowContractTest {
         assertTrue(build.contains("&quot;${value}&quot;"));
         assertTrue(build.contains("Eclipse launch does not quote its --${flag} path"));
         assertTrue(build.contains("if (launch.contains('-DlegacyClassPath.file=')"));
+        assertTrue(build.contains("entry.path == 'src/main/resources'"));
+        assertTrue(build.contains("'build/resources/main', 'bin/main'"));
+        assertTrue(build.contains("Eclipse must use processed production resources"));
     }
 
     private static String text(String path) throws Exception {

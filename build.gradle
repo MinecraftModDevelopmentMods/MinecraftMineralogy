@@ -373,6 +373,20 @@ eclipse {
     classpath {
         downloadSources = true
         downloadJavadoc = true
+        file.whenMerged { classpath ->
+            // Eclipse must consume processResources output. If it copies the
+            // raw source tree, ${version} in mods.toml becomes the exploded
+            // directory name "main" and Forge can no longer identify its
+            // Minecraft system mod.
+            classpath.entries.removeAll { entry ->
+                entry instanceof org.gradle.plugins.ide.eclipse.model.SourceFolder
+                        && entry.path == 'src/main/resources'
+            }
+            if (!classpath.entries.any { entry -> entry.path == 'build/resources/main' }) {
+                classpath.entries.add(new org.gradle.plugins.ide.eclipse.model.SourceFolder(
+                        'build/resources/main', 'bin/main'))
+            }
+        }
     }
     synchronizationTasks 'isolateEclipseProductionRuns'
 }
@@ -1174,6 +1188,12 @@ tasks.register('verifyEclipseProductionClasspath') {
         }
         String cp = classpath.getText('UTF-8')
         def classpathXml = new XmlSlurper(false, false).parse(classpath)
+        def sourcePaths = classpathXml.classpathentry.findAll { it.@kind.text() == 'src' }
+                .collect { it.@path.text() }
+        if (sourcePaths.contains('src/main/resources')
+                || !sourcePaths.contains('build/resources/main')) {
+            throw new GradleException('Eclipse must use processed production resources, not raw src/main/resources')
+        }
         classpathXml.classpathentry.each { entry ->
             String path = entry.@path.text()
             boolean testSource = path.replace('\\', '/').startsWith('src/test/')

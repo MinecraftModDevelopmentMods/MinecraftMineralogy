@@ -25,7 +25,7 @@ import zone.moddev.mc.mineralogy.MineralogyConfig;
 import zone.moddev.mc.mineralogy.data.Material;
 import zone.moddev.mc.mineralogy.data.MaterialData;
 
-/** Applies the legacy cobblestone option to Forge 45 block and item tags. */
+/** Applies the legacy cobblestone option to Forge 47 block and item tags. */
 public final class CobblestoneTagPolicy {
     private static final ResourceLocation COBBLESTONE = new ResourceLocation("forge", "cobblestone");
     private static final ResourceLocation STONE_CRAFTING_MATERIALS =
@@ -65,7 +65,7 @@ public final class CobblestoneTagPolicy {
         itemRegistry.bindTags(itemTags);
 
         Ingredient.invalidateAll();
-        Mineralogy.LOGGER.debug("Applied Forge 45 cobblestone policy: enabled={}, rocks={}, "
+        Mineralogy.LOGGER.debug("Applied Forge 47 cobblestone policy: enabled={}, rocks={}, "
                 + "forgeItems={}, craftingItems={}, toolItems={}", enabled, configuredItems.size(),
                 size(itemRegistry, Registries.ITEM, COBBLESTONE),
                 size(itemRegistry, Registries.ITEM, STONE_CRAFTING_MATERIALS),

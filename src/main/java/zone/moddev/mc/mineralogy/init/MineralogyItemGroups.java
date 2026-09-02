@@ -10,6 +10,7 @@ import zone.moddev.mc.mineralogy.blocks.RockStairs;
 import zone.moddev.mc.mineralogy.blocks.RockWall;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
@@ -17,10 +18,11 @@ import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.event.CreativeModeTabEvent;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegisterEvent;
 
 @Mod.EventBusSubscriber(modid = Mineralogy.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public final class MineralogyItemGroups {
@@ -36,23 +38,25 @@ public final class MineralogyItemGroups {
 	}
 
 	@SubscribeEvent
-	public static void registerTabs(CreativeModeTabEvent.Register event) {
-		if (MineralogyConfig.groupCreativeTabItemsByType()) {
-			rocks = register(event, "rock", "basalt");
-			stairs = register(event, "stair", "basalt_stairs");
-			slabs = register(event, "slab", "basalt_slab");
-			walls = register(event, "wall", "basalt_wall");
-			items = register(event, "item", "sulfur_dust");
-		} else {
-			mineralogy = register(event, "mineralogy", "basalt");
-		}
+	public static void registerTabs(RegisterEvent event) {
+		event.register(Registries.CREATIVE_MODE_TAB, helper -> {
+			if (MineralogyConfig.groupCreativeTabItemsByType()) {
+				rocks = register(helper, "rock", "basalt");
+				stairs = register(helper, "stair", "basalt_stairs");
+				slabs = register(helper, "slab", "basalt_slab");
+				walls = register(helper, "wall", "basalt_wall");
+				items = register(helper, "item", "sulfur_dust");
+			} else {
+				mineralogy = register(helper, "mineralogy", "basalt");
+			}
+		});
 	}
 
 	@SubscribeEvent
-	public static void buildTabContents(CreativeModeTabEvent.BuildContents event) {
+	public static void buildTabContents(BuildCreativeModeTabContentsEvent event) {
 		boolean grouped = MineralogyConfig.groupCreativeTabItemsByType();
 		CreativeModeTab tab = event.getTab();
-		if (!grouped && tab == CreativeModeTabs.INGREDIENTS
+		if (!grouped && CreativeModeTabs.INGREDIENTS.equals(event.getTabKey())
 				&& MineralogyConfig.isCreativeVisible("mineral_fertilizer")
 				&& Items.mineral_fertilizer != null) {
 			event.accept(Items.mineral_fertilizer);
@@ -100,12 +104,15 @@ public final class MineralogyItemGroups {
 		return items;
 	}
 
-	private static CreativeModeTab register(CreativeModeTabEvent.Register event, String name,
+	private static CreativeModeTab register(RegisterEvent.RegisterHelper<CreativeModeTab> helper, String name,
 			String iconItemName) {
-		return event.registerCreativeModeTab(new ResourceLocation(Mineralogy.MODID, name), builder -> builder
+		CreativeModeTab tab = CreativeModeTab.builder()
 				.title(Component.translatable("itemGroup." + Mineralogy.MODID + "." + name))
 				.icon(() -> icon(iconItemName))
-				.withSearchBar());
+				.withSearchBar()
+				.build();
+		helper.register(new ResourceLocation(Mineralogy.MODID, name), tab);
+		return tab;
 	}
 
 	private static ItemStack icon(String itemName) {

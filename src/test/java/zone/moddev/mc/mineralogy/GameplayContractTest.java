@@ -19,6 +19,14 @@ import static org.junit.Assert.*;
 
 public class GameplayContractTest {
     @Test
+    public void reliefOpenCentreDoesNotCullItsSupportingBlockFace() throws Exception {
+        String relief = text("src/main/java/zone/moddev/mc/mineralogy/blocks/RockRelief.java");
+        assertTrue(relief.contains("VoxelShape getOcclusionShape(BlockState state, BlockGetter world, BlockPos pos)"));
+        assertTrue(relief.contains("VoxelShape getVisualShape(BlockState state, BlockGetter world, BlockPos pos,"));
+        assertTrue(relief.contains("return Shapes.empty();"));
+    }
+
+    @Test
     public void novaculiteAndRockFamilyContractsAreStable() {
         assertEquals(3.0D, MaterialData.NOVACULITE.hardness, 0.0D);
         assertEquals(15.0D, MaterialData.NOVACULITE.blastResistance, 0.0D);
@@ -36,14 +44,15 @@ public class GameplayContractTest {
         assertTrue(source.indexOf("RockRelief.class") < source.indexOf("RockSlab.class"));
         assertTrue(source.contains("enum ContentGroup { ROCK, STAIR, SLAB, WALL, ITEM }"));
         String groups = text("src/main/java/zone/moddev/mc/mineralogy/init/MineralogyItemGroups.java");
-        assertTrue(groups.contains("register(event, \"rock\", \"basalt\")"));
-        assertTrue(groups.contains("register(event, \"stair\", \"basalt_stairs\")"));
-        assertTrue(groups.contains("register(event, \"slab\", \"basalt_slab\")"));
-        assertTrue(groups.contains("register(event, \"wall\", \"basalt_wall\")"));
-        assertTrue(groups.contains("register(event, \"item\", \"sulfur_dust\")"));
+        assertTrue(groups.contains("register(helper, \"rock\", \"basalt\")"));
+        assertTrue(groups.contains("register(helper, \"stair\", \"basalt_stairs\")"));
+        assertTrue(groups.contains("register(helper, \"slab\", \"basalt_slab\")"));
+        assertTrue(groups.contains("register(helper, \"wall\", \"basalt_wall\")"));
+        assertTrue(groups.contains("register(helper, \"item\", \"sulfur_dust\")"));
         assertTrue(groups.contains("CreativeModeTabs.INGREDIENTS"));
         assertTrue(groups.contains(".withSearchBar()"));
-        assertTrue(groups.contains("CreativeModeTabEvent.Register"));
+        assertTrue(groups.contains("BuildCreativeModeTabContentsEvent"));
+        assertTrue(groups.contains("Registries.CREATIVE_MODE_TAB"));
 
         CreativeTabPolicy grouped = new CreativeTabPolicy(true);
         assertTrue(grouped.groupTabsByType());
@@ -157,7 +166,10 @@ public class GameplayContractTest {
         assertTrue(hook.contains("type.getComponentType() != Dynamic.class"));
         assertTrue(hook.contains("legacyStates[stateId] = BlockStateData.parse(stateNbt)"));
         assertTrue(hook.contains("unsafe.putObjectVolatile(base, offset, expanded)"));
-        assertTrue(hook.contains("captureLegacyLevelData(CompoundTag root, Path levelPath)"));
+        assertTrue(hook.contains("captureLegacyLevelData(CompoundTag root,"));
+        assertTrue(hook.contains("LevelStorageSource.LevelDirectory levelDirectory)"));
+        String transformer = text("src/main/resources/coremods/mineralogy_legacy_world_fix.js");
+        assertTrue(transformer.contains("net/minecraft/world/level/storage/LevelStorageSource$LevelDirectory"));
         assertTrue(hook.contains("writeSidecar(levelDat.getParentFile(), blocks)"));
         assertTrue(hook.contains("prepareLegacyWorld(levelDat)"));
 

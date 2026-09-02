@@ -6,7 +6,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
@@ -53,7 +52,7 @@ public class RockSlab extends Block implements NamedMineralogyBlock {
 
 	public RockSlab(float hardness, float blastResistance, int toolHardnessLevel, SoundType sound, String name,
 			String doubleSlabName) {
-		super(BlockBehaviour.Properties.of(Material.STONE).strength(hardness, blastResistance).sound(sound)
+		super(BlockBehaviour.Properties.copy(net.minecraft.world.level.block.Blocks.STONE).strength(hardness, blastResistance).sound(sound)
 				.requiresCorrectToolForDrops());
 		this.toolHardnessLevel = toolHardnessLevel;
 		this.doubleSlabName = doubleSlabName;

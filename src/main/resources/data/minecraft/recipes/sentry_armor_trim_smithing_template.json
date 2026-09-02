@@ -1,0 +1,74 @@
+{
+    "type":  "forge:conditional",
+    "recipes":  [
+                    {
+                        "conditions":  [
+                                           {
+                                               "type":  "mineralogy:config",
+                                               "flag":  "COBBLESTONE_EQUIVILENT"
+                                           }
+                                       ],
+                        "recipe":  {
+                                       "type":  "minecraft:crafting_shaped",
+                                       "category":  "misc",
+                                       "pattern":  [
+                                                       "#S#",
+                                                       "#C#",
+                                                       "###"
+                                                   ],
+                                       "key":  {
+                                                   "#":  {
+                                                             "item":  "minecraft:diamond"
+                                                         },
+                                                   "C":  {
+                                                             "tag":  "mineralogy:cobblestone_equivalents"
+                                                         },
+                                                   "S":  {
+                                                             "item":  "minecraft:sentry_armor_trim_smithing_template"
+                                                         }
+                                               },
+                                       "result":  {
+                                                      "item":  "minecraft:sentry_armor_trim_smithing_template",
+                                                      "count":  2
+                                                  },
+                                       "show_notification":  true
+                                   }
+                    },
+                    {
+                        "conditions":  [
+                                           {
+                                               "type":  "forge:not",
+                                               "value":  {
+                                                             "type":  "mineralogy:config",
+                                                             "flag":  "COBBLESTONE_EQUIVILENT"
+                                                         }
+                                           }
+                                       ],
+                        "recipe":  {
+                                       "type":  "minecraft:crafting_shaped",
+                                       "category":  "misc",
+                                       "pattern":  [
+                                                       "#S#",
+                                                       "#C#",
+                                                       "###"
+                                                   ],
+                                       "key":  {
+                                                   "#":  {
+                                                             "item":  "minecraft:diamond"
+                                                         },
+                                                   "C":  {
+                                                             "item":  "minecraft:cobblestone"
+                                                         },
+                                                   "S":  {
+                                                             "item":  "minecraft:sentry_armor_trim_smithing_template"
+                                                         }
+                                               },
+                                       "result":  {
+                                                      "item":  "minecraft:sentry_armor_trim_smithing_template",
+                                                      "count":  2
+                                                  },
+                                       "show_notification":  true
+                                   }
+                    }
+                ]
+}

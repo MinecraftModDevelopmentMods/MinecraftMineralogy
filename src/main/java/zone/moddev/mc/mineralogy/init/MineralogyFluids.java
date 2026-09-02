@@ -8,6 +8,8 @@ import zone.moddev.mc.mineralogy.items.MineralogyBucketItem;
 
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.common.SoundActions;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.Item;
@@ -16,7 +18,6 @@ import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.Material;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
@@ -79,7 +80,9 @@ public final class MineralogyFluids {
 			FLUIDS.register("flowing_crude_oil", () -> new ForgeFlowingFluid.Flowing(CRUDE_OIL_PROPERTIES));
 	public static final RegistryObject<LiquidBlock> CRUDE_OIL_BLOCK = BLOCKS.register("crude_oil",
 			() -> new MineralogyLiquidBlock(MineralogyFluids::crudeOilFlowing,
-					BlockBehaviour.Properties.of(Material.WATER).noCollission().strength(100.0F).noLootTable()));
+					BlockBehaviour.Properties.of().mapColor(MapColor.WATER).replaceable()
+							.noCollission().strength(100.0F).noLootTable().liquid()
+							.pushReaction(PushReaction.DESTROY)));
 	public static final RegistryObject<Item> CRUDE_OIL_BUCKET = ITEMS.register("crude_oil_bucket",
 			() -> new MineralogyBucketItem(MineralogyFluids::crudeOil,
 					new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));

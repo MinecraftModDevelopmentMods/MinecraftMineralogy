@@ -35,9 +35,9 @@ public final class MineralogyFluids {
 	private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS,
 			Mineralogy.MODID);
 
-	private static final ResourceLocation CRUDE_OIL_STILL = new ResourceLocation(Mineralogy.MODID,
+	private static final ResourceLocation CRUDE_OIL_STILL = ResourceLocation.fromNamespaceAndPath(Mineralogy.MODID,
 			"blocks/crude_oil_still");
-	private static final ResourceLocation CRUDE_OIL_FLOW = new ResourceLocation(Mineralogy.MODID,
+	private static final ResourceLocation CRUDE_OIL_FLOW = ResourceLocation.fromNamespaceAndPath(Mineralogy.MODID,
 			"blocks/crude_oil_flow");
 
 	public static final RegistryObject<FluidType> CRUDE_OIL_TYPE = FLUID_TYPES.register("crude_oil",

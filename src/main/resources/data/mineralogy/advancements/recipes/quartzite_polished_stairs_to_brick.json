@@ -1,14 +1,17 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:quartzite_smooth_stairs"
-                       },
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:quartzite_smooth_brick_stairs"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:and",
+                            "values":  [
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:quartzite_smooth_stairs"
+                                           },
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:quartzite_smooth_brick_stairs"
+                                           }
+                                       ]
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:quartzite_polished_stairs_to_brick"
@@ -26,9 +29,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "items":  [
-                                                                                         "mineralogy:quartzite_smooth_stairs"
-                                                                                     ]
+                                                                           "items":  "mineralogy:quartzite_smooth_stairs"
                                                                        }
                                                                    ]
                                                      }

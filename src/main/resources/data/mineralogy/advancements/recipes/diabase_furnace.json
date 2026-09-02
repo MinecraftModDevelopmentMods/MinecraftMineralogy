@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:diabase_furnace"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:diabase_furnace"
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:diabase_furnace"
@@ -22,7 +20,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "tag":  "mineralogy:slabs/diabase"
+                                                                           "items":  "#mineralogy:slabs/diabase"
                                                                        }
                                                                    ]
                                                      }

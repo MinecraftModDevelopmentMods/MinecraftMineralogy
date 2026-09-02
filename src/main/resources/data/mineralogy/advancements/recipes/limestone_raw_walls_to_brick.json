@@ -1,14 +1,17 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:limestone_wall"
-                       },
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:limestone_brick_wall"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:and",
+                            "values":  [
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:limestone_wall"
+                                           },
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:limestone_brick_wall"
+                                           }
+                                       ]
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:limestone_raw_walls_to_brick"
@@ -26,9 +29,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "items":  [
-                                                                                         "mineralogy:limestone_wall"
-                                                                                     ]
+                                                                           "items":  "mineralogy:limestone_wall"
                                                                        }
                                                                    ]
                                                      }

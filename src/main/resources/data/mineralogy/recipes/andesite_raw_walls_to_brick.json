@@ -1,14 +1,17 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:andesite_wall"
-                       },
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:andesite_brick_wall"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:and",
+                            "values":  [
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:andesite_wall"
+                                           },
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:andesite_brick_wall"
+                                           }
+                                       ]
+                        },
     "type":  "minecraft:crafting_shaped",
     "category":  "building",
     "pattern":  [
@@ -21,7 +24,7 @@
                       }
             },
     "result":  {
-                   "item":  "mineralogy:andesite_brick_wall",
+                   "id":  "mineralogy:andesite_brick_wall",
                    "count":  4
                },
     "show_notification":  true

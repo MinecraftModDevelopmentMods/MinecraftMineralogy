@@ -13,6 +13,7 @@ import zone.moddev.mc.mineralogy.inventory.ContainerRockFurnace;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -28,12 +29,13 @@ import net.minecraft.world.entity.player.StackedContents;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.FurnaceFuelSlot;
-import net.minecraft.world.inventory.RecipeHolder;
+import net.minecraft.world.inventory.RecipeCraftingHolder;
 import net.minecraft.world.inventory.StackedContentsCompatible;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.level.GameRules;
@@ -50,7 +52,7 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
 public class TileEntityRockFurnace extends BaseContainerBlockEntity
-		implements WorldlyContainer, RecipeHolder, StackedContentsCompatible {
+		implements WorldlyContainer, RecipeCraftingHolder, StackedContentsCompatible {
 	private static final int[] SLOTS_TOP = new int[] { 0 };
 	private static final int[] SLOTS_BOTTOM = new int[] { 2, 1 };
 	private static final int[] SLOTS_SIDES = new int[] { 1 };
@@ -79,6 +81,7 @@ public class TileEntityRockFurnace extends BaseContainerBlockEntity
 	};
 	private LazyOptional<? extends IItemHandlerModifiable>[] handlers = createHandlers();
 	private final float fallbackBurnModifier;
+	private Component customInventoryName;
 
 	public TileEntityRockFurnace(BlockPos pos, BlockState state) {
 		this(pos, state, 1.0F);
@@ -122,7 +125,7 @@ public class TileEntityRockFurnace extends BaseContainerBlockEntity
 	@Override
 	public void setItem(int index, ItemStack stack) {
 		ItemStack previous = furnaceItemStacks.get(index);
-		boolean sameStack = !stack.isEmpty() && ItemStack.isSameItemSameTags(stack, previous);
+		boolean sameStack = !stack.isEmpty() && ItemStack.isSameItemSameComponents(stack, previous);
 		furnaceItemStacks.set(index, stack);
 
 		if (stack.getCount() > getMaxStackSize()) {
@@ -142,14 +145,31 @@ public class TileEntityRockFurnace extends BaseContainerBlockEntity
 	}
 
 	public void setCustomInventoryName(Component name) {
-		setCustomName(name);
+		customInventoryName = name;
+		setChanged();
 	}
 
 	@Override
-	public void load(CompoundTag compound) {
-		super.load(compound);
+	public Component getCustomName() {
+		return customInventoryName == null ? super.getCustomName() : customInventoryName;
+	}
+
+	@Override
+	protected NonNullList<ItemStack> getItems() {
+		return furnaceItemStacks;
+	}
+
+	@Override
+	protected void setItems(NonNullList<ItemStack> items) {
+		furnaceItemStacks = items;
+	}
+
+	@Override
+	protected void loadAdditional(CompoundTag compound, HolderLookup.Provider registries) {
+		super.loadAdditional(compound, registries);
+		customInventoryName = null;
 		furnaceItemStacks = NonNullList.withSize(getContainerSize(), ItemStack.EMPTY);
-		ContainerHelper.loadAllItems(compound, furnaceItemStacks);
+		ContainerHelper.loadAllItems(compound, furnaceItemStacks, registries);
 		furnaceBurnTime = compound.getInt("BurnTime");
 		cookTime = compound.getInt("CookTime");
 		totalCookTime = compound.getInt("CookTimeTotal");
@@ -157,12 +177,15 @@ public class TileEntityRockFurnace extends BaseContainerBlockEntity
 	}
 
 	@Override
-	protected void saveAdditional(CompoundTag compound) {
-		super.saveAdditional(compound);
+	protected void saveAdditional(CompoundTag compound, HolderLookup.Provider registries) {
+		super.saveAdditional(compound, registries);
 		compound.putInt("BurnTime", furnaceBurnTime);
 		compound.putInt("CookTime", cookTime);
 		compound.putInt("CookTimeTotal", totalCookTime);
-		ContainerHelper.saveAllItems(compound, furnaceItemStacks);
+		ContainerHelper.saveAllItems(compound, furnaceItemStacks, registries);
+		if (customInventoryName != null) {
+			compound.putString("CustomName", Component.Serializer.toJson(customInventoryName, registries));
+		}
 	}
 
 	public boolean isBurning() {
@@ -183,7 +206,7 @@ public class TileEntityRockFurnace extends BaseContainerBlockEntity
 
 		ItemStack fuel = furnaceItemStacks.get(1);
 		if (isBurning() || !fuel.isEmpty() && !furnaceItemStacks.get(0).isEmpty()) {
-			SmeltingRecipe recipe = getSmeltingRecipe();
+			RecipeHolder<SmeltingRecipe> recipe = getSmeltingRecipe();
 
 			if (!isBurning() && canSmelt(recipe)) {
 				furnaceBurnTime = (int) (getItemBurnTime(fuel) * getBurnModifier());
@@ -228,17 +251,17 @@ public class TileEntityRockFurnace extends BaseContainerBlockEntity
 		}
 	}
 
-	private int getCookTime(@Nullable SmeltingRecipe recipe) {
-		return recipe != null ? recipe.getCookingTime() : 200;
+	private int getCookTime(@Nullable RecipeHolder<SmeltingRecipe> recipe) {
+		return recipe != null ? recipe.value().getCookingTime() : 200;
 	}
 
 	@Nullable
-	private SmeltingRecipe getSmeltingRecipe() {
+	private RecipeHolder<SmeltingRecipe> getSmeltingRecipe() {
 		return level == null ? null
 				: level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, this, level).orElse(null);
 	}
 
-	private boolean canSmelt(@Nullable Recipe<?> recipe) {
+	private boolean canSmelt(@Nullable RecipeHolder<? extends Recipe<?>> recipe) {
 		if (furnaceItemStacks.get(0).isEmpty() || recipe == null) {
 			return false;
 		}
@@ -246,7 +269,7 @@ public class TileEntityRockFurnace extends BaseContainerBlockEntity
 		if (level == null) {
 			return false;
 		}
-		ItemStack result = recipe.getResultItem(level.registryAccess());
+		ItemStack result = recipe.value().getResultItem(level.registryAccess());
 		if (result.isEmpty()) {
 			return false;
 		}
@@ -266,13 +289,13 @@ public class TileEntityRockFurnace extends BaseContainerBlockEntity
 		return output.getCount() + result.getCount() <= result.getMaxStackSize();
 	}
 
-	private void smeltItem(@Nullable Recipe<?> recipe) {
+	private void smeltItem(@Nullable RecipeHolder<? extends Recipe<?>> recipe) {
 		if (!canSmelt(recipe)) {
 			return;
 		}
 
 		ItemStack input = furnaceItemStacks.get(0);
-		ItemStack result = recipe.getResultItem(level.registryAccess());
+		ItemStack result = recipe.value().getResultItem(level.registryAccess());
 		ItemStack output = furnaceItemStacks.get(2);
 
 		if (output.isEmpty()) {
@@ -395,17 +418,17 @@ public class TileEntityRockFurnace extends BaseContainerBlockEntity
 	}
 
 	@Override
-	public void setRecipeUsed(Recipe<?> recipe) {
+	public void setRecipeUsed(RecipeHolder<?> recipe) {
 		if (recipe == null) {
 			return;
 		}
-		ResourceLocation id = recipe.getId();
+		ResourceLocation id = recipe.id();
 		Integer count = recipeUseCounts.get(id);
 		recipeUseCounts.put(id, count == null ? 1 : count + 1);
 	}
 
 	@Override
-	public Recipe<?> getRecipeUsed() {
+	public RecipeHolder<?> getRecipeUsed() {
 		return null;
 	}
 
@@ -414,16 +437,16 @@ public class TileEntityRockFurnace extends BaseContainerBlockEntity
 	}
 
 	@Override
-	public boolean setRecipeUsed(Level level, ServerPlayer player, Recipe<?> recipe) {
+	public boolean setRecipeUsed(Level level, ServerPlayer player, RecipeHolder<?> recipe) {
 		setRecipeUsed(recipe);
 		return recipe != null;
 	}
 
 	public void onCrafting(Player player) {
 		if (!player.level().getGameRules().getBoolean(GameRules.RULE_LIMITED_CRAFTING)) {
-			List<Recipe<?>> recipes = new ArrayList<Recipe<?>>();
+			List<RecipeHolder<?>> recipes = new ArrayList<RecipeHolder<?>>();
 			for (ResourceLocation id : recipeUseCounts.keySet()) {
-				Recipe<?> recipe = player.level().getRecipeManager().byKey(id).orElse(null);
+				RecipeHolder<?> recipe = player.level().getRecipeManager().byKey(id).orElse(null);
 				if (recipe != null) {
 					recipes.add(recipe);
 				}

@@ -1,7 +1,4 @@
 {
-    "conditions":  [
-
-                   ],
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:cobblestone"
@@ -19,9 +16,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "items":  [
-                                                                                         "minecraft:stone"
-                                                                                     ]
+                                                                           "items":  "minecraft:stone"
                                                                        }
                                                                    ]
                                                      }

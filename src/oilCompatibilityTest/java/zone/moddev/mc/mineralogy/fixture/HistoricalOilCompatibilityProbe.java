@@ -65,8 +65,8 @@ public final class HistoricalOilCompatibilityProbe {
             () -> new BucketItem(HistoricalOilCompatibilityProbe::source,
                     new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
 
-    public HistoricalOilCompatibilityProbe() {
-        IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+    public HistoricalOilCompatibilityProbe(FMLJavaModLoadingContext context) {
+        IEventBus modBus = context.getModEventBus();
         FLUID_TYPES.register(modBus);
         FLUIDS.register(modBus);
         BLOCKS.register(modBus);
@@ -80,9 +80,9 @@ public final class HistoricalOilCompatibilityProbe {
         Item mineralogyBucket = requireItem("mineralogy", "crude_oil_bucket");
         Item historicalBucket = requireItem(MODID, "crude_oil_bucket");
         TagKey<Fluid> oilTag = TagKey.create(Registries.FLUID,
-                new ResourceLocation("forge", "crude_oil"));
+                ResourceLocation.fromNamespaceAndPath("forge", "crude_oil"));
         TagKey<Item> bucketTag = TagKey.create(Registries.ITEM,
-                new ResourceLocation("forge", "buckets/crude_oil"));
+                ResourceLocation.fromNamespaceAndPath("forge", "buckets/crude_oil"));
 
         boolean distinctFluids = mineralogy != historical;
         boolean distinctBuckets = mineralogyBucket != historicalBucket;
@@ -111,7 +111,8 @@ public final class HistoricalOilCompatibilityProbe {
     }
 
     private static Fluid requireFluid(String namespace, String path) {
-        Fluid result = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(namespace, path));
+        Fluid result = ForgeRegistries.FLUIDS.getValue(
+                ResourceLocation.fromNamespaceAndPath(namespace, path));
         if (result == null) {
             throw new IllegalStateException("Missing fluid " + namespace + ':' + path);
         }
@@ -119,7 +120,8 @@ public final class HistoricalOilCompatibilityProbe {
     }
 
     private static Item requireItem(String namespace, String path) {
-        Item result = ForgeRegistries.ITEMS.getValue(new ResourceLocation(namespace, path));
+        Item result = ForgeRegistries.ITEMS.getValue(
+                ResourceLocation.fromNamespaceAndPath(namespace, path));
         if (result == null) {
             throw new IllegalStateException("Missing item " + namespace + ':' + path);
         }

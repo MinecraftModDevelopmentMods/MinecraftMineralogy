@@ -1,14 +1,17 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:amphibolite_stairs"
-                       },
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:amphibolite_smooth_stairs"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:and",
+                            "values":  [
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:amphibolite_stairs"
+                                           },
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:amphibolite_smooth_stairs"
+                                           }
+                                       ]
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:amphibolite_raw_stairs_polishing"
@@ -26,9 +29,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "items":  [
-                                                                                         "mineralogy:amphibolite_stairs"
-                                                                                     ]
+                                                                           "items":  "mineralogy:amphibolite_stairs"
                                                                        }
                                                                    ]
                                                      }

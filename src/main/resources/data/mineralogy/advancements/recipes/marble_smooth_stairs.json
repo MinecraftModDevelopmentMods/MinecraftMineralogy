@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:marble_smooth_stairs"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:marble_smooth_stairs"
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:marble_smooth_stairs"
@@ -22,7 +20,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "tag":  "mineralogy:stones/marble/smooth"
+                                                                           "items":  "#mineralogy:stones/marble/smooth"
                                                                        }
                                                                    ]
                                                      }

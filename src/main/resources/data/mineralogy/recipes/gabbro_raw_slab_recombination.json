@@ -1,14 +1,17 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:gabbro_slab"
-                       },
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:gabbro"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:and",
+                            "values":  [
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:gabbro_slab"
+                                           },
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:gabbro"
+                                           }
+                                       ]
+                        },
     "type":  "minecraft:crafting_shapeless",
     "category":  "building",
     "ingredients":  [
@@ -20,7 +23,7 @@
                         }
                     ],
     "result":  {
-                   "item":  "mineralogy:gabbro",
+                   "id":  "mineralogy:gabbro",
                    "count":  1
                }
 }

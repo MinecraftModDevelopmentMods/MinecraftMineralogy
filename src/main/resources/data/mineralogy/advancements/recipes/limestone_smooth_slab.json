@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:limestone_smooth_slab"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:limestone_smooth_slab"
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:limestone_smooth_slab"
@@ -22,9 +20,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "items":  [
-                                                                                         "mineralogy:limestone_smooth"
-                                                                                     ]
+                                                                           "items":  "mineralogy:limestone_smooth"
                                                                        }
                                                                    ]
                                                      }

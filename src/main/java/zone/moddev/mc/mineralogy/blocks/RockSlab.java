@@ -10,7 +10,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.resources.ResourceLocation;
@@ -52,7 +52,7 @@ public class RockSlab extends Block implements NamedMineralogyBlock {
 
 	public RockSlab(float hardness, float blastResistance, int toolHardnessLevel, SoundType sound, String name,
 			String doubleSlabName) {
-		super(BlockBehaviour.Properties.copy(net.minecraft.world.level.block.Blocks.STONE).strength(hardness, blastResistance).sound(sound)
+		super(BlockBehaviour.Properties.ofFullCopy(net.minecraft.world.level.block.Blocks.STONE).strength(hardness, blastResistance).sound(sound)
 				.requiresCorrectToolForDrops());
 		this.toolHardnessLevel = toolHardnessLevel;
 		this.doubleSlabName = doubleSlabName;
@@ -96,31 +96,33 @@ public class RockSlab extends Block implements NamedMineralogyBlock {
 	}
 
 	@Override
-	public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player,
-			InteractionHand hand, BlockHitResult hit) {
+	protected ItemInteractionResult useItemOn(ItemStack held, BlockState state, Level world, BlockPos pos,
+			Player player, InteractionHand hand, BlockHitResult hit) {
 		Direction facing = hit.getDirection();
 		if (this.doubleSlabName == null || this.doubleSlabName.isEmpty() || facing != state.getValue(FACING)) {
-			return super.use(state, world, pos, player, hand, hit);
+			return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
 		}
 
-		ItemStack held = player.getItemInHand(hand);
 		ResourceLocation slabItemName = held.isEmpty() ? null : ForgeRegistries.ITEMS.getKey(held.getItem());
 
 		if (!ForgeRegistries.BLOCKS.getKey(this).equals(slabItemName)) {
-			return super.use(state, world, pos, player, hand, hit);
+			return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
 		}
 
-		Block doubleSlab = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(Mineralogy.MODID, this.doubleSlabName));
+		Block doubleSlab = ForgeRegistries.BLOCKS.getValue(
+				ResourceLocation.fromNamespaceAndPath(Mineralogy.MODID, this.doubleSlabName));
 		if (!(doubleSlab instanceof DoubleSlab)) {
-			return super.use(state, world, pos, player, hand, hit);
+			return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
 		}
 
-		world.setBlock(pos, doubleSlab.defaultBlockState(), 3);
-		if (!player.isCreative()) {
-			held.shrink(1);
+		if (!world.isClientSide) {
+			world.setBlock(pos, doubleSlab.defaultBlockState(), 3);
+			if (!player.isCreative()) {
+				held.shrink(1);
+			}
 		}
 
-		return InteractionResult.SUCCESS;
+		return ItemInteractionResult.sidedSuccess(world.isClientSide);
 	}
 @Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {

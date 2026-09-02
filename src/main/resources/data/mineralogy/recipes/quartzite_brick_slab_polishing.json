@@ -1,14 +1,17 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:quartzite_brick_slab"
-                       },
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:quartzite_smooth_brick_slab"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:and",
+                            "values":  [
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:quartzite_brick_slab"
+                                           },
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:quartzite_smooth_brick_slab"
+                                           }
+                                       ]
+                        },
     "type":  "minecraft:crafting_shapeless",
     "category":  "building",
     "ingredients":  [
@@ -20,7 +23,7 @@
                         }
                     ],
     "result":  {
-                   "item":  "mineralogy:quartzite_smooth_brick_slab",
+                   "id":  "mineralogy:quartzite_smooth_brick_slab",
                    "count":  1
                }
 }

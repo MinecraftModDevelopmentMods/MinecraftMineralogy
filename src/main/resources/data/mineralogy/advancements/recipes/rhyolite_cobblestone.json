@@ -1,7 +1,4 @@
 {
-    "conditions":  [
-
-                   ],
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:rhyolite_cobblestone"
@@ -19,7 +16,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "tag":  "mineralogy:stones/rhyolite"
+                                                                           "items":  "#mineralogy:stones/rhyolite"
                                                                        }
                                                                    ]
                                                      }

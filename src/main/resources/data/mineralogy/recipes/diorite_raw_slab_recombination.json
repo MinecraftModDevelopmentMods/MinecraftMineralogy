@@ -1,14 +1,17 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:diorite_slab"
-                       },
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:diorite"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:and",
+                            "values":  [
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:diorite_slab"
+                                           },
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:diorite"
+                                           }
+                                       ]
+                        },
     "type":  "minecraft:crafting_shapeless",
     "category":  "building",
     "ingredients":  [
@@ -20,7 +23,7 @@
                         }
                     ],
     "result":  {
-                   "item":  "mineralogy:diorite",
+                   "id":  "mineralogy:diorite",
                    "count":  1
                }
 }

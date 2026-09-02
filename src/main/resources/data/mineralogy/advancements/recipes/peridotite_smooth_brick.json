@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:peridotite_smooth_brick"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:peridotite_smooth_brick"
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:peridotite_smooth_brick"
@@ -22,7 +20,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "tag":  "mineralogy:stones/peridotite/smooth"
+                                                                           "items":  "#mineralogy:stones/peridotite/smooth"
                                                                        }
                                                                    ]
                                                      }

@@ -1,14 +1,17 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:pegmatite_smooth_slab"
-                       },
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:pegmatite_smooth"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:and",
+                            "values":  [
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:pegmatite_smooth_slab"
+                                           },
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:pegmatite_smooth"
+                                           }
+                                       ]
+                        },
     "type":  "minecraft:crafting_shapeless",
     "category":  "building",
     "ingredients":  [
@@ -20,7 +23,7 @@
                         }
                     ],
     "result":  {
-                   "item":  "mineralogy:pegmatite_smooth",
+                   "id":  "mineralogy:pegmatite_smooth",
                    "count":  1
                }
 }

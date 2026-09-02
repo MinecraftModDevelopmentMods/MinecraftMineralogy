@@ -119,7 +119,7 @@ public class GameplayContractTest {
     }
 
     @Test
-    public void forge40OilUsesNativeFlowingFluidRendering() throws Exception {
+    public void forge50UsesModelBlockLayersAndNativeFlowingFluidRendering() throws Exception {
         String fluid = text("src/main/java/zone/moddev/mc/mineralogy/init/MineralogyFluids.java");
         assertTrue(fluid.contains("ForgeFlowingFluid.Source"));
         assertTrue(fluid.contains("ForgeFlowingFluid.Flowing"));
@@ -130,6 +130,12 @@ public class GameplayContractTest {
         String client = text("src/main/java/zone/moddev/mc/mineralogy/client/ClientSetup.java");
         assertTrue(client.contains("ItemBlockRenderTypes.setRenderLayer(MineralogyFluids.CRUDE_OIL.get()"));
         assertTrue(client.contains("RenderType.translucent()"));
+        assertFalse(client.contains("setRenderLayer(block"));
+        for (String model : new String[] { "pane_n", "pane_ne", "pane_ns", "pane_nse", "pane_nsew",
+                "rocksaltlamp", "rocksaltlamp_down", "rocksaltlamp_wall", "rocksaltstreetlamp" }) {
+            assertTrue(text("src/main/resources/assets/mineralogy/models/block/" + model + ".json")
+                    .contains("\"render_type\": \"cutout\""));
+        }
         assertFalse(new File("src/main/java/zone/moddev/mc/mineralogy/client/ClientOilRenderer.java").exists());
     }
 
@@ -166,8 +172,10 @@ public class GameplayContractTest {
         assertTrue(hook.contains("type.getComponentType() != Dynamic.class"));
         assertTrue(hook.contains("legacyStates[stateId] = BlockStateData.parse(stateNbt)"));
         assertTrue(hook.contains("unsafe.putObjectVolatile(base, offset, expanded)"));
-        assertTrue(hook.contains("captureLegacyLevelData(CompoundTag root,"));
+        assertTrue(hook.contains("captureLegacyLevelData(LevelStorageSource.LevelStorageAccess access,"));
         assertTrue(hook.contains("LevelStorageSource.LevelDirectory levelDirectory)"));
+        assertTrue(hook.contains("access.getDataTagRaw(false)"));
+        assertTrue(hook.contains("access.getDataTagRaw(true)"));
         String transformer = text("src/main/resources/coremods/mineralogy_legacy_world_fix.js");
         assertTrue(transformer.contains("net/minecraft/world/level/storage/LevelStorageSource$LevelDirectory"));
         assertTrue(hook.contains("writeSidecar(levelDat.getParentFile(), blocks)"));

@@ -1,14 +1,17 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:basalt_slab"
-                       },
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:basalt"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:and",
+                            "values":  [
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:basalt_slab"
+                                           },
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:basalt"
+                                           }
+                                       ]
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:basalt_raw_slab_recombination"
@@ -26,9 +29,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "items":  [
-                                                                                         "mineralogy:basalt_slab"
-                                                                                     ]
+                                                                           "items":  "mineralogy:basalt_slab"
                                                                        }
                                                                    ]
                                                      }

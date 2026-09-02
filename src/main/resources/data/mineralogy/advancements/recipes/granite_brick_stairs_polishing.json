@@ -1,14 +1,17 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:granite_brick_stairs"
-                       },
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:granite_smooth_brick_stairs"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:and",
+                            "values":  [
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:granite_brick_stairs"
+                                           },
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:granite_smooth_brick_stairs"
+                                           }
+                                       ]
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:granite_brick_stairs_polishing"
@@ -26,9 +29,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "items":  [
-                                                                                         "mineralogy:granite_brick_stairs"
-                                                                                     ]
+                                                                           "items":  "mineralogy:granite_brick_stairs"
                                                                        }
                                                                    ]
                                                      }

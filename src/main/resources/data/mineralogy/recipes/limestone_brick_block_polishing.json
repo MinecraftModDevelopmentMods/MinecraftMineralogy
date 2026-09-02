@@ -1,14 +1,17 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:limestone_brick"
-                       },
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:limestone_smooth_brick"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:and",
+                            "values":  [
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:limestone_brick"
+                                           },
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:limestone_smooth_brick"
+                                           }
+                                       ]
+                        },
     "type":  "minecraft:crafting_shapeless",
     "category":  "building",
     "ingredients":  [
@@ -20,7 +23,7 @@
                         }
                     ],
     "result":  {
-                   "item":  "mineralogy:limestone_smooth_brick",
+                   "id":  "mineralogy:limestone_smooth_brick",
                    "count":  1
                }
 }

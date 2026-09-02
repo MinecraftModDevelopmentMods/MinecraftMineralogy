@@ -45,7 +45,7 @@ public class CobblestoneTagPolicyTest {
         Holder<Item> vanilla = holder(Blocks.COBBLESTONE.asItem());
         Holder<Item> mineralogyStandIn = holder(Blocks.BASALT.asItem());
         TagKey<Item> cobblestone = TagKey.create(Registries.ITEM,
-                new ResourceLocation("forge", "cobblestone"));
+                ResourceLocation.fromNamespaceAndPath("forge", "cobblestone"));
         Map<TagKey<Item>, List<Holder<Item>>> tags = new IdentityHashMap<>();
         tags.put(cobblestone, list(vanilla));
 

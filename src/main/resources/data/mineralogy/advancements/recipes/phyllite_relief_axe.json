@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:phyllite_relief_axe"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:phyllite_relief_axe"
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:phyllite_relief_axe"
@@ -22,9 +20,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "items":  [
-                                                                                         "mineralogy:phyllite_relief_blank"
-                                                                                     ]
+                                                                           "items":  "mineralogy:phyllite_relief_blank"
                                                                        }
                                                                    ]
                                                      }

@@ -36,7 +36,7 @@ public class TileEntities {
 		rock_furnace = BlockEntityType.Builder
 				.of(TileEntityRockFurnace::new, furnaceBlocks.toArray(new Block[furnaceBlocks.size()]))
 				.build(null);
-		registry.register(new ResourceLocation(Mineralogy.MODID, "rock_furnace"), rock_furnace);
+		registry.register(ResourceLocation.fromNamespaceAndPath(Mineralogy.MODID, "rock_furnace"), rock_furnace);
 	}
 
 	private TileEntities() {

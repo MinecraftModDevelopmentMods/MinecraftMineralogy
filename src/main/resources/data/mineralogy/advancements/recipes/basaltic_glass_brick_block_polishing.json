@@ -1,14 +1,17 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:basaltic_glass_brick"
-                       },
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:basaltic_glass_smooth_brick"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:and",
+                            "values":  [
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:basaltic_glass_brick"
+                                           },
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:basaltic_glass_smooth_brick"
+                                           }
+                                       ]
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:basaltic_glass_brick_block_polishing"
@@ -26,9 +29,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "items":  [
-                                                                                         "mineralogy:basaltic_glass_brick"
-                                                                                     ]
+                                                                           "items":  "mineralogy:basaltic_glass_brick"
                                                                        }
                                                                    ]
                                                      }

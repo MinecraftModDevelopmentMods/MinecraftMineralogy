@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:quartzite_smooth_wall"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:quartzite_smooth_wall"
+                        },
     "type":  "minecraft:crafting_shaped",
     "category":  "building",
     "pattern":  [
@@ -17,7 +15,7 @@
                       }
             },
     "result":  {
-                   "item":  "mineralogy:quartzite_smooth_wall",
+                   "id":  "mineralogy:quartzite_smooth_wall",
                    "count":  6
                },
     "show_notification":  true

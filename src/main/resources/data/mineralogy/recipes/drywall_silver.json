@@ -1,14 +1,17 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "mineralogy:config",
-                           "flag":  "ENABLE_DRYWALLS"
-                       },
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:drywall_silver"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:and",
+                            "values":  [
+                                           {
+                                               "type":  "mineralogy:config",
+                                               "flag":  "ENABLE_DRYWALLS"
+                                           },
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:drywall_silver"
+                                           }
+                                       ]
+                        },
     "type":  "minecraft:crafting_shapeless",
     "category":  "building",
     "ingredients":  [
@@ -20,7 +23,7 @@
                         }
                     ],
     "result":  {
-                   "item":  "mineralogy:drywall_silver",
+                   "id":  "mineralogy:drywall_silver",
                    "count":  1
                }
 }

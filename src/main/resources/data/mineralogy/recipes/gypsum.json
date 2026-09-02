@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:gypsum"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:gypsum"
+                        },
     "type":  "minecraft:crafting_shaped",
     "category":  "building",
     "pattern":  [
@@ -17,7 +15,7 @@
                       }
             },
     "result":  {
-                   "item":  "mineralogy:gypsum",
+                   "id":  "mineralogy:gypsum",
                    "count":  1
                },
     "show_notification":  true

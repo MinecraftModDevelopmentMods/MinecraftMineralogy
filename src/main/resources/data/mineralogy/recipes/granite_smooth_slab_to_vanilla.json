@@ -1,14 +1,17 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:granite_smooth_slab"
-                       },
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "minecraft:polished_granite_slab"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:and",
+                            "values":  [
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:granite_smooth_slab"
+                                           },
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "minecraft:polished_granite_slab"
+                                           }
+                                       ]
+                        },
     "type":  "minecraft:crafting_shapeless",
     "category":  "building",
     "ingredients":  [
@@ -17,7 +20,7 @@
                         }
                     ],
     "result":  {
-                   "item":  "minecraft:polished_granite_slab",
+                   "id":  "minecraft:polished_granite_slab",
                    "count":  1
                }
 }

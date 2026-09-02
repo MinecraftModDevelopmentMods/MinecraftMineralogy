@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:conglomerate_slab"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:conglomerate_slab"
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:conglomerate_slab"
@@ -22,9 +20,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "items":  [
-                                                                                         "mineralogy:conglomerate"
-                                                                                     ]
+                                                                           "items":  "mineralogy:conglomerate"
                                                                        }
                                                                    ]
                                                      }

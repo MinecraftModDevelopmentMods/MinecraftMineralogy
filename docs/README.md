@@ -1,6 +1,6 @@
 # Mineralogy Guide
 
-Mineralogy 6 for Minecraft 1.20.1 supplies rock, mineral, construction, and
+Mineralogy 6 for Minecraft 1.20.6 supplies rock, mineral, construction, and
 crude-oil content to OreSpawn 4. OreSpawn is the only terrain and deposit
 engine.
 

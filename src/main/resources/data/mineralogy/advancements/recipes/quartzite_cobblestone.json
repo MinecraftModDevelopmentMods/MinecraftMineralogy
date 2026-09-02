@@ -1,7 +1,4 @@
 {
-    "conditions":  [
-
-                   ],
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:quartzite_cobblestone"
@@ -19,7 +16,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "tag":  "mineralogy:stones/quartzite"
+                                                                           "items":  "#mineralogy:stones/quartzite"
                                                                        }
                                                                    ]
                                                      }

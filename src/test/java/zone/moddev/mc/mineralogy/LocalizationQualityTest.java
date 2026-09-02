@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 import static org.junit.Assert.*;
 
-/** Quality policy for the reviewed 1.20.1 JSON localization inventory. */
+/** Quality policy for the reviewed 1.20.6 JSON localization inventory. */
 public class LocalizationQualityTest {
     private static final File LANG_DIR = new File("src/main/resources/assets/mineralogy/lang");
     private static final Set<String> ENGLISH_LOCALES = new HashSet<String>(Arrays.asList(
@@ -166,7 +166,7 @@ public class LocalizationQualityTest {
     private static Map<String, String> read(File file) throws Exception {
         JsonObject object;
         try (Reader reader = Files.newBufferedReader(file.toPath(), StandardCharsets.UTF_8)) {
-            object = new JsonParser().parse(reader).getAsJsonObject();
+            object = JsonParser.parseReader(reader).getAsJsonObject();
         }
         Map<String, String> values = new LinkedHashMap<String, String>();
         for (Map.Entry<String, JsonElement> entry : object.entrySet()) {

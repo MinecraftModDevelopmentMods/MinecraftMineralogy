@@ -53,4 +53,4 @@ $actual = @(Get-ChildItem -LiteralPath $targetRoot -Filter '*.json' | Sort-Objec
 if ($actual.Count -ne 17) {
     throw "Expected exactly 17 generated locale files, found $($actual.Count)"
 }
-Write-Output 'Generated 17 reviewed Mineralogy 1.20.1 JSON locales with 938 ordered keys each.'
+Write-Output 'Generated 17 reviewed Mineralogy 1.20.6 JSON locales with 938 ordered keys each.'

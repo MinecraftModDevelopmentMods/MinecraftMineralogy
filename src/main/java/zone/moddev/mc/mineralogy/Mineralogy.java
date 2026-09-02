@@ -31,17 +31,17 @@ public class Mineralogy {
 		return version == null ? "DEV" : version;
 	}
 
-	public Mineralogy() {
+	public Mineralogy(FMLJavaModLoadingContext loadingContext) {
 		instance = this;
+		var modEventBus = loadingContext.getModEventBus();
 		MineralogyConfig.load();
 		LegacyMineralogy6ConfigMigrator.migrateGlobalConfig(
 				MineralogyConfig.configFile().toAbsolutePath().getParent(), LOGGER);
 		LegacyOreConfigMigrator.migrate(MineralogyConfig.configFile(), LOGGER);
-		MineralogyConfig.registerRecipeConditions();
-		MineralogyConfig.registerAdvancementPredicates();
+		MineralogyConfig.registerRecipeConditions(modEventBus);
 
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-		MineralogyFluids.register(FMLJavaModLoadingContext.get().getModEventBus());
+		modEventBus.addListener(this::setup);
+		MineralogyFluids.register(modEventBus);
 		MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST,
 				LegacyWorldDataHook::onServerAboutToStart);
 		MinecraftForge.EVENT_BUS.addListener(CobblestoneTagPolicy::onTagsUpdated);

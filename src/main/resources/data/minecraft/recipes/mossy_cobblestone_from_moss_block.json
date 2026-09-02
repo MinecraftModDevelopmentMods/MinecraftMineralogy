@@ -2,12 +2,10 @@
     "type":  "forge:conditional",
     "recipes":  [
                     {
-                        "conditions":  [
-                                           {
-                                               "type":  "mineralogy:config",
-                                               "flag":  "COBBLESTONE_EQUIVILENT"
-                                           }
-                                       ],
+                        "forge:condition":  {
+                                                "type":  "mineralogy:config",
+                                                "flag":  "COBBLESTONE_EQUIVILENT"
+                                            },
                         "recipe":  {
                                        "type":  "minecraft:crafting_shapeless",
                                        "group":  "mossy_cobblestone",
@@ -21,20 +19,18 @@
                                                            }
                                                        ],
                                        "result":  {
-                                                      "item":  "minecraft:mossy_cobblestone"
+                                                      "id":  "minecraft:mossy_cobblestone"
                                                   }
                                    }
                     },
                     {
-                        "conditions":  [
-                                           {
-                                               "type":  "forge:not",
-                                               "value":  {
-                                                             "type":  "mineralogy:config",
-                                                             "flag":  "COBBLESTONE_EQUIVILENT"
-                                                         }
-                                           }
-                                       ],
+                        "forge:condition":  {
+                                                "type":  "forge:not",
+                                                "value":  {
+                                                              "type":  "mineralogy:config",
+                                                              "flag":  "COBBLESTONE_EQUIVILENT"
+                                                          }
+                                            },
                         "recipe":  {
                                        "type":  "minecraft:crafting_shapeless",
                                        "group":  "mossy_cobblestone",
@@ -48,7 +44,7 @@
                                                            }
                                                        ],
                                        "result":  {
-                                                      "item":  "minecraft:mossy_cobblestone"
+                                                      "id":  "minecraft:mossy_cobblestone"
                                                   }
                                    }
                     }

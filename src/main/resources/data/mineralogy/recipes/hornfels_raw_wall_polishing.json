@@ -1,14 +1,17 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:hornfels_wall"
-                       },
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:hornfels_smooth_wall"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:and",
+                            "values":  [
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:hornfels_wall"
+                                           },
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:hornfels_smooth_wall"
+                                           }
+                                       ]
+                        },
     "type":  "minecraft:crafting_shapeless",
     "category":  "building",
     "ingredients":  [
@@ -20,7 +23,7 @@
                         }
                     ],
     "result":  {
-                   "item":  "mineralogy:hornfels_smooth_wall",
+                   "id":  "mineralogy:hornfels_smooth_wall",
                    "count":  1
                }
 }

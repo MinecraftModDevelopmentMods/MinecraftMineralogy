@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:basaltic_glass_relief_horizontal"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:basaltic_glass_relief_horizontal"
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:basaltic_glass_relief_horizontal"
@@ -22,9 +20,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "items":  [
-                                                                                         "mineralogy:basaltic_glass_relief_blank"
-                                                                                     ]
+                                                                           "items":  "mineralogy:basaltic_glass_relief_blank"
                                                                        }
                                                                    ]
                                                      }

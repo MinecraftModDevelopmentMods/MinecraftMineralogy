@@ -1,14 +1,17 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:diorite_smooth_slab"
-                       },
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "minecraft:polished_diorite_slab"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:and",
+                            "values":  [
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:diorite_smooth_slab"
+                                           },
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "minecraft:polished_diorite_slab"
+                                           }
+                                       ]
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:diorite_smooth_slab_from_vanilla"
@@ -26,9 +29,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "items":  [
-                                                                                         "minecraft:polished_diorite_slab"
-                                                                                     ]
+                                                                           "items":  "minecraft:polished_diorite_slab"
                                                                        }
                                                                    ]
                                                      }

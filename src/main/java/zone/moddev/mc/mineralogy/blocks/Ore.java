@@ -27,7 +27,7 @@ public class Ore extends Block implements NamedMineralogyBlock {
 	private final int pickLevel;
 
 	public Ore(String name, String dropItemName, int minNumberDropped, int maxNumberDropped, int pickLevel) {
-		super(BlockBehaviour.Properties.copy(net.minecraft.world.level.block.Blocks.STONE).strength(1.5F, 5.0F).sound(SoundType.STONE)
+		super(BlockBehaviour.Properties.ofFullCopy(net.minecraft.world.level.block.Blocks.STONE).strength(1.5F, 5.0F).sound(SoundType.STONE)
 				.requiresCorrectToolForDrops());
 		this.registryPath = name;
 		this.dropItemName = dropItemName;
@@ -48,7 +48,7 @@ public class Ore extends Block implements NamedMineralogyBlock {
 	}
 
 	public ItemLike getItemDropped() {
-		Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(Mineralogy.MODID, dropItemName));
+		Item item = ForgeRegistries.ITEMS.getValue(ResourceLocation.fromNamespaceAndPath(Mineralogy.MODID, dropItemName));
 		return item == null ? this : item;
 	}
 

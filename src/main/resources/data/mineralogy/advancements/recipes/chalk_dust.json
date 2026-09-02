@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:chalk_dust"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:chalk_dust"
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:chalk_dust"
@@ -22,9 +20,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "items":  [
-                                                                                         "mineralogy:chalk"
-                                                                                     ]
+                                                                           "items":  "mineralogy:chalk"
                                                                        }
                                                                    ]
                                                      }

@@ -1,14 +1,17 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:diorite_smooth_slab"
-                       },
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:diorite_smooth_brick_slab"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:and",
+                            "values":  [
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:diorite_smooth_slab"
+                                           },
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:diorite_smooth_brick_slab"
+                                           }
+                                       ]
+                        },
     "type":  "minecraft:crafting_shaped",
     "category":  "building",
     "pattern":  [
@@ -21,7 +24,7 @@
                       }
             },
     "result":  {
-                   "item":  "mineralogy:diorite_smooth_brick_slab",
+                   "id":  "mineralogy:diorite_smooth_brick_slab",
                    "count":  4
                },
     "show_notification":  true

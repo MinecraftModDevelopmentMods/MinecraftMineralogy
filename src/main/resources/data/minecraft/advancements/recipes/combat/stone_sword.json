@@ -1,89 +1,81 @@
 {
     "advancements":  [
                          {
-                             "conditions":  [
-                                                {
-                                                    "type":  "mineralogy:config",
-                                                    "flag":  "COBBLESTONE_EQUIVILENT"
-                                                }
-                                            ],
-                             "advancement":  {
-                                                 "parent":  "minecraft:recipes/root",
-                                                 "rewards":  {
-                                                                 "recipes":  [
-                                                                                 "minecraft:stone_sword"
-                                                                             ]
-                                                             },
-                                                 "criteria":  {
-                                                                  "has_cobblestone":  {
-                                                                                          "trigger":  "minecraft:inventory_changed",
-                                                                                          "conditions":  {
-                                                                                                             "items":  [
-                                                                                                                           {
-                                                                                                                               "tag":  "mineralogy:stone_tool_materials"
-                                                                                                                           }
-                                                                                                                       ]
-                                                                                                         }
-                                                                                      },
-                                                                  "has_the_recipe":  {
-                                                                                         "trigger":  "minecraft:recipe_unlocked",
-                                                                                         "conditions":  {
-                                                                                                            "recipe":  "minecraft:stone_sword"
-                                                                                                        }
+                             "forge:condition":  {
+                                                     "type":  "mineralogy:config",
+                                                     "flag":  "COBBLESTONE_EQUIVILENT"
+                                                 },
+                             "parent":  "minecraft:recipes/root",
+                             "rewards":  {
+                                             "recipes":  [
+                                                             "minecraft:stone_sword"
+                                                         ]
+                                         },
+                             "criteria":  {
+                                              "has_cobblestone":  {
+                                                                      "trigger":  "minecraft:inventory_changed",
+                                                                      "conditions":  {
+                                                                                         "items":  [
+                                                                                                       {
+                                                                                                           "items":  "#mineralogy:stone_tool_materials"
+                                                                                                       }
+                                                                                                   ]
                                                                                      }
-                                                              },
-                                                 "requirements":  [
-                                                                      [
-                                                                          "has_cobblestone",
-                                                                          "has_the_recipe"
-                                                                      ]
-                                                                  ],
-                                                 "sends_telemetry_event":  false
-                                             }
+                                                                  },
+                                              "has_the_recipe":  {
+                                                                     "trigger":  "minecraft:recipe_unlocked",
+                                                                     "conditions":  {
+                                                                                        "recipe":  "minecraft:stone_sword"
+                                                                                    }
+                                                                 }
+                                          },
+                             "requirements":  [
+                                                  [
+                                                      "has_cobblestone",
+                                                      "has_the_recipe"
+                                                  ]
+                                              ],
+                             "sends_telemetry_event":  false
                          },
                          {
-                             "conditions":  [
-                                                {
-                                                    "type":  "forge:not",
-                                                    "value":  {
-                                                                  "type":  "mineralogy:config",
-                                                                  "flag":  "COBBLESTONE_EQUIVILENT"
-                                                              }
-                                                }
-                                            ],
-                             "advancement":  {
-                                                 "parent":  "minecraft:recipes/root",
-                                                 "rewards":  {
-                                                                 "recipes":  [
-                                                                                 "minecraft:stone_sword"
-                                                                             ]
-                                                             },
-                                                 "criteria":  {
-                                                                  "has_cobblestone":  {
-                                                                                          "trigger":  "minecraft:inventory_changed",
-                                                                                          "conditions":  {
-                                                                                                             "items":  [
-                                                                                                                           {
-                                                                                                                               "tag":  "minecraft:stone_tool_materials"
-                                                                                                                           }
-                                                                                                                       ]
-                                                                                                         }
-                                                                                      },
-                                                                  "has_the_recipe":  {
-                                                                                         "trigger":  "minecraft:recipe_unlocked",
-                                                                                         "conditions":  {
-                                                                                                            "recipe":  "minecraft:stone_sword"
-                                                                                                        }
+                             "forge:condition":  {
+                                                     "type":  "forge:not",
+                                                     "value":  {
+                                                                   "type":  "mineralogy:config",
+                                                                   "flag":  "COBBLESTONE_EQUIVILENT"
+                                                               }
+                                                 },
+                             "parent":  "minecraft:recipes/root",
+                             "rewards":  {
+                                             "recipes":  [
+                                                             "minecraft:stone_sword"
+                                                         ]
+                                         },
+                             "criteria":  {
+                                              "has_cobblestone":  {
+                                                                      "trigger":  "minecraft:inventory_changed",
+                                                                      "conditions":  {
+                                                                                         "items":  [
+                                                                                                       {
+                                                                                                           "items":  "#minecraft:stone_tool_materials"
+                                                                                                       }
+                                                                                                   ]
                                                                                      }
-                                                              },
-                                                 "requirements":  [
-                                                                      [
-                                                                          "has_cobblestone",
-                                                                          "has_the_recipe"
-                                                                      ]
-                                                                  ],
-                                                 "sends_telemetry_event":  false
-                                             }
+                                                                  },
+                                              "has_the_recipe":  {
+                                                                     "trigger":  "minecraft:recipe_unlocked",
+                                                                     "conditions":  {
+                                                                                        "recipe":  "minecraft:stone_sword"
+                                                                                    }
+                                                                 }
+                                          },
+                             "requirements":  [
+                                                  [
+                                                      "has_cobblestone",
+                                                      "has_the_recipe"
+                                                  ]
+                                              ],
+                             "sends_telemetry_event":  false
                          }
                      ]
 }

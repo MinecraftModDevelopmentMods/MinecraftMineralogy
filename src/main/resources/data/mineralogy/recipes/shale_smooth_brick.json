@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:shale_smooth_brick"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:shale_smooth_brick"
+                        },
     "type":  "minecraft:crafting_shaped",
     "category":  "building",
     "pattern":  [
@@ -17,7 +15,7 @@
                       }
             },
     "result":  {
-                   "item":  "mineralogy:shale_smooth_brick",
+                   "id":  "mineralogy:shale_smooth_brick",
                    "count":  4
                },
     "show_notification":  true

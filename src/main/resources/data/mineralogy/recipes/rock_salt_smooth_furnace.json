@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:rock_salt_smooth_furnace"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:rock_salt_smooth_furnace"
+                        },
     "type":  "minecraft:crafting_shaped",
     "category":  "misc",
     "pattern":  [
@@ -21,7 +19,7 @@
                       }
             },
     "result":  {
-                   "item":  "mineralogy:rock_salt_smooth_furnace",
+                   "id":  "mineralogy:rock_salt_smooth_furnace",
                    "count":  1
                },
     "show_notification":  true

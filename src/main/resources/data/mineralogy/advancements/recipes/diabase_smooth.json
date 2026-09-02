@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:diabase_smooth"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:diabase_smooth"
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:diabase_smooth"
@@ -22,7 +20,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "tag":  "mineralogy:stones/diabase"
+                                                                           "items":  "#mineralogy:stones/diabase"
                                                                        }
                                                                    ]
                                                      }

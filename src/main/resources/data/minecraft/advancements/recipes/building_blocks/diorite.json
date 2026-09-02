@@ -1,93 +1,81 @@
 {
     "advancements":  [
                          {
-                             "conditions":  [
-                                                {
-                                                    "type":  "mineralogy:config",
-                                                    "flag":  "COBBLESTONE_EQUIVILENT"
-                                                }
-                                            ],
-                             "advancement":  {
-                                                 "parent":  "minecraft:recipes/root",
-                                                 "rewards":  {
-                                                                 "recipes":  [
-                                                                                 "minecraft:diorite"
-                                                                             ]
+                             "forge:condition":  {
+                                                     "type":  "mineralogy:config",
+                                                     "flag":  "COBBLESTONE_EQUIVILENT"
+                                                 },
+                             "parent":  "minecraft:recipes/root",
+                             "rewards":  {
+                                             "recipes":  [
+                                                             "minecraft:diorite"
+                                                         ]
+                                         },
+                             "criteria":  {
+                                              "has_quartz":  {
+                                                                 "trigger":  "minecraft:inventory_changed",
+                                                                 "conditions":  {
+                                                                                    "items":  [
+                                                                                                  {
+                                                                                                      "items":  "minecraft:quartz"
+                                                                                                  }
+                                                                                              ]
+                                                                                }
                                                              },
-                                                 "criteria":  {
-                                                                  "has_quartz":  {
-                                                                                     "trigger":  "minecraft:inventory_changed",
-                                                                                     "conditions":  {
-                                                                                                        "items":  [
-                                                                                                                      {
-                                                                                                                          "items":  [
-                                                                                                                                        "minecraft:quartz"
-                                                                                                                                    ]
-                                                                                                                      }
-                                                                                                                  ]
-                                                                                                    }
-                                                                                 },
-                                                                  "has_the_recipe":  {
-                                                                                         "trigger":  "minecraft:recipe_unlocked",
-                                                                                         "conditions":  {
-                                                                                                            "recipe":  "minecraft:diorite"
-                                                                                                        }
-                                                                                     }
-                                                              },
-                                                 "requirements":  [
-                                                                      [
-                                                                          "has_quartz",
-                                                                          "has_the_recipe"
-                                                                      ]
-                                                                  ],
-                                                 "sends_telemetry_event":  false
-                                             }
+                                              "has_the_recipe":  {
+                                                                     "trigger":  "minecraft:recipe_unlocked",
+                                                                     "conditions":  {
+                                                                                        "recipe":  "minecraft:diorite"
+                                                                                    }
+                                                                 }
+                                          },
+                             "requirements":  [
+                                                  [
+                                                      "has_quartz",
+                                                      "has_the_recipe"
+                                                  ]
+                                              ],
+                             "sends_telemetry_event":  false
                          },
                          {
-                             "conditions":  [
-                                                {
-                                                    "type":  "forge:not",
-                                                    "value":  {
-                                                                  "type":  "mineralogy:config",
-                                                                  "flag":  "COBBLESTONE_EQUIVILENT"
-                                                              }
-                                                }
-                                            ],
-                             "advancement":  {
-                                                 "parent":  "minecraft:recipes/root",
-                                                 "rewards":  {
-                                                                 "recipes":  [
-                                                                                 "minecraft:diorite"
-                                                                             ]
+                             "forge:condition":  {
+                                                     "type":  "forge:not",
+                                                     "value":  {
+                                                                   "type":  "mineralogy:config",
+                                                                   "flag":  "COBBLESTONE_EQUIVILENT"
+                                                               }
+                                                 },
+                             "parent":  "minecraft:recipes/root",
+                             "rewards":  {
+                                             "recipes":  [
+                                                             "minecraft:diorite"
+                                                         ]
+                                         },
+                             "criteria":  {
+                                              "has_quartz":  {
+                                                                 "trigger":  "minecraft:inventory_changed",
+                                                                 "conditions":  {
+                                                                                    "items":  [
+                                                                                                  {
+                                                                                                      "items":  "minecraft:quartz"
+                                                                                                  }
+                                                                                              ]
+                                                                                }
                                                              },
-                                                 "criteria":  {
-                                                                  "has_quartz":  {
-                                                                                     "trigger":  "minecraft:inventory_changed",
-                                                                                     "conditions":  {
-                                                                                                        "items":  [
-                                                                                                                      {
-                                                                                                                          "items":  [
-                                                                                                                                        "minecraft:quartz"
-                                                                                                                                    ]
-                                                                                                                      }
-                                                                                                                  ]
-                                                                                                    }
-                                                                                 },
-                                                                  "has_the_recipe":  {
-                                                                                         "trigger":  "minecraft:recipe_unlocked",
-                                                                                         "conditions":  {
-                                                                                                            "recipe":  "minecraft:diorite"
-                                                                                                        }
-                                                                                     }
-                                                              },
-                                                 "requirements":  [
-                                                                      [
-                                                                          "has_quartz",
-                                                                          "has_the_recipe"
-                                                                      ]
-                                                                  ],
-                                                 "sends_telemetry_event":  false
-                                             }
+                                              "has_the_recipe":  {
+                                                                     "trigger":  "minecraft:recipe_unlocked",
+                                                                     "conditions":  {
+                                                                                        "recipe":  "minecraft:diorite"
+                                                                                    }
+                                                                 }
+                                          },
+                             "requirements":  [
+                                                  [
+                                                      "has_quartz",
+                                                      "has_the_recipe"
+                                                  ]
+                                              ],
+                             "sends_telemetry_event":  false
                          }
                      ]
 }

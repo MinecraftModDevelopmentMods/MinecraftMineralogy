@@ -27,7 +27,7 @@ $colors = @(
     'gray', 'pink', 'lime', 'yellow', 'light_blue', 'magenta', 'orange', 'white'
 )
 
-# Minecraft owns these full-block identities in 1.20.1. Mineralogy keeps its
+# Minecraft owns these full-block identities in 1.20.6. Mineralogy keeps its
 # legacy blocks registered, but recipes may accept either identity where doing
 # so cannot compete with a native recipe.
 $nativeFullBlocks = @{
@@ -69,6 +69,13 @@ function NotCondition([System.Collections.IDictionary] $condition) {
     return [ordered]@{ type = 'forge:not'; value = $condition }
 }
 
+function CombinedCondition([object[]] $conditions) {
+    $present = @($conditions | Where-Object { $null -ne $_ })
+    if ($present.Count -eq 0) { return $null }
+    if ($present.Count -eq 1) { return $present[0] }
+    return [ordered]@{ type = 'forge:and'; values = $present }
+}
+
 function ItemTagNotEmptyCondition([string] $tag) {
     return [ordered]@{
         type = 'forge:not'
@@ -99,25 +106,25 @@ function ItemIngredient([string] $item, [object] $data = $null) {
 function AdvancementPredicate([object] $ingredient) {
     if ($ingredient -is [System.Collections.IDictionary]) {
         if ($ingredient.Contains('item')) {
-            return [ordered]@{ items = @([string]$ingredient['item']) }
+            return [ordered]@{ items = [string]$ingredient['item'] }
         }
         if ($ingredient.Contains('tag')) {
-            return [ordered]@{ tag = [string]$ingredient['tag'] }
+            return [ordered]@{ items = "#$([string]$ingredient['tag'])" }
         }
         if ($ingredient.Contains('items')) {
-            return [ordered]@{ items = @($ingredient['items']) }
+            return [ordered]@{ items = $ingredient['items'] }
         }
     }
     if ($null -ne $ingredient.PSObject.Properties['item']) {
-        return [ordered]@{ items = @([string]$ingredient.item) }
+        return [ordered]@{ items = [string]$ingredient.item }
     }
     if ($null -ne $ingredient.PSObject.Properties['tag']) {
-        return [ordered]@{ tag = [string]$ingredient.tag }
+        return [ordered]@{ items = "#$([string]$ingredient.tag)" }
     }
     if ($null -ne $ingredient.PSObject.Properties['items']) {
-        return [ordered]@{ items = @($ingredient.items) }
+        return [ordered]@{ items = $ingredient.items }
     }
-    throw "Cannot convert recipe ingredient into a Minecraft 1.20.1 advancement predicate"
+    throw "Cannot convert recipe ingredient into a Minecraft 1.20.6 advancement predicate"
 }
 
 function OreIngredient([string] $ore) {
@@ -143,7 +150,7 @@ function OreIngredient([string] $ore) {
         $finish = if ($Matches[2]) { '/' + (Convert-CamelToSnake $Matches[2]) } else { '' }
         return [ordered]@{ tag = "mineralogy:slabs/$family$finish" }
     }
-    throw "No Minecraft 1.20.1 tag mapping for legacy OreDictionary key $ore"
+    throw "No Minecraft 1.20.6 tag mapping for legacy OreDictionary key $ore"
 }
 
 function Convert-CamelToSnake([string] $value) {
@@ -151,11 +158,11 @@ function Convert-CamelToSnake([string] $value) {
 }
 
 function RecipeResult([string] $item, [int] $count) {
-    return [ordered]@{ item = $item; count = $count }
+    return [ordered]@{ id = $item; count = $count }
 }
 
 function VanillaResult([string] $item, [int] $count = 1) {
-    $result = [ordered]@{ item = $item }
+    $result = [ordered]@{ id = $item }
     if ($count -ne 1) { $result.count = $count }
     return $result
 }
@@ -245,8 +252,7 @@ function VanillaStonecuttingRecipe(
     return [ordered]@{
         type = 'minecraft:stonecutting'
         ingredient = $ingredient
-        result = $result
-        count = $count
+        result = VanillaResult $result $count
     }
 }
 
@@ -259,8 +265,8 @@ function Write-ConditionalMinecraftRecipe(
     Write-Json (Join-Path $minecraftRecipeRoot "$name.json") ([ordered]@{
         type = 'forge:conditional'
         recipes = @(
-            [ordered]@{ conditions = @($condition); recipe = $enabledRecipe },
-            [ordered]@{ conditions = @((NotCondition $condition)); recipe = $fallbackRecipe }
+            [ordered]@{ 'forge:condition' = $condition; recipe = $enabledRecipe },
+            [ordered]@{ 'forge:condition' = (NotCondition $condition); recipe = $fallbackRecipe }
         )
     })
 }
@@ -434,15 +440,17 @@ function Write-ShapedRecipe(
     [object[]] $conditions
 ) {
     if ($type.StartsWith('forge:ore_')) { $type = 'minecraft:crafting_shaped' }
-    Write-Recipe $name ([ordered]@{
-        conditions = $conditions
+    $recipe = [ordered]@{
         type = $type
         category = CraftingCategoryForResult $result
         pattern = $pattern
         key = $key
         result = RecipeResult $result $count
         show_notification = $true
-    })
+    }
+    $condition = CombinedCondition $conditions
+    if ($null -ne $condition) { $recipe.Insert(0, 'forge:condition', $condition) }
+    Write-Recipe $name $recipe
 }
 
 function Write-ShapelessRecipe(
@@ -454,13 +462,15 @@ function Write-ShapelessRecipe(
     [object[]] $conditions
 ) {
     if ($type.StartsWith('forge:ore_')) { $type = 'minecraft:crafting_shapeless' }
-    Write-Recipe $name ([ordered]@{
-        conditions = $conditions
+    $recipe = [ordered]@{
         type = $type
         category = CraftingCategoryForResult $result
         ingredients = $ingredients
         result = RecipeResult $result $count
-    })
+    }
+    $condition = CombinedCondition $conditions
+    if ($null -ne $condition) { $recipe.Insert(0, 'forge:condition', $condition) }
+    Write-Recipe $name $recipe
 }
 
 function FamilyOreName([string] $prefix, [string] $family, [string] $suffix = '') {
@@ -741,16 +751,6 @@ function Write-GlobalRecipes() {
     }
 }
 
-function Write-Factories() {
-    $factories = [ordered]@{
-        conditions = [ordered]@{
-            config = 'zone.moddev.mc.mineralogy.recipe.ConfigConditionFactory'
-        }
-    }
-    Write-Json (Join-Path $recipeRoot '_factories.json') $factories
-    Write-Json (Join-Path (Split-Path -Parent $advancementRoot) '_factories.json') $factories
-}
-
 function Ensure-MissingRecipeAdvancements() {
     $recipeFiles = Get-ChildItem -LiteralPath $recipeRoot -Filter '*.json' |
         Where-Object { -not $_.Name.StartsWith('_') }
@@ -783,8 +783,8 @@ function Ensure-MissingRecipeAdvancements() {
         $requirements = Get-UnlockRequirements $sandMode
 
         $generatedAdvancement = [ordered]@{}
-        if ($null -ne $recipe.conditions) {
-            $generatedAdvancement.conditions = @($recipe.conditions)
+        if ($null -ne $recipe.'forge:condition') {
+            $generatedAdvancement['forge:condition'] = $recipe.'forge:condition'
         }
         $generatedAdvancement.rewards = [ordered]@{ recipes = @("mineralogy:$recipeName") }
         $generatedAdvancement.criteria = $criteria
@@ -843,8 +843,8 @@ function Synchronize-AdvancementConditions() {
         $requirements = Get-UnlockRequirements $sandMode
 
         $ordered = [ordered]@{}
-        if ($null -ne $recipe.conditions) {
-            $ordered.conditions = @($recipe.conditions)
+        if ($null -ne $recipe.'forge:condition') {
+            $ordered['forge:condition'] = $recipe.'forge:condition'
         }
         foreach ($property in $advancement.PSObject.Properties) {
             if ($property.Name -eq 'criteria') {
@@ -853,7 +853,7 @@ function Synchronize-AdvancementConditions() {
             elseif ($property.Name -eq 'requirements') {
                 $ordered[$property.Name] = $requirements
             }
-            elseif ($property.Name -ne 'conditions') {
+            elseif ($property.Name -ne 'forge:condition') {
                 $ordered[$property.Name] = $property.Value
             }
         }
@@ -882,7 +882,12 @@ function Prepare-TargetDirectories() {
             }
             foreach ($property in $recipe.PSObject.Properties) {
                 if ($property.Name -notin @('type', 'category')) {
-                    $orderedRecipe[$property.Name] = $property.Value
+                    if ($property.Name -eq 'result' -and $property.Value -is [string]) {
+                        $orderedRecipe[$property.Name] = [ordered]@{ id = [string]$property.Value }
+                    }
+                    else {
+                        $orderedRecipe[$property.Name] = $property.Value
+                    }
                 }
             }
             Write-Json $file.FullName $orderedRecipe
@@ -981,16 +986,23 @@ function Write-ConditionalMinecraftAdvancement(
     New-Item -ItemType Directory -Force -Path $directory | Out-Null
     Write-Json (Join-Path $directory "$recipeName.json") ([ordered]@{
         advancements = @(
-            [ordered]@{
-                conditions = @($condition)
-                advancement = VanillaRecipeAdvancement $recipeName $criterionName $enabledIngredient
-            },
-            [ordered]@{
-                conditions = @((NotCondition $condition))
-                advancement = VanillaRecipeAdvancement $recipeName $criterionName $fallbackIngredient
-            }
+            (Add-ConditionToAdvancement $condition `
+                (VanillaRecipeAdvancement $recipeName $criterionName $enabledIngredient)),
+            (Add-ConditionToAdvancement (NotCondition $condition) `
+                (VanillaRecipeAdvancement $recipeName $criterionName $fallbackIngredient))
         )
     })
+}
+
+function Add-ConditionToAdvancement(
+    [System.Collections.IDictionary] $condition,
+    [System.Collections.IDictionary] $advancement
+) {
+    $result = [ordered]@{ 'forge:condition' = $condition }
+    foreach ($entry in $advancement.GetEnumerator()) {
+        $result[$entry.Key] = $entry.Value
+    }
+    return $result
 }
 
 function Write-CobblestoneRecipeOverrides() {
@@ -1246,4 +1258,4 @@ $advancementCount = Synchronize-AdvancementConditions
 if ($advancementCount -ne $expectedTargetRecipeCount) {
     throw "Expected $expectedTargetRecipeCount recipe advancements, found $advancementCount"
 }
-Write-Output "Generated $expectedRecipeCount crafting recipe JSON files, retained 28 target-native smelting recipes, created $createdAdvancements missing recipe advancements, and conditioned $advancementCount Minecraft 1.20.1 recipe advancements."
+Write-Output "Generated $expectedRecipeCount crafting recipe JSON files, retained 28 target-native smelting recipes, created $createdAdvancements missing recipe advancements, and conditioned $advancementCount Minecraft 1.20.6 recipe advancements."

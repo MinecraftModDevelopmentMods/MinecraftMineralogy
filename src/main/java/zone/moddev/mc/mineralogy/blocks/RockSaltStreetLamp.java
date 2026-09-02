@@ -27,7 +27,7 @@ public class RockSaltStreetLamp extends Block implements NamedMineralogyBlock {
 	private static final VoxelShape STANDING_SHAPE = Block.box(6.4D, 0.0D, 6.4D, 9.6D, 28.8D, 9.6D);
 
 	public RockSaltStreetLamp() {
-		super(BlockBehaviour.Properties.copy(net.minecraft.world.level.block.Blocks.IRON_BLOCK).strength(1.0F)
+		super(BlockBehaviour.Properties.ofFullCopy(net.minecraft.world.level.block.Blocks.IRON_BLOCK).strength(1.0F)
 				.lightLevel(state -> 15).sound(SoundType.METAL));
 		this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.UP));
 	}
@@ -81,7 +81,7 @@ public class RockSaltStreetLamp extends Block implements NamedMineralogyBlock {
 
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirror) {
-		return state.rotate(mirror.getRotation(state.getValue(FACING)));
+		return rotate(state, mirror.getRotation(state.getValue(FACING)));
 	}
 
 	@Override

@@ -2,12 +2,10 @@
     "type":  "forge:conditional",
     "recipes":  [
                     {
-                        "conditions":  [
-                                           {
-                                               "type":  "forge:item_exists",
-                                               "item":  "mineralogy:diorite_slab"
-                                           }
-                                       ],
+                        "forge:condition":  {
+                                                "type":  "forge:item_exists",
+                                                "item":  "mineralogy:diorite_slab"
+                                            },
                         "recipe":  {
                                        "type":  "minecraft:crafting_shaped",
                                        "category":  "building",
@@ -20,22 +18,20 @@
                                                          }
                                                },
                                        "result":  {
-                                                      "item":  "mineralogy:diorite_slab",
+                                                      "id":  "mineralogy:diorite_slab",
                                                       "count":  6
                                                   },
                                        "show_notification":  true
                                    }
                     },
                     {
-                        "conditions":  [
-                                           {
-                                               "type":  "forge:not",
-                                               "value":  {
-                                                             "type":  "forge:item_exists",
-                                                             "item":  "mineralogy:diorite_slab"
-                                                         }
-                                           }
-                                       ],
+                        "forge:condition":  {
+                                                "type":  "forge:not",
+                                                "value":  {
+                                                              "type":  "forge:item_exists",
+                                                              "item":  "mineralogy:diorite_slab"
+                                                          }
+                                            },
                         "recipe":  {
                                        "type":  "minecraft:crafting_shaped",
                                        "category":  "building",
@@ -48,7 +44,7 @@
                                                          }
                                                },
                                        "result":  {
-                                                      "item":  "minecraft:diorite_slab",
+                                                      "id":  "minecraft:diorite_slab",
                                                       "count":  6
                                                   },
                                        "show_notification":  true

@@ -146,7 +146,7 @@ public final class LegacyOreConfigMigrator {
         InputStream stream = LegacyOreConfigMigrator.class.getClassLoader().getResourceAsStream(PROVIDER_RESOURCE);
         if (stream == null) throw new IOException("missing " + PROVIDER_RESOURCE);
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream, StandardCharsets.UTF_8))) {
-            JsonElement parsed = new JsonParser().parse(reader);
+            JsonElement parsed = JsonParser.parseReader(reader);
             if (!parsed.isJsonObject()) throw new IOException("provider root is not an object");
             return parsed.getAsJsonObject();
         }

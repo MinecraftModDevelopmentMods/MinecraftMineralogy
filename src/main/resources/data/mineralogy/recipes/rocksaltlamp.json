@@ -1,14 +1,17 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "mineralogy:config",
-                           "flag":  "ENABLE_ROCK_SALT_LAMPS"
-                       },
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:rocksaltlamp"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:and",
+                            "values":  [
+                                           {
+                                               "type":  "mineralogy:config",
+                                               "flag":  "ENABLE_ROCK_SALT_LAMPS"
+                                           },
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:rocksaltlamp"
+                                           }
+                                       ]
+                        },
     "type":  "minecraft:crafting_shapeless",
     "category":  "building",
     "ingredients":  [
@@ -23,7 +26,7 @@
                         }
                     ],
     "result":  {
-                   "item":  "mineralogy:rocksaltlamp",
+                   "id":  "mineralogy:rocksaltlamp",
                    "count":  1
                }
 }

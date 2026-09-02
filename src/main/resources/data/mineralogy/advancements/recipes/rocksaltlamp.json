@@ -1,14 +1,17 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "mineralogy:config",
-                           "flag":  "ENABLE_ROCK_SALT_LAMPS"
-                       },
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:rocksaltlamp"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:and",
+                            "values":  [
+                                           {
+                                               "type":  "mineralogy:config",
+                                               "flag":  "ENABLE_ROCK_SALT_LAMPS"
+                                           },
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:rocksaltlamp"
+                                           }
+                                       ]
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:rocksaltlamp"
@@ -26,9 +29,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "items":  [
-                                                                                         "mineralogy:rock_salt"
-                                                                                     ]
+                                                                           "items":  "mineralogy:rock_salt"
                                                                        }
                                                                    ]
                                                      }

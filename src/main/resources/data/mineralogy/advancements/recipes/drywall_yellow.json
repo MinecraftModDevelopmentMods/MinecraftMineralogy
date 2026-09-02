@@ -1,14 +1,17 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "mineralogy:config",
-                           "flag":  "ENABLE_DRYWALLS"
-                       },
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:drywall_yellow"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:and",
+                            "values":  [
+                                           {
+                                               "type":  "mineralogy:config",
+                                               "flag":  "ENABLE_DRYWALLS"
+                                           },
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:drywall_yellow"
+                                           }
+                                       ]
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:drywall_yellow"
@@ -26,9 +29,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "items":  [
-                                                                                         "mineralogy:drywall_white"
-                                                                                     ]
+                                                                           "items":  "mineralogy:drywall_white"
                                                                        }
                                                                    ]
                                                      }

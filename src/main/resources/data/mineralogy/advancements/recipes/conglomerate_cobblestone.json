@@ -1,7 +1,4 @@
 {
-    "conditions":  [
-
-                   ],
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:conglomerate_cobblestone"
@@ -19,7 +16,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "tag":  "mineralogy:stones/conglomerate"
+                                                                           "items":  "#mineralogy:stones/conglomerate"
                                                                        }
                                                                    ]
                                                      }

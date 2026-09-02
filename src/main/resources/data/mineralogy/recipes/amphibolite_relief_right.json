@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:amphibolite_relief_right"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:amphibolite_relief_right"
+                        },
     "type":  "minecraft:crafting_shapeless",
     "category":  "building",
     "ingredients":  [
@@ -16,7 +14,7 @@
                         }
                     ],
     "result":  {
-                   "item":  "mineralogy:amphibolite_relief_right",
+                   "id":  "mineralogy:amphibolite_relief_right",
                    "count":  2
                }
 }

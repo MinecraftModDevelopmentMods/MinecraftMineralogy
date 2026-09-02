@@ -47,7 +47,7 @@ public class WorkflowContractTest {
         assertTrue(ci.contains("java-version: '8.0.502+7'"));
         assertTrue(ci.contains("java-version: '21.0.7+6.0.LTS'"));
         assertTrue(ci.contains("Install pinned Java 21 runtime and toolchain"));
-        assertTrue(ci.contains("no matching rules for net.minecraftforge:forge:1.20.6-50.2.0"));
+        assertTrue(ci.contains("applied 0 rule(s) for net.minecraftforge:forge:1.20.6-50.2.0 (explicit no-op)"));
         assertTrue(ci.contains("$JAVA_HOME,$JAVA_HOME_8_X64,$JAVA_HOME_25_X64"));
         assertTrue(ci.contains("verifyReleaseDependencies verifyReleaseArtifacts writeReleaseChecksums"));
         assertTrue(ci.contains("genEclipseRuns eclipse isolateEclipseProductionRuns verifyEclipseProductionClasspath"));

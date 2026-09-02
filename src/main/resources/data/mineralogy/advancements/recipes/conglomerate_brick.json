@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:conglomerate_brick"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:conglomerate_brick"
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:conglomerate_brick"
@@ -22,7 +20,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "tag":  "mineralogy:stones/conglomerate"
+                                                                           "items":  "#mineralogy:stones/conglomerate"
                                                                        }
                                                                    ]
                                                      }

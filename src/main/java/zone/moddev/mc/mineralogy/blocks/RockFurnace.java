@@ -2,6 +2,7 @@ package zone.moddev.mc.mineralogy.blocks;
 
 import java.util.Collections;
 import java.util.List;
+import com.mojang.serialization.MapCodec;
 
 import zone.moddev.mc.mineralogy.Mineralogy;
 import zone.moddev.mc.mineralogy.init.TileEntities;
@@ -23,6 +24,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.Containers;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -30,14 +32,15 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.core.Direction;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootParams.Builder;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -53,13 +56,18 @@ public class RockFurnace extends BaseEntityBlock implements NamedMineralogyBlock
 
 	public RockFurnace(float hardness, float blastResistance, int toolHardnessLevel, boolean burning,
 			float burnModifier, String name) {
-		super(BlockBehaviour.Properties.copy(net.minecraft.world.level.block.Blocks.STONE).strength(hardness, blastResistance)
+		super(BlockBehaviour.Properties.ofFullCopy(net.minecraft.world.level.block.Blocks.STONE).strength(hardness, blastResistance)
 				.sound(SoundType.STONE).lightLevel(state -> burning ? 14 : 0).requiresCorrectToolForDrops());
 		this.burning = burning;
 		this.burnModifier = burnModifier;
 		this.toolHardnessLevel = toolHardnessLevel;
 		this.registryPath = name;
 		this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH));
+	}
+
+	@Override
+	protected MapCodec<? extends BaseEntityBlock> codec() {
+		return MapCodec.unit(this);
 	}
 
 	@Override
@@ -79,7 +87,7 @@ public class RockFurnace extends BaseEntityBlock implements NamedMineralogyBlock
 	@Override
 	public void setPlacedBy(Level world, BlockPos pos, BlockState state, LivingEntity placer,
 			ItemStack stack) {
-		if (stack.hasCustomHoverName()) {
+		if (stack.has(DataComponents.CUSTOM_NAME)) {
 			BlockEntity tileEntity = world.getBlockEntity(pos);
 			if (tileEntity instanceof TileEntityRockFurnace) {
 				((TileEntityRockFurnace) tileEntity).setCustomInventoryName(stack.getHoverName());
@@ -88,8 +96,8 @@ public class RockFurnace extends BaseEntityBlock implements NamedMineralogyBlock
 	}
 
 	@Override
-	public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player,
-			InteractionHand hand, BlockHitResult hit) {
+	protected InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos, Player player,
+			BlockHitResult hit) {
 		if (world.isClientSide) {
 			return InteractionResult.SUCCESS;
 		}
@@ -166,7 +174,8 @@ public class RockFurnace extends BaseEntityBlock implements NamedMineralogyBlock
 	}
 
 	@Override
-	public ItemStack getCloneItemStack(BlockGetter world, BlockPos pos, BlockState state) {
+	public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader world, BlockPos pos,
+			Player player) {
 		return new ItemStack(getUnlitBlock(state.getBlock()));
 	}
 
@@ -210,7 +219,7 @@ public class RockFurnace extends BaseEntityBlock implements NamedMineralogyBlock
 
 	@Override
 	public BlockState mirror(BlockState state, Mirror mirror) {
-		return state.rotate(mirror.getRotation(state.getValue(FACING)));
+		return rotate(state, mirror.getRotation(state.getValue(FACING)));
 	}
 
 	@Override
@@ -239,7 +248,7 @@ public class RockFurnace extends BaseEntityBlock implements NamedMineralogyBlock
 			path = path.substring(4);
 		}
 
-		Block stateBlock = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(Mineralogy.MODID, path));
+		Block stateBlock = ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath(Mineralogy.MODID, path));
 		return stateBlock == null ? block : stateBlock;
 	}
 

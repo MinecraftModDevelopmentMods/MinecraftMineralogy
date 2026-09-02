@@ -8,7 +8,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
@@ -28,8 +28,8 @@ public class MineralogyLiquidBlock extends LiquidBlock {
 	}
 
 	@Override
-	public boolean isPathfindable(BlockState state, BlockGetter world, BlockPos pos, PathComputationType type) {
-		return !getFluid().is(FluidTags.LAVA);
+	protected boolean isPathfindable(BlockState state, PathComputationType type) {
+		return !state.getFluidState().is(FluidTags.LAVA);
 	}
 
 	@Override
@@ -58,7 +58,7 @@ public class MineralogyLiquidBlock extends LiquidBlock {
 	}
 
 	@Override
-	public ItemStack pickupBlock(LevelAccessor world, BlockPos pos, BlockState state) {
+	public ItemStack pickupBlock(Player player, LevelAccessor world, BlockPos pos, BlockState state) {
 		if (state.getValue(LEVEL) == 0) {
 			world.setBlock(pos, Blocks.AIR.defaultBlockState(), 11);
 			return new ItemStack(getFluid().getBucket());

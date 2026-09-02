@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:scoria_brick_slab"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:scoria_brick_slab"
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:scoria_brick_slab"
@@ -22,9 +20,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "items":  [
-                                                                                         "mineralogy:scoria_brick"
-                                                                                     ]
+                                                                           "items":  "mineralogy:scoria_brick"
                                                                        }
                                                                    ]
                                                      }

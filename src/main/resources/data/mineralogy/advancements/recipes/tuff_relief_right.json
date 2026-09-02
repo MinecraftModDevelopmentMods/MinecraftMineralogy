@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:tuff_relief_right"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:tuff_relief_right"
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:tuff_relief_right"
@@ -22,9 +20,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "items":  [
-                                                                                         "mineralogy:tuff_relief_left"
-                                                                                     ]
+                                                                           "items":  "mineralogy:tuff_relief_left"
                                                                        }
                                                                    ]
                                                      }

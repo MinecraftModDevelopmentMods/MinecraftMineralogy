@@ -1,7 +1,4 @@
 {
-    "conditions":  [
-
-                   ],
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:basaltic_glass_cobblestone"
@@ -19,7 +16,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "tag":  "mineralogy:stones/basaltic_glass"
+                                                                           "items":  "#mineralogy:stones/basaltic_glass"
                                                                        }
                                                                    ]
                                                      }

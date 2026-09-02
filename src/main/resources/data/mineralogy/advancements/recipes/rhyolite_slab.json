@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:rhyolite_slab"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:rhyolite_slab"
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:rhyolite_slab"
@@ -22,9 +20,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "items":  [
-                                                                                         "mineralogy:rhyolite"
-                                                                                     ]
+                                                                           "items":  "mineralogy:rhyolite"
                                                                        }
                                                                    ]
                                                      }

@@ -11,6 +11,7 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
@@ -69,8 +70,9 @@ public class SlotRockFurnaceOutput extends Slot {
 
 	private void spawnExperience() {
 		for (Map.Entry<ResourceLocation, Integer> entry : furnace.getRecipeUseCounts().entrySet()) {
-			Recipe<?> recipe = player.level().getRecipeManager().byKey(entry.getKey()).orElse(null);
-			float experience = recipe instanceof SmeltingRecipe ? ((SmeltingRecipe) recipe).getExperience() : 0.0F;
+			RecipeHolder<?> recipe = player.level().getRecipeManager().byKey(entry.getKey()).orElse(null);
+			float experience = recipe != null && recipe.value() instanceof SmeltingRecipe
+					? ((SmeltingRecipe) recipe.value()).getExperience() : 0.0F;
 			int amount = getExperienceAmount(entry.getValue().intValue(), experience);
 
 			if (amount > 0 && player.level() instanceof ServerLevel) {

@@ -27,7 +27,7 @@ public class Gypsum extends Rock {
 			return Collections.singletonList(new ItemStack(this));
 		}
 
-		Item dust = ForgeRegistries.ITEMS.getValue(new ResourceLocation(Mineralogy.MODID, "gypsum_dust"));
+		Item dust = ForgeRegistries.ITEMS.getValue(ResourceLocation.fromNamespaceAndPath(Mineralogy.MODID, "gypsum_dust"));
 		if (dust != null) {
 			return Collections.singletonList(new ItemStack(dust, prng.nextInt(3) + 1));
 		}

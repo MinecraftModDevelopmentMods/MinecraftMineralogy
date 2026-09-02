@@ -1,14 +1,17 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:siltstone_smooth_wall"
-                       },
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:siltstone_smooth_brick_wall"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:and",
+                            "values":  [
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:siltstone_smooth_wall"
+                                           },
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:siltstone_smooth_brick_wall"
+                                           }
+                                       ]
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:siltstone_polished_walls_to_brick"
@@ -26,9 +29,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "items":  [
-                                                                                         "mineralogy:siltstone_smooth_wall"
-                                                                                     ]
+                                                                           "items":  "mineralogy:siltstone_smooth_wall"
                                                                        }
                                                                    ]
                                                      }

@@ -10,7 +10,7 @@
                         }
                     ],
     "result":  {
-                   "item":  "minecraft:polished_diorite",
+                   "id":  "minecraft:polished_diorite",
                    "count":  1
                }
 }

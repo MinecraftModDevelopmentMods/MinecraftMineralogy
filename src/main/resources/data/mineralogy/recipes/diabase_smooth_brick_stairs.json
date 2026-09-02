@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:diabase_smooth_brick_stairs"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:diabase_smooth_brick_stairs"
+                        },
     "type":  "minecraft:crafting_shaped",
     "category":  "building",
     "pattern":  [
@@ -18,7 +16,7 @@
                       }
             },
     "result":  {
-                   "item":  "mineralogy:diabase_smooth_brick_stairs",
+                   "id":  "mineralogy:diabase_smooth_brick_stairs",
                    "count":  4
                },
     "show_notification":  true

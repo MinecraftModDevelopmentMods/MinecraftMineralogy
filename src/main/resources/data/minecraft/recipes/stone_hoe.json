@@ -2,12 +2,10 @@
     "type":  "forge:conditional",
     "recipes":  [
                     {
-                        "conditions":  [
-                                           {
-                                               "type":  "mineralogy:config",
-                                               "flag":  "COBBLESTONE_EQUIVILENT"
-                                           }
-                                       ],
+                        "forge:condition":  {
+                                                "type":  "mineralogy:config",
+                                                "flag":  "COBBLESTONE_EQUIVILENT"
+                                            },
                         "recipe":  {
                                        "type":  "minecraft:crafting_shaped",
                                        "category":  "equipment",
@@ -25,21 +23,19 @@
                                                          }
                                                },
                                        "result":  {
-                                                      "item":  "minecraft:stone_hoe"
+                                                      "id":  "minecraft:stone_hoe"
                                                   },
                                        "show_notification":  true
                                    }
                     },
                     {
-                        "conditions":  [
-                                           {
-                                               "type":  "forge:not",
-                                               "value":  {
-                                                             "type":  "mineralogy:config",
-                                                             "flag":  "COBBLESTONE_EQUIVILENT"
-                                                         }
-                                           }
-                                       ],
+                        "forge:condition":  {
+                                                "type":  "forge:not",
+                                                "value":  {
+                                                              "type":  "mineralogy:config",
+                                                              "flag":  "COBBLESTONE_EQUIVILENT"
+                                                          }
+                                            },
                         "recipe":  {
                                        "type":  "minecraft:crafting_shaped",
                                        "category":  "equipment",
@@ -57,7 +53,7 @@
                                                          }
                                                },
                                        "result":  {
-                                                      "item":  "minecraft:stone_hoe"
+                                                      "id":  "minecraft:stone_hoe"
                                                   },
                                        "show_notification":  true
                                    }

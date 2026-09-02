@@ -11,7 +11,7 @@ public class RockStairs extends StairBlock implements NamedMineralogyBlock {
 
 	public RockStairs(Block materialBlock, float hardness, float blastResistance, int toolHardnessLevel,
 			SoundType sound, String name) {
-		super(materialBlock.defaultBlockState(), BlockBehaviour.Properties.copy(materialBlock)
+		super(materialBlock.defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(materialBlock)
 				.strength(hardness, blastResistance).sound(sound).requiresCorrectToolForDrops());
 
 		this.registryPath = name;

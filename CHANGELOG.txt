@@ -1,13 +1,13 @@
-Mineralogy 6.1.1.120011 for Minecraft 1.20.1
+Mineralogy 6.1.1.120061 for Minecraft 1.20.6
 
 - Delegated terrain, strata, ore, and covered fluid-deposit generation to the
-  released OreSpawn 4.0.16.120011 provider engine, retaining the supported
+  released OreSpawn 4.0.16.120061 provider engine, retaining the supported
   `[4.0.6,5.0.0)` range; removed Mineralogy's parallel
   geology, geome, ore, noise, and stone-replacement generators.
 - Preserved all world-facing registry, tile, NBT, recipe, asset, patch, and
   pre-flattening conversion identities while moving production packages to
   zone.moddev.mc.mineralogy. Existing 1.10/1.12 chunks are protected during
-  1.20.1's flattening conversion. Legacy rock-furnace IDs are established
+  1.20.6's flattening conversion. Legacy rock-furnace IDs are established
   before Mojang data fixing, then all pre-namespaced tile IDs are made safe
   before Forge constructs tile entities, so inventories and progress survive
   and an uppercase vanilla ID cannot abort the complete chunk load.
@@ -25,11 +25,11 @@ Mineralogy 6.1.1.120011 for Minecraft 1.20.1
 - Made the historical `COBBLESTONE_EQUIVILENT` option functional through
   target-native per-family block and item tags, including vanilla aliases,
   reapplied after data reloads by updating the exact immutable tag objects
-  retained by already-parsed Forge 47 recipe ingredients. Chert and pumice
+  retained by already-parsed Forge 50 recipe ingredients. Chert and pumice
   remain unconditional cobblestone equivalents.
 - Added isolated Mineralogy crude-oil source and flowing fluids, block, bucket,
   rendering resources, and the covered Ocean deposit declaration.
-- Uses Minecraft 1.20.1's native granite, diorite, andesite, basalt, and tuff for
+- Uses Minecraft 1.20.6's native granite, diorite, andesite, basalt, and tuff for
   new OreSpawn terrain while retaining Mineralogy's historical registrations
   and conversion aliases. Native smooth basalt joins Mineralogy's smooth-basalt
   family without replacing Minecraft's basalt-smelting route. Deepslate remains
@@ -55,7 +55,7 @@ Mineralogy 6.1.1.120011 for Minecraft 1.20.1
   slab and back at a lossless 1:1 ratio for modpacks that require an exact
   vanilla item. Recipe advancements use the same exact item or family tag as
   the recipe they reveal.
-- Extended Minecraft 1.20.1's native stone crafting and tool-material tags so
+- Extended Minecraft 1.20.6's native stone crafting and tool-material tags so
   every enabled cobblestone equivalent, including all 27 legacy rock families
   and target-native aliases, works in the complete vanilla contract. Nineteen
   conditional JSON overrides cover furnaces, brewing stands, redstone and
@@ -70,7 +70,7 @@ Mineralogy 6.1.1.120011 for Minecraft 1.20.1
   existing template-owned advancements remain untouched.
 - Added `sends_telemetry_event: false` to every generated recipe advancement,
   including all conditional Minecraft advancement branches.
-- Prevented Forge 47 from silently reducing optional carbon- or coal-dust
+- Prevented Forge 50 from silently reducing optional carbon- or coal-dust
   gunpowder recipes to nitrate plus sulfur when their compatibility tag is
   empty; every loaded gunpowder recipe now requires all three components.
 - Added 17 reviewed UTF-8 JSON locales with the same 938 ordered keys, including
@@ -78,7 +78,7 @@ Mineralogy 6.1.1.120011 for Minecraft 1.20.1
   Russian.
 - Added first-start player, developer, content, provider, and version guides,
   plus an exact provider example. Existing exported guides are never
-  overwritten. Forge 47 Eclipse launches keep their required merged
+  overwritten. Forge 50 Eclipse launches keep their required merged
   `bin/main` mod output; if Eclipse removes Gradle's staged guide copies, the
   exporter reads the authoritative source-checkout guides without weakening
   packaged-jar validation.
@@ -90,14 +90,14 @@ Mineralogy 6.1.1.120011 for Minecraft 1.20.1
   entries onto Mineralogy's stable provider rule IDs. This prevents duplicate
   ore generation and preserves world-specific geology choices on first start;
   established OreSpawn files remain authoritative and reloads are byte-stable.
-- Preserved 1.20.1-native wall tall-side blockstates and models, wall/item tags,
-  loot tables, fluid APIs, rendering setup, and pack format 15 resources.
-- Added reproducible Java 17 main, sources, and Javadoc artifacts, exact released
-  OreSpawn dependency verification, guarded 1.20.1 CI, and the four-component
-  release tag `6.1.1.120011`.
-- Kept ForgeGradle 7 while sealing Forge 47's required Mavenizer compatibility
+- Preserved 1.20.6-native wall tall-side blockstates and models, wall/item tags,
+  loot tables, fluid APIs, rendering setup, and pack format 32 resources.
+- Added reproducible Java 21 main, sources, and Javadoc artifacts, exact released
+  OreSpawn dependency verification, guarded 1.20.6 CI, and the four-component
+  release tag `6.1.1.120061`.
+- Kept ForgeGradle 7 while sealing Forge 50's audited zero-repair Mavenizer
   fixture by SHA-256. The build-only tool runs on Java 25; Mineralogy compiles
-  and ships exclusively as Java 17, and release audits reject fixture leakage.
+  and ships exclusively as Java 21, and release audits reject fixture leakage.
 - Isolated CI's verified OreSpawn artifact in an exclusive Gradle repository so
   dependency resolution cannot fall through to an unverified public copy.
   Release verification also enforces Maven coordinate

@@ -2,385 +2,202 @@ package zone.moddev.mc.mineralogy;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.Reader;
-import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.IdentityHashMap;
-import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
+import org.junit.Test;
+
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.SharedConstants;
-import net.minecraft.server.Bootstrap;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.CraftingContainer;
-import net.minecraft.world.inventory.TransientCraftingContainer;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.CraftingRecipe;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeManager;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.common.crafting.VanillaIngredientSerializer;
-import net.minecraftforge.common.crafting.conditions.NotCondition;
-import net.minecraftforge.common.crafting.conditions.ICondition;
-
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-/** Exercises generated overrides through Forge conditions and Minecraft's recipe deserializers. */
+/**
+ * Checks generated recipe branches before the loader-side recipe-manager smoke.
+ * Forge 50's component and condition registries are deliberately unavailable to
+ * a plain JUnit VM, so real codec loading and matching are exercised in Forge.
+ */
 public class NativeRecipeManagerTest {
     private static final File RECIPE_ROOT = new File("src/main/resources/data/minecraft/recipes");
     private static final File MINERALOGY_RECIPE_ROOT = new File(
             "src/main/resources/data/mineralogy/recipes");
-    @BeforeClass
-    public static void initializeRegistriesAndConditions() {
-        SharedConstants.tryDetectVersion();
-        bootstrapRegistriesWithoutForgeNetworkInitialization();
-        CraftingHelper.register(NotCondition.Serializer.INSTANCE);
-        CraftingHelper.register(new ResourceLocation("minecraft", "item"),
-                VanillaIngredientSerializer.INSTANCE);
-        MineralogyConfig.registerRecipeConditions();
-    }
 
-    private static void bootstrapRegistriesWithoutForgeNetworkInitialization() {
-        try {
-            Field field = Bootstrap.class.getDeclaredField("isBootstrapped");
-            field.setAccessible(true);
-            if (!field.getBoolean(null)) {
-                field.setBoolean(null, true);
-                BuiltInRegistries.bootStrap();
-            }
-        } catch (ReflectiveOperationException exception) {
-            throw new AssertionError("Unable to initialize the isolated recipe registry", exception);
+    @Test
+    public void enabledBranchesUseExpandedMaterialsForEveryCoveredVanillaRecipe()
+            throws Exception {
+        for (String name : recipeNames()) {
+            JsonObject recipe = selectedRecipe(json(new File(RECIPE_ROOT, name + ".json")), true);
+            assertNotNull(name, recipe);
+            assertTrue(name, containsIngredient(recipe, enabledMaterial(name)));
+            assertEquals(name, expectedOutput(name), recipe.getAsJsonObject("result")
+                    .get("id").getAsString());
+            assertEquals(name, isTrimTemplateRecipe(name) ? 2 : expectedCount(name),
+                    resultCount(recipe));
         }
     }
 
     @Test
-    public void enabledNativeAndLegacyFamilyRepresentativesMatchEveryCoveredVanillaRecipe()
-            throws Exception {
-        Map<TagKey<Item>, List<Holder<Item>>> previous = snapshotItemTags();
-        try {
-            installRecipeTags();
-            loadConfig(true);
-            for (Item rock : ordinaryRockInputs()) {
-                for (String recipeName : recipeNames()) {
-                    CraftingRecipe recipe = recipe(recipeName);
-                    CraftingContainer inventory = inventory(recipeName, rock);
-                    assertTrue(recipeName + " with " + BuiltInRegistries.ITEM.getKey(rock),
-                            recipe.matches(inventory, null));
-                    String expectedOutput = recipeName.startsWith("mossy_cobblestone_from_")
-                            ? "minecraft:mossy_cobblestone" : "minecraft:" + recipeName;
-                    assertEquals(recipeName, expectedOutput,
-                            BuiltInRegistries.ITEM.getKey(
-                                    recipe.getResultItem(RegistryAccess.EMPTY).getItem()).toString());
-                    if (isTrimTemplateRecipe(recipeName)) {
-                        assertEquals(recipeName, 2,
-                                recipe.getResultItem(RegistryAccess.EMPTY).getCount());
-                    }
-                }
-            }
-        } finally {
-            BuiltInRegistries.ITEM.bindTags(previous);
+    public void disabledBranchesRetainExactTargetNativeMaterials() throws Exception {
+        for (String name : recipeNames()) {
+            JsonObject recipe = selectedRecipe(json(new File(RECIPE_ROOT, name + ".json")), false);
+            assertNotNull(name, recipe);
+            assertTrue(name, containsIngredient(recipe, disabledMaterial(name)));
+            assertFalse(name, containsIngredient(recipe, enabledMaterial(name)));
+            assertEquals(name, expectedOutput(name), recipe.getAsJsonObject("result")
+                    .get("id").getAsString());
         }
-    }
 
-    @Test
-    public void disabledEquivalenceRejectsOrdinaryFamiliesButKeepsVanillaChertAndPumice()
-            throws Exception {
-        Map<TagKey<Item>, List<Holder<Item>>> previous = snapshotItemTags();
-        try {
-            installRecipeTags();
-            loadConfig(false);
-            for (String recipeName : recipeNames()) {
-                CraftingRecipe recipe = recipe(recipeName);
-                for (Item rock : ordinaryRockInputs()) {
-                    assertFalse(recipeName + " with " + BuiltInRegistries.ITEM.getKey(rock),
-                            recipe.matches(inventory(recipeName, rock), null));
-                }
-                assertTrue(recipeName, recipe.matches(inventory(recipeName, Blocks.COBBLESTONE.asItem()), null));
-                // The three 1.20 template recipes deliberately retain exact vanilla
-                // cobblestone while equivalence is disabled. Other tag-backed recipes
-                // continue accepting always-cobblestone chert and pumice.
-                if (isTrimTemplateRecipe(recipeName)) {
-                    assertFalse(recipeName + " with chert stand-in",
-                            recipe.matches(inventory(recipeName, Blocks.NETHERRACK.asItem()), null));
-                    assertFalse(recipeName + " with pumice stand-in",
-                            recipe.matches(inventory(recipeName, Blocks.END_STONE.asItem()), null));
-                } else {
-                    assertTrue(recipeName + " with chert stand-in",
-                            recipe.matches(inventory(recipeName, Blocks.NETHERRACK.asItem()), null));
-                    assertTrue(recipeName + " with pumice stand-in",
-                            recipe.matches(inventory(recipeName, Blocks.END_STONE.asItem()), null));
-                }
-            }
-            assertTrue(recipe("furnace").matches(inventory("furnace", Blocks.BLACKSTONE.asItem()), null));
-            assertTrue(recipe("brewing_stand").matches(
-                    inventory("brewing_stand", Blocks.BLACKSTONE.asItem()), null));
-            assertTrue(recipe("furnace").matches(
-                    inventory("furnace", Blocks.COBBLED_DEEPSLATE.asItem()), null));
-            assertTrue(recipe("stone_pickaxe").matches(
-                    inventory("stone_pickaxe", Blocks.COBBLED_DEEPSLATE.asItem()), null));
-        } finally {
-            BuiltInRegistries.ITEM.bindTags(previous);
-        }
+        assertCompositeTag("cobblestone_equivalents", "#forge:cobblestone");
+        assertCompositeTag("stone_crafting_materials", "#minecraft:stone_crafting_materials");
+        assertCompositeTag("stone_tool_materials", "#minecraft:stone_tool_materials");
+        assertTagContains("data/forge/tags/items/cobblestone.json",
+                "mineralogy:chert", "mineralogy:pumice");
     }
 
     @Test
     public void nativeAndMineralogySlabsConvertExactlyOneForOneInBothDirections()
             throws Exception {
-        Object[][] bridges = {
-                { "andesite_slab", Blocks.ANDESITE_SLAB.asItem() },
-                { "andesite_smooth_slab", Blocks.POLISHED_ANDESITE_SLAB.asItem() },
-                { "diorite_slab", Blocks.DIORITE_SLAB.asItem() },
-                { "diorite_smooth_slab", Blocks.POLISHED_DIORITE_SLAB.asItem() },
-                { "granite_slab", Blocks.GRANITE_SLAB.asItem() },
-                { "granite_smooth_slab", Blocks.POLISHED_GRANITE_SLAB.asItem() }
-        };
-        for (Object[] bridge : bridges) {
-            assertSlabConversion((String) bridge[0], (Item) bridge[1]);
+        for (String family : Arrays.asList("andesite", "diorite", "granite")) {
+            assertSlabConversion(family + "_slab_to_vanilla",
+                    "mineralogy:" + family + "_slab", "minecraft:" + family + "_slab");
+            assertSlabConversion(family + "_slab_from_vanilla",
+                    "minecraft:" + family + "_slab", "mineralogy:" + family + "_slab");
+            assertSlabConversion(family + "_smooth_slab_to_vanilla",
+                    "mineralogy:" + family + "_smooth_slab",
+                    "minecraft:polished_" + family + "_slab");
+            assertSlabConversion(family + "_smooth_slab_from_vanilla",
+                    "minecraft:polished_" + family + "_slab",
+                    "mineralogy:" + family + "_smooth_slab");
         }
     }
 
-    private static void assertSlabConversion(String prefix, Item vanilla)
+    private static void assertSlabConversion(String name, String source, String result)
             throws Exception {
-        Item standIn = Blocks.COBBLESTONE.asItem();
-        CraftingRecipe toVanilla = mineralogyRecipe(prefix + "_to_vanilla", standIn);
-        assertTrue(prefix, toVanilla.matches(shapeless(new ItemStack(standIn)), null));
-        assertFalse(prefix, toVanilla.matches(shapeless(new ItemStack(vanilla)), null));
-        assertEquals(prefix, vanilla, toVanilla.getResultItem(RegistryAccess.EMPTY).getItem());
-        assertEquals(prefix, 1, toVanilla.getResultItem(RegistryAccess.EMPTY).getCount());
-
-        CraftingRecipe fromVanilla = mineralogyRecipe(prefix + "_from_vanilla", standIn);
-        assertTrue(prefix, fromVanilla.matches(shapeless(new ItemStack(vanilla)), null));
-        assertFalse(prefix, fromVanilla.matches(shapeless(new ItemStack(standIn)), null));
-        assertEquals(prefix, standIn,
-                fromVanilla.getResultItem(RegistryAccess.EMPTY).getItem());
-        assertEquals(prefix, 1, fromVanilla.getResultItem(RegistryAccess.EMPTY).getCount());
+        JsonObject recipe = json(new File(MINERALOGY_RECIPE_ROOT, name + ".json"));
+        assertEquals(name, "minecraft:crafting_shapeless", recipe.get("type").getAsString());
+        assertEquals(name, 1, recipe.getAsJsonArray("ingredients").size());
+        assertEquals(name, source, recipe.getAsJsonArray("ingredients").get(0)
+                .getAsJsonObject().get("item").getAsString());
+        assertEquals(name, result, recipe.getAsJsonObject("result").get("id").getAsString());
+        assertEquals(name, 1, resultCount(recipe));
+        JsonObject condition = recipe.getAsJsonObject("forge:condition");
+        assertEquals(name, "forge:and", condition.get("type").getAsString());
+        assertEquals(name, 2, condition.getAsJsonArray("values").size());
     }
 
-    private static void installRecipeTags() {
-        Map<TagKey<Item>, List<Holder<Item>>> tags = snapshotItemTags();
-        tags.put(tagKey("forge:cobblestone"), holders(Blocks.COBBLESTONE.asItem(),
-                Blocks.NETHERRACK.asItem(), Blocks.END_STONE.asItem()));
-        tags.put(tagKey("minecraft:stone_crafting_materials"),
-                holders(Blocks.COBBLESTONE.asItem(), Blocks.BLACKSTONE.asItem(),
-                        Blocks.COBBLED_DEEPSLATE.asItem(), Blocks.NETHERRACK.asItem(),
-                        Blocks.END_STONE.asItem()));
-        tags.put(tagKey("minecraft:stone_tool_materials"), holders(Blocks.COBBLESTONE.asItem(),
-                Blocks.BLACKSTONE.asItem(), Blocks.COBBLED_DEEPSLATE.asItem(),
-                Blocks.NETHERRACK.asItem(), Blocks.END_STONE.asItem()));
-        tags.put(tagKey("minecraft:planks"), holders(Blocks.OAK_PLANKS.asItem()));
-        tags.put(tagKey("mineralogy:cobblestone_equivalents"),
-                holders(Blocks.COBBLESTONE.asItem(), Blocks.NETHERRACK.asItem(), Blocks.END_STONE.asItem(),
-                        Blocks.BASALT.asItem(), Blocks.TUFF.asItem(), Blocks.ANDESITE.asItem(),
-                        Blocks.DIORITE.asItem(), Blocks.GRANITE.asItem(), Blocks.CALCITE.asItem()));
-        tags.put(tagKey("mineralogy:stone_crafting_materials"), holders(Blocks.COBBLESTONE.asItem(),
-                Blocks.BLACKSTONE.asItem(), Blocks.COBBLED_DEEPSLATE.asItem(),
-                Blocks.NETHERRACK.asItem(), Blocks.END_STONE.asItem(), Blocks.BASALT.asItem(),
-                Blocks.TUFF.asItem(), Blocks.ANDESITE.asItem(), Blocks.DIORITE.asItem(),
-                Blocks.GRANITE.asItem(), Blocks.CALCITE.asItem()));
-        tags.put(tagKey("mineralogy:stone_tool_materials"), holders(Blocks.COBBLESTONE.asItem(),
-                Blocks.BLACKSTONE.asItem(), Blocks.COBBLED_DEEPSLATE.asItem(),
-                Blocks.NETHERRACK.asItem(), Blocks.END_STONE.asItem(), Blocks.BASALT.asItem(),
-                Blocks.TUFF.asItem(), Blocks.ANDESITE.asItem(), Blocks.DIORITE.asItem(),
-                Blocks.GRANITE.asItem(), Blocks.CALCITE.asItem()));
-        BuiltInRegistries.ITEM.bindTags(tags);
-    }
-
-    private static Map<TagKey<Item>, List<Holder<Item>>> snapshotItemTags() {
-        Map<TagKey<Item>, List<Holder<Item>>> result = new IdentityHashMap<>();
-        BuiltInRegistries.ITEM.getTags().forEach(pair -> {
-            List<Holder<Item>> holders = new ArrayList<>();
-            pair.getSecond().forEach(holders::add);
-            result.put(pair.getFirst(), holders);
-        });
-        return result;
-    }
-
-    private static List<Holder<Item>> holders(Item... items) {
-        List<Holder<Item>> result = new ArrayList<>();
-        for (Item item : items) {
-            ResourceKey<Item> key = BuiltInRegistries.ITEM.getResourceKey(item).get();
-            result.add(BuiltInRegistries.ITEM.getHolderOrThrow(key));
-        }
-        return result;
-    }
-
-    private static TagKey<Item> tagKey(String value) {
-        return TagKey.create(Registries.ITEM, new ResourceLocation(value));
-    }
-
-    private static void loadConfig(boolean enabled) throws Exception {
-        Path directory = Files.createTempDirectory("mineralogy-recipe-condition");
-        Files.write(directory.resolve(MineralogyConfig.FILE_NAME),
-                ("[options]\nCOBBLESTONE_EQUIVILENT = " + enabled + "\n")
-                        .getBytes(StandardCharsets.UTF_8));
-        MineralogyConfig.load(directory);
-    }
-
-    private static CraftingRecipe recipe(String name) throws Exception {
-        JsonObject wrapper = json(new File(RECIPE_ROOT, name + ".json"));
-        JsonObject selected = null;
+    private static JsonObject selectedRecipe(JsonObject wrapper, boolean enabled) {
         for (JsonElement element : wrapper.getAsJsonArray("recipes")) {
-            JsonObject candidate = element.getAsJsonObject();
-            if (CraftingHelper.processConditions(candidate.getAsJsonArray("conditions"),
-                    ICondition.IContext.EMPTY)) {
-                selected = candidate.getAsJsonObject("recipe");
-                break;
+            JsonObject branch = element.getAsJsonObject();
+            if (conditionMatches(branch.getAsJsonObject("forge:condition"), enabled)) {
+                return branch.getAsJsonObject("recipe");
             }
         }
-        assertTrue(name + " has no selected conditional branch", selected != null);
-        Recipe<?> deserialized = RecipeManager.fromJson(new ResourceLocation("minecraft", name), selected);
-        assertTrue(name, deserialized instanceof CraftingRecipe);
-        return (CraftingRecipe) deserialized;
+        return null;
     }
 
-    private static CraftingRecipe mineralogyRecipe(String name, Item mineralogyStandIn)
-            throws Exception {
-        JsonObject data = json(new File(MINERALOGY_RECIPE_ROOT, name + ".json"));
-        String standInId = BuiltInRegistries.ITEM.getKey(mineralogyStandIn).toString();
-        JsonObject ingredient = data.getAsJsonArray("ingredients").get(0).getAsJsonObject();
-        if (ingredient.get("item").getAsString().startsWith("mineralogy:")) {
-            ingredient.addProperty("item", standInId);
+    private static boolean conditionMatches(JsonObject condition, boolean enabled) {
+        String type = condition.get("type").getAsString();
+        if ("mineralogy:config".equals(type)) {
+            assertEquals("COBBLESTONE_EQUIVILENT", condition.get("flag").getAsString());
+            return enabled;
         }
-        JsonObject result = data.getAsJsonObject("result");
-        if (result.get("item").getAsString().startsWith("mineralogy:")) {
-            result.addProperty("item", standInId);
+        if ("forge:not".equals(type)) {
+            return !conditionMatches(condition.getAsJsonObject("value"), enabled);
         }
-        Recipe<?> deserialized = RecipeManager.fromJson(
-                new ResourceLocation("mineralogy", name), data);
-        assertTrue(name, deserialized instanceof CraftingRecipe);
-        return (CraftingRecipe) deserialized;
+        throw new AssertionError("Unexpected recipe condition " + type);
     }
 
-    private static CraftingContainer inventory(String name, Item rock) {
-        if ("mossy_cobblestone_from_vine".equals(name)) {
-            return shapeless(new ItemStack(rock), new ItemStack(Blocks.VINE));
+    private static String enabledMaterial(String name) {
+        if ("furnace".equals(name) || "brewing_stand".equals(name)) {
+            return "#mineralogy:stone_crafting_materials";
         }
-        if ("mossy_cobblestone_from_moss_block".equals(name)) {
-            return shapeless(new ItemStack(rock), new ItemStack(Blocks.MOSS_BLOCK));
+        if (name.startsWith("stone_") || "stone_sword".equals(name)) {
+            return "#mineralogy:stone_tool_materials";
         }
-        if ("andesite".equals(name)) {
-            return shapeless(new ItemStack(Blocks.DIORITE), new ItemStack(rock));
-        }
+        return "#mineralogy:cobblestone_equivalents";
+    }
 
-        if (isTrimTemplateRecipe(name)) {
-            Item template;
-            if ("coast_armor_trim_smithing_template".equals(name)) {
-                template = Items.COAST_ARMOR_TRIM_SMITHING_TEMPLATE;
-            } else if ("sentry_armor_trim_smithing_template".equals(name)) {
-                template = Items.SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE;
-            } else {
-                template = Items.VEX_ARMOR_TRIM_SMITHING_TEMPLATE;
+    private static String disabledMaterial(String name) {
+        if ("furnace".equals(name) || "brewing_stand".equals(name)) {
+            return "#minecraft:stone_crafting_materials";
+        }
+        if (name.startsWith("stone_") || "stone_sword".equals(name)) {
+            return "#minecraft:stone_tool_materials";
+        }
+        if (isTrimTemplateRecipe(name)) return "minecraft:cobblestone";
+        return "#forge:cobblestone";
+    }
+
+    private static boolean containsIngredient(JsonElement element, String wanted) {
+        if (element == null || element.isJsonNull()) return false;
+        if (element.isJsonArray()) {
+            for (JsonElement child : element.getAsJsonArray()) {
+                if (containsIngredient(child, wanted)) return true;
             }
-            Map<Character, Item> ingredients = new LinkedHashMap<Character, Item>();
-            ingredients.put('#', Items.DIAMOND);
-            ingredients.put('C', rock);
-            ingredients.put('S', template);
-            return shaped(new String[] { "#S#", "#C#", "###" }, ingredients);
+            return false;
         }
-
-        String[] pattern;
-        Map<Character, Item> ingredients = new LinkedHashMap<Character, Item>();
-        ingredients.put('#', rock);
-        switch (name) {
-            case "furnace": pattern = new String[] { "###", "# #", "###" }; break;
-            case "brewing_stand":
-                pattern = new String[] { " B ", "###" };
-                ingredients.put('B', Items.BLAZE_ROD);
-                break;
-            case "lever":
-                pattern = new String[] { "X", "#" };
-                ingredients.put('X', Items.STICK);
-                break;
-            case "piston":
-                pattern = new String[] { "TTT", "#X#", "#R#" };
-                ingredients.put('T', Blocks.OAK_PLANKS.asItem());
-                ingredients.put('X', Items.IRON_INGOT);
-                ingredients.put('R', Items.REDSTONE);
-                break;
-            case "dispenser":
-                pattern = new String[] { "###", "#X#", "#R#" };
-                ingredients.put('X', Items.BOW);
-                ingredients.put('R', Items.REDSTONE);
-                break;
-            case "dropper":
-                pattern = new String[] { "###", "# #", "#R#" };
-                ingredients.put('R', Items.REDSTONE);
-                break;
-            case "observer":
-                pattern = new String[] { "###", "RRQ", "###" };
-                ingredients.put('R', Items.REDSTONE);
-                ingredients.put('Q', Items.QUARTZ);
-                break;
-            case "diorite":
-                pattern = new String[] { "CQ", "QC" };
-                ingredients.put('C', rock);
-                ingredients.put('Q', Items.QUARTZ);
-                break;
-            case "stone_axe": pattern = new String[] { "XX", "X#", " #" }; ingredients.put('X', rock); ingredients.put('#', Items.STICK); break;
-            case "stone_hoe": pattern = new String[] { "XX", " #", " #" }; ingredients.put('X', rock); ingredients.put('#', Items.STICK); break;
-            case "stone_pickaxe": pattern = new String[] { "XXX", " # ", " # " }; ingredients.put('X', rock); ingredients.put('#', Items.STICK); break;
-            case "stone_shovel": pattern = new String[] { "X", "#", "#" }; ingredients.put('X', rock); ingredients.put('#', Items.STICK); break;
-            case "stone_sword": pattern = new String[] { "X", "X", "#" }; ingredients.put('X', rock); ingredients.put('#', Items.STICK); break;
-            default: throw new IllegalArgumentException(name);
+        if (!element.isJsonObject()) return false;
+        JsonObject object = element.getAsJsonObject();
+        if (wanted.startsWith("#") && object.has("tag")
+                && wanted.substring(1).equals(object.get("tag").getAsString())) return true;
+        if (!wanted.startsWith("#") && object.has("item")
+                && wanted.equals(object.get("item").getAsString())) return true;
+        for (java.util.Map.Entry<String, JsonElement> child : object.entrySet()) {
+            if (containsIngredient(child.getValue(), wanted)) return true;
         }
-        return shaped(pattern, ingredients);
+        return false;
     }
 
-    private static CraftingContainer shaped(String[] pattern, Map<Character, Item> ingredients) {
-        CraftingContainer inventory = new TransientCraftingContainer(dummyContainer(), 3, 3);
-        for (int row = 0; row < pattern.length; row++) {
-            for (int column = 0; column < pattern[row].length(); column++) {
-                Item item = ingredients.get(pattern[row].charAt(column));
-                if (item != null) inventory.setItem(row * 3 + column, new ItemStack(item));
-            }
+    private static int resultCount(JsonObject recipe) {
+        JsonObject result = recipe.getAsJsonObject("result");
+        return result.has("count") ? result.get("count").getAsInt() : 1;
+    }
+
+    private static int expectedCount(String name) {
+        if ("andesite".equals(name) || "diorite".equals(name)) return 2;
+        return 1;
+    }
+
+    private static String expectedOutput(String name) {
+        return name.startsWith("mossy_cobblestone_from_")
+                ? "minecraft:mossy_cobblestone" : "minecraft:" + name;
+    }
+
+    private static void assertCompositeTag(String name, String base) throws Exception {
+        JsonArray values = json(new File("src/main/resources/data/mineralogy/tags/items/"
+                + name + ".json")).getAsJsonArray("values");
+        assertEquals(name, 28, values.size());
+        assertEquals(name, base, values.get(0).getAsString());
+        assertEquals(name, new LinkedHashSet<String>(rockFamilies()), familyReferences(values));
+    }
+
+    private static Set<String> familyReferences(JsonArray values) {
+        Set<String> result = new LinkedHashSet<String>();
+        for (int index = 1; index < values.size(); index++) {
+            result.add(values.get(index).getAsString().replace("#mineralogy:stones/", ""));
         }
-        return inventory;
+        return result;
     }
 
-    private static CraftingContainer shapeless(ItemStack... stacks) {
-        CraftingContainer inventory = new TransientCraftingContainer(dummyContainer(), 3, 3);
-        for (int index = 0; index < stacks.length; index++) inventory.setItem(index, stacks[index]);
-        return inventory;
+    private static void assertTagContains(String relative, String... entries) throws Exception {
+        JsonArray values = json(new File("src/main/resources", relative)).getAsJsonArray("values");
+        for (String entry : entries) assertTrue(relative + " " + entry, values.toString().contains(entry));
     }
 
-    private static AbstractContainerMenu dummyContainer() {
-        return new AbstractContainerMenu(null, -1) {
-            @Override
-            public ItemStack quickMoveStack(Player player, int index) {
-                return ItemStack.EMPTY;
-            }
-
-            @Override
-            public boolean stillValid(Player playerIn) {
-                return false;
-            }
-        };
+    private static java.util.List<String> rockFamilies() {
+        return Arrays.asList("andesite", "basalt", "diorite", "granite", "rhyolite",
+                "pegmatite", "diabase", "gabbro", "peridotite", "basaltic_glass",
+                "scoria", "tuff", "shale", "conglomerate", "dolomite", "limestone",
+                "siltstone", "marble", "slate", "schist", "gneiss", "phyllite",
+                "amphibolite", "hornfels", "quartzite", "novaculite", "rock_salt");
     }
 
     private static String[] recipeNames() {
@@ -396,15 +213,9 @@ public class NativeRecipeManagerTest {
         return name.endsWith("_armor_trim_smithing_template");
     }
 
-    private static Item[] ordinaryRockInputs() {
-        return new Item[] { Blocks.BASALT.asItem(), Blocks.TUFF.asItem(),
-                Blocks.ANDESITE.asItem(), Blocks.DIORITE.asItem(), Blocks.GRANITE.asItem(),
-                Blocks.CALCITE.asItem() };
-    }
-
     private static JsonObject json(File file) throws Exception {
         try (Reader reader = Files.newBufferedReader(file.toPath(), StandardCharsets.UTF_8)) {
-            return new JsonParser().parse(reader).getAsJsonObject();
+            return JsonParser.parseReader(reader).getAsJsonObject();
         }
     }
 }

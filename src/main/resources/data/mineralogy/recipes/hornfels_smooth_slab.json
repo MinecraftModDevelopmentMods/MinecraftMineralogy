@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:hornfels_smooth_slab"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:hornfels_smooth_slab"
+                        },
     "type":  "minecraft:crafting_shaped",
     "category":  "building",
     "pattern":  [
@@ -16,7 +14,7 @@
                       }
             },
     "result":  {
-                   "item":  "mineralogy:hornfels_smooth_slab",
+                   "id":  "mineralogy:hornfels_smooth_slab",
                    "count":  6
                },
     "show_notification":  true

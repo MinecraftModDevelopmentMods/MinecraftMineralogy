@@ -73,10 +73,10 @@ public final class PatchHandler {
 	}
 
 	private static ResourceLocation mineralogyId(String path) {
-		return new ResourceLocation(Mineralogy.MODID, path);
+		return ResourceLocation.fromNamespaceAndPath(Mineralogy.MODID, path);
 	}
 
 	private static ResourceLocation minecraftId(String path) {
-		return new ResourceLocation("minecraft", path);
+		return ResourceLocation.fromNamespaceAndPath("minecraft", path);
 	}
 }

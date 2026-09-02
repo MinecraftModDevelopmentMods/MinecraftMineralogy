@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:scoria_smooth"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:scoria_smooth"
+                        },
     "type":  "minecraft:crafting_shapeless",
     "category":  "building",
     "ingredients":  [
@@ -16,7 +14,7 @@
                         }
                     ],
     "result":  {
-                   "item":  "mineralogy:scoria_smooth",
+                   "id":  "mineralogy:scoria_smooth",
                    "count":  1
                }
 }

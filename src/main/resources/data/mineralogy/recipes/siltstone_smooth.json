@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:siltstone_smooth"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:siltstone_smooth"
+                        },
     "type":  "minecraft:crafting_shapeless",
     "category":  "building",
     "ingredients":  [
@@ -16,7 +14,7 @@
                         }
                     ],
     "result":  {
-                   "item":  "mineralogy:siltstone_smooth",
+                   "id":  "mineralogy:siltstone_smooth",
                    "count":  1
                }
 }

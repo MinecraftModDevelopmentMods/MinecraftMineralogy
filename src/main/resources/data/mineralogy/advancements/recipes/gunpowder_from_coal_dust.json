@@ -1,17 +1,20 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "mineralogy:config",
-                           "flag":  "ENABLE_MINERAL_DUSTS"
-                       },
-                       {
-                           "type":  "forge:not",
-                           "value":  {
-                                         "type":  "forge:tag_empty",
-                                         "tag":  "forge:dusts/coal"
-                                     }
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:and",
+                            "values":  [
+                                           {
+                                               "type":  "mineralogy:config",
+                                               "flag":  "ENABLE_MINERAL_DUSTS"
+                                           },
+                                           {
+                                               "type":  "forge:not",
+                                               "value":  {
+                                                             "type":  "forge:tag_empty",
+                                                             "tag":  "forge:dusts/coal"
+                                                         }
+                                           }
+                                       ]
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:gunpowder_from_coal_dust"
@@ -29,9 +32,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "items":  [
-                                                                                         "mineralogy:nitrate_dust"
-                                                                                     ]
+                                                                           "items":  "mineralogy:nitrate_dust"
                                                                        }
                                                                    ]
                                                      }

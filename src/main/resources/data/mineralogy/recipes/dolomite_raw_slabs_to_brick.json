@@ -1,14 +1,17 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:dolomite_slab"
-                       },
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:dolomite_brick_slab"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:and",
+                            "values":  [
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:dolomite_slab"
+                                           },
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:dolomite_brick_slab"
+                                           }
+                                       ]
+                        },
     "type":  "minecraft:crafting_shaped",
     "category":  "building",
     "pattern":  [
@@ -21,7 +24,7 @@
                       }
             },
     "result":  {
-                   "item":  "mineralogy:dolomite_brick_slab",
+                   "id":  "mineralogy:dolomite_brick_slab",
                    "count":  4
                },
     "show_notification":  true

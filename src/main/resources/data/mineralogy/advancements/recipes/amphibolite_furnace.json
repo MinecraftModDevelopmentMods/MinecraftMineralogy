@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:amphibolite_furnace"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:amphibolite_furnace"
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:amphibolite_furnace"
@@ -22,7 +20,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "tag":  "mineralogy:slabs/amphibolite"
+                                                                           "items":  "#mineralogy:slabs/amphibolite"
                                                                        }
                                                                    ]
                                                      }

@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:granite_brick_slab"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:granite_brick_slab"
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:granite_brick_slab"
@@ -22,9 +20,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "items":  [
-                                                                                         "mineralogy:granite_brick"
-                                                                                     ]
+                                                                           "items":  "mineralogy:granite_brick"
                                                                        }
                                                                    ]
                                                      }

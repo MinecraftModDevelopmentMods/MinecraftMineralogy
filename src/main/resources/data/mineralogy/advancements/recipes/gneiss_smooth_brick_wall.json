@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:gneiss_smooth_brick_wall"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:gneiss_smooth_brick_wall"
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:gneiss_smooth_brick_wall"
@@ -22,7 +20,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "tag":  "mineralogy:stones/gneiss/smooth_brick"
+                                                                           "items":  "#mineralogy:stones/gneiss/smooth_brick"
                                                                        }
                                                                    ]
                                                      }

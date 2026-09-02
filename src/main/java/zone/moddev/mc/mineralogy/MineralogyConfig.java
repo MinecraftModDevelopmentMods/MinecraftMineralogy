@@ -14,20 +14,17 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.function.BooleanSupplier;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DynamicOps;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.conditions.ICondition;
-import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.loading.FMLPaths;
+import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
 /**
@@ -39,7 +36,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 public final class MineralogyConfig {
     public static final String FILE_NAME = "mineralogy-common.toml";
     private static final ResourceLocation CONFIG_CONDITION_ID =
-            new ResourceLocation(Mineralogy.MODID, "config");
+            ResourceLocation.fromNamespaceAndPath(Mineralogy.MODID, "config");
+    private static DeferredRegister<MapCodec<? extends ICondition>> conditionCodecs;
 
     private static boolean smeltableGravel = true;
     private static boolean dropCobblestone;
@@ -69,7 +67,6 @@ public final class MineralogyConfig {
     private static CreativeTabPolicy creativeTabPolicy = new CreativeTabPolicy(false);
     private static Path configFile;
     private static boolean recipeConditionsRegistered;
-    private static boolean advancementPredicatesRegistered;
 
     private MineralogyConfig() {
     }
@@ -235,30 +232,15 @@ public final class MineralogyConfig {
         out.append('\t').append(key).append(" = ").append(value).append('\n');
     }
 
-    public static void registerRecipeConditions() {
+    public static void registerRecipeConditions(IEventBus modEventBus) {
         if (!recipeConditionsRegistered) {
-            CraftingHelper.register(new ConfigConditionSerializer());
+            conditionCodecs = DeferredRegister.create(
+                    ForgeRegistries.Keys.CONDITION_SERIALIZERS,
+                    Mineralogy.MODID);
+            conditionCodecs.register(CONFIG_CONDITION_ID.getPath(), () -> ConfigCondition.CODEC);
+            conditionCodecs.register(modEventBus);
             recipeConditionsRegistered = true;
         }
-    }
-
-    public static void registerAdvancementPredicates() {
-        if (!advancementPredicatesRegistered) {
-            ItemPredicate.register(new ResourceLocation(Mineralogy.MODID, "config_item"),
-                    MineralogyConfig::configItemPredicate);
-            advancementPredicatesRegistered = true;
-        }
-    }
-
-    private static ItemPredicate configItemPredicate(JsonObject json) {
-        List<BooleanSupplier> flags = new ArrayList<>();
-        if (json.has("flags")) {
-            JsonArray array = GsonHelper.getAsJsonArray(json, "flags");
-            for (JsonElement flag : array) flags.add(configFlagCondition(GsonHelper.convertToString(flag, "flag")));
-        } else {
-            flags.add(configFlagCondition(GsonHelper.getAsString(json, "flag")));
-        }
-        return new ConfigItemPredicate(flags, new ResourceLocation(GsonHelper.getAsString(json, "item")));
     }
 
     private static BooleanSupplier configFlagCondition(String flag) {
@@ -333,42 +315,19 @@ public final class MineralogyConfig {
         return !"mineral_fertilizer".equals(name) || contentPolicy.mineralFertilizerEnabled();
     }
 
-    private static final class ConfigCondition implements ICondition {
+    static final class ConfigCondition implements ICondition {
+        static final MapCodec<ConfigCondition> CODEC = RecordCodecBuilder.mapCodec(instance ->
+                instance.group(Codec.STRING.fieldOf("flag").forGetter(condition -> condition.flagName))
+                        .apply(instance, ConfigCondition::new));
         private final String flagName;
         private final BooleanSupplier flag;
 
-        private ConfigCondition(String flagName) {
+        ConfigCondition(String flagName) {
             this.flagName = flagName;
             this.flag = configFlagCondition(flagName);
         }
 
-        @Override public ResourceLocation getID() { return CONFIG_CONDITION_ID; }
-        @Override public boolean test(ICondition.IContext context) { return flag.getAsBoolean(); }
-    }
-
-    private static final class ConfigConditionSerializer implements IConditionSerializer<ConfigCondition> {
-        @Override public void write(JsonObject json, ConfigCondition value) {
-            json.addProperty("flag", value.flagName);
-        }
-
-        @Override public ConfigCondition read(JsonObject json) {
-            return new ConfigCondition(GsonHelper.getAsString(json, "flag"));
-        }
-
-        @Override public ResourceLocation getID() { return CONFIG_CONDITION_ID; }
-    }
-
-    private static final class ConfigItemPredicate extends ItemPredicate {
-        private final List<BooleanSupplier> flags;
-        private final ResourceLocation itemName;
-        private ConfigItemPredicate(List<BooleanSupplier> flags, ResourceLocation itemName) {
-            this.flags = flags;
-            this.itemName = itemName;
-        }
-        @Override public boolean matches(ItemStack stack) {
-            for (BooleanSupplier flag : flags) if (!flag.getAsBoolean()) return false;
-            Item item = ForgeRegistries.ITEMS.getValue(itemName);
-            return item != null && stack.getItem() == item;
-        }
+        @Override public boolean test(ICondition.IContext context, DynamicOps<?> ops) { return flag.getAsBoolean(); }
+        @Override public MapCodec<? extends ICondition> codec() { return CODEC; }
     }
 }

@@ -111,12 +111,12 @@ public final class MineralogyItemGroups {
 				.icon(() -> icon(iconItemName))
 				.withSearchBar()
 				.build();
-		helper.register(new ResourceLocation(Mineralogy.MODID, name), tab);
+		helper.register(ResourceLocation.fromNamespaceAndPath(Mineralogy.MODID, name), tab);
 		return tab;
 	}
 
 	private static ItemStack icon(String itemName) {
-		Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(Mineralogy.MODID, itemName));
+		Item item = ForgeRegistries.ITEMS.getValue(ResourceLocation.fromNamespaceAndPath(Mineralogy.MODID, itemName));
 		return new ItemStack(item == null ? net.minecraft.world.item.Items.IRON_PICKAXE : item);
 	}
 }

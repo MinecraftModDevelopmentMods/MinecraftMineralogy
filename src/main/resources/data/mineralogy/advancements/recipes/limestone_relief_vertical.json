@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:limestone_relief_vertical"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:limestone_relief_vertical"
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:limestone_relief_vertical"
@@ -22,9 +20,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "items":  [
-                                                                                         "mineralogy:limestone_relief_blank"
-                                                                                     ]
+                                                                           "items":  "mineralogy:limestone_relief_blank"
                                                                        }
                                                                    ]
                                                      }

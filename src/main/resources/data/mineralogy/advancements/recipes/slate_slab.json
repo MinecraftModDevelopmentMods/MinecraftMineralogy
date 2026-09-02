@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:slate_slab"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:slate_slab"
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:slate_slab"
@@ -22,9 +20,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "items":  [
-                                                                                         "mineralogy:slate"
-                                                                                     ]
+                                                                           "items":  "mineralogy:slate"
                                                                        }
                                                                    ]
                                                      }

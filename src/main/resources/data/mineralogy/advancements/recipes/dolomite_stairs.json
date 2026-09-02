@@ -1,10 +1,8 @@
 {
-    "conditions":  [
-                       {
-                           "type":  "forge:item_exists",
-                           "item":  "mineralogy:dolomite_stairs"
-                       }
-                   ],
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:dolomite_stairs"
+                        },
     "rewards":  {
                     "recipes":  [
                                     "mineralogy:dolomite_stairs"
@@ -22,7 +20,7 @@
                                       "conditions":  {
                                                          "items":  [
                                                                        {
-                                                                           "tag":  "mineralogy:stones/dolomite"
+                                                                           "items":  "#mineralogy:stones/dolomite"
                                                                        }
                                                                    ]
                                                      }

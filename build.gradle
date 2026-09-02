@@ -474,7 +474,7 @@ tasks.register('verifyReleaseConfiguration') {
     description = 'Verifies the exact Mineralogy 1.19.4 release identity.'
     dependsOn tasks.named('verifyMavenizerCompatibilityFixture')
     doLast {
-        if (project.mod_version != '6.1.0.119041'
+        if (project.mod_version != '6.1.1.119041'
                 || project.mod_group != expectedMavenGroup
                 || project.minecraft_version != '1.19.4'
                 || project.forge_version != '45.4.0'
@@ -489,7 +489,7 @@ tasks.register('verifyReleaseDependencies') {
     group = 'verification'
     description = 'Resolves and verifies the exact released OreSpawn dependency.'
     doLast {
-        if (project.mod_version != '6.1.0.119041'
+        if (project.mod_version != '6.1.1.119041'
                 || project.minecraft_version != project.mc_version
                 || project.mc_version != '1.19.4'
                 || project.loader_name != 'forge'
@@ -1078,7 +1078,7 @@ tasks.register('verifyEclipseProductionClasspath') {
             throw new GradleException('Eclipse output contains stale or unexpanded mods.toml metadata')
         }
         String eclipseMetadata = eclipseModsToml.getText('UTF-8')
-        if (eclipseMetadata.contains('${') || !eclipseMetadata.contains('version="6.1.0.119041"')) {
+        if (eclipseMetadata.contains('${') || !eclipseMetadata.contains('version="6.1.1.119041"')) {
             throw new GradleException('Eclipse output contains unresolved or invalid Mineralogy version metadata')
         }
     }

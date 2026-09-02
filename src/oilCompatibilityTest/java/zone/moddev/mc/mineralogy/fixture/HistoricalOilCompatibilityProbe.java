@@ -91,7 +91,9 @@ public final class HistoricalOilCompatibilityProbe {
         boolean additiveBucketTag = new ItemStack(mineralogyBucket).is(bucketTag)
                 && new ItemStack(historicalBucket).is(bucketTag);
         if (!distinctFluids || !distinctBuckets || !additiveFluidTag || !additiveBucketTag) {
-            throw new IllegalStateException("Historical crude-oil coexistence contract failed");
+            throw new IllegalStateException("Historical crude-oil coexistence contract failed: distinctFluids="
+                    + distinctFluids + ", distinctBuckets=" + distinctBuckets + ", additiveFluidTag="
+                    + additiveFluidTag + ", additiveBucketTag=" + additiveBucketTag);
         }
 
         String result = "mineralogy_fluid=mineralogy:crude_oil\n"
@@ -108,6 +110,7 @@ public final class HistoricalOilCompatibilityProbe {
         } catch (IOException exception) {
             throw new IllegalStateException("Could not write oil compatibility marker", exception);
         }
+        event.getServer().halt(false);
     }
 
     private static Fluid requireFluid(String namespace, String path) {

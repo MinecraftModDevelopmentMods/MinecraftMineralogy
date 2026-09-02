@@ -5,19 +5,18 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.LinkedHashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.CraftingContainer;
-import net.minecraft.world.inventory.TransientCraftingContainer;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.item.crafting.StonecutterRecipe;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -103,7 +102,7 @@ public final class RecipeIntegrationProbe {
         for (String family : new String[] { "andesite", "diorite", "granite" }) {
             Item nativeRock = requireItem("minecraft", family);
             CraftingRecipe slab = requireCraftingRecipe(level, family + "_slab");
-            CraftingContainer slabInput = shaped(new String[] { "###" }, Map.of('#', nativeRock));
+            CraftingInput slabInput = shaped(new String[] { "###" }, Map.of('#', nativeRock));
             require(slab.matches(slabInput, level), family + " slab override does not match");
             require(ResourceLocation.fromNamespaceAndPath("mineralogy", family + "_slab").equals(
                     ForgeRegistries.ITEMS.getKey(slab.assemble(slabInput, level.registryAccess()).getItem())),
@@ -131,25 +130,132 @@ public final class RecipeIntegrationProbe {
                     + family + "_stonecutting", requireItem("minecraft", "polished_" + family),
                     requireItem("mineralogy", family + "_smooth_slab"));
         }
+
+        verifyTuffSlabRoutes(level);
+    }
+
+    private static void verifyTuffSlabRoutes(Level level) {
+        String[][] forms = {
+                { "tuff", "tuff_slab", "tuff_slab" },
+                { "polished_tuff", "polished_tuff_slab", "tuff_smooth_slab" },
+                { "tuff_bricks", "tuff_brick_slab", "tuff_brick_slab" }
+        };
+        for (String[] form : forms) {
+            Item source = requireItem("minecraft", form[0]);
+            Item nativeSlab = requireItem("minecraft", form[1]);
+            Item mineralogySlab = requireItem("mineralogy", form[2]);
+            CraftingRecipe slab = requireCraftingRecipe(level, form[1]);
+            CraftingInput input = shaped(new String[] { "###" }, Map.of('#', source));
+            require(slab.matches(input, level), form[1] + " override does not match");
+            ItemStack result = slab.assemble(input, level.registryAccess());
+            require(result.getItem() == mineralogySlab && result.getCount() == 6,
+                    form[1] + " override did not produce six matching Mineralogy slabs");
+
+            String mineralogyName = form[2];
+            assertBridge(level, mineralogyName + "_to_vanilla", mineralogySlab, nativeSlab);
+            assertBridge(level, mineralogyName + "_from_vanilla", nativeSlab, mineralogySlab);
+        }
+
+        assertStonecutting(level, "tuff_slab_from_tuff_stonecutting",
+                Blocks.TUFF.asItem(), requireItem("mineralogy", "tuff_slab"));
+        assertStonecutting(level, "polished_tuff_slab_from_tuff_stonecutting",
+                Blocks.TUFF.asItem(), requireItem("mineralogy", "tuff_smooth_slab"));
+        assertStonecutting(level, "polished_tuff_slab_from_polished_tuff_stonecutting",
+                Blocks.POLISHED_TUFF.asItem(), requireItem("mineralogy", "tuff_smooth_slab"));
+        assertStonecutting(level, "tuff_brick_slab_from_tuff_stonecutting",
+                Blocks.TUFF.asItem(), requireItem("mineralogy", "tuff_brick_slab"));
+        assertStonecutting(level, "tuff_brick_slab_from_polished_tuff_stonecutting",
+                Blocks.POLISHED_TUFF.asItem(), requireItem("mineralogy", "tuff_brick_slab"));
+        assertStonecutting(level, "tuff_brick_slab_from_tuff_bricks_stonecutting",
+                Blocks.TUFF_BRICKS.asItem(), requireItem("mineralogy", "tuff_brick_slab"));
+
+        assertNativeTuffCrafting(level);
+        assertNativeTuffStonecutting(level);
+    }
+
+    private static void assertNativeTuffCrafting(Level level) {
+        assertCrafting(level, "polished_tuff", shapeless(Blocks.TUFF.asItem(), Blocks.SAND.asItem()),
+                Blocks.POLISHED_TUFF.asItem(), 1);
+        assertCrafting(level, "tuff_stairs", shaped(new String[] { "#  ", "## ", "###" },
+                Map.of('#', Blocks.TUFF.asItem())), Blocks.TUFF_STAIRS.asItem(), 4);
+        assertCrafting(level, "tuff_wall", shaped(new String[] { "###", "###" },
+                Map.of('#', Blocks.TUFF.asItem())), Blocks.TUFF_WALL.asItem(), 6);
+        assertCrafting(level, "polished_tuff_stairs", shaped(new String[] { "#  ", "## ", "###" },
+                Map.of('#', Blocks.POLISHED_TUFF.asItem())), Blocks.POLISHED_TUFF_STAIRS.asItem(), 4);
+        assertCrafting(level, "polished_tuff_wall", shaped(new String[] { "###", "###" },
+                Map.of('#', Blocks.POLISHED_TUFF.asItem())), Blocks.POLISHED_TUFF_WALL.asItem(), 6);
+        assertCrafting(level, "tuff_bricks", shaped(new String[] { "##", "##" },
+                Map.of('#', Blocks.POLISHED_TUFF.asItem())), Blocks.TUFF_BRICKS.asItem(), 4);
+        assertCrafting(level, "tuff_brick_stairs", shaped(new String[] { "#  ", "## ", "###" },
+                Map.of('#', Blocks.TUFF_BRICKS.asItem())), Blocks.TUFF_BRICK_STAIRS.asItem(), 4);
+        assertCrafting(level, "tuff_brick_wall", shaped(new String[] { "###", "###" },
+                Map.of('#', Blocks.TUFF_BRICKS.asItem())), Blocks.TUFF_BRICK_WALL.asItem(), 6);
+        assertCrafting(level, "chiseled_tuff", shaped(new String[] { "#", "#" },
+                Map.of('#', Blocks.TUFF_SLAB.asItem())), Blocks.CHISELED_TUFF.asItem(), 1);
+        assertCrafting(level, "chiseled_tuff_bricks", shaped(new String[] { "#", "#" },
+                Map.of('#', Blocks.TUFF_BRICK_SLAB.asItem())), Blocks.CHISELED_TUFF_BRICKS.asItem(), 1);
+    }
+
+    private static void assertNativeTuffStonecutting(Level level) {
+        Object[][] routes = {
+                { "chiseled_tuff_from_tuff_stonecutting", Blocks.TUFF, Blocks.CHISELED_TUFF },
+                { "chiseled_tuff_bricks_from_tuff_stonecutting", Blocks.TUFF, Blocks.CHISELED_TUFF_BRICKS },
+                { "chiseled_tuff_bricks_from_polished_tuff_stonecutting", Blocks.POLISHED_TUFF, Blocks.CHISELED_TUFF_BRICKS },
+                { "chiseled_tuff_bricks_from_tuff_bricks_stonecutting", Blocks.TUFF_BRICKS, Blocks.CHISELED_TUFF_BRICKS },
+                { "polished_tuff_from_tuff_stonecutting", Blocks.TUFF, Blocks.POLISHED_TUFF },
+                { "tuff_stairs_from_tuff_stonecutting", Blocks.TUFF, Blocks.TUFF_STAIRS },
+                { "tuff_wall_from_tuff_stonecutting", Blocks.TUFF, Blocks.TUFF_WALL },
+                { "polished_tuff_stairs_from_tuff_stonecutting", Blocks.TUFF, Blocks.POLISHED_TUFF_STAIRS },
+                { "polished_tuff_stairs_from_polished_tuff_stonecutting", Blocks.POLISHED_TUFF, Blocks.POLISHED_TUFF_STAIRS },
+                { "polished_tuff_wall_from_tuff_stonecutting", Blocks.TUFF, Blocks.POLISHED_TUFF_WALL },
+                { "polished_tuff_wall_from_polished_tuff_stonecutting", Blocks.POLISHED_TUFF, Blocks.POLISHED_TUFF_WALL },
+                { "tuff_bricks_from_tuff_stonecutting", Blocks.TUFF, Blocks.TUFF_BRICKS },
+                { "tuff_bricks_from_polished_tuff_stonecutting", Blocks.POLISHED_TUFF, Blocks.TUFF_BRICKS },
+                { "tuff_brick_stairs_from_tuff_stonecutting", Blocks.TUFF, Blocks.TUFF_BRICK_STAIRS },
+                { "tuff_brick_stairs_from_polished_tuff_stonecutting", Blocks.POLISHED_TUFF, Blocks.TUFF_BRICK_STAIRS },
+                { "tuff_brick_stairs_from_tuff_bricks_stonecutting", Blocks.TUFF_BRICKS, Blocks.TUFF_BRICK_STAIRS },
+                { "tuff_brick_wall_from_tuff_stonecutting", Blocks.TUFF, Blocks.TUFF_BRICK_WALL },
+                { "tuff_brick_wall_from_polished_tuff_stonecutting", Blocks.POLISHED_TUFF, Blocks.TUFF_BRICK_WALL },
+                { "tuff_brick_wall_from_tuff_bricks_stonecutting", Blocks.TUFF_BRICKS, Blocks.TUFF_BRICK_WALL }
+        };
+        for (Object[] route : routes) {
+            assertStonecutting(level, (String) route[0],
+                    ((net.minecraft.world.level.block.Block) route[1]).asItem(),
+                    ((net.minecraft.world.level.block.Block) route[2]).asItem(), 1);
+        }
     }
 
     private static void assertStonecutting(Level level, String name, Item source, Item expected) {
+        assertStonecutting(level, name, source, expected, 2);
+    }
+
+    private static void assertStonecutting(Level level, String name, Item source,
+            Item expected, int expectedCount) {
         RecipeHolder<?> holder = level.getRecipeManager().byKey(
                 ResourceLocation.fromNamespaceAndPath("minecraft", name)).orElseThrow(() ->
                         new IllegalStateException("Missing loaded stonecutting recipe minecraft:" + name));
         require(holder.value() instanceof StonecutterRecipe,
                 "minecraft:" + name + " is not a stonecutting recipe");
         StonecutterRecipe recipe = (StonecutterRecipe) holder.value();
-        SimpleContainer input = new SimpleContainer(new ItemStack(source));
+        SingleRecipeInput input = new SingleRecipeInput(new ItemStack(source));
         require(recipe.matches(input, level), name + " does not match its native source");
         ItemStack output = recipe.assemble(input, level.registryAccess());
-        require(output.getItem() == expected && output.getCount() == 2,
-                name + " did not produce two matching Mineralogy slabs");
+        require(output.getItem() == expected && output.getCount() == expectedCount,
+                name + " produced the wrong stonecutting result");
+    }
+
+    private static void assertCrafting(Level level, String name, CraftingInput input,
+            Item expected, int expectedCount) {
+        CraftingRecipe recipe = requireCraftingRecipe(level, name);
+        require(recipe.matches(input, level), name + " does not match its native inputs");
+        ItemStack output = recipe.assemble(input, level.registryAccess());
+        require(output.getItem() == expected && output.getCount() == expectedCount,
+                name + " produced the wrong native result");
     }
 
     private static void assertBridge(Level level, String name, Item source, Item expected) {
         CraftingRecipe recipe = requireCraftingRecipe(level, name, "mineralogy");
-        CraftingContainer input = shapeless(source);
+        CraftingInput input = shapeless(source);
         require(recipe.matches(input, level), name + " does not match its exact source");
         ItemStack output = recipe.assemble(input, level.registryAccess());
         require(output.getItem() == expected && output.getCount() == 1,
@@ -187,7 +293,7 @@ public final class RecipeIntegrationProbe {
         return (CraftingRecipe) holder.value();
     }
 
-    private static CraftingContainer inventory(String name, Item rock) {
+    private static CraftingInput inventory(String name, Item rock) {
         if ("mossy_cobblestone_from_vine".equals(name)) return shapeless(rock, Blocks.VINE.asItem());
         if ("mossy_cobblestone_from_moss_block".equals(name)) {
             return shapeless(rock, Blocks.MOSS_BLOCK.asItem());
@@ -271,30 +377,29 @@ public final class RecipeIntegrationProbe {
         return shaped(pattern, ingredients);
     }
 
-    private static CraftingContainer shaped(String[] pattern, Map<Character, Item> ingredients) {
-        CraftingContainer inventory = new TransientCraftingContainer(dummyContainer(), 3, 3);
+    private static CraftingInput shaped(String[] pattern, Map<Character, Item> ingredients) {
+        List<ItemStack> inventory = emptyGrid();
         for (int row = 0; row < pattern.length; row++) {
             for (int column = 0; column < pattern[row].length(); column++) {
                 Item item = ingredients.get(pattern[row].charAt(column));
-                if (item != null) inventory.setItem(row * 3 + column, new ItemStack(item));
+                if (item != null) inventory.set(row * 3 + column, new ItemStack(item));
             }
         }
-        return inventory;
+        return CraftingInput.of(3, 3, inventory);
     }
 
-    private static CraftingContainer shapeless(Item... items) {
-        CraftingContainer inventory = new TransientCraftingContainer(dummyContainer(), 3, 3);
+    private static CraftingInput shapeless(Item... items) {
+        List<ItemStack> inventory = emptyGrid();
         for (int index = 0; index < items.length; index++) {
-            inventory.setItem(index, new ItemStack(items[index]));
+            inventory.set(index, new ItemStack(items[index]));
         }
-        return inventory;
+        return CraftingInput.of(3, 3, inventory);
     }
 
-    private static AbstractContainerMenu dummyContainer() {
-        return new AbstractContainerMenu(null, -1) {
-            @Override public ItemStack quickMoveStack(Player player, int index) { return ItemStack.EMPTY; }
-            @Override public boolean stillValid(Player player) { return false; }
-        };
+    private static List<ItemStack> emptyGrid() {
+        List<ItemStack> result = new ArrayList<>(9);
+        for (int index = 0; index < 9; index++) result.add(ItemStack.EMPTY);
+        return result;
     }
 
     private static Item requireItem(String namespace, String path) {
@@ -332,8 +437,8 @@ public final class RecipeIntegrationProbe {
                 + "covered_vanilla_recipes=19\n"
                 + "legacy_rock_families=27\n"
                 + "native_rock_aliases=5\n"
-                + "shared_stonecutting_routes=9\n"
-                + "slab_bridges=12\n"
+                + "shared_stonecutting_routes=15\n"
+                + "slab_bridges=18\n"
                 + "progressive_advancements_loaded=true\n";
         try {
             Files.writeString(Path.of("recipe-integration-pass.properties"), result,

@@ -1,0 +1,33 @@
+{
+    "replace":  false,
+    "values":  [
+                   "#c:cobblestones",
+                   "#mineralogy:stones/andesite",
+                   "#mineralogy:stones/basalt",
+                   "#mineralogy:stones/diorite",
+                   "#mineralogy:stones/granite",
+                   "#mineralogy:stones/rhyolite",
+                   "#mineralogy:stones/pegmatite",
+                   "#mineralogy:stones/diabase",
+                   "#mineralogy:stones/gabbro",
+                   "#mineralogy:stones/peridotite",
+                   "#mineralogy:stones/basaltic_glass",
+                   "#mineralogy:stones/scoria",
+                   "#mineralogy:stones/tuff",
+                   "#mineralogy:stones/shale",
+                   "#mineralogy:stones/conglomerate",
+                   "#mineralogy:stones/dolomite",
+                   "#mineralogy:stones/limestone",
+                   "#mineralogy:stones/siltstone",
+                   "#mineralogy:stones/marble",
+                   "#mineralogy:stones/slate",
+                   "#mineralogy:stones/schist",
+                   "#mineralogy:stones/gneiss",
+                   "#mineralogy:stones/phyllite",
+                   "#mineralogy:stones/amphibolite",
+                   "#mineralogy:stones/hornfels",
+                   "#mineralogy:stones/quartzite",
+                   "#mineralogy:stones/novaculite",
+                   "#mineralogy:stones/rock_salt"
+               ]
+}

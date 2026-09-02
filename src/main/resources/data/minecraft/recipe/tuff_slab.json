@@ -1,0 +1,54 @@
+{
+    "type":  "forge:conditional",
+    "recipes":  [
+                    {
+                        "forge:condition":  {
+                                                "type":  "forge:item_exists",
+                                                "item":  "mineralogy:tuff_slab"
+                                            },
+                        "recipe":  {
+                                       "type":  "minecraft:crafting_shaped",
+                                       "category":  "building",
+                                       "pattern":  [
+                                                       "###"
+                                                   ],
+                                       "key":  {
+                                                   "#":  {
+                                                             "item":  "minecraft:tuff"
+                                                         }
+                                               },
+                                       "result":  {
+                                                      "id":  "mineralogy:tuff_slab",
+                                                      "count":  6
+                                                  },
+                                       "show_notification":  true
+                                   }
+                    },
+                    {
+                        "forge:condition":  {
+                                                "type":  "forge:not",
+                                                "value":  {
+                                                              "type":  "forge:item_exists",
+                                                              "item":  "mineralogy:tuff_slab"
+                                                          }
+                                            },
+                        "recipe":  {
+                                       "type":  "minecraft:crafting_shaped",
+                                       "category":  "building",
+                                       "pattern":  [
+                                                       "###"
+                                                   ],
+                                       "key":  {
+                                                   "#":  {
+                                                             "item":  "minecraft:tuff"
+                                                         }
+                                               },
+                                       "result":  {
+                                                      "id":  "minecraft:tuff_slab",
+                                                      "count":  6
+                                                  },
+                                       "show_notification":  true
+                                   }
+                    }
+                ]
+}

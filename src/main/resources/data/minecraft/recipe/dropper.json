@@ -1,0 +1,62 @@
+{
+    "type":  "forge:conditional",
+    "recipes":  [
+                    {
+                        "forge:condition":  {
+                                                "type":  "mineralogy:config",
+                                                "flag":  "COBBLESTONE_EQUIVILENT"
+                                            },
+                        "recipe":  {
+                                       "type":  "minecraft:crafting_shaped",
+                                       "category":  "redstone",
+                                       "pattern":  [
+                                                       "###",
+                                                       "# #",
+                                                       "#R#"
+                                                   ],
+                                       "key":  {
+                                                   "R":  {
+                                                             "item":  "minecraft:redstone"
+                                                         },
+                                                   "#":  {
+                                                             "tag":  "mineralogy:cobblestone_equivalents"
+                                                         }
+                                               },
+                                       "result":  {
+                                                      "id":  "minecraft:dropper"
+                                                  },
+                                       "show_notification":  true
+                                   }
+                    },
+                    {
+                        "forge:condition":  {
+                                                "type":  "forge:not",
+                                                "value":  {
+                                                              "type":  "mineralogy:config",
+                                                              "flag":  "COBBLESTONE_EQUIVILENT"
+                                                          }
+                                            },
+                        "recipe":  {
+                                       "type":  "minecraft:crafting_shaped",
+                                       "category":  "redstone",
+                                       "pattern":  [
+                                                       "###",
+                                                       "# #",
+                                                       "#R#"
+                                                   ],
+                                       "key":  {
+                                                   "R":  {
+                                                             "item":  "minecraft:redstone"
+                                                         },
+                                                   "#":  {
+                                                             "tag":  "c:cobblestones"
+                                                         }
+                                               },
+                                       "result":  {
+                                                      "id":  "minecraft:dropper"
+                                                  },
+                                       "show_notification":  true
+                                   }
+                    }
+                ]
+}

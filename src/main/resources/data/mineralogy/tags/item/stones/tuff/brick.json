@@ -1,0 +1,7 @@
+{
+    "replace":  false,
+    "values":  [
+                   "mineralogy:tuff_brick",
+                   "minecraft:tuff_bricks"
+               ]
+}

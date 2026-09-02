@@ -17,7 +17,7 @@ public final class ClientSetup {
 
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent event) {
-        // Block render types are declared by their model JSON on Forge 50.
+        // Block render types are declared by their model JSON on Forge 52.
         // Fluid render layers still use the target-native client registration API.
         ItemBlockRenderTypes.setRenderLayer(MineralogyFluids.CRUDE_OIL.get(), RenderType.translucent());
         ItemBlockRenderTypes.setRenderLayer(MineralogyFluids.FLOWING_CRUDE_OIL.get(), RenderType.translucent());

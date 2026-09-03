@@ -62,6 +62,13 @@ public class WorkflowContractTest {
         assertTrue(deploy.contains("forge:1) loader_display=Forge"));
         assertTrue(deploy.contains("neoforge:2) loader_display=NeoForge"));
         assertTrue(deploy.contains("Unexpected Mineralogy CurseForge project"));
+        assertTrue(deploy.contains("java_setup_version=\"$(value java_setup_version)\""));
+        assertTrue(deploy.contains("java_setup_version=\"${java_setup_version:-$java_toolchain_version}\""));
+        assertTrue(deploy.contains("java_setup_version: ${{ steps.validate.outputs.java_setup_version }}"));
+        assertEquals(2, countOccurrences(deploy,
+                "java-version: ${{ needs.preflight.outputs.java_setup_version }}"));
+        assertFalse(deploy.contains(
+                "java-version: ${{ needs.preflight.outputs.java_toolchain_version }}"));
 
         assertEquals("master-1.10.2", fullBranchFor("110021"));
         assertEquals("master-1.12.2", fullBranchFor("112021"));

@@ -47,6 +47,7 @@ jobs:
       loader_display: ${{ steps.validate.outputs.loader_display }}
       java_version: ${{ steps.validate.outputs.java_version }}
       java_toolchain_version: ${{ steps.validate.outputs.java_toolchain_version }}
+      java_setup_version: ${{ steps.validate.outputs.java_setup_version }}
       gradle_java_version: ${{ steps.validate.outputs.gradle_java_version }}
       curseforge_project_id: ${{ steps.validate.outputs.curseforge_project_id }}
       main_jar: ${{ steps.validate.outputs.main_jar }}
@@ -137,6 +138,7 @@ jobs:
           loader_code="$(value loader_code)"
           java_version="$(value java_version)"
           java_toolchain_version="$(value java_toolchain_version)"
+          java_setup_version="$(value java_setup_version)"
           gradle_java_version="$(value gradle_java_version)"
           curseforge_project_id="$(value curseforge_project_id)"
 
@@ -148,6 +150,7 @@ jobs:
             fi
           done
           java_toolchain_version="${java_toolchain_version:-$java_version}"
+          java_setup_version="${java_setup_version:-$java_toolchain_version}"
 
           IFS=. read -r mc_major mc_minor mc_patch extra <<<"$minecraft_version"
           if [[ -n "${extra:-}" || -z "${mc_major:-}" || -z "${mc_minor:-}" ]]; then
@@ -195,6 +198,7 @@ jobs:
           echo "loader_display=$loader_display" >> "$GITHUB_OUTPUT"
           echo "java_version=$java_version" >> "$GITHUB_OUTPUT"
           echo "java_toolchain_version=$java_toolchain_version" >> "$GITHUB_OUTPUT"
+          echo "java_setup_version=$java_setup_version" >> "$GITHUB_OUTPUT"
           echo "gradle_java_version=$gradle_java_version" >> "$GITHUB_OUTPUT"
           echo "curseforge_project_id=$curseforge_project_id" >> "$GITHUB_OUTPUT"
           echo "main_jar=Mineralogy-$release_version.jar" >> "$GITHUB_OUTPUT"
@@ -262,7 +266,7 @@ jobs:
         uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
         with:
           distribution: temurin
-          java-version: ${{ needs.preflight.outputs.java_toolchain_version }}
+          java-version: ${{ needs.preflight.outputs.java_setup_version }}
 
       - name: Record target Java toolchain path
         shell: bash
@@ -465,7 +469,7 @@ jobs:
         uses: actions/setup-java@b6effb05e454b25005698d916606bdc6ffcbf961 # v5
         with:
           distribution: temurin
-          java-version: ${{ needs.preflight.outputs.java_toolchain_version }}
+          java-version: ${{ needs.preflight.outputs.java_setup_version }}
 
       - name: Record target Java toolchain path
         shell: bash

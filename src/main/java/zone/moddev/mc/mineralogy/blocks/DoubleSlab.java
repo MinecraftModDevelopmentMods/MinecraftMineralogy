@@ -9,12 +9,9 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.storage.loot.LootParams.Builder;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.HitResult;
 
 public class DoubleSlab extends Block implements NamedMineralogyBlock {
@@ -50,9 +47,7 @@ public class DoubleSlab extends Block implements NamedMineralogyBlock {
 	}
 
 	public List<ItemStack> getDrops(BlockState state, Builder builder) {
-		ItemStack tool = builder.getOptionalParameter(LootContextParams.TOOL);
-		if (tool != null && !tool.isEmpty()
-				&& EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, tool) > 0) {
+		if (Rock.hasSilkTouch(builder)) {
 			return Collections.singletonList(new ItemStack(fullBlock));
 		}
 		return Collections.singletonList(new ItemStack(drops, 2));

@@ -1,0 +1,7 @@
+{
+    "replace":  false,
+    "values":  [
+                   "mineralogy:tuff_smooth_slab",
+                   "minecraft:polished_tuff_slab"
+               ]
+}

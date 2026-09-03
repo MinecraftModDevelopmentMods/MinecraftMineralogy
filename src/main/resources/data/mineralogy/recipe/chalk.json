@@ -1,0 +1,22 @@
+{
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:chalk"
+                        },
+    "type":  "minecraft:crafting_shaped",
+    "category":  "building",
+    "pattern":  [
+                    "xx",
+                    "xx"
+                ],
+    "key":  {
+                "x":  {
+                          "tag":  "c:dusts/chalk"
+                      }
+            },
+    "result":  {
+                   "id":  "mineralogy:chalk",
+                   "count":  1
+               },
+    "show_notification":  true
+}

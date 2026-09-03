@@ -19,8 +19,8 @@ public class WorkflowContractTest {
         try (FileInputStream input = new FileInputStream("gradle.properties")) {
             properties.load(input);
         }
-        assertEquals("6.1.1.120061", properties.getProperty("mod_version"));
-        assertEquals("1.20.6", properties.getProperty("minecraft_version"));
+        assertEquals("6.1.1.121011", properties.getProperty("mod_version"));
+        assertEquals("1.21.1", properties.getProperty("minecraft_version"));
         assertEquals(properties.getProperty("mc_version"), properties.getProperty("minecraft_version"));
         assertEquals("forge", properties.getProperty("loader_name"));
         assertEquals("1", properties.getProperty("loader_code"));
@@ -28,10 +28,10 @@ public class WorkflowContractTest {
         assertEquals("21.0.7+6", properties.getProperty("java_toolchain_version"));
         assertEquals("21", properties.getProperty("gradle_java_version"));
         assertEquals("240974", properties.getProperty("curseforge_project_id"));
-        assertEquals("zone.moddev.mc.mineralogy", properties.getProperty("mod_group"));
-        assertEquals("4.0.16.120061", properties.getProperty("orespawn_version"));
-        assertEquals("8786031", properties.getProperty("orespawn_curse_file_id"));
-        assertEquals("D86A14957B9996DDA0465C413C60811B7473EF327FC16E95266B522F06CBE806",
+        assertEquals("zone.moddev.mc", properties.getProperty("mod_group"));
+        assertEquals("4.0.16.121011", properties.getProperty("orespawn_version"));
+        assertEquals("8791317", properties.getProperty("orespawn_curse_file_id"));
+        assertEquals("3AB14B8F71B0AEB9A87A283B62BF1FB75C9580CD86F4895F540A591460358480",
                 properties.getProperty("orespawn_sha256"));
     }
 
@@ -42,12 +42,12 @@ public class WorkflowContractTest {
         String wrapper = text(".github/workflows/validate-gradle-build.yml");
         String staging = text("gradle/stage-orespawn-release.sh");
         assertTrue(ci.contains("name: Build, test, and audit"));
-        assertTrue(ci.contains("master-1.20.6"));
+        assertTrue(ci.contains("master-1.21.1"));
         assertTrue(ci.contains("Install pinned Java 8 launcher toolchain"));
         assertTrue(ci.contains("java-version: '8.0.502+7'"));
         assertTrue(ci.contains("java-version: '21.0.7+6.0.LTS'"));
         assertTrue(ci.contains("Install pinned Java 21 runtime and toolchain"));
-        assertTrue(ci.contains("applied 0 rule(s) for net.minecraftforge:forge:1.20.6-50.2.0 (explicit no-op)"));
+        assertTrue(ci.contains("applied 0 rule(s) for net.minecraftforge:forge:1.21.1-52.1.0 (explicit no-op)"));
         assertTrue(ci.contains("$JAVA_HOME,$JAVA_HOME_8_X64,$JAVA_HOME_25_X64"));
         assertTrue(ci.contains("verifyReleaseDependencies verifyReleaseArtifacts writeReleaseChecksums"));
         assertTrue(ci.contains("genEclipseRuns eclipse isolateEclipseProductionRuns verifyEclipseProductionClasspath"));
@@ -90,7 +90,7 @@ public class WorkflowContractTest {
         assertTrue(build.contains("tasks.register('verifyMavenCoordinates')"));
         assertTrue(build.contains("generatePomFileForMavenJavaPublication"));
         assertTrue(build.contains("dependsOn tasks.named('verifyMavenCoordinates')"));
-        assertTrue(build.contains("expectedMavenGroup = 'zone.moddev.mc.mineralogy'"));
+        assertTrue(build.contains("expectedMavenGroup = 'zone.moddev.mc'"));
         assertTrue(build.contains("expectedMavenArtifact = 'Mineralogy'"));
         assertTrue(build.contains("'Maven-Artifact'"));
         assertTrue(build.contains("Maven release publication must use a remote repository"));

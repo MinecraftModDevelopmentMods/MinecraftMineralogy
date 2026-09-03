@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 import static org.junit.Assert.*;
 
-/** Quality policy for the reviewed 1.20.6 JSON localization inventory. */
+/** Quality policy for the reviewed 1.21.1 JSON localization inventory. */
 public class LocalizationQualityTest {
     private static final File LANG_DIR = new File("src/main/resources/assets/mineralogy/lang");
     private static final Set<String> ENGLISH_LOCALES = new HashSet<String>(Arrays.asList(

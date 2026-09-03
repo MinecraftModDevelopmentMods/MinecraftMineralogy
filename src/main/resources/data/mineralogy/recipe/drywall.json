@@ -1,0 +1,35 @@
+{
+    "forge:condition":  {
+                            "type":  "forge:and",
+                            "values":  [
+                                           {
+                                               "type":  "mineralogy:config",
+                                               "flag":  "ENABLE_DRYWALLS"
+                                           },
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:drywall_white"
+                                           }
+                                       ]
+                        },
+    "type":  "minecraft:crafting_shaped",
+    "category":  "building",
+    "pattern":  [
+                    "pgp",
+                    "pgp",
+                    "pgp"
+                ],
+    "key":  {
+                "p":  {
+                          "tag":  "forge:paper"
+                      },
+                "g":  {
+                          "tag":  "c:dusts/gypsum"
+                      }
+            },
+    "result":  {
+                   "id":  "mineralogy:drywall_white",
+                   "count":  3
+               },
+    "show_notification":  true
+}

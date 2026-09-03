@@ -4,12 +4,12 @@ param()
 $ErrorActionPreference = 'Stop'
 
 $projectRoot = Split-Path -Parent $PSScriptRoot
-$recipeRoot = Join-Path $projectRoot 'src\main\resources\data\mineralogy\recipes'
-$advancementRoot = Join-Path $projectRoot 'src\main\resources\data\mineralogy\advancements\recipes'
-$minecraftRecipeRoot = Join-Path $projectRoot 'src\main\resources\data\minecraft\recipes'
-$minecraftAdvancementRoot = Join-Path $projectRoot 'src\main\resources\data\minecraft\advancements\recipes'
-$itemTagRoot = Join-Path $projectRoot 'src\main\resources\data\mineralogy\tags\items'
-$blockTagRoot = Join-Path $projectRoot 'src\main\resources\data\mineralogy\tags\blocks'
+$recipeRoot = Join-Path $projectRoot 'src\main\resources\data\mineralogy\recipe'
+$advancementRoot = Join-Path $projectRoot 'src\main\resources\data\mineralogy\advancement\recipes'
+$minecraftRecipeRoot = Join-Path $projectRoot 'src\main\resources\data\minecraft\recipe'
+$minecraftAdvancementRoot = Join-Path $projectRoot 'src\main\resources\data\minecraft\advancement\recipes'
+$itemTagRoot = Join-Path $projectRoot 'src\main\resources\data\mineralogy\tags\item'
+$blockTagRoot = Join-Path $projectRoot 'src\main\resources\data\mineralogy\tags\block'
 $utf8NoBom = New-Object System.Text.UTF8Encoding($false)
 $generatedNames = New-Object 'System.Collections.Generic.HashSet[string]'
 $unlockSources = @{}
@@ -27,7 +27,7 @@ $colors = @(
     'gray', 'pink', 'lime', 'yellow', 'light_blue', 'magenta', 'orange', 'white'
 )
 
-# Minecraft owns these full-block identities in 1.20.6. Mineralogy keeps its
+# Minecraft owns these full-block identities in 1.21.1. Mineralogy keeps its
 # legacy blocks registered, but recipes may accept either identity where doing
 # so cannot compete with a native recipe.
 $nativeFullBlocks = @{
@@ -35,13 +35,22 @@ $nativeFullBlocks = @{
     basalt = @{ raw = 'minecraft:basalt'; smooth = 'minecraft:polished_basalt' }
     diorite = @{ raw = 'minecraft:diorite'; smooth = 'minecraft:polished_diorite' }
     granite = @{ raw = 'minecraft:granite'; smooth = 'minecraft:polished_granite' }
-    tuff = @{ raw = 'minecraft:tuff' }
+    tuff = @{
+        raw = 'minecraft:tuff'
+        smooth = 'minecraft:polished_tuff'
+        brick = 'minecraft:tuff_bricks'
+    }
 }
 
 $nativeConstructionForms = @{
     andesite = @{ raw = @('stairs', 'slab', 'wall'); smooth = @('stairs', 'slab') }
     diorite = @{ raw = @('stairs', 'slab', 'wall'); smooth = @('stairs', 'slab') }
     granite = @{ raw = @('stairs', 'slab', 'wall'); smooth = @('stairs', 'slab') }
+    tuff = @{
+        raw = @('stairs', 'slab', 'wall')
+        smooth = @('stairs', 'slab', 'wall')
+        brick = @('stairs', 'slab', 'wall')
+    }
 }
 
 $nativeExactRecipeInputs = @{
@@ -51,6 +60,13 @@ $nativeExactRecipeInputs = @{
     basalt = @{ raw = @('smooth') }
     diorite = @{ raw = @('smooth', 'stairs', 'slab', 'wall'); smooth = @('stairs', 'slab') }
     granite = @{ raw = @('smooth', 'stairs', 'slab', 'wall'); smooth = @('stairs', 'slab') }
+    # Native tuff owns every corresponding construction route. Keep those
+    # inputs exact while allowing safe raw-to-brick and brick polishing routes.
+    tuff = @{
+        raw = @('smooth', 'stairs', 'slab', 'wall')
+        smooth = @('brick', 'stairs', 'slab', 'wall')
+        brick = @('stairs', 'slab', 'wall')
+    }
 }
 
 function ItemId([string] $path) {
@@ -124,7 +140,7 @@ function AdvancementPredicate([object] $ingredient) {
     if ($null -ne $ingredient.PSObject.Properties['items']) {
         return [ordered]@{ items = $ingredient.items }
     }
-    throw "Cannot convert recipe ingredient into a Minecraft 1.20.6 advancement predicate"
+    throw "Cannot convert recipe ingredient into a Minecraft 1.21.1 advancement predicate"
 }
 
 function OreIngredient([string] $ore) {
@@ -134,11 +150,11 @@ function OreIngredient([string] $ore) {
     if ($ore -eq 'lampRocksalt') { return [ordered]@{ tag = 'forge:lamps/rock_salt' } }
     if ($ore -match '^dust(.+)$') {
         $name = $Matches[1] -replace 'Rock_salt', 'rock_salt'
-        return [ordered]@{ tag = "forge:dusts/$($name.ToLowerInvariant())" }
+        return [ordered]@{ tag = "c:dusts/$($name.ToLowerInvariant())" }
     }
     if ($ore -match '^block(.+)$') {
         $name = $Matches[1] -replace 'Rocksalt', 'rock_salt'
-        return [ordered]@{ tag = "forge:storage_blocks/$($name.ToLowerInvariant())" }
+        return [ordered]@{ tag = "c:storage_blocks/$($name.ToLowerInvariant())" }
     }
     if ($ore -match '^stone(.+?)(SmoothBrick|Smooth|Brick)?$') {
         $family = Convert-CamelToSnake $Matches[1]
@@ -150,7 +166,7 @@ function OreIngredient([string] $ore) {
         $finish = if ($Matches[2]) { '/' + (Convert-CamelToSnake $Matches[2]) } else { '' }
         return [ordered]@{ tag = "mineralogy:slabs/$family$finish" }
     }
-    throw "No Minecraft 1.20.6 tag mapping for legacy OreDictionary key $ore"
+    throw "No Minecraft 1.21.1 tag mapping for legacy OreDictionary key $ore"
 }
 
 function Convert-CamelToSnake([string] $value) {
@@ -410,7 +426,7 @@ function NativeTagAliases(
         return @()
     }
     $nativeFinish = if ([string]::IsNullOrWhiteSpace($finish)) { 'raw' } else { $finish }
-    if ($nativeFinish -notin @('raw', 'smooth')) {
+    if ($nativeFinish -notin @('raw', 'smooth', 'brick')) {
         return @()
     }
     if (-not $nativeFullBlocks[$family].ContainsKey($nativeFinish)) {
@@ -424,6 +440,9 @@ function NativeTagAliases(
     }
     if ($kind -eq 'slabs' -and
             (Matrix-Contains $nativeConstructionForms $family $nativeFinish 'slab')) {
+        if ($family -eq 'tuff' -and $nativeFinish -eq 'brick') {
+            return @('minecraft:tuff_brick_slab')
+        }
         $prefix = if ($nativeFinish -eq 'smooth') { 'polished_' } else { '' }
         return @("minecraft:${prefix}${family}_slab")
     }
@@ -513,7 +532,8 @@ function Write-BaseFamilyRecipes([string] $family) {
         ([ordered]@{ x = ConstructionFormIngredient $family 'raw' 'brick' $raw $rawOre }) `
         $brick 4 (ConditionsFor $brick)
     Write-ShapedRecipe "${family}_brick_stairs" 'forge:ore_shaped' @('x  ', 'xx ', 'xxx') `
-        ([ordered]@{ x = OreIngredient $brickOre }) (ItemId "${family}_brick_stairs") 4 `
+        ([ordered]@{ x = ConstructionFormIngredient $family 'brick' 'stairs' $brick $brickOre }) `
+        (ItemId "${family}_brick_stairs") 4 `
         (ConditionsFor (ItemId "${family}_brick_stairs"))
     Write-ShapedRecipe "${family}_brick_slab" 'minecraft:crafting_shaped' @('xxx') `
         ([ordered]@{ x = ItemIngredient $brick }) (ItemId "${family}_brick_slab") 6 `
@@ -522,7 +542,8 @@ function Write-BaseFamilyRecipes([string] $family) {
         ([ordered]@{ x = OreIngredient (FamilyOreName 'slab' $family 'Brick'); y = ItemIngredient 'minecraft:furnace' }) `
         (ItemId "${family}_brick_furnace") 1 (ConditionsFor (ItemId "${family}_brick_furnace"))
     Write-ShapedRecipe "${family}_brick_wall" 'forge:ore_shaped' @('xxx', 'xxx') `
-        ([ordered]@{ x = OreIngredient $brickOre }) (ItemId "${family}_brick_wall") 6 `
+        ([ordered]@{ x = ConstructionFormIngredient $family 'brick' 'wall' $brick $brickOre }) `
+        (ItemId "${family}_brick_wall") 6 `
         (ConditionsFor (ItemId "${family}_brick_wall"))
 
     Write-ShapelessRecipe "${family}_smooth" 'forge:ore_shapeless' @(
@@ -546,7 +567,8 @@ function Write-BaseFamilyRecipes([string] $family) {
         (ConditionsFor (ItemId "${family}_smooth_wall"))
 
     Write-ShapedRecipe "${family}_smooth_brick" 'forge:ore_shaped' @('xx', 'xx') `
-        ([ordered]@{ x = OreIngredient $smoothOre }) $smoothBrick 4 (ConditionsFor $smoothBrick)
+        ([ordered]@{ x = ConstructionFormIngredient $family 'smooth' 'brick' $smooth $smoothOre }) `
+        $smoothBrick 4 (ConditionsFor $smoothBrick)
     Write-ShapedRecipe "${family}_smooth_brick_stairs" 'forge:ore_shaped' @('x  ', 'xx ', 'xxx') `
         ([ordered]@{ x = OreIngredient $smoothBrickOre }) (ItemId "${family}_smooth_brick_stairs") 4 `
         (ConditionsFor (ItemId "${family}_smooth_brick_stairs"))
@@ -657,8 +679,14 @@ function Write-ConstructionRecipes([string] $family) {
         }
     }
 
+    $brickBlockIngredient = if ($family -eq 'tuff') {
+        OreIngredient (FamilyOreName 'stone' $family 'Brick')
+    }
+    else {
+        ItemIngredient $forms.brick.block
+    }
     Write-ShapelessRecipe "${family}_brick_block_polishing" 'forge:ore_shapeless' `
-        @((ItemIngredient $forms.brick.block), (OreIngredient 'sand')) $forms.polished_brick.block 1 `
+        @($brickBlockIngredient, (OreIngredient 'sand')) $forms.polished_brick.block 1 `
         @((ItemCondition $forms.brick.block), (ItemCondition $forms.polished_brick.block))
     Register-UnlockSource "${family}_brick_block_polishing" $forms.brick.block
 }
@@ -683,11 +711,11 @@ function Write-GlobalRecipes() {
     Register-UnlockSource 'gunpowder_from_charcoal' (ItemId 'nitrate_dust')
     Write-ShapelessRecipe 'gunpowder_from_carbon_dust' 'forge:ore_shapeless' `
         (@((OreIngredient 'dustCarbon')) + $gunpowderTail) 'minecraft:gunpowder' 4 `
-        @($dustCondition, (ItemTagNotEmptyCondition 'forge:dusts/carbon'))
+        @($dustCondition, (ItemTagNotEmptyCondition 'c:dusts/carbon'))
     Register-UnlockSource 'gunpowder_from_carbon_dust' (ItemId 'nitrate_dust')
     Write-ShapelessRecipe 'gunpowder_from_coal_dust' 'forge:ore_shapeless' `
         (@((OreIngredient 'dustCoal')) + $gunpowderTail) 'minecraft:gunpowder' 4 `
-        @($dustCondition, (ItemTagNotEmptyCondition 'forge:dusts/coal'))
+        @($dustCondition, (ItemTagNotEmptyCondition 'c:dusts/coal'))
     Register-UnlockSource 'gunpowder_from_coal_dust' (ItemId 'nitrate_dust')
 
     Write-ShapelessRecipe 'mineralfertilizer' 'forge:ore_shapeless' @(
@@ -935,11 +963,61 @@ function Write-TargetTags() {
     }
 }
 
+function Write-DualCommonTag(
+    [string] $kind,
+    [string] $canonicalPath,
+    [string] $legacyPath,
+    [object[]] $values
+) {
+    $canonical = Join-Path $projectRoot "src\main\resources\data\c\tags\$kind\$canonicalPath.json"
+    $legacy = Join-Path $projectRoot "src\main\resources\data\forge\tags\$kind\$legacyPath.json"
+    New-Item -ItemType Directory -Force -Path (Split-Path -Parent $canonical) | Out-Null
+    New-Item -ItemType Directory -Force -Path (Split-Path -Parent $legacy) | Out-Null
+    Write-Json $canonical ([ordered]@{ replace = $false; values = $values })
+    Write-Json $legacy ([ordered]@{ replace = $false; values = @("#c:$canonicalPath") })
+}
+
+function Write-CommonCompatibilityTags() {
+    Write-DualCommonTag 'block' 'cobblestones' 'cobblestone' @(
+        'mineralogy:chert', 'mineralogy:pumice'
+    )
+    Write-DualCommonTag 'item' 'cobblestones' 'cobblestone' @(
+        'mineralogy:chert', 'mineralogy:pumice'
+    )
+
+    foreach ($ore in @('nitrate', 'phosphorous', 'sulfur')) {
+        Write-DualCommonTag 'block' "ores/$ore" "ores/$ore" @("mineralogy:${ore}_ore")
+        Write-DualCommonTag 'item' "ores/$ore" "ores/$ore" @("mineralogy:${ore}_ore")
+    }
+    foreach ($storage in @('chalk', 'gypsum', 'nitrate', 'phosphorous', 'rock_salt', 'sulfur')) {
+        $item = if ($storage -in @('chalk', 'gypsum', 'rock_salt')) {
+            "mineralogy:$storage"
+        }
+        else {
+            "mineralogy:${storage}_block"
+        }
+        Write-DualCommonTag 'block' "storage_blocks/$storage" "storage_blocks/$storage" @($item)
+        Write-DualCommonTag 'item' "storage_blocks/$storage" "storage_blocks/$storage" @($item)
+    }
+    foreach ($dust in @('carbon', 'coal')) {
+        Write-DualCommonTag 'item' "dusts/$dust" "dusts/$dust" @()
+    }
+    foreach ($dust in @('chalk', 'gypsum', 'nitrate', 'phosphorous', 'rock_salt', 'sulfur')) {
+        Write-DualCommonTag 'item' "dusts/$dust" "dusts/$dust" @("mineralogy:${dust}_dust")
+    }
+    Write-DualCommonTag 'item' 'buckets/crude_oil' 'buckets/crude_oil' @(
+        'mineralogy:crude_oil_bucket'
+    )
+    Write-DualCommonTag 'fluid' 'crude_oil' 'crude_oil' @(
+        'mineralogy:crude_oil', 'mineralogy:flowing_crude_oil'
+    )
+}
+
 function Write-CobblestoneRecipeTags() {
     $familyTags = @($families | ForEach-Object { "#mineralogy:stones/$_" })
     Write-Json (Join-Path $itemTagRoot 'cobblestone_equivalents.json') ([ordered]@{
         replace = $false
-        values = @('#forge:cobblestone') + $familyTags
+        values = @('#c:cobblestones') + $familyTags
     })
     Write-Json (Join-Path $itemTagRoot 'stone_crafting_materials.json') ([ordered]@{
         replace = $false
@@ -1008,7 +1086,7 @@ function Add-ConditionToAdvancement(
 function Write-CobblestoneRecipeOverrides() {
     $condition = ConfigCondition 'COBBLESTONE_EQUIVILENT'
     $enabledCobblestone = [ordered]@{ tag = 'mineralogy:cobblestone_equivalents' }
-    $fallbackCobblestone = [ordered]@{ tag = 'forge:cobblestone' }
+    $fallbackCobblestone = [ordered]@{ tag = 'c:cobblestones' }
     $enabledCrafting = [ordered]@{ tag = 'mineralogy:stone_crafting_materials' }
     $fallbackCrafting = [ordered]@{ tag = 'minecraft:stone_crafting_materials' }
     $enabledTools = [ordered]@{ tag = 'mineralogy:stone_tool_materials' }
@@ -1163,6 +1241,33 @@ function Write-NativeSlabOverrides() {
                 (VanillaStonecuttingRecipe (ItemIngredient $route.source) $route.vanilla 2)
         }
     }
+
+    $tuffCrafting = @(
+        @{ recipe = 'tuff_slab'; source = 'minecraft:tuff'; mineralogy = 'mineralogy:tuff_slab'; vanilla = 'minecraft:tuff_slab' },
+        @{ recipe = 'polished_tuff_slab'; source = 'minecraft:polished_tuff'; mineralogy = 'mineralogy:tuff_smooth_slab'; vanilla = 'minecraft:polished_tuff_slab' },
+        @{ recipe = 'tuff_brick_slab'; source = 'minecraft:tuff_bricks'; mineralogy = 'mineralogy:tuff_brick_slab'; vanilla = 'minecraft:tuff_brick_slab' }
+    )
+    foreach ($finish in $tuffCrafting) {
+        $condition = ItemCondition $finish.mineralogy
+        Write-ConditionalMinecraftRecipe $finish.recipe $condition `
+            (VanillaShapedRecipe @('###') ([ordered]@{ '#' = ItemIngredient $finish.source }) $finish.mineralogy 6) `
+            (VanillaShapedRecipe @('###') ([ordered]@{ '#' = ItemIngredient $finish.source }) $finish.vanilla 6)
+    }
+
+    $tuffStonecutting = @(
+        @{ recipe = 'tuff_slab_from_tuff_stonecutting'; source = 'minecraft:tuff'; mineralogy = 'mineralogy:tuff_slab'; vanilla = 'minecraft:tuff_slab' },
+        @{ recipe = 'polished_tuff_slab_from_tuff_stonecutting'; source = 'minecraft:tuff'; mineralogy = 'mineralogy:tuff_smooth_slab'; vanilla = 'minecraft:polished_tuff_slab' },
+        @{ recipe = 'polished_tuff_slab_from_polished_tuff_stonecutting'; source = 'minecraft:polished_tuff'; mineralogy = 'mineralogy:tuff_smooth_slab'; vanilla = 'minecraft:polished_tuff_slab' },
+        @{ recipe = 'tuff_brick_slab_from_tuff_stonecutting'; source = 'minecraft:tuff'; mineralogy = 'mineralogy:tuff_brick_slab'; vanilla = 'minecraft:tuff_brick_slab' },
+        @{ recipe = 'tuff_brick_slab_from_polished_tuff_stonecutting'; source = 'minecraft:polished_tuff'; mineralogy = 'mineralogy:tuff_brick_slab'; vanilla = 'minecraft:tuff_brick_slab' },
+        @{ recipe = 'tuff_brick_slab_from_tuff_bricks_stonecutting'; source = 'minecraft:tuff_bricks'; mineralogy = 'mineralogy:tuff_brick_slab'; vanilla = 'minecraft:tuff_brick_slab' }
+    )
+    foreach ($route in $tuffStonecutting) {
+        $condition = ItemCondition $route.mineralogy
+        Write-ConditionalMinecraftRecipe $route.recipe $condition `
+            (VanillaStonecuttingRecipe (ItemIngredient $route.source) $route.mineralogy 2) `
+            (VanillaStonecuttingRecipe (ItemIngredient $route.source) $route.vanilla 2)
+    }
 }
 
 function Write-NativeSlabConversions() {
@@ -1182,6 +1287,23 @@ function Write-NativeSlabConversions() {
                 @((ItemIngredient $finish.vanilla)) $finish.mineralogy 1 $conditions
             Register-UnlockSource "${prefix}_from_vanilla" $finish.vanilla
         }
+    }
+
+    foreach ($finish in @(
+            @{ name = 'raw'; mineralogy = 'mineralogy:tuff_slab'; vanilla = 'minecraft:tuff_slab' },
+            @{ name = 'smooth'; mineralogy = 'mineralogy:tuff_smooth_slab'; vanilla = 'minecraft:polished_tuff_slab' },
+            @{ name = 'brick'; mineralogy = 'mineralogy:tuff_brick_slab'; vanilla = 'minecraft:tuff_brick_slab' }
+        )) {
+        $prefix = if ($finish.name -eq 'raw') { 'tuff_slab' } else { "tuff_$($finish.name)_slab" }
+        $conditions = @((ItemCondition $finish.mineralogy), (ItemCondition $finish.vanilla))
+
+        Write-ShapelessRecipe "${prefix}_to_vanilla" 'minecraft:crafting_shapeless' `
+            @((ItemIngredient $finish.mineralogy)) $finish.vanilla 1 $conditions
+        Register-UnlockSource "${prefix}_to_vanilla" $finish.mineralogy
+
+        Write-ShapelessRecipe "${prefix}_from_vanilla" 'minecraft:crafting_shapeless' `
+            @((ItemIngredient $finish.vanilla)) $finish.mineralogy 1 $conditions
+        Register-UnlockSource "${prefix}_from_vanilla" $finish.vanilla
     }
 }
 
@@ -1226,6 +1348,7 @@ function Write-NativePolishedOverrides() {
 }
 
 Prepare-TargetDirectories
+Write-CommonCompatibilityTags
 Write-TargetTags
 Write-CobblestoneRecipeTags
 Write-CobblestoneRecipeOverrides
@@ -1241,7 +1364,7 @@ foreach ($family in $families) {
 Write-NativeSlabConversions
 Write-GlobalRecipes
 
-$expectedRecipeCount = ($families.Count * 50) + 49
+$expectedRecipeCount = ($families.Count * 50) + 55
 if ($generatedNames.Count -ne $expectedRecipeCount) {
     throw "Expected $expectedRecipeCount generated recipes, produced $($generatedNames.Count)"
 }
@@ -1258,4 +1381,4 @@ $advancementCount = Synchronize-AdvancementConditions
 if ($advancementCount -ne $expectedTargetRecipeCount) {
     throw "Expected $expectedTargetRecipeCount recipe advancements, found $advancementCount"
 }
-Write-Output "Generated $expectedRecipeCount crafting recipe JSON files, retained 28 target-native smelting recipes, created $createdAdvancements missing recipe advancements, and conditioned $advancementCount Minecraft 1.20.6 recipe advancements."
+Write-Output "Generated $expectedRecipeCount crafting recipe JSON files, retained 28 target-native smelting recipes, created $createdAdvancements missing recipe advancements, and conditioned $advancementCount Minecraft 1.21.1 recipe advancements."

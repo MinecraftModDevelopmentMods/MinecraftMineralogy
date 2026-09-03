@@ -11,13 +11,13 @@ description='''Disposable runtime fixture for Mineralogy crude-oil coexistence v
 [[dependencies.poweradvantage]]
 modId="forge"
 mandatory=true
-versionRange="[50.2.0,51)"
+versionRange="[52.1.0,53)"
 ordering="NONE"
 side="BOTH"
 
 [[dependencies.poweradvantage]]
 modId="mineralogy"
 mandatory=true
-versionRange="[6.1.1.120061]"
+versionRange="[6.1.1.121011]"
 ordering="AFTER"
 side="BOTH"

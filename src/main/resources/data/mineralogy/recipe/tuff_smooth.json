@@ -1,0 +1,20 @@
+{
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:tuff_smooth"
+                        },
+    "type":  "minecraft:crafting_shapeless",
+    "category":  "building",
+    "ingredients":  [
+                        {
+                            "item":  "mineralogy:tuff"
+                        },
+                        {
+                            "item":  "minecraft:sand"
+                        }
+                    ],
+    "result":  {
+                   "id":  "mineralogy:tuff_smooth",
+                   "count":  1
+               }
+}

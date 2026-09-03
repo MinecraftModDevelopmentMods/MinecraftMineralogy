@@ -10,13 +10,13 @@ displayName="Mineralogy Recipe Integration Probe"
 [[dependencies.mineralogyrecipeprobe]]
 modId="forge"
 mandatory=true
-versionRange="[50.2.0,51)"
+versionRange="[52.1.0,53)"
 ordering="NONE"
 side="BOTH"
 
 [[dependencies.mineralogyrecipeprobe]]
 modId="mineralogy"
 mandatory=true
-versionRange="[6.1.1.120061]"
+versionRange="[6.1.1.121011]"
 ordering="AFTER"
 side="BOTH"

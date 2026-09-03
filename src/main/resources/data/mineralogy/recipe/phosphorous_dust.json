@@ -1,0 +1,26 @@
+{
+    "forge:condition":  {
+                            "type":  "forge:and",
+                            "values":  [
+                                           {
+                                               "type":  "mineralogy:config",
+                                               "flag":  "ENABLE_MINERAL_DUSTS"
+                                           },
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:phosphorous_dust"
+                                           }
+                                       ]
+                        },
+    "type":  "minecraft:crafting_shapeless",
+    "category":  "building",
+    "ingredients":  [
+                        {
+                            "tag":  "c:storage_blocks/phosphorous"
+                        }
+                    ],
+    "result":  {
+                   "id":  "mineralogy:phosphorous_dust",
+                   "count":  9
+               }
+}

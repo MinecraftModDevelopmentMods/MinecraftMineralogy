@@ -1,0 +1,26 @@
+{
+    "forge:condition":  {
+                            "type":  "forge:and",
+                            "values":  [
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:tuff_brick_slab"
+                                           },
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "minecraft:tuff_brick_slab"
+                                           }
+                                       ]
+                        },
+    "type":  "minecraft:crafting_shapeless",
+    "category":  "building",
+    "ingredients":  [
+                        {
+                            "item":  "mineralogy:tuff_brick_slab"
+                        }
+                    ],
+    "result":  {
+                   "id":  "minecraft:tuff_brick_slab",
+                   "count":  1
+               }
+}

@@ -25,9 +25,11 @@ import zone.moddev.mc.mineralogy.MineralogyConfig;
 import zone.moddev.mc.mineralogy.data.Material;
 import zone.moddev.mc.mineralogy.data.MaterialData;
 
-/** Applies the legacy cobblestone option to Forge 50 block and item tags. */
+/** Applies the legacy cobblestone option to Forge 52 canonical and compatibility tags. */
 public final class CobblestoneTagPolicy {
-    private static final ResourceLocation COBBLESTONE = ResourceLocation.fromNamespaceAndPath("forge", "cobblestone");
+    private static final ResourceLocation COBBLESTONES = ResourceLocation.fromNamespaceAndPath("c", "cobblestones");
+    private static final ResourceLocation LEGACY_COBBLESTONE =
+            ResourceLocation.fromNamespaceAndPath("forge", "cobblestone");
     private static final ResourceLocation STONE_CRAFTING_MATERIALS =
             ResourceLocation.fromNamespaceAndPath("minecraft", "stone_crafting_materials");
     private static final ResourceLocation STONE_TOOL_MATERIALS =
@@ -51,12 +53,16 @@ public final class CobblestoneTagPolicy {
         boolean enabled = MineralogyConfig.makeRockCobblestoneEquivilent();
 
         Map<TagKey<Block>, List<Holder<Block>>> blockTags = snapshot(blockRegistry);
-        updateTag(blockTags, blockRegistry, Registries.BLOCK, COBBLESTONE,
+        updateTag(blockTags, blockRegistry, Registries.BLOCK, COBBLESTONES,
+                configuredBlocks, enabled, "chert", "pumice");
+        updateTag(blockTags, blockRegistry, Registries.BLOCK, LEGACY_COBBLESTONE,
                 configuredBlocks, enabled, "chert", "pumice");
         blockRegistry.bindTags(blockTags);
 
         Map<TagKey<Item>, List<Holder<Item>>> itemTags = snapshot(itemRegistry);
-        updateTag(itemTags, itemRegistry, Registries.ITEM, COBBLESTONE,
+        updateTag(itemTags, itemRegistry, Registries.ITEM, COBBLESTONES,
+                configuredItems, enabled, "chert", "pumice");
+        updateTag(itemTags, itemRegistry, Registries.ITEM, LEGACY_COBBLESTONE,
                 configuredItems, enabled, "chert", "pumice");
         updateTag(itemTags, itemRegistry, Registries.ITEM, STONE_CRAFTING_MATERIALS,
                 configuredItems, enabled, "chert", "pumice");
@@ -65,9 +71,11 @@ public final class CobblestoneTagPolicy {
         itemRegistry.bindTags(itemTags);
 
         Ingredient.invalidateAll();
-        Mineralogy.LOGGER.debug("Applied Forge 50 cobblestone policy: enabled={}, rocks={}, "
-                + "forgeItems={}, craftingItems={}, toolItems={}", enabled, configuredItems.size(),
-                size(itemRegistry, Registries.ITEM, COBBLESTONE),
+        Mineralogy.LOGGER.debug("Applied Forge 52 cobblestone policy: enabled={}, rocks={}, "
+                + "canonicalItems={}, legacyItems={}, craftingItems={}, toolItems={}",
+                enabled, configuredItems.size(),
+                size(itemRegistry, Registries.ITEM, COBBLESTONES),
+                size(itemRegistry, Registries.ITEM, LEGACY_COBBLESTONE),
                 size(itemRegistry, Registries.ITEM, STONE_CRAFTING_MATERIALS),
                 size(itemRegistry, Registries.ITEM, STONE_TOOL_MATERIALS));
     }
@@ -99,17 +107,24 @@ public final class CobblestoneTagPolicy {
             ResourceKey<? extends Registry<T>> registryKey, ResourceLocation id,
             Set<Holder<T>> configured, boolean enabled, String... unconditionalNames) {
         TagKey<T> key = TagKey.create(registryKey, id);
-        Set<Holder<T>> values = new LinkedHashSet<>(tags.getOrDefault(key, List.of()));
+        Set<Holder<T>> unconditional = new LinkedHashSet<>();
+        for (String name : unconditionalNames) {
+            ResourceKey<T> valueKey = ResourceKey.create(registryKey,
+                    ResourceLocation.fromNamespaceAndPath(Mineralogy.MODID, name));
+            registry.getHolder(valueKey).ifPresent(unconditional::add);
+        }
+        tags.put(key, rebuildValues(tags.getOrDefault(key, List.of()), configured, enabled, unconditional));
+    }
+
+    static <T> List<T> rebuildValues(List<T> existing, Set<T> configured,
+            boolean enabled, Set<T> unconditional) {
+        Set<T> values = new LinkedHashSet<>(existing);
         values.removeAll(configured);
         if (enabled) {
             values.addAll(configured);
         }
-        for (String name : unconditionalNames) {
-            ResourceKey<T> valueKey = ResourceKey.create(registryKey,
-                    ResourceLocation.fromNamespaceAndPath(Mineralogy.MODID, name));
-            registry.getHolder(valueKey).ifPresent(values::add);
-        }
-        tags.put(key, new ArrayList<>(values));
+        values.addAll(unconditional);
+        return new ArrayList<>(values);
     }
 
     private static <T> int size(Registry<T> registry, ResourceKey<? extends Registry<T>> registryKey,

@@ -104,6 +104,8 @@ public class GameplayContractTest {
         assertTrue(policy.contains("itemRegistry.bindTags(itemTags)"));
         assertTrue(policy.contains("STONE_CRAFTING_MATERIALS"));
         assertTrue(policy.contains("STONE_TOOL_MATERIALS"));
+        assertTrue(policy.contains("ResourceLocation.fromNamespaceAndPath(\"c\", \"cobblestones\")"));
+        assertTrue(policy.contains("ResourceLocation.fromNamespaceAndPath(\"forge\", \"cobblestone\")"));
         assertTrue(policy.contains("TagKey.create"));
         assertFalse(policy.contains("java.lang.reflect"));
         assertTrue(policy.contains("Ingredient.invalidateAll()"));
@@ -112,14 +114,14 @@ public class GameplayContractTest {
     @Test
     public void optionalGunpowderDustsCannotCollapseToTwoIngredients() throws Exception {
         String generator = text("scripts/generate-recipes.ps1");
-        assertTrue(generator.contains("ItemTagNotEmptyCondition 'forge:dusts/carbon'"));
-        assertTrue(generator.contains("ItemTagNotEmptyCondition 'forge:dusts/coal'"));
+        assertTrue(generator.contains("ItemTagNotEmptyCondition 'c:dusts/carbon'"));
+        assertTrue(generator.contains("ItemTagNotEmptyCondition 'c:dusts/coal'"));
         assertTrue(generator.contains("type = 'forge:not'"));
         assertTrue(generator.contains("type = 'forge:tag_empty'"));
     }
 
     @Test
-    public void forge50UsesModelBlockLayersAndNativeFlowingFluidRendering() throws Exception {
+    public void forge52UsesModelBlockLayersAndNativeFlowingFluidRendering() throws Exception {
         String fluid = text("src/main/java/zone/moddev/mc/mineralogy/init/MineralogyFluids.java");
         assertTrue(fluid.contains("ForgeFlowingFluid.Source"));
         assertTrue(fluid.contains("ForgeFlowingFluid.Flowing"));

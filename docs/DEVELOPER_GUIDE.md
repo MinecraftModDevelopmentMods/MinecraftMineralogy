@@ -32,65 +32,72 @@ may supply an authoritative full override at
 
 ## Forge Tag Integration
 
-All raw rocks use `forge:stone` and their material-specific Mineralogy tags.
+All raw rocks use their material-specific Mineralogy tags and the appropriate
+common stone identities.
 When the historical `COBBLESTONE_EQUIVILENT` option is enabled, all 27 raw
 families additionally use `cobblestone`; chert and pumice always retain that
 identity. Gypsum, chalk, rock salt, and both rock salt lamps retain their
 specialty aliases.
 
-Minecraft 1.20.6's `minecraft:stone_crafting_materials` and
-`minecraft:stone_tool_materials` item tags include `#forge:cobblestone`, so
-enabled Mineralogy rocks work in native tool recipes. Forge 50 exposes
+Minecraft 1.21.1's `minecraft:stone_crafting_materials` and
+`minecraft:stone_tool_materials` item tags include `#c:cobblestones`, so
+enabled Mineralogy rocks work in native tool recipes. Forge 52 exposes
 immutable tag snapshots; Mineralogy rebuilds only the block and item tag
 membership after initial tag loading and every data reload, preserves other
 mods' members, updates the exact tag instances retained by parsed recipes,
-then invalidates recipe ingredient caches. The nested Minecraft crafting and
-tool tags are updated alongside the direct Forge tag.
+then invalidates recipe ingredient caches. Canonical `c:` tags and retained
+legacy `forge:` aliases are updated together, as are the nested Minecraft
+crafting and tool tags.
 
 Sixteen established vanilla recipes and their advancements use conditional JSON overrides
 for the complete exact-cobblestone, stone-crafting-material, and
 stone-tool-material contracts. Enabled branches use stable Mineralogy union
-tags; disabled branches restore the target-native ingredients. Forge 50's
+tags; disabled branches restore the target-native ingredients. Forge 52's
 already-resolved nested tags do not observe a replacement tag collection, so
 Mineralogy also mutates retained tag instances rather than swapping the
 collection.
 
-Minecraft 1.20.6 retains three additional configurable recipes: coast, sentry, and vex
+Minecraft 1.21.1 retains three additional configurable recipes: coast, sentry, and vex
 armor-trim template duplication. Enabled branches use the Mineralogy
 cobblestone union; disabled branches preserve the recipes' exact vanilla
 cobblestone ingredient. Their vanilla advancements are intentionally untouched
 because those recipes unlock from owning the template, not from cobblestone.
 
-Minecraft 1.20.6 also owns andesite, basalt, diorite, granite, tuff, and several
+Minecraft 1.21.1 also owns andesite, basalt, diorite, granite, tuff, and several
 matching finishes. Mineralogy's family tags include both native and retained
-legacy identities. Four `data/minecraft/recipes/polished_*.json` overrides move
+legacy identities. Five `data/minecraft/recipe/polished_*.json` overrides move
 the native polished-block route from 2x2 crafting to one exact native block plus
 sand. That leaves 2x2 matching raw blocks available for Mineralogy bricks. The
 matching vanilla advancements are overridden too, so native polishing is
 revealed only after the player has both the exact native rock and sand.
 
-Native `minecraft:tuff` is the raw tuff-family input; Mineralogy supplies all
-of its construction and polished forms. `minecraft:smooth_basalt` joins the
-smooth-basalt family and can unlock and craft Mineralogy smooth-basalt forms,
-while Minecraft's basalt-to-smooth-basalt smelting recipe remains intact.
-Deepslate is deliberately only an OreSpawn terrain and ore host, not a
+Native tuff now owns raw, polished, brick, stair, slab, wall, and chiseled
+forms. Those items join Mineralogy's tuff-family tags only where no competing
+vanilla output exists. Vanilla construction and chiseled recipes remain
+authoritative, including polished tuff to tuff bricks. The five polished-block
+overrides make tuff plus sand produce polished tuff while the 2x2 raw route
+remains available for Mineralogy tuff bricks. `minecraft:smooth_basalt` joins
+the smooth-basalt family and can unlock and craft Mineralogy smooth-basalt
+forms, while Minecraft's basalt-to-smooth-basalt smelting recipe remains
+intact. Deepslate is deliberately only an OreSpawn terrain and ore host, not a
 Mineralogy construction family.
 
 Do not broaden vanilla slab, stair, or wall recipes. Where Minecraft already
 owns a matching form (raw and polished andesite/diorite/granite slabs and
 stairs, plus their raw walls), the Mineralogy-output recipe keeps an exact
 legacy Mineralogy input except for the deliberate slab overrides below. Basalt
-and tuff have no native construction forms in 1.20.6, so their safe family tags
-feed Mineralogy slabs, stairs, and walls. Polished andesite/diorite/granite have
-no native walls, so those three Mineralogy wall recipes may also accept the
-matching family tag.
+has no native construction forms, so its safe family tags feed Mineralogy
+slabs, stairs, and walls. Tuff has complete native construction forms, so the
+Mineralogy construction recipes use exact inputs wherever a broad family tag
+would compete. Polished andesite/diorite/granite have no native walls, so those
+three Mineralogy wall recipes may also accept the matching family tag.
 
-The six shared raw/polished slab crafting recipes and nine corresponding
-stonecutting routes deliberately output Mineralogy's upright-capable slabs.
-Twelve exact shapeless recipes provide reversible 1:1 conversion between those
-Mineralogy slabs and their retained vanilla counterparts. This preserves exact
-item compatibility for other mods without allowing a normal crafting or
-stonecutting route to prefer the less capable slab.
+The nine shared raw/polished/brick slab crafting recipes and fifteen
+corresponding stonecutting routes deliberately output Mineralogy's
+upright-capable slabs. Eighteen exact shapeless recipes provide reversible 1:1
+conversion between those Mineralogy slabs and their retained vanilla
+counterparts. The six new tuff bridges preserve access to native chiseled-tuff
+recipes as well as exact-item modpack compatibility.
 
 Use broad `stone` or `cobblestone` inputs only when any matching material is
 valid. Recipes returning a Mineralogy construction form must use the exact
@@ -98,17 +105,19 @@ material and finish so basalt cannot produce a different rock's slab or wall.
 
 ## Crafting Data
 
-All Mineralogy recipes are native Minecraft/Forge 1.20.6 JSON under
-`data/mineralogy/recipes/`. Run `scripts/generate-recipes.ps1` after changing
+All Mineralogy recipes are native Minecraft/Forge 1.21.1 JSON under
+`data/mineralogy/recipe/`. Minecraft 1.21 uses singular registry data
+directories (`recipe`, `advancement`, `loot_table`, and `tags/item|block|fluid`).
+Run `scripts/generate-recipes.ps1` after changing
 the recipe matrix; it generates the 27 stone families and global recipes, the
-native slab/stonecutting overrides and compatibility conversions, and the four
+native slab/stonecutting overrides and compatibility conversions, and the five
 target-native polished-block recipe/advancement overrides, then retains the
 target-native smelting data. Every Mineralogy recipe has a matching unlock
 advancement with the same Forge conditions and the same exact-item or
 family-tag material predicate as the recipe. Unlocks use direct inventory
 ingredients instead of listening to other recipe unlocks, which would
 recursively reveal an entire construction tree. Polishing uses Minecraft
-1.20.6's advancement requirements matrix to require the matching source plus
+1.21.1's advancement requirements matrix to require the matching source plus
 accepted sand; manually crafting a recipe is the target-native fallback for
 Forge's delayed crafting-output inventory trigger. Rock-furnace advancements
 use the matching slab-family tag as their sole material criterion. They
@@ -135,7 +144,7 @@ The legacy `GENERATE_*` flags can remove registrations on the next start. The
 new issue-121 switches only change creative visibility and Mineralogy-owned
 recipes, so existing content remains loadable.
 
-Forge 50 converts pre-flattening chunks lazily. The coremod expands Minecraft's
+Forge 52 converts pre-flattening chunks lazily. The coremod expands Minecraft's
 fixed legacy state tables before conversion, and the selected-world hook
 installs the complete saved block mapping before Mojang's data fixer. It
 reinstalls that mapping after the client enumerates other old saves, normalizes
@@ -164,5 +173,5 @@ OreSpawn in a launcher-like Forge installation. The normal jar packages this
 guide under `META-INF/mineralogy/docs/`.
 
 The complete release version is `Major.Minor.Bug.Target`; see
-[Mineralogy Versioning](VERSIONS.md). This branch validates target `120061`
-for Minecraft 1.20.6 Forge and does not append CI build numbers.
+[Mineralogy Versioning](VERSIONS.md). This branch validates target `121011`
+for Minecraft 1.21.1 Forge and does not append CI build numbers.

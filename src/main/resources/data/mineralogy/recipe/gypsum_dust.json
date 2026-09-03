@@ -1,0 +1,17 @@
+{
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:gypsum_dust"
+                        },
+    "type":  "minecraft:crafting_shapeless",
+    "category":  "building",
+    "ingredients":  [
+                        {
+                            "tag":  "c:storage_blocks/gypsum"
+                        }
+                    ],
+    "result":  {
+                   "id":  "mineralogy:gypsum_dust",
+                   "count":  4
+               }
+}

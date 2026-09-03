@@ -1,0 +1,35 @@
+{
+    "forge:condition":  {
+                            "type":  "forge:and",
+                            "values":  [
+                                           {
+                                               "type":  "mineralogy:config",
+                                               "flag":  "ENABLE_MINERAL_DUSTS"
+                                           },
+                                           {
+                                               "type":  "forge:not",
+                                               "value":  {
+                                                             "type":  "forge:tag_empty",
+                                                             "tag":  "c:dusts/coal"
+                                                         }
+                                           }
+                                       ]
+                        },
+    "type":  "minecraft:crafting_shapeless",
+    "category":  "misc",
+    "ingredients":  [
+                        {
+                            "tag":  "c:dusts/coal"
+                        },
+                        {
+                            "tag":  "c:dusts/nitrate"
+                        },
+                        {
+                            "tag":  "c:dusts/sulfur"
+                        }
+                    ],
+    "result":  {
+                   "id":  "minecraft:gunpowder",
+                   "count":  4
+               }
+}

@@ -1,0 +1,29 @@
+{
+    "forge:condition":  {
+                            "type":  "forge:and",
+                            "values":  [
+                                           {
+                                               "type":  "mineralogy:config",
+                                               "flag":  "ENABLE_MINERAL_FERTILIZER"
+                                           },
+                                           {
+                                               "type":  "forge:item_exists",
+                                               "item":  "mineralogy:mineral_fertilizer"
+                                           }
+                                       ]
+                        },
+    "type":  "minecraft:crafting_shapeless",
+    "category":  "building",
+    "ingredients":  [
+                        {
+                            "tag":  "c:dusts/nitrate"
+                        },
+                        {
+                            "tag":  "c:dusts/phosphorous"
+                        }
+                    ],
+    "result":  {
+                   "id":  "mineralogy:mineral_fertilizer",
+                   "count":  1
+               }
+}

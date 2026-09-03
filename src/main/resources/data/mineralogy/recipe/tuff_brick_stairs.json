@@ -1,0 +1,23 @@
+{
+    "forge:condition":  {
+                            "type":  "forge:item_exists",
+                            "item":  "mineralogy:tuff_brick_stairs"
+                        },
+    "type":  "minecraft:crafting_shaped",
+    "category":  "building",
+    "pattern":  [
+                    "x  ",
+                    "xx ",
+                    "xxx"
+                ],
+    "key":  {
+                "x":  {
+                          "item":  "mineralogy:tuff_brick"
+                      }
+            },
+    "result":  {
+                   "id":  "mineralogy:tuff_brick_stairs",
+                   "count":  4
+               },
+    "show_notification":  true
+}

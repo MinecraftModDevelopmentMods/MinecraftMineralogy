@@ -37,6 +37,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
@@ -258,7 +259,8 @@ public class TileEntityRockFurnace extends BaseContainerBlockEntity
 	@Nullable
 	private RecipeHolder<SmeltingRecipe> getSmeltingRecipe() {
 		return level == null ? null
-				: level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, this, level).orElse(null);
+				: level.getRecipeManager().getRecipeFor(RecipeType.SMELTING,
+						new SingleRecipeInput(furnaceItemStacks.get(0)), level).orElse(null);
 	}
 
 	private boolean canSmelt(@Nullable RecipeHolder<? extends Recipe<?>> recipe) {

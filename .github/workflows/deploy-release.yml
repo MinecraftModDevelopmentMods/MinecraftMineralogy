@@ -438,12 +438,64 @@ jobs:
             exit 1
           fi
 
+  validate_release_tag:
+    name: Validate created release tag
+    needs:
+      - preflight
+      - create_release_tag
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      actions: write
+      contents: read
+
+    steps:
+      - name: Dispatch and await tag validation
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ needs.preflight.outputs.release_tag }}
+        run: |
+          set -euo pipefail
+
+          started_epoch="$(date -u +%s)"
+          default_branch="$(gh api "repos/$GITHUB_REPOSITORY" --jq '.default_branch')"
+          expected_name="Validate Mineralogy release tag $RELEASE_TAG"
+
+          gh workflow run release-on-tag.yml \
+            --repo "$GITHUB_REPOSITORY" \
+            --ref "$default_branch" \
+            -f release_tag="$RELEASE_TAG"
+
+          validation_run=
+          for attempt in {1..30}; do
+            validation_run="$(gh run list \
+              --repo "$GITHUB_REPOSITORY" \
+              --workflow release-on-tag.yml \
+              --event workflow_dispatch \
+              --limit 20 \
+              --json databaseId,name,createdAt \
+              --jq ".[] | select(.name == \"$expected_name\") | select((.createdAt | fromdateiso8601) >= $started_epoch) | .databaseId" \
+              | head -n 1)"
+            if [[ -n "$validation_run" ]]; then
+              break
+            fi
+            sleep 2
+          done
+          if [[ -z "$validation_run" ]]; then
+            echo "The tag-validation workflow did not start for $RELEASE_TAG" >&2
+            exit 1
+          fi
+
+          echo "Awaiting tag-validation run $validation_run"
+          gh run watch "$validation_run" --repo "$GITHUB_REPOSITORY" --exit-status
+
   publish_maven:
     name: Publish Maven
     needs:
       - preflight
       - build
       - create_release_tag
+      - validate_release_tag
     runs-on: ubuntu-latest
     timeout-minutes: 30
 

@@ -1,0 +1,21 @@
+modLoader="javafml"
+loaderVersion="[45,)"
+license="LGPL-2.1-only"
+
+[[mods]]
+modId="mineralogyminingprobe"
+version="1"
+displayName="Mineralogy Mining Integration Probe"
+
+[[dependencies.mineralogyminingprobe]]
+modId="forge"
+mandatory=true
+versionRange="[45.4.0,46)"
+ordering="NONE"
+side="BOTH"
+[[dependencies.mineralogyminingprobe]]
+modId="mineralogy"
+mandatory=true
+versionRange="[6.1.2.119041]"
+ordering="AFTER"
+side="BOTH"

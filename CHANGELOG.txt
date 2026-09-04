@@ -1,5 +1,11 @@
-Mineralogy 6.1.1.119041 for Minecraft 1.19.4
+Mineralogy 6.1.2.119041 for Minecraft 1.19.4
 
+- Updated all pickaxe and harvest-tier tags to the supported optional
+  tag-entry object format. This restores normal mining speed and drops for all
+  1,133 pickaxe-mined Mineralogy blocks, including every derived rock form.
+- Synchronized a retained rock-furnace block entity with its new block state
+  before reattaching it during lit/unlit transitions, preventing stale chunk
+  state while preserving fuel, contents, and progress.
 - Corrected relief occlusion so their intentionally open centres reveal the
   supporting block face instead of culling it and exposing the sky/void when
   mounted on floors, walls, or ceilings.
@@ -90,7 +96,7 @@ Mineralogy 6.1.1.119041 for Minecraft 1.19.4
   pack format 12 resources.
 - Added reproducible Java 17 main, sources, and Javadoc artifacts, exact released
   OreSpawn dependency verification, guarded 1.19.4 CI, and the four-component
-  release tag `6.1.1.119041`.
+  release tag `6.1.2.119041`.
 - Kept ForgeGradle 7 while sealing Forge 45's required Mavenizer compatibility
   fixture by SHA-256. The build-only tool runs on Java 25; Mineralogy compiles
   and ships exclusively as Java 17, and release audits reject fixture leakage.

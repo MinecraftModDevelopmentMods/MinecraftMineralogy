@@ -104,6 +104,7 @@ public class RockFurnace extends BaseEntityBlock implements NamedMineralogyBlock
 		return InteractionResult.SUCCESS;
 	}
 
+	@SuppressWarnings("deprecation")
 	public static void setState(boolean active, Level world, BlockPos pos) {
 		BlockState oldState = world.getBlockState(pos);
 		Block oldBlock = oldState.getBlock();
@@ -114,11 +115,16 @@ public class RockFurnace extends BaseEntityBlock implements NamedMineralogyBlock
 		}
 
 		BlockEntity tileEntity = world.getBlockEntity(pos);
+		BlockState newState = newBlock.defaultBlockState().setValue(FACING, oldState.getValue(FACING));
 		keepInventory = true;
-		world.setBlock(pos, newBlock.defaultBlockState().setValue(FACING, oldState.getValue(FACING)), 3);
-		keepInventory = false;
+		try {
+			world.setBlock(pos, newState, 3);
+		} finally {
+			keepInventory = false;
+		}
 
 		if (tileEntity != null) {
+			tileEntity.setBlockState(newState);
 			tileEntity.clearRemoved();
 			world.setBlockEntity(tileEntity);
 		}

@@ -82,6 +82,12 @@ public class GameplayContractTest {
         assertTrue(furnace.contains("Block block = state.getBlock()"));
         assertTrue(furnace.contains("getBurnModifier()"));
         assertTrue(furnace.contains("ContainerHelper.loadAllItems"));
+        String furnaceBlock = text("src/main/java/zone/moddev/mc/mineralogy/blocks/RockFurnace.java");
+        assertTrue(furnaceBlock.contains("BlockState newState = newBlock.defaultBlockState()"));
+        assertTrue(furnaceBlock.contains("try {"));
+        assertTrue(furnaceBlock.contains("finally {"));
+        assertTrue(furnaceBlock.contains("tileEntity.setBlockState(newState)"));
+        assertTrue(furnaceBlock.contains("world.setBlockEntity(tileEntity)"));
 
 		String lamp = text("src/main/java/zone/moddev/mc/mineralogy/blocks/RockSaltLamp.java");
 		assertTrue(lamp.contains("facing.getAxis().isVertical()"));

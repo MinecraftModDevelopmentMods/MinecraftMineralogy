@@ -18,6 +18,6 @@ side="BOTH"
 [[dependencies.poweradvantage]]
 modId="mineralogy"
 mandatory=true
-versionRange="[6.1.1.121011]"
+versionRange="[6.1.2.121011]"
 ordering="AFTER"
 side="BOTH"

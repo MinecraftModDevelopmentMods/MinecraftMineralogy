@@ -36,9 +36,13 @@ public class WorkflowContractTest {
     public void tagValidatorIsGenericReadOnlyAndNeverStartsASecondRelease() throws Exception {
         String starter = read(".github/workflows/release-on-tag.yml");
         assertTrue(starter.contains("'*.*.*.*'"));
+        assertTrue(starter.contains("workflow_dispatch:"));
+        assertTrue(starter.contains("release_tag:"));
+        assertTrue(starter.contains("inputs.release_tag || github.ref_name"));
         assertTrue(starter.contains("loader_name:$loader_code"));
         assertTrue(starter.contains("Build, test, and audit"));
         assertTrue(starter.contains("Release tag must equal mod_version"));
+        assertTrue(starter.contains("commits/$tag_sha/check-runs"));
         assertTrue(starter.contains("confirm live publication: checked"));
         assertFalse(starter.contains("gh workflow run"));
         assertFalse(starter.contains("actions: write"));
@@ -83,6 +87,10 @@ public class WorkflowContractTest {
         assertTrue(deploy.contains("Existing tag $release_tag resolves to"));
         assertTrue(deploy.contains("already has a GitHub Release for exact tag"));
         assertTrue(deploy.contains("Create validated release tag"));
+        assertTrue(deploy.contains("  validate_release_tag:"));
+        assertTrue(deploy.contains("gh workflow run release-on-tag.yml"));
+        assertTrue(deploy.contains("-f release_tag=\"$RELEASE_TAG\""));
+        assertTrue(deploy.contains("gh run watch \"$validation_run\""));
         assertTrue(deploy.contains("SHA256SUMS"));
         assertTrue(deploy.contains("curseforge-dependencies: 245586(required)"));
         assertTrue(deploy.contains("version-type: ${{ inputs.curseforge_release_level }}"));
@@ -92,9 +100,11 @@ public class WorkflowContractTest {
         assertTrue(deploy.contains("-PorespawnVerificationRepository=\"${{ steps.orespawn.outputs.repository }}\""));
 
         int maven = deploy.indexOf("  publish_maven:");
+        int tagValidation = deploy.indexOf("  validate_release_tag:");
         int curseForge = deploy.indexOf("  publish_curseforge:");
         int github = deploy.indexOf("  publish_github:");
-        assertTrue(maven > 0 && curseForge > maven && github > curseForge);
+        assertTrue(tagValidation > 0 && maven > tagValidation && curseForge > maven && github > curseForge);
+        assertTrue(deploy.substring(maven, curseForge).contains("- validate_release_tag"));
         assertTrue(deploy.substring(curseForge, github).contains("- publish_maven"));
         assertTrue(deploy.substring(github).contains("- publish_curseforge"));
     }

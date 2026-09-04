@@ -1,130 +1,488 @@
-﻿{
-    "replace":  false,
-    "values":  [
-                   "mineralogy:basalt",
-                   "mineralogy:diabase",
-                   "mineralogy:gabbro"
-               ],
-    "optional":  [
-                     "mineralogy:basalt_brick",
-                     "mineralogy:basalt_brick_double_slab",
-                     "mineralogy:basalt_brick_furnace",
-                     "mineralogy:basalt_brick_slab",
-                     "mineralogy:basalt_brick_stairs",
-                     "mineralogy:basalt_brick_wall",
-                     "mineralogy:basalt_double_slab",
-                     "mineralogy:basalt_furnace",
-                     "mineralogy:basalt_relief_axe",
-                     "mineralogy:basalt_relief_blank",
-                     "mineralogy:basalt_relief_cross",
-                     "mineralogy:basalt_relief_hammer",
-                     "mineralogy:basalt_relief_hoe",
-                     "mineralogy:basalt_relief_horizontal",
-                     "mineralogy:basalt_relief_i",
-                     "mineralogy:basalt_relief_left",
-                     "mineralogy:basalt_relief_pickaxe",
-                     "mineralogy:basalt_relief_plus",
-                     "mineralogy:basalt_relief_right",
-                     "mineralogy:basalt_relief_sword",
-                     "mineralogy:basalt_relief_vertical",
-                     "mineralogy:basalt_slab",
-                     "mineralogy:basalt_smooth",
-                     "mineralogy:basalt_smooth_brick",
-                     "mineralogy:basalt_smooth_brick_double_slab",
-                     "mineralogy:basalt_smooth_brick_furnace",
-                     "mineralogy:basalt_smooth_brick_slab",
-                     "mineralogy:basalt_smooth_brick_stairs",
-                     "mineralogy:basalt_smooth_brick_wall",
-                     "mineralogy:basalt_smooth_double_slab",
-                     "mineralogy:basalt_smooth_furnace",
-                     "mineralogy:basalt_smooth_slab",
-                     "mineralogy:basalt_smooth_stairs",
-                     "mineralogy:basalt_smooth_wall",
-                     "mineralogy:basalt_stairs",
-                     "mineralogy:basalt_wall",
-                     "mineralogy:diabase_brick",
-                     "mineralogy:diabase_brick_double_slab",
-                     "mineralogy:diabase_brick_furnace",
-                     "mineralogy:diabase_brick_slab",
-                     "mineralogy:diabase_brick_stairs",
-                     "mineralogy:diabase_brick_wall",
-                     "mineralogy:diabase_double_slab",
-                     "mineralogy:diabase_furnace",
-                     "mineralogy:diabase_relief_axe",
-                     "mineralogy:diabase_relief_blank",
-                     "mineralogy:diabase_relief_cross",
-                     "mineralogy:diabase_relief_hammer",
-                     "mineralogy:diabase_relief_hoe",
-                     "mineralogy:diabase_relief_horizontal",
-                     "mineralogy:diabase_relief_i",
-                     "mineralogy:diabase_relief_left",
-                     "mineralogy:diabase_relief_pickaxe",
-                     "mineralogy:diabase_relief_plus",
-                     "mineralogy:diabase_relief_right",
-                     "mineralogy:diabase_relief_sword",
-                     "mineralogy:diabase_relief_vertical",
-                     "mineralogy:diabase_slab",
-                     "mineralogy:diabase_smooth",
-                     "mineralogy:diabase_smooth_brick",
-                     "mineralogy:diabase_smooth_brick_double_slab",
-                     "mineralogy:diabase_smooth_brick_furnace",
-                     "mineralogy:diabase_smooth_brick_slab",
-                     "mineralogy:diabase_smooth_brick_stairs",
-                     "mineralogy:diabase_smooth_brick_wall",
-                     "mineralogy:diabase_smooth_double_slab",
-                     "mineralogy:diabase_smooth_furnace",
-                     "mineralogy:diabase_smooth_slab",
-                     "mineralogy:diabase_smooth_stairs",
-                     "mineralogy:diabase_smooth_wall",
-                     "mineralogy:diabase_stairs",
-                     "mineralogy:diabase_wall",
-                     "mineralogy:gabbro_brick",
-                     "mineralogy:gabbro_brick_double_slab",
-                     "mineralogy:gabbro_brick_furnace",
-                     "mineralogy:gabbro_brick_slab",
-                     "mineralogy:gabbro_brick_stairs",
-                     "mineralogy:gabbro_brick_wall",
-                     "mineralogy:gabbro_double_slab",
-                     "mineralogy:gabbro_furnace",
-                     "mineralogy:gabbro_relief_axe",
-                     "mineralogy:gabbro_relief_blank",
-                     "mineralogy:gabbro_relief_cross",
-                     "mineralogy:gabbro_relief_hammer",
-                     "mineralogy:gabbro_relief_hoe",
-                     "mineralogy:gabbro_relief_horizontal",
-                     "mineralogy:gabbro_relief_i",
-                     "mineralogy:gabbro_relief_left",
-                     "mineralogy:gabbro_relief_pickaxe",
-                     "mineralogy:gabbro_relief_plus",
-                     "mineralogy:gabbro_relief_right",
-                     "mineralogy:gabbro_relief_sword",
-                     "mineralogy:gabbro_relief_vertical",
-                     "mineralogy:gabbro_slab",
-                     "mineralogy:gabbro_smooth",
-                     "mineralogy:gabbro_smooth_brick",
-                     "mineralogy:gabbro_smooth_brick_double_slab",
-                     "mineralogy:gabbro_smooth_brick_furnace",
-                     "mineralogy:gabbro_smooth_brick_slab",
-                     "mineralogy:gabbro_smooth_brick_stairs",
-                     "mineralogy:gabbro_smooth_brick_wall",
-                     "mineralogy:gabbro_smooth_double_slab",
-                     "mineralogy:gabbro_smooth_furnace",
-                     "mineralogy:gabbro_smooth_slab",
-                     "mineralogy:gabbro_smooth_stairs",
-                     "mineralogy:gabbro_smooth_wall",
-                     "mineralogy:gabbro_stairs",
-                     "mineralogy:gabbro_wall",
-                     "mineralogy:lit_basalt_brick_furnace",
-                     "mineralogy:lit_basalt_furnace",
-                     "mineralogy:lit_basalt_smooth_brick_furnace",
-                     "mineralogy:lit_basalt_smooth_furnace",
-                     "mineralogy:lit_diabase_brick_furnace",
-                     "mineralogy:lit_diabase_furnace",
-                     "mineralogy:lit_diabase_smooth_brick_furnace",
-                     "mineralogy:lit_diabase_smooth_furnace",
-                     "mineralogy:lit_gabbro_brick_furnace",
-                     "mineralogy:lit_gabbro_furnace",
-                     "mineralogy:lit_gabbro_smooth_brick_furnace",
-                     "mineralogy:lit_gabbro_smooth_furnace"
-                 ]
+{
+  "replace": false,
+  "values": [
+    "mineralogy:basalt",
+    "mineralogy:diabase",
+    "mineralogy:gabbro",
+    {
+      "id": "mineralogy:basalt_brick",
+      "required": false
+    },
+    {
+      "id": "mineralogy:basalt_brick_double_slab",
+      "required": false
+    },
+    {
+      "id": "mineralogy:basalt_brick_furnace",
+      "required": false
+    },
+    {
+      "id": "mineralogy:basalt_brick_slab",
+      "required": false
+    },
+    {
+      "id": "mineralogy:basalt_brick_stairs",
+      "required": false
+    },
+    {
+      "id": "mineralogy:basalt_brick_wall",
+      "required": false
+    },
+    {
+      "id": "mineralogy:basalt_double_slab",
+      "required": false
+    },
+    {
+      "id": "mineralogy:basalt_furnace",
+      "required": false
+    },
+    {
+      "id": "mineralogy:basalt_relief_axe",
+      "required": false
+    },
+    {
+      "id": "mineralogy:basalt_relief_blank",
+      "required": false
+    },
+    {
+      "id": "mineralogy:basalt_relief_cross",
+      "required": false
+    },
+    {
+      "id": "mineralogy:basalt_relief_hammer",
+      "required": false
+    },
+    {
+      "id": "mineralogy:basalt_relief_hoe",
+      "required": false
+    },
+    {
+      "id": "mineralogy:basalt_relief_horizontal",
+      "required": false
+    },
+    {
+      "id": "mineralogy:basalt_relief_i",
+      "required": false
+    },
+    {
+      "id": "mineralogy:basalt_relief_left",
+      "required": false
+    },
+    {
+      "id": "mineralogy:basalt_relief_pickaxe",
+      "required": false
+    },
+    {
+      "id": "mineralogy:basalt_relief_plus",
+      "required": false
+    },
+    {
+      "id": "mineralogy:basalt_relief_right",
+      "required": false
+    },
+    {
+      "id": "mineralogy:basalt_relief_sword",
+      "required": false
+    },
+    {
+      "id": "mineralogy:basalt_relief_vertical",
+      "required": false
+    },
+    {
+      "id": "mineralogy:basalt_slab",
+      "required": false
+    },
+    {
+      "id": "mineralogy:basalt_smooth",
+      "required": false
+    },
+    {
+      "id": "mineralogy:basalt_smooth_brick",
+      "required": false
+    },
+    {
+      "id": "mineralogy:basalt_smooth_brick_double_slab",
+      "required": false
+    },
+    {
+      "id": "mineralogy:basalt_smooth_brick_furnace",
+      "required": false
+    },
+    {
+      "id": "mineralogy:basalt_smooth_brick_slab",
+      "required": false
+    },
+    {
+      "id": "mineralogy:basalt_smooth_brick_stairs",
+      "required": false
+    },
+    {
+      "id": "mineralogy:basalt_smooth_brick_wall",
+      "required": false
+    },
+    {
+      "id": "mineralogy:basalt_smooth_double_slab",
+      "required": false
+    },
+    {
+      "id": "mineralogy:basalt_smooth_furnace",
+      "required": false
+    },
+    {
+      "id": "mineralogy:basalt_smooth_slab",
+      "required": false
+    },
+    {
+      "id": "mineralogy:basalt_smooth_stairs",
+      "required": false
+    },
+    {
+      "id": "mineralogy:basalt_smooth_wall",
+      "required": false
+    },
+    {
+      "id": "mineralogy:basalt_stairs",
+      "required": false
+    },
+    {
+      "id": "mineralogy:basalt_wall",
+      "required": false
+    },
+    {
+      "id": "mineralogy:diabase_brick",
+      "required": false
+    },
+    {
+      "id": "mineralogy:diabase_brick_double_slab",
+      "required": false
+    },
+    {
+      "id": "mineralogy:diabase_brick_furnace",
+      "required": false
+    },
+    {
+      "id": "mineralogy:diabase_brick_slab",
+      "required": false
+    },
+    {
+      "id": "mineralogy:diabase_brick_stairs",
+      "required": false
+    },
+    {
+      "id": "mineralogy:diabase_brick_wall",
+      "required": false
+    },
+    {
+      "id": "mineralogy:diabase_double_slab",
+      "required": false
+    },
+    {
+      "id": "mineralogy:diabase_furnace",
+      "required": false
+    },
+    {
+      "id": "mineralogy:diabase_relief_axe",
+      "required": false
+    },
+    {
+      "id": "mineralogy:diabase_relief_blank",
+      "required": false
+    },
+    {
+      "id": "mineralogy:diabase_relief_cross",
+      "required": false
+    },
+    {
+      "id": "mineralogy:diabase_relief_hammer",
+      "required": false
+    },
+    {
+      "id": "mineralogy:diabase_relief_hoe",
+      "required": false
+    },
+    {
+      "id": "mineralogy:diabase_relief_horizontal",
+      "required": false
+    },
+    {
+      "id": "mineralogy:diabase_relief_i",
+      "required": false
+    },
+    {
+      "id": "mineralogy:diabase_relief_left",
+      "required": false
+    },
+    {
+      "id": "mineralogy:diabase_relief_pickaxe",
+      "required": false
+    },
+    {
+      "id": "mineralogy:diabase_relief_plus",
+      "required": false
+    },
+    {
+      "id": "mineralogy:diabase_relief_right",
+      "required": false
+    },
+    {
+      "id": "mineralogy:diabase_relief_sword",
+      "required": false
+    },
+    {
+      "id": "mineralogy:diabase_relief_vertical",
+      "required": false
+    },
+    {
+      "id": "mineralogy:diabase_slab",
+      "required": false
+    },
+    {
+      "id": "mineralogy:diabase_smooth",
+      "required": false
+    },
+    {
+      "id": "mineralogy:diabase_smooth_brick",
+      "required": false
+    },
+    {
+      "id": "mineralogy:diabase_smooth_brick_double_slab",
+      "required": false
+    },
+    {
+      "id": "mineralogy:diabase_smooth_brick_furnace",
+      "required": false
+    },
+    {
+      "id": "mineralogy:diabase_smooth_brick_slab",
+      "required": false
+    },
+    {
+      "id": "mineralogy:diabase_smooth_brick_stairs",
+      "required": false
+    },
+    {
+      "id": "mineralogy:diabase_smooth_brick_wall",
+      "required": false
+    },
+    {
+      "id": "mineralogy:diabase_smooth_double_slab",
+      "required": false
+    },
+    {
+      "id": "mineralogy:diabase_smooth_furnace",
+      "required": false
+    },
+    {
+      "id": "mineralogy:diabase_smooth_slab",
+      "required": false
+    },
+    {
+      "id": "mineralogy:diabase_smooth_stairs",
+      "required": false
+    },
+    {
+      "id": "mineralogy:diabase_smooth_wall",
+      "required": false
+    },
+    {
+      "id": "mineralogy:diabase_stairs",
+      "required": false
+    },
+    {
+      "id": "mineralogy:diabase_wall",
+      "required": false
+    },
+    {
+      "id": "mineralogy:gabbro_brick",
+      "required": false
+    },
+    {
+      "id": "mineralogy:gabbro_brick_double_slab",
+      "required": false
+    },
+    {
+      "id": "mineralogy:gabbro_brick_furnace",
+      "required": false
+    },
+    {
+      "id": "mineralogy:gabbro_brick_slab",
+      "required": false
+    },
+    {
+      "id": "mineralogy:gabbro_brick_stairs",
+      "required": false
+    },
+    {
+      "id": "mineralogy:gabbro_brick_wall",
+      "required": false
+    },
+    {
+      "id": "mineralogy:gabbro_double_slab",
+      "required": false
+    },
+    {
+      "id": "mineralogy:gabbro_furnace",
+      "required": false
+    },
+    {
+      "id": "mineralogy:gabbro_relief_axe",
+      "required": false
+    },
+    {
+      "id": "mineralogy:gabbro_relief_blank",
+      "required": false
+    },
+    {
+      "id": "mineralogy:gabbro_relief_cross",
+      "required": false
+    },
+    {
+      "id": "mineralogy:gabbro_relief_hammer",
+      "required": false
+    },
+    {
+      "id": "mineralogy:gabbro_relief_hoe",
+      "required": false
+    },
+    {
+      "id": "mineralogy:gabbro_relief_horizontal",
+      "required": false
+    },
+    {
+      "id": "mineralogy:gabbro_relief_i",
+      "required": false
+    },
+    {
+      "id": "mineralogy:gabbro_relief_left",
+      "required": false
+    },
+    {
+      "id": "mineralogy:gabbro_relief_pickaxe",
+      "required": false
+    },
+    {
+      "id": "mineralogy:gabbro_relief_plus",
+      "required": false
+    },
+    {
+      "id": "mineralogy:gabbro_relief_right",
+      "required": false
+    },
+    {
+      "id": "mineralogy:gabbro_relief_sword",
+      "required": false
+    },
+    {
+      "id": "mineralogy:gabbro_relief_vertical",
+      "required": false
+    },
+    {
+      "id": "mineralogy:gabbro_slab",
+      "required": false
+    },
+    {
+      "id": "mineralogy:gabbro_smooth",
+      "required": false
+    },
+    {
+      "id": "mineralogy:gabbro_smooth_brick",
+      "required": false
+    },
+    {
+      "id": "mineralogy:gabbro_smooth_brick_double_slab",
+      "required": false
+    },
+    {
+      "id": "mineralogy:gabbro_smooth_brick_furnace",
+      "required": false
+    },
+    {
+      "id": "mineralogy:gabbro_smooth_brick_slab",
+      "required": false
+    },
+    {
+      "id": "mineralogy:gabbro_smooth_brick_stairs",
+      "required": false
+    },
+    {
+      "id": "mineralogy:gabbro_smooth_brick_wall",
+      "required": false
+    },
+    {
+      "id": "mineralogy:gabbro_smooth_double_slab",
+      "required": false
+    },
+    {
+      "id": "mineralogy:gabbro_smooth_furnace",
+      "required": false
+    },
+    {
+      "id": "mineralogy:gabbro_smooth_slab",
+      "required": false
+    },
+    {
+      "id": "mineralogy:gabbro_smooth_stairs",
+      "required": false
+    },
+    {
+      "id": "mineralogy:gabbro_smooth_wall",
+      "required": false
+    },
+    {
+      "id": "mineralogy:gabbro_stairs",
+      "required": false
+    },
+    {
+      "id": "mineralogy:gabbro_wall",
+      "required": false
+    },
+    {
+      "id": "mineralogy:lit_basalt_brick_furnace",
+      "required": false
+    },
+    {
+      "id": "mineralogy:lit_basalt_furnace",
+      "required": false
+    },
+    {
+      "id": "mineralogy:lit_basalt_smooth_brick_furnace",
+      "required": false
+    },
+    {
+      "id": "mineralogy:lit_basalt_smooth_furnace",
+      "required": false
+    },
+    {
+      "id": "mineralogy:lit_diabase_brick_furnace",
+      "required": false
+    },
+    {
+      "id": "mineralogy:lit_diabase_furnace",
+      "required": false
+    },
+    {
+      "id": "mineralogy:lit_diabase_smooth_brick_furnace",
+      "required": false
+    },
+    {
+      "id": "mineralogy:lit_diabase_smooth_furnace",
+      "required": false
+    },
+    {
+      "id": "mineralogy:lit_gabbro_brick_furnace",
+      "required": false
+    },
+    {
+      "id": "mineralogy:lit_gabbro_furnace",
+      "required": false
+    },
+    {
+      "id": "mineralogy:lit_gabbro_smooth_brick_furnace",
+      "required": false
+    },
+    {
+      "id": "mineralogy:lit_gabbro_smooth_furnace",
+      "required": false
+    }
+  ]
 }

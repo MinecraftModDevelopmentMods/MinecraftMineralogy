@@ -482,7 +482,7 @@ public class ResourceContractTest {
     @Test
     public void oilAndBuildMetadataUseStableTargetIdentities() throws Exception {
         String properties = new String(Files.readAllBytes(new File("gradle.properties").toPath()), StandardCharsets.UTF_8);
-        assertTrue(properties.contains("mod_version=6.1.1.118021"));
+        assertTrue(properties.contains("mod_version=6.1.2.118021"));
         assertTrue(properties.contains("orespawn_curse_file_id=8750114"));
         String build = new String(Files.readAllBytes(new File("build.gradle").toPath()), StandardCharsets.UTF_8);
         assertTrue(build.contains("runtimeOnly renamer.dependency(\"curse.maven:mmd-orespawn-"));
@@ -709,10 +709,67 @@ public class ResourceContractTest {
         return files;
     }
 
+    @Test
+    public void miningTagsUseSupportedOptionalEntryObjects() throws Exception {
+        String[] paths = {
+                "data/minecraft/tags/blocks/mineable/pickaxe.json",
+                "data/minecraft/tags/blocks/needs_iron_tool.json",
+                "data/minecraft/tags/blocks/needs_stone_tool.json"
+        };
+        int[] totals = { 1133, 123, 329 };
+        int[] optionalTotals = { 1080, 120, 320 };
+        assertMiningTagContracts(paths, totals, optionalTotals);
+    }
+
     private static JsonObject json(File file) throws Exception {
         try (java.io.Reader reader = Files.newBufferedReader(file.toPath(), StandardCharsets.UTF_8)) {
             return new JsonParser().parse(reader).getAsJsonObject();
         }
+    }
+
+    private static void assertMiningTagContracts(String[] paths, int[] totals,
+            int[] optionalTotals) throws Exception {
+        for (int index = 0; index < paths.length; index++) {
+            JsonObject tag = json(new File(ROOT, paths[index]));
+            assertFalse(paths[index], tag.has("optional"));
+            JsonArray values = tag.getAsJsonArray("values");
+            assertEquals(paths[index], totals[index], values.size());
+            Set<String> ids = new HashSet<String>();
+            int optionalEntries = 0;
+            for (JsonElement value : values) {
+                String id;
+                if (value.isJsonObject()) {
+                    JsonObject entry = value.getAsJsonObject();
+                    assertEquals(paths[index], 2, entry.size());
+                    assertTrue(paths[index], entry.has("id"));
+                    assertTrue(paths[index], entry.has("required"));
+                    assertFalse(paths[index], entry.get("required").getAsBoolean());
+                    id = entry.get("id").getAsString();
+                    assertTrue(paths[index], id.startsWith("mineralogy:"));
+                    optionalEntries++;
+                } else {
+                    id = value.getAsString();
+                }
+                assertTrue(paths[index] + " duplicate " + id, ids.add(id));
+            }
+            assertEquals(paths[index], optionalTotals[index], optionalEntries);
+        }
+        JsonArray pickaxe = json(new File(ROOT, paths[0])).getAsJsonArray("values");
+        JsonArray iron = json(new File(ROOT, paths[1])).getAsJsonArray("values");
+        assertTrue(pickaxe.contains(new JsonParser().parse("\"mineralogy:basalt\"")));
+        assertTrue(iron.contains(new JsonParser().parse("\"mineralogy:basalt\"")));
+        assertTrue(hasOptionalTagEntry(pickaxe, "mineralogy:basalt_smooth"));
+        assertTrue(hasOptionalTagEntry(iron, "mineralogy:basalt_smooth"));
+    }
+
+    private static boolean hasOptionalTagEntry(JsonArray values, String id) {
+        for (JsonElement value : values) {
+            if (!value.isJsonObject()) continue;
+            JsonObject entry = value.getAsJsonObject();
+            if (id.equals(entry.get("id").getAsString())
+                    && !entry.get("required").getAsBoolean()) return true;
+        }
+        return false;
     }
 
     private static void assertGunpowderRecipe(File recipes, String name, String requiredTag) throws Exception {

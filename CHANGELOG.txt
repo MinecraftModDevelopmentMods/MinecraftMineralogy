@@ -1,5 +1,11 @@
-Mineralogy 6.1.1.120011 for Minecraft 1.20.1
+Mineralogy 6.1.2.120011 for Minecraft 1.20.1
 
+- Updated all pickaxe and harvest-tier tags to the supported optional
+  tag-entry object format. This restores normal mining speed and drops for all
+  1,133 pickaxe-mined Mineralogy blocks, including every derived rock form.
+- Synchronized a retained rock-furnace block entity with its new block state
+  before reattaching it during lit/unlit transitions, preventing stale chunk
+  state while preserving fuel, contents, and progress.
 - Delegated terrain, strata, ore, and covered fluid-deposit generation to the
   released OreSpawn 4.0.16.120011 provider engine, retaining the supported
   `[4.0.6,5.0.0)` range; removed Mineralogy's parallel
@@ -94,7 +100,7 @@ Mineralogy 6.1.1.120011 for Minecraft 1.20.1
   loot tables, fluid APIs, rendering setup, and pack format 15 resources.
 - Added reproducible Java 17 main, sources, and Javadoc artifacts, exact released
   OreSpawn dependency verification, guarded 1.20.1 CI, and the four-component
-  release tag `6.1.1.120011`.
+  release tag `6.1.2.120011`.
 - Kept ForgeGradle 7 while sealing Forge 47's required Mavenizer compatibility
   fixture by SHA-256. The build-only tool runs on Java 25; Mineralogy compiles
   and ships exclusively as Java 17, and release audits reject fixture leakage.

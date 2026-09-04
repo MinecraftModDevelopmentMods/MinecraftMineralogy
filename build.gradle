@@ -278,6 +278,33 @@ tasks.named('jar', Jar) {
     }
 }
 
+// Exact-loader regression probe for mining tags and rock-furnace state swaps.
+// It is compiled and packaged separately and is never part of a release jar.
+def miningIntegrationClasses = file("${buildDir}/mining-integration-fixture/classes")
+tasks.register('compileMiningIntegrationFixture', JavaCompile) {
+    dependsOn tasks.named('classes')
+    source fileTree('src/miningIntegrationTest/java')
+    classpath = files(sourceSets.main.output, sourceSets.main.compileClasspath)
+    destinationDirectory = miningIntegrationClasses
+    javaCompiler = javaToolchains.compilerFor {
+        languageVersion = JavaLanguageVersion.of(17)
+        vendor = JvmVendorSpec.ADOPTIUM
+    }
+    options.encoding = 'UTF-8'
+    options.release = 17
+}
+tasks.register('miningIntegrationFixtureJar', Jar) {
+    dependsOn tasks.named('compileMiningIntegrationFixture')
+    archiveFileName = 'mineralogyminingprobe.jar'
+    destinationDirectory = file("${buildDir}/mining-integration-fixture")
+    from miningIntegrationClasses
+    from 'src/miningIntegrationTest/resources'
+}
+def packagedMiningIntegrationFixtureJar = renamer.classes(tasks.named('miningIntegrationFixtureJar', Jar)) {
+    map.from minecraft.dependency.toSrgFile
+    output = layout.buildDirectory.file('mining-integration-fixture/mineralogyminingprobe-reobf.jar')
+}
+
 eclipse {
     classpath {
         downloadSources = true
@@ -318,6 +345,26 @@ def expectedReleaseNames = [mainReleaseName, sourcesReleaseName, javadocReleaseN
 def expectedMavenGroup = 'zone.moddev.mc.mineralogy'
 def expectedMavenArtifact = 'Mineralogy'
 def expectedMavenCoordinate = "${expectedMavenGroup}:${expectedMavenArtifact}:${project.version}"
+
+tasks.register('verifyMiningIntegrationFixtureIsolation') {
+    group = 'verification'
+    dependsOn releaseJar
+    dependsOn tasks.named('sourcesJar')
+    dependsOn tasks.named('javadocJar')
+    doLast {
+        [file("${buildDir}/libs/${mainReleaseName}"),
+         tasks.named('sourcesJar', Jar).get().archiveFile.get().asFile,
+         tasks.named('javadocJar', Jar).get().archiveFile.get().asFile].each { File artifact ->
+            new ZipFile(artifact).withCloseable { zip ->
+                if (zip.entries().toList().any { entry ->
+                        entry.name.contains('mineralogyminingprobe') ||
+                                entry.name.contains('miningIntegrationTest') }) {
+                    throw new GradleException("Mining integration fixture leaked into ${artifact.name}")
+                }
+            }
+        }
+    }
+}
 def preparedReleaseDir = project.findProperty('preparedReleaseDir')
 def mavenUploadUrl = System.getenv('MAVEN_UPLOAD_URL') ?: 'https://invalid.invalid/missing-maven-upload-url'
 def mavenUploadUsername = System.getenv('MAVEN_UPLOAD_USERNAME') ?: ''
@@ -474,7 +521,7 @@ tasks.register('verifyReleaseConfiguration') {
     description = 'Verifies the exact Mineralogy 1.19.4 release identity.'
     dependsOn tasks.named('verifyMavenizerCompatibilityFixture')
     doLast {
-        if (project.mod_version != '6.1.1.119041'
+        if (project.mod_version != '6.1.2.119041'
                 || project.mod_group != expectedMavenGroup
                 || project.minecraft_version != '1.19.4'
                 || project.forge_version != '45.4.0'
@@ -489,7 +536,7 @@ tasks.register('verifyReleaseDependencies') {
     group = 'verification'
     description = 'Resolves and verifies the exact released OreSpawn dependency.'
     doLast {
-        if (project.mod_version != '6.1.1.119041'
+        if (project.mod_version != '6.1.2.119041'
                 || project.minecraft_version != project.mc_version
                 || project.mc_version != '1.19.4'
                 || project.loader_name != 'forge'
@@ -580,6 +627,25 @@ tasks.register('verifyReleaseArtifacts') {
                     it.startsWith('ci-fixtures/') || it.contains('minecraft-mavenizer') ||
                     it == 'AGENTS.md' || it.contains('/agent-notes/') }) {
                 throw new GradleException('Release jar contains a retired, test, probe, or agent-only path')
+            }
+            def miningTagContracts = [
+                    'data/minecraft/tags/blocks/mineable/pickaxe.json': [1133, 1080],
+                    'data/minecraft/tags/blocks/needs_iron_tool.json': [123, 120],
+                    'data/minecraft/tags/blocks/needs_stone_tool.json': [329, 320]
+            ]
+            miningTagContracts.each { tagName, contract ->
+                def entry = zip.getEntry(tagName)
+                if (entry == null) throw new GradleException("Release jar is missing ${tagName}")
+                def tag = new JsonSlurper().parse(zip.getInputStream(entry))
+                if (tag.containsKey('optional')) throw new GradleException("${tagName} uses an unsupported top-level optional field")
+                if (tag.values.size() != contract[0]) throw new GradleException("${tagName} must contain ${contract[0]} values")
+                def optionalEntries = tag.values.findAll { it instanceof Map }
+                if (optionalEntries.size() != contract[1] || !optionalEntries.every {
+                        it.keySet() == ['id', 'required'] as Set && it.id instanceof String &&
+                                it.id.startsWith('mineralogy:') && it.required == false
+                }) throw new GradleException("${tagName} has invalid optional tag entries")
+                def ids = tag.values.collect { it instanceof Map ? it.id : it } as Set
+                if (ids.size() != tag.values.size()) throw new GradleException("${tagName} contains duplicate entries")
             }
             def locales = names.findAll { it ==~ /assets\/mineralogy\/lang\/[a-z_]+\.json/ }
             if (locales.size() != 17) {
@@ -1078,7 +1144,7 @@ tasks.register('verifyEclipseProductionClasspath') {
             throw new GradleException('Eclipse output contains stale or unexpanded mods.toml metadata')
         }
         String eclipseMetadata = eclipseModsToml.getText('UTF-8')
-        if (eclipseMetadata.contains('${') || !eclipseMetadata.contains('version="6.1.1.119041"')) {
+        if (eclipseMetadata.contains('${') || !eclipseMetadata.contains('version="6.1.2.119041"')) {
             throw new GradleException('Eclipse output contains unresolved or invalid Mineralogy version metadata')
         }
     }
@@ -1101,4 +1167,6 @@ tasks.matching { it.name == 'eclipse' }.configureEach {
 tasks.named('check') {
     dependsOn tasks.named('verifyReleaseDependencies')
     dependsOn tasks.named('verifyMavenCoordinates')
+    dependsOn tasks.named('compileMiningIntegrationFixture')
+    dependsOn tasks.named('verifyMiningIntegrationFixtureIsolation')
 }

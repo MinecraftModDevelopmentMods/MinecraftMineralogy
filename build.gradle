@@ -579,7 +579,7 @@ tasks.register('verifyReleaseConfiguration') {
     description = 'Verifies the exact Mineralogy 1.21.1 release identity.'
     dependsOn tasks.named('verifyMavenizerCompatibilityFixture')
     doLast {
-        if (project.mod_version != '6.1.1.121011'
+        if (project.mod_version != '6.1.2.121011'
                 || project.mod_group != expectedMavenGroup
                 || project.minecraft_version != '1.21.1'
                 || project.forge_version != '52.1.0'
@@ -594,7 +594,7 @@ tasks.register('verifyReleaseDependencies') {
     group = 'verification'
     description = 'Resolves and verifies the exact released OreSpawn dependency.'
     doLast {
-        if (project.mod_version != '6.1.1.121011'
+        if (project.mod_version != '6.1.2.121011'
                 || project.minecraft_version != project.mc_version
                 || project.mc_version != '1.21.1'
                 || project.loader_name != 'forge'
@@ -693,6 +693,25 @@ tasks.register('verifyReleaseArtifacts') {
                     name.matches('data/[^/]+/tags/(items|blocks|fluids)/.*')
             }) {
                 throw new GradleException('Release jar contains a stale pre-1.21 plural data directory')
+            }
+            def miningTagContracts = [
+                    'data/minecraft/tags/block/mineable/pickaxe.json': [1133, 1080],
+                    'data/minecraft/tags/block/needs_iron_tool.json': [123, 120],
+                    'data/minecraft/tags/block/needs_stone_tool.json': [329, 320]
+            ]
+            miningTagContracts.each { tagName, contract ->
+                def entry = zip.getEntry(tagName)
+                if (entry == null) throw new GradleException("Release jar is missing ${tagName}")
+                def tag = new JsonSlurper().parse(zip.getInputStream(entry))
+                if (tag.containsKey('optional')) throw new GradleException("${tagName} uses an unsupported top-level optional field")
+                if (tag.values.size() != contract[0]) throw new GradleException("${tagName} must contain ${contract[0]} values")
+                def optionalEntries = tag.values.findAll { it instanceof Map }
+                if (optionalEntries.size() != contract[1] || !optionalEntries.every {
+                        it.keySet() == ['id', 'required'] as Set && it.id instanceof String &&
+                                it.id.startsWith('mineralogy:') && it.required == false
+                }) throw new GradleException("${tagName} has invalid optional tag entries")
+                def ids = tag.values.collect { it instanceof Map ? it.id : it } as Set
+                if (ids.size() != tag.values.size()) throw new GradleException("${tagName} contains duplicate entries")
             }
             def locales = names.findAll { it ==~ /assets\/mineralogy\/lang\/[a-z_]+\.json/ }
             if (locales.size() != 17) {
@@ -1282,7 +1301,7 @@ tasks.register('verifyEclipseProductionClasspath') {
             throw new GradleException('Eclipse output contains stale or unexpanded mods.toml metadata')
         }
         String eclipseMetadata = eclipseModsToml.getText('UTF-8')
-        if (eclipseMetadata.contains('${') || !eclipseMetadata.contains('version="6.1.1.121011"')) {
+        if (eclipseMetadata.contains('${') || !eclipseMetadata.contains('version="6.1.2.121011"')) {
             throw new GradleException('Eclipse output contains unresolved or invalid Mineralogy version metadata')
         }
     }

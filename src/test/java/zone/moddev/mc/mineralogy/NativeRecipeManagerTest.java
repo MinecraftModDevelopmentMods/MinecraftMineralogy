@@ -22,7 +22,7 @@ import com.google.gson.JsonParser;
 
 /**
  * Checks generated recipe branches before the loader-side recipe-manager smoke.
- * Forge 64's component and condition registries are deliberately unavailable to
+ * Forge 65's component and condition registries are deliberately unavailable to
  * a plain JUnit VM, so real codec loading and matching are exercised in Forge.
  */
 public class NativeRecipeManagerTest {

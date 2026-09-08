@@ -14,7 +14,9 @@ The exact bytes from the installed build are exported as
 - Provider schema 4, mod ID `mineralogy`, and provider revision 3.
 - 32 enabled rock rules across the four geological families.
 - Sulfur, phosphorous, and nitrate ore rules.
-- Minecraft 26.1.2 heights `-64` through `319` and Overworld-only terrain defaults.
+- Minecraft 26.2 sulfur and cinnabar remain separate native families; they are
+  not aliases, recipe inputs, tags, or outputs of Mineralogy's sulfur rule.
+- Minecraft 26.2 heights `-64` through `319` and Overworld-only terrain defaults.
 - Minecraft blocks for granite, diorite, andesite, basalt, and tuff. Worldgen
   aliases map the five matching historical Mineralogy rock IDs to their native
   outputs, while all historical Mineralogy blocks remain registered for old
@@ -82,7 +84,7 @@ that same dimension ID to each desired rock rule's `dimensions` array. A rock
 without `dimensions` is Overworld-only. A configured custom dimension is
 disabled during baking when no valid rock rules include it.
 
-Minecraft 26.1.2 uses the registered dimension-type ID, such as
+Minecraft 26.2 uses the registered dimension-type ID, such as
 `examplemod:moon`; consult the dimension mod's documentation for its exact ID.
 Rock membership makes different stone sets possible per dimension. To use
 different altitude settings for the same output block, define unique rock rule
@@ -90,7 +92,7 @@ IDs with different `depth_peak`, `depth_spread`, `min_y`, or `max_y` values and
 non-overlapping dimension lists. Duplicate output states within one dimension
 are rejected.
 
-The 26.1.2 editor does not expose terrain-dimension or rock-membership fields, so
+The 26.2 editor does not expose terrain-dimension or rock-membership fields, so
 players edit the stopped world's saved profile and pack authors may provide
 global defaults or a complete provider override. Changes affect newly generated
 chunks only.
@@ -104,7 +106,7 @@ Issue #57's replacement blocklist is provided by OreSpawn rather than
 natural-terrain registry IDs or appropriate host tags to that dimension.
 
 The packaged Mineralogy ore rules use explicit `minecraft:stone` and
-`minecraft:deepslate` hosts. Forge 64 binds tags after common setup, while
+`minecraft:deepslate` hosts. Forge 65 binds tags after common setup, while
 OreSpawn 4.0.16 discovers packaged providers during common setup. The four
 configured `host_families` still cover every OreSpawn-managed Mineralogy rock.
 
@@ -117,6 +119,6 @@ intends to replace the whole packaged Mineralogy provider; it is unnecessary
 for an ordinary per-world host-list change and does not rewrite established
 world profiles.
 
-On Minecraft 26.1.2, terrain hosts are baked as flattened block identities.
+On Minecraft 26.2, terrain hosts are baked as flattened block identities.
 Changes affect only newly generated chunks because Mineralogy strata are never
 retro-generated.

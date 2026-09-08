@@ -30,7 +30,7 @@ if ($expected.Count -ne 928) {
 
 if ($Check) {
     if (-not (Test-Path -LiteralPath $definitionRoot)) {
-        throw "Missing Minecraft 26.1.2 item-definition directory $definitionRoot"
+        throw "Missing Minecraft 26.2 item-definition directory $definitionRoot"
     }
     $actual = @(Get-ChildItem -LiteralPath $definitionRoot -Filter '*.json')
     if ($actual.Count -ne $expected.Count) {
@@ -45,7 +45,7 @@ if ($Check) {
             throw "Item definition differs from its generated contract: $($entry.Key)"
         }
     }
-    Write-Output 'Verified 928 Minecraft 26.1.2 Mineralogy item definitions.'
+    Write-Output 'Verified 928 Minecraft 26.2 Mineralogy item definitions.'
     return
 }
 
@@ -59,4 +59,4 @@ foreach ($entry in $expected.GetEnumerator()) {
     [IO.File]::WriteAllText((Join-Path $definitionRoot $entry.Key), $entry.Value, $utf8NoBom)
 }
 
-Write-Output 'Generated 928 Minecraft 26.1.2 Mineralogy item definitions.'
+Write-Output 'Generated 928 Minecraft 26.2 Mineralogy item definitions.'

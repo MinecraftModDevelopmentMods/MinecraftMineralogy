@@ -25,6 +25,10 @@ It declares 32 rock rules, sulfur, phosphorous, and nitrate ores, and the
 provider-owned `mineralogy:fluid_deposit/crude_oil` rule. OreSpawn owns optional
 vanilla-ore management and must not be duplicated in Mineralogy.
 
+Minecraft 26.2's native sulfur and cinnabar families are deliberately separate.
+Do not add their items or blocks to Mineralogy sulfur dust, storage, ore, recipe,
+or provider identities; compatibility requires the two namespaces to coexist.
+
 Keep provider-owned IDs stable. Existing worlds contain self-contained
 profiles; provider updates must not overwrite established world choices. A pack
 may supply an authoritative full override at
@@ -39,9 +43,9 @@ families additionally use `cobblestone`; chert and pumice always retain that
 identity. Gypsum, chalk, rock salt, and both rock salt lamps retain their
 specialty aliases.
 
-Minecraft 26.1.2's `minecraft:stone_crafting_materials` and
+Minecraft 26.2's `minecraft:stone_crafting_materials` and
 `minecraft:stone_tool_materials` item tags include `#c:cobblestones`, so
-enabled Mineralogy rocks work in native tool recipes. Forge 64 exposes named
+enabled Mineralogy rocks work in native tool recipes. Forge 65 exposes named
 holder sets retained by parsed recipes; Mineralogy updates those existing sets
 in place after initial tag loading and every data reload, preserving other
 mods' members. Holder-set invalidation callbacks refresh dependent ingredients,
@@ -52,12 +56,12 @@ nested Minecraft crafting and tool tags.
 Sixteen established vanilla recipes and their advancements use conditional JSON overrides
 for the complete exact-cobblestone, stone-crafting-material, and
 stone-tool-material contracts. Enabled branches use stable Mineralogy union
-tags; disabled branches restore the target-native ingredients. Forge 64's
+tags; disabled branches restore the target-native ingredients. Forge 65's
 already-resolved nested tags do not observe a replacement tag collection, so
 Mineralogy also mutates retained tag instances rather than swapping the
 collection.
 
-Minecraft 26.1.2 retains three additional configurable recipes: coast, sentry, and vex
+Minecraft 26.2 retains three additional configurable recipes: coast, sentry, and vex
 armor-trim template duplication. Enabled branches use the Mineralogy
 cobblestone union; disabled branches preserve the recipes' exact vanilla
 cobblestone ingredient. Their vanilla advancements are intentionally untouched
@@ -68,7 +72,7 @@ has a matching native advancement. Do not override either file: enabled rock
 families reach it through the updated holder set, while disabled mode retains
 vanilla members plus unconditional chert and pumice.
 
-Minecraft 26.1.2 also owns andesite, basalt, diorite, granite, tuff, and several
+Minecraft 26.2 also owns andesite, basalt, diorite, granite, tuff, and several
 matching finishes. Mineralogy's family tags include both native and retained
 legacy identities. Five `data/minecraft/recipe/polished_*.json` overrides move
 the native polished-block route from 2x2 crafting to one exact native block plus
@@ -110,7 +114,7 @@ material and finish so basalt cannot produce a different rock's slab or wall.
 
 ## Crafting Data
 
-All Mineralogy recipes are native Minecraft/Forge 26.1.2 JSON under
+All Mineralogy recipes are native Minecraft/Forge 26.2 JSON under
 `data/mineralogy/recipe/`. Minecraft 1.21 uses singular registry data
 directories (`recipe`, `advancement`, `loot_table`, and `tags/item|block|fluid`).
 Run `scripts/generate-recipes.ps1` after changing
@@ -122,7 +126,7 @@ advancement with the same Forge conditions and the same exact-item or
 family-tag material predicate as the recipe. Unlocks use direct inventory
 ingredients instead of listening to other recipe unlocks, which would
 recursively reveal an entire construction tree. Polishing uses Minecraft
-26.1.2's advancement requirements matrix to require the matching source plus
+26.2's advancement requirements matrix to require the matching source plus
 accepted sand; manually crafting a recipe is the target-native fallback for
 Forge's delayed crafting-output inventory trigger. Rock-furnace advancements
 use the matching slab-family tag as their sole material criterion. They
@@ -149,7 +153,7 @@ The legacy `GENERATE_*` flags can remove registrations on the next start. The
 new issue-121 switches only change creative visibility and Mineralogy-owned
 recipes, so existing content remains loadable.
 
-Forge 64 converts pre-flattening chunks lazily. Required Mixins expand
+Forge 65 converts pre-flattening chunks lazily. Required Mixins expand
 Minecraft's fixed legacy state tables before conversion, and the selected-world hook
 installs the complete saved block mapping before Mojang's data fixer. It
 reinstalls that mapping after the client enumerates other old saves, normalizes
@@ -161,7 +165,7 @@ unloaded occupied furnaces and new chunks at an old-world boundary in the
 reobfuscated jar; a development launch alone cannot prove this path.
 
 Minecraft-facing identifiers use `net.minecraft.resources.Identifier`.
-Registration and lifecycle listeners use Forge 64's `BusGroup` and EventBus 7
+Registration and lifecycle listeners use Forge 65's `BusGroup` and EventBus 7
 APIs; do not reintroduce `ResourceLocation` or the removed
 `MinecraftForge.EVENT_BUS` singleton.
 
@@ -172,7 +176,7 @@ An exact Temurin 25.0.3+9 toolchain runs Mavenizer, Gradle, compilation, tests,
 and development launches:
 
 ```powershell
-$env:JAVA_HOME='path-to-a-Java-21-jdk'
+$env:JAVA_HOME='path-to-a-Java-25-jdk'
 $env:GRADLE_USER_HOME='D:\MinecraftMineralogy\.gradle-verify-cache'
 .\gradlew.bat clean check build javadoc verifyReleaseConfiguration verifyReleaseDependencies verifyReleaseArtifacts writeReleaseChecksums --no-daemon
 .\gradlew.bat genEclipseRuns isolateEclipseProductionRuns verifyEclipseProductionClasspath --no-daemon
@@ -184,5 +188,5 @@ OreSpawn in a launcher-like Forge installation. The normal jar packages this
 guide under `META-INF/mineralogy/docs/`.
 
 The complete release version is `Major.Minor.Bug.Target`; see
-[Mineralogy Versioning](VERSIONS.md). This branch validates target `2601021`
-for Minecraft 26.1.2 Forge and does not append CI build numbers.
+[Mineralogy Versioning](VERSIONS.md). This branch validates target `2602001`
+for Minecraft 26.2 Forge and does not append CI build numbers.

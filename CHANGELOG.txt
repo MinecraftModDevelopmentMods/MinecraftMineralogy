@@ -1,3 +1,36 @@
+Mineralogy 6.1.2.2602001 for Minecraft 26.2
+
+- Ported the accepted Mineralogy 6.1.2 Forge contract to Minecraft 26.2 while
+  preserving every registry and block-entity ID, NBT field, item definition,
+  recipe identity, configuration key, migration report, provider rule, locale,
+  guide, crude-oil identity, relief shape, mining tag, and furnace-state fix.
+- Updated the main and integration-test data packs to data format 107.1 and the
+  external texture packs to resource format 88.0.
+- Aligned the five changed vanilla overrides with Minecraft 26.2 by omitting
+  the removed `category` field from furnace, brewing stand, and coast, sentry,
+  and vex armor-trim template duplication recipes. IDs, conditions, patterns,
+  ingredients, results, counts, and advancement behavior remain unchanged.
+- Kept Minecraft's new sulfur and cinnabar families separate from Mineralogy.
+  Vanilla materials are not aliases or inputs for Mineralogy sulfur dust,
+  storage, recipes, tags, or its established OreSpawn rule.
+- Retained 1,433 JSON recipes and progressive advancements, 18 reversible slab
+  bridges, 48 Minecraft recipe overrides, 21 advancement overrides, 19
+  configurable cobblestone routes, the native tuff matrix, stone-spear
+  compatibility, and Mineralogy slab precedence.
+- Retained the schema-4/revision-3 OreSpawn provider with 32 rocks, three ores,
+  the covered Ocean oil deposit, native aliases, stone/deepslate hosts,
+  Cyano/GEOME migration, and `manage_vanilla_ores=false`.
+- Upgraded the build and runtime target to Forge 65.1.0, Java 25, released
+  OreSpawn 4.0.16.2602001, and Maven coordinate
+  `zone.moddev.mc:Mineralogy:6.1.2.2602001`.
+- Reused the checksum-sealed five-file Mavenizer fixture as an audited
+  zero-repair Forge 65 target. Forge 65 still exposes its compile-only
+  `mixinextras-common` artifact beside the embedded MixinExtras runtime on
+  Buildship's combined launch module path, so Mineralogy excludes the redundant
+  common artifact and audits the compile classpath to prevent startup failure.
+- Retargeted guarded branch CI, cold bootstrap, artifact checks, documentation,
+  and tag validation to Minecraft 26.2 and exact tag `6.1.2.2602001`.
+
 Mineralogy 6.1.2.2601021 for Minecraft 26.1.2
 
 - Ported the complete Mineralogy 6.1.2 content, recipe, migration, and

@@ -22,7 +22,7 @@ import zone.moddev.mc.mineralogy.MineralogyConfig;
 import zone.moddev.mc.mineralogy.data.Material;
 import zone.moddev.mc.mineralogy.data.MaterialData;
 
-/** Applies the legacy cobblestone option to Forge 64 canonical and compatibility tags. */
+/** Applies the legacy cobblestone option to Forge 65 canonical and compatibility tags. */
 public final class CobblestoneTagPolicy {
     private static final Identifier COBBLESTONES = Identifier.fromNamespaceAndPath("c", "cobblestones");
     private static final Identifier LEGACY_COBBLESTONE =
@@ -64,7 +64,7 @@ public final class CobblestoneTagPolicy {
         updateTag(itemRegistry, Registries.ITEM, STONE_TOOL_MATERIALS,
                 configuredItems, enabled, "chert", "pumice");
 
-        Mineralogy.LOGGER.debug("Applied Forge 64 cobblestone policy: enabled={}, rocks={}, "
+        Mineralogy.LOGGER.debug("Applied Forge 65 cobblestone policy: enabled={}, rocks={}, "
                 + "canonicalItems={}, legacyItems={}, craftingItems={}, toolItems={}",
                 enabled, configuredItems.size(),
                 size(itemRegistry, Registries.ITEM, COBBLESTONES),

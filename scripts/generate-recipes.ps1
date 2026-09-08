@@ -27,7 +27,7 @@ $colors = @(
     'gray', 'pink', 'lime', 'yellow', 'light_blue', 'magenta', 'orange', 'white'
 )
 
-# Minecraft owns these full-block identities in 26.1.2. Mineralogy keeps its
+# Minecraft owns these full-block identities in 26.2. Mineralogy keeps its
 # legacy blocks registered, but recipes may accept either identity where doing
 # so cannot compete with a native recipe.
 $nativeFullBlocks = @{
@@ -145,7 +145,7 @@ function AdvancementPredicate([object] $ingredient) {
     if ($null -ne $ingredient.PSObject.Properties['items']) {
         return [ordered]@{ items = $ingredient.items }
     }
-    throw "Cannot convert recipe ingredient into a Minecraft 26.1.2 advancement predicate"
+    throw "Cannot convert recipe ingredient into a Minecraft 26.2 advancement predicate"
 }
 
 function OreIngredient([string] $ore) {
@@ -171,7 +171,7 @@ function OreIngredient([string] $ore) {
         $finish = if ($Matches[2]) { '/' + (Convert-CamelToSnake $Matches[2]) } else { '' }
         return "#mineralogy:slabs/$family$finish"
     }
-    throw "No Minecraft 26.1.2 tag mapping for legacy OreDictionary key $ore"
+    throw "No Minecraft 26.2 tag mapping for legacy OreDictionary key $ore"
 }
 
 function Convert-CamelToSnake([string] $value) {
@@ -235,16 +235,20 @@ function VanillaShapedRecipe(
     [string[]] $pattern,
     [System.Collections.IDictionary] $key,
     [string] $result,
-    [int] $count = 1
+    [int] $count = 1,
+    [bool] $includeCategory = $true
 ) {
-    return [ordered]@{
+    $recipe = [ordered]@{
         type = 'minecraft:crafting_shaped'
-        category = VanillaCraftingCategoryForResult $result
-        pattern = $pattern
-        key = $key
-        result = VanillaResult $result $count
-        show_notification = $true
     }
+    if ($includeCategory) {
+        $recipe['category'] = VanillaCraftingCategoryForResult $result
+    }
+    $recipe['pattern'] = $pattern
+    $recipe['key'] = $key
+    $recipe['result'] = VanillaResult $result $count
+    $recipe['show_notification'] = $true
+    return $recipe
 }
 
 function VanillaShapelessRecipe(
@@ -1113,15 +1117,15 @@ function Write-CobblestoneRecipeOverrides() {
 	$fallbackTools = '#minecraft:stone_tool_materials'
 
     Write-ConditionalMinecraftRecipe 'furnace' $condition `
-        (VanillaShapedRecipe @('###', '# #', '###') ([ordered]@{ '#' = $enabledCrafting }) 'minecraft:furnace') `
-        (VanillaShapedRecipe @('###', '# #', '###') ([ordered]@{ '#' = $fallbackCrafting }) 'minecraft:furnace')
+        (VanillaShapedRecipe @('###', '# #', '###') ([ordered]@{ '#' = $enabledCrafting }) 'minecraft:furnace' 1 $false) `
+        (VanillaShapedRecipe @('###', '# #', '###') ([ordered]@{ '#' = $fallbackCrafting }) 'minecraft:furnace' 1 $false)
     Write-ConditionalMinecraftRecipe 'brewing_stand' $condition `
         (VanillaShapedRecipe @(' B ', '###') ([ordered]@{
             B = ItemIngredient 'minecraft:blaze_rod'; '#' = $enabledCrafting
-        }) 'minecraft:brewing_stand') `
+        }) 'minecraft:brewing_stand' 1 $false) `
         (VanillaShapedRecipe @(' B ', '###') ([ordered]@{
             B = ItemIngredient 'minecraft:blaze_rod'; '#' = $fallbackCrafting
-        }) 'minecraft:brewing_stand')
+        }) 'minecraft:brewing_stand' 1 $false)
     Write-ConditionalMinecraftRecipe 'lever' $condition `
         (VanillaShapedRecipe @('X', '#') ([ordered]@{
             '#' = $enabledCobblestone; X = ItemIngredient 'minecraft:stick'
@@ -1204,12 +1208,12 @@ function Write-CobblestoneRecipeOverrides() {
             '#' = ItemIngredient 'minecraft:diamond'
             C = $enabledCobblestone
             S = ItemIngredient $templateItem
-        }) $templateItem 2
+        }) $templateItem 2 $false
         $fallbackRecipe = VanillaShapedRecipe @('#S#', '#C#', '###') ([ordered]@{
             '#' = ItemIngredient 'minecraft:diamond'
             C = ItemIngredient 'minecraft:cobblestone'
             S = ItemIngredient $templateItem
-        }) $templateItem 2
+        }) $templateItem 2 $false
         Write-ConditionalMinecraftRecipe $recipeName $condition $enabledRecipe $fallbackRecipe
     }
 
@@ -1401,4 +1405,4 @@ $advancementCount = Synchronize-AdvancementConditions
 if ($advancementCount -ne $expectedTargetRecipeCount) {
     throw "Expected $expectedTargetRecipeCount recipe advancements, found $advancementCount"
 }
-Write-Output "Generated $expectedRecipeCount crafting recipe JSON files, retained 28 target-native smelting recipes, created $createdAdvancements missing recipe advancements, and conditioned $advancementCount Minecraft 26.1.2 recipe advancements."
+Write-Output "Generated $expectedRecipeCount crafting recipe JSON files, retained 28 target-native smelting recipes, created $createdAdvancements missing recipe advancements, and conditioned $advancementCount Minecraft 26.2 recipe advancements."

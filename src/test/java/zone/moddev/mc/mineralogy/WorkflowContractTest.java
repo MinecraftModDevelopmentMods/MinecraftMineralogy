@@ -104,6 +104,9 @@ public class WorkflowContractTest {
         assertTrue(deploy.contains("version-type: ${{ inputs.curseforge_release_level }}"));
         assertTrue(deploy.contains("github-prerelease: false"));
         assertTrue(deploy.contains("version-type: release"));
+        assertFalse(deploy.contains("./gradlew clean check build"));
+        assertTrue(deploy.contains("./gradlew clean \"${gradle_args[@]}\""));
+        assertTrue(deploy.contains("./gradlew check build javadoc verifyReleaseDependencies"));
         assertEquals(2, countOccurrences(deploy, "bash gradle/stage-orespawn-release.sh"));
         assertTrue(deploy.contains("-PorespawnVerificationRepository=\"${{ steps.orespawn.outputs.repository }}\""));
 

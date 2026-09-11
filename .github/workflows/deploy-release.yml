@@ -362,12 +362,16 @@ jobs:
       - name: Build, test, and audit once
         run: |
           chmod +x ./gradlew
-          ./gradlew clean check build javadoc verifyReleaseDependencies verifyReleaseArtifacts writeReleaseChecksums \
-            -PorespawnVerificationRepository="${{ steps.orespawn.outputs.repository }}" \
-            --no-daemon --stacktrace \
-            -Dorg.gradle.java.installations.paths="${{ steps.java-paths.outputs.paths }}" \
-            -Dorg.gradle.java.installations.auto-detect=false \
+          gradle_args=(
+            -PorespawnVerificationRepository="${{ steps.orespawn.outputs.repository }}"
+            --no-daemon --stacktrace
+            -Dorg.gradle.java.installations.paths="${{ steps.java-paths.outputs.paths }}"
+            -Dorg.gradle.java.installations.auto-detect=false
             -Dorg.gradle.java.installations.auto-download=false
+          )
+          ./gradlew clean "${gradle_args[@]}"
+          ./gradlew check build javadoc verifyReleaseDependencies verifyReleaseArtifacts writeReleaseChecksums \
+            "${gradle_args[@]}"
 
       - name: Stage the immutable release artifact
         id: artifact

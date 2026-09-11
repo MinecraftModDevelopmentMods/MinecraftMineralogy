@@ -1,3 +1,27 @@
+Mineralogy 6.1.2.2602002 for Minecraft 26.2 NeoForge
+
+- Ported the accepted NeoForge 26.1.2 product to Minecraft 26.2 and
+  NeoForge 26.2.0.45-beta while preserving every registry, block-entity, NBT,
+  provider, configuration, migration, recipe, locale, guide, crude-oil,
+  relief, mining, furnace, creative-tab, texture, and legacy-world identity.
+- Retained the established NeoForge registration, capabilities, fluid models,
+  tag reload policy, and Java-25 Mixin conversion path. The complete 18,192
+  legacy mappings, dual Overworld region layouts, selected-world restoration,
+  sidecars, chunk protection, and furnace normalization remain intact.
+- Regenerated the five changed vanilla overrides without Minecraft 26.2's
+  removed crafting category field. The remaining 1,433 Mineralogy recipes,
+  progressive advancements, tuff matrix, slab precedence, stone-spear support,
+  and all 19 configurable cobblestone routes are unchanged.
+- Kept Minecraft's new sulfur and cinnabar families separate from Mineralogy's
+  sulfur ore, dust, storage block, recipes, tags, and OreSpawn provider rule.
+- Removed the 26.1.2-only NeoGradle source-decompiler workaround and adopted
+  the validated 26.2 binary userdev path, while retaining the MMD Maven primary
+  and checksum-verified CurseMaven fallback for OreSpawn.
+- Updated metadata, packs, CI, documentation, and release audits for Minecraft
+  26.2, NeoForge 26.2.0.45-beta, OreSpawn 4.0.16.2602002, Java 25,
+  resource format 88, and data format 107.1. Mineralogy still registers no
+  world generator.
+
 Mineralogy 6.1.2.2601022 for Minecraft 26.1.2 NeoForge
 
 - Ported the accepted NeoForge 1.21.11 product to Minecraft 26.1.2 and

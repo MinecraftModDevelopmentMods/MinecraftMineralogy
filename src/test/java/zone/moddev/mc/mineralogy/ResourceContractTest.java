@@ -50,7 +50,7 @@ public class ResourceContractTest {
         assertFalse(text.contains("metadata"));
         assertTrue(text.contains("minecraft:deepslate"));
         assertTrue(text.contains("\"host_blocks\""));
-        assertFalse("NeoForge 26.1 common setup must not resolve unbound host tags",
+        assertFalse("NeoForge 26.2 common setup must not resolve unbound host tags",
                 text.contains("minecraft:stone_ore_replaceables")
                         || text.contains("minecraft:deepslate_ore_replaceables"));
         for (Map.Entry<String, JsonElement> entry : provider.getAsJsonObject("rocks").entrySet()) {
@@ -454,15 +454,15 @@ public class ResourceContractTest {
     }
 
     @Test
-    public void neoForge261ResourcesRetainNativeWallsTagsAndPackFormats() throws Exception {
+    public void neoForge262ResourcesRetainNativeWallsTagsAndPackFormats() throws Exception {
         JsonObject pack = json(new File(ROOT, "pack.mcmeta"));
-        assertEquals(101, pack.getAsJsonObject("pack").get("max_format").getAsInt());
+        assertEquals(107, pack.getAsJsonObject("pack").get("max_format").getAsInt());
         JsonArray dataMinimum = pack.getAsJsonObject("pack").getAsJsonArray("min_format");
-        assertEquals(101, dataMinimum.get(0).getAsInt());
+        assertEquals(107, dataMinimum.get(0).getAsInt());
         assertEquals(1, dataMinimum.get(1).getAsInt());
         JsonObject resourcePack = json(new File("resourcepack/x16/pack.mcmeta"));
-        assertEquals(84, resourcePack.getAsJsonObject("pack").get("min_format").getAsInt());
-        assertEquals(84, resourcePack.getAsJsonObject("pack").get("max_format").getAsInt());
+        assertEquals(88, resourcePack.getAsJsonObject("pack").get("min_format").getAsInt());
+        assertEquals(88, resourcePack.getAsJsonObject("pack").get("max_format").getAsInt());
 
         File blockstates = new File(ROOT, "assets/mineralogy/blockstates");
         File[] wallStates = blockstates.listFiles((dir, name) -> name.endsWith("_wall.json"));
@@ -529,6 +529,9 @@ public class ResourceContractTest {
             assertEquals(id, "minecraft:" + id,
                     enabled.getAsJsonObject("result").get("id").getAsString());
             assertEquals(id, 2, enabled.getAsJsonObject("result").get("count").getAsInt());
+            assertFalse(id, enabled.has("category"));
+            assertTrue(id, enabled.has("show_notification"));
+            assertTrue(id, enabled.get("show_notification").getAsBoolean());
         }
         File[] stonecutting = new File(ROOT, "data/mineralogy/recipe")
                 .listFiles((dir, name) -> name.contains("stonecutting"));
@@ -537,14 +540,14 @@ public class ResourceContractTest {
     }
 
     @Test
-    public void integrationFixturesUseDataFormat101AndSingularDataDirectories() throws Exception {
+    public void integrationFixturesUseDataFormat107AndSingularDataDirectories() throws Exception {
         for (String sourceSet : Arrays.asList("recipeIntegrationTest", "oilCompatibilityTest")) {
             File fixtureRoot = new File("src/" + sourceSet + "/resources");
             JsonObject pack = json(new File(fixtureRoot, "pack.mcmeta"));
-            assertEquals(sourceSet, 101,
+            assertEquals(sourceSet, 107,
                     pack.getAsJsonObject("pack").get("max_format").getAsInt());
             JsonArray minimum = pack.getAsJsonObject("pack").getAsJsonArray("min_format");
-            assertEquals(sourceSet, 101, minimum.get(0).getAsInt());
+            assertEquals(sourceSet, 107, minimum.get(0).getAsInt());
             assertEquals(sourceSet, 1, minimum.get(1).getAsInt());
             assertFalse(sourceSet, new File(fixtureRoot, "data/c/tags/items").exists());
             assertFalse(sourceSet, new File(fixtureRoot, "data/c/tags/fluids").exists());
@@ -557,6 +560,38 @@ public class ResourceContractTest {
         assertTrue(new File(oilRoot, "data/c/tags/fluid/crude_oil.json").isFile());
         assertTrue(new File(oilRoot, "data/forge/tags/item/buckets/crude_oil.json").isFile());
         assertTrue(new File(oilRoot, "data/forge/tags/fluid/crude_oil.json").isFile());
+    }
+
+    @Test
+    public void nativeSulfurAndCinnabarRemainSeparateFromMineralogyMaterials() throws Exception {
+        assertTagValues(new File(ROOT, "data/c/tags/item/storage_blocks/sulfur.json"),
+                "mineralogy:sulfur_block");
+        assertTagValues(new File(ROOT, "data/c/tags/block/storage_blocks/sulfur.json"),
+                "mineralogy:sulfur_block");
+        assertTagValues(new File(ROOT, "data/c/tags/item/dusts/sulfur.json"),
+                "mineralogy:sulfur_dust");
+        assertTagValues(new File(ROOT, "data/forge/tags/item/storage_blocks/sulfur.json"),
+                "#c:storage_blocks/sulfur");
+        assertTagValues(new File(ROOT, "data/forge/tags/item/dusts/sulfur.json"),
+                "#c:dusts/sulfur");
+
+        JsonObject sulfurBlock = json(new File(ROOT,
+                "data/mineralogy/recipe/sulfur_block.json"));
+        assertEquals("mineralogy:sulfur_dust",
+                sulfurBlock.getAsJsonObject("key").get("x").getAsString());
+        JsonObject sulfurDust = json(new File(ROOT,
+                "data/mineralogy/recipe/sulfur_dust.json"));
+        assertEquals("#c:storage_blocks/sulfur",
+                sulfurDust.getAsJsonArray("ingredients").get(0).getAsString());
+
+        File recipeDirectory = new File(ROOT, "data/mineralogy/recipe");
+        File[] recipes = recipeDirectory.listFiles((dir, name) -> name.endsWith(".json"));
+        assertNotNull(recipes);
+        for (File recipe : recipes) {
+            String contents = new String(Files.readAllBytes(recipe.toPath()), StandardCharsets.UTF_8);
+            assertFalse(recipe.getName(), contents.contains("minecraft:sulfur"));
+            assertFalse(recipe.getName(), contents.contains("minecraft:cinnabar"));
+        }
     }
 
     @Test
@@ -666,8 +701,8 @@ public class ResourceContractTest {
     @Test
     public void oilAndBuildMetadataUseStableTargetIdentities() throws Exception {
         String properties = new String(Files.readAllBytes(new File("gradle.properties").toPath()), StandardCharsets.UTF_8);
-        assertTrue(properties.contains("mod_version=6.1.2.2601022"));
-        assertTrue(properties.contains("orespawn_curse_file_id=8809908"));
+        assertTrue(properties.contains("mod_version=6.1.2.2602002"));
+        assertTrue(properties.contains("orespawn_curse_file_id=8830635"));
         String build = new String(Files.readAllBytes(new File("build.gradle").toPath()), StandardCharsets.UTF_8);
         assertTrue(build.contains("runtimeOnly(orespawnCoordinate)"));
         assertTrue(build.contains("https://maven.moddev.zone/releases"));
@@ -869,7 +904,13 @@ public class ResourceContractTest {
     private static void assertRecipeBookFields(String name, JsonObject recipe) {
         String type = recipe.get("type").getAsString();
         if ("minecraft:crafting_shaped".equals(type)) {
-            assertTrue(name, recipe.has("category"));
+            Set<String> categoryFreeRecipes = new HashSet<String>(Arrays.asList(
+                    "furnace.json",
+                    "brewing_stand.json",
+                    "coast_armor_trim_smithing_template.json",
+                    "sentry_armor_trim_smithing_template.json",
+                    "vex_armor_trim_smithing_template.json"));
+            assertEquals(name, !categoryFreeRecipes.contains(name), recipe.has("category"));
             assertTrue(name, recipe.has("show_notification"));
             assertTrue(name, recipe.get("show_notification").getAsBoolean());
         } else if ("minecraft:crafting_shapeless".equals(type)) {

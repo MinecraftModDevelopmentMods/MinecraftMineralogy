@@ -71,7 +71,7 @@ as levers, pistons, dispensers, droppers, and brewing stands. Setting it to
 and stone-crafting recipes while restoring their target-native ingredients.
 Rocks remain `stone`, retain their material-specific tags, and use exact
 Mineralogy slab, stair, and wall recipes. Chert and pumice remain historical
-unconditional cobblestone equivalents in tag-backed recipes. The three 26.1.2
+unconditional cobblestone equivalents in tag-backed recipes. The three 26.2
 armor-trim template duplication recipes restore exact vanilla cobblestone when
 the option is disabled, matching their native definitions.
 

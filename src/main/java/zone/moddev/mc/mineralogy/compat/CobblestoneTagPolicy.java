@@ -22,7 +22,7 @@ import zone.moddev.mc.mineralogy.MineralogyConfig;
 import zone.moddev.mc.mineralogy.data.Material;
 import zone.moddev.mc.mineralogy.data.MaterialData;
 
-/** Applies the legacy cobblestone option to NeoForge 26.1 tags. */
+/** Applies the legacy cobblestone option to NeoForge 26.2 tags. */
 public final class CobblestoneTagPolicy {
     private static final Identifier COMMON_COBBLESTONES = id("c", "cobblestones");
     private static final Identifier COMMON_NORMAL_COBBLESTONES = id("c", "cobblestones/normal");
@@ -75,7 +75,7 @@ public final class CobblestoneTagPolicy {
         updateTag(itemRegistry, Registries.ITEM, STONE_TOOL_MATERIALS,
                 configuredItems, enabled, "chert", "pumice");
 
-        Mineralogy.LOGGER.debug("Applied NeoForge 26.1 cobblestone policy: enabled={}, rocks={}, "
+        Mineralogy.LOGGER.debug("Applied NeoForge 26.2 cobblestone policy: enabled={}, rocks={}, "
                 + "unionItems={}, commonItems={}, craftingItems={}, toolItems={}", enabled,
                 configuredItems.size(), size(itemRegistry, Registries.ITEM, MINERALOGY_COBBLESTONE),
                 size(itemRegistry, Registries.ITEM, COMMON_COBBLESTONES),

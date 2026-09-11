@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import zone.moddev.mc.mineralogy.compat.CobblestoneTagPolicy;
 
 /**
- * Rebind the affected named sets immediately after Minecraft 26.1.2 commits
+ * Rebind the affected named sets immediately after Minecraft 26.2 commits
  * pending tags and static components, which also covers every later /reload.
  */
 @Mixin(ReloadableServerResources.class)

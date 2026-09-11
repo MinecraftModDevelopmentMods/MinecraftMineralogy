@@ -9,13 +9,13 @@ description='''Disposable runtime fixture for Mineralogy crude-oil coexistence v
 [[dependencies.poweradvantage]]
 modId="neoforge"
 type="required"
-versionRange="[26.1.2.94,26.1.3)"
+versionRange="[26.2.0.45-beta,26.2.1)"
 ordering="NONE"
 side="BOTH"
 
 [[dependencies.poweradvantage]]
 modId="mineralogy"
 type="required"
-versionRange="[6.1.2.2601022]"
+versionRange="[6.1.2.2602002]"
 ordering="AFTER"
 side="BOTH"

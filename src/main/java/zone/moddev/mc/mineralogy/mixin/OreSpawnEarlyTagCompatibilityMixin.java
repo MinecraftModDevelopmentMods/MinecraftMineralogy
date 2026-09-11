@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
- * Minecraft 26.1.2 throws when a block tag is queried before the first tag
+ * Minecraft 26.2 throws when a block tag is queried before the first tag
  * load. OreSpawn 4.0.16 can make that query during common setup when an older
  * global profile contains tag-backed ore hosts. Defer those hosts as an empty
  * early result; OreSpawn rebakes the same unchanged profile after the world's

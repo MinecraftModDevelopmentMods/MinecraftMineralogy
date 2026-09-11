@@ -1,19 +1,19 @@
-name: Mineralogy 26.1.2 NeoForge CI
+name: Mineralogy 26.2 NeoForge CI
 
 on:
   push:
     branches:
-      - master-26.1.2-neo
+      - master-26.2-neo
       - 'feature/**'
   pull_request:
     branches:
-      - master-26.1.2-neo
+      - master-26.2-neo
 
 permissions:
   contents: read
 
 concurrency:
-  group: mineralogy-26.1.2-neo-${{ github.workflow }}-${{ github.ref }}
+  group: mineralogy-26.2-neo-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -72,12 +72,17 @@ jobs:
         run: |
           set -euo pipefail
           chmod +x ./gradlew
-          ./gradlew clean check build javadoc verifyReleaseConfiguration verifyReleaseDependencies verifyReleaseArtifacts writeReleaseChecksums \
-            -PorespawnVerificationRepository="${{ steps.orespawn.outputs.repository }}" \
-            --no-daemon --stacktrace --max-workers=2 \
-            "-Dorg.gradle.java.installations.paths=$JAVA_HOME" \
-            -Dorg.gradle.java.installations.auto-detect=false \
+          gradle_jdk_args=(
+            "-Dorg.gradle.java.installations.paths=$JAVA_HOME"
+            -Dorg.gradle.java.installations.auto-detect=false
             -Dorg.gradle.java.installations.auto-download=false
+          )
+          ./gradlew clean \
+            -PorespawnVerificationRepository="${{ steps.orespawn.outputs.repository }}" \
+            --no-daemon --stacktrace --max-workers=2 "${gradle_jdk_args[@]}"
+          ./gradlew check build javadoc verifyReleaseConfiguration verifyReleaseDependencies verifyReleaseArtifacts writeReleaseChecksums \
+            -PorespawnVerificationRepository="${{ steps.orespawn.outputs.repository }}" \
+            --no-daemon --stacktrace --max-workers=2 "${gradle_jdk_args[@]}"
       - name: Generate and audit Eclipse production launches
         shell: bash
         run: |
@@ -91,20 +96,20 @@ jobs:
       - name: Upload audited release candidate
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
-          name: Mineralogy-26.1.2-neoforge-${{ github.sha }}
+          name: Mineralogy-26.2-neoforge-${{ github.sha }}
           if-no-files-found: error
           retention-days: 30
           path: |
-            build/libs/Mineralogy-6.1.2.2601022.jar
-            build/libs/Mineralogy-6.1.2.2601022-sources.jar
-            build/libs/Mineralogy-6.1.2.2601022-javadoc.jar
+            build/libs/Mineralogy-6.1.2.2602002.jar
+            build/libs/Mineralogy-6.1.2.2602002-sources.jar
+            build/libs/Mineralogy-6.1.2.2602002-javadoc.jar
             build/release/SHA256SUMS
             CHANGELOG.txt
       - name: Upload diagnostics on failure
         if: failure()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
-          name: Mineralogy-26.1.2-neoforge-diagnostics-${{ github.sha }}
+          name: Mineralogy-26.2-neoforge-diagnostics-${{ github.sha }}
           if-no-files-found: ignore
           retention-days: 14
           path: |

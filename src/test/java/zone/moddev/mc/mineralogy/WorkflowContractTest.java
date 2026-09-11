@@ -19,8 +19,8 @@ public class WorkflowContractTest {
         try (FileInputStream input = new FileInputStream("gradle.properties")) {
             properties.load(input);
         }
-        assertEquals("6.1.2.2601022", properties.getProperty("mod_version"));
-        assertEquals("26.1.2", properties.getProperty("minecraft_version"));
+        assertEquals("6.1.2.2602002", properties.getProperty("mod_version"));
+        assertEquals("26.2", properties.getProperty("minecraft_version"));
         assertEquals(properties.getProperty("mc_version"), properties.getProperty("minecraft_version"));
         assertEquals("neoforge", properties.getProperty("loader_name"));
         assertEquals("2", properties.getProperty("loader_code"));
@@ -29,10 +29,11 @@ public class WorkflowContractTest {
         assertEquals("25", properties.getProperty("gradle_java_version"));
         assertEquals("240974", properties.getProperty("curseforge_project_id"));
         assertEquals("zone.moddev.mc.mineralogy", properties.getProperty("mod_group"));
-        assertEquals("4.0.16.2601022", properties.getProperty("orespawn_version"));
-        assertEquals("8809908", properties.getProperty("orespawn_curse_file_id"));
-        assertEquals("4F6612B89FC65E4860E962E8EA45CC03B752330060B3362112EBEBC7AA9C2E6C",
+        assertEquals("4.0.16.2602002", properties.getProperty("orespawn_version"));
+        assertEquals("8830635", properties.getProperty("orespawn_curse_file_id"));
+        assertEquals("16DFD59B5083BB1F7FE399091AC9778F9D10F397FE214865C937F00D1C20625A",
                 properties.getProperty("orespawn_sha256"));
+        assertFalse(properties.containsKey("neogradle.subsystems.decompiler.enabled"));
         String wrapper = text("gradle/wrapper/gradle-wrapper.properties");
         assertTrue(wrapper.contains("gradle-9.2.1-bin.zip"));
     }
@@ -44,23 +45,29 @@ public class WorkflowContractTest {
         String wrapper = text(".github/workflows/validate-gradle-build.yml");
         String staging = text("gradle/stage-orespawn-release.sh");
         assertTrue(ci.contains("name: Build, test, and audit"));
-        assertTrue(ci.contains("master-26.1.2-neo"));
+        assertTrue(ci.contains("master-26.2-neo"));
         assertTrue(ci.contains("java-version: '25.0.3+9.0.LTS'"));
         assertTrue(ci.contains("Install exact Java 25"));
         assertTrue(ci.contains("Cold NeoForge bootstrap"));
+        assertFalse(ci.contains("./gradlew clean check"));
+        assertTrue(ci.contains("./gradlew clean \\"));
+        assertTrue(ci.contains("./gradlew check build javadoc"));
         assertTrue(ci.contains("verifyReleaseDependencies verifyReleaseArtifacts writeReleaseChecksums"));
         assertTrue(ci.contains("eclipse verifyEclipseProductionClasspath"));
         assertTrue(ci.contains("CHANGELOG.txt"));
         assertTrue(ci.contains("PorespawnVerificationRepository"));
         assertFalse(ci.contains("genEclipseRuns"));
         assertFalse(ci.contains("Mavenizer"));
+        assertFalse(ci.contains("neogradle.subsystems.decompiler.enabled=true"));
         assertFalse(ci.contains("JAVA_HOME_8_X64"));
         assertFalse(ci.contains("JAVA_HOME_25_X64"));
         assertTrue(staging.contains("https://www.curseforge.com/api/v1/mods/$project_id/files/$file_id/download"));
         assertTrue(staging.contains("sha256sum"));
         assertTrue(codeql.contains("github/codeql-action/init@db488ddef3bf6cb639b32c2e9a7c0a7ea8271d28"));
         assertTrue(codeql.contains("Install exact Java 25"));
-        assertTrue(codeql.contains("clean classes --no-daemon --stacktrace --max-workers=2"));
+        assertFalse(codeql.contains("clean classes"));
+        assertTrue(codeql.contains("./gradlew clean --no-daemon --stacktrace --max-workers=2"));
+        assertTrue(codeql.contains("./gradlew classes --no-daemon --stacktrace --max-workers=2"));
         assertFalse(codeql.contains("Mavenizer"));
         assertTrue(wrapper.contains("gradle/actions/wrapper-validation@9c971963bec38e04b3d30dcc455b5382be2fdbfb"));
     }
@@ -87,9 +94,11 @@ public class WorkflowContractTest {
         assertTrue(build.contains("reproducibleFileOrder = true"));
         assertTrue(build.contains("filesMatching('META-INF/neoforge.mods.toml')"));
         assertTrue(build.contains("from('docs')"));
-        assertTrue(build.contains("NeoForge 26.1 uses official names"));
+        assertTrue(build.contains("NeoForge 26.2 uses official names"));
         assertTrue(build.contains("'zone/moddev/mc/mineralogy/Mineralogy.class'"));
-        assertTrue(build.contains("928 NeoForge 26.1.2 item definitions"));
+        assertTrue(build.contains("928 NeoForge 26.2 item definitions"));
+        assertTrue(build.contains("task.name.startsWith('cacheVersionExecutable')"));
+        assertTrue(build.contains("NeoForge 26.2 must retain its validated binary userdev path"));
         assertTrue(build.contains("assets/mineralogy/items/"));
         assertTrue(build.contains("def preparedReleaseDir = project.findProperty('preparedReleaseDir')"));
         assertTrue(build.contains("tasks.register('verifyPreparedReleaseArtifacts')"));

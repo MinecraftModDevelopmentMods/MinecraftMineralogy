@@ -25,7 +25,7 @@ public class MineralFertilizer extends Item {
 
 		boolean canUse = BoneMealItem.applyBonemeal(context.getItemInHand(), world, target, player);
 		if (canUse) {
-			// Minecraft 26.1 binds item components after registry objects are
+			// Minecraft 26.2 binds item components after registry objects are
 			// constructed, so helper stacks must be created lazily during play.
 			ItemStack phantomBonemeal = new ItemStack(Items.BONE_MEAL, 27);
 			for (int dx = -2; dx <= 2; dx++) {

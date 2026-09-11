@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 
 /**
- * Applies the stable registry identity before Minecraft 26.1.2 constructs an
+ * Applies the stable registry identity before Minecraft 26.2 constructs an
  * item or block. The target derives description and loot identities during
  * construction, so assigning the registry entry afterward is too late.
  */

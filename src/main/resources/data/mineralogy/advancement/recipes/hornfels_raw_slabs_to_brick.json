@@ -8,7 +8,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:hornfels_raw_slabs_to_brick"
+        "recipes": "mineralogy:hornfels_raw_slabs_to_brick"
       }
     },
     "has_rock": {

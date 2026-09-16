@@ -8,7 +8,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:conglomerate_relief_horizontal"
+        "recipes": "mineralogy:conglomerate_relief_horizontal"
       }
     },
     "has_rock": {

@@ -8,7 +8,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:phyllite_polished_brick_slab_recombination"
+        "recipes": "mineralogy:phyllite_polished_brick_slab_recombination"
       }
     },
     "has_rock": {

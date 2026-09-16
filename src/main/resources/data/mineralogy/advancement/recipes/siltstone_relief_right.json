@@ -8,7 +8,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:siltstone_relief_right"
+        "recipes": "mineralogy:siltstone_relief_right"
       }
     },
     "has_rock": {

@@ -8,7 +8,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:limestone_polished_slabs_to_brick"
+        "recipes": "mineralogy:limestone_polished_slabs_to_brick"
       }
     },
     "has_rock": {

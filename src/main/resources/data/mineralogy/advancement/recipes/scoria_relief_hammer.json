@@ -8,7 +8,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:scoria_relief_hammer"
+        "recipes": "mineralogy:scoria_relief_hammer"
       }
     },
     "has_rock": {

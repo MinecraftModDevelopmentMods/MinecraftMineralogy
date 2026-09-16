@@ -135,7 +135,7 @@ public final class RegionPaletteAudit {
 			CompoundTag blockStates = section.getCompoundOrEmpty("block_states");
 			ListTag palette = blockStates.getListOrEmpty("palette");
 			for (int paletteIndex = 0; paletteIndex < palette.size(); paletteIndex++) {
-				String name = palette.getCompoundOrEmpty(paletteIndex).getStringOr("Name", "");
+				String name = blockStateId(palette.get(paletteIndex));
 				containsOil |= "mineralogy:crude_oil".equals(name);
 				audit.paletteEntries++;
 				if (audit.targets.containsKey(name)) audit.targets.merge(name, 1L, Long::sum);
@@ -217,7 +217,7 @@ public final class RegionPaletteAudit {
 		ListTag palette = blockStates.getListOrEmpty("palette");
 		String[] names = new String[palette.size()];
 		for (int index = 0; index < palette.size(); index++) {
-			names[index] = palette.getCompoundOrEmpty(index).getStringOr("Name", "");
+			names[index] = blockStateId(palette.get(index));
 		}
 		String[] states = new String[4096];
 		if (names.length == 0) return states;
@@ -244,6 +244,16 @@ public final class RegionPaletteAudit {
 		if (states == null) return "minecraft:air";
 		int localY = Math.floorMod(y, 16);
 		return states[(localY << 8) | (z << 4) | x];
+	}
+
+	private static String blockStateId(Tag state) {
+		if (state instanceof CompoundTag compound) {
+			String current = compound.getStringOr("id", "");
+			return current.isEmpty() ? compound.getStringOr("Name", "") : current;
+		}
+		String serialized = state.asString().orElse("");
+		int properties = serialized.indexOf('[');
+		return properties < 0 ? serialized : serialized.substring(0, properties);
 	}
 
 	private static boolean isSolidCover(String block) {

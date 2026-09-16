@@ -14,7 +14,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:drywall_brown"
+        "recipes": "mineralogy:drywall_brown"
       }
     },
     "has_rock": {

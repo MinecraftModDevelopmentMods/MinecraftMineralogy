@@ -8,7 +8,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:siltstone_cobblestone"
+        "recipes": "mineralogy:siltstone_cobblestone"
       }
     },
     "has_rock": {

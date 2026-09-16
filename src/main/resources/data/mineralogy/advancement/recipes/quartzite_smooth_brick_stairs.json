@@ -8,7 +8,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:quartzite_smooth_brick_stairs"
+        "recipes": "mineralogy:quartzite_smooth_brick_stairs"
       }
     },
     "has_rock": {

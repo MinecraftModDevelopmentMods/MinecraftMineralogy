@@ -8,7 +8,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:quartzite_raw_slab_polishing"
+        "recipes": "mineralogy:quartzite_raw_slab_polishing"
       }
     },
     "has_rock": {

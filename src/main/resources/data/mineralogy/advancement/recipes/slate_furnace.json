@@ -8,7 +8,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:slate_furnace"
+        "recipes": "mineralogy:slate_furnace"
       }
     },
     "has_rock": {

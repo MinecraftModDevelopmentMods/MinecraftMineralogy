@@ -8,7 +8,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:slate_relief_hammer"
+        "recipes": "mineralogy:slate_relief_hammer"
       }
     },
     "has_rock": {

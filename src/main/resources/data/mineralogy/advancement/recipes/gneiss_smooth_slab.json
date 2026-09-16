@@ -8,7 +8,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:gneiss_smooth_slab"
+        "recipes": "mineralogy:gneiss_smooth_slab"
       }
     },
     "has_rock": {

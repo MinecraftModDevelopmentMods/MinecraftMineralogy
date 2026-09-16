@@ -8,7 +8,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:diorite_smooth_brick_wall"
+        "recipes": "mineralogy:diorite_smooth_brick_wall"
       }
     },
     "has_rock": {

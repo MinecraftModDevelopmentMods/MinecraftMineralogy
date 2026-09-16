@@ -8,7 +8,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:amphibolite_wall"
+        "recipes": "mineralogy:amphibolite_wall"
       }
     },
     "has_rock": {

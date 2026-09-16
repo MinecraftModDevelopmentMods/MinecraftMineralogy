@@ -14,7 +14,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:rocksaltlamp"
+        "recipes": "mineralogy:rocksaltlamp"
       }
     },
     "has_rock": {

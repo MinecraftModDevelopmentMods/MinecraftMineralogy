@@ -219,7 +219,10 @@ public class GameplayContractTest {
         assertTrue(hook.contains("expandFlatteningTable(highestStateId + 1)"));
         assertTrue(hook.contains("BlockStateDataAccessor.mineralogy$getLegacyStateMap()"));
         assertTrue(hook.contains("legacyStates[stateId] = new Dynamic<>(NbtOps.INSTANCE"));
-        assertTrue(hook.contains("NbtUtils.writeBlockState(legacyState(block, meta))"));
+        assertTrue(hook.contains("writeLegacyBlockState(legacyState(block, meta))"));
+        assertTrue(hook.contains("result.putString(\"Name\""));
+        assertTrue(hook.contains("result.put(\"Properties\", properties)"));
+        assertFalse(hook.contains("NbtUtils.writeBlockState"));
         assertTrue(hook.contains("captureLegacyLevelData(CompoundTag root,"));
         assertTrue(hook.contains("LevelStorageSource.LevelDirectory levelDirectory)"));
         assertTrue(hook.contains("root.getCompoundOrEmpty(\"FML\")"));

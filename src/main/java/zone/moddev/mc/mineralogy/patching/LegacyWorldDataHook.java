@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.BitSet;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -31,7 +32,6 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.nbt.NbtAccounter;
 import net.minecraft.nbt.NbtOps;
-import net.minecraft.nbt.NbtUtils;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.StairBlock;
@@ -307,11 +307,37 @@ public final class LegacyWorldDataHook {
 				// its original final 4,096-entry array. Write the expanded array directly;
 				// Mineralogy has no legacy aliases that need its auxiliary name maps.
 				legacyStates[stateId] = new Dynamic<>(NbtOps.INSTANCE,
-						NbtUtils.writeBlockState(legacyState(block, meta)));
+						writeLegacyBlockState(legacyState(block, meta)));
 				++mapped;
 			}
 		}
 		return mapped;
+	}
+
+	/**
+	 * Serializes the input expected by the pre-flattening {@code BlockStateData}
+	 * data fixer. Minecraft 26.3's normal block-state writer emits the modern
+	 * lowercase {@code id}/{@code properties} schema, but this table is itself
+	 * the source for that conversion and must retain legacy
+	 * {@code Name}/{@code Properties} fields.
+	 */
+	static CompoundTag writeLegacyBlockState(BlockState state) {
+		Map<String, String> values = new LinkedHashMap<>();
+		state.getValues().forEach(value ->
+				values.put(value.property().getName(), value.valueName()));
+		return writeLegacyBlockState(
+				BuiltInRegistries.BLOCK.getKey(state.getBlock()).toString(), values);
+	}
+
+	static CompoundTag writeLegacyBlockState(String blockName, Map<String, String> values) {
+		CompoundTag result = new CompoundTag();
+		result.putString("Name", blockName);
+		if (!values.isEmpty()) {
+			CompoundTag properties = new CompoundTag();
+			values.forEach(properties::putString);
+			result.put("Properties", properties);
+		}
+		return result;
 	}
 
 	/** Returns the lookup table expanded by the required BlockStateData mixin. */

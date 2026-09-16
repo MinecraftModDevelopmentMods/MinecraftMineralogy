@@ -15,6 +15,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.resources.Identifier;
@@ -37,6 +38,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.CookingFuel;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -46,6 +48,7 @@ import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ResolvableInt;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
@@ -319,11 +322,15 @@ public class TileEntityRockFurnace extends BaseContainerBlockEntity
 	}
 
 	private int getItemBurnTime(ItemStack stack) {
-		return stack.isEmpty() || level == null ? 0 : stack.getBurnTime(RecipeType.SMELTING, level.fuelValues());
+		if (stack.isEmpty() || !(level instanceof ServerLevel serverLevel)) {
+			return 0;
+		}
+		return ResolvableInt.getFromItem(stack, DataComponents.COOKING_FUEL,
+				CookingFuel::burnTime, getLootContext(serverLevel, stack), 0);
 	}
 
 	public boolean isItemFuel(ItemStack stack) {
-		return getItemBurnTime(stack) > 0;
+		return stack.has(DataComponents.COOKING_FUEL);
 	}
 
 	@Override

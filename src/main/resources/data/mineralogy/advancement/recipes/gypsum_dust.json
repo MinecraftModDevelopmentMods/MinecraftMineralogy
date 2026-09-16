@@ -8,7 +8,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:gypsum_dust"
+        "recipes": "mineralogy:gypsum_dust"
       }
     },
     "has_rock": {

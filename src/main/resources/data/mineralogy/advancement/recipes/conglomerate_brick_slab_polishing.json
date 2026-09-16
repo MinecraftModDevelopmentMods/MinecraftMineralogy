@@ -8,7 +8,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:conglomerate_brick_slab_polishing"
+        "recipes": "mineralogy:conglomerate_brick_slab_polishing"
       }
     },
     "has_rock": {

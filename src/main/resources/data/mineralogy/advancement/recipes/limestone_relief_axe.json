@@ -8,7 +8,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:limestone_relief_axe"
+        "recipes": "mineralogy:limestone_relief_axe"
       }
     },
     "has_rock": {

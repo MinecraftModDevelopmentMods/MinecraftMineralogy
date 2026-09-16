@@ -8,7 +8,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:novaculite_relief_left"
+        "recipes": "mineralogy:novaculite_relief_left"
       }
     },
     "has_rock": {

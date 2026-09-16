@@ -1,3 +1,28 @@
+Mineralogy 6.1.2.2603002 for Minecraft 26.3 NeoForge
+
+- Ported the accepted NeoForge 26.2 product to Minecraft 26.3 and NeoForge
+  26.3.0.1-beta while preserving registry, NBT, provider, configuration,
+  migration, recipe, locale, guide, crude-oil, texture, relief, mining,
+  furnace, creative-tab, and legacy-world identities.
+- Updated all 1,454 recipe-unlock advancement criteria to Minecraft 26.3's
+  `recipes` field and retained explicit cooking times on all 28 cooking
+  recipes. The established native-rock, tuff, slab, stone-spear, and nineteen
+  configurable cobblestone routes remain unchanged.
+- Added Minecraft 26.3's motion, fluid-washing, entity-flotation, and ore
+  semantic tags without making Mineralogy construction blocks vanilla ore
+  hosts or merging Mineralogy sulfur with Minecraft sulfur and cinnabar.
+- Kept pre-flattening conversion input in the legacy `Name`/`Properties`
+  block-state schema so Minecraft's data fixer can produce modern lowercase
+  `id`/`properties` states. All 18,192 mappings and both Overworld region
+  layouts remain supported.
+- Adapted crude-oil piston behavior, rock-furnace fuel components, and block
+  registration to the target APIs while preserving existing behavior and
+  saves.
+- Updated metadata, packs, CI, documentation, and release audits for Minecraft
+  26.3, NeoForge 26.3.0.1-beta, OreSpawn 4.0.16.2603002, NeoGradle 7.1.39,
+  Java 25, resource format 97.1, and data format 121.0. Mineralogy still
+  registers no world generator.
+
 Mineralogy 6.1.2.2602002 for Minecraft 26.2 NeoForge
 
 - Ported the accepted NeoForge 26.1.2 product to Minecraft 26.2 and

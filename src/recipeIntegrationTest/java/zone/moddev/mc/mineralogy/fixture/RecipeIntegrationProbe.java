@@ -1,5 +1,6 @@
 package zone.moddev.mc.mineralogy.fixture;
 
+import com.mojang.serialization.Dynamic;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -10,7 +11,10 @@ import java.util.List;
 import java.util.Map;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.SharedConstants;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.core.registries.Registries;
@@ -25,6 +29,8 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.item.crafting.StonecutterRecipe;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.datafix.DataFixers;
+import net.minecraft.util.datafix.fixes.References;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -67,6 +73,7 @@ public final class RecipeIntegrationProbe {
         ServerLevel level = event.getServer().overworld();
         Item basalt = requireItem("mineralogy", "basalt");
 
+        verifyLegacyBlockStateDataFix();
         verifyMiningTags();
         for (String name : RECIPE_NAMES) {
             CraftingRecipe recipe = requireCraftingRecipe(level, name);
@@ -109,6 +116,25 @@ public final class RecipeIntegrationProbe {
         verifyAdvancements(event);
         writeMarker(enabled, phase);
         event.getServer().halt(false);
+    }
+
+    private static void verifyLegacyBlockStateDataFix() {
+        CompoundTag legacy = new CompoundTag();
+        legacy.putString("Name", "minecraft:oak_log");
+        CompoundTag legacyProperties = new CompoundTag();
+        legacyProperties.putString("axis", "x");
+        legacy.put("Properties", legacyProperties);
+
+        CompoundTag modern = (CompoundTag) DataFixers.getDataFixer()
+                .update(References.BLOCK_STATE, new Dynamic<>(NbtOps.INSTANCE, legacy), 1343,
+                        SharedConstants.getCurrentVersion().dataVersion().version())
+                .getValue();
+        require("minecraft:oak_log".equals(modern.getStringOr("id", "")),
+                "legacy block-state datafix did not produce lowercase id: " + modern);
+        require("x".equals(modern.getCompoundOrEmpty("properties").getStringOr("axis", "")),
+                "legacy block-state datafix did not produce lowercase properties: " + modern);
+        require(!modern.contains("Name") && !modern.contains("Properties"),
+                "legacy block-state datafix retained uppercase fields: " + modern);
     }
 
     private static void verifyMiningTags() {

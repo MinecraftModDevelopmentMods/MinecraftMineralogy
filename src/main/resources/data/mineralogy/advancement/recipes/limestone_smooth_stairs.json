@@ -8,7 +8,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:limestone_smooth_stairs"
+        "recipes": "mineralogy:limestone_smooth_stairs"
       }
     },
     "has_rock": {

@@ -8,7 +8,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:slate_smooth_wall"
+        "recipes": "mineralogy:slate_smooth_wall"
       }
     },
     "has_rock": {

@@ -8,7 +8,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:schist_smooth_brick_wall"
+        "recipes": "mineralogy:schist_smooth_brick_wall"
       }
     },
     "has_rock": {

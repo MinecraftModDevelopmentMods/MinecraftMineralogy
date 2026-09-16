@@ -8,7 +8,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:amphibolite_cobblestone"
+        "recipes": "mineralogy:amphibolite_cobblestone"
       }
     },
     "has_rock": {

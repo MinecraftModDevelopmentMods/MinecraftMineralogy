@@ -8,7 +8,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:limestone_brick_block_polishing"
+        "recipes": "mineralogy:limestone_brick_block_polishing"
       }
     },
     "has_rock": {

@@ -8,7 +8,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:marble_smooth_brick_furnace"
+        "recipes": "mineralogy:marble_smooth_brick_furnace"
       }
     },
     "has_rock": {

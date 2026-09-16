@@ -8,7 +8,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:tuff_smooth"
+        "recipes": "mineralogy:tuff_smooth"
       }
     },
     "has_rock": {

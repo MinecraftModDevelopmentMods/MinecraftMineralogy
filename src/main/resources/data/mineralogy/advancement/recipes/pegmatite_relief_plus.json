@@ -8,7 +8,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:pegmatite_relief_plus"
+        "recipes": "mineralogy:pegmatite_relief_plus"
       }
     },
     "has_rock": {

@@ -8,7 +8,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:diabase_polished_stairs_to_brick"
+        "recipes": "mineralogy:diabase_polished_stairs_to_brick"
       }
     },
     "has_rock": {

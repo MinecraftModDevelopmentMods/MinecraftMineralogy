@@ -26,7 +26,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:gunpowder_from_coal_dust"
+        "recipes": "mineralogy:gunpowder_from_coal_dust"
       }
     },
     "has_rock": {

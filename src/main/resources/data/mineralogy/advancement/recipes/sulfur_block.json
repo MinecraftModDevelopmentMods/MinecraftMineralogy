@@ -14,7 +14,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:sulfur_block"
+        "recipes": "mineralogy:sulfur_block"
       }
     },
     "has_rock": {

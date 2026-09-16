@@ -12,7 +12,7 @@ plugins {
     id 'idea'
     id 'java-library'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.1.38'
+    id 'net.neoforged.gradle.userdev' version '7.1.39'
 }
 
 def sha256Of = { File inputFile ->
@@ -44,8 +44,8 @@ def versionParts = project.mod_version.toString().tokenize('.')
 if (versionParts.size() != 4 || !versionParts.every { it ==~ /\d+/ }) {
     throw new GradleException("mod_version must use Major.Minor.Bug.Target numeric form: ${project.mod_version}")
 }
-if (versionParts[3] != '2602002') {
-    throw new GradleException("Mineralogy 26.2 NeoForge releases must use target 2602002: ${project.mod_version}")
+if (versionParts[3] != '2603002') {
+    throw new GradleException("Mineralogy 26.3 NeoForge releases must use target 2603002: ${project.mod_version}")
 }
 
 java {
@@ -202,7 +202,7 @@ configurations {
 
 dependencies {
     implementation "net.neoforged:neoforge:${project.neo_version}"
-    // NeoForge 26.2 uses official names in both development and production, so the
+    // NeoForge 26.3 uses official names in both development and production, so the
     // exact released OreSpawn artifact is suitable for ordinary runtime use.
     runtimeOnly(orespawnCoordinate) { transitive = false }
     orespawnRelease(orespawnCoordinate) { transitive = false }
@@ -471,16 +471,16 @@ tasks.register('verifyMavenCoordinates') {
 
 tasks.register('verifyReleaseConfiguration') {
     group = 'verification'
-    description = 'Verifies the exact Mineralogy 26.2 NeoForge release identity.'
+    description = 'Verifies the exact Mineralogy 26.3 NeoForge release identity.'
     doLast {
-        if (project.mod_version != '6.1.2.2602002'
+        if (project.mod_version != '6.1.2.2603002'
                 || project.mod_group != expectedMavenGroup
-                || project.minecraft_version != '26.2'
-                || project.neo_version != '26.2.0.45-beta') {
-            throw new GradleException('Unexpected Mineralogy 26.2 NeoForge release identity')
+                || project.minecraft_version != '26.3'
+                || project.neo_version != '26.3.0.1-beta') {
+            throw new GradleException('Unexpected Mineralogy 26.3 NeoForge release identity')
         }
         if (project.findProperty('neogradle.subsystems.decompiler.enabled') != null) {
-            throw new GradleException('NeoForge 26.2 must retain its validated binary userdev path')
+            throw new GradleException('NeoForge 26.3 must retain its validated binary userdev path')
         }
     }
 }
@@ -489,9 +489,9 @@ tasks.register('verifyReleaseDependencies') {
     group = 'verification'
     description = 'Resolves and verifies the exact released OreSpawn dependency.'
     doLast {
-        if (project.mod_version != '6.1.2.2602002'
+        if (project.mod_version != '6.1.2.2603002'
                 || project.minecraft_version != project.mc_version
-                || project.mc_version != '26.2'
+                || project.mc_version != '26.3'
                 || project.loader_name != 'neoforge'
                 || project.loader_code != '2'
                 || project.java_version != '25'
@@ -500,9 +500,9 @@ tasks.register('verifyReleaseDependencies') {
                 || project.curseforge_project_id != '240974') {
             throw new GradleException('Unexpected generic release dispatcher metadata')
         }
-        if (project.orespawn_version != '4.0.16.2602002' ||
+        if (project.orespawn_version != '4.0.16.2603002' ||
                 project.orespawn_curse_project_id != '245586' ||
-                project.orespawn_curse_file_id != '8830635') {
+                project.orespawn_curse_file_id != '8894665') {
             throw new GradleException('Unexpected OreSpawn release coordinates')
         }
         File artifact = configurations.orespawnRelease.resolvedConfiguration.resolvedArtifacts
@@ -605,8 +605,8 @@ tasks.register('verifyReleaseArtifacts') {
                 throw new GradleException('Release jar contains a stale pre-1.21 plural data directory')
             }
             def pack = new JsonSlurper().parse(zip.getInputStream(zip.getEntry('pack.mcmeta')))
-            if (pack.pack?.max_format != 107 || pack.pack?.min_format != [107, 1]) {
-                throw new GradleException('Release jar does not use Minecraft 26.2 data format 107.1')
+            if (pack.pack?.max_format != 121 || pack.pack?.min_format != [97, 1]) {
+                throw new GradleException('Release jar does not span Minecraft 26.3 resource 97.1 and data 121.0 formats')
             }
             def miningTagContracts = [
                     'data/minecraft/tags/block/mineable/pickaxe.json': [1133, 1080],
@@ -627,6 +627,55 @@ tasks.register('verifyReleaseArtifacts') {
                 def ids = tag.values.collect { it instanceof Map ? it.id : it } as Set
                 if (ids.size() != tag.values.size()) throw new GradleException("${tagName} contains duplicate entries")
             }
+            def readTagValues = { String tagName ->
+                def entry = zip.getEntry(tagName)
+                if (entry == null) throw new GradleException("Release jar is missing ${tagName}")
+                def tag = new JsonSlurper().parse(zip.getInputStream(entry))
+                if (tag.replace != false || !(tag.values instanceof Collection)) {
+                    throw new GradleException("Invalid additive semantic tag ${tagName}")
+                }
+                return tag.values as List
+            }
+            def pickaxeValues = readTagValues('data/minecraft/tags/block/mineable/pickaxe.json')
+                    .collect { it instanceof Map ? it.id : it }
+            def motionValues = readTagValues('data/minecraft/tags/block/blocks_motion_no_leaves.json')
+                    .collect { it instanceof Map ? it.id : it }
+            def expectedMotionValues = new LinkedHashSet<String>(pickaxeValues)
+            expectedMotionValues.add('mineralogy:rocksaltstreetlamp')
+            if (motionValues.size() != 1134 || (motionValues as Set) != expectedMotionValues
+                    || motionValues.contains('mineralogy:rocksaltlamp')
+                    || motionValues.contains('mineralogy:crude_oil')) {
+                throw new GradleException('Minecraft 26.3 motion tag does not match Mineralogy collision behavior')
+            }
+            if ((readTagValues('data/minecraft/tags/block/washed_away_by_fluids.json') as Set)
+                    != (['mineralogy:rocksaltlamp'] as Set)) {
+                throw new GradleException('Rock-salt lamp must retain torch-like fluid replacement behavior')
+            }
+            if ((readTagValues('data/minecraft/tags/fluid/entity_floatable.json') as Set)
+                    != (['mineralogy:crude_oil', 'mineralogy:flowing_crude_oil'] as Set)) {
+                throw new GradleException('Crude oil must retain entity flotation behavior')
+            }
+            def oreIds = ['mineralogy:nitrate_ore', 'mineralogy:phosphorous_ore',
+                          'mineralogy:sulfur_ore'] as Set
+            ['block', 'item'].each { registryName ->
+                if ((readTagValues("data/minecraft/tags/${registryName}/ores.json") as Set) != oreIds) {
+                    throw new GradleException("Minecraft ores aggregate is incomplete for ${registryName}")
+                }
+                def commonOres = readTagValues("data/c/tags/${registryName}/ores.json") as Set
+                if (commonOres != (['#c:ores/nitrate', '#c:ores/phosphorous', '#c:ores/sulfur'] as Set)) {
+                    throw new GradleException("Common ores aggregate is incomplete for ${registryName}")
+                }
+            }
+            def heightSpecific = zip.getEntry('data/minecraft/tags/block/height_specific_ore_replaceables.json')
+            if (heightSpecific != null) {
+                def heightTag = new JsonSlurper().parse(zip.getInputStream(heightSpecific))
+                if (heightTag.values.any { value ->
+                        String id = value instanceof Map ? value.id : value
+                        id instanceof String && id.startsWith('mineralogy:')
+                }) {
+                    throw new GradleException('Mineralogy construction blocks must not become vanilla ore hosts')
+                }
+            }
             def locales = names.findAll { it ==~ /assets\/mineralogy\/lang\/[a-z_]+\.json/ }
             if (locales.size() != 17) {
                 throw new GradleException("Release jar must contain 17 locales, found ${locales.size()}")
@@ -634,7 +683,7 @@ tasks.register('verifyReleaseArtifacts') {
             def legacyItemModels = names.findAll { it ==~ /assets\/mineralogy\/models\/item\/[^\/]+\.json/ }
             def itemDefinitions = names.findAll { it ==~ /assets\/mineralogy\/items\/[^\/]+\.json/ }
             if (legacyItemModels.size() != 1144 || itemDefinitions.size() != 928) {
-                throw new GradleException('Release jar must contain 1,144 legacy item models and 928 NeoForge 26.2 item definitions')
+                throw new GradleException('Release jar must contain 1,144 legacy item models and 928 NeoForge 26.3 item definitions')
             }
             itemDefinitions.each { definitionName ->
                 String id = definitionName.substring(
@@ -645,7 +694,7 @@ tasks.register('verifyReleaseArtifacts') {
                 def definition = new JsonSlurper().parse(zip.getInputStream(zip.getEntry(definitionName)))
                 if (definition.model?.type != 'minecraft:model' ||
                         definition.model?.model != "mineralogy:item/${id}") {
-                    throw new GradleException("Invalid NeoForge 26.2 item definition: ${definitionName}")
+                    throw new GradleException("Invalid NeoForge 26.3 item definition: ${definitionName}")
                 }
             }
             def blockModelText = names.findAll {
@@ -720,7 +769,7 @@ tasks.register('verifyReleaseArtifacts') {
                     ?.dimensions?.get('minecraft:overworld')
             if (!provider.rocks.values().every { it.min_y == -64 && it.max_y == 319 }
                     || oil?.min_y != -48 || oil?.max_y != 48) {
-                throw new GradleException('Packaged provider does not use Minecraft 26.2 world heights')
+                throw new GradleException('Packaged provider does not use Minecraft 26.3 world heights')
             }
             if (provider.rocks['mineralogy:rock/minecraft/basalt']?.block != 'minecraft:basalt' ||
                     provider.rocks['mineralogy:rock/minecraft/tuff']?.block != 'minecraft:tuff' ||
@@ -737,7 +786,7 @@ tasks.register('verifyReleaseArtifacts') {
                         dimension?.host_blocks == ['minecraft:stone', 'minecraft:deepslate'] &&
                                 dimension?.host_tags == []
                     }) {
-                throw new GradleException('Packaged provider does not use the Minecraft 26.2 native-rock and deepslate contract')
+                throw new GradleException('Packaged provider does not use the Minecraft 26.3 native-rock and deepslate contract')
             }
             byte[] providerBytes = zip.getInputStream(
                     zip.getEntry('data/mineralogy/orespawn/provider.json')).bytes
@@ -755,12 +804,25 @@ tasks.register('verifyReleaseArtifacts') {
             if (recipes.size() != 1433 || advancements.size() != 1433) {
                 throw new GradleException("Release jar must contain 1433 recipes and advancements, found ${recipes.size()} and ${advancements.size()}")
             }
+            def cookingRecipes = recipes.collect { entryName ->
+                [name: entryName, data: new JsonSlurper().parse(zip.getInputStream(zip.getEntry(entryName)))]
+            }.findAll { it.data.type in ['minecraft:smelting', 'minecraft:blasting',
+                                         'minecraft:smoking', 'minecraft:campfire_cooking'] }
+            if (cookingRecipes.size() != 28 || cookingRecipes.any {
+                    !(it.data.cookingtime instanceof Number) || it.data.cookingtime <= 0
+            }) {
+                throw new GradleException('All 28 Minecraft 26.3 cooking recipes must declare a positive cookingtime')
+            }
             def allTheRocks = new JsonSlurper().parse(zip.getInputStream(zip.getEntry(
                     'data/mineralogy/advancement/mineralogy/all_the_rocks.json')))
             if (allTheRocks.display?.icon?.id != 'mineralogy:basalt'
                     || allTheRocks.display.icon.containsKey('item')) {
-                throw new GradleException('Custom advancement icon must use the Minecraft 26.2 item-stack id field')
+                throw new GradleException('Custom advancement icon must use the Minecraft 26.3 item-stack id field')
             }
+            if (allTheRocks.display?.background != 'minecraft:gui/advancements/backgrounds/stone') {
+                throw new GradleException('Visible Mineralogy root advancement must declare its background')
+            }
+            int recipeUnlockCriteria = 0
             def verifyAdvancementPredicates = { advancement, String source ->
                 advancement.criteria?.each { criterionName, criterion ->
                     if (criterion.trigger == 'minecraft:inventory_changed') {
@@ -772,7 +834,15 @@ tasks.register('verifyReleaseArtifacts') {
                                     ? holderSet.isEmpty() || holderSet.any { !(it instanceof String) || it.isEmpty() }
                                     : !(holderSet instanceof String) || holderSet.isEmpty()
                         }) {
-                            throw new GradleException("Invalid Minecraft 26.2 item predicate in ${source}: ${criterionName}")
+                            throw new GradleException("Invalid Minecraft 26.3 item predicate in ${source}: ${criterionName}")
+                        }
+                    }
+                    if (criterion.trigger == 'minecraft:recipe_unlocked') {
+                        recipeUnlockCriteria++
+                        if (criterion.conditions?.containsKey('recipe')
+                                || !(criterion.conditions?.recipes instanceof String)
+                                || criterion.conditions.recipes.isEmpty()) {
+                            throw new GradleException("Invalid Minecraft 26.3 recipe-unlocked criterion in ${source}: ${criterionName}")
                         }
                     }
                 }
@@ -783,7 +853,7 @@ tasks.register('verifyReleaseArtifacts') {
             }.each { entryName ->
                 def advancement = new JsonSlurper().parse(zip.getInputStream(zip.getEntry(entryName)))
                 if (advancement.sends_telemetry_event != false) {
-                    throw new GradleException("Minecraft 26.2 recipe advancement must disable telemetry: ${entryName}")
+                    throw new GradleException("Minecraft 26.3 recipe advancement must disable telemetry: ${entryName}")
                 }
                 if (advancement.criteria != null) verifyAdvancementPredicates(advancement, entryName)
             }
@@ -855,7 +925,7 @@ tasks.register('verifyReleaseArtifacts') {
                     throw new GradleException("Mossy cobblestone override lost its vanilla recipe group: ${recipe}")
                 }
                 if (recipe in ['furnace', 'brewing_stand'] && data.containsKey('category')) {
-                    throw new GradleException("Minecraft 26.2 recipe must omit removed category: ${recipe}")
+                    throw new GradleException("Minecraft 26.3 recipe must omit removed category: ${recipe}")
                 }
             }
             ['coast', 'sentry', 'vex'].each { template ->
@@ -882,10 +952,10 @@ tasks.register('verifyReleaseArtifacts') {
                 if (recipe.endsWith('_stonecutting')) {
                     if (!(data.result instanceof Map) || data.result.id == null
                             || data.result.count != 2 || data.containsKey('count')) {
-                        throw new GradleException("Invalid Minecraft 26.2 stonecutting result: ${recipe}")
+                        throw new GradleException("Invalid Minecraft 26.3 stonecutting result: ${recipe}")
                     }
                 } else if (data.result?.id == null) {
-                    throw new GradleException("Invalid Minecraft 26.2 slab result: ${recipe}")
+                    throw new GradleException("Invalid Minecraft 26.3 slab result: ${recipe}")
                 }
             }
             def families = ['andesite', 'basalt', 'diorite', 'granite', 'rhyolite',
@@ -925,7 +995,7 @@ tasks.register('verifyReleaseArtifacts') {
                     stream.getText('UTF-8')
                 }
                 if (recipeText.contains('minecraft:sulfur') || recipeText.contains('minecraft:cinnabar')) {
-                    throw new GradleException("Mineralogy recipe aliases a native 26.2 material: ${entryName}")
+                    throw new GradleException("Mineralogy recipe aliases a native 26.3 material: ${entryName}")
                 }
             }
             if (!families.every { names.contains("data/mineralogy/tags/block/stones/${it}.json".toString()) }) {
@@ -968,10 +1038,13 @@ tasks.register('verifyReleaseArtifacts') {
                 }
                 verifyAdvancementPredicates(advancement, entryName)
             }
+            if (recipeUnlockCriteria != 1454) {
+                throw new GradleException("Expected 1454 Minecraft 26.3 recipe-unlocked criteria, found ${recipeUnlockCriteria}")
+            }
             def wallBlockstates = names.findAll { it ==~ /assets\/mineralogy\/blockstates\/.+_wall\.json/ }
             def tallWallModels = names.findAll { it ==~ /assets\/mineralogy\/models\/block\/.+_wall_side_tall\.json/ }
             if (wallBlockstates.size() != 108 || tallWallModels.size() != 108) {
-                throw new GradleException("Release jar must contain all 108 NeoForge 26.2 wall blockstates and tall-side models")
+                throw new GradleException("Release jar must contain all 108 NeoForge 26.3 wall blockstates and tall-side models")
             }
         }
         finally {
@@ -1081,19 +1154,36 @@ eclipse {
     classpath {
         downloadSources = true
         downloadJavadoc = true
-        file.whenMerged { classpath ->
-            def libraryPaths = new LinkedHashSet<String>()
-            classpath.entries = classpath.entries.findAll { entry ->
-                !(entry instanceof org.gradle.plugins.ide.eclipse.model.Library)
-                        || libraryPaths.add(entry.path)
-            }
-            classpath.entries.removeAll { entry ->
-                entry instanceof org.gradle.plugins.ide.eclipse.model.SourceFolder
-                        && ['src/main/resources', 'src/generated/resources'].contains(entry.path)
-            }
-            if (!classpath.entries.any { entry -> entry.path == 'build/resources/main' }) {
-                classpath.entries.add(new org.gradle.plugins.ide.eclipse.model.SourceFolder(
-                        'build/resources/main', 'bin/main'))
+        defaultOutputDir = file('bin/default')
+        file {
+            whenMerged { classpath ->
+                def libraryPaths = new LinkedHashSet<String>()
+                classpath.entries = classpath.entries.findAll { entry ->
+                    !(entry instanceof org.gradle.plugins.ide.eclipse.model.Library)
+                            || libraryPaths.add(entry.path)
+                }
+                classpath.entries.findAll { entry ->
+                    entry instanceof org.gradle.plugins.ide.eclipse.model.Output
+                }.each { entry ->
+                    entry.path = 'bin/default'
+                }
+                classpath.entries.removeAll { entry ->
+                    entry instanceof org.gradle.plugins.ide.eclipse.model.SourceFolder
+                            && ['src/main/resources', 'src/generated/resources'].contains(entry.path)
+                }
+                if (!classpath.entries.any { entry -> entry.path == 'build/resources/main' }) {
+                    classpath.entries.add(new org.gradle.plugins.ide.eclipse.model.SourceFolder(
+                            'build/resources/main', 'bin/main'))
+                }
+                classpath.entries.findAll { entry ->
+                    entry instanceof org.gradle.plugins.ide.eclipse.model.SourceFolder
+                }.each { entry ->
+                    if (entry.path == 'build/resources/main' || entry.path == 'src/main/java') {
+                        entry.output = 'bin/main'
+                    } else if (entry.path.startsWith('src/test/')) {
+                        entry.output = 'bin/test'
+                    }
+                }
             }
         }
     }
@@ -1104,16 +1194,20 @@ tasks.named('eclipse').configure {
     dependsOn prepareEclipseResources
     doLast {
         String requestedGradleHome = System.getenv('GRADLE_USER_HOME')
-        if (requestedGradleHome == null || requestedGradleHome.trim().isEmpty()) return
         File preferencesFile = file('.settings/org.eclipse.buildship.core.prefs')
         Properties preferences = new Properties()
-        if (preferencesFile.isFile()) preferencesFile.withInputStream { preferences.load(it) }
-        String gradleHome = file(requestedGradleHome).canonicalPath
+        if (preferencesFile.isFile()) {
+            preferencesFile.withInputStream { preferences.load(it) }
+        }
+        String existingGradleHome = preferences.getProperty('connection.gradle.user.home', '').trim()
+        File gradleHome = requestedGradleHome != null && !requestedGradleHome.trim().isEmpty()
+                ? file(requestedGradleHome)
+                : (!existingGradleHome.isEmpty() ? file(existingGradleHome) : gradle.gradleUserHomeDir)
         preferences.setProperty('eclipse.preferences.version', '1')
         preferences.setProperty('connection.gradle.distribution', 'GRADLE_DISTRIBUTION(WRAPPER)')
         preferences.setProperty('override.workspace.settings', 'true')
-        preferences.setProperty('gradle.user.home', gradleHome)
-        preferences.setProperty('connection.gradle.user.home', gradleHome)
+        preferences.setProperty('gradle.user.home', gradleHome.canonicalPath)
+        preferences.setProperty('connection.gradle.user.home', gradleHome.canonicalPath)
         preferences.setProperty('java.home', System.getProperty('java.home'))
         preferencesFile.parentFile.mkdirs()
         preferencesFile.withOutputStream {
@@ -1133,6 +1227,16 @@ tasks.register('verifyEclipseProductionClasspath') {
         if (preferences.getProperty('override.workspace.settings') != 'true') {
             throw new GradleException('Eclipse Buildship workspace override is not active')
         }
+        String eclipseJavaHome = preferences.getProperty('java.home', '').trim()
+        if (eclipseJavaHome.isEmpty() || !new File(eclipseJavaHome, 'release').isFile()) {
+            throw new GradleException("Eclipse Buildship Java home is missing or invalid: ${eclipseJavaHome}")
+        }
+        String eclipseJavaRelease = new File(eclipseJavaHome, 'release').getText('UTF-8')
+        if (!eclipseJavaRelease.contains('JAVA_VERSION="25.0.3"')
+                || !eclipseJavaRelease.contains('IMPLEMENTOR="Eclipse Adoptium"')) {
+            throw new GradleException(
+                    "Eclipse Buildship must use exact Temurin 25.0.3+9: ${eclipseJavaHome}")
+        }
         File eclipseClasspath = file('.classpath')
         if (!eclipseClasspath.isFile()) throw new GradleException('Eclipse .classpath was not generated')
         String classpathText = eclipseClasspath.getText('UTF-8')
@@ -1140,6 +1244,35 @@ tasks.register('verifyEclipseProductionClasspath') {
                 || classpathText.contains('path="src/main/resources"')
                 || classpathText.contains('path="src/generated/resources"')) {
             throw new GradleException('Eclipse must consume only Gradle-processed production resources')
+        }
+        def classpathXml = new XmlSlurper(false, false).parse(eclipseClasspath)
+        String defaultOutput = classpathXml.classpathentry
+                .find { it.@kind.text() == 'output' }.@path.text()
+        Map<String, String> expectedSourceOutputs = [
+                'src/main/java'        : 'bin/main',
+                'build/resources/main' : 'bin/main',
+                'src/test/java'        : 'bin/test',
+                'src/test/resources'   : 'bin/test'
+        ]
+        List<String> invalidSourceOutputs = classpathXml.classpathentry
+                .findAll { it.@kind.text() == 'src' }
+                .collect { [it.@path.text(), it.@output.text()] }
+                .findAll { pair ->
+                    String expected = expectedSourceOutputs[pair[0]]
+                    expected != null && pair[1] != expected
+                }
+                .collect { pair -> "${pair[0]} -> ${pair[1]}" }
+        boolean nestedOutput = classpathXml.classpathentry
+                .findAll { it.@kind.text() == 'src' && !it.@output.text().isEmpty() }
+                .any { entry ->
+                    String output = entry.@output.text()
+                    output == defaultOutput || output.startsWith(defaultOutput + '/')
+                }
+        if (defaultOutput != 'bin/default' || !invalidSourceOutputs.isEmpty()
+                || nestedOutput || classpathText.contains('output="build/sourceSets')) {
+            throw new GradleException(
+                    "Eclipse outputs must be disjoint bin/default, bin/main and bin/test " +
+                    "directories; default=${defaultOutput}, invalid=${invalidSourceOutputs}")
         }
         ['META-INF/neoforge.mods.toml', 'META-INF/accesstransformer.cfg',
          'META-INF/mineralogy/docs/README.md',

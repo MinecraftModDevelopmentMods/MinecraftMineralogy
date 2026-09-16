@@ -8,7 +8,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:rhyolite_raw_stairs_polishing"
+        "recipes": "mineralogy:rhyolite_raw_stairs_polishing"
       }
     },
     "has_rock": {

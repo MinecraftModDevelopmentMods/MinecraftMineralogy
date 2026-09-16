@@ -8,7 +8,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:marble_raw_walls_to_brick"
+        "recipes": "mineralogy:marble_raw_walls_to_brick"
       }
     },
     "has_rock": {

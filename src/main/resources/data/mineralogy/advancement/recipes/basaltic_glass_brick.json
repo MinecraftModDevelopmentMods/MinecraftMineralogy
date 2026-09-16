@@ -8,7 +8,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:basaltic_glass_brick"
+        "recipes": "mineralogy:basaltic_glass_brick"
       }
     },
     "has_rock": {

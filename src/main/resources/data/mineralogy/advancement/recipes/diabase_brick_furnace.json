@@ -8,7 +8,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:diabase_brick_furnace"
+        "recipes": "mineralogy:diabase_brick_furnace"
       }
     },
     "has_rock": {

@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "mineralogy:nitrate_ore",
+    "mineralogy:phosphorous_ore",
+    "mineralogy:sulfur_ore"
+  ]
+}

@@ -8,7 +8,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:slate_stairs"
+        "recipes": "mineralogy:slate_stairs"
       }
     },
     "has_rock": {

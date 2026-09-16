@@ -14,7 +14,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:nitrate_block"
+        "recipes": "mineralogy:nitrate_block"
       }
     },
     "has_rock": {

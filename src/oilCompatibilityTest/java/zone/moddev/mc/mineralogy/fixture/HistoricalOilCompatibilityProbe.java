@@ -61,7 +61,7 @@ public final class HistoricalOilCompatibilityProbe {
             () -> new LiquidBlock(source(),
                     blockProperties(BlockBehaviour.Properties.of().mapColor(MapColor.WATER).replaceable(), "crude_oil")
                             .noCollision().strength(100.0F).noLootTable().liquid()
-                            .pushReaction(PushReaction.DESTROY)));
+							.pushReaction(PushReaction.POPPED)));
     private static final DeferredHolder<Item, Item> BUCKET = ITEMS.register("crude_oil_bucket",
             () -> new BucketItem(source(),
                     itemProperties(new Item.Properties(), "crude_oil_bucket")

@@ -8,7 +8,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:peridotite_relief_blank"
+        "recipes": "mineralogy:peridotite_relief_blank"
       }
     },
     "has_rock": {

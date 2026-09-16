@@ -8,7 +8,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:dolomite_brick"
+        "recipes": "mineralogy:dolomite_brick"
       }
     },
     "has_rock": {

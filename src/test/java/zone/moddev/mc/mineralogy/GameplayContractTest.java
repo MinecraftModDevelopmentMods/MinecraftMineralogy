@@ -108,7 +108,8 @@ public class GameplayContractTest {
     public void cobblestonePolicyReappliesAfterReloadAndKeepsSpecialCases() throws Exception {
         String policy = text("src/main/java/zone/moddev/mc/mineralogy/compat/CobblestoneTagPolicy.java");
         assertTrue(policy.contains("onTagsUpdated(TagsUpdatedEvent event)"));
-        assertTrue(policy.contains("event.getLookupProvider()"));
+        assertTrue(policy.contains("event.getRegistries()"));
+        assertFalse(policy.contains("event.getLookupProvider()"));
         assertTrue(policy.contains("event.shouldUpdateStaticData()"));
         assertTrue(policy.contains("MaterialData.allIncludingRockSalt()"));
         assertTrue(policy.contains("\"stones/\" + material.id()"));

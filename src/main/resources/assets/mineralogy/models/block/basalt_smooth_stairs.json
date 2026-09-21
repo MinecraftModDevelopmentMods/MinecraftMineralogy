@@ -1,7 +1,7 @@
 {
   "parent": "mineralogy:block/stairs_normal",
   "textures": {
-    "face": "mineralogy:blocks/basalt_smooth",
-    "side": "mineralogy:blocks/basalt_smooth"
+    "face": "minecraft:block/polished_basalt_top",
+    "side": "minecraft:block/polished_basalt_side"
   }
 }

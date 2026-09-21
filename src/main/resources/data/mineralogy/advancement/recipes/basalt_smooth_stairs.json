@@ -12,7 +12,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:basalt_smooth_stairs"
+        "recipes": "mineralogy:basalt_smooth_stairs"
       }
     },
     "has_rock": {

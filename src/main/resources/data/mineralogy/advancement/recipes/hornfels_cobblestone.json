@@ -8,7 +8,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:hornfels_cobblestone"
+        "recipes": "mineralogy:hornfels_cobblestone"
       }
     },
     "has_rock": {

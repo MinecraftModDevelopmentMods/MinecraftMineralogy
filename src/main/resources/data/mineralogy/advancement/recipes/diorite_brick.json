@@ -12,7 +12,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:diorite_brick"
+        "recipes": "mineralogy:diorite_brick"
       }
     },
     "has_rock": {

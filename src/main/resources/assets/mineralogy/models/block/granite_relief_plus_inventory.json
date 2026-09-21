@@ -2,7 +2,7 @@
   "parent": "mineralogy:block/relief_plus_inventory",
   "textures": {
     "0": "mineralogy:blocks/marble_smooth",
-    "2": "mineralogy:blocks/granite_smooth",
+    "2": "minecraft:block/polished_granite",
     "particle": "mineralogy:blocks/marble_smooth"
   }
 }

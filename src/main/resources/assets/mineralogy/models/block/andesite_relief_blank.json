@@ -1,7 +1,7 @@
 {
   "parent": "mineralogy:block/relief_blank",
   "textures": {
-    "0": "mineralogy:blocks/andesite_smooth",
-    "particle": "mineralogy:blocks/andesite_smooth"
+    "0": "minecraft:block/polished_andesite",
+    "particle": "minecraft:block/polished_andesite"
   }
 }

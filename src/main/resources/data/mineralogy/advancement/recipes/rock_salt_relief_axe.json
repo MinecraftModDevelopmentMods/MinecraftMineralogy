@@ -12,7 +12,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:rock_salt_relief_axe"
+        "recipes": "mineralogy:rock_salt_relief_axe"
       }
     },
     "has_rock": {

@@ -21,7 +21,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:phosphorous_dust"
+        "recipes": "mineralogy:phosphorous_dust"
       }
     },
     "has_rock": {

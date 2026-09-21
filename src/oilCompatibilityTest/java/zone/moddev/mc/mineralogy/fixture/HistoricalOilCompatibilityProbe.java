@@ -62,7 +62,7 @@ public final class HistoricalOilCompatibilityProbe {
                             .noCollision().strength(100.0F).noLootTable().liquid()
                             .setId(ResourceKey.create(Registries.BLOCK,
                                     Identifier.fromNamespaceAndPath(MODID, "crude_oil")))
-                            .pushReaction(PushReaction.DESTROY)));
+                            .pushReaction(PushReaction.POPPED)));
     private static final RegistryObject<Item> BUCKET = ITEMS.register("crude_oil_bucket",
             () -> new BucketItem(HistoricalOilCompatibilityProbe::source,
                     new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)

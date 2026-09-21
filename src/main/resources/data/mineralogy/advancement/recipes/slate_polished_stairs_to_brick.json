@@ -21,7 +21,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:slate_polished_stairs_to_brick"
+        "recipes": "mineralogy:slate_polished_stairs_to_brick"
       }
     },
     "has_rock": {

@@ -1,8 +1,8 @@
 {
   "parent": "minecraft:block/slab_top",
   "textures": {
-    "bottom": "mineralogy:blocks/tuff",
-    "top": "mineralogy:blocks/tuff",
-    "side": "mineralogy:blocks/tuff"
+    "bottom": "minecraft:block/tuff",
+    "top": "minecraft:block/tuff",
+    "side": "minecraft:block/tuff"
   }
 }

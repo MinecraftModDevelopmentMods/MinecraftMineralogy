@@ -1,7 +1,7 @@
 {
   "parent": "mineralogy:block/stairs_outer",
   "textures": {
-    "face": "mineralogy:blocks/andesite_smooth",
-    "side": "mineralogy:blocks/andesite_smooth"
+    "face": "minecraft:block/polished_andesite",
+    "side": "minecraft:block/polished_andesite"
   }
 }

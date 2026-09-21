@@ -12,7 +12,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:novaculite_slab"
+        "recipes": "mineralogy:novaculite_slab"
       }
     },
     "has_rock": {

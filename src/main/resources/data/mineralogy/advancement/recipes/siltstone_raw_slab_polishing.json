@@ -21,7 +21,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:siltstone_raw_slab_polishing"
+        "recipes": "mineralogy:siltstone_raw_slab_polishing"
       }
     },
     "has_rock": {

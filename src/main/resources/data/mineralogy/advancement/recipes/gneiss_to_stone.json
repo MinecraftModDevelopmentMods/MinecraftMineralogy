@@ -8,7 +8,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:gneiss_to_stone"
+        "recipes": "mineralogy:gneiss_to_stone"
       }
     },
     "has_rock": {

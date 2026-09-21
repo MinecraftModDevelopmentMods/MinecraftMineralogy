@@ -12,7 +12,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:conglomerate_smooth"
+        "recipes": "mineralogy:conglomerate_smooth"
       }
     },
     "has_rock": {

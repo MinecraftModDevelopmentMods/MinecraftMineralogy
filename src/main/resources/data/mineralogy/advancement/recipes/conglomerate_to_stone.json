@@ -8,7 +8,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:conglomerate_to_stone"
+        "recipes": "mineralogy:conglomerate_to_stone"
       }
     },
     "has_rock": {

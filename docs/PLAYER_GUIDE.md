@@ -2,8 +2,10 @@
 
 ## Installing
 
-Mineralogy 6 needs Minecraft 26.3, NeoForge 26.3.0.1-beta, and OreSpawn
-4.0.16.2603002. Do not mix this NeoForge jar with the separate Forge build.
+Mineralogy 6 needs Minecraft 26.3, a compatible NeoForge 26.3 release, and
+OreSpawn 4.0.16.2603002. This release supports NeoForge 26.3 from
+26.3.0.1-beta and is runtime-validated on 26.3.0.8-beta. Do not mix this
+NeoForge jar with the separate Forge build.
 Install matching Mineralogy and OreSpawn jars on both clients and servers. Do
 not open a world containing Mineralogy blocks without Mineralogy installed.
 

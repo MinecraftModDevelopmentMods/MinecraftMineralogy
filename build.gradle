@@ -473,7 +473,7 @@ tasks.register('verifyReleaseConfiguration') {
     group = 'verification'
     description = 'Verifies the exact Mineralogy 26.3 NeoForge release identity.'
     doLast {
-        if (project.mod_version != '6.1.2.2603002'
+        if (project.mod_version != '6.1.3.2603002'
                 || project.mod_group != expectedMavenGroup
                 || project.minecraft_version != '26.3'
                 || project.neo_version != '26.3.0.1-beta') {
@@ -489,7 +489,7 @@ tasks.register('verifyReleaseDependencies') {
     group = 'verification'
     description = 'Resolves and verifies the exact released OreSpawn dependency.'
     doLast {
-        if (project.mod_version != '6.1.2.2603002'
+        if (project.mod_version != '6.1.3.2603002'
                 || project.minecraft_version != project.mc_version
                 || project.mc_version != '26.3'
                 || project.loader_name != 'neoforge'

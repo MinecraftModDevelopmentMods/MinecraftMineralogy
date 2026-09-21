@@ -10,8 +10,9 @@ mineral ores and dusts, rock furnaces, drywall, rock-salt lighting, fertilizer,
 and crude oil. OreSpawn 4 is the sole terrain, strata, ore, and deposit engine;
 Mineralogy no longer installs a parallel world generator.
 
-This branch builds Mineralogy `6.1.2.2603002` for NeoForge `26.3.0.1-beta` and is built
-and tested against OreSpawn `4.0.16.2603002`. Its declared compatibility range is
+This branch builds Mineralogy `6.1.3.2603002` for NeoForge `26.3.0.1-beta`, is
+runtime-validated on NeoForge `26.3.0.8-beta`, and is built and tested against
+OreSpawn `4.0.16.2603002`. Its declared compatibility range is
 OreSpawn `[4.0.6,5.0.0)`. Install both mods on clients and servers.
 
 This is the NeoForge build. It is intentionally maintained separately from the

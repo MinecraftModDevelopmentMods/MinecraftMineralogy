@@ -39,7 +39,7 @@ public final class CobblestoneTagPolicy {
     /** Reapply on clients after receiving the server's tag packet. */
     public static void onTagsUpdated(TagsUpdatedEvent event) {
         if (event.shouldUpdateStaticData()) {
-            apply(event.getLookupProvider());
+            apply(event.getRegistries());
         }
     }
 

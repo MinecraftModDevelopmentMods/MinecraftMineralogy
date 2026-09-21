@@ -1,3 +1,15 @@
+Mineralogy 6.1.3.2603002 for Minecraft 26.3 NeoForge
+
+- Fixed a client crash during world-list and world-creation tag reloads on
+  NeoForge 26.3.0.8-beta and newer by replacing the removed
+  `TagsUpdatedEvent.getLookupProvider()` call with the stable registry-access
+  API. Configurable cobblestone equivalence still reapplies after initial tag
+  loading and reloads.
+- Raised the bug-fix version from 6.1.2 to 6.1.3 and added runtime
+  qualification on NeoForge 26.3.0.8-beta. The pinned 26.3.0.1-beta build
+  target, declared NeoForge 26.3 compatibility range, OreSpawn dependency,
+  recipes, registries, configs, provider data, and world data are unchanged.
+
 Mineralogy 6.1.2.2603002 for Minecraft 26.3 NeoForge
 
 - Ported the accepted NeoForge 26.2 product to Minecraft 26.3 and NeoForge

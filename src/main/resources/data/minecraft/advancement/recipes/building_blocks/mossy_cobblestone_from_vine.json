@@ -1,41 +1,57 @@
 {
-  "forge:conditional": [
+  "forge:condition": {
+    "type": "forge:or",
+    "values": [
+      {
+        "type": "mineralogy:config",
+        "flag": "COBBLESTONE_EQUIVILENT"
+      },
+      {
+        "type": "forge:not",
+        "value": {
+          "type": "mineralogy:config",
+          "flag": "COBBLESTONE_EQUIVILENT"
+        }
+      }
+    ]
+  },
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minecraft:mossy_cobblestone_from_vine"
+    ]
+  },
+  "criteria": {
+    "has_vine": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:vine"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipes": "minecraft:mossy_cobblestone_from_vine"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_vine",
+      "has_the_recipe"
+    ]
+  ],
+  "sends_telemetry_event": false,
+  "forge:children": [
     {
       "forge:condition": {
         "type": "mineralogy:config",
         "flag": "COBBLESTONE_EQUIVILENT"
-      },
-      "parent": "minecraft:recipes/root",
-      "rewards": {
-        "recipes": [
-          "minecraft:mossy_cobblestone_from_vine"
-        ]
-      },
-      "criteria": {
-        "has_vine": {
-          "trigger": "minecraft:inventory_changed",
-          "conditions": {
-            "items": [
-              {
-                "items": "minecraft:vine"
-              }
-            ]
-          }
-        },
-        "has_the_recipe": {
-          "trigger": "minecraft:recipe_unlocked",
-          "conditions": {
-            "recipe": "minecraft:mossy_cobblestone_from_vine"
-          }
-        }
-      },
-      "requirements": [
-        [
-          "has_vine",
-          "has_the_recipe"
-        ]
-      ],
-      "sends_telemetry_event": false
+      }
     },
     {
       "forge:condition": {
@@ -45,37 +61,39 @@
           "flag": "COBBLESTONE_EQUIVILENT"
         }
       },
-      "parent": "minecraft:recipes/root",
-      "rewards": {
-        "recipes": [
-          "minecraft:mossy_cobblestone_from_vine"
-        ]
-      },
-      "criteria": {
-        "has_vine": {
-          "trigger": "minecraft:inventory_changed",
-          "conditions": {
-            "items": [
-              {
-                "items": "minecraft:vine"
-              }
-            ]
+      "child": {
+        "parent": "minecraft:recipes/root",
+        "rewards": {
+          "recipes": [
+            "minecraft:mossy_cobblestone_from_vine"
+          ]
+        },
+        "criteria": {
+          "has_vine": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+              "items": [
+                {
+                  "items": "minecraft:vine"
+                }
+              ]
+            }
+          },
+          "has_the_recipe": {
+            "trigger": "minecraft:recipe_unlocked",
+            "conditions": {
+              "recipes": "minecraft:mossy_cobblestone_from_vine"
+            }
           }
         },
-        "has_the_recipe": {
-          "trigger": "minecraft:recipe_unlocked",
-          "conditions": {
-            "recipe": "minecraft:mossy_cobblestone_from_vine"
-          }
-        }
-      },
-      "requirements": [
-        [
-          "has_vine",
-          "has_the_recipe"
-        ]
-      ],
-      "sends_telemetry_event": false
+        "requirements": [
+          [
+            "has_vine",
+            "has_the_recipe"
+          ]
+        ],
+        "sends_telemetry_event": false
+      }
     }
   ]
 }

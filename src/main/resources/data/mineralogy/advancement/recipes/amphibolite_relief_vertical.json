@@ -12,7 +12,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:amphibolite_relief_vertical"
+        "recipes": "mineralogy:amphibolite_relief_vertical"
       }
     },
     "has_rock": {

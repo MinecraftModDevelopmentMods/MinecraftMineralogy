@@ -12,7 +12,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:dolomite_slab"
+        "recipes": "mineralogy:dolomite_slab"
       }
     },
     "has_rock": {

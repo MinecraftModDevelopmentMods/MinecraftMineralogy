@@ -8,7 +8,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:diorite_to_stone"
+        "recipes": "mineralogy:diorite_to_stone"
       }
     },
     "has_rock": {

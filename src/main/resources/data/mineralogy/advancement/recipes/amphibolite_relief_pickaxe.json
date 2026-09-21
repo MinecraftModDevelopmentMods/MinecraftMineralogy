@@ -12,7 +12,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:amphibolite_relief_pickaxe"
+        "recipes": "mineralogy:amphibolite_relief_pickaxe"
       }
     },
     "has_rock": {

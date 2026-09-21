@@ -12,7 +12,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:quartzite_relief_horizontal"
+        "recipes": "mineralogy:quartzite_relief_horizontal"
       }
     },
     "has_rock": {

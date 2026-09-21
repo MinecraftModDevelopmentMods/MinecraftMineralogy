@@ -82,7 +82,7 @@ public final class MineralogyFluids {
 			() -> new MineralogyLiquidBlock(MineralogyFluids::crudeOilFlowing,
 					RegistrationProperties.block(BlockBehaviour.Properties.of().mapColor(MapColor.WATER).replaceable()
 							.noCollision().strength(100.0F).noLootTable().liquid()
-							.pushReaction(PushReaction.DESTROY), "crude_oil")));
+							.pushReaction(PushReaction.POPPED), "crude_oil")));
 	public static final RegistryObject<Item> CRUDE_OIL_BUCKET = ITEMS.register("crude_oil_bucket",
 			() -> new MineralogyBucketItem(MineralogyFluids::crudeOil,
 					RegistrationProperties.item(

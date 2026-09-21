@@ -12,7 +12,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:siltstone_smooth_brick_slab"
+        "recipes": "mineralogy:siltstone_smooth_brick_slab"
       }
     },
     "has_rock": {

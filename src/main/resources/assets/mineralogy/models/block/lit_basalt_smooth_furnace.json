@@ -1,8 +1,8 @@
 {
   "parent": "block/orientable",
   "textures": {
-    "top": "mineralogy:blocks/basalt_smooth",
+    "top": "minecraft:block/polished_basalt_top",
     "front": "mineralogy:blocks/basalt_smooth_furnace_front_on",
-    "side": "mineralogy:blocks/basalt_smooth"
+    "side": "minecraft:block/polished_basalt_side"
   }
 }

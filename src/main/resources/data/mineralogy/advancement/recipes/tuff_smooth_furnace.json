@@ -12,7 +12,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:tuff_smooth_furnace"
+        "recipes": "mineralogy:tuff_smooth_furnace"
       }
     },
     "has_rock": {

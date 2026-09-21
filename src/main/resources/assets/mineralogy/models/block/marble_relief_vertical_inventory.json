@@ -2,7 +2,7 @@
   "parent": "mineralogy:block/relief_vertical_inventory",
   "textures": {
     "0": "mineralogy:blocks/marble_smooth",
-    "1": "mineralogy:blocks/basalt_smooth",
+    "1": "minecraft:block/polished_basalt_side",
     "particle": "mineralogy:blocks/marble_smooth"
   }
 }

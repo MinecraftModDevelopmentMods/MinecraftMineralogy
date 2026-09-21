@@ -12,7 +12,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:hornfels_relief_hoe"
+        "recipes": "mineralogy:hornfels_relief_hoe"
       }
     },
     "has_rock": {

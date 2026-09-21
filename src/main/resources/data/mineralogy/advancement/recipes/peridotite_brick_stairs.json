@@ -12,7 +12,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:peridotite_brick_stairs"
+        "recipes": "mineralogy:peridotite_brick_stairs"
       }
     },
     "has_rock": {

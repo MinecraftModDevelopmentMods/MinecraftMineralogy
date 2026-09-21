@@ -12,7 +12,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:schist_brick_furnace"
+        "recipes": "mineralogy:schist_brick_furnace"
       }
     },
     "has_rock": {

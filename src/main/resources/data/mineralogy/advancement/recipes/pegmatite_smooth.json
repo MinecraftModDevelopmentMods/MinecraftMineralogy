@@ -12,7 +12,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:pegmatite_smooth"
+        "recipes": "mineralogy:pegmatite_smooth"
       }
     },
     "has_rock": {

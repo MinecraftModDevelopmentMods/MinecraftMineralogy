@@ -21,7 +21,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:diorite_raw_slab_polishing"
+        "recipes": "mineralogy:diorite_raw_slab_polishing"
       }
     },
     "has_rock": {

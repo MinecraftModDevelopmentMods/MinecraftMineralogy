@@ -21,7 +21,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:andesite_slab_from_vanilla"
+        "recipes": "mineralogy:andesite_slab_from_vanilla"
       }
     },
     "has_rock": {

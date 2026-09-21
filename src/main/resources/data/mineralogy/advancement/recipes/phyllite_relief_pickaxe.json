@@ -12,7 +12,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:phyllite_relief_pickaxe"
+        "recipes": "mineralogy:phyllite_relief_pickaxe"
       }
     },
     "has_rock": {

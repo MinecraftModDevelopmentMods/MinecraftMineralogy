@@ -12,7 +12,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:quartzite_smooth"
+        "recipes": "mineralogy:quartzite_smooth"
       }
     },
     "has_rock": {

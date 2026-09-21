@@ -12,7 +12,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:rhyolite_stairs"
+        "recipes": "mineralogy:rhyolite_stairs"
       }
     },
     "has_rock": {

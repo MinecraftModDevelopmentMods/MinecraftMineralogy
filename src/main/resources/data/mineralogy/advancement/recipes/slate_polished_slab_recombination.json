@@ -21,7 +21,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:slate_polished_slab_recombination"
+        "recipes": "mineralogy:slate_polished_slab_recombination"
       }
     },
     "has_rock": {

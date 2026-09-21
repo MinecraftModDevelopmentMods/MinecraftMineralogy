@@ -1,6 +1,6 @@
 {
   "parent": "block/wall_inventory",
   "textures": {
-    "wall": "mineralogy:blocks/tuff_smooth"
+    "wall": "minecraft:block/polished_tuff"
   }
 }

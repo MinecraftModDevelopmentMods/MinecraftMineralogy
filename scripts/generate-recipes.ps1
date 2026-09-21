@@ -27,7 +27,7 @@ $colors = @(
     'gray', 'pink', 'lime', 'yellow', 'light_blue', 'magenta', 'orange', 'white'
 )
 
-# Minecraft owns these full-block identities in 26.2. Mineralogy keeps its
+# Minecraft owns these full-block identities in 26.3. Mineralogy keeps its
 # legacy blocks registered, but recipes may accept either identity where doing
 # so cannot compete with a native recipe.
 $nativeFullBlocks = @{
@@ -145,7 +145,7 @@ function AdvancementPredicate([object] $ingredient) {
     if ($null -ne $ingredient.PSObject.Properties['items']) {
         return [ordered]@{ items = $ingredient.items }
     }
-    throw "Cannot convert recipe ingredient into a Minecraft 26.2 advancement predicate"
+    throw "Cannot convert recipe ingredient into a Minecraft 26.3 advancement predicate"
 }
 
 function OreIngredient([string] $ore) {
@@ -171,7 +171,7 @@ function OreIngredient([string] $ore) {
         $finish = if ($Matches[2]) { '/' + (Convert-CamelToSnake $Matches[2]) } else { '' }
         return "#mineralogy:slabs/$family$finish"
     }
-    throw "No Minecraft 26.2 tag mapping for legacy OreDictionary key $ore"
+    throw "No Minecraft 26.3 tag mapping for legacy OreDictionary key $ore"
 }
 
 function Convert-CamelToSnake([string] $value) {
@@ -809,7 +809,7 @@ function Ensure-MissingRecipeAdvancements() {
         $criteria = [ordered]@{
             has_the_recipe = [ordered]@{
                 trigger = 'minecraft:recipe_unlocked'
-                conditions = [ordered]@{ recipe = "mineralogy:$recipeName" }
+                conditions = [ordered]@{ recipes = "mineralogy:$recipeName" }
             }
             has_rock = [ordered]@{
                 trigger = 'minecraft:inventory_changed'
@@ -1068,7 +1068,7 @@ function VanillaRecipeAdvancement(
             }
             has_the_recipe = [ordered]@{
                 trigger = 'minecraft:recipe_unlocked'
-                conditions = [ordered]@{ recipe = "minecraft:$recipeName" }
+                conditions = [ordered]@{ recipes = "minecraft:$recipeName" }
             }
         }
         requirements = ,@($criterionName, 'has_the_recipe')
@@ -1086,25 +1086,31 @@ function Write-ConditionalMinecraftAdvancement(
 ) {
     $directory = Join-Path $minecraftAdvancementRoot $category
     New-Item -ItemType Directory -Force -Path $directory | Out-Null
-    Write-Json (Join-Path $directory "$recipeName.json") ([ordered]@{
-        'forge:conditional' = @(
-            (Add-ConditionToAdvancement $condition `
-                (VanillaRecipeAdvancement $recipeName $criterionName $enabledIngredient)),
-            (Add-ConditionToAdvancement (NotCondition $condition) `
-                (VanillaRecipeAdvancement $recipeName $criterionName $fallbackIngredient))
-        )
-    })
-}
+    $fallbackCondition = NotCondition $condition
+    $enabledAdvancement = VanillaRecipeAdvancement $recipeName $criterionName $enabledIngredient
+    $fallbackAdvancement = VanillaRecipeAdvancement $recipeName $criterionName $fallbackIngredient
 
-function Add-ConditionToAdvancement(
-    [System.Collections.IDictionary] $condition,
-    [System.Collections.IDictionary] $advancement
-) {
-    $result = [ordered]@{ 'forge:condition' = $condition }
-    foreach ($entry in $advancement.GetEnumerator()) {
+    # Forge 66 wraps conditional advancements through Advancement.CODEC. The
+    # first branch is the root advancement and forge:children selects either
+    # that root or a complete fallback child. The old forge:conditional root
+    # is no longer decoded by Minecraft 26.3's registry loader.
+    $result = [ordered]@{
+        'forge:condition' = [ordered]@{
+            type = 'forge:or'
+            values = @($condition, $fallbackCondition)
+        }
+    }
+    foreach ($entry in $enabledAdvancement.GetEnumerator()) {
         $result[$entry.Key] = $entry.Value
     }
-    return $result
+    $result['forge:children'] = @(
+        [ordered]@{ 'forge:condition' = $condition },
+        [ordered]@{
+            'forge:condition' = $fallbackCondition
+            child = $fallbackAdvancement
+        }
+    )
+    Write-Json (Join-Path $directory "$recipeName.json") $result
 }
 
 function Write-CobblestoneRecipeOverrides() {
@@ -1359,7 +1365,7 @@ function Write-NativePolishedOverrides() {
                 }
                 has_the_recipe = [ordered]@{
                     trigger = 'minecraft:recipe_unlocked'
-                    conditions = [ordered]@{ recipe = "minecraft:$recipeName" }
+                    conditions = [ordered]@{ recipes = "minecraft:$recipeName" }
                 }
             }
             requirements = @(
@@ -1405,4 +1411,4 @@ $advancementCount = Synchronize-AdvancementConditions
 if ($advancementCount -ne $expectedTargetRecipeCount) {
     throw "Expected $expectedTargetRecipeCount recipe advancements, found $advancementCount"
 }
-Write-Output "Generated $expectedRecipeCount crafting recipe JSON files, retained 28 target-native smelting recipes, created $createdAdvancements missing recipe advancements, and conditioned $advancementCount Minecraft 26.2 recipe advancements."
+Write-Output "Generated $expectedRecipeCount crafting recipe JSON files, retained 28 target-native smelting recipes, created $createdAdvancements missing recipe advancements, and conditioned $advancementCount Minecraft 26.3 recipe advancements."

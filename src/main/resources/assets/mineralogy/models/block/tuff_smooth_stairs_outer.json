@@ -1,7 +1,7 @@
 {
   "parent": "mineralogy:block/stairs_outer",
   "textures": {
-    "face": "mineralogy:blocks/tuff_smooth",
-    "side": "mineralogy:blocks/tuff_smooth"
+    "face": "minecraft:block/polished_tuff",
+    "side": "minecraft:block/polished_tuff"
   }
 }

@@ -1,41 +1,57 @@
 {
-  "forge:conditional": [
+  "forge:condition": {
+    "type": "forge:or",
+    "values": [
+      {
+        "type": "mineralogy:config",
+        "flag": "COBBLESTONE_EQUIVILENT"
+      },
+      {
+        "type": "forge:not",
+        "value": {
+          "type": "mineralogy:config",
+          "flag": "COBBLESTONE_EQUIVILENT"
+        }
+      }
+    ]
+  },
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minecraft:observer"
+    ]
+  },
+  "criteria": {
+    "has_quartz": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:quartz"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipes": "minecraft:observer"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_quartz",
+      "has_the_recipe"
+    ]
+  ],
+  "sends_telemetry_event": false,
+  "forge:children": [
     {
       "forge:condition": {
         "type": "mineralogy:config",
         "flag": "COBBLESTONE_EQUIVILENT"
-      },
-      "parent": "minecraft:recipes/root",
-      "rewards": {
-        "recipes": [
-          "minecraft:observer"
-        ]
-      },
-      "criteria": {
-        "has_quartz": {
-          "trigger": "minecraft:inventory_changed",
-          "conditions": {
-            "items": [
-              {
-                "items": "minecraft:quartz"
-              }
-            ]
-          }
-        },
-        "has_the_recipe": {
-          "trigger": "minecraft:recipe_unlocked",
-          "conditions": {
-            "recipe": "minecraft:observer"
-          }
-        }
-      },
-      "requirements": [
-        [
-          "has_quartz",
-          "has_the_recipe"
-        ]
-      ],
-      "sends_telemetry_event": false
+      }
     },
     {
       "forge:condition": {
@@ -45,37 +61,39 @@
           "flag": "COBBLESTONE_EQUIVILENT"
         }
       },
-      "parent": "minecraft:recipes/root",
-      "rewards": {
-        "recipes": [
-          "minecraft:observer"
-        ]
-      },
-      "criteria": {
-        "has_quartz": {
-          "trigger": "minecraft:inventory_changed",
-          "conditions": {
-            "items": [
-              {
-                "items": "minecraft:quartz"
-              }
-            ]
+      "child": {
+        "parent": "minecraft:recipes/root",
+        "rewards": {
+          "recipes": [
+            "minecraft:observer"
+          ]
+        },
+        "criteria": {
+          "has_quartz": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+              "items": [
+                {
+                  "items": "minecraft:quartz"
+                }
+              ]
+            }
+          },
+          "has_the_recipe": {
+            "trigger": "minecraft:recipe_unlocked",
+            "conditions": {
+              "recipes": "minecraft:observer"
+            }
           }
         },
-        "has_the_recipe": {
-          "trigger": "minecraft:recipe_unlocked",
-          "conditions": {
-            "recipe": "minecraft:observer"
-          }
-        }
-      },
-      "requirements": [
-        [
-          "has_quartz",
-          "has_the_recipe"
-        ]
-      ],
-      "sends_telemetry_event": false
+        "requirements": [
+          [
+            "has_quartz",
+            "has_the_recipe"
+          ]
+        ],
+        "sends_telemetry_event": false
+      }
     }
   ]
 }

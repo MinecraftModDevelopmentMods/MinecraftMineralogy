@@ -21,7 +21,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:quartzite_polished_brick_slab_recombination"
+        "recipes": "mineralogy:quartzite_polished_brick_slab_recombination"
       }
     },
     "has_rock": {

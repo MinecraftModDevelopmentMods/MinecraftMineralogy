@@ -12,7 +12,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:basaltic_glass_smooth_brick_stairs"
+        "recipes": "mineralogy:basaltic_glass_smooth_brick_stairs"
       }
     },
     "has_rock": {

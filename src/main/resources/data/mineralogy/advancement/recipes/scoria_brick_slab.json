@@ -12,7 +12,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:scoria_brick_slab"
+        "recipes": "mineralogy:scoria_brick_slab"
       }
     },
     "has_rock": {

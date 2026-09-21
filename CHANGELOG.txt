@@ -1,3 +1,35 @@
+Mineralogy 6.1.2.2603001 for Minecraft 26.3 Forge
+
+- Ported the accepted Forge 26.2 product to Minecraft 26.3 and Forge 66.0.0
+  while preserving registry, NBT, provider, configuration, migration, recipe,
+  locale, guide, crude-oil, relief, mining, furnace, creative-tab, and
+  legacy-world identities.
+- Updated every generated recipe-unlock advancement to Minecraft 26.3's
+  `recipes` field and Forge 66's root-plus-`forge:children` conditional
+  advancement codec. Retained explicit cooking times on all 28 cooking
+  recipes. The established native-rock, tuff, slab, stone-spear, and nineteen
+  configurable cobblestone routes remain unchanged.
+- Added Minecraft 26.3's motion, fluid-washing, entity-flotation, and ore
+  semantic tags without making Mineralogy construction blocks vanilla ore
+  hosts or merging Mineralogy sulfur with Minecraft sulfur and cinnabar.
+- Kept pre-flattening conversion input in the legacy `Name`/`Properties`
+  block-state schema so Minecraft's data fixer can produce modern lowercase
+  `id`/`properties` states. All 18,192 mappings and both Overworld region
+  layouts remain supported.
+- Carried the accepted native andesite, diorite, granite, basalt, and tuff
+  texture mappings across matching Mineralogy construction forms while
+  preserving Mineralogy's geometry and functional overlays.
+- Adapted crude-oil piston behavior, rock-furnace fuel components, and block
+  registration to the target APIs while preserving existing behavior and
+  saves.
+- Kept Eclipse launches module-safe by excluding Forge's redundant
+  `mixinextras-common` compile artifact while retaining the complete
+  `mixinextras-forge` runtime.
+- Updated metadata, packs, CI, documentation, and release audits for Minecraft
+  26.3, Forge 66.0.0, OreSpawn 4.0.16.2603001, ForgeGradle 7.0.34,
+  Gradle 9.7.1, Java 25, resource format 97.1, and data format 121.0.
+  Mineralogy still registers no world generator.
+
 Mineralogy 6.1.2.2602001 for Minecraft 26.2
 
 - Ported the accepted Mineralogy 6.1.2 Forge contract to Minecraft 26.2 while

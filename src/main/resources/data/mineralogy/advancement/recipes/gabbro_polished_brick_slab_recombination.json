@@ -21,7 +21,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:gabbro_polished_brick_slab_recombination"
+        "recipes": "mineralogy:gabbro_polished_brick_slab_recombination"
       }
     },
     "has_rock": {

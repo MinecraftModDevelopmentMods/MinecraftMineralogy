@@ -12,7 +12,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:conglomerate_relief_hammer"
+        "recipes": "mineralogy:conglomerate_relief_hammer"
       }
     },
     "has_rock": {

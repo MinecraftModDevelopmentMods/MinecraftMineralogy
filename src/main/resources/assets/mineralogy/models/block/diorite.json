@@ -1,6 +1,6 @@
 {
   "parent": "mineralogy:block/block",
   "textures": {
-    "face": "mineralogy:blocks/diorite"
+    "face": "minecraft:block/diorite"
   }
 }

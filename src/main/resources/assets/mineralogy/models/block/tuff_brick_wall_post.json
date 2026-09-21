@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/template_wall_post",
   "textures": {
-    "wall": "mineralogy:blocks/tuff_brick_side"
+    "wall": "minecraft:block/tuff_bricks"
   }
 }

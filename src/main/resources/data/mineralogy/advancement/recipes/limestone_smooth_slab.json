@@ -12,7 +12,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:limestone_smooth_slab"
+        "recipes": "mineralogy:limestone_smooth_slab"
       }
     },
     "has_rock": {

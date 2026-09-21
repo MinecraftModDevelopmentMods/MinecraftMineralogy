@@ -21,7 +21,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:quartzite_raw_walls_to_brick"
+        "recipes": "mineralogy:quartzite_raw_walls_to_brick"
       }
     },
     "has_rock": {

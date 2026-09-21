@@ -12,7 +12,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:basaltic_glass_relief_right"
+        "recipes": "mineralogy:basaltic_glass_relief_right"
       }
     },
     "has_rock": {

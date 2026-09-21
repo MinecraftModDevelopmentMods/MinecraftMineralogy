@@ -21,7 +21,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:pegmatite_brick_block_polishing"
+        "recipes": "mineralogy:pegmatite_brick_block_polishing"
       }
     },
     "has_rock": {

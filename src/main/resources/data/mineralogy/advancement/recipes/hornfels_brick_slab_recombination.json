@@ -21,7 +21,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:hornfels_brick_slab_recombination"
+        "recipes": "mineralogy:hornfels_brick_slab_recombination"
       }
     },
     "has_rock": {

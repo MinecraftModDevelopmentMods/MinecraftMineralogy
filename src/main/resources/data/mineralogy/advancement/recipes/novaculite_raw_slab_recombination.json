@@ -21,7 +21,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:novaculite_raw_slab_recombination"
+        "recipes": "mineralogy:novaculite_raw_slab_recombination"
       }
     },
     "has_rock": {

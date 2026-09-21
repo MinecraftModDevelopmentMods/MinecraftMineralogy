@@ -12,7 +12,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:dolomite_smooth_brick_stairs"
+        "recipes": "mineralogy:dolomite_smooth_brick_stairs"
       }
     },
     "has_rock": {

@@ -1,41 +1,57 @@
 {
-  "forge:conditional": [
+  "forge:condition": {
+    "type": "forge:or",
+    "values": [
+      {
+        "type": "mineralogy:config",
+        "flag": "COBBLESTONE_EQUIVILENT"
+      },
+      {
+        "type": "forge:not",
+        "value": {
+          "type": "mineralogy:config",
+          "flag": "COBBLESTONE_EQUIVILENT"
+        }
+      }
+    ]
+  },
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minecraft:andesite"
+    ]
+  },
+  "criteria": {
+    "has_stone": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:diorite"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipes": "minecraft:andesite"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_stone",
+      "has_the_recipe"
+    ]
+  ],
+  "sends_telemetry_event": false,
+  "forge:children": [
     {
       "forge:condition": {
         "type": "mineralogy:config",
         "flag": "COBBLESTONE_EQUIVILENT"
-      },
-      "parent": "minecraft:recipes/root",
-      "rewards": {
-        "recipes": [
-          "minecraft:andesite"
-        ]
-      },
-      "criteria": {
-        "has_stone": {
-          "trigger": "minecraft:inventory_changed",
-          "conditions": {
-            "items": [
-              {
-                "items": "minecraft:diorite"
-              }
-            ]
-          }
-        },
-        "has_the_recipe": {
-          "trigger": "minecraft:recipe_unlocked",
-          "conditions": {
-            "recipe": "minecraft:andesite"
-          }
-        }
-      },
-      "requirements": [
-        [
-          "has_stone",
-          "has_the_recipe"
-        ]
-      ],
-      "sends_telemetry_event": false
+      }
     },
     {
       "forge:condition": {
@@ -45,37 +61,39 @@
           "flag": "COBBLESTONE_EQUIVILENT"
         }
       },
-      "parent": "minecraft:recipes/root",
-      "rewards": {
-        "recipes": [
-          "minecraft:andesite"
-        ]
-      },
-      "criteria": {
-        "has_stone": {
-          "trigger": "minecraft:inventory_changed",
-          "conditions": {
-            "items": [
-              {
-                "items": "minecraft:diorite"
-              }
-            ]
+      "child": {
+        "parent": "minecraft:recipes/root",
+        "rewards": {
+          "recipes": [
+            "minecraft:andesite"
+          ]
+        },
+        "criteria": {
+          "has_stone": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+              "items": [
+                {
+                  "items": "minecraft:diorite"
+                }
+              ]
+            }
+          },
+          "has_the_recipe": {
+            "trigger": "minecraft:recipe_unlocked",
+            "conditions": {
+              "recipes": "minecraft:andesite"
+            }
           }
         },
-        "has_the_recipe": {
-          "trigger": "minecraft:recipe_unlocked",
-          "conditions": {
-            "recipe": "minecraft:andesite"
-          }
-        }
-      },
-      "requirements": [
-        [
-          "has_stone",
-          "has_the_recipe"
-        ]
-      ],
-      "sends_telemetry_event": false
+        "requirements": [
+          [
+            "has_stone",
+            "has_the_recipe"
+          ]
+        ],
+        "sends_telemetry_event": false
+      }
     }
   ]
 }

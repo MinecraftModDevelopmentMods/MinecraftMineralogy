@@ -1,7 +1,7 @@
 {
   "parent": "mineralogy:block/stairs_outer",
   "textures": {
-    "face": "mineralogy:blocks/basalt",
-    "side": "mineralogy:blocks/basalt"
+    "face": "minecraft:block/basalt_top",
+    "side": "minecraft:block/basalt_side"
   }
 }

@@ -12,7 +12,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:basalt_relief_left"
+        "recipes": "mineralogy:basalt_relief_left"
       }
     },
     "has_rock": {

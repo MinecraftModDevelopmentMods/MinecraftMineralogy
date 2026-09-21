@@ -12,7 +12,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:shale_slab"
+        "recipes": "mineralogy:shale_slab"
       }
     },
     "has_rock": {

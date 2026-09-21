@@ -12,7 +12,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:gunpowder_from_charcoal"
+        "recipes": "mineralogy:gunpowder_from_charcoal"
       }
     },
     "has_rock": {

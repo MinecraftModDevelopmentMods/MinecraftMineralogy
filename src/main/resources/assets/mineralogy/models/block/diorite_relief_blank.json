@@ -1,7 +1,7 @@
 {
   "parent": "mineralogy:block/relief_blank",
   "textures": {
-    "0": "mineralogy:blocks/diorite_smooth",
-    "particle": "mineralogy:blocks/diorite_smooth"
+    "0": "minecraft:block/polished_diorite",
+    "particle": "minecraft:block/polished_diorite"
   }
 }

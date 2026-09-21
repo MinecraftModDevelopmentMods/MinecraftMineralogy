@@ -1,6 +1,6 @@
 {
   "parent": "mineralogy:block/block",
   "textures": {
-    "face": "mineralogy:blocks/granite_smooth"
+    "face": "minecraft:block/polished_granite"
   }
 }

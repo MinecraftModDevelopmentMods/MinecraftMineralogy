@@ -12,7 +12,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:granite_brick"
+        "recipes": "mineralogy:granite_brick"
       }
     },
     "has_rock": {

@@ -1,7 +1,7 @@
 {
   "parent": "mineralogy:block/relief_blank",
   "textures": {
-    "0": "mineralogy:blocks/tuff_smooth",
-    "particle": "mineralogy:blocks/tuff_smooth"
+    "0": "minecraft:block/polished_tuff",
+    "particle": "minecraft:block/polished_tuff"
   }
 }

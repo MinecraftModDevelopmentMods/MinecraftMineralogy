@@ -200,7 +200,9 @@ public final class RecipeIntegrationProbe {
             require(furnace.getItem(1).is(Items.COAL) && furnace.getItem(1).getCount() == 1,
                     "unlit transition lost the furnace fuel");
         } finally {
-            if (!"first".equals(phase)) level.removeBlock(pos, false);
+            if (!"first".equals(phase) && !"fresh".equals(phase)) {
+                level.removeBlock(pos, false);
+            }
         }
     }
 

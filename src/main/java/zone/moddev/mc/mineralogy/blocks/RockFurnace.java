@@ -2,7 +2,6 @@ package zone.moddev.mc.mineralogy.blocks;
 
 import java.util.Collections;
 import java.util.List;
-import com.mojang.serialization.MapCodec;
 
 import zone.moddev.mc.mineralogy.Mineralogy;
 import zone.moddev.mc.mineralogy.init.TileEntities;
@@ -67,11 +66,6 @@ public class RockFurnace extends BaseEntityBlock implements NamedMineralogyBlock
 		this.toolHardnessLevel = toolHardnessLevel;
 		this.registryPath = name;
 		this.registerDefaultState(this.getStateDefinition().any().setValue(FACING, Direction.NORTH));
-	}
-
-	@Override
-	protected MapCodec<? extends BaseEntityBlock> codec() {
-		return MapCodec.unit(this);
 	}
 
 	@Override

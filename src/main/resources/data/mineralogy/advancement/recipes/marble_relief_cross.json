@@ -12,7 +12,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:marble_relief_cross"
+        "recipes": "mineralogy:marble_relief_cross"
       }
     },
     "has_rock": {

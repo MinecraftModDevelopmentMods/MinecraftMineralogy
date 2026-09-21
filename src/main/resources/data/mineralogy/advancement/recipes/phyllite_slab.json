@@ -12,7 +12,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:phyllite_slab"
+        "recipes": "mineralogy:phyllite_slab"
       }
     },
     "has_rock": {

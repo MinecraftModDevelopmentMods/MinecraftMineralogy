@@ -12,7 +12,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:gabbro_relief_left"
+        "recipes": "mineralogy:gabbro_relief_left"
       }
     },
     "has_rock": {

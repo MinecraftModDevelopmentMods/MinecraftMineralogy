@@ -12,7 +12,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:amphibolite_smooth"
+        "recipes": "mineralogy:amphibolite_smooth"
       }
     },
     "has_rock": {

@@ -21,7 +21,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:mineralfertilizer"
+        "recipes": "mineralogy:mineralfertilizer"
       }
     },
     "has_rock": {

@@ -12,7 +12,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:shale_relief_pickaxe"
+        "recipes": "mineralogy:shale_relief_pickaxe"
       }
     },
     "has_rock": {

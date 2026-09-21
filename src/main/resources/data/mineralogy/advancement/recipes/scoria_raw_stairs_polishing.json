@@ -21,7 +21,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "mineralogy:scoria_raw_stairs_polishing"
+        "recipes": "mineralogy:scoria_raw_stairs_polishing"
       }
     },
     "has_rock": {

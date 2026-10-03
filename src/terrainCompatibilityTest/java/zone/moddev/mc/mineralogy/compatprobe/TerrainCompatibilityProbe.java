@@ -52,6 +52,7 @@ public final class TerrainCompatibilityProbe {
     }
     private void test(ServerLevel level, String phase) throws Exception {
         verifyTags(phase);
+        verifyBats(level, phase);
         verifyCubes(level, phase);
         verifyCatalysts(level, phase);
         verifyFeatures(level, phase);
@@ -88,6 +89,70 @@ public final class TerrainCompatibilityProbe {
         for (String excluded : List.of("basalt_brick", "basalt_smooth", "basalt_slab", "basalt_furnace", "sulfur_ore", "sulfur_block", "rocksaltlamp", "rocksaltstreetlamp"))
             require(!block("mineralogy:" + excluded).defaultBlockState().is(terrainTag), "Crafted/non-terrain member " + excluded);
         evidence.add(phase + ": 37 block/item terrain identities; all five vanilla consumers; vanilla and third-party members retained");
+    }
+    private void verifyBats(ServerLevel level, String phase) throws Exception {
+        // The real target predicate and loaded tags decide eligibility. Only the
+        // environment's light/height is controlled so asynchronous lighting and
+        // probabilistic ambient spawning cannot make this regression test flaky.
+        BlockPos position = new BlockPos(640, 201, 128);
+        level.getChunk(position);
+        level.setBlockAndUpdate(position, Blocks.AIR.defaultBlockState());
+        level.setBlockAndUpdate(position.above(), Blocks.AIR.defaultBlockState());
+        int[] brightness = {0};
+        boolean[] belowSurface = {true};
+        net.minecraft.world.level.LevelAccessor view =
+                (net.minecraft.world.level.LevelAccessor)Proxy.newProxyInstance(
+                        net.minecraft.world.level.LevelAccessor.class.getClassLoader(),
+                        new Class<?>[] {net.minecraft.world.level.LevelAccessor.class}, (proxy, method, args) -> {
+                            if (method.getName().equals("getMaxLocalRawBrightness")) return brightness[0];
+                            if (method.getName().equals("getHeightmapPos"))
+                                return belowSurface[0] ? position.above(10) : position;
+                            return method.invoke(level, args);
+                        });
+        Set<String> terrain = raw();
+        for (String name : List.of("andesite", "basalt", "diorite", "granite", "sandstone", "tuff"))
+            terrain.add("minecraft:" + name);
+        List<String> supported = new ArrayList<>(List.of("minecraft:stone", "minecraft:deepslate", "minecraft:gold_block"));
+        supported.addAll(terrain);
+        for (String name : supported) {
+            level.setBlockAndUpdate(position.below(), block(name).defaultBlockState());
+            boolean accepted = false;
+            RandomSource random = RandomSource.create(81499);
+            for (int attempt = 0; attempt < 32; attempt++)
+                accepted |= net.minecraft.world.entity.ambient.Bat.checkBatSpawnRules(
+                        net.minecraft.world.entity.EntityTypes.BAT, view,
+                        net.minecraft.world.entity.EntitySpawnReason.NATURAL, position, random);
+            require(accepted, "Native bat spawn predicate rejected " + name);
+            if (name.equals("minecraft:stone") || name.equals("minecraft:deepslate") || name.equals("minecraft:gold_block"))
+                evidence.add(phase + ": vanilla/third-party bat control accepted " + name);
+            require(block(name).defaultBlockState().is(blockTag("minecraft:bats_spawnable_on")),
+                    "Bat tag omitted " + name);
+        }
+        for (String name : List.of("basalt_brick", "basalt_smooth", "basalt_slab", "basalt_furnace",
+                "sulfur_ore", "sulfur_block", "rocksaltlamp", "rocksaltstreetlamp")) {
+            level.setBlockAndUpdate(position.below(), block("mineralogy:" + name).defaultBlockState());
+            RandomSource random = RandomSource.create(81499);
+            for (int attempt = 0; attempt < 32; attempt++)
+                require(!net.minecraft.world.entity.ambient.Bat.checkBatSpawnRules(
+                        net.minecraft.world.entity.EntityTypes.BAT, view,
+                        net.minecraft.world.entity.EntitySpawnReason.NATURAL, position, random),
+                        "Native bat predicate accepted excluded " + name);
+        }
+        level.setBlockAndUpdate(position.below(), Blocks.STONE.defaultBlockState());
+        brightness[0] = 15;
+        RandomSource random = RandomSource.create(81499);
+        for (int attempt = 0; attempt < 32; attempt++)
+            require(!net.minecraft.world.entity.ambient.Bat.checkBatSpawnRules(
+                    net.minecraft.world.entity.EntityTypes.BAT, view, net.minecraft.world.entity.EntitySpawnReason.NATURAL,
+                    position, random), "Bat spawned in bright control");
+        brightness[0] = 0;
+        belowSurface[0] = false;
+        random = RandomSource.create(81499);
+        for (int attempt = 0; attempt < 32; attempt++)
+            require(!net.minecraft.world.entity.ambient.Bat.checkBatSpawnRules(
+                    net.minecraft.world.entity.EntityTypes.BAT, view, net.minecraft.world.entity.EntitySpawnReason.NATURAL,
+                    position, random), "Bat spawned above surface control");
+        evidence.add(phase + ": native Bat.checkBatSpawnRules accepted 37 terrain substrates + stone/deepslate/third-party gold; eight exclusions, bright and surface controls rejected");
     }
     private void verifyCubes(ServerLevel level, String phase) throws Exception {
         Class<?> cubeClass;

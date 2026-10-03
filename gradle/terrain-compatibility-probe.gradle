@@ -1,0 +1,21 @@
+def probeClasses = layout.buildDirectory.dir('terrain-compatibility-fixture/classes')
+tasks.register('compileTerrainCompatibilityProbe', JavaCompile) {
+    dependsOn tasks.named('classes')
+    source fileTree('src/terrainCompatibilityTest/java')
+    classpath = files(sourceSets.main.output, sourceSets.main.compileClasspath)
+    destinationDirectory = probeClasses
+    javaCompiler = javaToolchains.compilerFor {
+        languageVersion = JavaLanguageVersion.of(Integer.parseInt(project.java_version))
+        vendor = JvmVendorSpec.ADOPTIUM
+    }
+    options.encoding = 'UTF-8'
+    options.release = Integer.parseInt(project.java_version)
+}
+tasks.register('terrainCompatibilityProbeJar', Jar) {
+    dependsOn tasks.named('compileTerrainCompatibilityProbe')
+    archiveFileName = 'terraincompatibilityprobe.jar'
+    destinationDirectory = layout.buildDirectory.dir('terrain-compatibility-fixture')
+    from probeClasses
+    from 'src/terrainCompatibilityTest/resources'
+}
+tasks.named('check') { dependsOn tasks.named('compileTerrainCompatibilityProbe') }

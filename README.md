@@ -23,6 +23,11 @@ full-rock items. Terrain eligibility is independent of cobblestone equivalence;
 crafted blocks are excluded from natural replacement. Sculk, moss and cube
 behavior updates existing worlds; natural cave decoration improves in new chunks.
 
+Natural bats can spawn above Mineralogy terrain under Minecraft's normal dark,
+below-surface conditions. The additive bat tag applies to existing worlds and
+is independent of cobblestone equivalence; crafted construction blocks remain
+excluded.
+
 ## Configuration and help
 
 Mineralogy's content and recipe switches remain in

@@ -195,6 +195,12 @@ feature generation, not the exact jar.
 
 ## Builds and release notes
 
+This local 6.1.4 candidate also repairs natural bat substrate eligibility.
+Minecraft introduced the bats_spawnable_on block tag in 1.21.2; the compatibility
+interface belongs only on 1.21.2-and-later targets. Earlier Mineralogy candidates
+remain unchanged. The additive block tag reuses natural terrain membership,
+not the broad base_stone_overworld tag, and preserves vanilla spawn restrictions.
+
 The Gradle build reads the complete version from `mod_version`, verifies that
 it has four numeric components, and checks that its Target matches the declared
 Minecraft version and NeoForge loader. CI build numbers are not appended. For this

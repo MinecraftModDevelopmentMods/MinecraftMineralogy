@@ -1,3 +1,20 @@
+Mineralogy 6.1.4.2603001 for Minecraft 26.3 Forge
+
+- Restored vanilla sculk-catalyst conversion, dripstone replacement and moss
+  spreading across Mineralogy terrain, including native basalt, sandstone,
+  chalk, chert, gypsum, pumice and retained legacy rock identities.
+- Added full-rock sulfur-cube absorption and Slow Bouncy classification on
+  Minecraft 26.2 and later. Configuration-disabled construction forms are
+  optional; shaped blocks, furnaces, ores and storage blocks are excluded.
+- Added stable block/item terrain_rocks tags and an item sulfur_cube_stones
+  tag. All vanilla extensions are additive and independent of cobblestone
+  equivalence; vanilla and third-party tag members remain intact.
+- Sculk conversion, moss spreading and sulfur-cube eligibility apply to existing
+  worlds after updating. Natural dripstone/lush-cave decoration improves in
+  newly generated chunks. Existing chunks are not regenerated.
+- Preserved recipes, registries, configuration files, migrations, provider
+  bytes, textures, translations and the pinned Forge/OreSpawn dependencies.
+
 Mineralogy 6.1.2.2603001 for Minecraft 26.3 Forge
 
 - Ported the accepted Forge 26.2 product to Minecraft 26.3 and Forge 66.0.0

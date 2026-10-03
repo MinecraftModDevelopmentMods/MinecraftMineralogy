@@ -1,3 +1,12 @@
+Mineralogy 6.1.4.120011 for Minecraft 1.20.1
+
+- Added matching 37-member terrain-rock block/item tags and additive vanilla
+  sculk, dripstone and moss replacement interfaces. Vanilla and third-party
+  members remain intact; crafted forms are excluded.
+- Restored catalyst spreading and moss on existing terrain, and natural
+  dripstone/lush-cave decoration in newly generated chunks, independently of
+  cobblestone equivalence. No OreSpawn, provider, config, registry or recipe changes.
+
 Mineralogy 6.1.2.120011 for Minecraft 1.20.1
 
 - Updated all pickaxe and harvest-tier tags to the supported optional

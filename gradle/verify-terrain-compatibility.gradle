@@ -1,0 +1,69 @@
+import groovy.json.JsonSlurper
+import java.util.zip.ZipFile
+
+// Runs on assembled resources as well as source tests: no probe enters a release jar.
+tasks.register('verifyTerrainCompatibilityArtifacts') {
+    group = 'verification'
+    dependsOn tasks.named('assemble')
+    doLast {
+        def families = ('andesite basalt diorite granite rhyolite pegmatite diabase gabbro peridotite ' +
+                'basaltic_glass scoria tuff shale conglomerate dolomite limestone siltstone marble slate schist gneiss ' +
+                'phyllite amphibolite hornfels quartzite novaculite rock_salt').split(' ')
+        def raw = (families.collect { "mineralogy:$it".toString() } +
+                ['chalk', 'chert', 'gypsum', 'pumice'].collect { "mineralogy:$it".toString() }).toSet()
+        def terrain = raw + ['andesite', 'basalt', 'diorite', 'granite', 'sandstone', 'tuff'].collect { "minecraft:$it".toString() }
+        boolean singular = !(minecraft_version in ['1.19.4', '1.20.1', '1.20.6'])
+        boolean cubes = minecraft_version in ['26.2', '26.3']
+        def block = singular ? 'block' : 'blocks'
+        def item = singular ? 'item' : 'items'
+        def inspect = { ZipFile zip, String path, Set expected, boolean optional ->
+            def entry = zip.getEntry("data/$path")
+            if (entry == null) throw new GradleException("Missing compatibility tag: $path")
+            def tag = new JsonSlurper().parseText(zip.getInputStream(entry).getText('UTF-8'))
+            if (tag.keySet() != ['replace', 'values'].toSet() || tag.replace != false || !(tag.values instanceof List))
+                throw new GradleException("Non-additive/malformed compatibility tag: $path")
+            def ids = tag.values.collect { value ->
+                if (value instanceof Map) {
+                    if (!optional || value.keySet() != ['id', 'required'].toSet() || value.required != false || raw.contains(value.id))
+                        throw new GradleException("Invalid optional compatibility entry: $path $value")
+                    return value.id
+                }
+                if (!(value instanceof String) || (optional && !raw.contains(value)))
+                    throw new GradleException("Invalid required compatibility entry: $path $value")
+                value
+            }
+            if (ids.size() != ids.toSet().size() || ids.toSet() != expected)
+                throw new GradleException("Incorrect compatibility membership: $path")
+            if (optional && tag.values.count { it instanceof Map } != 81)
+                throw new GradleException('Sulfur cube construction forms must all be optional')
+        }
+        ['jar', 'sourcesJar'].each { taskName ->
+            new ZipFile(tasks.named(taskName).get().archiveFile.get().asFile).withCloseable { zip ->
+                inspect(zip, "mineralogy/tags/$block/terrain_rocks.json", terrain, false)
+                inspect(zip, "mineralogy/tags/$item/terrain_rocks.json", terrain, false)
+                ['sculk_replaceable', 'dripstone_replaceable_blocks', 'moss_replaceable'].each { name ->
+                    inspect(zip, "minecraft/tags/$block/${name}.json", ['#mineralogy:terrain_rocks'].toSet(), false)
+                }
+                if (cubes) {
+                    def full = raw + ['_smooth', '_brick', '_smooth_brick'].collectMany { suffix -> families.collect { "mineralogy:$it$suffix".toString() } }
+                    full.each { id ->
+                        def name = id.substring('mineralogy:'.length())
+                        if (zip.getEntry("assets/mineralogy/blockstates/${name}.json") == null || zip.getEntry("assets/mineralogy/models/item/${name}.json") == null)
+                            throw new GradleException("Nonexistent sulfur cube block/item: $id")
+                    }
+                    inspect(zip, "mineralogy/tags/$item/sulfur_cube_stones.json", full, true)
+                    inspect(zip, "minecraft/tags/$item/sulfur_cube_archetype/slow_bouncy.json", ['#mineralogy:sulfur_cube_stones'].toSet(), false)
+                }
+                def forbiddenKind = singular ? 'blocks|items' : 'block|item'
+                zip.entries().each { entry ->
+                    if (entry.name ==~ "data/.+/tags/($forbiddenKind)/.*(terrain_rocks|sulfur_cube).*" ||
+                            (!cubes && entry.name.contains('sulfur_cube')) ||
+                            entry.name.toLowerCase().contains('terraincompatibilityprobe') || entry.name.contains('compatprobe/') ||
+                            entry.name.contains('terrainCompatibilityTest') || entry.name.contains('terrain-compatibility-fixture'))
+                        throw new GradleException("Forbidden compatibility resource/probe: ${entry.name}")
+                }
+            }
+        }
+    }
+}
+tasks.named('verifyReleaseArtifacts') { dependsOn tasks.named('verifyTerrainCompatibilityArtifacts') }

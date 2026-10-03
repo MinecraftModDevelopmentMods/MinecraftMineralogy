@@ -1,0 +1,14 @@
+modLoader="javafml"
+loaderVersion="[50,)"
+license="LGPL-2.1-only"
+[[mods]]
+modId="mineralogycompatprobe"
+version="1"
+displayName="Non-shipping Mineralogy Terrain Compatibility Probe"
+[[dependencies.mineralogycompatprobe]]
+modId="mineralogy"
+mandatory=true
+# Includes the accepted baseline solely for paired before/after cave samples.
+versionRange="[6.1.2,6.1.5)"
+ordering="AFTER"
+side="BOTH"

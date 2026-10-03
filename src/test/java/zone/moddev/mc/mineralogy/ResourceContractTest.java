@@ -592,7 +592,7 @@ public class ResourceContractTest {
     @Test
     public void oilAndBuildMetadataUseStableTargetIdentities() throws Exception {
         String properties = new String(Files.readAllBytes(new File("gradle.properties").toPath()), StandardCharsets.UTF_8);
-        assertTrue(properties.contains("mod_version=6.1.2.121012"));
+        assertTrue(properties.contains("mod_version=6.1.4.121012"));
         assertTrue(properties.contains("orespawn_curse_file_id=8807135"));
         String build = new String(Files.readAllBytes(new File("build.gradle").toPath()), StandardCharsets.UTF_8);
         assertTrue(build.contains("runtimeOnly(orespawnCoordinate)"));

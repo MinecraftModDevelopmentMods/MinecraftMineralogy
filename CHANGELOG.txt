@@ -1,3 +1,15 @@
+Mineralogy 6.1.4.2602001 for Minecraft 26.2
+
+- Restored vanilla sculk catalyst conversion and dripstone/moss replacement on
+  37 natural terrain identities, including native aliases and special rocks.
+- Restored sulfur-cube absorption and Slow Bouncy classification for supported
+  full-rock items; optional construction forms remain configuration-safe.
+- Sculk and sulfur cubes work in existing worlds after updating. Natural cave
+  decoration improves in newly generated chunks.
+- Added deterministic tag, real-loader/reload, vanilla consumer, cave sample
+  and packaged-runtime validation. No recipes, IDs, configurations, provider,
+  OreSpawn engine, translations, or existing textures changed.
+
 Mineralogy 6.1.2.2602001 for Minecraft 26.2
 
 - Ported the accepted Mineralogy 6.1.2 Forge contract to Minecraft 26.2 while

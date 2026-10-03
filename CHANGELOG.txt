@@ -1,3 +1,12 @@
+Mineralogy 6.1.4.2601022 for Minecraft 26.1.2 NeoForge
+
+- Added matching 37-member terrain-rock block/item tags and additive vanilla
+  sculk, dripstone and moss replacement interfaces, preserving existing members.
+- Natural replacement is independent of cobblestone equivalence and excludes
+  crafted forms. Sculk/moss eligibility updates existing worlds; cave decoration
+  improves in new chunks. No provider, config, registry, recipe, texture or
+  OreSpawn changes. Sulfur-cube resources are not applicable before 26.2.
+
 Mineralogy 6.1.2.2601022 for Minecraft 26.1.2 NeoForge
 
 - Ported the accepted NeoForge 1.21.11 product to Minecraft 26.1.2 and

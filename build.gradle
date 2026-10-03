@@ -473,7 +473,7 @@ tasks.register('verifyReleaseConfiguration') {
     group = 'verification'
     description = 'Verifies the exact Mineralogy 26.2 NeoForge release identity.'
     doLast {
-        if (project.mod_version != '6.1.2.2602002'
+        if (project.mod_version != '6.1.4.2602002'
                 || project.mod_group != expectedMavenGroup
                 || project.minecraft_version != '26.2'
                 || project.neo_version != '26.2.0.45-beta') {
@@ -489,7 +489,7 @@ tasks.register('verifyReleaseDependencies') {
     group = 'verification'
     description = 'Resolves and verifies the exact released OreSpawn dependency.'
     doLast {
-        if (project.mod_version != '6.1.2.2602002'
+        if (project.mod_version != '6.1.4.2602002'
                 || project.minecraft_version != project.mc_version
                 || project.mc_version != '26.2'
                 || project.loader_name != 'neoforge'
@@ -1173,3 +1173,6 @@ tasks.named('check') {
     dependsOn tasks.named('verifyOilCompatibilityFixtureIsolation')
     dependsOn tasks.named('compileRecipeIntegrationFixture')
 }
+
+apply from: 'gradle/verify-terrain-compatibility.gradle'
+apply from: 'gradle/terrain-compatibility-probe.gradle'

@@ -14,6 +14,7 @@ tasks.register('verifyTerrainCompatibilityArtifacts') {
         def terrain = raw + ['andesite', 'basalt', 'diorite', 'granite', 'sandstone', 'tuff'].collect { "minecraft:$it".toString() }
         boolean singular = !(minecraft_version in ['1.19.4', '1.20.1', '1.20.6'])
         boolean cubes = minecraft_version in ['26.2', '26.3']
+        boolean bats = minecraft_version in ['1.21.11', '26.1.2', '26.2', '26.3']
         def block = singular ? 'block' : 'blocks'
         def item = singular ? 'item' : 'items'
         def inspect = { ZipFile zip, String path, Set expected, boolean optional ->
@@ -45,6 +46,7 @@ tasks.register('verifyTerrainCompatibilityArtifacts') {
                     inspect(zip, "minecraft/tags/$block/${name}.json", ['#mineralogy:terrain_rocks'].toSet(), false)
                 }
                 if (cubes) {
+                    // Sulfur cubes are independently version-gated.
                     def full = raw + ['_smooth', '_brick', '_smooth_brick'].collectMany { suffix -> families.collect { "mineralogy:$it$suffix".toString() } }
                     full.each { id ->
                         def name = id.substring('mineralogy:'.length())
@@ -55,7 +57,15 @@ tasks.register('verifyTerrainCompatibilityArtifacts') {
                     inspect(zip, "minecraft/tags/$item/sulfur_cube_archetype/slow_bouncy.json", ['#mineralogy:sulfur_cube_stones'].toSet(), false)
                 }
                 def forbiddenKind = singular ? 'blocks|items' : 'block|item'
+                if (bats) {
+                    inspect(zip, "minecraft/tags/$block/bats_spawnable_on.json", ['#mineralogy:terrain_rocks'].toSet(), false)
+                }
                 zip.entries().each { entry ->
+                    if (entry.name.endsWith('/bats_spawnable_on.json') &&
+                            (!bats || entry.name != "data/minecraft/tags/$block/bats_spawnable_on.json"))
+                        throw new GradleException("Wrong-era/non-block bat tag: ${entry.name}")
+                    if (entry.name == "data/minecraft/tags/$block/base_stone_overworld.json")
+                        throw new GradleException('Bat compatibility must not broaden the base terrain/worldgen tag')
                     if (entry.name ==~ "data/.+/tags/($forbiddenKind)/.*(terrain_rocks|sulfur_cube).*" ||
                             (!cubes && entry.name.contains('sulfur_cube')) ||
                             entry.name.toLowerCase().contains('terraincompatibilityprobe') || entry.name.contains('compatprobe/') ||

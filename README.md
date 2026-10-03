@@ -24,6 +24,10 @@ in newly generated chunks, without regenerating old terrain.
 
 ## Configuration and help
 
+Natural bats can spawn above Mineralogy terrain under Minecraft's normal dark,
+below-surface conditions. The additive bat tag applies to existing worlds and
+does not depend on cobblestone equivalence or include crafted construction forms.
+
 Mineralogy's content and recipe switches remain in
 `config/mineralogy-common.toml`. Use OreSpawn's world-creation UI or saved world
 profile for rock, ore, fluid, dimension, altitude, and terrain-host settings.

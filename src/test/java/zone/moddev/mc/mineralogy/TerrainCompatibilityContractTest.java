@@ -62,6 +62,14 @@ public class TerrainCompatibilityContractTest {
         assertEquals(expected, members(json("mineralogy/tags/" + kind("block") + "/terrain_rocks.json"), false));
         assertEquals(expected, members(json("mineralogy/tags/" + kind("item") + "/terrain_rocks.json"), false));
     }
+    @Test public void batSpawningUsesOnlyTheAdditiveBlockTerrainInterface() throws Exception {
+        assertEquals(Collections.singleton("#mineralogy:terrain_rocks"),
+                members(json("minecraft/tags/" + kind("block") + "/bats_spawnable_on.json"), false));
+        assertFalse(Files.exists(ROOT.resolve("minecraft/tags/" + kind("item") + "/bats_spawnable_on.json")));
+        assertFalse(Files.exists(ROOT.resolve("minecraft/tags/blocks/bats_spawnable_on.json")));
+        // Do not broaden base_stone_overworld: it has unrelated worldgen consumers.
+        assertFalse(Files.exists(ROOT.resolve("minecraft/tags/" + kind("block") + "/base_stone_overworld.json")));
+    }
     @Test public void naturalReplacementIsAdditiveAndNotConfigConditional() throws Exception {
         for (String name : Arrays.asList("sculk_replaceable", "dripstone_replaceable_blocks", "moss_replaceable"))
             assertEquals(Collections.singleton("#mineralogy:terrain_rocks"), members(json("minecraft/tags/" + kind("block") + "/" + name + ".json"), false));

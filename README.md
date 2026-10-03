@@ -20,6 +20,11 @@ improved natural cave decoration appears in newly generated chunks. These
 additive tags are independent of the cobblestone-equivalence option and exclude
 crafted or shaped construction blocks. Sulfur cubes do not exist on this target.
 
+Natural bats can spawn above Mineralogy terrain under Minecraft's normal dark,
+below-surface conditions. The additive bat tag applies to existing worlds and
+is independent of cobblestone equivalence; crafted construction blocks remain
+excluded.
+
 ## Configuration and help
 
 Mineralogy's content and recipe switches remain in

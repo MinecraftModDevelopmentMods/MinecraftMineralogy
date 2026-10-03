@@ -1,5 +1,9 @@
 Mineralogy 6.1.4.2603002 for Minecraft 26.3 NeoForge
 
+- Restored natural bat spawning on Mineralogy terrain through the additive
+  vanilla bats_spawnable_on block tag. Applies to existing worlds, preserves
+  normal light/height restrictions, and excludes crafted construction blocks.
+  Eligibility is independent of cobblestone equivalence.
 - Added matching 37-member terrain-rock block/item tags and additive vanilla
   sculk, dripstone and moss replacement interfaces. Vanilla and third-party
   members remain intact; crafted forms are excluded from natural replacement.

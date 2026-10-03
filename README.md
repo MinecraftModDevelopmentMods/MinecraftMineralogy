@@ -10,10 +10,16 @@ mineral ores and dusts, rock furnaces, drywall, rock-salt lighting, fertilizer,
 and crude oil. OreSpawn 4 is the sole terrain, strata, ore, and deposit engine;
 Mineralogy no longer installs a parallel world generator.
 
-This branch builds Mineralogy `6.1.2.2601021` for Forge `64.0.9`, with an
+This branch builds Mineralogy `6.1.4.2601021` for Forge `64.0.9`, with an
 additional compatibility smoke on Forge `64.1.0`, and is built and tested
 against OreSpawn `4.0.16.2601021`. Its declared compatibility range is
 OreSpawn `[4.0.6,5.0.0)`. Install both mods on clients and servers.
+
+Version 6.1.4 restores vanilla sculk conversion and dripstone/moss replacement
+on natural Mineralogy terrain. Sculk works in existing worlds after updating;
+improved natural cave decoration appears in newly generated chunks. These
+additive tags are independent of the cobblestone-equivalence option and exclude
+crafted or shaped construction blocks. Sulfur cubes do not exist on this target.
 
 ## Configuration and help
 

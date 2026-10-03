@@ -1,0 +1,12 @@
+license="LGPL-2.1-only"
+[[mods]]
+modId="mineralogycompatprobe"
+version="1"
+displayName="Non-shipping Mineralogy Terrain Compatibility Probe"
+[[dependencies.mineralogycompatprobe]]
+modId="mineralogy"
+type="required"
+# Allows the accepted baseline solely for paired cave samples.
+versionRange="[6.1.2,6.1.5)"
+ordering="AFTER"
+side="BOTH"

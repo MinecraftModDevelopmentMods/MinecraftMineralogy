@@ -1,6 +1,9 @@
 {
-    "replace":  false,
-    "values":  [
-                   "mineralogy:diabase_brick"
-               ]
+  "replace": false,
+  "values": [
+    {
+      "id": "mineralogy:diabase_brick",
+      "required": false
+    }
+  ]
 }

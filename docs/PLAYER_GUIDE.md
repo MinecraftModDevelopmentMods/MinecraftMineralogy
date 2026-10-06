@@ -1,5 +1,17 @@
 # Mineralogy Player Guide
 
+## Vanilla stone compatibility in 6.1.4
+
+Natural Mineralogy rocks now work with sculk spreading, moss and dripstone
+replacement, goat spawning, azalea roots and forest-rock placement. Hard raw
+rocks can break goat horns; soft rocks and crafted blocks cannot. Rock-salt
+lamps also keep their supporting wall post, like a vanilla torch.
+
+These interactions work in existing worlds after updating. Decoration changes
+need newly generated chunks and do not promise a particular number of cave
+features. Bare rock is not azalea tree soil. Sulfur cubes and the later bat
+substrate tag do not exist in Minecraft 1.21.1.
+
 ## Installing
 
 Mineralogy 6 needs Minecraft 1.21.1, Forge 52.1.0, and OreSpawn

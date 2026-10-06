@@ -14,11 +14,17 @@ This branch builds Mineralogy `6.1.4.121011` for Forge `52.1.0` and is built
 and tested against OreSpawn `4.0.16.121011`. Its declared compatibility range is
 OreSpawn `[4.0.6,5.0.0)`. Install both mods on clients and servers.
 
-Version 6.1.4 restores vanilla sculk conversion and dripstone/moss replacement
-on natural Mineralogy terrain. Sculk works in existing worlds after updating;
-improved natural cave decoration appears in newly generated chunks. These
-additive tags are independent of the cobblestone-equivalence option and exclude
-crafted or shaped construction blocks. Sulfur cubes do not exist on this target.
+Version 6.1.4 lets vanilla sculk, moss, dripstone, goats and forest-rock features
+recognise natural Mineralogy terrain. It also fixes dripstone water pockets and
+column boundaries, rock-salt lamp support on walls, and common stone, furnace,
+ore, storage, dyed-colour and construction tags. Disabled construction options
+no longer leave required tag or loot references behind.
+
+Sculk, goat and wall-support changes work in existing worlds after updating.
+Natural cave decoration changes need newly generated chunks. Terrain eligibility
+is independent of cobblestone equivalence and excludes crafted blocks. Sulfur
+cubes do not exist on this target. This revised candidate needs renewed testing;
+publication remains paused.
 
 ## Configuration and help
 

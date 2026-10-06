@@ -16,6 +16,6 @@ side="BOTH"
 [[dependencies.mineralogyminingprobe]]
 modId="mineralogy"
 mandatory=true
-versionRange="[6.1.2.118021]"
+versionRange="[6.1.4.118021]"
 ordering="AFTER"
 side="BOTH"

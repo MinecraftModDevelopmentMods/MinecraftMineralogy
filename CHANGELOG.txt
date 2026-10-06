@@ -1,3 +1,17 @@
+Mineralogy 6.1.4.118021 for Minecraft 1.18.2
+
+- Moss, dripstone, azalea roots and forest rocks recognise natural Mineralogy
+  terrain in newly generated chunks. Two narrow dripstone checks are fixed
+  without changing general base-stone tags or ore hosts. Bare rock is not soil
+  for growing azalea trees. Goats can spawn on the rocks in existing worlds too.
+- Single slabs, stairs and walls have the matching vanilla classifications.
+  Raw rocks, ores and storage blocks join Forge's common tags. Normal cobblestone
+  follows the same option as the root tag, with chert and pumice always valid.
+- Rock-salt lamps keep a wall post beneath them, like a vanilla torch.
+- Disabled construction forms no longer leave missing tag or loot references.
+  Recipes, IDs, configs, providers, migrations, textures and OreSpawn are
+  unchanged. Sculk, horn breaking and sulfur cubes are not part of this target.
+
 Mineralogy 6.1.2.118021 for Minecraft 1.18.2
 
 - Updated all pickaxe and harvest-tier tags to the supported optional

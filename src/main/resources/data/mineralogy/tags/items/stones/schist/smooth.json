@@ -1,6 +1,9 @@
 {
-    "replace":  false,
-    "values":  [
-                   "mineralogy:schist_smooth"
-               ]
+  "replace": false,
+  "values": [
+    {
+      "id": "mineralogy:schist_smooth",
+      "required": false
+    }
+  ]
 }

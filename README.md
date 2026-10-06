@@ -15,18 +15,17 @@ additional compatibility smoke on Forge `66.0.2`, and is built and tested
 against OreSpawn `4.0.16.2603001`. Its declared compatibility range is
 OreSpawn `[4.0.6,5.0.0)`. Install both mods on clients and servers.
 
-Mineralogy 6.1.4 restores vanilla sculk, dripstone and moss replacement on
-natural Mineralogy terrain. On Minecraft 26.2 and newer, sulfur cubes can also
-absorb Mineralogy full-rock blocks as Slow Bouncy stones. These additive tags
-are independent of the cobblestone-equivalence setting. Sculk, moss spreading
-and cube behaviour work in existing worlds; natural cave decoration improves
-in newly generated chunks, without regenerating old terrain.
+Mineralogy 6.1.4 fixes a few places where Minecraft wasn't treating Mineralogy
+rocks like natural stone. Sculk catalysts and moss can now spread across them,
+dripstone and lush caves get their missing decoration, and bats can spawn above
+them under Minecraft's normal dark, below-surface conditions. Sulfur cubes can
+also absorb Mineralogy's full-rock blocks as Slow Bouncy stones.
+
+These fixes work with cobblestone equivalence on or off. Sculk, moss, bats and
+sulfur cubes work in existing worlds after updating. The cave-generation fix
+applies to new chunks; it won't redecorate caves you've already explored.
 
 ## Configuration and help
-
-Natural bats can spawn above Mineralogy terrain under Minecraft's normal dark,
-below-surface conditions. The additive bat tag applies to existing worlds and
-does not depend on cobblestone equivalence or include crafted construction forms.
 
 Mineralogy's content and recipe switches remain in
 `config/mineralogy-common.toml`. Use OreSpawn's world-creation UI or saved world

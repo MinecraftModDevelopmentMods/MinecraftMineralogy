@@ -203,7 +203,7 @@ feature generation, not the exact jar.
 
 ## Builds and release notes
 
-This local 6.1.4 candidate also repairs natural bat substrate eligibility.
+This 6.1.4 release also fixes natural bat spawning above Mineralogy rocks.
 Minecraft introduced the bats_spawnable_on block tag in 1.21.2; the compatibility
 entry applies to the maintained 1.21.11 and 26.x Forge/NeoForge targets, not to
 1.21.1 or earlier. Vanilla darkness and surface restrictions remain authoritative.

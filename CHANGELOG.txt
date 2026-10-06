@@ -1,24 +1,20 @@
 Mineralogy 6.1.4.2603001 for Minecraft 26.3 Forge
 
-- Restored natural bat spawning on Mineralogy terrain through the additive
-  vanilla bats_spawnable_on block tag. Applies to existing worlds, preserves
-  vanilla/third-party eligibility and remains independent of cobblestone
-  equivalence. Crafted forms stay excluded; vanilla light/surface rules remain.
-
-- Restored vanilla sculk-catalyst conversion, dripstone replacement and moss
-  spreading across Mineralogy terrain, including native basalt, sandstone,
-  chalk, chert, gypsum, pumice and retained legacy rock identities.
-- Added full-rock sulfur-cube absorption and Slow Bouncy classification on
-  Minecraft 26.2 and later. Configuration-disabled construction forms are
-  optional; shaped blocks, furnaces, ores and storage blocks are excluded.
-- Added stable block/item terrain_rocks tags and an item sulfur_cube_stones
-  tag. All vanilla extensions are additive and independent of cobblestone
-  equivalence; vanilla and third-party tag members remain intact.
-- Sculk conversion, moss spreading and sulfur-cube eligibility apply to existing
-  worlds after updating. Natural dripstone/lush-cave decoration improves in
-  newly generated chunks. Existing chunks are not regenerated.
-- Preserved recipes, registries, configuration files, migrations, provider
-  bytes, textures, translations and the pinned Forge/OreSpawn dependencies.
+- Fixed sculk catalysts and moss failing to spread across natural Mineralogy
+  rocks, including chalk, chert, gypsum, pumice and older Mineralogy blocks.
+- Fixed missing dripstone and moss decoration where OreSpawn had replaced
+  vanilla stone. This improves newly generated caves, not existing chunks.
+- Fixed bats being unable to spawn above Mineralogy rocks. Minecraft's normal
+  darkness and below-surface checks still apply.
+- Sulfur cubes can now absorb Mineralogy's raw, polished and brick full blocks
+  as Slow Bouncy stones. Slabs, stairs, furnaces, ores and storage blocks are
+  still excluded.
+- These fixes work with cobblestone equivalence on or off, and keep vanilla
+  and other mods' tag entries intact. Sculk, moss, bats and sulfur cubes work
+  in existing worlds after updating.
+- Recipes, saved block IDs, configs, migrations, textures and OreSpawn's
+  generation settings are unchanged. Requires Forge 66.0.0 or later and the
+  matching OreSpawn 4 release for Minecraft 26.3.
 
 Mineralogy 6.1.2.2603001 for Minecraft 26.3 Forge
 

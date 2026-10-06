@@ -1,5 +1,24 @@
 # Mineralogy Developer Guide
 
+## Natural terrain interfaces
+
+The block and item `mineralogy:terrain_rocks` tags contain the 32 provider
+outputs and five retained legacy aliases. Vanilla cave and goat tags refer to
+the block interface. The horn whitelist is narrower, and `mineralogy:raw_stones`
+excludes sandstone. Forge's stone, ore and storage tags keep their native names
+on this target; later workstation and dyed-colour interfaces are not invented.
+
+Two exact-count JavaScript hooks redirect only the proven dripstone water-pocket
+and large-column base-stone reads. Global base-stone, carver and ore-host tags
+remain unchanged. Root replacement does not make bare rock tree soil.
+Config-dependent construction members are optional. Forge 50 checks loading
+conditions on loot pools, not whole tables, so each optional construction pool
+has an item-existence guard without changing its enabled drops.
+
+Use the isolated tag generator and focused resource contracts when changing
+these interfaces. The non-shipping native probe checks recursive inheritance,
+actual consumers and reloads; the full audit index stays local.
+
 ## Responsibility Split
 
 | Mineralogy owns | OreSpawn owns |

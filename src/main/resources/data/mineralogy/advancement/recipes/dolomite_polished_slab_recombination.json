@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:dolomite_smooth"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:dolomite_smooth_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:dolomite_polished_slab_recombination"

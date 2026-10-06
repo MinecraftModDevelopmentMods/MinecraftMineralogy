@@ -6,10 +6,21 @@ Mineralogy 6.1.4.2601022 for Minecraft 26.1.2 NeoForge
   Eligibility is independent of cobblestone equivalence.
 - Added matching 37-member terrain-rock block/item tags and additive vanilla
   sculk, dripstone and moss replacement interfaces, preserving existing members.
+- Goats can spawn on natural rocks and break horns against harder raw rocks.
+  Soft materials and crafted blocks are excluded from horn breaking.
+- Fixed dripstone water-pocket and large-column checks rejecting natural rock.
+  Roots and forest rocks recognise natural substrates; bare rock is still not
+  suitable for growing azalea trees.
+- Added slab, stair, furnace, ore, storage and dyed-block classifications.
+  Double slabs remain full blocks, and disabled construction references are
+  optional. Normal cobblestone follows the existing setting.
+- Rock-salt lamps retain the centre post on straight walls.
+- Construction recipes, unlocks and loot tables skip unregistered forms.
+  Their enabled ingredients, outputs, progression and normal drops are unchanged.
 - Natural replacement is independent of cobblestone equivalence and excludes
-  crafted forms. Sculk/moss eligibility updates existing worlds; cave decoration
-  improves in new chunks. No provider, config, registry, recipe, texture or
-  OreSpawn changes. Sulfur-cube resources are not applicable before 26.2.
+  crafted forms. Sculk/moss eligibility updates existing worlds; cave, root and
+  forest decoration improves in new chunks. No provider, config, registry,
+  texture or OreSpawn changes. Sulfur cubes are not present before 26.2.
 
 Mineralogy 6.1.2.2601022 for Minecraft 26.1.2 NeoForge
 

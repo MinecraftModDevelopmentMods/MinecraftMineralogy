@@ -1,7 +1,10 @@
 {
   "replace": false,
   "values": [
-    "mineralogy:tuff_brick_slab",
+    {
+      "id": "mineralogy:tuff_brick_slab",
+      "required": false
+    },
     "minecraft:tuff_brick_slab"
   ]
 }

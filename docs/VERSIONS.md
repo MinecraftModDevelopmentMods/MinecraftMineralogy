@@ -50,25 +50,28 @@ minor digits, and all remaining digits for the Minecraft major version.
 | 1.12.2 | Forge | `112021` | `6.0.1.112021` |
 | 1.14.4 | Forge | `114041` | `6.0.1.114041` |
 | 1.15.2 | Forge | `115021` | `6.0.1.115021` |
-| 1.16.5 | Forge | `116051` | `6.1.0.116051` |
-| 1.17.1 | Forge | `117011` | `6.1.0.117011` |
-| 1.18.2 | Forge | `118021` | `6.1.2.118021` |
-| 1.19.4 | Forge | `119041` | `6.1.2.119041` |
-| 1.20.1 | Forge | `120011` | `6.1.2.120011` |
-| 1.20.6 | Forge | `120061` | `6.1.2.120061` |
-| 1.20.6 | NeoForge | `120062` | `6.1.2.120062` |
-| 1.21.1 | Forge | `121011` | `6.1.2.121011` |
-| 1.21.1 | NeoForge | `121012` | `6.1.2.121012` |
-| 1.21.11 | Forge | `121111` | `6.1.2.121111` |
-| 1.21.11 | NeoForge | `121112` | `6.1.2.121112` |
-| 26.1.2 | Forge | `2601021` | `6.1.2.2601021` |
+| 1.16.5 | Forge | `116051` | `6.1.4.116051` |
+| 1.17.1 | Forge | `117011` | `6.1.4.117011` |
+| 1.18.2 | Forge | `118021` | `6.1.4.118021` |
+| 1.19.4 | Forge | `119041` | `6.1.4.119041` |
+| 1.20.1 | Forge | `120011` | `6.1.4.120011` |
+| 1.20.6 | Forge | `120061` | `6.1.4.120061` |
+| 1.20.6 | NeoForge | `120062` | `6.1.4.120062` |
+| 1.21.1 | Forge | `121011` | `6.1.4.121011` |
+| 1.21.1 | NeoForge | `121012` | `6.1.4.121012` |
+| 1.21.11 | Forge | `121111` | `6.1.4.121111` |
+| 1.21.11 | NeoForge | `121112` | `6.1.4.121112` |
+| 26.1.2 | Forge | `2601021` | `6.1.4.2601021` |
 | 26.1.2 | NeoForge | `2601022` | `6.1.4.2601022` |
-| 26.2 | Forge | `2602001` | `6.0.0.2602001` |
-| 26.2 | NeoForge | `2602002` | `6.0.0.2602002` |
+| 26.2 | Forge | `2602001` | `6.1.4.2602001` |
+| 26.2 | NeoForge | `2602002` | `6.1.4.2602002` |
+| 26.3 | Forge | `2603001` | `6.1.4.2603001` |
+| 26.3 | NeoForge | `2603002` | `6.1.4.2603002` |
 
-The 26.1.2 NeoForge row records this branch's current release. The other rows illustrate
-target encoding or earlier releases; they do not claim that later Minecraft
-targets already contain the same functional changes.
+The 6.1.4 rows identify the local tag-compatibility campaign candidates, not
+published releases or accepted builds. Each target needs separate validation,
+manual acceptance and publication approval. Older examples illustrate target
+encoding; Forge 1.13–1.15 remain outside this campaign.
 
 Historical Mineralogy releases may also have four numeric components that used
 the last number as an ordinary build sequence. The target policy applies to

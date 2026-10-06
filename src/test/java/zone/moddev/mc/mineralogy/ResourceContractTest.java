@@ -161,7 +161,10 @@ public class ResourceContractTest {
             JsonObject recipe = json(file);
             assertFalse(file.getName(), recipe.has("recipes"));
             assertFalse(file.getName(), recipe.has("forge:condition"));
-            assertFalse(file.getName(), recipe.has("neoforge:conditions"));
+            if (recipe.has("neoforge:conditions")) {
+                assertTrue(file.getName(), recipe.getAsJsonArray("neoforge:conditions").asList().stream().allMatch(value ->
+                        "neoforge:registered".equals(value.getAsJsonObject().get("type").getAsString())));
+            }
             assertRecipeBookFields(file.getName(), recipe);
         }
     }
@@ -768,7 +771,14 @@ public class ResourceContractTest {
         JsonArray values = json(file).getAsJsonArray("values");
         assertEquals(file.getPath(), expected.length, values.size());
         for (int index = 0; index < expected.length; index++) {
-            assertEquals(file.getPath(), expected[index], values.get(index).getAsString());
+            JsonElement value = values.get(index);
+            if (value.isJsonObject()) {
+                JsonObject optional = value.getAsJsonObject();
+                assertEquals(file.getPath(), new java.util.HashSet<>(Arrays.asList("id", "required")), optional.keySet());
+                assertFalse(file.getPath(), optional.get("required").getAsBoolean());
+            }
+            assertEquals(file.getPath(), expected[index], value.isJsonObject()
+                    ? value.getAsJsonObject().get("id").getAsString() : value.getAsString());
         }
     }
 
@@ -830,11 +840,11 @@ public class ResourceContractTest {
                 .getAsString());
         assertEquals(recipeName, result, recipe.getAsJsonObject("result").get("id").getAsString());
         assertEquals(recipeName, 1, recipe.getAsJsonObject("result").get("count").getAsInt());
-        assertFalse(recipeName, recipe.has("neoforge:conditions"));
+        assertTrue(recipeName, recipe.has("neoforge:conditions"));
 
         JsonObject advancement = json(new File(ROOT,
                 "data/mineralogy/advancement/recipes/" + recipeName + ".json"));
-        assertFalse(recipeName, advancement.has("neoforge:conditions"));
+        assertEquals(recipeName, recipe.get("neoforge:conditions"), advancement.get("neoforge:conditions"));
         assertEquals(recipeName, source, criterionItem(advancement, "has_rock"));
         assertEquals(recipeName, "mineralogy:" + recipeName,
                 advancement.getAsJsonObject("rewards").getAsJsonArray("recipes")

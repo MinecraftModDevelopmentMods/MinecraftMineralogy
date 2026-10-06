@@ -18,10 +18,18 @@ This is the NeoForge build. It is intentionally maintained separately from the
 Forge 26.1.2 branch; use the jar that matches the loader in your modpack.
 
 Mineralogy 6.1.4 restores sculk catalyst conversion, moss growth and dripstone
-decoration on natural Mineralogy terrain. Eligibility is independent of
-cobblestone equivalence; crafted blocks are excluded from natural replacement.
-Sculk and moss behavior updates existing worlds; natural cave decoration
-improves in newly generated chunks. Sulfur-cube compatibility is only for 26.2+.
+decoration on natural Mineralogy terrain. Goats can spawn on natural rocks and
+break horns against harder raw rocks. Root and forest-rock decoration recognise
+natural substrates, without making bare rock suitable for growing azalea trees.
+Rock-salt lamps retain the centre post on straight walls.
+
+These block and animal fixes work in existing worlds. Improved cave, root and
+forest decoration needs newly generated chunks. Terrain eligibility is
+independent of cobblestone equivalence; crafted blocks stay outside natural
+replacement. Single/upright slabs and stairs join the vanilla aggregates;
+separate double slabs remain full blocks. Construction tags, recipes, unlocks
+and loot tables tolerate forms disabled by content settings. Enabled recipes
+and drops are unchanged. Sulfur-cube compatibility is only for 26.2+.
 
 Natural bats can spawn above Mineralogy terrain under Minecraft's normal dark,
 below-surface conditions. The additive bat tag applies to existing worlds and

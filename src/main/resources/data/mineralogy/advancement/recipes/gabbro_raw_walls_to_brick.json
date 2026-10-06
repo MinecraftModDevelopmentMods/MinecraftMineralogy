@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:gabbro_brick_wall"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:gabbro_wall"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:gabbro_raw_walls_to_brick"

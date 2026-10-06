@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:rock_salt_smooth_stairs"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:rock_salt_stairs"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:rock_salt_raw_stairs_polishing"

@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "mineralogy:limestone_smooth"
+    {
+      "id": "mineralogy:limestone_smooth",
+      "required": false
+    }
   ]
 }

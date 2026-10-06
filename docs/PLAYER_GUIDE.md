@@ -1,5 +1,18 @@
 # Mineralogy Player Guide
 
+## Minecraft 1.16 compatibility fixes in 6.1.4
+
+Natural rocks can now support Minecraft's forest-rock decoration. Rock-salt
+lamps keep straight-wall posts, and rock furnaces retain their contents and
+state correctly when lighting or cooling. These block fixes work in existing
+worlds; decoration changes apply only to new chunks.
+
+Slabs, stairs and walls are classified consistently. Disabling construction
+does not leave required tag references to blocks that are no longer registered.
+The normal-cobblestone tag follows the cobblestone option, with chert and pumice
+always accepted. No later-version sculk, cave, goat or sulfur-cube behaviour
+is added to Minecraft 1.16.
+
 ## Installing
 
 Mineralogy 6 needs Minecraft 1.16.5, Forge 36.2.34, and OreSpawn

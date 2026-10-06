@@ -27,6 +27,7 @@ import zone.moddev.mc.mineralogy.data.MaterialData;
 /** Applies the legacy cobblestone option to target-native block and item tags. */
 public final class CobblestoneTagPolicy {
     private static final ResourceLocation COBBLESTONE = new ResourceLocation("forge", "cobblestone");
+    private static final ResourceLocation NORMAL_COBBLESTONE = new ResourceLocation("forge", "cobblestone/normal");
     private static final ResourceLocation STONE_CRAFTING_MATERIALS =
             new ResourceLocation("minecraft", "stone_crafting_materials");
     private static final ResourceLocation STONE_TOOL_MATERIALS =
@@ -61,6 +62,14 @@ public final class CobblestoneTagPolicy {
         addItem(items, "chert");
         addItem(items, "pumice");
         replaceElementsInPlace(required(itemTags, COBBLESTONE), items);
+
+        Set<Block> normalBlocks = existing(blockTags, NORMAL_COBBLESTONE);
+        normalBlocks.removeAll(configuredBlocks);
+        if (enabled) normalBlocks.addAll(configuredBlocks);
+        addBlock(normalBlocks, "chert");
+        addBlock(normalBlocks, "pumice");
+        replaceElementsInPlace(required(blockTags, NORMAL_COBBLESTONE), normalBlocks);
+        updateDerivedItemTag(itemTags, NORMAL_COBBLESTONE, configuredItems, enabled);
 
         // Nested tags were already expanded before this event. Update their
         // retained objects as well so vanilla tool recipes see the same

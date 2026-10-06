@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "#forge:storage_blocks/chalk",
+    "#forge:storage_blocks/gypsum",
+    "#forge:storage_blocks/nitrate",
+    "#forge:storage_blocks/phosphorous",
+    "#forge:storage_blocks/rock_salt",
+    "#forge:storage_blocks/sulfur"
+  ]
+}

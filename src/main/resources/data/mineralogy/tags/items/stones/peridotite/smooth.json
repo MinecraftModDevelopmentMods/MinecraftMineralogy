@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "mineralogy:peridotite_smooth"
+    {
+      "id": "mineralogy:peridotite_smooth",
+      "required": false
+    }
   ]
 }

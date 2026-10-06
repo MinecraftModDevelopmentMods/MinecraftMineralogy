@@ -1,0 +1,14 @@
+modLoader="javafml"
+loaderVersion="[36,)"
+license="LGPL-2.1-only"
+[[mods]]
+modId="mineralogycompatprobe"
+version="1"
+displayName="Non-shipping Mineralogy Terrain Compatibility Probe"
+[[dependencies.mineralogycompatprobe]]
+modId="mineralogy"
+mandatory=true
+# The accepted baseline is used only for isolated red/control checks.
+versionRange="[6.1.0,6.1.5)"
+ordering="AFTER"
+side="BOTH"

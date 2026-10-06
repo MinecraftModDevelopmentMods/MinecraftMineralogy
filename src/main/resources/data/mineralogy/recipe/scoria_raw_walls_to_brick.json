@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:scoria_brick_wall"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:scoria_wall"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "pattern": [

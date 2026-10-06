@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:peridotite_smooth_brick_slab"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:peridotite_smooth_slab"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "pattern": [

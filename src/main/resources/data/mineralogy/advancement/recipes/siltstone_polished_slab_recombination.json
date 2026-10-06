@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:siltstone_smooth"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:siltstone_smooth_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:siltstone_polished_slab_recombination"

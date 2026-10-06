@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:hornfels_smooth_stairs"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:hornfels_stairs"
+    }
+  ],
   "type": "minecraft:crafting_shapeless",
   "category": "building",
   "ingredients": [

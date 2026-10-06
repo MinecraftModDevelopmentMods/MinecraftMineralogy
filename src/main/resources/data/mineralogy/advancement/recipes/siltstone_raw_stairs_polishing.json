@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:siltstone_smooth_stairs"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:siltstone_stairs"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:siltstone_raw_stairs_polishing"

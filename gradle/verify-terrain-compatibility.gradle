@@ -17,6 +17,22 @@ tasks.register('verifyTerrainCompatibilityArtifacts') {
         boolean bats = minecraft_version in ['1.21.11', '26.1.2', '26.2', '26.3']
         def block = singular ? 'block' : 'blocks'
         def item = singular ? 'item' : 'items'
+        def lootConditions = { String id ->
+            def flags = []
+            if (id.contains('_relief_')) flags = ['GENERATE_SMOOTH', 'GENERATE_RELIEFS']
+            else {
+                String prefix = id.contains('_smooth_brick') ? 'SMOOTHBRICK' : id.contains('_smooth') ? 'SMOOTH' : id.contains('_brick') ? 'BRICK' : 'ROCK'
+                if (prefix.startsWith('SMOOTH')) flags.add('GENERATE_SMOOTH')
+                if (prefix == 'SMOOTHBRICK') flags.add('GENERATE_SMOOTHBRICK')
+                if (prefix == 'BRICK') flags.add('GENERATE_BRICK')
+                if (id.endsWith('_furnace')) flags.addAll(["GENERATE_${prefix}SLAB".toString(), "GENERATE_${prefix}FURNACE".toString()])
+                else if (id.endsWith('_slab')) flags.add("GENERATE_${prefix}SLAB".toString())
+                else if (id.endsWith('_stairs')) flags.add("GENERATE_${prefix}STAIRS".toString())
+                else if (id.endsWith('_wall')) flags.add("GENERATE_${prefix}WALL".toString())
+            }
+            if (flags.isEmpty()) throw new GradleException("Unmapped construction loot $id")
+            flags.collect { [type: 'mineralogy:config', flag: it] }
+        }
         def inspect = { ZipFile zip, String path, Set expected, boolean optional ->
             def entry = zip.getEntry("data/$path")
             if (entry == null) throw new GradleException("Missing compatibility tag: $path")
@@ -35,11 +51,57 @@ tasks.register('verifyTerrainCompatibilityArtifacts') {
             }
             if (ids.size() != ids.toSet().size() || ids.toSet() != expected)
                 throw new GradleException("Incorrect compatibility membership: $path")
-            if (optional && tag.values.count { it instanceof Map } != 81)
-                throw new GradleException('Sulfur cube construction forms must all be optional')
         }
         ['jar', 'sourcesJar'].each { taskName ->
             new ZipFile(tasks.named(taskName).get().archiveFile.get().asFile).withCloseable { zip ->
+                def optionalItems = [] as Set
+                zip.entries().each { entry ->
+                    if (entry.name.startsWith('data/mineralogy/loot_table/blocks/') && entry.name.endsWith('.json')) {
+                        def loot = new JsonSlurper().parseText(zip.getInputStream(entry).getText('UTF-8'))
+                        loot.pools.each { pool -> pool.entries.each { drop ->
+                            if (drop.type == 'minecraft:item' && drop.name ==~ 'mineralogy:(.+)(_smooth|_brick|_slab|_stairs|_wall|_furnace|_relief_.+)') optionalItems.add(drop.name)
+                        } }
+                    }
+                }
+                if (optionalItems.size() != 864) throw new GradleException('Expected exactly 864 optional construction items')
+                def collectItems
+                collectItems = { node, found ->
+                    if (node instanceof String) { if (optionalItems.contains(node)) found.add(node) }
+                    else if (node instanceof Map) node.each { key, value -> if (key != 'neoforge:conditions') collectItems(value, found) }
+                    else if (node instanceof List) node.each { collectItems(it, found) }
+                }
+                int guardedRecipes = 0
+                zip.entries().each { entry ->
+                    if (entry.name ==~ 'data/(minecraft|mineralogy)/recipe/.+\\.json') {
+                        def recipe = new JsonSlurper().parseText(zip.getInputStream(entry).getText('UTF-8'))
+                        def required = [] as Set
+                        collectItems(recipe, required)
+                        def advance = null
+                        if (entry.name.startsWith('data/mineralogy/recipe/')) {
+                            def advanceEntry = zip.getEntry(entry.name.replace('/recipe/', '/advancement/recipes/'))
+                            if (advanceEntry != null) {
+                                advance = new JsonSlurper().parseText(zip.getInputStream(advanceEntry).getText('UTF-8'))
+                                collectItems(advance, required)
+                            }
+                        } else if (!required.isEmpty()) {
+                            def advanceEntry = zip.getEntry(entry.name.replace('/recipe/', '/advancement/recipes/building_blocks/'))
+                            if (advanceEntry != null) {
+                                advance = new JsonSlurper().parseText(zip.getInputStream(advanceEntry).getText('UTF-8'))
+                                collectItems(advance, required)
+                            }
+                        }
+                        if (!required.isEmpty()) {
+                            def conditions = recipe['neoforge:conditions']
+                            def guards = conditions?.findAll { it.type == 'neoforge:registered' }
+                            if (guards == null || guards.any { it.registry != 'minecraft:item' } ||
+                                    guards.collect { it.value }.toSet() != required || guards.size() != required.size() ||
+                                    (advance != null && advance['neoforge:conditions'] != conditions))
+                                throw new GradleException("Unguarded optional recipe/advancement references: ${entry.name}")
+                            guardedRecipes++
+                        }
+                    }
+                }
+                if (guardedRecipes != 1365) throw new GradleException("Expected 1365 guarded construction recipes, found $guardedRecipes")
                 inspect(zip, "mineralogy/tags/$block/terrain_rocks.json", terrain, false)
                 inspect(zip, "mineralogy/tags/$item/terrain_rocks.json", terrain, false)
                 ['sculk_replaceable', 'dripstone_replaceable_blocks', 'moss_replaceable'].each { name ->
@@ -47,13 +109,13 @@ tasks.register('verifyTerrainCompatibilityArtifacts') {
                 }
                 if (cubes) {
                     // Sulfur cubes are independently version-gated.
-                    def full = raw + ['_smooth', '_brick', '_smooth_brick'].collectMany { suffix -> families.collect { "mineralogy:$it$suffix".toString() } }
+                    def full = raw
                     full.each { id ->
                         def name = id.substring('mineralogy:'.length())
                         if (zip.getEntry("assets/mineralogy/blockstates/${name}.json") == null || zip.getEntry("assets/mineralogy/models/item/${name}.json") == null)
                             throw new GradleException("Nonexistent sulfur cube block/item: $id")
                     }
-                    inspect(zip, "mineralogy/tags/$item/sulfur_cube_stones.json", full, true)
+                    inspect(zip, "mineralogy/tags/$item/sulfur_cube_stones.json", full, false)
                     inspect(zip, "minecraft/tags/$item/sulfur_cube_archetype/slow_bouncy.json", ['#mineralogy:sulfur_cube_stones'].toSet(), false)
                 }
                 def forbiddenKind = singular ? 'blocks|items' : 'block|item'
@@ -61,6 +123,31 @@ tasks.register('verifyTerrainCompatibilityArtifacts') {
                     inspect(zip, "minecraft/tags/$block/bats_spawnable_on.json", ['#mineralogy:terrain_rocks'].toSet(), false)
                 }
                 zip.entries().each { entry ->
+                    if (entry.name.startsWith('data/mineralogy/loot_table/blocks/') && entry.name.endsWith('.json')) {
+                        def loot = new JsonSlurper().parseText(zip.getInputStream(entry).getText('UTF-8'))
+                        loot.pools.each { pool -> pool.entries.each { drop ->
+                            if (drop.type == 'minecraft:item' && drop.name ==~ 'mineralogy:(.+)(_smooth|_brick|_slab|_stairs|_wall|_furnace|_relief_.+)') {
+                                if (loot.containsKey('forge:condition') || loot['neoforge:conditions'] != lootConditions(drop.name))
+                                    throw new GradleException("Unguarded optional construction loot: ${entry.name}")
+                            }
+                        } }
+                    }
+                    if (entry.name.startsWith('data/') && entry.name.contains('/tags/') && entry.name.endsWith('.json')) {
+                        def tag = new JsonSlurper().parseText(zip.getInputStream(entry).getText('UTF-8'))
+                        if (tag.containsKey('optional')) throw new GradleException("Unsupported top-level optional: ${entry.name}")
+                        def ids = tag.values.collect { value ->
+                            if (value instanceof Map && (value.keySet() != ['id', 'required'].toSet() || value.required != false))
+                                throw new GradleException("Malformed optional entry: ${entry.name}")
+                            def id = value instanceof Map ? value.id : value
+                            if (!(id instanceof String) || !(id ==~ '#?[a-z0-9_.-]+:[a-z0-9_/.-]+'))
+                                throw new GradleException("Malformed tag identity: ${entry.name}")
+                            if (id ==~ 'mineralogy:(lit_)?(.+)(_smooth|_brick|_slab|_stairs|_wall|_furnace|_relief_.+)') {
+                                if (!(value instanceof Map)) throw new GradleException("Required unregisterable construction member: ${entry.name}: $id")
+                            }
+                            id
+                        }
+                        if (ids.size() != ids.toSet().size()) throw new GradleException("Duplicate tag member: ${entry.name}")
+                    }
                     if (entry.name.endsWith('/bats_spawnable_on.json') &&
                             (!bats || entry.name != "data/minecraft/tags/$block/bats_spawnable_on.json"))
                         throw new GradleException("Wrong-era/non-block bat tag: ${entry.name}")
@@ -71,6 +158,24 @@ tasks.register('verifyTerrainCompatibilityArtifacts') {
                             entry.name.toLowerCase().contains('terraincompatibilityprobe') || entry.name.contains('compatprobe/') ||
                             entry.name.contains('terrainCompatibilityTest') || entry.name.contains('terrain-compatibility-fixture'))
                         throw new GradleException("Forbidden compatibility resource/probe: ${entry.name}")
+                }
+                def contract = new JsonSlurper().parse(file('src/test/resources/tag-compatibility-contract.json'))
+                if (contract.minecraft != minecraft_version) throw new GradleException('Tag contract targets the wrong Minecraft version')
+                contract.tags.each { path, values ->
+                    def entry = zip.getEntry("data/$path")
+                    if (entry == null) throw new GradleException("Missing audited tag $path")
+                    def tag = new JsonSlurper().parseText(zip.getInputStream(entry).getText('UTF-8'))
+                    if (tag.replace != false || tag.keySet() != ['replace', 'values'].toSet() || tag.values != values)
+                        throw new GradleException("Tag contract changed in artifact: $path")
+                }
+                if (minecraft_version == '1.21.11') {
+                    inspect(zip, "mineralogy/tags/$block/forest_rock_substrates.json", ['#mineralogy:terrain_rocks'].toSet(), false)
+                    def mixins = new JsonSlurper().parseText(zip.getInputStream(zip.getEntry('mineralogy.mixins.json')).getText('UTF-8'))
+                    if (mixins.mixins.count('ForestRockSubstrateMixin') != 1)
+                        throw new GradleException('Missing focused forest-rock hook')
+                    String extension = taskName == 'sourcesJar' ? 'java' : 'class'
+                    if (zip.getEntry("zone/moddev/mc/mineralogy/mixin/ForestRockSubstrateMixin.$extension") == null)
+                        throw new GradleException('Forest-rock hook missing from artifact')
                 }
             }
         }

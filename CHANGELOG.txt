@@ -1,5 +1,16 @@
 Mineralogy 6.1.4.121112 for Minecraft 1.21.11 NeoForge
 
+- Completed natural-stone tags for cave decoration, goats and bats, and added
+  an explicit hard-rock horn-breaking list. Crafted blocks remain excluded.
+- Classified single/upright slabs, stairs, walls, furnaces, ores, storage blocks
+  and coloured drywall through the appropriate vanilla and common tags.
+- Fixed dripstone water-pocket and large-column boundaries on natural rocks,
+  and rock-salt lamp support on straight walls. Ore and carver hosts are unchanged.
+- Let the native forest-rock feature place on natural Mineralogy substrates,
+  preserving its vanilla stone/dirt checks without making bare rock tree soil.
+- Made optional construction tag entries safe when construction is disabled,
+  and skipped recipes, advancements and loot that require unregistered items.
+  Enabled recipe and drop payloads, identities and config settings are unchanged.
 - Restored natural bat spawning on Mineralogy terrain through the additive
   vanilla bats_spawnable_on block tag. Applies to existing worlds, preserves
   normal light/height restrictions, and excludes crafted construction blocks.
@@ -8,7 +19,7 @@ Mineralogy 6.1.4.121112 for Minecraft 1.21.11 NeoForge
   sculk, dripstone and moss replacement interfaces, preserving existing members.
 - Natural replacement is independent of cobblestone equivalence and excludes
   crafted forms. Sculk/moss eligibility updates existing worlds; cave decoration
-  improves in new chunks. No provider, config, registry, recipe, texture or
+  improves in new chunks. No provider, config, registry, enabled recipe, texture or
   OreSpawn changes. Sulfur-cube resources are not applicable before 26.2.
 
 Mineralogy 6.1.2.121112 for Minecraft 1.21.11 NeoForge

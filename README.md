@@ -28,6 +28,14 @@ below-surface conditions. The additive bat tag applies to existing worlds and
 is independent of cobblestone equivalence; crafted construction blocks remain
 excluded.
 
+Natural rocks also support goat spawning and horn breaking on the appropriate
+hard substrates. Slabs, stairs, walls, furnaces, ores, storage blocks and coloured
+drywall now have the common tags expected by other mods. Rock-salt lamps work
+on straight walls as well as wall junctions. The two dripstone boundary checks
+accept natural Mineralogy terrain without changing vanilla ore or carver hosts.
+Turning construction off also skips resources that require the absent items;
+enabled recipes and drops are unchanged.
+
 ## Configuration and help
 
 Mineralogy's content and recipe switches remain in

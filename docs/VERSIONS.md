@@ -50,19 +50,19 @@ minor digits, and all remaining digits for the Minecraft major version.
 | 1.12.2 | Forge | `112021` | `6.0.1.112021` |
 | 1.14.4 | Forge | `114041` | `6.0.1.114041` |
 | 1.15.2 | Forge | `115021` | `6.0.1.115021` |
-| 1.16.5 | Forge | `116051` | `6.1.0.116051` |
-| 1.17.1 | Forge | `117011` | `6.1.0.117011` |
-| 1.18.2 | Forge | `118021` | `6.1.2.118021` |
-| 1.19.4 | Forge | `119041` | `6.1.2.119041` |
-| 1.20.1 | Forge | `120011` | `6.1.2.120011` |
-| 1.20.6 | Forge | `120061` | `6.1.2.120061` |
-| 1.20.6 | NeoForge | `120062` | `6.1.2.120062` |
-| 1.21.1 | Forge | `121011` | `6.1.2.121011` |
-| 1.21.1 | NeoForge | `121012` | `6.1.2.121012` |
-| 1.21.11 | Forge | `121111` | `6.1.2.121111` |
+| 1.16.5 | Forge | `116051` | `6.1.4.116051` |
+| 1.17.1 | Forge | `117011` | `6.1.4.117011` |
+| 1.18.2 | Forge | `118021` | `6.1.4.118021` |
+| 1.19.4 | Forge | `119041` | `6.1.4.119041` |
+| 1.20.1 | Forge | `120011` | `6.1.4.120011` |
+| 1.20.6 | Forge | `120061` | `6.1.4.120061` |
+| 1.20.6 | NeoForge | `120062` | `6.1.4.120062` |
+| 1.21.1 | Forge | `121011` | `6.1.4.121011` |
+| 1.21.1 | NeoForge | `121012` | `6.1.4.121012` |
+| 1.21.11 | Forge | `121111` | `6.1.4.121111` |
 | 1.21.11 | NeoForge | `121112` | `6.1.4.121112` |
-| 26.2 | Forge | `2602001` | `6.0.0.2602001` |
-| 26.2 | NeoForge | `2602002` | `6.0.0.2602002` |
+| 26.2 | Forge | `2602001` | `6.1.4.2602001` |
+| 26.2 | NeoForge | `2602002` | `6.1.4.2602002` |
 
 The 1.21.11 NeoForge row records this branch's current release. The other rows illustrate
 target encoding or earlier releases; they do not claim that later Minecraft
@@ -81,6 +81,9 @@ NeoForge 26.3 retains its existing 6.1.3 compatibility correction.
 
 | Minecraft | Forge candidate | NeoForge candidate |
 | --- | --- | --- |
+| 1.16.5 | 6.1.4.116051 | Not in scope |
+| 1.17.1 | 6.1.4.117011 | Not in scope |
+| 1.18.2 | 6.1.4.118021 | Not in scope |
 | 1.19.4 | 6.1.4.119041 | Not in scope |
 | 1.20.1 | 6.1.4.120011 | Not in scope |
 | 1.20.6 | 6.1.4.120061 | 6.1.4.120062 |
@@ -90,8 +93,12 @@ NeoForge 26.3 retains its existing 6.1.3 compatibility correction.
 | 26.2 | 6.1.4.2602001 | 6.1.4.2602002 |
 | 26.3 | 6.1.4.2603001 | 6.1.4.2603002 |
 
-Forge 1.18.2's dripstone/moss correction is outstanding and outside this
-campaign. Native-texture synchronization remains a separate campaign.
+The revised campaign includes Forge 1.16.5–1.18.2 with only the interfaces
+available on each target. Native-texture synchronization remains a separate
+campaign. Sulfur cubes consume only raw Mineralogy rocks on 26.2/26.3; no
+sulfur-cube resources apply to this 1.21.11 target. Existing worlds gain the
+behaviour fixes after updating; natural decoration changes newly generated
+chunks. Revised candidates require renewed acceptance before publication.
 
 ## Major version
 

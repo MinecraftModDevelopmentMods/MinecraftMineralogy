@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:granite_relief_blank"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:granite_relief_horizontal"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:granite_relief_horizontal"

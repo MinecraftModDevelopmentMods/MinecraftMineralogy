@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:diorite_relief_blank"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:diorite_relief_horizontal"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:diorite_relief_horizontal"

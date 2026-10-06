@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:gneiss_brick_stairs"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:gneiss_stairs"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:gneiss_raw_stairs_to_brick"

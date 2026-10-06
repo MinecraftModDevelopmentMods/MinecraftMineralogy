@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:tuff_smooth_stairs"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:tuff_stairs"
+    }
+  ],
   "type": "minecraft:crafting_shapeless",
   "category": "building",
   "ingredients": [

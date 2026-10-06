@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_SMOOTH"
+    },
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_RELIEFS"
+    }
+  ],
   "type": "minecraft:block",
   "pools": [
     {

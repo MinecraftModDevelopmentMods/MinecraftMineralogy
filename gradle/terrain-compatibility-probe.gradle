@@ -1,8 +1,8 @@
 def probeClasses = layout.buildDirectory.dir('terrain-compatibility-fixture/classes')
 tasks.register('compileTerrainCompatibilityProbe', JavaCompile) {
-    dependsOn tasks.named('classes')
+    dependsOn tasks.named('classes'), tasks.named('compileRecipeIntegrationFixture')
     source fileTree('src/terrainCompatibilityTest/java')
-    classpath = files(sourceSets.main.output, sourceSets.main.compileClasspath)
+    classpath = files(sourceSets.main.output, sourceSets.main.compileClasspath, layout.buildDirectory.dir('recipe-integration-fixture/classes'))
     destinationDirectory = probeClasses
     javaCompiler = javaToolchains.compilerFor {
         languageVersion = JavaLanguageVersion.of(Integer.parseInt(project.java_version))
@@ -17,5 +17,7 @@ tasks.register('terrainCompatibilityProbeJar', Jar) {
     destinationDirectory = layout.buildDirectory.dir('terrain-compatibility-fixture')
     from probeClasses
     from 'src/terrainCompatibilityTest/resources'
+    from(layout.buildDirectory.dir('recipe-integration-fixture/classes')) { include 'zone/moddev/mc/mineralogy/fixture/RecipeIntegrationAssertions*.class' }
+    from('src/test/resources') { include 'tag-compatibility-contract.json' }
 }
 tasks.named('check') { dependsOn tasks.named('compileTerrainCompatibilityProbe') }

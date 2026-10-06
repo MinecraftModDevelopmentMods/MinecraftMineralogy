@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "mineralogy:slate_smooth_brick_slab"
+    {
+      "id": "mineralogy:slate_smooth_brick_slab",
+      "required": false
+    }
   ]
 }

@@ -1,4 +1,11 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:phyllite_stairs"
+    }
+  ],
   "type": "minecraft:block",
   "pools": [
     {

@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:slate_slab"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:slate_smooth_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:slate_raw_slab_polishing"

@@ -1,4 +1,11 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:rhyolite_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:rhyolite_raw_slab_recombination"

@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:rhyolite_relief_blank"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:rhyolite_smooth"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:rhyolite_relief_blank"

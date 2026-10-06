@@ -1,4 +1,11 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:peridotite_smooth_brick_furnace"
+    }
+  ],
   "type": "minecraft:block",
   "pools": [
     {

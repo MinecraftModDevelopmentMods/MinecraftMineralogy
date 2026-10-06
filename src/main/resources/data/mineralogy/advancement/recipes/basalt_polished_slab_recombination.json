@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:basalt_smooth"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:basalt_smooth_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:basalt_polished_slab_recombination"

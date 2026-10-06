@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:pegmatite_smooth"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:pegmatite_smooth_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:pegmatite_smooth_slab"

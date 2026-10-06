@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:granite_smooth_brick_stairs"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:granite_smooth_stairs"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:granite_polished_stairs_to_brick"

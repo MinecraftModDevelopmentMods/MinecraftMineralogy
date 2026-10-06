@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:quartzite_relief_blank"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:quartzite_relief_plus"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:quartzite_relief_plus"

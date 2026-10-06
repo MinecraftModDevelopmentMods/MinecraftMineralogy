@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:peridotite_smooth_stairs"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:peridotite_stairs"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:peridotite_raw_stairs_polishing"

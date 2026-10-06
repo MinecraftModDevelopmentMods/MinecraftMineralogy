@@ -7,11 +7,32 @@ Mineralogy 6.1.4.2603002 for Minecraft 26.3 NeoForge
 - Added matching 37-member terrain-rock block/item tags and additive vanilla
   sculk, dripstone and moss replacement interfaces. Vanilla and third-party
   members remain intact; crafted forms are excluded from natural replacement.
-- Added 112 possible full-rock items to sulfur-cube Slow Bouncy eligibility,
-  with optional entries for configuration-controlled construction forms.
+- Sulfur cubes accept only the 31 raw Mineralogy rocks as Slow Bouncy stones.
+  Polished blocks, bricks, slabs and other crafted Mineralogy items are excluded.
+  Minecraft's existing vanilla consumption rules are unchanged.
+- Restored goat spawning on natural terrain and horn breaking against harder
+  raw rocks. Soft rocks and crafted blocks do not break horns.
+- Fixed the dripstone water-pocket and large-column checks without broadening
+  global base-stone or ore-host tags. Added natural root and forest-rock support
+  without making bare rock suitable soil for growing azalea trees.
+- Made config-dependent construction tag entries optional.
+  Single/upright slabs and stairs join the vanilla aggregates;
+  separate double slabs remain full blocks.
+- Fixed data loading when construction forms are disabled. Recipes, recipe-book
+  entries and loot tables skip forms that are not registered; their normal
+  ingredients, outputs, counts and drops are unchanged.
+  The 24 vanilla slab recipe-book entries use matching guards so disabling
+  Mineralogy slabs does not leave them pointing at missing recipes.
+- Connected raw stone, furnace workstations, ores, storage blocks and dyed
+  drywall to the common tags. Normal cobblestone follows the existing option,
+  including reloads, without changing mossy, infested or deepslate categories.
+- Rock-salt lamps retain straight-wall posts, and cats can sit on lit Mineralogy
+  furnaces but not unlit ones.
 - Sculk, moss and cube behavior updates existing worlds; natural cave decoration
-  improves in newly generated chunks. No OreSpawn, provider, config, registry,
-  recipe or texture changes. Retained the released 6.1.3 NeoForge API fix.
+  and root/forest decoration improves in newly generated chunks. No OreSpawn,
+  provider, config, registry or texture changes. Recipe identities and enabled
+  contents are unchanged. Retained the released
+  6.1.3 NeoForge API fix and native texture mappings.
 
 Mineralogy 6.1.3.2603002 for Minecraft 26.3 NeoForge
 

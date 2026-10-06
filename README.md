@@ -18,12 +18,19 @@ OreSpawn `[4.0.6,5.0.0)`. Install both mods on clients and servers.
 This is the NeoForge build. It is intentionally maintained separately from the
 Forge 26.3 branch; use the jar that matches the loader in your modpack.
 
-Mineralogy 6.1.4 restores sculk catalyst conversion, moss growth and dripstone
-decoration on natural Mineralogy terrain, and sulfur-cube absorption of supported
-full-rock items. Terrain eligibility is independent of cobblestone equivalence;
-crafted blocks are excluded from natural replacement. Sculk, moss and cube
-behavior updates existing worlds; natural cave decoration improves in new chunks.
-The released 6.1.3 NeoForge compatibility correction is retained unchanged.
+Mineralogy 6.1.4 restores sculk conversion, moss and dripstone decoration, and
+natural animal behaviour on Mineralogy terrain. Sulfur cubes can absorb the
+31 raw Mineralogy rocks, not polished blocks, bricks or other crafted items;
+vanilla blocks keep Minecraft's own rules. Goats spawn on natural rocks and
+break horns against the harder raw rocks. Cats can sit on lit rock furnaces,
+and rock-salt lamps retain straight-wall posts like vanilla torches.
+
+These block and animal fixes work in existing worlds. Improved cave, root and
+forest decoration needs newly generated chunks. Natural terrain eligibility is
+independent of cobblestone equivalence. Construction tags tolerate disabled
+blocks, and slabs, stairs, furnaces, ores, storage blocks and coloured drywall
+join their appropriate common interfaces. The released 6.1.3 NeoForge loader
+correction and synchronized native textures are retained.
 
 Natural bats can spawn above Mineralogy terrain under Minecraft's normal dark,
 below-surface conditions. The additive bat tag applies to existing worlds and

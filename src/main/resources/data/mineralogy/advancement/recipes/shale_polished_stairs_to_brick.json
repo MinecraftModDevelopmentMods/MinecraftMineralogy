@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:shale_smooth_brick_stairs"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:shale_smooth_stairs"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:shale_polished_stairs_to_brick"

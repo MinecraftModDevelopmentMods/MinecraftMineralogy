@@ -1,5 +1,22 @@
 # Mineralogy Developer Guide
 
+## Stone compatibility tags
+
+`mineralogy:terrain_rocks` contains provider terrain outputs and retained raw
+aliases, not construction blocks, ores or storage conversions. Natural consumers
+use it independently of cobblestone equivalence. `mineralogy:raw_stones` omits
+sandstone for common stone consumers. `mineralogy:horn_breaking_rocks` is a
+hard-rock whitelist; rock salt, scoria, siltstone and other soft materials stay
+out. Sulfur cubes receive only the 31 raw Mineralogy items, including through
+aggregate tags.
+
+Config-dependent construction references are optional objects inside `values`.
+Slab aggregates include single/upright slabs, not separate double slabs.
+Two required, single-target Mixins extend only dripstone water containment and
+column boundaries through `mineralogy:dripstone_base_stones`. Global base-stone
+and ore-host tags remain unchanged. Every port must explicitly review new
+native tags and consumer checks rather than copy an adjacent target blindly.
+
 ## Responsibility Split
 
 | Mineralogy owns | OreSpawn owns |
@@ -184,6 +201,20 @@ produce the modern lowercase representation.
 
 ## Building
 
+Construction settings can prevent blocks and items from registering. Native
+`neoforge:registered` conditions guard recipes, their matching advancements and
+loot tables before decoding those item references. Keep the enabled payloads
+unchanged, and preserve the existing content-switch conditions. Run
+`scripts/guard-construction-resources.ps1` after editing generated data; the
+recipe generator also runs it automatically.
+
+Minecraft 26.3 advancements resolve recipe holders during registry loading.
+The 24 native slab advancements therefore need the same guard as the overridden
+recipe when a Mineralogy slab is disabled. Their native criteria and rewards
+are preserved. This brings the packaged Minecraft advancement overrides to 45
+(16 cobblestone, five polishing and 24 slab guards); the 48 recipe overrides
+and 1,433 Mineralogy recipe/advancement pairs remain unchanged.
+
 The build uses NeoGradle 7.1.39 and the Gradle 9.2.1 wrapper on Java 25,
 with an exact Temurin 25.0.3+9 toolchain for production and test bytecode.
 NeoForge 26.3 uses the validated binary userdev path; the temporary 26.1.2
@@ -192,7 +223,8 @@ source-decompiler workaround is deliberately absent:
 ```powershell
 $env:JAVA_HOME='path-to-Temurin-25.0.3+9'
 $env:GRADLE_USER_HOME='D:\MinecraftMineralogy\.gradle-verify-cache'
-.\gradlew.bat clean check build javadoc verifyReleaseConfiguration verifyReleaseDependencies verifyReleaseArtifacts writeReleaseChecksums --no-daemon
+.\gradlew.bat clean --no-daemon
+.\gradlew.bat check build javadoc verifyReleaseConfiguration verifyReleaseDependencies verifyReleaseArtifacts writeReleaseChecksums --no-daemon
 .\gradlew.bat eclipse verifyEclipseProductionClasspath --no-daemon
 .\gradlew.bat assemble --no-daemon
 ```

@@ -1,4 +1,11 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:schist_relief_right"
+    }
+  ],
   "type": "minecraft:block",
   "pools": [
     {

@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:basaltic_glass_brick_wall"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:basaltic_glass_wall"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:basaltic_glass_raw_walls_to_brick"

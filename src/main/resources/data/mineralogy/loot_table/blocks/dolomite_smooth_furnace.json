@@ -1,4 +1,11 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:dolomite_smooth_furnace"
+    }
+  ],
   "type": "minecraft:block",
   "pools": [
     {

@@ -1,4 +1,11 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:shale_smooth_stairs"
+    }
+  ],
   "type": "minecraft:block",
   "pools": [
     {

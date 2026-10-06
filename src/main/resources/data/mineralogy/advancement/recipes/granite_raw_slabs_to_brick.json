@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:granite_brick_slab"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:granite_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:granite_raw_slabs_to_brick"

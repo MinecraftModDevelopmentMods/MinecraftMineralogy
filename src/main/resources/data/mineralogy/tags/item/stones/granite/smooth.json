@@ -1,7 +1,10 @@
 {
   "replace": false,
   "values": [
-    "mineralogy:granite_smooth",
+    {
+      "id": "mineralogy:granite_smooth",
+      "required": false
+    },
     "minecraft:polished_granite"
   ]
 }

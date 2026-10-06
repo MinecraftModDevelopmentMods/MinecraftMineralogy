@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "mineralogy:novaculite_brick"
+    {
+      "id": "mineralogy:novaculite_brick",
+      "required": false
+    }
   ]
 }

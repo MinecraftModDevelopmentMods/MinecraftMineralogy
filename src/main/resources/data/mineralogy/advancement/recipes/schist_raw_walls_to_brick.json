@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:schist_brick_wall"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:schist_wall"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:schist_raw_walls_to_brick"

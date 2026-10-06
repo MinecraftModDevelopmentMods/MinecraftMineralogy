@@ -173,7 +173,9 @@ public class ResourceContractTest {
             JsonObject recipe = json(file);
             assertFalse(file.getName(), recipe.has("recipes"));
             assertFalse(file.getName(), recipe.has("forge:condition"));
-            assertFalse(file.getName(), recipe.has("neoforge:conditions"));
+            String output = recipe.getAsJsonObject("result").get("id").getAsString();
+            if (output.startsWith("mineralogy:")) assertRegisteredItemGuard(file.getName(), recipe, output);
+            else assertFalse(file.getName(), recipe.has("neoforge:conditions"));
             assertRecipeBookFields(file.getName(), recipe);
         }
     }
@@ -598,7 +600,7 @@ public class ResourceContractTest {
                 }
             }
         }
-        assertEquals(1454, recipeCriteria);
+        assertEquals(1478, recipeCriteria);
 
         int cookingRecipes = 0;
         for (File file : jsonFiles(new File(ROOT, "data/mineralogy/recipe"))) {
@@ -697,7 +699,7 @@ public class ResourceContractTest {
 
         File minecraftAdvancements = new File(ROOT, "data/minecraft/advancement/recipes");
         List<File> overrides = jsonFiles(minecraftAdvancements);
-        assertEquals(21, overrides.size());
+        assertEquals(45, overrides.size());
         for (File file : overrides) {
             JsonObject wrapper = json(file);
             if (wrapper.has("forge:conditional")) {
@@ -757,7 +759,7 @@ public class ResourceContractTest {
                 "mineralogy:basalt", "minecraft:basalt");
 
         File advancementRoot = new File(ROOT, "data/minecraft/advancement/recipes");
-        assertEquals(21, countJsonFiles(advancementRoot));
+        assertEquals(45, countJsonFiles(advancementRoot));
         JsonObject furnace = json(new File(advancementRoot, "decorations/furnace.json"));
         assertEquals("#mineralogy:stone_crafting_materials", furnace
                 .getAsJsonObject("criteria").getAsJsonObject("has_cobblestone")
@@ -893,7 +895,14 @@ public class ResourceContractTest {
         JsonArray values = json(file).getAsJsonArray("values");
         assertEquals(file.getPath(), expected.length, values.size());
         for (int index = 0; index < expected.length; index++) {
-            assertEquals(file.getPath(), expected[index], values.get(index).getAsString());
+            JsonElement value = values.get(index);
+            if (value.isJsonObject()) {
+                JsonObject optional = value.getAsJsonObject();
+                assertEquals(file.getPath(), new java.util.HashSet<>(Arrays.asList("id", "required")), optional.keySet());
+                assertFalse(file.getPath(), optional.get("required").getAsBoolean());
+            }
+            assertEquals(file.getPath(), expected[index], value.isJsonObject()
+                    ? value.getAsJsonObject().get("id").getAsString() : value.getAsString());
         }
     }
 
@@ -955,15 +964,25 @@ public class ResourceContractTest {
                 .getAsString());
         assertEquals(recipeName, result, recipe.getAsJsonObject("result").get("id").getAsString());
         assertEquals(recipeName, 1, recipe.getAsJsonObject("result").get("count").getAsInt());
-        assertFalse(recipeName, recipe.has("neoforge:conditions"));
+        assertRegisteredItemGuard(recipeName, recipe, source.startsWith("mineralogy:") ? source : result);
 
         JsonObject advancement = json(new File(ROOT,
                 "data/mineralogy/advancement/recipes/" + recipeName + ".json"));
-        assertFalse(recipeName, advancement.has("neoforge:conditions"));
+        assertEquals(recipeName, recipe.get("neoforge:conditions"), advancement.get("neoforge:conditions"));
         assertEquals(recipeName, source, criterionItem(advancement, "has_rock"));
         assertEquals(recipeName, "mineralogy:" + recipeName,
                 advancement.getAsJsonObject("rewards").getAsJsonArray("recipes")
                         .get(0).getAsString());
+    }
+
+    private static void assertRegisteredItemGuard(String name, JsonObject resource, String item) {
+        JsonArray conditions = resource.getAsJsonArray("neoforge:conditions");
+        assertNotNull(name, conditions);
+        assertEquals(name, 1, conditions.size());
+        JsonObject condition = conditions.get(0).getAsJsonObject();
+        assertEquals(name, "neoforge:registered", condition.get("type").getAsString());
+        assertEquals(name, "minecraft:item", condition.get("registry").getAsString());
+        assertEquals(name, item, condition.get("value").getAsString());
     }
 
     private static void assertCompositeRockTag(String name, String baseTag) throws Exception {

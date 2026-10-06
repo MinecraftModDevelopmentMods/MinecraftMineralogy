@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:novaculite_smooth_brick_wall"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:novaculite_smooth_wall"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:novaculite_polished_walls_to_brick"

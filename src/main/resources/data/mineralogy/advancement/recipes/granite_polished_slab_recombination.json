@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:granite_smooth"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:granite_smooth_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:granite_polished_slab_recombination"

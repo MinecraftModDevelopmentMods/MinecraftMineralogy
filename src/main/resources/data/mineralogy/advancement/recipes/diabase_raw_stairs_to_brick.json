@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:diabase_brick_stairs"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:diabase_stairs"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:diabase_raw_stairs_to_brick"

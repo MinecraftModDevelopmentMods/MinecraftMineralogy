@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:shale_brick_wall"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:shale_smooth_brick_wall"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:shale_brick_wall_polishing"

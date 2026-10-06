@@ -6,11 +6,25 @@ Mineralogy 6.1.4.2602002 for Minecraft 26.2 NeoForge
   Eligibility is independent of cobblestone equivalence.
 - Added matching 37-member terrain-rock block/item tags and additive vanilla
   sculk, dripstone and moss replacement interfaces, preserving existing members.
-- Added 112 possible full-rock sulfur-cube Slow Bouncy items, with optional
-  entries for configuration-controlled construction forms.
+- Sulfur cubes accept only the 31 raw Mineralogy rocks as Slow Bouncy stones.
+  Polished blocks, bricks, slabs and other crafted Mineralogy items are excluded.
+  Minecraft's existing vanilla consumption rules are unchanged.
+- Restored goat spawning on natural terrain and horn breaking against harder
+  raw rocks. Soft rocks and crafted blocks do not break horns.
+- Fixed dripstone water-pocket and large-column checks without broadening
+  global base-stone or ore-host tags. Added natural root and forest-rock support
+  without making bare rock suitable soil for growing azalea trees.
+- Made config-dependent construction tag entries optional. Single/upright
+  slabs and stairs join vanilla aggregates; separate double slabs stay full blocks.
+- Connected raw stone, furnace workstations, ores, storage blocks and dyed
+  drywall to common tags. Normal cobblestone follows the existing option.
+- Rock-salt lamps retain straight-wall posts like vanilla torches.
+- Fixed missing-item resource errors when construction forms are disabled.
+  Recipes, unlocks and loot tables now check that their items are registered;
+  enabled recipes and drops keep their existing contents.
 - Sculk, moss and cube eligibility updates existing worlds; natural cave
-  decoration improves in new chunks. No provider, config, registry, recipe,
-  texture or OreSpawn changes.
+  decoration improves in new chunks. No provider, config, registry, texture
+  or OreSpawn changes. Recipe identities and enabled contents are unchanged.
 
 Mineralogy 6.1.2.2602002 for Minecraft 26.2 NeoForge
 

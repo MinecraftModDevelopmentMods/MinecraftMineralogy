@@ -40,8 +40,8 @@ recommended before upgrading the original.
   where covered Ocean deposits form.
 
 Raw Mineralogy rocks work in broad stone recipes. With
-`COBBLESTONE_EQUIVILENT=true`, they also join Forge's block and item
-`cobblestone` tags for recipes such as levers, pistons, dispensers, and brewing stands.
+`COBBLESTONE_EQUIVILENT=true`, they also join the common `c:cobblestones` tags
+and historical compatibility aliases for levers, pistons, dispensers and brewing stands.
 Exact Mineralogy rocks still make their matching Mineralogy slabs, stairs, and
 walls.
 
@@ -71,6 +71,18 @@ furnace with eight matching Mineralogy slabs. Brick, polished, and
 polished-brick furnaces use the corresponding slab finish.
 
 ## Configuration And Servers
+
+Natural Mineralogy terrain supports sculk conversion, moss, dripstone, bats
+and goat spawning independently of cobblestone equivalence. Harder raw rocks
+can break goat horns; soft rocks and crafted forms cannot. Sulfur cubes accept
+only the 31 raw Mineralogy rocks as Slow Bouncy stones. They do not consume
+Mineralogy polished blocks, bricks, slabs or other crafted items. Minecraft's
+existing rules for vanilla blocks are unchanged.
+
+Block and animal eligibility changes apply to existing worlds after updating.
+Improved cave, root and forest-rock decoration needs newly generated chunks.
+Bare rock is not suitable soil for growing azalea trees. Rock-salt lamps retain
+wall posts like torches, including straight walls.
 
 `config/mineralogy-common.toml` controls Mineralogy content and recipe compatibility.
 OreSpawn's UI and JSON profile control terrain and deposits. Settings require a

@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:slate_relief_left"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:slate_relief_right"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:slate_relief_right"

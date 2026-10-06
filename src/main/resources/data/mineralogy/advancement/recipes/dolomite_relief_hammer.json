@@ -1,4 +1,21 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:dolomite_relief_blank"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:dolomite_relief_hammer"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:dolomite_smooth"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:dolomite_relief_hammer"

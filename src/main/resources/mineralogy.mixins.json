@@ -7,9 +7,11 @@
     "BlockStateDataAccessor",
     "BlockStateDataMixin",
     "CommonHooksMixin",
+    "LargeDripstoneBoundaryMixin",
     "OreSpawnEarlyTagCompatibilityMixin",
     "ReloadableServerResourcesMixin",
     "SimpleRegionStorageMixin",
+    "SpeleothemWaterPocketMixin",
     "WorldGenRegionMixin"
   ],
   "injectors": {

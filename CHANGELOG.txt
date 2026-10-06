@@ -6,8 +6,20 @@ Mineralogy 6.1.4.2602001 for Minecraft 26.2
   Eligibility is independent of cobblestone equivalence.
 - Restored vanilla sculk catalyst conversion and dripstone/moss replacement on
   37 natural terrain identities, including native aliases and special rocks.
-- Restored sulfur-cube absorption and Slow Bouncy classification for supported
-  full-rock items; optional construction forms remain configuration-safe.
+- Sulfur cubes now accept only the 31 raw Mineralogy rocks as Slow Bouncy
+  stones. Polished blocks, bricks and all other Mineralogy items are excluded;
+  Minecraft's own vanilla consumption rules are unchanged.
+- Goats can spawn on natural terrain and break horns against harder raw rocks.
+  Soft rocks and crafted blocks are excluded from horn breaking.
+- Fixed dripstone water-pocket and column checks rejecting natural rocks.
+  Roots and forest rocks recognise natural substrates without making bare
+  rock suitable for growing azalea trees.
+- Added slab, stair, furnace, ore, storage and dyed-block classifications.
+  Double slabs remain full blocks. Disabled construction references are
+  configuration-safe, and normal cobblestone follows the existing option.
+- Rock-salt lamps retain the centre post on straight walls.
+- Disabled construction loot tables no longer refer to missing items. Their
+  normal drops remain unchanged when construction is enabled.
 - Sculk and sulfur cubes work in existing worlds after updating. Natural cave
   decoration improves in newly generated chunks.
 - Added deterministic tag, real-loader/reload, vanilla consumer, cave sample

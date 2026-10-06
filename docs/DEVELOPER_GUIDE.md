@@ -1,5 +1,24 @@
 # Mineralogy Developer Guide
 
+## Stone compatibility tags
+
+`mineralogy:terrain_rocks` contains natural provider outputs and retained aliases,
+not crafted forms, machines, ores or storage conversions. `raw_stones` excludes
+sandstone for common stone consumers. The horn whitelist excludes rock salt,
+scoria, siltstone, chalk, gypsum and pumice.
+
+Sulfur cubes receive exactly 31 raw Mineralogy items, independently of the
+cobblestone option. Crafted items must remain outside the resolved swallowing
+aggregate, including through indirect common-tag references.
+
+Config-dependent construction members are optional objects inside `values`.
+Their loot tables check item existence before loading, keeping disabled
+construction free of missing-item references without changing normal drops.
+Single/upright slabs join the shape aggregates; separate double slabs do not.
+The two dripstone hooks redirect only the pool-containment and column-boundary
+checks to the dedicated base-stone/terrain union. Global base-stone, ore-host
+and carver tags remain unchanged. Review native interfaces explicitly on ports.
+
 ## Responsibility Split
 
 | Mineralogy owns | OreSpawn owns |

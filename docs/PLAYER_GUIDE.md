@@ -1,5 +1,17 @@
 # Mineralogy Player Guide
 
+## Natural stone compatibility
+
+Natural Mineralogy rocks support sculk, moss, dripstone, bats and goat spawning.
+Harder raw rocks can break goat horns; soft rocks and crafted blocks cannot.
+Sulfur cubes accept only the 31 raw Mineralogy rocks as Slow Bouncy stones, not
+polished blocks, bricks or other crafted items. Vanilla blocks keep Minecraft's
+own consumption rules.
+
+Rock-salt lamps keep the post on a straight wall. These behaviour fixes work
+in existing worlds; cave, root and forest-rock decoration changes apply to
+newly generated chunks.
+
 ## Installing
 
 Mineralogy 6 needs Minecraft 26.2, Forge 65.1.0 or compatible Forge 65.1.x,

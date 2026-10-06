@@ -15,16 +15,23 @@ additional compatibility smoke on Forge `65.1.3`, and is built and tested
 against OreSpawn `4.0.16.2602001`. Its declared compatibility range is
 OreSpawn `[4.0.6,5.0.0)`. Install both mods on clients and servers.
 
-Version 6.1.4 restores vanilla sculk conversion, sulfur-cube stone absorption,
-and dripstone/moss replacement on natural Mineralogy terrain. Sculk and sulfur
-cubes work in existing worlds after updating; improved natural cave decoration
-appears in newly generated chunks. These additive tags are independent of the
-cobblestone-equivalence option and exclude crafted or shaped construction blocks.
+Mineralogy 6.1.4 fixes places where Minecraft wasn't recognising natural
+Mineralogy stone. Sculk and moss can spread across it, dripstone and roots
+recognise their natural substrates, and bats and goats keep their normal
+spawning rules. Goats can break horns against harder raw rocks, not soft rocks
+or crafted blocks.
 
-Natural bats can spawn above Mineralogy terrain under Minecraft's normal dark,
-below-surface conditions. The additive bat tag applies to existing worlds and
-is independent of cobblestone equivalence; crafted construction blocks remain
-excluded.
+Sulfur cubes can absorb the 31 raw Mineralogy rocks as Slow Bouncy stones.
+Polished blocks, bricks and every other Mineralogy item are excluded. This
+doesn't change Minecraft's existing rules for vanilla blocks.
+
+Slabs, stairs, walls, furnaces, ores, storage blocks and coloured drywall now
+have the appropriate classifications. Rock-salt lamps keep the post on straight
+walls. Construction references stay loadable when their blocks are disabled.
+
+These fixes work with cobblestone equivalence on or off. Existing worlds gain
+the behaviour fixes after updating; improved cave decoration applies to newly
+generated chunks and won't redecorate explored caves.
 
 ## Configuration and help
 

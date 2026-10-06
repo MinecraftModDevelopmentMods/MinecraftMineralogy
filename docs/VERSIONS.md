@@ -76,9 +76,13 @@ new releases and does not reinterpret an old file's version.
 The following local candidates share the 6.1.4 additive terrain compatibility
 fix. This is a candidate matrix, not a claim that every release is published.
 NeoForge 26.3 retains its existing 6.1.3 compatibility correction.
+Publication is paused while the expanded tag fixes are checked and retested.
 
 | Minecraft | Forge candidate | NeoForge candidate |
 | --- | --- | --- |
+| 1.16.5 | 6.1.4.116051 | Not in scope |
+| 1.17.1 | 6.1.4.117011 | Not in scope |
+| 1.18.2 | 6.1.4.118021 | Not in scope |
 | 1.19.4 | 6.1.4.119041 | Not in scope |
 | 1.20.1 | 6.1.4.120011 | Not in scope |
 | 1.20.6 | 6.1.4.120061 | 6.1.4.120062 |
@@ -88,8 +92,10 @@ NeoForge 26.3 retains its existing 6.1.3 compatibility correction.
 | 26.2 | 6.1.4.2602001 | 6.1.4.2602002 |
 | 26.3 | 6.1.4.2603001 | 6.1.4.2603002 |
 
-Forge 1.18.2's dripstone/moss correction is outstanding and outside this
-campaign. Native-texture synchronization remains a separate campaign.
+Natural cave and animal interfaces apply only where Minecraft supports them.
+Sulfur cubes use raw Mineralogy items only on 26.2 and 26.3. Forge 1.17 keeps
+its native goat-spawning rule. Forge 1.13.2–1.15.2 are deferred until their
+later 6.1 ports; native-texture synchronization remains a separate campaign.
 
 ## Major version
 

@@ -1,6 +1,9 @@
 {
-    "replace":  false,
-    "values":  [
-                   "mineralogy:basalt_slab"
-               ]
+  "replace": false,
+  "values": [
+    {
+      "id": "mineralogy:basalt_slab",
+      "required": false
+    }
+  ]
 }

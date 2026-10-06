@@ -1,8 +1,21 @@
+// Assertions are compiled separately and included only in the isolated probe.
+tasks.register('compileRecipeIntegrationFixture', JavaCompile) {
+    dependsOn tasks.named('classes')
+    source fileTree('src/recipeIntegrationTest/java')
+    classpath = files(sourceSets.main.output, sourceSets.main.compileClasspath)
+    destinationDirectory = layout.buildDirectory.dir('recipe-integration-fixture/classes')
+    javaCompiler = javaToolchains.compilerFor {
+        languageVersion = JavaLanguageVersion.of(Integer.parseInt(project.java_version))
+        vendor = JvmVendorSpec.ADOPTIUM
+    }
+    options.encoding = 'UTF-8'
+    options.release = Integer.parseInt(project.java_version)
+}
 def probeClasses = layout.buildDirectory.dir('terrain-compatibility-fixture/classes')
 tasks.register('compileTerrainCompatibilityProbe', JavaCompile) {
-    dependsOn tasks.named('classes')
+    dependsOn tasks.named('classes'), tasks.named('compileRecipeIntegrationFixture')
     source fileTree('src/terrainCompatibilityTest/java')
-    classpath = files(sourceSets.main.output, sourceSets.main.compileClasspath)
+    classpath = files(sourceSets.main.output, sourceSets.main.compileClasspath, layout.buildDirectory.dir('recipe-integration-fixture/classes'))
     destinationDirectory = probeClasses
     javaCompiler = javaToolchains.compilerFor {
         languageVersion = JavaLanguageVersion.of(Integer.parseInt(project.java_version))
@@ -17,6 +30,8 @@ tasks.register('terrainCompatibilityProbeJar', Jar) {
     destinationDirectory = layout.buildDirectory.dir('terrain-compatibility-fixture')
     from probeClasses
     from 'src/terrainCompatibilityTest/resources'
+    from(layout.buildDirectory.dir('recipe-integration-fixture/classes')) { include 'zone/moddev/mc/mineralogy/fixture/RecipeIntegrationAssertions*.class' }
+    from('src/test/resources') { include 'tag-compatibility-contract.json' }
     from layout.buildDirectory.dir('terrain-compatibility-fixture/reflection')
 }
 
@@ -27,9 +42,6 @@ tasks.register('generateTerrainCompatibilityReflectionMap') {
     def destination = layout.buildDirectory.file('terrain-compatibility-fixture/reflection/terrain-reflection.properties')
     outputs.file(destination)
     doLast {
-        def selected = ['getListener', 'getSculkSpreader', 'getCursors', 'die', 'of',
-                'handleGameEvent', 'updateCursors', 'registryOrThrow', 'getHolderOrThrow',
-                'value', 'place', 'listener', 'callback', 'ZOMBIE', 'ENTITY_DIE'].toSet()
         def aliases = new TreeMap<String, Set<String>>()
         String owner = null
         def mapping = inputs.files.singleFile
@@ -40,7 +52,7 @@ tasks.register('generateTerrainCompatibilityReflectionMap') {
                     if (columns.length == 2) owner = columns[1].replace('/', '.')
                 } else if (owner != null && !line.startsWith('\t\t')) {
                     def columns = line.trim().split(' ')
-                    if (selected.contains(columns[0])) {
+                    if (columns.length >= 2) {
                         String key = owner + '.' + columns[0]
                         aliases.computeIfAbsent(key) { new TreeSet<String>() }.add(columns[-1])
                     }

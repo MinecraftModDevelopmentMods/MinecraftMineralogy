@@ -35,6 +35,11 @@ public final class TerrainCompatibilityProbe {
         if (Boolean.getBoolean("mineralogy.compatProbe.client")) return;
         MinecraftServer server = event.getServer();
         try {
+            if (Boolean.getBoolean("mineralogy.compatProbe.baseline")) {
+                verifyNarrowChecks(server.overworld(), "baseline", false);
+                finish(server, null);
+                return;
+            }
             if (Boolean.getBoolean("mineralogy.compatProbe.caveSample")) {
                 sampleCaves(server.overworld());
                 finish(server, null);
@@ -52,14 +57,245 @@ public final class TerrainCompatibilityProbe {
     }
     private void test(ServerLevel level, String phase) throws Exception {
         verifyTags(phase);
+        verifyConstructionLoot(level, phase);
+        verifyClassifications(phase);
+        verifyCarverPolicy(level, phase);
+        verifyGoatsAndCats(level, phase);
         verifyCatalysts(level, phase);
         verifyFeatures(level, phase);
+        verifyNarrowChecks(level, phase, true);
+        verifyRootsAndForestRocks(level, phase);
+        if (!Boolean.getBoolean("mineralogy.compatProbe.constructionDisabled")) {
+            String recipePhase = phase.equals("reload") ? "resource-reload"
+                    : System.getProperty("mineralogy.compatProbe.cycle", "fresh").equals("reload") ? "persisted-reload" : "first";
+            zone.moddev.mc.mineralogy.fixture.RecipeIntegrationAssertions.verify(new ServerStartedEvent(level.getServer()),
+                    zone.moddev.mc.mineralogy.MineralogyConfig.makeRockCobblestoneEquivilent(), recipePhase);
+            evidence.add(phase + ": native recipe/advancement managers and slab routes, mining/drops and furnace state/reload assertions passed");
+        }
+    }
+    private void verifyCarverPolicy(ServerLevel level, String phase) throws Exception {
+        var carver = level.registryAccess().registryOrThrow(Registries.CONFIGURED_CARVER)
+                .getHolderOrThrow(ResourceKey.create(Registries.CONFIGURED_CARVER, id("minecraft:cave"))).value();
+        require((Boolean)call(carver.worldCarver(), "canReplaceBlock", carver.config(), Blocks.STONE.defaultBlockState()), "Native stone carver control");
+        require(!(Boolean)call(carver.worldCarver(), "canReplaceBlock", carver.config(), Blocks.BEDROCK.defaultBlockState()), "Native bedrock carver exclusion");
+        for (String name : raw())
+            require(!(Boolean)call(carver.worldCarver(), "canReplaceBlock", carver.config(), block(name).defaultBlockState()), "Broadened native carver hosts: " + name);
+        evidence.add(phase + ": native positive carver hosts unchanged; stone accepted, bedrock and 31 Mineralogy rocks rejected. OreSpawn replacement follows carving, so no carver-tag addition");
+    }
+    private void verifyConstructionLoot(ServerLevel level, String phase) throws Exception {
+        var registries = level.getServer().getLootTables();
+        var tables = registries.getIds().stream()
+                .filter(key -> key.getNamespace().equals("mineralogy") && key.getPath().startsWith("blocks/")).toList();
+        require(tables.size() == 919, "Missing loaded Mineralogy loot tables: " + tables.size());
+        boolean disabled = Boolean.getBoolean("mineralogy.compatProbe.constructionDisabled");
+        int guarded = 0;
+        for (var name : tables) {
+            if (!name.getPath().matches("blocks/(lit_)?(.+)(_smooth|_brick|_slab|_stairs|_wall|_furnace|_relief_.+)")) continue;
+            var table = registries.get(name);
+            boolean entries = false;
+            for (Object pool : (List<?>)field(table, "pools"))
+                if (Array.getLength(field(pool, "entries")) > 0) entries = true;
+            require(entries != disabled, "Native construction loot guard " + name);
+            guarded++;
+        }
+        require(guarded == 864, "Loaded construction loot guard count: " + guarded);
+        evidence.add(phase + ": all 919 native loot tables loaded; 864 construction pools " + (disabled ? "empty" : "retained"));
+    }
+    private void verifyClassifications(String phase) throws Exception {
+        com.google.gson.JsonObject contract;
+        try (var reader = new java.io.InputStreamReader(getClass().getResourceAsStream("/tag-compatibility-contract.json"), StandardCharsets.UTF_8)) {
+            contract = com.google.gson.JsonParser.parseReader(reader).getAsJsonObject();
+        }
+        int checked = 0;
+        for (var entry : contract.getAsJsonObject("tags").entrySet()) {
+            String path = entry.getKey();
+            String namespace = path.substring(0, path.indexOf('/'));
+            String kind = path.contains("/tags/blocks/") ? "blocks" : "items";
+            String tagPath = path.substring(path.indexOf("/tags/" + kind + "/") + ("/tags/" + kind + "/").length(), path.length() - 5);
+            for (var member : entry.getValue().getAsJsonArray()) {
+                boolean optional = member.isJsonObject();
+                String memberId = optional ? member.getAsJsonObject().get("id").getAsString() : member.getAsString();
+                if (memberId.startsWith("#")) {
+                    ResourceLocation inherited = id(memberId.substring(1));
+                    if (kind.equals("blocks")) {
+                        for (var holder : BuiltInRegistries.BLOCK.getTagOrEmpty(TagKey.create(Registries.BLOCK, inherited))) {
+                            require(holder.value().defaultBlockState().is(blockTag(namespace + ":" + tagPath)),
+                                    "Lost inherited block member " + path + " from " + memberId);
+                        }
+                    } else {
+                        for (var holder : BuiltInRegistries.ITEM.getTagOrEmpty(TagKey.create(Registries.ITEM, inherited))) {
+                            require(new ItemStack(holder.value()).is(TagKey.create(Registries.ITEM, id(namespace + ":" + tagPath))),
+                                    "Lost inherited item member " + path + " from " + memberId);
+                        }
+                    }
+                    continue;
+                }
+                if (kind.equals("blocks")) {
+                    Block value = BuiltInRegistries.BLOCK.get(id(memberId));
+                    if (optional && (value == null || value == Blocks.AIR)) continue;
+                    require(value != null && value != Blocks.AIR, "Missing required block " + memberId);
+                    require(value.defaultBlockState().is(blockTag(namespace + ":" + tagPath)), "Loaded block classification " + path + " " + memberId);
+                } else {
+                    var value = BuiltInRegistries.ITEM.get(id(memberId));
+                    if (optional && (value == null || value == Blocks.AIR.asItem())) continue;
+                    require(value != null && value != Blocks.AIR.asItem(), "Missing required item " + memberId);
+                    require(new ItemStack(value).is(TagKey.create(Registries.ITEM, id(namespace + ":" + tagPath))), "Loaded item classification " + path + " " + memberId);
+                }
+                checked++;
+            }
+        }
+        boolean enabled = zone.moddev.mc.mineralogy.MineralogyConfig.makeRockCobblestoneEquivilent();
+        for (String name : List.of("mineralogy:basalt", "minecraft:basalt", "mineralogy:chert", "mineralogy:pumice")) {
+            boolean wanted = enabled || name.endsWith(":chert") || name.endsWith(":pumice");
+            for (String tag : List.of("forge:cobblestone", "forge:cobblestone/normal")) {
+                require(block(name).defaultBlockState().is(blockTag(tag)) == wanted, "Block cobblestone option " + tag + " " + name);
+                require(new ItemStack(block(name)).is(TagKey.create(Registries.ITEM, id(tag))) == wanted, "Item cobblestone option " + tag + " " + name);
+            }
+        }
+        for (String tag : List.of("forge:cobblestone", "forge:cobblestone/normal")) {
+            require(Blocks.GOLD_BLOCK.defaultBlockState().is(blockTag(tag)), "Lost third-party block cobblestone " + tag);
+            require(new ItemStack(Blocks.GOLD_BLOCK).is(TagKey.create(Registries.ITEM, id(tag))), "Lost third-party item cobblestone " + tag);
+        }
+        for (String name : List.of("nitrate", "phosphorous", "sulfur")) {
+            require(block("mineralogy:" + name + "_ore").defaultBlockState().is(blockTag("forge:ores")), "Ore aggregate " + name);
+            require(new ItemStack(block("mineralogy:" + name + "_ore")).is(TagKey.create(Registries.ITEM, id("forge:ores"))), "Item ore aggregate " + name);
+        }
+        for (String excluded : List.of("mineralogy:basalt_brick", "mineralogy:basalt_smooth", "minecraft:sandstone"))
+            if (registered(excluded))
+            require(!block(excluded).defaultBlockState().is(blockTag("mineralogy:raw_stones")), "Crafted/sandstone common stone " + excluded);
+        evidence.add(phase + ": " + checked + " registered direct block/item classifications; recursive ore/storage aggregates and normal/root cobblestone option=" + enabled);
+    }
+    private void verifyGoatsAndCats(ServerLevel level, String phase) throws Exception {
+        BlockPos pos = new BlockPos(768, 201, 192);
+        level.getChunk(pos);
+        net.minecraft.world.level.LevelAccessor view = (net.minecraft.world.level.LevelAccessor)Proxy.newProxyInstance(
+                net.minecraft.world.level.LevelAccessor.class.getClassLoader(), new Class<?>[] {net.minecraft.world.level.LevelAccessor.class},
+                (proxy, method, args) -> memberName(method.getDeclaringClass(), "getRawBrightness", method.getName()) ? 15 : method.invoke(level, args));
+        Set<String> terrain = raw();
+        for (String name : List.of("andesite", "basalt", "diorite", "granite", "sandstone", "tuff")) terrain.add("minecraft:" + name);
+        terrain.add("minecraft:stone");
+        for (String name : terrain) {
+            level.setBlock(pos.below(), block(name).defaultBlockState(), 2);
+            require(net.minecraft.world.entity.animal.goat.Goat.checkGoatSpawnRules(net.minecraft.world.entity.EntityType.GOAT, view,
+                    net.minecraft.world.entity.MobSpawnType.NATURAL, pos, RandomSource.create(17)), "Native goat spawn " + name);
+        }
+        var behavior = new net.minecraft.world.entity.ai.behavior.RamTarget(goat -> net.minecraft.util.valueproviders.UniformInt.of(1, 2),
+                net.minecraft.world.entity.ai.targeting.TargetingConditions.forCombat(), 1.0F, goat -> 1.0D,
+                goat -> net.minecraft.sounds.SoundEvents.GOAT_RAM_IMPACT, goat -> net.minecraft.sounds.SoundEvents.GOAT_HORN_BREAK);
+        int horns = 0;
+        Set<String> hornControls = raw();
+        for (String name : List.of("andesite", "basalt", "diorite", "granite", "tuff", "stone")) hornControls.add("minecraft:" + name);
+        if (registered("mineralogy:basalt_brick")) hornControls.add("mineralogy:basalt_brick");
+        for (String name : hornControls) {
+            var goat = new net.minecraft.world.entity.animal.goat.Goat(net.minecraft.world.entity.EntityType.GOAT, level);
+            goat.setPos(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+            goat.setDeltaMovement(new net.minecraft.world.phys.Vec3(1, 0, 0));
+            goat.getBrain().setMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.RAM_TARGET, goat.position().add(10, 0, 0));
+            level.setBlock(pos.east(), block(name).defaultBlockState(), 2);
+            level.setBlock(pos.east().above(), Blocks.AIR.defaultBlockState(), 2);
+            boolean expected = !List.of("mineralogy:rock_salt", "mineralogy:scoria", "mineralogy:siltstone", "mineralogy:chalk", "mineralogy:gypsum", "mineralogy:pumice", "mineralogy:basalt_brick").contains(name);
+            require((Boolean)call(behavior, "hasRammedHornBreakingBlock", level, goat) == expected, "Native horn collision " + name);
+            call(behavior, "tick", level, goat, 1L);
+            boolean dropped = !goat.hasLeftHorn() || !goat.hasRightHorn();
+            require(dropped == expected, "Actual horn loss " + name);
+            if (dropped) horns++;
+            goat.discard();
+        }
+        var cat = new net.minecraft.world.entity.animal.Cat(net.minecraft.world.entity.EntityType.CAT, level);
+        var goal = new net.minecraft.world.entity.ai.goal.CatSitOnBlockGoal(cat, 1.0D);
+        List<String> furnaces = new ArrayList<>(List.of("minecraft:furnace"));
+        for (String family : FAMILIES) for (String finish : List.of("", "_smooth", "_brick", "_smooth_brick")) {
+            furnaces.add("mineralogy:" + family + finish + "_furnace");
+            furnaces.add("mineralogy:lit_" + family + finish + "_furnace");
+        }
+        for (String name : furnaces) {
+            Block value = BuiltInRegistries.BLOCK.get(id(name));
+            if (value == null || value == Blocks.AIR) continue;
+            level.setBlock(pos, value.defaultBlockState(), 2);
+            level.setBlock(pos.above(), Blocks.AIR.defaultBlockState(), 2);
+            require((Boolean)call(goal, "isValidTarget", level, pos) == false, "Cat lit-only targeting " + name);
+        }
+        level.setBlock(pos, Blocks.FURNACE.defaultBlockState().setValue(net.minecraft.world.level.block.FurnaceBlock.LIT, true), 2);
+        require((Boolean)call(goal, "isValidTarget", level, pos), "Cat vanilla lit-furnace control");
+        evidence.add(phase + ": native goat spawn on 37 terrain rocks + stone; actual horn loss on " + horns + " hard/vanilla controls with soft/crafted negatives; native pre-26.3 cat targets unchanged (Mineralogy furnaces excluded)");
+    }
+    private void verifyRootsAndForestRocks(ServerLevel level, String phase) throws Exception {
+        Object registry = call(level.registryAccess(), "registryOrThrow", Registries.CONFIGURED_FEATURE);
+        Object roots = call(call(registry, "getHolderOrThrow", ResourceKey.create(Registries.CONFIGURED_FEATURE, id("minecraft:rooted_azalea_tree"))), "value");
+        Object forest = call(call(registry, "getHolderOrThrow", ResourceKey.create(Registries.CONFIGURED_FEATURE, id("minecraft:forest_rock"))), "value");
+        int index = 0;
+        for (String name : List.of("minecraft:stone", "mineralogy:basalt", "mineralogy:chalk", "mineralogy:basalt_brick")) {
+            if (!registered(name)) continue;
+            BlockPos pos = new BlockPos(index++ * 48, level.getMinBuildHeight() + 10, 384);
+            prepareRoom(level, pos, block(name), 8);
+            call(call(roots, "feature"), "placeRootedDirt", level, call(roots, "config"), RandomSource.create(17), pos.getX(), pos.getZ(), pos.mutable());
+            boolean rootPlaced = count(level, pos, 8, Blocks.ROOTED_DIRT) > 0;
+            boolean expected = !name.endsWith("_brick");
+            require(rootPlaced == expected, "Native azalea root placement " + name);
+            prepareRoom(level, pos, block(name), 8);
+            for (int y = level.getMinBuildHeight(); y < pos.getY(); y++) level.setBlock(new BlockPos(pos.getX(), y, pos.getZ()), block(name).defaultBlockState(), 2);
+            call(forest, "place", level, level.getChunkSource().getGenerator(), RandomSource.create(17), pos.above());
+            int placed = count(level, pos, 8, Blocks.MOSSY_COBBLESTONE);
+            require((placed > 0) == expected, "Native forest-rock placement " + name);
+            require(!block(name).defaultBlockState().is(blockTag("minecraft:azalea_grows_on")), "Bare rock was made tree soil " + name);
+            evidence.add(phase + ": native root/forest-rock " + name + "=" + rootPlaced + "/" + placed);
+        }
+    }
+    private void verifyNarrowChecks(ServerLevel level, String phase, boolean fixed) throws Exception {
+        Object featureRegistry = call(level.registryAccess(), "registryOrThrow", Registries.CONFIGURED_FEATURE);
+        Object cluster = call(call(featureRegistry, "getHolderOrThrow", ResourceKey.create(Registries.CONFIGURED_FEATURE, id("minecraft:dripstone_cluster"))), "value");
+        cluster = call(cluster, "feature");
+        BlockPos center = new BlockPos(512, 200, 256);
+        prepareRoom(level, center, Blocks.STONE, 12);
+        for (String name : List.of("minecraft:stone", "mineralogy:basalt", "mineralogy:chalk", "mineralogy:basalt_brick")) {
+            if (!registered(name)) continue;
+            level.setBlock(center, block(name).defaultBlockState(), 2);
+            boolean accepted = (Boolean)call(cluster, "canBeAdjacentToWater", level, center);
+            evidence.add(phase + ": native water-pocket adjacency " + name + "=" + accepted);
+            require(accepted == (name.equals("minecraft:stone") || fixed && !name.endsWith("_brick")), "Water-pocket native control " + name);
+        }
+        // Exercise the private column walker directly: air, a rock barrier, then
+        // air again. A column must stop at natural rock, but not at crafted brick.
+        Class<?> columnType = Class.forName("net.minecraft.world.level.levelgen.feature.LargeDripstoneFeature$LargeDripstone");
+        Class<?> windType = Class.forName("net.minecraft.world.level.levelgen.feature.LargeDripstoneFeature$WindOffsetter");
+        Constructor<?> columnConstructor = columnType.getDeclaredConstructor(BlockPos.class, boolean.class, int.class, double.class, double.class);
+        columnConstructor.setAccessible(true);
+        Object wind = callStatic(windType, "noWind");
+        for (String name : List.of("minecraft:stone", "mineralogy:basalt", "mineralogy:basalt_brick")) {
+            if (!registered(name)) continue;
+            prepareRoom(level, center, Blocks.STONE, 12);
+            for (int y = -8; y <= 0; y++) level.setBlock(center.offset(0, y, 0), (y == -2 ? block(name) : Blocks.AIR).defaultBlockState(), 2);
+            Object column = columnConstructor.newInstance(center, false, 2, 0.5, 5.0);
+            call(column, "placeBlocks", level, RandomSource.create(17), wind);
+            boolean stopped = level.getBlockState(center.below(3)).isAir();
+            evidence.add(phase + ": native large-column stop " + name + "=" + stopped);
+            require(stopped == (name.equals("minecraft:stone") || fixed && !name.endsWith("_brick")), "Large-column native control " + name);
+        }
+        net.minecraft.world.level.block.WallBlock wall = (net.minecraft.world.level.block.WallBlock)Blocks.COBBLESTONE_WALL;
+        var straight = wall.defaultBlockState().setValue(net.minecraft.world.level.block.WallBlock.NORTH_WALL, net.minecraft.world.level.block.state.properties.WallSide.LOW)
+                .setValue(net.minecraft.world.level.block.WallBlock.SOUTH_WALL, net.minecraft.world.level.block.state.properties.WallSide.LOW);
+        for (String name : List.of("minecraft:torch", "mineralogy:rocksaltlamp")) {
+            var top = block(name).defaultBlockState();
+            Method topUpdate = declaredMethod(wall.getClass(), "topUpdate", net.minecraft.world.level.LevelReader.class,
+                    net.minecraft.world.level.block.state.BlockState.class, BlockPos.class, net.minecraft.world.level.block.state.BlockState.class);
+            var result = (net.minecraft.world.level.block.state.BlockState)topUpdate.invoke(wall, level, straight, center.above(), top);
+            boolean post = result.getValue(net.minecraft.world.level.block.WallBlock.UP);
+            evidence.add(phase + ": native straight-wall post under " + name + "=" + post);
+            require(post == (name.equals("minecraft:torch") || fixed), "Straight-wall torch control " + name);
+            var junction = straight.setValue(net.minecraft.world.level.block.WallBlock.EAST_WALL, net.minecraft.world.level.block.state.properties.WallSide.LOW);
+            result = (net.minecraft.world.level.block.state.BlockState)topUpdate.invoke(wall, level, junction, center.above(), top);
+            require(result.getValue(net.minecraft.world.level.block.WallBlock.UP), "Junction-wall post " + name);
+        }
     }
     private static ResourceLocation id(String value) { return new ResourceLocation(value); }
     private static Block block(String value) {
         Block result = BuiltInRegistries.BLOCK.get(id(value));
         require(result != null && result != Blocks.AIR, "Missing block " + value);
         return result;
+    }
+    private static boolean registered(String value) {
+        Block valueBlock = BuiltInRegistries.BLOCK.get(id(value));
+        return valueBlock != null && valueBlock != Blocks.AIR;
     }
     private static TagKey<Block> blockTag(String name) { return TagKey.create(Registries.BLOCK, id(name)); }
     private static Set<String> raw() {
@@ -85,7 +321,16 @@ public final class TerrainCompatibilityProbe {
             require(Blocks.GOLD_BLOCK.defaultBlockState().is(blockTag("minecraft:" + tag)), "Lost third-party member " + tag);
         }
         for (String excluded : List.of("basalt_brick", "basalt_smooth", "basalt_slab", "basalt_furnace", "sulfur_ore", "sulfur_block", "rocksaltlamp", "rocksaltstreetlamp"))
+            if (registered("mineralogy:" + excluded))
             require(!block("mineralogy:" + excluded).defaultBlockState().is(terrainTag), "Crafted/non-terrain member " + excluded);
+        boolean constructionDisabled = Boolean.getBoolean("mineralogy.compatProbe.constructionDisabled");
+        String[] mining = {"mineable/pickaxe", "needs_iron_tool", "needs_stone_tool"};
+        int[] totals = constructionDisabled ? new int[]{53, 3, 9} : new int[]{1133, 123, 329};
+        for (int index = 0; index < mining.length; index++) {
+            long total = java.util.stream.StreamSupport.stream(BuiltInRegistries.BLOCK.getTagOrEmpty(blockTag("minecraft:" + mining[index])).spliterator(), false)
+                    .filter(holder -> BuiltInRegistries.BLOCK.getKey(holder.value()).getNamespace().equals("mineralogy")).count();
+            require(total == totals[index], "Loaded mining total " + mining[index] + "=" + total);
+        }
         evidence.add(phase + ": 37 block/item terrain identities; all five vanilla consumers; vanilla and third-party members retained");
     }
     private void verifyCatalysts(ServerLevel level, String phase) throws Exception {
@@ -97,6 +342,7 @@ public final class TerrainCompatibilityProbe {
             level.setBlockAndUpdate(catalystPos, Blocks.SCULK_CATALYST.defaultBlockState());
             Object catalyst = level.getBlockEntity(catalystPos);
             require(catalyst != null, "No catalyst block entity");
+            // On 1.19.4 the catalyst block entity is itself the event listener.
             Object listener = catalyst;
             Class<?> entityTypes = Class.forName("net.minecraft.world.entity.EntityType");
             Object type = field(entityTypes, "ZOMBIE");
@@ -132,6 +378,7 @@ public final class TerrainCompatibilityProbe {
             Object configured = call(holder, "value");
             int index = 0;
             for (String substrate : List.of("minecraft:stone", "mineralogy:basalt", "minecraft:basalt", "mineralogy:rhyolite", "mineralogy:chalk", "mineralogy:chert", "mineralogy:gypsum", "mineralogy:pumice", "mineralogy:basalt_brick")) {
+                if (!registered(substrate)) continue;
                 BlockPos center = new BlockPos(index++ * 32, 200, 64);
                 int placed = 0;
                 for (long seed : new long[] { 3, 17, 81, 109, 531 }) {
@@ -162,20 +409,22 @@ public final class TerrainCompatibilityProbe {
     }
     private void sampleCaves(ServerLevel level) {
         Map<String, Long> counts = new TreeMap<>();
-        for (int x = -1; x <= 1; x++) for (int z = -1; z <= 1; z++) level.getChunk(x, z);
-        for (BlockPos pos : BlockPos.betweenClosed(new BlockPos(-16, -64, -16), new BlockPos(31, 80, 31))) {
+        for (int x = -4; x <= 4; x++) for (int z = -4; z <= 4; z++) level.getChunk(x, z);
+        for (BlockPos pos : BlockPos.betweenClosed(new BlockPos(-64, -64, -64), new BlockPos(79, 80, 79))) {
             String name = BuiltInRegistries.BLOCK.getKey(level.getBlockState(pos).getBlock()).toString();
-            if (name.startsWith("mineralogy:") || name.contains("dripstone") || name.contains("moss") || name.contains("cave_vines"))
+            if (name.startsWith("mineralogy:") || name.contains("dripstone") || name.contains("moss") || name.contains("cave_vines")
+                    || name.equals("minecraft:air") || name.equals("minecraft:cave_air"))
                 counts.merge(name, 1L, Long::sum);
         }
-        evidence.add("Paired fresh cave sample: nine chunks; seed -4965128775892001975; y=-64..80");
+        evidence.add("Paired fresh cave sample: 81 chunks; seed -4965128775892001975; y=-64..80");
         counts.forEach((name, count) -> evidence.add(name + "=" + count));
     }
     private static final class ClientSmoke {
+        private static boolean openedFixture;
         private static int ticks;
         private static int waiting;
-        private static boolean opened;
         private static String lastScreen;
+        private static Object confirmedBackup;
         private static void register() { net.minecraftforge.common.MinecraftForge.EVENT_BUS.addListener((net.minecraftforge.event.TickEvent.ClientTickEvent event) -> { if (event.phase == net.minecraftforge.event.TickEvent.Phase.END) tick(); }); }
         private static void tick() {
             net.minecraft.client.Minecraft client = net.minecraft.client.Minecraft.getInstance();
@@ -184,22 +433,20 @@ public final class TerrainCompatibilityProbe {
                 lastScreen = screen.getClass().getName();
                 System.out.println("COMPAT_CLIENT_SCREEN " + lastScreen);
             }
-            if (!opened && screen instanceof net.minecraft.client.gui.screens.TitleScreen) {
-                opened = true;
-                new net.minecraft.client.gui.screens.worldselection.WorldOpenFlows(client, client.getLevelSource())
-                        .loadLevel(client.screen, "compatibility-world");
+            if (!openedFixture && screen instanceof net.minecraft.client.gui.screens.TitleScreen) {
+                openedFixture = true;
+                // 1.19.4 predates Quick Play. Open only the copied probe world,
+                // through its native loader, and acknowledge its experimental pack.
+                try {
+                    call(client.createWorldOpenFlows(), "doLoadLevel", screen,
+                            "compatibility-world", false, true, true);
+                } catch (Exception problem) { throw new IllegalStateException(problem); }
             }
-            if (screen instanceof net.minecraft.client.gui.screens.ConfirmScreen confirm
-                    && confirm.getTitle().equals(net.minecraft.network.chat.Component.translatable("selectWorld.backupQuestion.experimental"))) {
-                // Forge 45's experimental warning is expected for this disposable
-                // copied fixture. Do not accept resource failures or other dialogs.
-                try { ((it.unimi.dsi.fastutil.booleans.BooleanConsumer)field(confirm, "callback")).accept(true); }
-                catch (Exception problem) { throw new IllegalStateException(problem); }
-            }
-            if (screen instanceof net.minecraft.client.gui.screens.BackupConfirmScreen backup) {
+            if (screen instanceof net.minecraft.client.gui.screens.BackupConfirmScreen backup && screen != confirmedBackup) {
                 // The copied disposable world is the only accepted target. Never
                 // auto-confirm a user world or unrelated dialog.
                 try {
+                    confirmedBackup = screen;
                     net.minecraft.client.gui.screens.BackupConfirmScreen.Listener listener =
                             (net.minecraft.client.gui.screens.BackupConfirmScreen.Listener)field(backup, "listener");
                     listener.proceed(false, false);
@@ -238,7 +485,16 @@ public final class TerrainCompatibilityProbe {
         if (source.equals(actual)) return true;
         return Arrays.asList(REFLECTION_NAMES.getProperty(owner.getName() + "." + source, "").split(",")).contains(actual);
     }
-    private static Object enumValue(String type, String name) throws Exception { return Class.forName(type).getField(name).get(null); }
+    private static Object enumValue(String type, String name) throws Exception { return field(Class.forName(type), name); }
+    private static Method declaredMethod(Class<?> type, String name, Class<?>... parameters) throws Exception {
+        for (Method method : type.getDeclaredMethods()) {
+            if (memberName(type, name, method.getName()) && Arrays.equals(method.getParameterTypes(), parameters)) {
+                method.setAccessible(true);
+                return method;
+            }
+        }
+        throw new NoSuchMethodException(type.getName() + "." + name);
+    }
     private static Object field(Object target, String name) throws Exception {
         for (Class<?> type = target instanceof Class<?> ? (Class<?>)target : target.getClass(); type != null; type = type.getSuperclass()) {
             for (Field field : type.getDeclaredFields()) if (memberName(field.getDeclaringClass(), name, field.getName())) {
@@ -267,6 +523,8 @@ public final class TerrainCompatibilityProbe {
             if (type == boolean.class) type = Boolean.class;
             if (type == int.class) type = Integer.class;
             if (type == double.class) type = Double.class;
+            if (type == float.class) type = Float.class;
+            if (type == long.class) type = Long.class;
             if (args[index] != null && !type.isInstance(args[index])) return false;
         }
         return true;

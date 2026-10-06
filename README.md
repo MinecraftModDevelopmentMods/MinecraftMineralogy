@@ -25,6 +25,13 @@ below-surface conditions. The additive bat tag applies to existing worlds and
 is independent of cobblestone equivalence; crafted construction blocks remain
 excluded.
 
+Goats can also spawn on natural rock, and hard raw rocks can break their horns.
+Azalea roots and forest rocks recognise raw Mineralogy stone; bare rock is
+not tree-growing soil. Rock-salt lamps keep the centre post on straight walls.
+Construction tags remain loadable when their registration switches are off.
+Slabs, stairs, walls, furnaces, ores, storage blocks and coloured drywall now
+join the matching vanilla or common tags without changing recipes.
+
 ## Configuration and help
 
 Mineralogy's content and recipe switches remain in

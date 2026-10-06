@@ -14,6 +14,14 @@ import org.junit.Test;
 
 public class WorkflowContractTest {
     @Test
+    public void mergedSourceSetOutputsAreNotRestoredIndependentlyFromCache() throws Exception {
+        String build = text("build.gradle");
+        assertTrue(build.contains("['compileJava', 'processResources', 'compileTestJava', 'processTestResources']"));
+        assertTrue(build.contains("outputs.doNotCacheIf('ForgeGradle merged output has multiple producers')"));
+        assertFalse(build.contains("failOnNoDiscoveredTests = false"));
+    }
+
+    @Test
     public void releaseMetadataIdentifiesTheGenericForgeTarget() throws Exception {
         Properties properties = new Properties();
         try (FileInputStream input = new FileInputStream("gradle.properties")) {
@@ -89,7 +97,7 @@ public class WorkflowContractTest {
         assertTrue(build.contains("reproducibleFileOrder = true"));
         assertTrue(build.contains("filesMatching(['**/*.java', '**/*.json', '**/*.mcmeta', '**/*.toml'])"));
         assertTrue(build.contains("filesMatching(['**/*.json', '**/*.mcmeta', '**/*.toml', '**/*.md'])"));
-        assertTrue(build.contains("ForgeGradle merged main output has multiple producers"));
+        assertTrue(build.contains("ForgeGradle merged output has multiple producers"));
         assertTrue(build.contains("'zone/moddev/mc/mineralogy/Mineralogy.class'"));
         assertTrue(build.contains("928 Forge 61 item definitions"));
         assertTrue(build.contains("assets/mineralogy/items/"));

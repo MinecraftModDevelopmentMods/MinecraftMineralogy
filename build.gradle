@@ -267,12 +267,12 @@ processResources {
     }
 }
 
-// ForgeGradle 7 merges the main Java and resource outputs into one directory.
+// ForgeGradle 7 merges each source set's Java and resource outputs.
 // A cache restore for either producer replaces that directory and can erase the
-// other producer's files, yielding a resource-only or class-only release jar.
-['compileJava', 'processResources'].each { taskName ->
+// other producer's files: incomplete jars or a test run with no test classes.
+['compileJava', 'processResources', 'compileTestJava', 'processTestResources'].each { taskName ->
     tasks.named(taskName) {
-        outputs.doNotCacheIf('ForgeGradle merged main output has multiple producers') { true }
+        outputs.doNotCacheIf('ForgeGradle merged output has multiple producers') { true }
     }
 }
 

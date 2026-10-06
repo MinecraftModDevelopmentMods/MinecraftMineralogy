@@ -1,7 +1,10 @@
 {
   "replace": false,
   "values": [
-    "mineralogy:andesite_slab",
+    {
+      "id": "mineralogy:andesite_slab",
+      "required": false
+    },
     "minecraft:andesite_slab"
   ]
 }

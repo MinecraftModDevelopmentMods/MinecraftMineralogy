@@ -19,6 +19,19 @@ import static org.junit.Assert.*;
 
 public class GameplayContractTest {
     @Test
+    public void furnaceTransitionSynchronizesTheRetainedEntityAndAlwaysResetsTheGuard() throws Exception {
+        String source = text("src/main/java/zone/moddev/mc/mineralogy/blocks/RockFurnace.java");
+        String transition = source.substring(source.indexOf("public static void setState"),
+                source.indexOf("public BlockEntity newBlockEntity"));
+        assertTrue(transition.contains("BlockState newState = newBlock.defaultBlockState().setValue(FACING, oldState.getValue(FACING))"));
+        assertTrue(transition.contains("try {"));
+        assertTrue(transition.contains("finally {"));
+        assertTrue(transition.indexOf("finally {") < transition.indexOf("keepInventory = false"));
+        assertTrue(transition.indexOf("tileEntity.setBlockState(newState)") < transition.indexOf("tileEntity.clearRemoved()"));
+        assertTrue(transition.indexOf("tileEntity.clearRemoved()") < transition.indexOf("world.setBlockEntity(tileEntity)"));
+    }
+
+    @Test
     public void reliefOpenCentreDoesNotCullItsSupportingBlockFace() throws Exception {
         String relief = text("src/main/java/zone/moddev/mc/mineralogy/blocks/RockRelief.java");
         assertTrue(relief.contains("VoxelShape getOcclusionShape(BlockState state, BlockGetter world, BlockPos pos)"));

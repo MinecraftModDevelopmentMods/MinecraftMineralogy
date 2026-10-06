@@ -1,3 +1,20 @@
+Mineralogy 6.1.4.117011 for Minecraft 1.17.1
+
+- Fixed mining tags so all intended blocks load into their pickaxe and tool-tier
+  tags. Optional construction entries now use the format Minecraft accepts.
+- Moss, dripstone, azalea roots and forest rocks recognise natural Mineralogy
+  terrain in newly generated chunks. Direct dripstone checks use a dedicated
+  interface, without changing global base-stone or ore-host tags.
+- Single and upright slabs, stairs and walls use the matching vanilla tags;
+  raw stones and ore/storage blocks use common interoperability aggregates.
+- Rock-salt lamps keep their posts on walls. Config-disabled construction
+  forms no longer leave required tags or loot entries.
+- Normal cobblestone follows the existing option, retaining chert, pumice and
+  other mods' members. Minecraft 1.17 goat spawning stays unchanged.
+- Rock furnaces keep their block-entity state in step when lighting and cooling,
+  preserving their contents, fuel and facing through the transition.
+- Recipes, IDs, configs, providers, migrations, textures and OreSpawn are unchanged.
+
 Mineralogy 6.1.1.117011 for Minecraft 1.17.1
 
 - Corrected relief occlusion so their intentionally open centres reveal the

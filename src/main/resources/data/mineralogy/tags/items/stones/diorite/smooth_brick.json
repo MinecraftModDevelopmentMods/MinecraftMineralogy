@@ -1,6 +1,9 @@
 {
-    "replace":  false,
-    "values":  [
-                   "mineralogy:diorite_smooth_brick"
-               ]
+  "replace": false,
+  "values": [
+    {
+      "id": "mineralogy:diorite_smooth_brick",
+      "required": false
+    }
+  ]
 }

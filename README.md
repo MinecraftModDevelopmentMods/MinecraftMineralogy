@@ -10,9 +10,20 @@ mineral ores and dusts, rock furnaces, drywall, rock-salt lighting, fertilizer,
 and crude oil. OreSpawn 4 is the sole terrain, strata, ore, and deposit engine;
 Mineralogy no longer installs a parallel world generator.
 
-This branch builds Mineralogy `6.1.1.117011` for Forge `37.1.1` and is built
+This branch builds Mineralogy `6.1.4.117011` for Forge `37.1.1` and is built
 and tested against OreSpawn `4.0.9.117011`. Its declared compatibility range is
 OreSpawn `[4.0.6,5.0.0)`. Install both mods on clients and servers.
+
+Mineralogy 6.1.4 restores the intended mining tags and lets moss, dripstone,
+azalea roots and forest rocks recognise natural Mineralogy terrain. Cave
+decoration changes appear in newly generated chunks. Rock-salt lamps keep
+their wall posts, and disabled construction types no longer leave required
+tag or loot references. Common stone and shape tags describe the matching
+raw rocks and single slabs, stairs and walls; crafted blocks stay out of
+natural replacement tags. Goat spawning keeps Minecraft 1.17's native rules.
+Rock furnaces also keep their retained block entity in step with lit/unlit
+transitions, without losing contents, fuel or facing.
+Recipes, IDs, configs, providers, migrations, textures and OreSpawn are unchanged.
 
 ## Configuration and help
 

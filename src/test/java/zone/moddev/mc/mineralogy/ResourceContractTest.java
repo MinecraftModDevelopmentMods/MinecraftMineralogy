@@ -849,7 +849,9 @@ public class ResourceContractTest {
         JsonArray values = json(file).getAsJsonArray("values");
         assertEquals(file.getPath(), expected.length, values.size());
         for (int index = 0; index < expected.length; index++) {
-            assertEquals(file.getPath(), expected[index], values.get(index).getAsString());
+            JsonElement value = values.get(index);
+            assertEquals(file.getPath(), expected[index], value.isJsonObject()
+                    ? value.getAsJsonObject().get("id").getAsString() : value.getAsString());
         }
     }
 

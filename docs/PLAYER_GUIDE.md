@@ -7,6 +7,19 @@ and OreSpawn 4.0.16.2601021.
 Install matching Mineralogy and OreSpawn jars on both clients and servers. Do
 not open a world containing Mineralogy blocks without Mineralogy installed.
 
+## Vanilla Stone Behaviour
+
+Natural Mineralogy rocks support sculk spreading, moss, dripstone, rooted
+dirt and forest-rock placement. Bats and goats can use natural terrain under
+Minecraft's normal spawning rules. Harder raw rocks can break a charging
+goat's horn; soft rocks and crafted blocks cannot.
+
+Rock-salt lamps keep the centre post on straight walls. Slabs, stairs,
+furnaces and coloured drywall have their matching common classifications.
+These behaviours do not depend on cobblestone equivalence. They apply after
+updating an existing world, but cave decoration needs newly generated chunks.
+Sulfur cubes are not present in Minecraft 26.1.2.
+
 ## Creating Or Upgrading A World
 
 Open **OreSpawn World Generation** while creating a world. **Recommended

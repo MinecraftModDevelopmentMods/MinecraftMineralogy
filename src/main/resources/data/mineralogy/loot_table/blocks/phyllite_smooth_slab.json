@@ -1,4 +1,8 @@
 {
+  "forge:condition": {
+    "type": "forge:item_exists",
+    "item": "mineralogy:phyllite_smooth_slab"
+  },
   "type": "minecraft:block",
   "pools": [
     {

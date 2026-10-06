@@ -79,6 +79,9 @@ NeoForge 26.3 retains its existing 6.1.3 compatibility correction.
 
 | Minecraft | Forge candidate | NeoForge candidate |
 | --- | --- | --- |
+| 1.16.5 | 6.1.4.116051 | Not in scope |
+| 1.17.1 | 6.1.4.117011 | Not in scope |
+| 1.18.2 | 6.1.4.118021 | Not in scope |
 | 1.19.4 | 6.1.4.119041 | Not in scope |
 | 1.20.1 | 6.1.4.120011 | Not in scope |
 | 1.20.6 | 6.1.4.120061 | 6.1.4.120062 |
@@ -88,8 +91,10 @@ NeoForge 26.3 retains its existing 6.1.3 compatibility correction.
 | 26.2 | 6.1.4.2602001 | 6.1.4.2602002 |
 | 26.3 | 6.1.4.2603001 | 6.1.4.2603002 |
 
-Forge 1.18.2's dripstone/moss correction is outstanding and outside this
-campaign. Native-texture synchronization remains a separate campaign.
+The revised local candidates need renewed testing before publication resumes.
+Minecraft 1.13.2–1.15.2 remain unchanged; applicable classifications and
+target-native substrate checks are recorded for their later 6.1 ports.
+Native-texture synchronization remains a separate campaign.
 
 ## Major version
 

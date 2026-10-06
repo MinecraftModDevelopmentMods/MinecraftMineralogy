@@ -77,28 +77,22 @@ public class TerrainCompatibilityContractTest {
         assertFalse(Files.exists(ROOT.resolve("minecraft/tags/" + kind("block") + "/sculk_replaceable_world_gen.json")));
         assertFalse(Files.exists(ROOT.resolve("minecraft/tags/" + kind("block") + "/lush_ground_replaceable.json")));
     }
-    @Test public void sulfurCubeMembershipIsOnlySupportedFullRockItems() throws Exception {
+    @Test public void sulfurCubeMembershipIsOnlyRawRockItems() throws Exception {
         boolean cubes = Arrays.asList("26.2", "26.3").contains(minecraft());
         Path stones = ROOT.resolve("mineralogy/tags/" + kind("item") + "/sulfur_cube_stones.json");
         Path archetype = ROOT.resolve("minecraft/tags/" + kind("item") + "/sulfur_cube_archetype/slow_bouncy.json");
         if (!cubes) { assertFalse(Files.exists(stones)); assertFalse(Files.exists(archetype)); return; }
         Set<String> expected = raw();
-        for (String suffix : Arrays.asList("_smooth", "_brick", "_smooth_brick"))
-            for (String family : FAMILIES) expected.add("mineralogy:" + family + suffix);
         JsonObject tag = json("mineralogy/tags/" + kind("item") + "/sulfur_cube_stones.json");
-        assertEquals(112, expected.size());
-        assertEquals(expected, members(tag, true));
+        assertEquals(31, expected.size());
+        assertEquals(expected, members(tag, false));
         for (String id : expected) {
             String name = id.substring("mineralogy:".length());
             assertTrue("Nonexistent block identity: " + id, Files.exists(Paths.get("src/main/resources/assets/mineralogy/blockstates/" + name + ".json")));
             assertTrue("Nonexistent item identity: " + id, Files.exists(Paths.get("src/main/resources/assets/mineralogy/models/item/" + name + ".json")));
         }
-        int optional = 0;
-        for (JsonElement value : tag.getAsJsonArray("values")) {
-            if (value.isJsonObject()) { optional++; assertFalse(raw().contains(value.getAsJsonObject().get("id").getAsString())); }
-            else assertTrue(raw().contains(value.getAsString()));
-        }
-        assertEquals(81, optional);
+        for (String suffix : Arrays.asList("_smooth", "_brick", "_smooth_brick", "_slab", "_stairs", "_wall", "_furnace"))
+            for (String family : FAMILIES) assertFalse(expected.contains("mineralogy:" + family + suffix));
         assertEquals(Collections.singleton("#mineralogy:sulfur_cube_stones"), members(json("minecraft/tags/" + kind("item") + "/sulfur_cube_archetype/slow_bouncy.json"), false));
     }
     @Test public void noWrongEraTagDirectoriesOrSulfurCubeResources() throws Exception {

@@ -1,3 +1,21 @@
+Mineralogy 6.1.4.2603001 for Minecraft 26.3 Forge
+
+- Fixed sculk catalysts and moss failing to spread across natural Mineralogy
+  rocks, including chalk, chert, gypsum, pumice and older Mineralogy blocks.
+- Fixed missing dripstone and moss decoration where OreSpawn had replaced
+  vanilla stone. This improves newly generated caves, not existing chunks.
+- Fixed bats being unable to spawn above Mineralogy rocks. Minecraft's normal
+  darkness and below-surface checks still apply.
+- Sulfur cubes can now absorb Mineralogy's raw, polished and brick full blocks
+  as Slow Bouncy stones. Slabs, stairs, furnaces, ores and storage blocks are
+  still excluded.
+- These fixes work with cobblestone equivalence on or off, and keep vanilla
+  and other mods' tag entries intact. Sculk, moss, bats and sulfur cubes work
+  in existing worlds after updating.
+- Recipes, saved block IDs, configs, migrations, textures and OreSpawn's
+  generation settings are unchanged. Requires Forge 66.0.0 or later and the
+  matching OreSpawn 4 release for Minecraft 26.3.
+
 Mineralogy 6.1.2.2603001 for Minecraft 26.3 Forge
 
 - Ported the accepted Forge 26.2 product to Minecraft 26.3 and Forge 66.0.0

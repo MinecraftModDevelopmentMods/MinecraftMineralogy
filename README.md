@@ -10,10 +10,20 @@ mineral ores and dusts, rock furnaces, drywall, rock-salt lighting, fertilizer,
 and crude oil. OreSpawn 4 is the sole terrain, strata, ore, and deposit engine;
 Mineralogy no longer installs a parallel world generator.
 
-This branch builds Mineralogy `6.1.2.2603001` for Forge `66.0.0`, with an
+This branch builds Mineralogy `6.1.4.2603001` for Forge `66.0.0`, with an
 additional compatibility smoke on Forge `66.0.2`, and is built and tested
 against OreSpawn `4.0.16.2603001`. Its declared compatibility range is
 OreSpawn `[4.0.6,5.0.0)`. Install both mods on clients and servers.
+
+Mineralogy 6.1.4 fixes a few places where Minecraft wasn't treating Mineralogy
+rocks like natural stone. Sculk catalysts and moss can now spread across them,
+dripstone and lush caves get their missing decoration, and bats can spawn above
+them under Minecraft's normal dark, below-surface conditions. Sulfur cubes can
+also absorb Mineralogy's full-rock blocks as Slow Bouncy stones.
+
+These fixes work with cobblestone equivalence on or off. Sculk, moss, bats and
+sulfur cubes work in existing worlds after updating. The cave-generation fix
+applies to new chunks; it won't redecorate caves you've already explored.
 
 ## Configuration and help
 

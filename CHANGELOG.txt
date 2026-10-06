@@ -1,11 +1,18 @@
 Mineralogy 6.1.4.120011 for Minecraft 1.20.1
 
-- Added matching 37-member terrain-rock block/item tags and additive vanilla
-  sculk, dripstone and moss replacement interfaces. Vanilla and third-party
-  members remain intact; crafted forms are excluded.
-- Restored catalyst spreading and moss on existing terrain, and natural
-  dripstone/lush-cave decoration in newly generated chunks, independently of
-  cobblestone equivalence. No OreSpawn, provider, config, registry or recipe changes.
+- Sculk can spread across natural Mineralogy terrain. Goats can spawn on it,
+  and the harder raw rocks can break their horns. These changes also work in
+  existing worlds; polished and crafted rocks are not natural terrain.
+- Moss, dripstone, azalea roots and forest rocks recognise natural terrain in
+  newly generated chunks. Fixed two dripstone checks without changing general
+  base-stone tags or ore hosts. Bare rock is still not soil for growing trees.
+- Single slabs, stairs and walls join the matching vanilla classifications.
+  Raw rocks, ores and storage blocks join Forge's common tags. Normal cobblestone
+  follows the same option as the root tag, with chert and pumice always valid.
+- Rock-salt lamps keep a wall post beneath them, like a vanilla torch.
+- Disabled construction forms no longer leave missing tag and loot references.
+  Recipes, IDs, configs, providers, migrations, textures and the released
+  OreSpawn dependency are unchanged. There are no sulfur cubes on this target.
 
 Mineralogy 6.1.2.120011 for Minecraft 1.20.1
 

@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "mineralogy:dolomite_brick"
+    {
+      "id": "mineralogy:dolomite_brick",
+      "required": false
+    }
   ]
 }

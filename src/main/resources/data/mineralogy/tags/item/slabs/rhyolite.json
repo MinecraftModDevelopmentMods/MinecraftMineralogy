@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "mineralogy:rhyolite_slab"
+    {
+      "id": "mineralogy:rhyolite_slab",
+      "required": false
+    }
   ]
 }

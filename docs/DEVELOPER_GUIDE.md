@@ -1,5 +1,27 @@
 # Mineralogy Developer Guide
 
+## Stone compatibility tags
+
+`mineralogy:terrain_rocks` contains the provider's natural terrain outputs and
+retained legacy aliases. It does not contain construction blocks, ores or
+storage conversions. Natural replacement and animal behaviour use this
+interface independently of the cobblestone option.
+
+`mineralogy:raw_stones` omits sandstone for common stone consumers.
+`mineralogy:horn_breaking_rocks` is an explicit hard-rock whitelist, excluding
+rock salt, scoria, siltstone, chalk, gypsum and pumice. Sulfur cubes receive only
+the 31 raw Mineralogy items through `mineralogy:sulfur_cube_stones`; no crafted
+forms are contributed, including through aggregate tags.
+
+Config-dependent construction members are optional objects inside `values`.
+Their loot tables also check that the dropped item is registered before loading;
+disabled construction does not leave dangling loot references.
+Slab aggregates classify single/upright slabs, not separate double-slab blocks.
+The two dripstone hooks use `mineralogy:dripstone_base_stones` only at the pool
+containment and column boundary checks. Global base-stone and ore-host tags
+are unchanged. Ports must review new native tags explicitly rather than copy
+an adjacent version's interfaces blindly.
+
 ## Responsibility Split
 
 | Mineralogy owns | OreSpawn owns |

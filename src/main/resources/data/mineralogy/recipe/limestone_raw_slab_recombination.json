@@ -1,16 +1,22 @@
 {
-    "type":  "minecraft:crafting_shapeless",
-    "category":  "building",
-    "ingredients":  [
-                        {
-                            "item":  "mineralogy:limestone_slab"
-                        },
-                        {
-                            "item":  "mineralogy:limestone_slab"
-                        }
-                    ],
-    "result":  {
-                   "id":  "mineralogy:limestone",
-                   "count":  1
-               }
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:limestone_slab"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "mineralogy:limestone_slab"
+    },
+    {
+      "item": "mineralogy:limestone_slab"
+    }
+  ],
+  "result": {
+    "id": "mineralogy:limestone",
+    "count": 1
+  }
 }

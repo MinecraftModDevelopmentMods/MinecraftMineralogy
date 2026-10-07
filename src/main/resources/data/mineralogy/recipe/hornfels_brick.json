@@ -1,18 +1,24 @@
 {
-    "type":  "minecraft:crafting_shaped",
-    "category":  "building",
-    "pattern":  [
-                    "xx",
-                    "xx"
-                ],
-    "key":  {
-                "x":  {
-                          "tag":  "mineralogy:stones/hornfels"
-                      }
-            },
-    "result":  {
-                   "id":  "mineralogy:hornfels_brick",
-                   "count":  4
-               },
-    "show_notification":  true
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:hornfels_brick"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "xx",
+    "xx"
+  ],
+  "key": {
+    "x": {
+      "tag": "mineralogy:stones/hornfels"
+    }
+  },
+  "result": {
+    "id": "mineralogy:hornfels_brick",
+    "count": 4
+  },
+  "show_notification": true
 }

@@ -1,13 +1,19 @@
 {
-    "type":  "minecraft:crafting_shapeless",
-    "category":  "building",
-    "ingredients":  [
-                        {
-                            "item":  "minecraft:andesite_slab"
-                        }
-                    ],
-    "result":  {
-                   "id":  "mineralogy:andesite_slab",
-                   "count":  1
-               }
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:andesite_slab"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "minecraft:andesite_slab"
+    }
+  ],
+  "result": {
+    "id": "mineralogy:andesite_slab",
+    "count": 1
+  }
 }

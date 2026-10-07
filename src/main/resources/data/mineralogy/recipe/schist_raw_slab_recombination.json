@@ -1,16 +1,22 @@
 {
-    "type":  "minecraft:crafting_shapeless",
-    "category":  "building",
-    "ingredients":  [
-                        {
-                            "item":  "mineralogy:schist_slab"
-                        },
-                        {
-                            "item":  "mineralogy:schist_slab"
-                        }
-                    ],
-    "result":  {
-                   "id":  "mineralogy:schist",
-                   "count":  1
-               }
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:schist_slab"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "mineralogy:schist_slab"
+    },
+    {
+      "item": "mineralogy:schist_slab"
+    }
+  ],
+  "result": {
+    "id": "mineralogy:schist",
+    "count": 1
+  }
 }

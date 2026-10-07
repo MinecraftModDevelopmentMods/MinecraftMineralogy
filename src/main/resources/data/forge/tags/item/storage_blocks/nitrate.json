@@ -1,6 +1,6 @@
 {
-    "replace":  false,
-    "values":  [
-                   "#c:storage_blocks/nitrate"
-               ]
+  "replace": false,
+  "values": [
+    "#c:storage_blocks/nitrate"
+  ]
 }

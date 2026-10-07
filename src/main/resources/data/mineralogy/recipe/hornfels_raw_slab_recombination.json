@@ -1,16 +1,22 @@
 {
-    "type":  "minecraft:crafting_shapeless",
-    "category":  "building",
-    "ingredients":  [
-                        {
-                            "item":  "mineralogy:hornfels_slab"
-                        },
-                        {
-                            "item":  "mineralogy:hornfels_slab"
-                        }
-                    ],
-    "result":  {
-                   "id":  "mineralogy:hornfels",
-                   "count":  1
-               }
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:hornfels_slab"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "mineralogy:hornfels_slab"
+    },
+    {
+      "item": "mineralogy:hornfels_slab"
+    }
+  ],
+  "result": {
+    "id": "mineralogy:hornfels",
+    "count": 1
+  }
 }

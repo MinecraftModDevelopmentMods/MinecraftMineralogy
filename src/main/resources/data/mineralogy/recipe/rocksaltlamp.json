@@ -1,25 +1,25 @@
 {
-    "neoforge:conditions":  [
-                                {
-                                    "type":  "mineralogy:config",
-                                    "flag":  "ENABLE_ROCK_SALT_LAMPS"
-                                }
-                            ],
-    "type":  "minecraft:crafting_shapeless",
-    "category":  "building",
-    "ingredients":  [
-                        {
-                            "item":  "mineralogy:rock_salt"
-                        },
-                        {
-                            "item":  "minecraft:torch"
-                        },
-                        {
-                            "item":  "minecraft:iron_ingot"
-                        }
-                    ],
-    "result":  {
-                   "id":  "mineralogy:rocksaltlamp",
-                   "count":  1
-               }
+  "neoforge:conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "ENABLE_ROCK_SALT_LAMPS"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "mineralogy:rock_salt"
+    },
+    {
+      "item": "minecraft:torch"
+    },
+    {
+      "item": "minecraft:iron_ingot"
+    }
+  ],
+  "result": {
+    "id": "mineralogy:rocksaltlamp",
+    "count": 1
+  }
 }

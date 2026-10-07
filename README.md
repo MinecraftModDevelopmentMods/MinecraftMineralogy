@@ -21,7 +21,12 @@ Mineralogy 6.1.4 restores sculk catalyst conversion, moss growth and dripstone
 decoration on natural Mineralogy terrain. Eligibility is independent of
 cobblestone equivalence; crafted blocks are excluded from natural replacement.
 Sculk and moss behavior updates existing worlds; natural cave decoration
-improves in newly generated chunks. Sulfur-cube compatibility is only for 26.2+.
+uses the correct substrates in newly generated chunks. Sulfur-cube compatibility
+is only for 26.2+ and covers raw Mineralogy rock, not polished or crafted forms.
+Natural rocks also support goat spawning and horn breaking on the intended hard
+substrates. Slabs, stairs and walls participate in their normal construction
+tags; rock furnaces, ores, storage blocks and dyed drywall use the common tags.
+Turning construction off no longer leaves missing tag or loot references.
 
 ## Configuration and help
 

@@ -1,17 +1,23 @@
 {
-    "type":  "minecraft:crafting_shaped",
-    "category":  "building",
-    "pattern":  [
-                    "###"
-                ],
-    "key":  {
-                "#":  {
-                          "item":  "minecraft:granite"
-                      }
-            },
-    "result":  {
-                   "id":  "mineralogy:granite_slab",
-                   "count":  6
-               },
-    "show_notification":  true
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:granite_slab"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:granite"
+    }
+  },
+  "result": {
+    "id": "mineralogy:granite_slab",
+    "count": 6
+  },
+  "show_notification": true
 }

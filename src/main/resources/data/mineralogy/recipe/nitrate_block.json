@@ -1,25 +1,25 @@
 {
-    "neoforge:conditions":  [
-                                {
-                                    "type":  "mineralogy:config",
-                                    "flag":  "ENABLE_MINERAL_DUSTS"
-                                }
-                            ],
-    "type":  "minecraft:crafting_shaped",
-    "category":  "building",
-    "pattern":  [
-                    "xxx",
-                    "xxx",
-                    "xxx"
-                ],
-    "key":  {
-                "x":  {
-                          "item":  "mineralogy:nitrate_dust"
-                      }
-            },
-    "result":  {
-                   "id":  "mineralogy:nitrate_block",
-                   "count":  1
-               },
-    "show_notification":  true
+  "neoforge:conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "ENABLE_MINERAL_DUSTS"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "xxx",
+    "xxx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:nitrate_dust"
+    }
+  },
+  "result": {
+    "id": "mineralogy:nitrate_block",
+    "count": 1
+  },
+  "show_notification": true
 }

@@ -73,12 +73,15 @@ new releases and does not reinterpret an old file's version.
 
 ## Vanilla stone compatibility campaign
 
-The following local candidates share the 6.1.4 additive terrain compatibility
-fix. This is a candidate matrix, not a claim that every release is published.
+The following local candidates share the 6.1.4 terrain and tag compatibility
+fixes. This is a candidate matrix, not a claim that every release is published.
 NeoForge 26.3 retains its existing 6.1.3 compatibility correction.
 
 | Minecraft | Forge candidate | NeoForge candidate |
 | --- | --- | --- |
+| 1.16.5 | 6.1.4.116051 | Not in scope |
+| 1.17.1 | 6.1.4.117011 | Not in scope |
+| 1.18.2 | 6.1.4.118021 | Not in scope |
 | 1.19.4 | 6.1.4.119041 | Not in scope |
 | 1.20.1 | 6.1.4.120011 | Not in scope |
 | 1.20.6 | 6.1.4.120061 | 6.1.4.120062 |
@@ -88,8 +91,10 @@ NeoForge 26.3 retains its existing 6.1.3 compatibility correction.
 | 26.2 | 6.1.4.2602001 | 6.1.4.2602002 |
 | 26.3 | 6.1.4.2603001 | 6.1.4.2603002 |
 
-Forge 1.18.2's dripstone/moss correction is outstanding and outside this
-campaign. Native-texture synchronization remains a separate campaign.
+Interfaces apply only where the target provides them: sculk starts with 1.19,
+bat substrate tags apply to the newer targets, and sulfur cubes on 26.2+ accept
+raw Mineralogy rock only. Earlier cave and construction fixes are included on
+1.16–1.18 where applicable. Native-texture synchronization remains separate.
 
 ## Major version
 

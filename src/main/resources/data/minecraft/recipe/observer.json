@@ -1,24 +1,24 @@
 {
-    "type":  "minecraft:crafting_shaped",
-    "category":  "redstone",
-    "pattern":  [
-                    "###",
-                    "RRQ",
-                    "###"
-                ],
-    "key":  {
-                "Q":  {
-                          "item":  "minecraft:quartz"
-                      },
-                "R":  {
-                          "item":  "minecraft:redstone"
-                      },
-                "#":  {
-                          "tag":  "mineralogy:cobblestone_equivalents"
-                      }
-            },
-    "result":  {
-                   "id":  "minecraft:observer"
-               },
-    "show_notification":  true
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "###",
+    "RRQ",
+    "###"
+  ],
+  "key": {
+    "Q": {
+      "item": "minecraft:quartz"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "#": {
+      "tag": "mineralogy:cobblestone_equivalents"
+    }
+  },
+  "result": {
+    "id": "minecraft:observer"
+  },
+  "show_notification": true
 }

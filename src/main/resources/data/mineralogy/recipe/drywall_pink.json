@@ -1,22 +1,22 @@
 {
-    "neoforge:conditions":  [
-                                {
-                                    "type":  "mineralogy:config",
-                                    "flag":  "ENABLE_DRYWALLS"
-                                }
-                            ],
-    "type":  "minecraft:crafting_shapeless",
-    "category":  "building",
-    "ingredients":  [
-                        {
-                            "tag":  "mineralogy:drywall/white"
-                        },
-                        {
-                            "item":  "minecraft:pink_dye"
-                        }
-                    ],
-    "result":  {
-                   "id":  "mineralogy:drywall_pink",
-                   "count":  1
-               }
+  "neoforge:conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "ENABLE_DRYWALLS"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "tag": "mineralogy:drywall/white"
+    },
+    {
+      "item": "minecraft:pink_dye"
+    }
+  ],
+  "result": {
+    "id": "mineralogy:drywall_pink",
+    "count": 1
+  }
 }

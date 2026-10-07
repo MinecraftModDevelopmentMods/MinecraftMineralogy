@@ -1,6 +1,9 @@
 {
-    "replace":  false,
-    "values":  [
-                   "mineralogy:dolomite_smooth_brick"
-               ]
+  "replace": false,
+  "values": [
+    {
+      "id": "mineralogy:dolomite_smooth_brick",
+      "required": false
+    }
+  ]
 }

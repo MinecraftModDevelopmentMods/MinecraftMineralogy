@@ -1,22 +1,22 @@
 {
-    "type":  "minecraft:crafting_shapeless",
-    "category":  "building",
-    "ingredients":  [
-                        {
-                            "tag":  "mineralogy:stones/dolomite"
-                        },
-                        {
-                            "tag":  "mineralogy:stones/dolomite"
-                        },
-                        {
-                            "item":  "minecraft:gravel"
-                        },
-                        {
-                            "item":  "minecraft:gravel"
-                        }
-                    ],
-    "result":  {
-                   "id":  "minecraft:cobblestone",
-                   "count":  4
-               }
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "tag": "mineralogy:stones/dolomite"
+    },
+    {
+      "tag": "mineralogy:stones/dolomite"
+    },
+    {
+      "item": "minecraft:gravel"
+    },
+    {
+      "item": "minecraft:gravel"
+    }
+  ],
+  "result": {
+    "id": "minecraft:cobblestone",
+    "count": 4
+  }
 }

@@ -1,6 +1,6 @@
 {
-    "replace":  false,
-    "values":  [
-                   "#c:dusts/carbon"
-               ]
+  "replace": false,
+  "values": [
+    "#c:dusts/carbon"
+  ]
 }

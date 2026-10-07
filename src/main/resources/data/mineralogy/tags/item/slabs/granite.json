@@ -1,7 +1,10 @@
 {
   "replace": false,
   "values": [
-    "mineralogy:granite_slab",
+    {
+      "id": "mineralogy:granite_slab",
+      "required": false
+    },
     "minecraft:granite_slab"
   ]
 }

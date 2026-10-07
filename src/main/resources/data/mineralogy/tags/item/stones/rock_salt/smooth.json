@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "mineralogy:rock_salt_smooth"
+    {
+      "id": "mineralogy:rock_salt_smooth",
+      "required": false
+    }
   ]
 }

@@ -1,4 +1,8 @@
 {
+  "forge:condition": {
+    "type": "forge:item_exists",
+    "item": "mineralogy:conglomerate_smooth_brick"
+  },
   "type": "minecraft:block",
   "pools": [
     {

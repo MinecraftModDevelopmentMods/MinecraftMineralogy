@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "mineralogy:limestone_brick"
+    {
+      "id": "mineralogy:limestone_brick",
+      "required": false
+    }
   ]
 }

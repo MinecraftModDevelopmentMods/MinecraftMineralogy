@@ -1,3 +1,34 @@
+Mineralogy 6.1.4.2603001 for Minecraft 26.3 Forge
+
+- Fixed sculk catalysts and moss failing to spread across natural Mineralogy
+  rocks, including chalk, chert, gypsum, pumice and older Mineralogy blocks.
+- Fixed missing dripstone and moss decoration where OreSpawn had replaced
+  vanilla stone. This improves newly generated caves, not existing chunks.
+- Fixed bats being unable to spawn above Mineralogy rocks. Minecraft's normal
+  darkness and below-surface checks still apply.
+- Sulfur cubes can absorb the 31 raw Mineralogy rocks as Slow Bouncy stones.
+  Polished blocks, bricks and all other crafted Mineralogy items are excluded.
+  Minecraft's existing rules for its own blocks are unchanged.
+- Goats can spawn on natural Mineralogy terrain and lose horns against the
+  harder raw rocks. Soft rocks and crafted blocks do not break horns.
+- Fixed dripstone water pockets and large columns rejecting natural Mineralogy
+  rock. Azalea roots and forest rocks also recognise their natural substrates,
+  without making bare rock suitable for growing azalea trees.
+- Added the missing slab, stair, furnace, ore, storage and dyed-block tags.
+  Double slabs remain full blocks, and disabled construction forms no longer
+  prevent their tags from loading. Normal cobblestone follows the same option
+  as the existing cobblestone tag, with chert and pumice always included.
+- Fixed construction loot tables preventing a world from loading when those
+  blocks are disabled. Their normal drops are unchanged when enabled.
+- Rock-salt lamps keep the centre post on straight walls. Cats can sit on lit
+  Mineralogy furnaces, but not unlit ones.
+- These fixes work with cobblestone equivalence on or off, and keep vanilla
+  and other mods' tag entries intact. Sculk, moss, bats and sulfur cubes work
+  in existing worlds after updating.
+- Recipes, saved block IDs, configs, migrations, textures and OreSpawn's
+  generation settings are unchanged. Requires Forge 66.0.0 or later and the
+  matching OreSpawn 4 release for Minecraft 26.3.
+
 Mineralogy 6.1.2.2603001 for Minecraft 26.3 Forge
 
 - Ported the accepted Forge 26.2 product to Minecraft 26.3 and Forge 66.0.0

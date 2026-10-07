@@ -1,5 +1,17 @@
 # Mineralogy Player Guide
 
+## Natural stone compatibility
+
+Natural Mineralogy rocks support sculk, moss, dripstone, bats and goat spawning.
+Goats can break horns against the harder raw rocks, but not soft rocks or
+crafted blocks. Sulfur cubes accept the 31 raw Mineralogy rocks as Slow Bouncy
+stones; polished blocks, bricks and other crafted Mineralogy items are not food.
+Vanilla blocks keep Minecraft's own consumption rules.
+
+Cats can sit on lit Mineralogy furnaces, and rock-salt lamps keep the post on a
+straight wall. These changes work in existing worlds. Improved dripstone,
+root and forest-rock generation applies to new chunks, not explored terrain.
+
 ## Installing
 
 Mineralogy 6 needs Minecraft 26.3, Forge 66.0.0 or compatible Forge 66.0.x,

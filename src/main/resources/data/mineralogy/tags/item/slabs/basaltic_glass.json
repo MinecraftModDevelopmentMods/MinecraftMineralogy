@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "mineralogy:basaltic_glass_slab"
+    {
+      "id": "mineralogy:basaltic_glass_slab",
+      "required": false
+    }
   ]
 }

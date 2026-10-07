@@ -1,5 +1,20 @@
 # Mineralogy Player Guide
 
+## Natural stone compatibility
+
+Sculk catalysts can convert natural Mineralogy terrain after an XP-producing
+mob dies nearby. Goats can spawn on it, and hard raw rock can break a goat's
+horn. Bats keep Minecraft's normal darkness and below-surface restrictions.
+These changes work in existing worlds after updating.
+
+Moss, dripstone, azalea roots and forest rocks recognise natural terrain in
+newly generated chunks. Crafted bricks and polished construction blocks are
+not natural cave substrates. Bare rock is not suitable soil for an azalea tree.
+Rock-salt lamps retain the centre post on straight and junction walls.
+
+Sulfur cubes do not exist in Minecraft 1.21.11. On newer supported versions,
+Mineralogy contributes only its raw rocks to their swallowing rules.
+
 ## Installing
 
 Mineralogy 6 needs Minecraft 1.21.11, Forge 61.1.0, and OreSpawn

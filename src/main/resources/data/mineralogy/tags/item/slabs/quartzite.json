@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "mineralogy:quartzite_slab"
+    {
+      "id": "mineralogy:quartzite_slab",
+      "required": false
+    }
   ]
 }

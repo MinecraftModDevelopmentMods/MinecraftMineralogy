@@ -1,5 +1,24 @@
 # Mineralogy Developer Guide
 
+## Tag compatibility contracts
+
+`mineralogy:terrain_rocks` covers provider outputs and retained raw aliases,
+not construction forms. Natural feature eligibility does not depend on
+`COBBLESTONE_EQUIVILENT`. `raw_stones` excludes sandstone from common stone
+classification. Slab aggregates include upright single slabs, not the separate
+double-slab full blocks. Config-dependent members are optional objects inside
+`values`, and their loot tables use Forge's item-existence condition.
+
+Only the dripstone pool and exposed-column base-stone checks are redirected
+to the dedicated terrain union. Each Mixin requires exactly one hook. General
+base-stone, carver and ore-host tags remain unchanged. Forge's existing common
+stone check supplies forest-rock eligibility; azalea root replacement does not
+change the tree's soil requirements.
+
+Every port must audit target tag availability, recursive inheritance, registry
+types and optional construction references, then load the data through the
+target loader under both equivalence settings and disabled construction.
+
 ## Responsibility Split
 
 | Mineralogy owns | OreSpawn owns |

@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "mineralogy:gneiss_brick_slab"
+    {
+      "id": "mineralogy:gneiss_brick_slab",
+      "required": false
+    }
   ]
 }

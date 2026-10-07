@@ -10,9 +10,27 @@ mineral ores and dusts, rock furnaces, drywall, rock-salt lighting, fertilizer,
 and crude oil. OreSpawn 4 is the sole terrain, strata, ore, and deposit engine;
 Mineralogy no longer installs a parallel world generator.
 
-This branch builds Mineralogy `6.1.2.121111` for Forge `61.1.0` and is built
+This branch builds Mineralogy `6.1.4.121111` for Forge `61.1.0` and is built
 and tested against OreSpawn `4.0.16.121111`. Its declared compatibility range is
 OreSpawn `[4.0.6,5.0.0)`. Install both mods on clients and servers.
+
+Version 6.1.4 restores vanilla sculk conversion and dripstone/moss replacement
+on natural Mineralogy terrain. Sculk works in existing worlds after updating;
+improved natural cave decoration appears in newly generated chunks. These
+additive tags are independent of the cobblestone-equivalence option and exclude
+crafted or shaped construction blocks. Sulfur cubes do not exist on this target.
+
+Natural bats can spawn above Mineralogy terrain under Minecraft's normal dark,
+below-surface conditions. The additive bat tag applies to existing worlds and
+is independent of cobblestone equivalence; crafted construction blocks remain
+excluded.
+
+Goats can also spawn on natural rock, and hard raw rocks can break their horns.
+Azalea roots and forest rocks recognise raw Mineralogy stone; bare rock is
+not tree-growing soil. Rock-salt lamps keep the centre post on straight walls.
+Construction tags remain loadable when their registration switches are off.
+Slabs, stairs, walls, furnaces, ores, storage blocks and coloured drywall now
+join the matching vanilla or common tags without changing recipes.
 
 ## Configuration and help
 

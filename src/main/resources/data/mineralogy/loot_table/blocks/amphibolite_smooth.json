@@ -1,4 +1,8 @@
 {
+  "forge:condition": {
+    "type": "forge:item_exists",
+    "item": "mineralogy:amphibolite_smooth"
+  },
   "type": "minecraft:block",
   "pools": [
     {

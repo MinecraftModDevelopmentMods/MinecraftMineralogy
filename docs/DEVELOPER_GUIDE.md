@@ -13,6 +13,25 @@ Mineralogy requires OreSpawn `[4.0.6,5.0.0)`. Reusable worldgen integrations
 belong in `zone.moddev.mc.orespawn.api` or an OreSpawn provider rather than
 Mineralogy internals.
 
+## Compatibility Tags
+
+`mineralogy:terrain_rocks` contains this target's 32 provider outputs and five
+retained aliases. Natural replacement, roots, forest rocks and animal
+substrates use that dedicated interface, not the configurable cobblestone
+union. Horn breaking uses a separate hard-raw-rock whitelist.
+
+Single/upright slabs, stairs and walls join the vanilla block and item
+aggregates; separate double slabs remain full blocks. Common raw-stone,
+furnace-workstation, ore, storage and dyed tags are additive. Unregisterable
+construction members are optional, and their loot tables use native
+item-existence guards without changing enabled drops. Normal cobblestone
+follows the same runtime option as the root, preserving unrelated members.
+
+The two dripstone Mixins redirect only the water-pocket and exposed-column
+base-stone checks. They require exactly one hook each. Global base-stone,
+ore-host, carver and azalea-growing-soil tags are deliberately unchanged.
+Future ports must check the native consumers, not just copy tag names.
+
 ## Packaged Provider
 
 The schema-4, revision-3 provider is at:

@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "mineralogy:conglomerate_slab"
+    {
+      "id": "mineralogy:conglomerate_slab",
+      "required": false
+    }
   ]
 }

@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:marble_slab"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:marble_smooth_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:marble_raw_slab_polishing"

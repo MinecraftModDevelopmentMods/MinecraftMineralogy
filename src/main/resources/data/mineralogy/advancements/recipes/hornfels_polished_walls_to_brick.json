@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:hornfels_smooth_brick_wall"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:hornfels_smooth_wall"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:hornfels_polished_walls_to_brick"

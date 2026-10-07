@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:siltstone_smooth_brick"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:siltstone_smooth_brick_slab"
+    }
+  ],
   "type": "minecraft:crafting_shapeless",
   "category": "building",
   "ingredients": [

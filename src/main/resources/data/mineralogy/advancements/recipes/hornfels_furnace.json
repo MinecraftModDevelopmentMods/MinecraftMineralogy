@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:hornfels_furnace"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:hornfels_furnace"

@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:dolomite_brick_wall"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:dolomite_smooth_brick_wall"
+    }
+  ],
   "type": "minecraft:crafting_shapeless",
   "category": "building",
   "ingredients": [

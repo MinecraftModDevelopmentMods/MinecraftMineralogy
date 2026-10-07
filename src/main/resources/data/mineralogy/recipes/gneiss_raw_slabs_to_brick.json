@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:gneiss_brick_slab"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:gneiss_slab"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "pattern": [

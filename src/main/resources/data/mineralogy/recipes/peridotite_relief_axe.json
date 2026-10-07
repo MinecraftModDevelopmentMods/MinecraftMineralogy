@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:peridotite_relief_axe"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:peridotite_relief_blank"
+    }
+  ],
   "type": "minecraft:crafting_shapeless",
   "category": "building",
   "ingredients": [

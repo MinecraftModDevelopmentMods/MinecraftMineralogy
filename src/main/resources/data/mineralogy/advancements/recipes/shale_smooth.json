@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:shale_smooth"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:shale_smooth"

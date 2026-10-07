@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:rock_salt_brick_stairs"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:rock_salt_brick_stairs"

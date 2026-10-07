@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:rhyolite_smooth_wall"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:rhyolite_wall"
+    }
+  ],
   "type": "minecraft:crafting_shapeless",
   "category": "building",
   "ingredients": [

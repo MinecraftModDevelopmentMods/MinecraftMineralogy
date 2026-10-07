@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:schist_smooth_stairs"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:schist_stairs"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:schist_raw_stairs_polishing"

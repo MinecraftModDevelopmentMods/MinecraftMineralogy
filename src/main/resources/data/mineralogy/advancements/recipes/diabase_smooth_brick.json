@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:diabase_smooth_brick"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:diabase_smooth_brick"

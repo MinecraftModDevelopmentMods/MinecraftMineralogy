@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:andesite_smooth"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:andesite_smooth"

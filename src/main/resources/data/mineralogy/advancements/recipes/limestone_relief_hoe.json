@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:limestone_relief_blank"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:limestone_relief_hoe"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:limestone_relief_hoe"

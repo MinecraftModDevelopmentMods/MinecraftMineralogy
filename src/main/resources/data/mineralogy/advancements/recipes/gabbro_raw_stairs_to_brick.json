@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:gabbro_brick_stairs"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:gabbro_stairs"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:gabbro_raw_stairs_to_brick"

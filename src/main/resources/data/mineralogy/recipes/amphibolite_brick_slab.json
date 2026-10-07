@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:amphibolite_brick"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:amphibolite_brick_slab"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "pattern": [

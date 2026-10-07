@@ -670,8 +670,9 @@ tasks.register('verifyReleaseArtifacts') {
                         "data/mineralogy/advancements/recipes/${bridge.name}.json")))
                 if (recipe.type != 'minecraft:crafting_shapeless' || recipe.ingredients?.size() != 1 ||
                         recipe.ingredients[0].item != bridge.source || recipe.result?.id != bridge.result ||
-                        recipe.result?.count != 1 || recipe.containsKey('neoforge:conditions') ||
-                        advancement.containsKey('neoforge:conditions') ||
+                        recipe.result?.count != 1 ||
+                        recipe['neoforge:conditions'] != [[type: 'neoforge:item_exists', item: bridge.source.startsWith('mineralogy:') ? bridge.source : bridge.result]] ||
+                        advancement['neoforge:conditions'] != recipe['neoforge:conditions'] ||
                         advancement.criteria?.has_rock?.conditions?.items?.getAt(0)?.items != bridge.source) {
                     throw new GradleException("Invalid native/Mineralogy slab conversion: ${bridge.name}")
                 }
@@ -727,8 +728,8 @@ tasks.register('verifyReleaseArtifacts') {
             }
             slabOverrides.each { recipe ->
                 def data = new JsonSlurper().parse(zip.getInputStream(zip.getEntry("data/minecraft/recipes/${recipe}.json")))
-                if (data.containsKey('neoforge:conditions')) {
-                    throw new GradleException("Guaranteed Mineralogy slab override must be unconditional: ${recipe}")
+                if (data['neoforge:conditions'] != [[type: 'neoforge:item_exists', item: data.result?.id]]) {
+                    throw new GradleException("Invalid optional Mineralogy slab guard: ${recipe}")
                 }
                 if (recipe.endsWith('_stonecutting')) {
                     if (!(data.result instanceof Map) || data.result.id == null

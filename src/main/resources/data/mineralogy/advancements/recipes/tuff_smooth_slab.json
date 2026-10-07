@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:tuff_smooth_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:tuff_smooth_slab"

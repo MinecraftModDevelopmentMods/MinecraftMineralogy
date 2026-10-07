@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:basalt_smooth_brick_stairs"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:basalt_smooth_brick_stairs"

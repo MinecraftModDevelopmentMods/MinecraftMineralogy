@@ -17,11 +17,17 @@ OreSpawn `[4.0.6,5.0.0)`. Install both mods on clients and servers.
 This is the NeoForge build. It is intentionally maintained separately from the
 Forge 1.20.6 branch; use the jar that matches the loader in your modpack.
 
-Mineralogy 6.1.4 restores sculk catalyst conversion, moss growth and dripstone
-decoration on natural Mineralogy terrain. Eligibility is independent of
-cobblestone equivalence; crafted blocks are excluded from natural replacement.
-Sculk and moss behavior updates existing worlds; natural cave decoration
-improves in newly generated chunks. Sulfur-cube compatibility is only for 26.2+.
+Mineralogy 6.1.4 lets sculk catalysts, moss, dripstone, azalea roots and forest
+rocks recognise natural Mineralogy terrain. Goats can spawn on it and break
+their horns against the supported hard raw rocks, while soft and crafted forms
+stay excluded. These rules do not depend on cobblestone equivalence. Existing
+worlds gain the interaction fixes; natural decoration changes new chunks.
+
+Slabs, stairs, walls, furnaces, ores, storage blocks and coloured drywall now
+join their appropriate vanilla and common tags. Disabling construction no
+longer leaves missing tag, recipe, advancement or loot references. Enabled
+recipes and drops are unchanged. Sulfur cubes and the later bat substrate tag
+are not available on Minecraft 1.20.6.
 
 ## Configuration and help
 

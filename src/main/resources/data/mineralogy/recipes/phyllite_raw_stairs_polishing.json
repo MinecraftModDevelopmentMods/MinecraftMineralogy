@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:phyllite_smooth_stairs"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:phyllite_stairs"
+    }
+  ],
   "type": "minecraft:crafting_shapeless",
   "category": "building",
   "ingredients": [

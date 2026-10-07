@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:gneiss_smooth"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:gneiss_smooth_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:gneiss_polished_slab_recombination"

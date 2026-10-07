@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_ROCKSLAB"
+    },
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_ROCKFURNACE"
+    }
+  ],
   "type": "minecraft:block",
   "pools": [
     {

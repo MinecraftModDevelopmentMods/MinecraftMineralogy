@@ -1,4 +1,4 @@
-Mineralogy 6.1.4.120011 for Minecraft 1.20.1
+Mineralogy 6.1.4.120011 for Minecraft 1.20.1 Forge
 
 - Sculk can spread across natural Mineralogy terrain. Goats can spawn on it,
   and the harder raw rocks can break their horns. These changes also work in

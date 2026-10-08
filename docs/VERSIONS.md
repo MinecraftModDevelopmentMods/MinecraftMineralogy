@@ -68,10 +68,10 @@ minor digits, and all remaining digits for the Minecraft major version.
 | 26.3 | Forge | `2603001` | `6.1.4.2603001` |
 | 26.3 | NeoForge | `2603002` | `6.1.4.2603002` |
 
-The 6.1.4 rows identify the local tag-compatibility campaign candidates, not
-published releases or accepted builds. Each target needs separate validation,
-manual acceptance and publication approval. Older examples illustrate target
-encoding; Forge 1.13–1.15 remain outside this campaign.
+The 6.1.4 rows identify the builds in the terrain-compatibility release campaign.
+Availability for each Minecraft version and loader is shown on CurseForge.
+Older examples illustrate target encoding; Forge 1.13–1.15 remain outside this
+campaign.
 
 Historical Mineralogy releases may also have four numeric components that used
 the last number as an ordinary build sequence. The target policy applies to
@@ -80,12 +80,15 @@ new releases and does not reinterpret an old file's version.
 
 ## Vanilla stone compatibility campaign
 
-The following local candidates share the 6.1.4 additive terrain compatibility
-fix. This is a candidate matrix, not a claim that every release is published.
-NeoForge 26.3 retains its existing 6.1.3 compatibility correction.
+The following builds share the 6.1.4 additive terrain compatibility fixes.
+Use the file for your exact Minecraft version and loader. NeoForge 26.3 also
+retains its existing 6.1.3 compatibility correction.
 
-| Minecraft | Forge candidate | NeoForge candidate |
+| Minecraft | Forge build | NeoForge build |
 | --- | --- | --- |
+| 1.16.5 | 6.1.4.116051 | Not in scope |
+| 1.17.1 | 6.1.4.117011 | Not in scope |
+| 1.18.2 | 6.1.4.118021 | Not in scope |
 | 1.19.4 | 6.1.4.119041 | Not in scope |
 | 1.20.1 | 6.1.4.120011 | Not in scope |
 | 1.20.6 | 6.1.4.120061 | 6.1.4.120062 |
@@ -95,8 +98,8 @@ NeoForge 26.3 retains its existing 6.1.3 compatibility correction.
 | 26.2 | 6.1.4.2602001 | 6.1.4.2602002 |
 | 26.3 | 6.1.4.2603001 | 6.1.4.2603002 |
 
-Forge 1.18.2's dripstone/moss correction is outstanding and outside this
-campaign. Native-texture synchronization remains a separate campaign.
+Each target uses its own native compatibility interfaces. Native-texture
+synchronization remains a separate campaign.
 
 ## Major version
 
@@ -187,7 +190,7 @@ particular jar can load on the current game.
 
 Mineralogy 6 also requires OreSpawn `[4.0.6,5.0.0)`. OreSpawn uses the same
 target calculation, so the matching Minecraft 26.1.2 NeoForge release used for
-this candidate is `4.0.16.2601022`. The dependency range deliberately describes the supported
+this build is `4.0.16.2601022`. The dependency range deliberately describes the supported
 functional OreSpawn generation; NeoForge still prevents jars for another
 Minecraft target from loading together.
 
@@ -197,9 +200,9 @@ feature generation, not the exact jar.
 
 ## Builds and release notes
 
-This local 6.1.4 candidate also repairs natural bat substrate eligibility.
+This 6.1.4 release also repairs natural bat substrate eligibility.
 Minecraft introduced the bats_spawnable_on block tag in 1.21.2; the compatibility
-interface belongs only on 1.21.2-and-later targets. Earlier Mineralogy candidates
+interface belongs only on 1.21.2-and-later targets. Earlier Minecraft targets
 remain unchanged. The additive block tag reuses natural terrain membership,
 not the broad base_stone_overworld tag, and preserves vanilla spawn restrictions.
 

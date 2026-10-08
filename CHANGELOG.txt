@@ -15,8 +15,9 @@ Mineralogy 6.1.4.2601022 for Minecraft 26.1.2 NeoForge
   Double slabs remain full blocks, and disabled construction references are
   optional. Normal cobblestone follows the existing setting.
 - Rock-salt lamps retain the centre post on straight walls.
-- Construction recipes, unlocks and loot tables skip unregistered forms.
-  Their enabled ingredients, outputs, progression and normal drops are unchanged.
+- Construction recipes and unlocks check that their items are registered;
+  loot tables follow the matching content settings. Enabled ingredients,
+  outputs, progression and normal drops are unchanged.
 - Natural replacement is independent of cobblestone equivalence and excludes
   crafted forms. Sculk/moss eligibility updates existing worlds; cave, root and
   forest decoration improves in new chunks. No provider, config, registry,

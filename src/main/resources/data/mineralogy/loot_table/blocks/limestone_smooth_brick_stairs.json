@@ -14,7 +14,11 @@
         {
           "condition": "minecraft:survives_explosion"
         }
-      ]
+      ],
+      "forge:condition": {
+        "type": "forge:item_exists",
+        "item": "mineralogy:limestone_smooth_brick_stairs"
+      }
     }
   ]
 }

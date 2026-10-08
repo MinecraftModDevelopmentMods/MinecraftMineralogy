@@ -1,3 +1,24 @@
+Mineralogy 6.1.4.116051 for Minecraft 1.16.5 Forge
+
+- Natural rocks now join the common stone tags used by forest-rock placement.
+  Crafted rocks and sandstone stay outside that contribution. Existing ore
+  and storage tags are connected to their common aggregates.
+- Classified single/upright slabs, stairs and walls without treating the
+  separate double-slab blocks as slabs. Config-dependent construction entries
+  are optional, so disabling those blocks does not break tag loading. Loot
+  tables for disabled construction items load without unknown-item errors;
+  enabled drops are unchanged.
+- Normal cobblestone follows the existing configurable cobblestone policy,
+  including reloads. Vanilla and other mods' members survive, and chert and
+  pumice remain unconditional equivalents.
+- Rock-salt lamps retain straight-wall posts like vanilla torches.
+- Fixed stale rock-furnace block-entity state on lit/unlit transitions while
+  keeping orientation, inventory, fuel and cooking progress.
+- Existing worlds gain the block-behaviour fixes on update. Forest decoration
+  changes need new chunks. Recipes, registry IDs, configs, providers, ore
+  hosts and textures are unchanged. Later moss, dripstone, sculk, goat and
+  sulfur-cube systems do not exist on this target.
+
 Mineralogy 6.1.0.116051 for Minecraft 1.16.5
 
 - Delegated terrain, strata, ore, and covered fluid-deposit generation to the

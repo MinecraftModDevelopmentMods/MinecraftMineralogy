@@ -1,5 +1,32 @@
 # Mineralogy Developer Guide
 
+## Terrain and construction tags
+
+`mineralogy:terrain_rocks` contains the 32 provider outputs and four retained
+legacy aliases on this target: 36 block and item identities. `raw_stones`
+excludes native sandstone and contributes to `forge:stone`. It never includes
+polished or crafted forms. Minecraft's forest-rock placement uses that common
+block tag; no world generator or global ore-host tag is changed.
+
+Single/upright slabs, stairs and walls join the matching block/item aggregates.
+Separate double-slab blocks stay outside slab tags. Config-dependent forms
+use optional objects inside `values`, not a top-level `optional` array.
+Normal cobblestone follows the existing root policy after load and reload,
+preserving unrelated members and unconditional chert/pumice.
+Forge 36 has only a native root cobblestone tag, so the added normal category
+starts with vanilla cobblestone and does not import mossy or infested members.
+
+Forge 36 resolves loot item IDs before checking conditions. A single verified
+`ForgeHooks.loadLootTable` hook empties only explicitly marked Mineralogy
+construction pools whose item is unregistered. Registered drops and unrelated
+tables are untouched; the transformer rejects a changed target signature.
+
+Rock furnaces retain their tile entity during state changes. Forge 36 has a
+lazy state cache rather than a setter: clear it, read the new world state,
+then validate and reattach the retained entity. Keep the inventory guard in
+`try/finally`. Mining still uses this target's harvest properties; do not
+invent the mining tags introduced in Minecraft 1.17.
+
 ## Responsibility Split
 
 | Mineralogy owns | OreSpawn owns |

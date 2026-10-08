@@ -422,7 +422,7 @@ public class ResourceContractTest {
     @Test
     public void oilAndBuildMetadataUseStableTargetIdentities() throws Exception {
         String properties = new String(Files.readAllBytes(new File("gradle.properties").toPath()), StandardCharsets.UTF_8);
-        assertTrue(properties.contains("mod_version=6.1.0.116051"));
+        assertTrue(properties.contains("mod_version=6.1.4.116051"));
         assertTrue(properties.contains("orespawn_curse_file_id=8742102"));
         String build = new String(Files.readAllBytes(new File("build.gradle").toPath()), StandardCharsets.UTF_8);
         assertTrue(build.contains("runtimeOnly renamer.dependency(\"curse.maven:mmd-orespawn-"));
@@ -474,7 +474,14 @@ public class ResourceContractTest {
         JsonArray values = json(file).getAsJsonArray("values");
         assertEquals(file.getPath(), expected.length, values.size());
         for (int index = 0; index < expected.length; index++) {
-            assertEquals(file.getPath(), expected[index], values.get(index).getAsString());
+            JsonElement value = values.get(index);
+            if (value.isJsonObject()) {
+                assertEquals(file.getPath(), 2, value.getAsJsonObject().size());
+                assertFalse(file.getPath(), value.getAsJsonObject().get("required").getAsBoolean());
+                assertEquals(file.getPath(), expected[index], value.getAsJsonObject().get("id").getAsString());
+            } else {
+                assertEquals(file.getPath(), expected[index], value.getAsString());
+            }
         }
     }
 

@@ -1,5 +1,12 @@
 # Mineralogy Player Guide
 
+In 6.1.4, natural Mineralogy terrain supports moss, dripstone, azalea roots and
+forest rocks. Decoration improves in new chunks; mining, common-tag consumers
+and lamp support improve in existing worlds too. Crafted blocks stay outside
+natural replacement tags. Minecraft 1.17 goat spawning is unchanged.
+Rock furnaces retain their contents, fuel and facing while their lit/unlit
+block and block-entity states stay in step. This also applies to existing worlds.
+
 ## Installing
 
 Mineralogy 6 needs Minecraft 1.17.1, Forge 37.1.1, and OreSpawn

@@ -59,7 +59,7 @@ minor digits, and all remaining digits for the Minecraft major version.
 | 26.2 | Forge | `2602001` | `6.0.0.2602001` |
 | 26.2 | NeoForge | `2602002` | `6.0.0.2602002` |
 
-The 1.16.5 row records this branch's current candidate. The other rows illustrate
+The 1.16.5 row records this branch's release target. The other rows illustrate
 target encoding or earlier releases; they do not claim that later Minecraft
 targets already contain the same functional changes.
 
@@ -69,11 +69,11 @@ new releases and does not reinterpret an old file's version.
 
 ## Vanilla stone compatibility campaign
 
-The following local candidates share the 6.1.4 stone compatibility
-fix. This is a candidate matrix, not a claim that every release is published.
-NeoForge 26.3 retains its existing 6.1.3 compatibility correction.
+The following target builds share the 6.1.4 stone compatibility fixes.
+This is a build matrix, not a claim that every release is published.
+Each target carries only the interfaces supported by its Minecraft version.
 
-| Minecraft | Forge candidate | NeoForge candidate |
+| Minecraft | Forge build | NeoForge build |
 | --- | --- | --- |
 | 1.16.5 | 6.1.4.116051 | Not in scope |
 | 1.17.1 | 6.1.4.117011 | Not in scope |
@@ -87,7 +87,6 @@ NeoForge 26.3 retains its existing 6.1.3 compatibility correction.
 | 26.2 | 6.1.4.2602001 | 6.1.4.2602002 |
 | 26.3 | 6.1.4.2603001 | 6.1.4.2603002 |
 
-The revised candidates need renewed acceptance; publication remains paused.
 Sulfur cubes receive only the 31 raw Mineralogy items on 26.2 and 26.3, not
 polished or brick forms. Earlier targets carry only the interfaces they support.
 Forge 1.13.2–1.15.2 are deferred until their later 6.1 ports. Native-texture
@@ -177,7 +176,7 @@ particular jar can load on the current game.
 
 Mineralogy 6 also requires OreSpawn `[4.0.6,5.0.0)`. OreSpawn uses the same
 target calculation, so the matching Minecraft 1.16.5 Forge release used for
-this candidate is `4.0.9.116051`. The dependency range deliberately describes the supported
+this release is `4.0.9.116051`. The dependency range deliberately describes the supported
 functional OreSpawn generation; Forge still prevents jars for another
 Minecraft target from loading together.
 

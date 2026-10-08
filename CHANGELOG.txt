@@ -1,4 +1,4 @@
-Mineralogy 6.1.4.116051 for Minecraft 1.16.5
+Mineralogy 6.1.4.116051 for Minecraft 1.16.5 Forge
 
 - Natural rocks now join the common stone tags used by forest-rock placement.
   Crafted rocks and sandstone stay outside that contribution. Existing ore

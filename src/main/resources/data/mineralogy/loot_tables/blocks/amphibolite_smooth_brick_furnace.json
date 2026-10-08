@@ -16,5 +16,6 @@
         }
       ]
     }
-  ]
+  ],
+  "mineralogy:construction_item": "mineralogy:amphibolite_smooth_brick_furnace"
 }

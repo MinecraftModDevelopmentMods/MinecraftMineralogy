@@ -10,9 +10,19 @@ mineral ores and dusts, rock furnaces, drywall, rock-salt lighting, fertilizer,
 and crude oil. OreSpawn 4 is the sole terrain, strata, ore, and deposit engine;
 Mineralogy no longer installs a parallel world generator.
 
-This branch builds Mineralogy `6.1.2.119041` for Forge `45.4.0` and is built
+This branch builds Mineralogy `6.1.4.119041` for Forge `45.4.0` and is built
 and tested against OreSpawn `4.0.16.119041`. Its declared compatibility range is
 OreSpawn `[4.0.6,5.0.0)`. Install both mods on clients and servers.
+
+Mineralogy 6.1.4 lets sculk spread and goats spawn on natural Mineralogy terrain.
+The harder raw rocks can break goat horns. Moss, dripstone, azalea roots and
+forest rocks recognise natural terrain, while polished and crafted blocks stay
+out of these natural replacement rules. Bare rock is still not tree soil.
+These interactions work in existing worlds; naturally generated decoration
+improves in new chunks. Slabs, stairs, walls, raw rocks, ores and storage blocks
+also have the matching vanilla and Forge classifications. Rock-salt lamps keep
+the wall post beneath them, and disabled construction forms load safely.
+Recipes, IDs, configs, providers, migrations, textures and OreSpawn are unchanged.
 
 ## Configuration and help
 

@@ -1,6 +1,9 @@
 {
-    "replace":  false,
-    "values":  [
-                   "mineralogy:slate_brick"
-               ]
+  "replace": false,
+  "values": [
+    {
+      "id": "mineralogy:slate_brick",
+      "required": false
+    }
+  ]
 }

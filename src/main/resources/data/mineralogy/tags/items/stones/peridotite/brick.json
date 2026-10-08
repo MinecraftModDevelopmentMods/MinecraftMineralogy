@@ -1,6 +1,9 @@
 {
-    "replace":  false,
-    "values":  [
-                   "mineralogy:peridotite_brick"
-               ]
+  "replace": false,
+  "values": [
+    {
+      "id": "mineralogy:peridotite_brick",
+      "required": false
+    }
+  ]
 }

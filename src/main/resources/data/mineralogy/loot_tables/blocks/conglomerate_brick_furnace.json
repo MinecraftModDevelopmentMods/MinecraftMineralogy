@@ -16,5 +16,6 @@
         }
       ]
     }
-  ]
+  ],
+  "mineralogy:construction_item": "mineralogy:conglomerate_brick_furnace"
 }

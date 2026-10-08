@@ -7,6 +7,16 @@ Mineralogy 6 needs Minecraft 1.19.4, Forge 45.4.0, and OreSpawn
 Install matching Mineralogy and OreSpawn jars on both clients and servers. Do
 not open a world containing Mineralogy blocks without Mineralogy installed.
 
+## Natural stone interactions
+
+Sculk catalysts and moss can spread over natural Mineralogy rocks. Goats can
+spawn on that terrain, and harder raw rocks can break their horns. Polished
+blocks, bricks and other construction forms stay outside these natural rules.
+Azalea roots, forest rocks and dripstone recognise natural rocks in new chunks;
+bare rock is still not soil for growing an azalea tree. These rules do not depend
+on the cobblestone-equivalence setting. Rock-salt lamps retain the post beneath
+them when placed on a wall.
+
 ## Creating Or Upgrading A World
 
 Open **OreSpawn World Generation** while creating a world. **Recommended

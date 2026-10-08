@@ -1,4 +1,18 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_BRICK"
+    },
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_BRICKSLAB"
+    },
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_BRICKFURNACE"
+    }
+  ],
   "type": "minecraft:block",
   "pools": [
     {

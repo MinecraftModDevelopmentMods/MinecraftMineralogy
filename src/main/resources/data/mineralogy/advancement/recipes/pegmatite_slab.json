@@ -1,4 +1,11 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:pegmatite_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:pegmatite_slab"

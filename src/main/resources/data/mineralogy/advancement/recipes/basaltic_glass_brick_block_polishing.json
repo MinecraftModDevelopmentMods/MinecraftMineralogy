@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:basaltic_glass_brick"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:basaltic_glass_smooth_brick"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:basaltic_glass_brick_block_polishing"

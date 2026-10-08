@@ -184,8 +184,9 @@ source-decompiler workaround is deliberately absent:
 
 ```powershell
 $env:JAVA_HOME='path-to-Temurin-25.0.3+9'
-$env:GRADLE_USER_HOME='D:\MinecraftMineralogy\.gradle-verify-cache'
-.\gradlew.bat clean check build javadoc verifyReleaseConfiguration verifyReleaseDependencies verifyReleaseArtifacts writeReleaseChecksums --no-daemon
+$env:GRADLE_USER_HOME='D:\GradleCaches\minecraft-mineralogy-shared'
+.\gradlew.bat clean --no-daemon
+.\gradlew.bat check build javadoc verifyReleaseConfiguration verifyReleaseDependencies verifyReleaseArtifacts writeReleaseChecksums --no-daemon
 .\gradlew.bat eclipse verifyEclipseProductionClasspath --no-daemon
 .\gradlew.bat assemble --no-daemon
 ```
@@ -193,6 +194,23 @@ $env:GRADLE_USER_HOME='D:\MinecraftMineralogy\.gradle-verify-cache'
 Inspect complete client/server logs and test the reobfuscated jar with released
 OreSpawn in a launcher-like NeoForge installation. The normal jar packages this
 guide under `META-INF/mineralogy/docs/`.
+
+## Terrain compatibility
+
+The isolated terrain generator maintains additive block/item interfaces without
+rewriting recipes or provider data. Natural terrain has 37 identities, common
+stone excludes sandstone, and sulfur cubes receive exactly 31 raw Mineralogy
+items. Optional construction references use objects inside `values`; separate
+double slabs are not classified as vanilla slabs.
+
+Required Mixins extend only the dripstone water-pocket and large-column
+containment checks. Each verifies exactly one native base-stone field access.
+Do not broaden global base-stone or ore-host tags. Roots and forest rocks use
+dedicated substrate tags; bare rocks remain outside azalea-growing soil.
+
+Canonical `c:` classifications cover raw stone, furnace workstations, ores,
+storage blocks and dyed drywall. Cobblestone policy preserves third-party
+members and unconditional chert/pumice across initial loading and reloads.
 
 The complete release version is `Major.Minor.Bug.Target`; see
 [Mineralogy Versioning](VERSIONS.md). This branch validates target `2602002`

@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "mineralogy:pegmatite_brick"
+    {
+      "id": "mineralogy:pegmatite_brick",
+      "required": false
+    }
   ]
 }

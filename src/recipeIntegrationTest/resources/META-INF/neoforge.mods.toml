@@ -15,6 +15,6 @@ side="BOTH"
 [[dependencies.mineralogyrecipeprobe]]
 modId="mineralogy"
 type="required"
-versionRange="[6.1.2.2602002]"
+versionRange="[6.1.4.2602002]"
 ordering="AFTER"
 side="BOTH"

@@ -1,4 +1,11 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:andesite_relief_blank"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:andesite_relief_blank"

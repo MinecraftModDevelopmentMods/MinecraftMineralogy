@@ -13,6 +13,22 @@ Mineralogy requires OreSpawn `[4.0.6,5.0.0)`. Reusable worldgen integrations
 belong in `zone.moddev.mc.orespawn.api` or an OreSpawn provider rather than
 Mineralogy internals.
 
+## Natural-rock compatibility
+
+The additive block/item `mineralogy:terrain_rocks` tags follow the 32 provider
+outputs and five retained aliases. Cave/root and goat-spawn consumers use
+this natural-only interface; polished and crafted forms are excluded. Dedicated
+dripstone helpers accept native base stone or this terrain tag without adding
+rocks to global base-stone or ore-host tags. Common stone excludes sandstone.
+Single/upright slabs, stairs and walls join their vanilla aggregates; separate
+double-slab blocks do not. Normal cobblestone follows the root option, retaining
+unrelated members and unconditional chert/pumice after reload.
+
+Forge 40 predates loot loading-condition codecs. The scoped loader hook empties
+only explicitly guarded Mineralogy construction pools whose item is absent;
+registered items and other mods' tables keep their payloads. Sculk, horn-breaking,
+bat and sulfur-cube tags are not available on this Minecraft target.
+
 ## Packaged Provider
 
 The schema-4, revision-3 provider is at:

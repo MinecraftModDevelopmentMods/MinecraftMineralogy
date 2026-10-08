@@ -9,6 +9,12 @@ not open a world containing Mineralogy blocks without Mineralogy installed.
 
 ## Creating Or Upgrading A World
 
+Natural Mineralogy rocks now work with moss, dripstone, azalea roots and
+forest rocks, and goats can spawn on them. Crafted blocks remain outside
+these rules. Goat spawning works in existing worlds after updating;
+natural cave and surface decoration improves in newly generated chunks.
+Rock-salt lamps also keep the post on straight walls, like a vanilla torch.
+
 Open **OreSpawn World Generation** while creating a world. **Recommended
 Defaults** selects Mineralogy's Sky/geome Stable Layers profile. Use **Help &
 Guide** for OreSpawn's explanation of geology, formations, geomes, ores, and

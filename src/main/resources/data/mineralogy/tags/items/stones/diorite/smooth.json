@@ -1,7 +1,10 @@
 {
-    "replace":  false,
-    "values":  [
-                   "mineralogy:diorite_smooth",
-                   "minecraft:polished_diorite"
-               ]
+  "replace": false,
+  "values": [
+    {
+      "id": "mineralogy:diorite_smooth",
+      "required": false
+    },
+    "minecraft:polished_diorite"
+  ]
 }

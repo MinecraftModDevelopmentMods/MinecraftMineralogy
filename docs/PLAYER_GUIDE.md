@@ -1,5 +1,14 @@
 # Mineralogy Player Guide
 
+## Natural stone compatibility in 6.1.4
+
+Sculk, moss, dripstone, goats and bats recognise natural Mineralogy terrain.
+Horn breaking uses the hard raw-rock whitelist; soft rocks and crafted forms
+are excluded. These rules do not depend on cobblestone equivalence. Existing
+worlds gain the behaviour fixes after updating; cave decoration changes new
+chunks. Rock-salt lamps also stand correctly on straight and junction walls.
+Disabled construction does not leave recipes or drops for missing blocks.
+
 ## Installing
 
 Mineralogy 6 needs Minecraft 1.21.11, NeoForge 21.11.45, and OreSpawn

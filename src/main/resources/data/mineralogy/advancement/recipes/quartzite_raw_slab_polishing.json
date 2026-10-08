@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:quartzite_slab"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:quartzite_smooth_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:quartzite_raw_slab_polishing"

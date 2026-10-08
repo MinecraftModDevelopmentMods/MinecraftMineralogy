@@ -1,4 +1,11 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:diorite_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:diorite_slab_to_vanilla"

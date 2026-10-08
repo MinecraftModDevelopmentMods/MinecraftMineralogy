@@ -9,14 +9,14 @@ exact Minecraft/loader target are both visible in one number.
 Major.Minor.Bug.Target
 ```
 
-The first three components are the **functional version**. Mineralogy `6.1.2`
-means major generation 6, minor release 1, and bug revision 2.
+The first three components are the **functional version**. Mineralogy `6.1.4`
+means major generation 6, minor release 1, and bug revision 4.
 
 The fourth component identifies the target build. The complete version for
 this Minecraft 1.21.11 NeoForge release is therefore:
 
 ```text
-6.1.2.121112
+6.1.4.121112
 ```
 
 This expanded numeric form is compatible with Maven version ordering, but it
@@ -25,7 +25,7 @@ components.
 
 The release tag is exactly the complete four-component version, with no
 redundant Minecraft-version prefix. For this branch the tag is therefore
-`6.1.2.121112`, not `1.21.11-6.1.2.121112`. The Target already makes tags unique
+`6.1.4.121112`, not `1.21.11-6.1.4.121112`. The Target already makes tags unique
 across Minecraft versions and loaders.
 
 ## Reading the target component
@@ -50,19 +50,19 @@ minor digits, and all remaining digits for the Minecraft major version.
 | 1.12.2 | Forge | `112021` | `6.0.1.112021` |
 | 1.14.4 | Forge | `114041` | `6.0.1.114041` |
 | 1.15.2 | Forge | `115021` | `6.0.1.115021` |
-| 1.16.5 | Forge | `116051` | `6.1.0.116051` |
-| 1.17.1 | Forge | `117011` | `6.1.0.117011` |
-| 1.18.2 | Forge | `118021` | `6.1.2.118021` |
-| 1.19.4 | Forge | `119041` | `6.1.2.119041` |
-| 1.20.1 | Forge | `120011` | `6.1.2.120011` |
-| 1.20.6 | Forge | `120061` | `6.1.2.120061` |
-| 1.20.6 | NeoForge | `120062` | `6.1.2.120062` |
-| 1.21.1 | Forge | `121011` | `6.1.2.121011` |
-| 1.21.1 | NeoForge | `121012` | `6.1.2.121012` |
-| 1.21.11 | Forge | `121111` | `6.1.2.121111` |
-| 1.21.11 | NeoForge | `121112` | `6.1.2.121112` |
-| 26.2 | Forge | `2602001` | `6.0.0.2602001` |
-| 26.2 | NeoForge | `2602002` | `6.0.0.2602002` |
+| 1.16.5 | Forge | `116051` | `6.1.4.116051` |
+| 1.17.1 | Forge | `117011` | `6.1.4.117011` |
+| 1.18.2 | Forge | `118021` | `6.1.4.118021` |
+| 1.19.4 | Forge | `119041` | `6.1.4.119041` |
+| 1.20.1 | Forge | `120011` | `6.1.4.120011` |
+| 1.20.6 | Forge | `120061` | `6.1.4.120061` |
+| 1.20.6 | NeoForge | `120062` | `6.1.4.120062` |
+| 1.21.1 | Forge | `121011` | `6.1.4.121011` |
+| 1.21.1 | NeoForge | `121012` | `6.1.4.121012` |
+| 1.21.11 | Forge | `121111` | `6.1.4.121111` |
+| 1.21.11 | NeoForge | `121112` | `6.1.4.121112` |
+| 26.2 | Forge | `2602001` | `6.1.4.2602001` |
+| 26.2 | NeoForge | `2602002` | `6.1.4.2602002` |
 
 The 1.21.11 NeoForge row records this branch's current release. The other rows illustrate
 target encoding or earlier releases; they do not claim that later Minecraft
@@ -71,6 +71,35 @@ targets already contain the same functional changes.
 Historical Mineralogy releases may also have four numeric components that used
 the last number as an ordinary build sequence. The target policy applies to
 new releases and does not reinterpret an old file's version.
+
+
+## Vanilla stone compatibility campaign
+
+The following versions make up the 6.1.4 compatibility release campaign.
+Publication proceeds separately for each target; this matrix does not claim
+that every release is already available. NeoForge 26.3 retains its earlier
+compatibility correction.
+
+| Minecraft | Forge version | NeoForge version |
+| --- | --- | --- |
+| 1.16.5 | 6.1.4.116051 | Not in scope |
+| 1.17.1 | 6.1.4.117011 | Not in scope |
+| 1.18.2 | 6.1.4.118021 | Not in scope |
+| 1.19.4 | 6.1.4.119041 | Not in scope |
+| 1.20.1 | 6.1.4.120011 | Not in scope |
+| 1.20.6 | 6.1.4.120061 | 6.1.4.120062 |
+| 1.21.1 | 6.1.4.121011 | 6.1.4.121012 |
+| 1.21.11 | 6.1.4.121111 | 6.1.4.121112 |
+| 26.1.2 | 6.1.4.2601021 | 6.1.4.2601022 |
+| 26.2 | 6.1.4.2602001 | 6.1.4.2602002 |
+| 26.3 | 6.1.4.2603001 | 6.1.4.2603002 |
+
+The revised campaign includes Forge 1.16.5–1.18.2 with only the interfaces
+available on each target. Native-texture synchronization remains a separate
+campaign. Sulfur cubes consume only raw Mineralogy rocks on 26.2/26.3; no
+sulfur-cube resources apply to this 1.21.11 target. Existing worlds gain the
+behaviour fixes after updating; natural decoration changes newly generated
+chunks.
 
 ## Major version
 
@@ -127,7 +156,7 @@ Minecraft 1.19.4 / Forge / Mineralogy 6.1.2.119041
 Minecraft 1.20.1 / Forge / Mineralogy 6.1.2.120011
 Minecraft 1.20.6 / Forge / Mineralogy 6.1.2.120061
 Minecraft 1.21.1 / NeoForge / Mineralogy 6.1.2.121012
-Minecraft 1.21.11 / NeoForge / Mineralogy 6.1.2.121112
+Minecraft 1.21.11 / NeoForge / Mineralogy 6.1.4.121112
 ```
 
 Minecraft and loader APIs may require different internal code without changing
@@ -160,7 +189,7 @@ particular jar can load on the current game.
 
 Mineralogy 6 also requires OreSpawn `[4.0.6,5.0.0)`. OreSpawn uses the same
 target calculation, so the matching Minecraft 1.21.11 NeoForge release used for
-this candidate is `4.0.16.121112`. The dependency range deliberately describes the supported
+this release is `4.0.16.121112`. The dependency range deliberately describes the supported
 functional OreSpawn generation; NeoForge still prevents jars for another
 Minecraft target from loading together.
 
@@ -170,10 +199,16 @@ feature generation, not the exact jar.
 
 ## Builds and release notes
 
+This 6.1.4 release also repairs natural bat substrate eligibility.
+Minecraft introduced the bats_spawnable_on block tag in 1.21.2; the compatibility
+interface belongs only on 1.21.2-and-later targets. Earlier targets retain their
+existing spawn checks. The additive block tag reuses natural terrain membership,
+not the broad base_stone_overworld tag, and preserves vanilla spawn restrictions.
+
 The Gradle build reads the complete version from `mod_version`, verifies that
 it has four numeric components, and checks that its Target matches the declared
 Minecraft version and NeoForge loader. CI build numbers are not appended. For this
-branch, published metadata and artifacts therefore use `6.1.2.121112`.
+branch, published metadata and artifacts therefore use `6.1.4.121112`.
 
 Every release note should state:
 

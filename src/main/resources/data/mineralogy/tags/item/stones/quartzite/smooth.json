@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "mineralogy:quartzite_smooth"
+    {
+      "id": "mineralogy:quartzite_smooth",
+      "required": false
+    }
   ]
 }

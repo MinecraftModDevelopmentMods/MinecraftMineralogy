@@ -1,4 +1,4 @@
-Mineralogy 6.1.4.118021 for Minecraft 1.18.2
+Mineralogy 6.1.4.118021 for Minecraft 1.18.2 Forge
 
 - Moss, dripstone, azalea roots and forest rocks recognise natural Mineralogy
   terrain in newly generated chunks. Two narrow dripstone checks are fixed

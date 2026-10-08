@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:scoria_slab"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:scoria_smooth_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:scoria_raw_slab_polishing"

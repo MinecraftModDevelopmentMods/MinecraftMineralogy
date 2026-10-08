@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:diorite_smooth"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:diorite_smooth_stairs"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:diorite_smooth_stairs"

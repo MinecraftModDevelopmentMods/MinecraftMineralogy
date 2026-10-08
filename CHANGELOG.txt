@@ -1,3 +1,31 @@
+Mineralogy 6.1.4.2602002 for Minecraft 26.2 NeoForge
+
+- Restored natural bat spawning on Mineralogy terrain through the additive
+  vanilla bats_spawnable_on block tag. Applies to existing worlds, preserves
+  normal light/height restrictions, and excludes crafted construction blocks.
+  Eligibility is independent of cobblestone equivalence.
+- Added matching 37-member terrain-rock block/item tags and additive vanilla
+  sculk, dripstone and moss replacement interfaces, preserving existing members.
+- Sulfur cubes accept only the 31 raw Mineralogy rocks as Slow Bouncy stones.
+  Polished blocks, bricks, slabs and other crafted Mineralogy items are excluded.
+  Minecraft's existing vanilla consumption rules are unchanged.
+- Restored goat spawning on natural terrain and horn breaking against harder
+  raw rocks. Soft rocks and crafted blocks do not break horns.
+- Fixed dripstone water-pocket and large-column checks without broadening
+  global base-stone or ore-host tags. Added natural root and forest-rock support
+  without making bare rock suitable soil for growing azalea trees.
+- Made config-dependent construction tag entries optional. Single/upright
+  slabs and stairs join vanilla aggregates; separate double slabs stay full blocks.
+- Connected raw stone, furnace workstations, ores, storage blocks and dyed
+  drywall to common tags. Normal cobblestone follows the existing option.
+- Rock-salt lamps retain straight-wall posts like vanilla torches.
+- Fixed missing-item resource errors when construction forms are disabled.
+  Recipes and unlocks check that their items are registered; loot tables follow
+  the matching content settings. Enabled recipes and drops are unchanged.
+- Sculk, moss and cube eligibility updates existing worlds; natural cave
+  decoration improves in new chunks. No provider, config, registry, texture
+  or OreSpawn changes. Recipe identities and enabled contents are unchanged.
+
 Mineralogy 6.1.2.2602002 for Minecraft 26.2 NeoForge
 
 - Ported the accepted NeoForge 26.1.2 product to Minecraft 26.2 and

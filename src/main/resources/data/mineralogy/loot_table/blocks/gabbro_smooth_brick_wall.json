@@ -1,4 +1,18 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_SMOOTH"
+    },
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_SMOOTHBRICK"
+    },
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_SMOOTHBRICKWALL"
+    }
+  ],
   "type": "minecraft:block",
   "pools": [
     {

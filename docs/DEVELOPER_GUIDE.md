@@ -194,6 +194,26 @@ Inspect complete client/server logs and test the reobfuscated jar with released
 OreSpawn in a launcher-like NeoForge installation. The normal jar packages this
 guide under `META-INF/mineralogy/docs/`.
 
+## Terrain Compatibility
+
+The isolated terrain generator maintains additive block/item interfaces without
+rewriting recipe payloads or provider data. Natural terrain has 37 identities;
+common stone excludes sandstone and crafted forms. Sulfur-cube resources do
+not exist on this target. Optional construction entries use objects inside
+`values`; separate double slabs are not classified as vanilla slabs.
+
+Required Mixins extend only the dripstone water-pocket and large-column
+containment checks. Each verifies exactly one native base-stone field access.
+Do not broaden global base-stone or ore-host tags. Roots and forest rocks use
+dedicated substrate tags; bare rock remains outside azalea-growing soil.
+
+Canonical `c:` classifications cover raw stone, furnace workstations, ores,
+storage blocks and dyed drywall. Cobblestone policy preserves third-party
+members and unconditional chert/pumice across initial loading and reloads.
+Native recipe/advancement conditions guard missing construction items; loot
+uses the existing construction flags and their registration prerequisites.
+Enabled payloads remain unchanged. Keep validation probes outside release jars.
+
 The complete release version is `Major.Minor.Bug.Target`; see
 [Mineralogy Versioning](VERSIONS.md). This branch validates target `2601022`
 for Minecraft 26.1.2 NeoForge and does not append CI build numbers.

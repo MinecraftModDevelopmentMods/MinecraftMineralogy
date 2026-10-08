@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:marble_brick"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:marble_smooth_brick"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:marble_brick_block_polishing"

@@ -28,6 +28,23 @@ from loading. Let the game or server stop normally after the upgrade so
 converted chunks can be saved. A complete copied world test is strongly
 recommended before upgrading the original.
 
+## Natural Stone Compatibility
+
+Natural Mineralogy rocks support sculk spread after an XP-producing mob dies,
+moss growth, dripstone decoration and bats under Minecraft's normal light and
+height rules. Goats can spawn on natural rocks; harder raw rocks can break their
+horns. Soft rocks and crafted construction blocks cannot break horns.
+
+These behaviour changes apply to existing worlds after updating. Root, forest
+rock and cave decoration improves in newly generated chunks. Bare rocks still
+cannot grow azalea trees. The natural rules do not depend on cobblestone
+equivalence, and this Minecraft version has no sulfur cubes.
+
+Single and upright slabs, stairs and walls have their normal classifications;
+separate double slabs remain full blocks. Rock-salt lamps keep the centre post
+when placed on straight walls. Disabling construction content also skips its
+recipes, unlocks and loot tables; enabled recipes and normal drops are unchanged.
+
 ## What Mineralogy Adds
 
 - Sedimentary, metamorphic, intrusive igneous, and volcanic igneous rocks.

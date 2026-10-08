@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:quartzite_smooth_stairs"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:quartzite_stairs"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:quartzite_raw_stairs_polishing"

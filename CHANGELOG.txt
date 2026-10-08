@@ -20,8 +20,8 @@ Mineralogy 6.1.4.2602002 for Minecraft 26.2 NeoForge
   drywall to common tags. Normal cobblestone follows the existing option.
 - Rock-salt lamps retain straight-wall posts like vanilla torches.
 - Fixed missing-item resource errors when construction forms are disabled.
-  Recipes, unlocks and loot tables now check that their items are registered;
-  enabled recipes and drops keep their existing contents.
+  Recipes and unlocks check that their items are registered; loot tables follow
+  the matching content settings. Enabled recipes and drops are unchanged.
 - Sculk, moss and cube eligibility updates existing worlds; natural cave
   decoration improves in new chunks. No provider, config, registry, texture
   or OreSpawn changes. Recipe identities and enabled contents are unchanged.

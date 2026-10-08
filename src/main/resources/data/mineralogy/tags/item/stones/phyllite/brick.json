@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "mineralogy:phyllite_brick"
+    {
+      "id": "mineralogy:phyllite_brick",
+      "required": false
+    }
   ]
 }

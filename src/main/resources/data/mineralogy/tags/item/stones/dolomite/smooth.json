@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "mineralogy:dolomite_smooth"
+    {
+      "id": "mineralogy:dolomite_smooth",
+      "required": false
+    }
   ]
 }

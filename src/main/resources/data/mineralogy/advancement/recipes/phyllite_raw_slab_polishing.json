@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:phyllite_slab"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:phyllite_smooth_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:phyllite_raw_slab_polishing"

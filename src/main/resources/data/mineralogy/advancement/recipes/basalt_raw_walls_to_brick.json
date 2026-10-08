@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:basalt_brick_wall"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:basalt_wall"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:basalt_raw_walls_to_brick"

@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:peridotite_smooth"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:peridotite_smooth_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:peridotite_polished_slab_recombination"

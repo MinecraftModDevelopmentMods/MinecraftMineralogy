@@ -1,4 +1,11 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:conglomerate_smooth_wall"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:conglomerate_smooth_wall"

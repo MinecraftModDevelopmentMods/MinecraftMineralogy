@@ -1,4 +1,11 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:siltstone_relief_cross"
+    }
+  ],
   "type": "minecraft:block",
   "pools": [
     {

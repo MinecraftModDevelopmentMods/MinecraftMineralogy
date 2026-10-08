@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "mineralogy:amphibolite_brick_slab"
+    {
+      "id": "mineralogy:amphibolite_brick_slab",
+      "required": false
+    }
   ]
 }

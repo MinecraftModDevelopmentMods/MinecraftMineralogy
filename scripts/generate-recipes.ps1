@@ -74,7 +74,10 @@ function ItemId([string] $path) {
 }
 
 function ItemCondition([string] $item) {
-    # Mineralogy registers every referenced item unconditionally on this target.
+    # Construction flags can prevent registration, unlike visibility-only controls.
+    if ($item -match '^mineralogy:(.+)(_smooth|_brick|_slab|_stairs|_wall|_furnace|_relief_.+)$') {
+        return [ordered]@{ type = 'neoforge:registered'; registry = 'minecraft:item'; value = $item }
+    }
     return $null
 }
 
@@ -970,7 +973,7 @@ function Write-TargetTags() {
                 }
                 $destination = Join-Path $itemTagRoot "$kind\$family$pathSuffix.json"
                 New-Item -ItemType Directory -Force -Path (Split-Path -Parent $destination) | Out-Null
-                $values = @($item)
+                [object[]]$values = if ($kind -eq 'slabs' -or $finish) { @([ordered]@{ id = $item; required = $false }) } else { @($item) }
                 $values += @(NativeTagAliases $kind $family $finish)
                 Write-Json $destination ([ordered]@{ replace = $false; values = $values })
             }
@@ -1351,12 +1354,44 @@ function Write-NativePolishedOverrides() {
     }
 }
 
+function Write-NativeSlabAdvancements {
+    $written = 0
+    $destination = Join-Path $minecraftAdvancementRoot 'building_blocks'
+    New-Item -ItemType Directory -Path $destination -Force | Out-Null
+    foreach ($file in Get-ChildItem -LiteralPath $minecraftRecipeRoot -Filter '*.json') {
+        $recipe = Get-Content -Raw -LiteralPath $file.FullName | ConvertFrom-Json
+        if (-not ([string]$recipe.result.id).StartsWith('mineralogy:')) { continue }
+        $source = if ($recipe.type -eq 'minecraft:stonecutting') { [string]$recipe.ingredient }
+                  else { [string]@($recipe.key.PSObject.Properties.Value)[0] }
+        if (-not $source.StartsWith('minecraft:')) { throw "Review native slab source $source" }
+        $criterion = 'has_' + $source.Split(':')[1]
+        $criteria = [ordered]@{}
+        $criteria[$criterion] = [ordered]@{
+            conditions = [ordered]@{ items = @([ordered]@{ items = $source }) }
+            trigger = 'minecraft:inventory_changed'
+        }
+        $criteria.has_the_recipe = [ordered]@{
+            conditions = [ordered]@{ recipes = "minecraft:$($file.BaseName)" }
+            trigger = 'minecraft:recipe_unlocked'
+        }
+        Write-Json (Join-Path $destination $file.Name) ([ordered]@{
+            parent = 'minecraft:recipes/root'; criteria = $criteria
+            requirements = @(,@('has_the_recipe', $criterion))
+            rewards = [ordered]@{ recipes = @("minecraft:$($file.BaseName)") }
+            sends_telemetry_event = $false
+        })
+        $written++
+    }
+    if ($written -ne 24) { throw "Expected 24 native slab advancement guards, found $written" }
+}
+
 Prepare-TargetDirectories
 Write-CommonCompatibilityTags
 Write-TargetTags
 Write-CobblestoneRecipeTags
 Write-CobblestoneRecipeOverrides
 Write-NativeSlabOverrides
+Write-NativeSlabAdvancements
 Write-NativePolishedOverrides
 New-Item -ItemType Directory -Force -Path $recipeRoot | Out-Null
 
@@ -1386,3 +1421,4 @@ if ($advancementCount -ne $expectedTargetRecipeCount) {
     throw "Expected $expectedTargetRecipeCount recipe advancements, found $advancementCount"
 }
 Write-Output "Generated $expectedRecipeCount crafting recipe JSON files, retained 28 target-native smelting recipes, created $createdAdvancements missing recipe advancements, and conditioned $advancementCount Minecraft 26.3 recipe advancements."
+& "$PSScriptRoot/guard-construction-resources.ps1" -ProjectRoot $projectRoot

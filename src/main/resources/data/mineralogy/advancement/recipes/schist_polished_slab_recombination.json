@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:schist_smooth"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:schist_smooth_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:schist_polished_slab_recombination"

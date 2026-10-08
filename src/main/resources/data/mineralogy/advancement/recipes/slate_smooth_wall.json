@@ -1,4 +1,11 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:slate_smooth_wall"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:slate_smooth_wall"

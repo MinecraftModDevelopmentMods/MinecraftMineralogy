@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:basaltic_glass_relief_blank"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:basaltic_glass_relief_i"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:basaltic_glass_relief_i"

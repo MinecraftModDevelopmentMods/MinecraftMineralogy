@@ -1,19 +1,25 @@
 {
-    "type":  "minecraft:crafting_shaped",
-    "category":  "building",
-    "pattern":  [
-                    "xxx",
-                    "xxx",
-                    "xxx"
-                ],
-    "key":  {
-                "x":  {
-                          "tag":  "mineralogy:stones/diorite/smooth"
-                      }
-            },
-    "result":  {
-                   "id":  "mineralogy:diorite_relief_blank",
-                   "count":  16
-               },
-    "show_notification":  true
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:diorite_relief_blank"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "xxx",
+    "xxx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "tag": "mineralogy:stones/diorite/smooth"
+    }
+  },
+  "result": {
+    "id": "mineralogy:diorite_relief_blank",
+    "count": 16
+  },
+  "show_notification": true
 }

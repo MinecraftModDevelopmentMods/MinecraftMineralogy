@@ -1,16 +1,22 @@
 {
-    "type":  "minecraft:crafting_shapeless",
-    "category":  "building",
-    "ingredients":  [
-                        {
-                            "item":  "mineralogy:andesite"
-                        },
-                        {
-                            "item":  "minecraft:sand"
-                        }
-                    ],
-    "result":  {
-                   "id":  "mineralogy:andesite_smooth",
-                   "count":  1
-               }
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:andesite_smooth"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "mineralogy:andesite"
+    },
+    {
+      "item": "minecraft:sand"
+    }
+  ],
+  "result": {
+    "id": "mineralogy:andesite_smooth",
+    "count": 1
+  }
 }

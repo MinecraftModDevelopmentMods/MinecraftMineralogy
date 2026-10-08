@@ -1,16 +1,26 @@
 {
-    "type":  "minecraft:crafting_shapeless",
-    "category":  "building",
-    "ingredients":  [
-                        {
-                            "item":  "mineralogy:schist_smooth_slab"
-                        },
-                        {
-                            "item":  "mineralogy:schist_smooth_slab"
-                        }
-                    ],
-    "result":  {
-                   "id":  "mineralogy:schist_smooth",
-                   "count":  1
-               }
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:schist_smooth"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:schist_smooth_slab"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "mineralogy:schist_smooth_slab"
+    },
+    {
+      "item": "mineralogy:schist_smooth_slab"
+    }
+  ],
+  "result": {
+    "id": "mineralogy:schist_smooth",
+    "count": 1
+  }
 }

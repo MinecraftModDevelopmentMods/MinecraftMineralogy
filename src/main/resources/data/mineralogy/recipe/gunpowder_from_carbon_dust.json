@@ -1,37 +1,37 @@
 {
-    "neoforge:conditions":  [
-                                {
-                                    "type":  "neoforge:and",
-                                    "values":  [
-                                                   {
-                                                       "type":  "mineralogy:config",
-                                                       "flag":  "ENABLE_MINERAL_DUSTS"
-                                                   },
-                                                   {
-                                                       "type":  "neoforge:not",
-                                                       "value":  {
-                                                                     "type":  "neoforge:tag_empty",
-                                                                     "tag":  "c:dusts/carbon"
-                                                                 }
-                                                   }
-                                               ]
-                                }
-                            ],
-    "type":  "minecraft:crafting_shapeless",
-    "category":  "misc",
-    "ingredients":  [
-                        {
-                            "tag":  "c:dusts/carbon"
-                        },
-                        {
-                            "tag":  "c:dusts/nitrate"
-                        },
-                        {
-                            "tag":  "c:dusts/sulfur"
-                        }
-                    ],
-    "result":  {
-                   "id":  "minecraft:gunpowder",
-                   "count":  4
-               }
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:and",
+      "values": [
+        {
+          "type": "mineralogy:config",
+          "flag": "ENABLE_MINERAL_DUSTS"
+        },
+        {
+          "type": "neoforge:not",
+          "value": {
+            "type": "neoforge:tag_empty",
+            "tag": "c:dusts/carbon"
+          }
+        }
+      ]
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "tag": "c:dusts/carbon"
+    },
+    {
+      "tag": "c:dusts/nitrate"
+    },
+    {
+      "tag": "c:dusts/sulfur"
+    }
+  ],
+  "result": {
+    "id": "minecraft:gunpowder",
+    "count": 4
+  }
 }

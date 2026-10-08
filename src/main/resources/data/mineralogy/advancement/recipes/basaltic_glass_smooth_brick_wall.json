@@ -1,32 +1,38 @@
 {
-    "rewards":  {
-                    "recipes":  [
-                                    "mineralogy:basaltic_glass_smooth_brick_wall"
-                                ]
-                },
-    "criteria":  {
-                     "has_the_recipe":  {
-                                            "trigger":  "minecraft:recipe_unlocked",
-                                            "conditions":  {
-                                                               "recipe":  "mineralogy:basaltic_glass_smooth_brick_wall"
-                                                           }
-                                        },
-                     "has_rock":  {
-                                      "trigger":  "minecraft:inventory_changed",
-                                      "conditions":  {
-                                                         "items":  [
-                                                                       {
-                                                                           "items":  "#mineralogy:stones/basaltic_glass/smooth_brick"
-                                                                       }
-                                                                   ]
-                                                     }
-                                  }
-                 },
-    "requirements":  [
-                         [
-                             "has_the_recipe",
-                             "has_rock"
-                         ]
-                     ],
-    "sends_telemetry_event":  false
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:basaltic_glass_smooth_brick_wall"
+    }
+  ],
+  "rewards": {
+    "recipes": [
+      "mineralogy:basaltic_glass_smooth_brick_wall"
+    ]
+  },
+  "criteria": {
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "mineralogy:basaltic_glass_smooth_brick_wall"
+      }
+    },
+    "has_rock": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "#mineralogy:stones/basaltic_glass/smooth_brick"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_rock"
+    ]
+  ],
+  "sends_telemetry_event": false
 }

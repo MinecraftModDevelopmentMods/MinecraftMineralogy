@@ -1,37 +1,47 @@
 {
-    "type":  "minecraft:crafting_shapeless",
-    "category":  "building",
-    "ingredients":  [
-                        {
-                            "item":  "mineralogy:conglomerate_relief_blank"
-                        },
-                        {
-                            "item":  "mineralogy:conglomerate_relief_blank"
-                        },
-                        {
-                            "item":  "mineralogy:conglomerate_relief_blank"
-                        },
-                        {
-                            "item":  "mineralogy:conglomerate_relief_blank"
-                        },
-                        {
-                            "item":  "mineralogy:conglomerate_relief_blank"
-                        },
-                        {
-                            "item":  "mineralogy:conglomerate_relief_blank"
-                        },
-                        {
-                            "item":  "mineralogy:conglomerate_relief_blank"
-                        },
-                        {
-                            "item":  "mineralogy:conglomerate_relief_blank"
-                        },
-                        {
-                            "item":  "minecraft:stone_axe"
-                        }
-                    ],
-    "result":  {
-                   "id":  "mineralogy:conglomerate_relief_axe",
-                   "count":  8
-               }
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:conglomerate_relief_axe"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:conglomerate_relief_blank"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "mineralogy:conglomerate_relief_blank"
+    },
+    {
+      "item": "mineralogy:conglomerate_relief_blank"
+    },
+    {
+      "item": "mineralogy:conglomerate_relief_blank"
+    },
+    {
+      "item": "mineralogy:conglomerate_relief_blank"
+    },
+    {
+      "item": "mineralogy:conglomerate_relief_blank"
+    },
+    {
+      "item": "mineralogy:conglomerate_relief_blank"
+    },
+    {
+      "item": "mineralogy:conglomerate_relief_blank"
+    },
+    {
+      "item": "mineralogy:conglomerate_relief_blank"
+    },
+    {
+      "item": "minecraft:stone_axe"
+    }
+  ],
+  "result": {
+    "id": "mineralogy:conglomerate_relief_axe",
+    "count": 8
+  }
 }

@@ -1,7 +1,10 @@
 {
-    "replace":  false,
-    "values":  [
-                   "mineralogy:diorite_slab",
-                   "minecraft:diorite_slab"
-               ]
+  "replace": false,
+  "values": [
+    {
+      "id": "mineralogy:diorite_slab",
+      "required": false
+    },
+    "minecraft:diorite_slab"
+  ]
 }

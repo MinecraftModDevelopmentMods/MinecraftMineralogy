@@ -1,6 +1,6 @@
 {
-    "replace":  false,
-    "values":  [
-                   "mineralogy:nitrate_dust"
-               ]
+  "replace": false,
+  "values": [
+    "mineralogy:nitrate_dust"
+  ]
 }

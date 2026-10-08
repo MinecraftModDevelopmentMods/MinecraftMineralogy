@@ -1,28 +1,28 @@
 {
-    "neoforge:conditions":  [
-                                {
-                                    "type":  "mineralogy:config",
-                                    "flag":  "ENABLE_ROCK_SALT_LAMPS"
-                                }
-                            ],
-    "type":  "minecraft:crafting_shaped",
-    "category":  "building",
-    "pattern":  [
-                    "x",
-                    "y",
-                    "y"
-                ],
-    "key":  {
-                "x":  {
-                          "tag":  "c:lamps/rock_salt"
-                      },
-                "y":  {
-                          "item":  "minecraft:iron_ingot"
-                      }
-            },
-    "result":  {
-                   "id":  "mineralogy:rocksaltstreetlamp",
-                   "count":  1
-               },
-    "show_notification":  true
+  "neoforge:conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "ENABLE_ROCK_SALT_LAMPS"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "x",
+    "y",
+    "y"
+  ],
+  "key": {
+    "x": {
+      "tag": "c:lamps/rock_salt"
+    },
+    "y": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "id": "mineralogy:rocksaltstreetlamp",
+    "count": 1
+  },
+  "show_notification": true
 }

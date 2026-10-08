@@ -1,16 +1,26 @@
 {
-    "type":  "minecraft:crafting_shapeless",
-    "category":  "building",
-    "ingredients":  [
-                        {
-                            "item":  "mineralogy:tuff_slab"
-                        },
-                        {
-                            "tag":  "c:sands"
-                        }
-                    ],
-    "result":  {
-                   "id":  "mineralogy:tuff_smooth_slab",
-                   "count":  1
-               }
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:tuff_slab"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:tuff_smooth_slab"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "mineralogy:tuff_slab"
+    },
+    {
+      "tag": "c:sands"
+    }
+  ],
+  "result": {
+    "id": "mineralogy:tuff_smooth_slab",
+    "count": 1
+  }
 }

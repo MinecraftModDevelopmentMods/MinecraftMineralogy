@@ -1,19 +1,25 @@
 {
-    "type":  "minecraft:crafting_shaped",
-    "category":  "building",
-    "pattern":  [
-                    "x  ",
-                    "xx ",
-                    "xxx"
-                ],
-    "key":  {
-                "x":  {
-                          "tag":  "mineralogy:stones/rhyolite"
-                      }
-            },
-    "result":  {
-                   "id":  "mineralogy:rhyolite_stairs",
-                   "count":  4
-               },
-    "show_notification":  true
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:rhyolite_stairs"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "x  ",
+    "xx ",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "tag": "mineralogy:stones/rhyolite"
+    }
+  },
+  "result": {
+    "id": "mineralogy:rhyolite_stairs",
+    "count": 4
+  },
+  "show_notification": true
 }

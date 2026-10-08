@@ -1,16 +1,16 @@
 {
-    "type":  "minecraft:crafting_shapeless",
-    "category":  "building",
-    "ingredients":  [
-                        {
-                            "item":  "minecraft:diorite"
-                        },
-                        {
-                            "tag":  "mineralogy:cobblestone_equivalents"
-                        }
-                    ],
-    "result":  {
-                   "id":  "minecraft:andesite",
-                   "count":  2
-               }
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "minecraft:diorite"
+    },
+    {
+      "tag": "mineralogy:cobblestone_equivalents"
+    }
+  ],
+  "result": {
+    "id": "minecraft:andesite",
+    "count": 2
+  }
 }

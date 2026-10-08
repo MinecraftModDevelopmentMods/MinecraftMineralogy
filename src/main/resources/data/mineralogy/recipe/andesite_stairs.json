@@ -1,19 +1,25 @@
 {
-    "type":  "minecraft:crafting_shaped",
-    "category":  "building",
-    "pattern":  [
-                    "x  ",
-                    "xx ",
-                    "xxx"
-                ],
-    "key":  {
-                "x":  {
-                          "item":  "mineralogy:andesite"
-                      }
-            },
-    "result":  {
-                   "id":  "mineralogy:andesite_stairs",
-                   "count":  4
-               },
-    "show_notification":  true
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:andesite_stairs"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "x  ",
+    "xx ",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:andesite"
+    }
+  },
+  "result": {
+    "id": "mineralogy:andesite_stairs",
+    "count": 4
+  },
+  "show_notification": true
 }

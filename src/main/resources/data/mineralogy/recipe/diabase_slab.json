@@ -1,17 +1,23 @@
 {
-    "type":  "minecraft:crafting_shaped",
-    "category":  "building",
-    "pattern":  [
-                    "xxx"
-                ],
-    "key":  {
-                "x":  {
-                          "item":  "mineralogy:diabase"
-                      }
-            },
-    "result":  {
-                   "id":  "mineralogy:diabase_slab",
-                   "count":  6
-               },
-    "show_notification":  true
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:diabase_slab"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:diabase"
+    }
+  },
+  "result": {
+    "id": "mineralogy:diabase_slab",
+    "count": 6
+  },
+  "show_notification": true
 }

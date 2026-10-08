@@ -1,17 +1,27 @@
 {
-    "type":  "minecraft:crafting_shaped",
-    "category":  "building",
-    "pattern":  [
-                    "xxx"
-                ],
-    "key":  {
-                "x":  {
-                          "item":  "mineralogy:conglomerate_smooth"
-                      }
-            },
-    "result":  {
-                   "id":  "mineralogy:conglomerate_smooth_slab",
-                   "count":  6
-               },
-    "show_notification":  true
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:conglomerate_smooth"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:conglomerate_smooth_slab"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:conglomerate_smooth"
+    }
+  },
+  "result": {
+    "id": "mineralogy:conglomerate_smooth_slab",
+    "count": 6
+  },
+  "show_notification": true
 }

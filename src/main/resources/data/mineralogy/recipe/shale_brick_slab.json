@@ -1,17 +1,27 @@
 {
-    "type":  "minecraft:crafting_shaped",
-    "category":  "building",
-    "pattern":  [
-                    "xxx"
-                ],
-    "key":  {
-                "x":  {
-                          "item":  "mineralogy:shale_brick"
-                      }
-            },
-    "result":  {
-                   "id":  "mineralogy:shale_brick_slab",
-                   "count":  6
-               },
-    "show_notification":  true
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:shale_brick"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:shale_brick_slab"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:shale_brick"
+    }
+  },
+  "result": {
+    "id": "mineralogy:shale_brick_slab",
+    "count": 6
+  },
+  "show_notification": true
 }

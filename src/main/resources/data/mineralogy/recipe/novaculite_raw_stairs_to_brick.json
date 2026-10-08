@@ -1,18 +1,28 @@
 {
-    "type":  "minecraft:crafting_shaped",
-    "category":  "building",
-    "pattern":  [
-                    "xx",
-                    "xx"
-                ],
-    "key":  {
-                "x":  {
-                          "item":  "mineralogy:novaculite_stairs"
-                      }
-            },
-    "result":  {
-                   "id":  "mineralogy:novaculite_brick_stairs",
-                   "count":  4
-               },
-    "show_notification":  true
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:novaculite_brick_stairs"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:novaculite_stairs"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "xx",
+    "xx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:novaculite_stairs"
+    }
+  },
+  "result": {
+    "id": "mineralogy:novaculite_brick_stairs",
+    "count": 4
+  },
+  "show_notification": true
 }

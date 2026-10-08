@@ -1,16 +1,22 @@
 {
-    "type":  "minecraft:crafting_shapeless",
-    "category":  "building",
-    "ingredients":  [
-                        {
-                            "item":  "mineralogy:gneiss_slab"
-                        },
-                        {
-                            "item":  "mineralogy:gneiss_slab"
-                        }
-                    ],
-    "result":  {
-                   "id":  "mineralogy:gneiss",
-                   "count":  1
-               }
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:gneiss_slab"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "mineralogy:gneiss_slab"
+    },
+    {
+      "item": "mineralogy:gneiss_slab"
+    }
+  ],
+  "result": {
+    "id": "mineralogy:gneiss",
+    "count": 1
+  }
 }

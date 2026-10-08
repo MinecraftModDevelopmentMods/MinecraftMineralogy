@@ -1,32 +1,38 @@
 {
-    "rewards":  {
-                    "recipes":  [
-                                    "mineralogy:diorite_brick"
-                                ]
-                },
-    "criteria":  {
-                     "has_the_recipe":  {
-                                            "trigger":  "minecraft:recipe_unlocked",
-                                            "conditions":  {
-                                                               "recipe":  "mineralogy:diorite_brick"
-                                                           }
-                                        },
-                     "has_rock":  {
-                                      "trigger":  "minecraft:inventory_changed",
-                                      "conditions":  {
-                                                         "items":  [
-                                                                       {
-                                                                           "items":  "#mineralogy:stones/diorite"
-                                                                       }
-                                                                   ]
-                                                     }
-                                  }
-                 },
-    "requirements":  [
-                         [
-                             "has_the_recipe",
-                             "has_rock"
-                         ]
-                     ],
-    "sends_telemetry_event":  false
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:diorite_brick"
+    }
+  ],
+  "rewards": {
+    "recipes": [
+      "mineralogy:diorite_brick"
+    ]
+  },
+  "criteria": {
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "mineralogy:diorite_brick"
+      }
+    },
+    "has_rock": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "#mineralogy:stones/diorite"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_rock"
+    ]
+  ],
+  "sends_telemetry_event": false
 }

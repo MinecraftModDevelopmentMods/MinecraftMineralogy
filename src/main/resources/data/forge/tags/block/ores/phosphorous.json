@@ -1,6 +1,6 @@
 {
-    "replace":  false,
-    "values":  [
-                   "#c:ores/phosphorous"
-               ]
+  "replace": false,
+  "values": [
+    "#c:ores/phosphorous"
+  ]
 }

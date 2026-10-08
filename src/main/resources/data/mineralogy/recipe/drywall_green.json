@@ -1,22 +1,22 @@
 {
-    "neoforge:conditions":  [
-                                {
-                                    "type":  "mineralogy:config",
-                                    "flag":  "ENABLE_DRYWALLS"
-                                }
-                            ],
-    "type":  "minecraft:crafting_shapeless",
-    "category":  "building",
-    "ingredients":  [
-                        {
-                            "tag":  "mineralogy:drywall/white"
-                        },
-                        {
-                            "item":  "minecraft:green_dye"
-                        }
-                    ],
-    "result":  {
-                   "id":  "mineralogy:drywall_green",
-                   "count":  1
-               }
+  "neoforge:conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "ENABLE_DRYWALLS"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "tag": "mineralogy:drywall/white"
+    },
+    {
+      "item": "minecraft:green_dye"
+    }
+  ],
+  "result": {
+    "id": "mineralogy:drywall_green",
+    "count": 1
+  }
 }

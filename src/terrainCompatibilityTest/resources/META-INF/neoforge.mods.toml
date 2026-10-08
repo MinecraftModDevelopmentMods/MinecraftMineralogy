@@ -1,0 +1,7 @@
+modLoader="javafml"
+loaderVersion="[3,)"
+license="LGPL-2.1"
+[[mods]]
+modId="mineralogycompatprobe"
+version="1.0.0"
+displayName="Non-shipping Mineralogy Terrain Compatibility Probe"

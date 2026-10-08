@@ -1,32 +1,32 @@
 {
-    "rewards":  {
-                    "recipes":  [
-                                    "mineralogy:slate_cobblestone"
-                                ]
-                },
-    "criteria":  {
-                     "has_the_recipe":  {
-                                            "trigger":  "minecraft:recipe_unlocked",
-                                            "conditions":  {
-                                                               "recipe":  "mineralogy:slate_cobblestone"
-                                                           }
-                                        },
-                     "has_rock":  {
-                                      "trigger":  "minecraft:inventory_changed",
-                                      "conditions":  {
-                                                         "items":  [
-                                                                       {
-                                                                           "items":  "#mineralogy:stones/slate"
-                                                                       }
-                                                                   ]
-                                                     }
-                                  }
-                 },
-    "requirements":  [
-                         [
-                             "has_the_recipe",
-                             "has_rock"
-                         ]
-                     ],
-    "sends_telemetry_event":  false
+  "rewards": {
+    "recipes": [
+      "mineralogy:slate_cobblestone"
+    ]
+  },
+  "criteria": {
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "mineralogy:slate_cobblestone"
+      }
+    },
+    "has_rock": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "#mineralogy:stones/slate"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_rock"
+    ]
+  ],
+  "sends_telemetry_event": false
 }

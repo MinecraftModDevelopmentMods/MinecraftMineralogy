@@ -1,17 +1,23 @@
 {
-    "type":  "minecraft:crafting_shaped",
-    "category":  "building",
-    "pattern":  [
-                    "xxx"
-                ],
-    "key":  {
-                "x":  {
-                          "item":  "mineralogy:rhyolite"
-                      }
-            },
-    "result":  {
-                   "id":  "mineralogy:rhyolite_slab",
-                   "count":  6
-               },
-    "show_notification":  true
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:rhyolite_slab"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:rhyolite"
+    }
+  },
+  "result": {
+    "id": "mineralogy:rhyolite_slab",
+    "count": 6
+  },
+  "show_notification": true
 }

@@ -1,37 +1,47 @@
 {
-    "type":  "minecraft:crafting_shapeless",
-    "category":  "building",
-    "ingredients":  [
-                        {
-                            "item":  "mineralogy:marble_relief_blank"
-                        },
-                        {
-                            "item":  "mineralogy:marble_relief_blank"
-                        },
-                        {
-                            "item":  "mineralogy:marble_relief_blank"
-                        },
-                        {
-                            "item":  "mineralogy:marble_relief_blank"
-                        },
-                        {
-                            "item":  "mineralogy:marble_relief_blank"
-                        },
-                        {
-                            "item":  "mineralogy:marble_relief_blank"
-                        },
-                        {
-                            "item":  "mineralogy:marble_relief_blank"
-                        },
-                        {
-                            "item":  "mineralogy:marble_relief_blank"
-                        },
-                        {
-                            "item":  "minecraft:stone_axe"
-                        }
-                    ],
-    "result":  {
-                   "id":  "mineralogy:marble_relief_axe",
-                   "count":  8
-               }
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:marble_relief_axe"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:marble_relief_blank"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "mineralogy:marble_relief_blank"
+    },
+    {
+      "item": "mineralogy:marble_relief_blank"
+    },
+    {
+      "item": "mineralogy:marble_relief_blank"
+    },
+    {
+      "item": "mineralogy:marble_relief_blank"
+    },
+    {
+      "item": "mineralogy:marble_relief_blank"
+    },
+    {
+      "item": "mineralogy:marble_relief_blank"
+    },
+    {
+      "item": "mineralogy:marble_relief_blank"
+    },
+    {
+      "item": "mineralogy:marble_relief_blank"
+    },
+    {
+      "item": "minecraft:stone_axe"
+    }
+  ],
+  "result": {
+    "id": "mineralogy:marble_relief_axe",
+    "count": 8
+  }
 }

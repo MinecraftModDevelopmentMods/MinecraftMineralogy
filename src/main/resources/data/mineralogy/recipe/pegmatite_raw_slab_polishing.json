@@ -1,16 +1,26 @@
 {
-    "type":  "minecraft:crafting_shapeless",
-    "category":  "building",
-    "ingredients":  [
-                        {
-                            "item":  "mineralogy:pegmatite_slab"
-                        },
-                        {
-                            "tag":  "c:sands"
-                        }
-                    ],
-    "result":  {
-                   "id":  "mineralogy:pegmatite_smooth_slab",
-                   "count":  1
-               }
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:pegmatite_slab"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:pegmatite_smooth_slab"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "mineralogy:pegmatite_slab"
+    },
+    {
+      "tag": "c:sands"
+    }
+  ],
+  "result": {
+    "id": "mineralogy:pegmatite_smooth_slab",
+    "count": 1
+  }
 }

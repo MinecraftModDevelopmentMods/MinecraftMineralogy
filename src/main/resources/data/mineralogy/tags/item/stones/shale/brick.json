@@ -1,6 +1,9 @@
 {
-    "replace":  false,
-    "values":  [
-                   "mineralogy:shale_brick"
-               ]
+  "replace": false,
+  "values": [
+    {
+      "id": "mineralogy:shale_brick",
+      "required": false
+    }
+  ]
 }

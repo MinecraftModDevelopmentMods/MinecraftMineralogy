@@ -1,18 +1,24 @@
 {
-    "type":  "minecraft:crafting_shaped",
-    "category":  "building",
-    "pattern":  [
-                    "xxx",
-                    "xxx"
-                ],
-    "key":  {
-                "x":  {
-                          "tag":  "mineralogy:stones/scoria/brick"
-                      }
-            },
-    "result":  {
-                   "id":  "mineralogy:scoria_brick_wall",
-                   "count":  6
-               },
-    "show_notification":  true
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:scoria_brick_wall"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "xxx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "tag": "mineralogy:stones/scoria/brick"
+    }
+  },
+  "result": {
+    "id": "mineralogy:scoria_brick_wall",
+    "count": 6
+  },
+  "show_notification": true
 }

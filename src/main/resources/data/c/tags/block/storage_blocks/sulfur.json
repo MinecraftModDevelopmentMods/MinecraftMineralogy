@@ -1,6 +1,6 @@
 {
-    "replace":  false,
-    "values":  [
-                   "mineralogy:sulfur_block"
-               ]
+  "replace": false,
+  "values": [
+    "mineralogy:sulfur_block"
+  ]
 }

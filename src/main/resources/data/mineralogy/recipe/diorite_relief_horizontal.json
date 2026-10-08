@@ -1,17 +1,27 @@
 {
-    "type":  "minecraft:crafting_shaped",
-    "category":  "building",
-    "pattern":  [
-                    "xxx"
-                ],
-    "key":  {
-                "x":  {
-                          "item":  "mineralogy:diorite_relief_blank"
-                      }
-            },
-    "result":  {
-                   "id":  "mineralogy:diorite_relief_horizontal",
-                   "count":  3
-               },
-    "show_notification":  true
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:diorite_relief_blank"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:diorite_relief_horizontal"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:diorite_relief_blank"
+    }
+  },
+  "result": {
+    "id": "mineralogy:diorite_relief_horizontal",
+    "count": 3
+  },
+  "show_notification": true
 }

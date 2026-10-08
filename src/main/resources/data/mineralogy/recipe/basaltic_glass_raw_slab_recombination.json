@@ -1,16 +1,22 @@
 {
-    "type":  "minecraft:crafting_shapeless",
-    "category":  "building",
-    "ingredients":  [
-                        {
-                            "item":  "mineralogy:basaltic_glass_slab"
-                        },
-                        {
-                            "item":  "mineralogy:basaltic_glass_slab"
-                        }
-                    ],
-    "result":  {
-                   "id":  "mineralogy:basaltic_glass",
-                   "count":  1
-               }
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:basaltic_glass_slab"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "mineralogy:basaltic_glass_slab"
+    },
+    {
+      "item": "mineralogy:basaltic_glass_slab"
+    }
+  ],
+  "result": {
+    "id": "mineralogy:basaltic_glass",
+    "count": 1
+  }
 }

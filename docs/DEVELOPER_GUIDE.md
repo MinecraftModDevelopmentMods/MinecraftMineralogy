@@ -175,3 +175,18 @@ guide under `META-INF/mineralogy/docs/`.
 The complete release version is `Major.Minor.Bug.Target`; see
 [Mineralogy Versioning](VERSIONS.md). This branch validates target `121012`
 for Minecraft 1.21.1 NeoForge and does not append CI build numbers.
+# Terrain interfaces in 6.1.4
+
+`mineralogy:terrain_rocks` is the natural-terrain block/item interface, derived
+from provider outputs and retained legacy aliases. Crafted forms, ores, lamps,
+furnaces and storage conversions are excluded. Common stone classification
+uses the narrower raw-stone interface and excludes sandstone. Construction
+members that configuration can remove use optional objects inside `values`.
+
+Three exact-count JavaScript hooks preserve native checks while adding dedicated
+terrain eligibility for dripstone water pockets, large columns and forest rocks.
+They do not broaden vanilla base-stone, carver or ore-host tags. Recipe and
+advancement resources use this target's native `neoforge:item_exists` conditions
+for optional construction IDs. Loot guards retain the existing construction
+flags and nested registration prerequisites. Enabled payloads and public IDs
+remain unchanged; tests and artifact audits enforce these contracts.

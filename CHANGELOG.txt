@@ -1,3 +1,21 @@
+Mineralogy 6.1.4.121012 for Minecraft 1.21.1 NeoForge
+
+- Added matching 37-member terrain-rock block/item tags and additive vanilla
+  sculk, dripstone and moss replacement interfaces, preserving existing members.
+- Natural replacement is independent of cobblestone equivalence and excludes
+  crafted forms. Sculk/moss eligibility updates existing worlds; cave decoration
+  uses the right substrates in new chunks. Provider, config, registry, texture
+  and OreSpawn identities are unchanged. Sulfur-cube resources do not apply here.
+- Natural rock now supports goat spawning, with a separate hard-rock whitelist
+  for breaking horns. Slabs, stairs, walls, furnaces, ores, storage blocks and
+  coloured drywall join their appropriate vanilla or common tags.
+- Fixed the direct vanilla checks that blocked dripstone water pockets, large
+  columns and forest rocks on Mineralogy terrain. Azalea roots can replace rock;
+  bare rock has not been made suitable soil for growing an azalea tree.
+- Rock-salt lamps keep the expected wall post. Disabled construction no longer
+  leaves broken tag, recipe, advancement or loot references. Enabled recipes,
+  progression and drops are unchanged.
+
 Mineralogy 6.1.2.121012 for Minecraft 1.21.1 NeoForge
 
 - Ported the accepted NeoForge feature and compatibility contract to Minecraft

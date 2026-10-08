@@ -1,18 +1,18 @@
 {
-    "type":  "minecraft:crafting_shaped",
-    "category":  "misc",
-    "pattern":  [
-                    "###",
-                    "# #",
-                    "###"
-                ],
-    "key":  {
-                "#":  {
-                          "tag":  "mineralogy:stone_crafting_materials"
-                      }
-            },
-    "result":  {
-                   "id":  "minecraft:furnace"
-               },
-    "show_notification":  true
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "###",
+    "# #",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "tag": "mineralogy:stone_crafting_materials"
+    }
+  },
+  "result": {
+    "id": "minecraft:furnace"
+  },
+  "show_notification": true
 }

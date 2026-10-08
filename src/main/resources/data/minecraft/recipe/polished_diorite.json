@@ -1,16 +1,16 @@
 {
-    "type":  "minecraft:crafting_shapeless",
-    "category":  "building",
-    "ingredients":  [
-                        {
-                            "item":  "minecraft:diorite"
-                        },
-                        {
-                            "item":  "minecraft:sand"
-                        }
-                    ],
-    "result":  {
-                   "id":  "minecraft:polished_diorite",
-                   "count":  1
-               }
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "minecraft:diorite"
+    },
+    {
+      "item": "minecraft:sand"
+    }
+  ],
+  "result": {
+    "id": "minecraft:polished_diorite",
+    "count": 1
+  }
 }

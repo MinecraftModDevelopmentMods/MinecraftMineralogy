@@ -75,11 +75,12 @@ new releases and does not reinterpret an old file's version.
 
 ## Vanilla stone compatibility campaign
 
-The following local candidates share the 6.1.4 additive terrain compatibility
-fix. This is a candidate matrix, not a claim that every release is published.
-NeoForge 26.3 retains its existing 6.1.3 compatibility correction.
+The following versions make up the 6.1.4 compatibility release campaign.
+Publication proceeds separately for each target; this matrix does not claim
+that every release is already available. NeoForge 26.3 retains its earlier
+compatibility correction.
 
-| Minecraft | Forge candidate | NeoForge candidate |
+| Minecraft | Forge version | NeoForge version |
 | --- | --- | --- |
 | 1.16.5 | 6.1.4.116051 | Not in scope |
 | 1.17.1 | 6.1.4.117011 | Not in scope |
@@ -98,7 +99,7 @@ available on each target. Native-texture synchronization remains a separate
 campaign. Sulfur cubes consume only raw Mineralogy rocks on 26.2/26.3; no
 sulfur-cube resources apply to this 1.21.11 target. Existing worlds gain the
 behaviour fixes after updating; natural decoration changes newly generated
-chunks. Revised candidates require renewed acceptance before publication.
+chunks.
 
 ## Major version
 
@@ -188,7 +189,7 @@ particular jar can load on the current game.
 
 Mineralogy 6 also requires OreSpawn `[4.0.6,5.0.0)`. OreSpawn uses the same
 target calculation, so the matching Minecraft 1.21.11 NeoForge release used for
-this candidate is `4.0.16.121112`. The dependency range deliberately describes the supported
+this release is `4.0.16.121112`. The dependency range deliberately describes the supported
 functional OreSpawn generation; NeoForge still prevents jars for another
 Minecraft target from loading together.
 
@@ -198,10 +199,10 @@ feature generation, not the exact jar.
 
 ## Builds and release notes
 
-This local 6.1.4 candidate also repairs natural bat substrate eligibility.
+This 6.1.4 release also repairs natural bat substrate eligibility.
 Minecraft introduced the bats_spawnable_on block tag in 1.21.2; the compatibility
-interface belongs only on 1.21.2-and-later targets. Earlier Mineralogy candidates
-remain unchanged. The additive block tag reuses natural terrain membership,
+interface belongs only on 1.21.2-and-later targets. Earlier targets retain their
+existing spawn checks. The additive block tag reuses natural terrain membership,
 not the broad base_stone_overworld tag, and preserves vanilla spawn restrictions.
 
 The Gradle build reads the complete version from `mod_version`, verifies that

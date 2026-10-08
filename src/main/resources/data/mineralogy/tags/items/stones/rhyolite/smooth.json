@@ -1,6 +1,9 @@
 {
-    "replace":  false,
-    "values":  [
-                   "mineralogy:rhyolite_smooth"
-               ]
+  "replace": false,
+  "values": [
+    {
+      "id": "mineralogy:rhyolite_smooth",
+      "required": false
+    }
+  ]
 }

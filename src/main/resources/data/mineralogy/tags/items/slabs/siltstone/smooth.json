@@ -1,6 +1,9 @@
 {
-    "replace":  false,
-    "values":  [
-                   "mineralogy:siltstone_smooth_slab"
-               ]
+  "replace": false,
+  "values": [
+    {
+      "id": "mineralogy:siltstone_smooth_slab",
+      "required": false
+    }
+  ]
 }

@@ -64,6 +64,21 @@ Mineralogy rock furnace is an upgrade recipe: surround an existing Minecraft
 furnace with eight matching Mineralogy slabs. Brick, polished, and
 polished-brick furnaces use the corresponding slab finish.
 
+## Natural Rock Compatibility
+
+Sculk can spread onto natural Mineralogy rock, and goats can spawn on it.
+Harder raw rocks can also break goat horns; rock salt, scoria, siltstone,
+chalk, gypsum and pumice are excluded. Crafted and polished forms are not
+treated as natural terrain.
+
+Moss, dripstone, azalea roots and forest rocks recognise the same natural
+substrates. Updating does not regenerate existing caves: explore new chunks
+to see natural decoration changes. Bare rock still cannot grow an azalea tree.
+Rock-salt lamps keep the post of a straight wall, just as vanilla torches do.
+
+These rules work with cobblestone equivalence enabled or disabled. Sulfur cubes
+and the newer bat substrate tag are not present in Minecraft 1.20.6.
+
 ## Configuration And Servers
 
 `config/mineralogy-common.toml` controls Mineralogy content and recipe compatibility.

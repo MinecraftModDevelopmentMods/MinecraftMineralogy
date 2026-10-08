@@ -1,5 +1,13 @@
 # Mineralogy Developer Guide
 
+The 6.1.4 terrain interface contains provider outputs and retained raw aliases,
+not crafted forms. Cave consumers use additive, dedicated tags. The two
+dripstone redirects and optional-construction loot guard verify exact native
+hook counts on Forge 37. Keep its reload-aware Tag objects; do not replace them
+with the holder/TagKey APIs from later Minecraft versions. Common normal
+cobblestone follows the root option. Slab tags exclude separate double blocks.
+Future ports must explicitly audit new vanilla/common tags and their consumers.
+
 ## Responsibility Split
 
 | Mineralogy owns | OreSpawn owns |

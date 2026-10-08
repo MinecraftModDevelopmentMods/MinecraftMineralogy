@@ -1,7 +1,10 @@
 {
-    "replace":  false,
-    "values":  [
-                   "mineralogy:diorite_smooth_slab",
-                   "minecraft:polished_diorite_slab"
-               ]
+  "replace": false,
+  "values": [
+    {
+      "id": "mineralogy:diorite_smooth_slab",
+      "required": false
+    },
+    "minecraft:polished_diorite_slab"
+  ]
 }

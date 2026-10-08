@@ -1,6 +1,9 @@
 {
-    "replace":  false,
-    "values":  [
-                   "mineralogy:diabase_slab"
-               ]
+  "replace": false,
+  "values": [
+    {
+      "id": "mineralogy:diabase_slab",
+      "required": false
+    }
+  ]
 }

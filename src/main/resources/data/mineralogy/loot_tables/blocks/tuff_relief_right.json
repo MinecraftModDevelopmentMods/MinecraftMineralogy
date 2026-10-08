@@ -16,5 +16,6 @@
         }
       ]
     }
-  ]
+  ],
+  "mineralogy:construction_item": "mineralogy:tuff_relief_right"
 }

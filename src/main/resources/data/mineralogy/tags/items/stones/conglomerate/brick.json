@@ -1,6 +1,9 @@
 {
-    "replace":  false,
-    "values":  [
-                   "mineralogy:conglomerate_brick"
-               ]
+  "replace": false,
+  "values": [
+    {
+      "id": "mineralogy:conglomerate_brick",
+      "required": false
+    }
+  ]
 }

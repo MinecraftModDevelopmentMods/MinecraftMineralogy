@@ -28,6 +28,7 @@ import zone.moddev.mc.mineralogy.data.MaterialData;
 /** Applies the legacy cobblestone option to Forge 52 canonical and compatibility tags. */
 public final class CobblestoneTagPolicy {
     private static final ResourceLocation COBBLESTONES = ResourceLocation.fromNamespaceAndPath("c", "cobblestones");
+    private static final ResourceLocation NORMAL_COBBLESTONES = ResourceLocation.fromNamespaceAndPath("c", "cobblestones/normal");
     private static final ResourceLocation LEGACY_COBBLESTONE =
             ResourceLocation.fromNamespaceAndPath("forge", "cobblestone");
     private static final ResourceLocation STONE_CRAFTING_MATERIALS =
@@ -55,12 +56,16 @@ public final class CobblestoneTagPolicy {
         Map<TagKey<Block>, List<Holder<Block>>> blockTags = snapshot(blockRegistry);
         updateTag(blockTags, blockRegistry, Registries.BLOCK, COBBLESTONES,
                 configuredBlocks, enabled, "chert", "pumice");
+        updateTag(blockTags, blockRegistry, Registries.BLOCK, NORMAL_COBBLESTONES,
+                configuredBlocks, enabled, "chert", "pumice");
         updateTag(blockTags, blockRegistry, Registries.BLOCK, LEGACY_COBBLESTONE,
                 configuredBlocks, enabled, "chert", "pumice");
         blockRegistry.bindTags(blockTags);
 
         Map<TagKey<Item>, List<Holder<Item>>> itemTags = snapshot(itemRegistry);
         updateTag(itemTags, itemRegistry, Registries.ITEM, COBBLESTONES,
+                configuredItems, enabled, "chert", "pumice");
+        updateTag(itemTags, itemRegistry, Registries.ITEM, NORMAL_COBBLESTONES,
                 configuredItems, enabled, "chert", "pumice");
         updateTag(itemTags, itemRegistry, Registries.ITEM, LEGACY_COBBLESTONE,
                 configuredItems, enabled, "chert", "pumice");

@@ -1,5 +1,23 @@
 # Mineralogy Developer Guide
 
+## Natural terrain interfaces
+
+`mineralogy:terrain_rocks` contains the 32 provider outputs and five retained
+legacy aliases. Its block and item forms stay independent of cobblestone
+equivalence. Additive vanilla replacement and goat tags refer to the block
+interface; crafted forms are excluded. `mineralogy:raw_stones` excludes sandstone
+and feeds the available common stone tags. A separate hard-rock whitelist
+controls horn breaking.
+
+Two exact-count JavaScript hooks redirect only the proven dripstone water-pocket
+and large-column base-stone reads to `mineralogy:dripstone_base_stones`. Global
+base-stone, carver and ore-host tags remain unchanged. Azalea root replacement
+does not make bare rock eligible tree soil. Optional construction entries and
+item-existence loot guards allow disabled construction settings to load cleanly.
+
+The focused resource contracts and non-shipping native probes are checked again
+at release audit. Ports must make explicit decisions for newly introduced tags.
+
 ## Responsibility Split
 
 | Mineralogy owns | OreSpawn owns |

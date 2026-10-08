@@ -1,7 +1,10 @@
 {
-    "replace":  false,
-    "values":  [
-                   "mineralogy:tuff_smooth_slab",
-                   "minecraft:polished_tuff_slab"
-               ]
+  "replace": false,
+  "values": [
+    {
+      "id": "mineralogy:tuff_smooth_slab",
+      "required": false
+    },
+    "minecraft:polished_tuff_slab"
+  ]
 }

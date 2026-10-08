@@ -1,19 +1,19 @@
 {
-    "neoforge:conditions":  [
-                                {
-                                    "type":  "mineralogy:config",
-                                    "flag":  "ENABLE_MINERAL_DUSTS"
-                                }
-                            ],
-    "type":  "minecraft:crafting_shapeless",
-    "category":  "building",
-    "ingredients":  [
-                        {
-                            "tag":  "c:storage_blocks/nitrate"
-                        }
-                    ],
-    "result":  {
-                   "id":  "mineralogy:nitrate_dust",
-                   "count":  9
-               }
+  "neoforge:conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "ENABLE_MINERAL_DUSTS"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "tag": "c:storage_blocks/nitrate"
+    }
+  ],
+  "result": {
+    "id": "mineralogy:nitrate_dust",
+    "count": 9
+  }
 }

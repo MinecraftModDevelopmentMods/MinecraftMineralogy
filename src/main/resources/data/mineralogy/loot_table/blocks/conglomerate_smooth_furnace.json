@@ -1,4 +1,18 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_SMOOTH"
+    },
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_SMOOTHSLAB"
+    },
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_SMOOTHFURNACE"
+    }
+  ],
   "type": "minecraft:block",
   "pools": [
     {

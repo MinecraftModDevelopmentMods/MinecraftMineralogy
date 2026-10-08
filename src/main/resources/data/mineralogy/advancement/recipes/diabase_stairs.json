@@ -1,32 +1,38 @@
 {
-    "rewards":  {
-                    "recipes":  [
-                                    "mineralogy:diabase_stairs"
-                                ]
-                },
-    "criteria":  {
-                     "has_the_recipe":  {
-                                            "trigger":  "minecraft:recipe_unlocked",
-                                            "conditions":  {
-                                                               "recipe":  "mineralogy:diabase_stairs"
-                                                           }
-                                        },
-                     "has_rock":  {
-                                      "trigger":  "minecraft:inventory_changed",
-                                      "conditions":  {
-                                                         "items":  [
-                                                                       {
-                                                                           "items":  "#mineralogy:stones/diabase"
-                                                                       }
-                                                                   ]
-                                                     }
-                                  }
-                 },
-    "requirements":  [
-                         [
-                             "has_the_recipe",
-                             "has_rock"
-                         ]
-                     ],
-    "sends_telemetry_event":  false
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:diabase_stairs"
+    }
+  ],
+  "rewards": {
+    "recipes": [
+      "mineralogy:diabase_stairs"
+    ]
+  },
+  "criteria": {
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "mineralogy:diabase_stairs"
+      }
+    },
+    "has_rock": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "#mineralogy:stones/diabase"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_rock"
+    ]
+  ],
+  "sends_telemetry_event": false
 }

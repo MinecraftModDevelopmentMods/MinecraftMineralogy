@@ -1,22 +1,22 @@
 {
-    "type":  "minecraft:crafting_shapeless",
-    "category":  "building",
-    "ingredients":  [
-                        {
-                            "tag":  "mineralogy:stones/tuff"
-                        },
-                        {
-                            "tag":  "mineralogy:stones/tuff"
-                        },
-                        {
-                            "item":  "minecraft:gravel"
-                        },
-                        {
-                            "item":  "minecraft:gravel"
-                        }
-                    ],
-    "result":  {
-                   "id":  "minecraft:cobblestone",
-                   "count":  4
-               }
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "tag": "mineralogy:stones/tuff"
+    },
+    {
+      "tag": "mineralogy:stones/tuff"
+    },
+    {
+      "item": "minecraft:gravel"
+    },
+    {
+      "item": "minecraft:gravel"
+    }
+  ],
+  "result": {
+    "id": "minecraft:cobblestone",
+    "count": 4
+  }
 }

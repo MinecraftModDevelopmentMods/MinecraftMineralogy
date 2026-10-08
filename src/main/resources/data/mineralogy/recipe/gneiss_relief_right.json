@@ -1,16 +1,26 @@
 {
-    "type":  "minecraft:crafting_shapeless",
-    "category":  "building",
-    "ingredients":  [
-                        {
-                            "item":  "mineralogy:gneiss_relief_left"
-                        },
-                        {
-                            "item":  "mineralogy:gneiss_relief_left"
-                        }
-                    ],
-    "result":  {
-                   "id":  "mineralogy:gneiss_relief_right",
-                   "count":  2
-               }
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:gneiss_relief_left"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:gneiss_relief_right"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "mineralogy:gneiss_relief_left"
+    },
+    {
+      "item": "mineralogy:gneiss_relief_left"
+    }
+  ],
+  "result": {
+    "id": "mineralogy:gneiss_relief_right",
+    "count": 2
+  }
 }

@@ -1,18 +1,28 @@
 {
-    "type":  "minecraft:crafting_shaped",
-    "category":  "building",
-    "pattern":  [
-                    "xx",
-                    "xx"
-                ],
-    "key":  {
-                "x":  {
-                          "item":  "mineralogy:quartzite_smooth_stairs"
-                      }
-            },
-    "result":  {
-                   "id":  "mineralogy:quartzite_smooth_brick_stairs",
-                   "count":  4
-               },
-    "show_notification":  true
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:quartzite_smooth_brick_stairs"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:quartzite_smooth_stairs"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "xx",
+    "xx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:quartzite_smooth_stairs"
+    }
+  },
+  "result": {
+    "id": "mineralogy:quartzite_smooth_brick_stairs",
+    "count": 4
+  },
+  "show_notification": true
 }

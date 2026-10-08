@@ -1,17 +1,27 @@
 {
-    "type":  "minecraft:crafting_shaped",
-    "category":  "building",
-    "pattern":  [
-                    "xxx"
-                ],
-    "key":  {
-                "x":  {
-                          "item":  "mineralogy:scoria_smooth"
-                      }
-            },
-    "result":  {
-                   "id":  "mineralogy:scoria_smooth_slab",
-                   "count":  6
-               },
-    "show_notification":  true
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:scoria_smooth"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:scoria_smooth_slab"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:scoria_smooth"
+    }
+  },
+  "result": {
+    "id": "mineralogy:scoria_smooth_slab",
+    "count": 6
+  },
+  "show_notification": true
 }

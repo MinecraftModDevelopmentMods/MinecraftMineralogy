@@ -1,32 +1,38 @@
 {
-    "rewards":  {
-                    "recipes":  [
-                                    "mineralogy:tuff_brick"
-                                ]
-                },
-    "criteria":  {
-                     "has_the_recipe":  {
-                                            "trigger":  "minecraft:recipe_unlocked",
-                                            "conditions":  {
-                                                               "recipe":  "mineralogy:tuff_brick"
-                                                           }
-                                        },
-                     "has_rock":  {
-                                      "trigger":  "minecraft:inventory_changed",
-                                      "conditions":  {
-                                                         "items":  [
-                                                                       {
-                                                                           "items":  "#mineralogy:stones/tuff"
-                                                                       }
-                                                                   ]
-                                                     }
-                                  }
-                 },
-    "requirements":  [
-                         [
-                             "has_the_recipe",
-                             "has_rock"
-                         ]
-                     ],
-    "sends_telemetry_event":  false
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:tuff_brick"
+    }
+  ],
+  "rewards": {
+    "recipes": [
+      "mineralogy:tuff_brick"
+    ]
+  },
+  "criteria": {
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "mineralogy:tuff_brick"
+      }
+    },
+    "has_rock": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "#mineralogy:stones/tuff"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_rock"
+    ]
+  ],
+  "sends_telemetry_event": false
 }

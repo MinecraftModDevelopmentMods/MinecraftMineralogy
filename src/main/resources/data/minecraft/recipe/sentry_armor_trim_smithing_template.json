@@ -1,25 +1,25 @@
 {
-    "type":  "minecraft:crafting_shaped",
-    "category":  "misc",
-    "pattern":  [
-                    "#S#",
-                    "#C#",
-                    "###"
-                ],
-    "key":  {
-                "#":  {
-                          "item":  "minecraft:diamond"
-                      },
-                "C":  {
-                          "tag":  "mineralogy:cobblestone_equivalents"
-                      },
-                "S":  {
-                          "item":  "minecraft:sentry_armor_trim_smithing_template"
-                      }
-            },
-    "result":  {
-                   "id":  "minecraft:sentry_armor_trim_smithing_template",
-                   "count":  2
-               },
-    "show_notification":  true
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "#S#",
+    "#C#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:diamond"
+    },
+    "C": {
+      "tag": "mineralogy:cobblestone_equivalents"
+    },
+    "S": {
+      "item": "minecraft:sentry_armor_trim_smithing_template"
+    }
+  },
+  "result": {
+    "id": "minecraft:sentry_armor_trim_smithing_template",
+    "count": 2
+  },
+  "show_notification": true
 }

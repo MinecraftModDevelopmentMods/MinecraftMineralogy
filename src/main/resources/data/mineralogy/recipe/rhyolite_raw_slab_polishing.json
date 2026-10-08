@@ -1,16 +1,26 @@
 {
-    "type":  "minecraft:crafting_shapeless",
-    "category":  "building",
-    "ingredients":  [
-                        {
-                            "item":  "mineralogy:rhyolite_slab"
-                        },
-                        {
-                            "tag":  "c:sands"
-                        }
-                    ],
-    "result":  {
-                   "id":  "mineralogy:rhyolite_smooth_slab",
-                   "count":  1
-               }
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:rhyolite_slab"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:rhyolite_smooth_slab"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "mineralogy:rhyolite_slab"
+    },
+    {
+      "tag": "c:sands"
+    }
+  ],
+  "result": {
+    "id": "mineralogy:rhyolite_smooth_slab",
+    "count": 1
+  }
 }

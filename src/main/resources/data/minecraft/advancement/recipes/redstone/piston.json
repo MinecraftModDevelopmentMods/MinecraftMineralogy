@@ -1,33 +1,33 @@
 {
-    "parent":  "minecraft:recipes/root",
-    "rewards":  {
-                    "recipes":  [
-                                    "minecraft:piston"
-                                ]
-                },
-    "criteria":  {
-                     "has_redstone":  {
-                                          "trigger":  "minecraft:inventory_changed",
-                                          "conditions":  {
-                                                             "items":  [
-                                                                           {
-                                                                               "items":  "minecraft:redstone"
-                                                                           }
-                                                                       ]
-                                                         }
-                                      },
-                     "has_the_recipe":  {
-                                            "trigger":  "minecraft:recipe_unlocked",
-                                            "conditions":  {
-                                                               "recipe":  "minecraft:piston"
-                                                           }
-                                        }
-                 },
-    "requirements":  [
-                         [
-                             "has_redstone",
-                             "has_the_recipe"
-                         ]
-                     ],
-    "sends_telemetry_event":  false
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minecraft:piston"
+    ]
+  },
+  "criteria": {
+    "has_redstone": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:redstone"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minecraft:piston"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_redstone",
+      "has_the_recipe"
+    ]
+  ],
+  "sends_telemetry_event": false
 }

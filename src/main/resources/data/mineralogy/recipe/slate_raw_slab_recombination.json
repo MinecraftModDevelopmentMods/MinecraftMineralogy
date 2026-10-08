@@ -1,16 +1,22 @@
 {
-    "type":  "minecraft:crafting_shapeless",
-    "category":  "building",
-    "ingredients":  [
-                        {
-                            "item":  "mineralogy:slate_slab"
-                        },
-                        {
-                            "item":  "mineralogy:slate_slab"
-                        }
-                    ],
-    "result":  {
-                   "id":  "mineralogy:slate",
-                   "count":  1
-               }
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:slate_slab"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "mineralogy:slate_slab"
+    },
+    {
+      "item": "mineralogy:slate_slab"
+    }
+  ],
+  "result": {
+    "id": "mineralogy:slate",
+    "count": 1
+  }
 }

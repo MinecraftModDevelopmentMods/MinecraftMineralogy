@@ -1,37 +1,47 @@
 {
-    "type":  "minecraft:crafting_shapeless",
-    "category":  "building",
-    "ingredients":  [
-                        {
-                            "item":  "mineralogy:gabbro_relief_blank"
-                        },
-                        {
-                            "item":  "mineralogy:gabbro_relief_blank"
-                        },
-                        {
-                            "item":  "mineralogy:gabbro_relief_blank"
-                        },
-                        {
-                            "item":  "mineralogy:gabbro_relief_blank"
-                        },
-                        {
-                            "item":  "mineralogy:gabbro_relief_blank"
-                        },
-                        {
-                            "item":  "mineralogy:gabbro_relief_blank"
-                        },
-                        {
-                            "item":  "mineralogy:gabbro_relief_blank"
-                        },
-                        {
-                            "item":  "mineralogy:gabbro_relief_blank"
-                        },
-                        {
-                            "item":  "minecraft:stone_hoe"
-                        }
-                    ],
-    "result":  {
-                   "id":  "mineralogy:gabbro_relief_hoe",
-                   "count":  8
-               }
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:gabbro_relief_blank"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:gabbro_relief_hoe"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "mineralogy:gabbro_relief_blank"
+    },
+    {
+      "item": "mineralogy:gabbro_relief_blank"
+    },
+    {
+      "item": "mineralogy:gabbro_relief_blank"
+    },
+    {
+      "item": "mineralogy:gabbro_relief_blank"
+    },
+    {
+      "item": "mineralogy:gabbro_relief_blank"
+    },
+    {
+      "item": "mineralogy:gabbro_relief_blank"
+    },
+    {
+      "item": "mineralogy:gabbro_relief_blank"
+    },
+    {
+      "item": "mineralogy:gabbro_relief_blank"
+    },
+    {
+      "item": "minecraft:stone_hoe"
+    }
+  ],
+  "result": {
+    "id": "mineralogy:gabbro_relief_hoe",
+    "count": 8
+  }
 }

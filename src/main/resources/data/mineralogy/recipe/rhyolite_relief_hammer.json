@@ -1,25 +1,39 @@
 {
-    "type":  "minecraft:crafting_shaped",
-    "category":  "building",
-    "pattern":  [
-                    "zxz",
-                    "zyz",
-                    "zzz"
-                ],
-    "key":  {
-                "x":  {
-                          "item":  "mineralogy:rhyolite_smooth"
-                      },
-                "y":  {
-                          "item":  "minecraft:stick"
-                      },
-                "z":  {
-                          "item":  "mineralogy:rhyolite_relief_blank"
-                      }
-            },
-    "result":  {
-                   "id":  "mineralogy:rhyolite_relief_hammer",
-                   "count":  7
-               },
-    "show_notification":  true
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:rhyolite_relief_blank"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:rhyolite_relief_hammer"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:rhyolite_smooth"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "zxz",
+    "zyz",
+    "zzz"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:rhyolite_smooth"
+    },
+    "y": {
+      "item": "minecraft:stick"
+    },
+    "z": {
+      "item": "mineralogy:rhyolite_relief_blank"
+    }
+  },
+  "result": {
+    "id": "mineralogy:rhyolite_relief_hammer",
+    "count": 7
+  },
+  "show_notification": true
 }

@@ -1,25 +1,39 @@
 {
-    "type":  "minecraft:crafting_shaped",
-    "category":  "building",
-    "pattern":  [
-                    "zxz",
-                    "zyz",
-                    "zzz"
-                ],
-    "key":  {
-                "x":  {
-                          "item":  "mineralogy:granite_smooth"
-                      },
-                "y":  {
-                          "item":  "minecraft:stick"
-                      },
-                "z":  {
-                          "item":  "mineralogy:granite_relief_blank"
-                      }
-            },
-    "result":  {
-                   "id":  "mineralogy:granite_relief_hammer",
-                   "count":  7
-               },
-    "show_notification":  true
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:granite_relief_blank"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:granite_relief_hammer"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:granite_smooth"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "zxz",
+    "zyz",
+    "zzz"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:granite_smooth"
+    },
+    "y": {
+      "item": "minecraft:stick"
+    },
+    "z": {
+      "item": "mineralogy:granite_relief_blank"
+    }
+  },
+  "result": {
+    "id": "mineralogy:granite_relief_hammer",
+    "count": 7
+  },
+  "show_notification": true
 }

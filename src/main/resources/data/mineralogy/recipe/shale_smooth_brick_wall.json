@@ -1,18 +1,24 @@
 {
-    "type":  "minecraft:crafting_shaped",
-    "category":  "building",
-    "pattern":  [
-                    "xxx",
-                    "xxx"
-                ],
-    "key":  {
-                "x":  {
-                          "tag":  "mineralogy:stones/shale/smooth_brick"
-                      }
-            },
-    "result":  {
-                   "id":  "mineralogy:shale_smooth_brick_wall",
-                   "count":  6
-               },
-    "show_notification":  true
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:shale_smooth_brick_wall"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "xxx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "tag": "mineralogy:stones/shale/smooth_brick"
+    }
+  },
+  "result": {
+    "id": "mineralogy:shale_smooth_brick_wall",
+    "count": 6
+  },
+  "show_notification": true
 }

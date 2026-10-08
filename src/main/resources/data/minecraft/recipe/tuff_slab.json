@@ -1,17 +1,23 @@
 {
-    "type":  "minecraft:crafting_shaped",
-    "category":  "building",
-    "pattern":  [
-                    "###"
-                ],
-    "key":  {
-                "#":  {
-                          "item":  "minecraft:tuff"
-                      }
-            },
-    "result":  {
-                   "id":  "mineralogy:tuff_slab",
-                   "count":  6
-               },
-    "show_notification":  true
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:tuff_slab"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:tuff"
+    }
+  },
+  "result": {
+    "id": "mineralogy:tuff_slab",
+    "count": 6
+  },
+  "show_notification": true
 }

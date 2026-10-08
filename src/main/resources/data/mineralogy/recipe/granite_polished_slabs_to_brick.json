@@ -1,18 +1,28 @@
 {
-    "type":  "minecraft:crafting_shaped",
-    "category":  "building",
-    "pattern":  [
-                    "xx",
-                    "xx"
-                ],
-    "key":  {
-                "x":  {
-                          "item":  "mineralogy:granite_smooth_slab"
-                      }
-            },
-    "result":  {
-                   "id":  "mineralogy:granite_smooth_brick_slab",
-                   "count":  4
-               },
-    "show_notification":  true
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:granite_smooth_brick_slab"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:granite_smooth_slab"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "xx",
+    "xx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:granite_smooth_slab"
+    }
+  },
+  "result": {
+    "id": "mineralogy:granite_smooth_brick_slab",
+    "count": 4
+  },
+  "show_notification": true
 }

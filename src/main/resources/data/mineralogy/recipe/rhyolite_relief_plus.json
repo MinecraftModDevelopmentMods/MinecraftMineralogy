@@ -1,19 +1,29 @@
 {
-    "type":  "minecraft:crafting_shaped",
-    "category":  "building",
-    "pattern":  [
-                    " x ",
-                    "xxx",
-                    " x "
-                ],
-    "key":  {
-                "x":  {
-                          "item":  "mineralogy:rhyolite_relief_blank"
-                      }
-            },
-    "result":  {
-                   "id":  "mineralogy:rhyolite_relief_plus",
-                   "count":  5
-               },
-    "show_notification":  true
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:rhyolite_relief_blank"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:rhyolite_relief_plus"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    " x ",
+    "xxx",
+    " x "
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:rhyolite_relief_blank"
+    }
+  },
+  "result": {
+    "id": "mineralogy:rhyolite_relief_plus",
+    "count": 5
+  },
+  "show_notification": true
 }

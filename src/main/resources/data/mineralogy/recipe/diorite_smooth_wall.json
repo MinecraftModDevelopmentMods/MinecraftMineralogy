@@ -1,18 +1,24 @@
 {
-    "type":  "minecraft:crafting_shaped",
-    "category":  "building",
-    "pattern":  [
-                    "xxx",
-                    "xxx"
-                ],
-    "key":  {
-                "x":  {
-                          "tag":  "mineralogy:stones/diorite/smooth"
-                      }
-            },
-    "result":  {
-                   "id":  "mineralogy:diorite_smooth_wall",
-                   "count":  6
-               },
-    "show_notification":  true
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:diorite_smooth_wall"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "xxx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "tag": "mineralogy:stones/diorite/smooth"
+    }
+  },
+  "result": {
+    "id": "mineralogy:diorite_smooth_wall",
+    "count": 6
+  },
+  "show_notification": true
 }

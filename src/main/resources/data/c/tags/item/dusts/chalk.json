@@ -1,6 +1,6 @@
 {
-    "replace":  false,
-    "values":  [
-                   "mineralogy:chalk_dust"
-               ]
+  "replace": false,
+  "values": [
+    "mineralogy:chalk_dust"
+  ]
 }

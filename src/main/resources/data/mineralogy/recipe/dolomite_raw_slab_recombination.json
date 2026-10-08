@@ -1,16 +1,22 @@
 {
-    "type":  "minecraft:crafting_shapeless",
-    "category":  "building",
-    "ingredients":  [
-                        {
-                            "item":  "mineralogy:dolomite_slab"
-                        },
-                        {
-                            "item":  "mineralogy:dolomite_slab"
-                        }
-                    ],
-    "result":  {
-                   "id":  "mineralogy:dolomite",
-                   "count":  1
-               }
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:dolomite_slab"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "mineralogy:dolomite_slab"
+    },
+    {
+      "item": "mineralogy:dolomite_slab"
+    }
+  ],
+  "result": {
+    "id": "mineralogy:dolomite",
+    "count": 1
+  }
 }

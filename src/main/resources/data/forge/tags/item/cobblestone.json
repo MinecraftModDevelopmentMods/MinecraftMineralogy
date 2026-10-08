@@ -1,6 +1,6 @@
 {
-    "replace":  false,
-    "values":  [
-                   "#c:cobblestones"
-               ]
+  "replace": false,
+  "values": [
+    "#c:cobblestones"
+  ]
 }

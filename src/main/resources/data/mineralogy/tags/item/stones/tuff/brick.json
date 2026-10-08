@@ -1,7 +1,10 @@
 {
-    "replace":  false,
-    "values":  [
-                   "mineralogy:tuff_brick",
-                   "minecraft:tuff_bricks"
-               ]
+  "replace": false,
+  "values": [
+    {
+      "id": "mineralogy:tuff_brick",
+      "required": false
+    },
+    "minecraft:tuff_bricks"
+  ]
 }

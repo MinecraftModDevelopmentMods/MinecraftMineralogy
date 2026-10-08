@@ -1,19 +1,25 @@
 {
-    "type":  "minecraft:crafting_shaped",
-    "category":  "building",
-    "pattern":  [
-                    "xxx",
-                    "xxx",
-                    "xxx"
-                ],
-    "key":  {
-                "x":  {
-                          "tag":  "mineralogy:stones/tuff/smooth"
-                      }
-            },
-    "result":  {
-                   "id":  "mineralogy:tuff_relief_blank",
-                   "count":  16
-               },
-    "show_notification":  true
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:tuff_relief_blank"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "xxx",
+    "xxx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "tag": "mineralogy:stones/tuff/smooth"
+    }
+  },
+  "result": {
+    "id": "mineralogy:tuff_relief_blank",
+    "count": 16
+  },
+  "show_notification": true
 }

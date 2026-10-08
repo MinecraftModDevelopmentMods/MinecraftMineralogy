@@ -218,3 +218,15 @@ Each world stores its complete worldgen profile at:
 Copy the complete world, including that file, to a dedicated server and
 install the same required mods. For advanced setup, read
 `config/mineralogy-guide/` and `config/orespawn-guide/` after one start.
+# Natural stone compatibility in 6.1.4
+
+Sculk catalysts and moss can work on natural Mineralogy terrain in existing
+worlds. Goat spawning and horn breaking use separate substrate rules: soft
+rocks and crafted blocks are not horn-breaking surfaces. Dripstone, azalea
+roots and forest rocks can use the intended natural substrates when new chunks
+are generated. Bare rock is still not soil for growing an azalea tree.
+
+Single and upright slabs, stairs and walls use normal construction tags;
+separate double-slab full blocks are excluded. Rock-salt lamps retain their
+wall post. These rules do not depend on cobblestone equivalence. Sulfur cubes
+exist only on 26.2+ builds; their Mineralogy contribution is raw rock only.

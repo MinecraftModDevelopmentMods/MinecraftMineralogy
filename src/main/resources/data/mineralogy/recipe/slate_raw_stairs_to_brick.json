@@ -1,18 +1,28 @@
 {
-    "type":  "minecraft:crafting_shaped",
-    "category":  "building",
-    "pattern":  [
-                    "xx",
-                    "xx"
-                ],
-    "key":  {
-                "x":  {
-                          "item":  "mineralogy:slate_stairs"
-                      }
-            },
-    "result":  {
-                   "id":  "mineralogy:slate_brick_stairs",
-                   "count":  4
-               },
-    "show_notification":  true
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:slate_brick_stairs"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:slate_stairs"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "xx",
+    "xx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:slate_stairs"
+    }
+  },
+  "result": {
+    "id": "mineralogy:slate_brick_stairs",
+    "count": 4
+  },
+  "show_notification": true
 }

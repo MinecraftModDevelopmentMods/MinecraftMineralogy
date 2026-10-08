@@ -1,18 +1,28 @@
 {
-    "type":  "minecraft:crafting_shaped",
-    "category":  "building",
-    "pattern":  [
-                    "xx",
-                    "xx"
-                ],
-    "key":  {
-                "x":  {
-                          "item":  "mineralogy:basaltic_glass_stairs"
-                      }
-            },
-    "result":  {
-                   "id":  "mineralogy:basaltic_glass_brick_stairs",
-                   "count":  4
-               },
-    "show_notification":  true
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:basaltic_glass_brick_stairs"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:basaltic_glass_stairs"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "xx",
+    "xx"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:basaltic_glass_stairs"
+    }
+  },
+  "result": {
+    "id": "mineralogy:basaltic_glass_brick_stairs",
+    "count": 4
+  },
+  "show_notification": true
 }

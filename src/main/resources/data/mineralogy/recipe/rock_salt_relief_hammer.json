@@ -1,25 +1,39 @@
 {
-    "type":  "minecraft:crafting_shaped",
-    "category":  "building",
-    "pattern":  [
-                    "zxz",
-                    "zyz",
-                    "zzz"
-                ],
-    "key":  {
-                "x":  {
-                          "item":  "mineralogy:rock_salt_smooth"
-                      },
-                "y":  {
-                          "item":  "minecraft:stick"
-                      },
-                "z":  {
-                          "item":  "mineralogy:rock_salt_relief_blank"
-                      }
-            },
-    "result":  {
-                   "id":  "mineralogy:rock_salt_relief_hammer",
-                   "count":  7
-               },
-    "show_notification":  true
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:rock_salt_relief_blank"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:rock_salt_relief_hammer"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:rock_salt_smooth"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "zxz",
+    "zyz",
+    "zzz"
+  ],
+  "key": {
+    "x": {
+      "item": "mineralogy:rock_salt_smooth"
+    },
+    "y": {
+      "item": "minecraft:stick"
+    },
+    "z": {
+      "item": "mineralogy:rock_salt_relief_blank"
+    }
+  },
+  "result": {
+    "id": "mineralogy:rock_salt_relief_hammer",
+    "count": 7
+  },
+  "show_notification": true
 }

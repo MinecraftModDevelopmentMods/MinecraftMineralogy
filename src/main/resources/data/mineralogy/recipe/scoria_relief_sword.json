@@ -1,37 +1,47 @@
 {
-    "type":  "minecraft:crafting_shapeless",
-    "category":  "building",
-    "ingredients":  [
-                        {
-                            "item":  "mineralogy:scoria_relief_blank"
-                        },
-                        {
-                            "item":  "mineralogy:scoria_relief_blank"
-                        },
-                        {
-                            "item":  "mineralogy:scoria_relief_blank"
-                        },
-                        {
-                            "item":  "mineralogy:scoria_relief_blank"
-                        },
-                        {
-                            "item":  "mineralogy:scoria_relief_blank"
-                        },
-                        {
-                            "item":  "mineralogy:scoria_relief_blank"
-                        },
-                        {
-                            "item":  "mineralogy:scoria_relief_blank"
-                        },
-                        {
-                            "item":  "mineralogy:scoria_relief_blank"
-                        },
-                        {
-                            "item":  "minecraft:stone_sword"
-                        }
-                    ],
-    "result":  {
-                   "id":  "mineralogy:scoria_relief_sword",
-                   "count":  8
-               }
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:scoria_relief_blank"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:scoria_relief_sword"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "mineralogy:scoria_relief_blank"
+    },
+    {
+      "item": "mineralogy:scoria_relief_blank"
+    },
+    {
+      "item": "mineralogy:scoria_relief_blank"
+    },
+    {
+      "item": "mineralogy:scoria_relief_blank"
+    },
+    {
+      "item": "mineralogy:scoria_relief_blank"
+    },
+    {
+      "item": "mineralogy:scoria_relief_blank"
+    },
+    {
+      "item": "mineralogy:scoria_relief_blank"
+    },
+    {
+      "item": "mineralogy:scoria_relief_blank"
+    },
+    {
+      "item": "minecraft:stone_sword"
+    }
+  ],
+  "result": {
+    "id": "mineralogy:scoria_relief_sword",
+    "count": 8
+  }
 }

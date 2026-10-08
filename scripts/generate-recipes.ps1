@@ -74,7 +74,7 @@ function ItemId([string] $path) {
 }
 
 function ItemCondition([string] $item) {
-    # Mineralogy registers every referenced item unconditionally on this target.
+    # Construction availability is guarded after generation, without changing enabled recipes.
     return $null
 }
 
@@ -966,7 +966,9 @@ function Write-TargetTags() {
                 }
                 $destination = Join-Path $itemTagRoot "$kind\$family$pathSuffix.json"
                 New-Item -ItemType Directory -Force -Path (Split-Path -Parent $destination) | Out-Null
-                $values = @($item)
+                [object[]]$values = if ($kind -eq 'slabs' -or $finish) {
+                    @([ordered]@{ id = $item; required = $false })
+                } else { @($item) }
                 $values += @(NativeTagAliases $kind $family $finish)
                 Write-Json $destination ([ordered]@{ replace = $false; values = $values })
             }
@@ -1382,3 +1384,5 @@ if ($advancementCount -ne $expectedTargetRecipeCount) {
     throw "Expected $expectedTargetRecipeCount recipe advancements, found $advancementCount"
 }
 Write-Output "Generated $expectedRecipeCount crafting recipe JSON files, retained 28 target-native smelting recipes, created $createdAdvancements missing recipe advancements, and conditioned $advancementCount Minecraft 1.21.11 recipe advancements."
+
+& "$PSScriptRoot/guard-construction-resources.ps1" -ProjectRoot $projectRoot

@@ -1,4 +1,11 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:marble_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:marble_raw_slab_recombination"

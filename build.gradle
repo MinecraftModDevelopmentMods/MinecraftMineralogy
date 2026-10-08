@@ -462,7 +462,7 @@ tasks.register('verifyReleaseConfiguration') {
     group = 'verification'
     description = 'Verifies the exact Mineralogy 1.21.11 NeoForge release identity.'
     doLast {
-        if (project.mod_version != '6.1.2.121112'
+        if (project.mod_version != '6.1.4.121112'
                 || project.mod_group != expectedMavenGroup
                 || project.minecraft_version != '1.21.11'
                 || project.neo_version != '21.11.45') {
@@ -475,7 +475,7 @@ tasks.register('verifyReleaseDependencies') {
     group = 'verification'
     description = 'Resolves and verifies the exact released OreSpawn dependency.'
     doLast {
-        if (project.mod_version != '6.1.2.121112'
+        if (project.mod_version != '6.1.4.121112'
                 || project.minecraft_version != project.mc_version
                 || project.mc_version != '1.21.11'
                 || project.loader_name != 'neoforge'
@@ -792,8 +792,10 @@ tasks.register('verifyReleaseArtifacts') {
                         "data/mineralogy/advancement/recipes/${bridge.name}.json")))
                 if (recipe.type != 'minecraft:crafting_shapeless' || recipe.ingredients?.size() != 1 ||
                         recipe.ingredients[0] != bridge.source || recipe.result?.id != bridge.result ||
-                        recipe.result?.count != 1 || recipe.containsKey('neoforge:conditions') ||
-                        advancement.containsKey('neoforge:conditions') ||
+                        recipe.result?.count != 1 ||
+                        recipe['neoforge:conditions'] != [[type: 'neoforge:registered', registry: 'minecraft:item',
+                                value: bridge.source.startsWith('mineralogy:') ? bridge.source : bridge.result]] ||
+                        advancement['neoforge:conditions'] != recipe['neoforge:conditions'] ||
                         advancement.criteria?.has_rock?.conditions?.items?.getAt(0)?.items != bridge.source) {
                     throw new GradleException("Invalid native/Mineralogy slab conversion: ${bridge.name}")
                 }
@@ -855,8 +857,8 @@ tasks.register('verifyReleaseArtifacts') {
             }
             slabOverrides.each { recipe ->
                 def data = new JsonSlurper().parse(zip.getInputStream(zip.getEntry("data/minecraft/recipe/${recipe}.json")))
-                if (data.containsKey('neoforge:conditions')) {
-                    throw new GradleException("Guaranteed Mineralogy slab override must be unconditional: ${recipe}")
+                if (data['neoforge:conditions'] != [[type: 'neoforge:registered', registry: 'minecraft:item', value: data.result?.id]]) {
+                    throw new GradleException("Invalid optional Mineralogy slab guard: ${recipe}")
                 }
                 if (recipe.endsWith('_stonecutting')) {
                     if (!(data.result instanceof Map) || data.result.id == null
@@ -1140,3 +1142,6 @@ tasks.named('check') {
     dependsOn tasks.named('verifyOilCompatibilityFixtureIsolation')
     dependsOn tasks.named('compileRecipeIntegrationFixture')
 }
+
+apply from: 'gradle/verify-terrain-compatibility.gradle'
+apply from: 'gradle/terrain-compatibility-probe.gradle'

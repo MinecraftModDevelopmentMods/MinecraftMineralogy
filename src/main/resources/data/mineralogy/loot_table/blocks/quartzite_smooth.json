@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_SMOOTH"
+    }
+  ],
   "type": "minecraft:block",
   "pools": [
     {

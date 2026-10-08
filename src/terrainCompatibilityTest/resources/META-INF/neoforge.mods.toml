@@ -1,0 +1,11 @@
+license="LGPL-2.1"
+[[mods]]
+modId="mineralogycompatprobe"
+version="1"
+displayName="Non-shipping Terrain Compatibility Probe"
+[[dependencies.mineralogycompatprobe]]
+modId="mineralogy"
+type="required"
+versionRange="[6.1.2,6.1.5)"
+ordering="AFTER"
+side="BOTH"

@@ -1,5 +1,20 @@
 # Mineralogy Developer Guide
 
+## Focused compatibility interfaces
+
+Use mineralogy:terrain_rocks for natural terrain replacement, raw_stones for
+common stone classification and the explicit horn-breaking whitelist for hard
+raw rocks. Crafted forms do not inherit terrain eligibility. Single/upright
+slabs join slab aggregates; separate double slabs do not. Config-dependent
+construction IDs are optional tag objects. Native registration conditions guard
+their recipes and matching advancements; existing construction flags guard loot.
+Enabled payloads are unchanged. Dripstone redirects target only water-pocket
+containment and large-column boundaries, with exactly one hook each. Do not
+broaden base-stone, carver or ore-host tags to solve these consumer checks.
+NeoForge 21.11 also needs one redirect of BlockBlobFeature's direct isStone
+call. It preserves the native check and adds only forest_rock_substrates,
+which references natural terrain. Bare rock is not added to azalea tree soil.
+
 ## Responsibility Split
 
 | Mineralogy owns | OreSpawn owns |

@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:schist_brick"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:schist_brick_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:schist_brick_slab_recombination"

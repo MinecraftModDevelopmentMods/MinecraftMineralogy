@@ -1,6 +1,9 @@
 {
-    "replace":  false,
-    "values":  [
-                   "mineralogy:tuff_smooth"
-               ]
+  "replace": false,
+  "values": [
+    {
+      "id": "mineralogy:tuff_smooth",
+      "required": false
+    }
+  ]
 }

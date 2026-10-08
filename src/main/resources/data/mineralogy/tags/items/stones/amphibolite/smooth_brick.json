@@ -1,6 +1,9 @@
 {
-    "replace":  false,
-    "values":  [
-                   "mineralogy:amphibolite_smooth_brick"
-               ]
+  "replace": false,
+  "values": [
+    {
+      "id": "mineralogy:amphibolite_smooth_brick",
+      "required": false
+    }
+  ]
 }

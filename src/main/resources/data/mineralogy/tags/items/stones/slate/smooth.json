@@ -1,6 +1,9 @@
 {
-    "replace":  false,
-    "values":  [
-                   "mineralogy:slate_smooth"
-               ]
+  "replace": false,
+  "values": [
+    {
+      "id": "mineralogy:slate_smooth",
+      "required": false
+    }
+  ]
 }

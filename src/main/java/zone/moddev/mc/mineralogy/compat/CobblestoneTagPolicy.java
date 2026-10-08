@@ -28,6 +28,7 @@ import zone.moddev.mc.mineralogy.data.MaterialData;
 /** Applies the legacy cobblestone option to Forge 45 block and item tags. */
 public final class CobblestoneTagPolicy {
     private static final ResourceLocation COBBLESTONE = new ResourceLocation("forge", "cobblestone");
+    private static final ResourceLocation NORMAL_COBBLESTONE = new ResourceLocation("forge", "cobblestone/normal");
     private static final ResourceLocation STONE_CRAFTING_MATERIALS =
             new ResourceLocation("minecraft", "stone_crafting_materials");
     private static final ResourceLocation STONE_TOOL_MATERIALS =
@@ -53,6 +54,8 @@ public final class CobblestoneTagPolicy {
         Map<TagKey<Block>, List<Holder<Block>>> blockTags = snapshot(blockRegistry);
         updateTag(blockTags, blockRegistry, Registries.BLOCK, COBBLESTONE,
                 configuredBlocks, enabled, "chert", "pumice");
+        updateTag(blockTags, blockRegistry, Registries.BLOCK, NORMAL_COBBLESTONE,
+                configuredBlocks, enabled, "chert", "pumice");
         blockRegistry.bindTags(blockTags);
 
         Map<TagKey<Item>, List<Holder<Item>>> itemTags = snapshot(itemRegistry);
@@ -61,6 +64,8 @@ public final class CobblestoneTagPolicy {
         updateTag(itemTags, itemRegistry, Registries.ITEM, STONE_CRAFTING_MATERIALS,
                 configuredItems, enabled, "chert", "pumice");
         updateTag(itemTags, itemRegistry, Registries.ITEM, STONE_TOOL_MATERIALS,
+                configuredItems, enabled, "chert", "pumice");
+        updateTag(itemTags, itemRegistry, Registries.ITEM, NORMAL_COBBLESTONE,
                 configuredItems, enabled, "chert", "pumice");
         itemRegistry.bindTags(itemTags);
 

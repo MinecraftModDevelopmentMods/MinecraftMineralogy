@@ -16,5 +16,6 @@
         }
       ]
     }
-  ]
+  ],
+  "mineralogy:construction_item": "mineralogy:granite_smooth_brick_wall"
 }

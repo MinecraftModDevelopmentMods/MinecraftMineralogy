@@ -13,6 +13,23 @@ Mineralogy requires OreSpawn `[4.0.6,5.0.0)`. Reusable worldgen integrations
 belong in `zone.moddev.mc.orespawn.api` or an OreSpawn provider rather than
 Mineralogy internals.
 
+## Natural stone tags
+
+`mineralogy:terrain_rocks` contains this target's 32 provider outputs and five
+retained legacy identities. Its block and item tags are separate. Additive
+consumer tags cover sculk, moss, dripstone, azalea roots and goat spawning; horn
+breaking has a narrower raw-rock whitelist. Crafted forms are not terrain.
+Forge's common stone, ore and storage aggregates and vanilla shape tags are
+kept separate from world-generation hosts. Normal cobblestone follows the
+existing configurable root policy, including unconditional chert and pumice.
+
+Two exact-count JavaScript transformers replace only the proven direct
+base-stone checks in dripstone water pockets and large columns. Forge 45's
+Gson loot loader needs a separate scoped hook: an explicitly guarded Mineralogy
+construction table keeps its original pools when its item is registered and
+loads as an empty table otherwise. Other namespaces and unguarded tables are
+untouched. No general base-stone or ore-host tag is broadened.
+
 ## Packaged Provider
 
 The schema-4, revision-3 provider is at:

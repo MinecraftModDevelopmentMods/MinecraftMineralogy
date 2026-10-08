@@ -1,6 +1,9 @@
 {
-    "replace":  false,
-    "values":  [
-                   "mineralogy:shale_slab"
-               ]
+  "replace": false,
+  "values": [
+    {
+      "id": "mineralogy:shale_slab",
+      "required": false
+    }
+  ]
 }

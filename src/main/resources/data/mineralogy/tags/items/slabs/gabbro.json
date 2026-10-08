@@ -1,6 +1,9 @@
 {
-    "replace":  false,
-    "values":  [
-                   "mineralogy:gabbro_slab"
-               ]
+  "replace": false,
+  "values": [
+    {
+      "id": "mineralogy:gabbro_slab",
+      "required": false
+    }
+  ]
 }

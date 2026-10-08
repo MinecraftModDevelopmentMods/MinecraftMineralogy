@@ -23,6 +23,7 @@ raw rocks and single slabs, stairs and walls; crafted blocks stay out of
 natural replacement tags. Goat spawning keeps Minecraft 1.17's native rules.
 Rock furnaces also keep their retained block entity in step with lit/unlit
 transitions, without losing contents, fuel or facing.
+Mining, lamp support and furnace fixes also apply to existing worlds after updating.
 Recipes, IDs, configs, providers, migrations, textures and OreSpawn are unchanged.
 
 ## Configuration and help

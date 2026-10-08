@@ -1,4 +1,4 @@
-Mineralogy 6.1.4.117011 for Minecraft 1.17.1
+Mineralogy 6.1.4.117011 for Minecraft 1.17.1 Forge
 
 - Fixed mining tags so all intended blocks load into their pickaxe and tool-tier
   tags. Optional construction entries now use the format Minecraft accepts.
@@ -13,6 +13,7 @@ Mineralogy 6.1.4.117011 for Minecraft 1.17.1
   other mods' members. Minecraft 1.17 goat spawning stays unchanged.
 - Rock furnaces keep their block-entity state in step when lighting and cooling,
   preserving their contents, fuel and facing through the transition.
+- Mining, lamp support and furnace fixes apply to existing worlds after updating.
 - Recipes, IDs, configs, providers, migrations, textures and OreSpawn are unchanged.
 
 Mineralogy 6.1.1.117011 for Minecraft 1.17.1

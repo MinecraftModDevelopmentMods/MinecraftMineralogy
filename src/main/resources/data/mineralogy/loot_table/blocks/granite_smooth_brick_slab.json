@@ -1,4 +1,11 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:granite_smooth_brick_slab"
+    }
+  ],
   "type": "minecraft:block",
   "pools": [
     {

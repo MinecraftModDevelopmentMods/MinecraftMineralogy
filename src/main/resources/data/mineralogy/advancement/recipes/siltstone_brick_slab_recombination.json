@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:siltstone_brick"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:siltstone_brick_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:siltstone_brick_slab_recombination"

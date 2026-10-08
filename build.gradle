@@ -473,7 +473,7 @@ tasks.register('verifyReleaseConfiguration') {
     group = 'verification'
     description = 'Verifies the exact Mineralogy 26.3 NeoForge release identity.'
     doLast {
-        if (project.mod_version != '6.1.3.2603002'
+        if (project.mod_version != '6.1.4.2603002'
                 || project.mod_group != expectedMavenGroup
                 || project.minecraft_version != '26.3'
                 || project.neo_version != '26.3.0.1-beta') {
@@ -489,7 +489,7 @@ tasks.register('verifyReleaseDependencies') {
     group = 'verification'
     description = 'Resolves and verifies the exact released OreSpawn dependency.'
     doLast {
-        if (project.mod_version != '6.1.3.2603002'
+        if (project.mod_version != '6.1.4.2603002'
                 || project.minecraft_version != project.mc_version
                 || project.mc_version != '26.3'
                 || project.loader_name != 'neoforge'
@@ -880,8 +880,8 @@ tasks.register('verifyReleaseArtifacts') {
                         "data/mineralogy/advancement/recipes/${bridge.name}.json")))
                 if (recipe.type != 'minecraft:crafting_shapeless' || recipe.ingredients?.size() != 1 ||
                         recipe.ingredients[0] != bridge.source || recipe.result?.id != bridge.result ||
-                        recipe.result?.count != 1 || recipe.containsKey('neoforge:conditions') ||
-                        advancement.containsKey('neoforge:conditions') ||
+                        recipe.result?.count != 1 || recipe['neoforge:conditions'] != [[type: 'neoforge:registered', registry: 'minecraft:item', value: bridge.source.startsWith('mineralogy:') ? bridge.source : bridge.result]] ||
+                        advancement['neoforge:conditions'] != recipe['neoforge:conditions'] ||
                         advancement.criteria?.has_rock?.conditions?.items?.getAt(0)?.items != bridge.source) {
                     throw new GradleException("Invalid native/Mineralogy slab conversion: ${bridge.name}")
                 }
@@ -946,8 +946,8 @@ tasks.register('verifyReleaseArtifacts') {
             }
             slabOverrides.each { recipe ->
                 def data = new JsonSlurper().parse(zip.getInputStream(zip.getEntry("data/minecraft/recipe/${recipe}.json")))
-                if (data.containsKey('neoforge:conditions')) {
-                    throw new GradleException("Guaranteed Mineralogy slab override must be unconditional: ${recipe}")
+                if (data['neoforge:conditions'] != [[type: 'neoforge:registered', registry: 'minecraft:item', value: data.result?.id]]) {
+                    throw new GradleException("Optional Mineralogy slab override must guard its registered output: ${recipe}")
                 }
                 if (recipe.endsWith('_stonecutting')) {
                     if (!(data.result instanceof Map) || data.result.id == null
@@ -1016,11 +1016,14 @@ tasks.register('verifyReleaseArtifacts') {
             expectedMinecraftAdvancements.addAll(['andesite', 'basalt', 'diorite', 'granite', 'tuff'].collect {
                 "data/minecraft/advancement/recipes/building_blocks/polished_${it}.json"
             })
+            expectedMinecraftAdvancements.addAll(slabOverrides.collect {
+                "data/minecraft/advancement/recipes/building_blocks/${it}.json"
+            })
             def minecraftAdvancements = names.findAll {
                 it.startsWith('data/minecraft/advancement/recipes/') && it.endsWith('.json')
             } as Set
             if (minecraftAdvancements != expectedMinecraftAdvancements) {
-                throw new GradleException('Release jar must contain exactly 16 cobblestone and five polished-block advancement overrides')
+                throw new GradleException('Release jar must contain 16 cobblestone, five polished-block and 24 guarded native slab advancements')
             }
             advancementCategories.each { recipe, category ->
                 def data = new JsonSlurper().parse(zip.getInputStream(zip.getEntry(
@@ -1038,8 +1041,16 @@ tasks.register('verifyReleaseArtifacts') {
                 }
                 verifyAdvancementPredicates(advancement, entryName)
             }
-            if (recipeUnlockCriteria != 1454) {
-                throw new GradleException("Expected 1454 Minecraft 26.3 recipe-unlocked criteria, found ${recipeUnlockCriteria}")
+            slabOverrides.each { recipe ->
+                String entryName = "data/minecraft/advancement/recipes/building_blocks/${recipe}.json"
+                def advancement = new JsonSlurper().parse(zip.getInputStream(zip.getEntry(entryName)))
+                if (advancement.sends_telemetry_event != false) {
+                    throw new GradleException("Native slab advancement must disable telemetry: ${entryName}")
+                }
+                verifyAdvancementPredicates(advancement, entryName)
+            }
+            if (recipeUnlockCriteria != 1478) {
+                throw new GradleException("Expected 1478 Minecraft 26.3 recipe-unlocked criteria, found ${recipeUnlockCriteria}")
             }
             def wallBlockstates = names.findAll { it ==~ /assets\/mineralogy\/blockstates\/.+_wall\.json/ }
             def tallWallModels = names.findAll { it ==~ /assets\/mineralogy\/models\/block\/.+_wall_side_tall\.json/ }
@@ -1306,3 +1317,6 @@ tasks.named('check') {
     dependsOn tasks.named('verifyOilCompatibilityFixtureIsolation')
     dependsOn tasks.named('compileRecipeIntegrationFixture')
 }
+
+apply from: 'gradle/verify-terrain-compatibility.gradle'
+apply from: 'gradle/terrain-compatibility-probe.gradle'

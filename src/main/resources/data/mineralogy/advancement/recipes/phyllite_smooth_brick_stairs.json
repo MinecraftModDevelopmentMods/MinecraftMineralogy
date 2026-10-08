@@ -1,4 +1,11 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:phyllite_smooth_brick_stairs"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:phyllite_smooth_brick_stairs"

@@ -1,4 +1,11 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:tuff_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:tuff_slab_from_vanilla"

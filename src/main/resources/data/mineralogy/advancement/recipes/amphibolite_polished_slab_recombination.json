@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:amphibolite_smooth"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:amphibolite_smooth_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:amphibolite_polished_slab_recombination"

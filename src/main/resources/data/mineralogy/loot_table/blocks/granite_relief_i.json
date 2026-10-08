@@ -1,4 +1,11 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:granite_relief_i"
+    }
+  ],
   "type": "minecraft:block",
   "pools": [
     {

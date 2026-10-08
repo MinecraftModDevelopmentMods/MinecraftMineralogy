@@ -9,14 +9,14 @@ exact Minecraft/loader target are both visible in one number.
 Major.Minor.Bug.Target
 ```
 
-The first three components are the **functional version**. Mineralogy `6.1.3`
-means major generation 6, minor release 1, and bug revision 3.
+The first three components are the **functional version**. Mineralogy `6.1.4`
+means major generation 6, minor release 1, and bug revision 4.
 
 The fourth component identifies the target build. The complete version for
 this Minecraft 26.3 NeoForge release is therefore:
 
 ```text
-6.1.3.2603002
+6.1.4.2603002
 ```
 
 This expanded numeric form is compatible with Maven version ordering, but it
@@ -25,7 +25,7 @@ components.
 
 The release tag is exactly the complete four-component version, with no
 redundant Minecraft-version prefix. For this branch the tag is therefore
-`6.1.3.2603002`, not `26.3-6.1.3.2603002`. The Target already makes tags unique
+`6.1.4.2603002`, not `26.3-6.1.4.2603002`. The Target already makes tags unique
 across Minecraft versions and loaders.
 
 ## Reading the target component
@@ -65,7 +65,7 @@ minor digits, and all remaining digits for the Minecraft major version.
 | 26.1.2 | NeoForge | `2601022` | `6.1.2.2601022` |
 | 26.2 | Forge | `2602001` | `6.1.2.2602001` |
 | 26.2 | NeoForge | `2602002` | `6.1.2.2602002` |
-| 26.3 | NeoForge | `2603002` | `6.1.3.2603002` |
+| 26.3 | NeoForge | `2603002` | `6.1.4.2603002` |
 
 The 26.3 NeoForge row records this branch's current release. The other rows illustrate
 target encoding or earlier releases; they do not claim that later Minecraft
@@ -74,6 +74,32 @@ targets already contain the same functional changes.
 Historical Mineralogy releases may also have four numeric components that used
 the last number as an ordinary build sequence. The target policy applies to
 new releases and does not reinterpret an old file's version.
+
+## Vanilla stone compatibility campaign
+
+The following target builds share the 6.1.4 stone compatibility
+fix. This matrix describes the release targets, not their publication status.
+NeoForge 26.3 retains its existing 6.1.3 compatibility correction.
+
+| Minecraft | Forge build | NeoForge build |
+| --- | --- | --- |
+| 1.16.5 | 6.1.4.116051 | Not in scope |
+| 1.17.1 | 6.1.4.117011 | Not in scope |
+| 1.18.2 | 6.1.4.118021 | Not in scope |
+| 1.19.4 | 6.1.4.119041 | Not in scope |
+| 1.20.1 | 6.1.4.120011 | Not in scope |
+| 1.20.6 | 6.1.4.120061 | 6.1.4.120062 |
+| 1.21.1 | 6.1.4.121011 | 6.1.4.121012 |
+| 1.21.11 | 6.1.4.121111 | 6.1.4.121112 |
+| 26.1.2 | 6.1.4.2601021 | 6.1.4.2601022 |
+| 26.2 | 6.1.4.2602001 | 6.1.4.2602002 |
+| 26.3 | 6.1.4.2603001 | 6.1.4.2603002 |
+
+These branches have been tested and approved for sequential release.
+Sulfur cubes receive only the 31 raw Mineralogy items on 26.2 and 26.3, not
+polished or brick forms. Earlier targets carry only supported interfaces.
+Forge 1.13.2–1.15.2 are deferred until their later 6.1 ports. Backporting native
+texture synchronization remains a separate campaign.
 
 ## Major version
 
@@ -133,7 +159,7 @@ Minecraft 1.21.1 / NeoForge / Mineralogy 6.1.2.121012
 Minecraft 1.21.11 / NeoForge / Mineralogy 6.1.2.121112
 Minecraft 26.1.2 / NeoForge / Mineralogy 6.1.2.2601022
 Minecraft 26.2 / NeoForge / Mineralogy 6.1.2.2602002
-Minecraft 26.3 / NeoForge / Mineralogy 6.1.3.2603002
+Minecraft 26.3 / NeoForge / Mineralogy 6.1.4.2603002
 ```
 
 Minecraft and loader APIs may require different internal code without changing
@@ -166,7 +192,7 @@ particular jar can load on the current game.
 
 Mineralogy 6 also requires OreSpawn `[4.0.6,5.0.0)`. OreSpawn uses the same
 target calculation, so the matching Minecraft 26.3 NeoForge release used for
-this candidate is `4.0.16.2603002`. The dependency range deliberately describes the supported
+this build is `4.0.16.2603002`. The dependency range deliberately describes the supported
 functional OreSpawn generation; NeoForge still prevents jars for another
 Minecraft target from loading together.
 
@@ -176,10 +202,16 @@ feature generation, not the exact jar.
 
 ## Builds and release notes
 
+This 6.1.4 release also repairs natural bat substrate eligibility.
+Minecraft introduced the bats_spawnable_on block tag in 1.21.2; the compatibility
+interface belongs only on 1.21.2-and-later targets. Earlier Mineralogy targets
+remain unchanged. The additive block tag reuses natural terrain membership,
+not the broad base_stone_overworld tag, and preserves vanilla spawn restrictions.
+
 The Gradle build reads the complete version from `mod_version`, verifies that
 it has four numeric components, and checks that its Target matches the declared
 Minecraft version and NeoForge loader. CI build numbers are not appended. For this
-branch, published metadata and artifacts therefore use `6.1.3.2603002`.
+branch, published metadata and artifacts therefore use `6.1.4.2603002`.
 
 Every release note should state:
 

@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:basalt_brick"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:basalt_smooth_brick"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:basalt_brick_block_polishing"

@@ -1,4 +1,16 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:conglomerate_smooth"
+    },
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:conglomerate_smooth_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:conglomerate_smooth_slab"

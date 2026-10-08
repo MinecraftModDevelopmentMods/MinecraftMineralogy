@@ -1,4 +1,11 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:registered",
+      "registry": "minecraft:item",
+      "value": "mineralogy:gabbro_furnace"
+    }
+  ],
   "type": "minecraft:block",
   "pools": [
     {

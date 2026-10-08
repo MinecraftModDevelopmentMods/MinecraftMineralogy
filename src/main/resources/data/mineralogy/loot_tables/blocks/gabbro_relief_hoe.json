@@ -16,5 +16,6 @@
         }
       ]
     }
-  ]
+  ],
+  "mineralogy:construction_item": "mineralogy:gabbro_relief_hoe"
 }

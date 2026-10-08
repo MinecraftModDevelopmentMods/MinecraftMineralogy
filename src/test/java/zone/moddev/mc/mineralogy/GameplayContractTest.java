@@ -102,6 +102,21 @@ public class GameplayContractTest {
     }
 
     @Test
+    public void furnaceTransitionsRefreshTheNativeLazyStateBeforeReattaching() throws Exception {
+        String source = text("src/main/java/zone/moddev/mc/mineralogy/blocks/RockFurnace.java");
+        String transition = source.substring(source.indexOf("public static void setState("),
+                source.indexOf("public TileEntity createNewTileEntity("));
+        assertTrue(transition.contains("BlockState newState ="));
+        assertTrue(transition.contains("try {"));
+        assertTrue(transition.contains("} finally {"));
+        assertTrue(transition.contains("keepInventory = false;"));
+        assertTrue(transition.indexOf("updateContainingBlockInfo()") < transition.indexOf("tileEntity.getBlockState()"));
+        assertTrue(transition.indexOf("tileEntity.getBlockState()") < transition.indexOf("tileEntity.validate()"));
+        assertTrue(transition.indexOf("tileEntity.validate()") < transition.indexOf("world.setTileEntity(pos, tileEntity)"));
+        assertFalse(transition.contains("tileEntity.setBlockState("));
+    }
+
+    @Test
     public void optionalGunpowderDustsCannotCollapseToTwoIngredients() throws Exception {
         String generator = text("scripts/generate-recipes.ps1");
         assertTrue(generator.contains("ItemTagNotEmptyCondition 'forge:dusts/carbon'"));

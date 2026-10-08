@@ -105,11 +105,19 @@ public class RockFurnace extends ContainerBlock {
 		}
 
 		TileEntity tileEntity = world.getTileEntity(pos);
+		BlockState newState = newBlock.getDefaultState().with(FACING, oldState.get(FACING));
 		keepInventory = true;
-		world.setBlockState(pos, newBlock.getDefaultState().with(FACING, oldState.get(FACING)), 3);
-		keepInventory = false;
+		try {
+			world.setBlockState(pos, newState, 3);
+		} finally {
+			keepInventory = false;
+		}
 
 		if (tileEntity != null) {
+			// Forge 36 has a lazy cached state rather than a state setter. Clear
+			// and refresh that cache from the newly installed world block first.
+			tileEntity.updateContainingBlockInfo();
+			tileEntity.getBlockState();
 			tileEntity.validate();
 			world.setTileEntity(pos, tileEntity);
 		}

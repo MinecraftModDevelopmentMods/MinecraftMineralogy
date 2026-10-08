@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "mineralogy:pegmatite_smooth_brick_slab"
+    {
+      "id": "mineralogy:pegmatite_smooth_brick_slab",
+      "required": false
+    }
   ]
 }

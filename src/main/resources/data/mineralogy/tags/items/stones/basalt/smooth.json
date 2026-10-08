@@ -1,7 +1,10 @@
 {
   "replace": false,
   "values": [
-    "mineralogy:basalt_smooth",
+    {
+      "id": "mineralogy:basalt_smooth",
+      "required": false
+    },
     "minecraft:polished_basalt"
   ]
 }

@@ -1,7 +1,10 @@
 {
-    "replace":  false,
-    "values":  [
-                   "mineralogy:andesite_smooth",
-                   "minecraft:polished_andesite"
-               ]
+  "replace": false,
+  "values": [
+    {
+      "id": "mineralogy:andesite_smooth",
+      "required": false
+    },
+    "minecraft:polished_andesite"
+  ]
 }

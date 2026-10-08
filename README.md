@@ -10,9 +10,16 @@ mineral ores and dusts, rock furnaces, drywall, rock-salt lighting, fertilizer,
 and crude oil. OreSpawn 4 is the sole terrain, strata, ore, and deposit engine;
 Mineralogy no longer installs a parallel world generator.
 
-This branch builds Mineralogy `6.1.2.120061` for Forge `50.2.0` and is built
+This branch builds Mineralogy `6.1.4.120061` for Forge `50.2.0` and is built
 and tested against OreSpawn `4.0.16.120061`. Its declared compatibility range is
 OreSpawn `[4.0.6,5.0.0)`. Install both mods on clients and servers.
+
+Version 6.1.4 lets vanilla cave features and animals recognise natural
+Mineralogy rock. Sculk can spread, goats can spawn, and harder raw rocks can
+break goat horns in existing worlds. Moss, dripstone, roots and forest rocks
+also recognise natural terrain when new chunks are generated. Crafted blocks
+are kept separate, and none of this depends on cobblestone equivalence.
+Sulfur cubes do not exist on this Minecraft version.
 
 ## Configuration and help
 

@@ -1,6 +1,9 @@
 {
-    "replace":  false,
-    "values":  [
-                   "mineralogy:scoria_slab"
-               ]
+  "replace": false,
+  "values": [
+    {
+      "id": "mineralogy:scoria_slab",
+      "required": false
+    }
+  ]
 }

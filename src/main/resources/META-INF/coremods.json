@@ -1,3 +1,4 @@
 {
-  "mineralogy_legacy_world_fix": "coremods/mineralogy_legacy_world_fix.js"
+  "mineralogy_legacy_world_fix": "coremods/mineralogy_legacy_world_fix.js",
+  "mineralogy_terrain_compatibility": "coremods/mineralogy_terrain_compatibility.js"
 }

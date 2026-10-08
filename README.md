@@ -23,8 +23,7 @@ no longer leave required tag or loot references behind.
 Sculk, goat and wall-support changes work in existing worlds after updating.
 Natural cave decoration changes need newly generated chunks. Terrain eligibility
 is independent of cobblestone equivalence and excludes crafted blocks. Sulfur
-cubes do not exist on this target. This revised candidate needs renewed testing;
-publication remains paused.
+cubes do not exist on this target.
 
 ## Configuration and help
 

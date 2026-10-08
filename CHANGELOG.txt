@@ -1,16 +1,16 @@
-Mineralogy 6.1.4.121011 for Minecraft 1.21.1
+Mineralogy 6.1.4.121011 for Minecraft 1.21.1 (Forge)
 
 - Restored vanilla sculk catalyst conversion and dripstone/moss replacement on
   37 natural terrain identities, including native aliases and special rocks.
-- Sculk works in existing worlds after updating; natural cave decoration
-  improves in newly generated chunks. No sulfur-cube tags on this target.
+- Sculk works in existing worlds after updating. Natural cave decoration can
+  use these rocks in newly generated chunks. No sulfur-cube tags on this target.
 - Natural terrain now supports goat spawning. Horn breaking uses a separate
   hard raw-rock whitelist, leaving soft rocks and crafted blocks out.
 - Fixed the two dripstone helpers that still checked vanilla base stone
   directly, without changing global base-stone or ore-host tags.
 - Added common raw-stone, furnace, ore, storage and dyed-drywall classifications,
   plus single-slab, stair and wall aggregates. Double-slab full blocks stay out.
-- Made disabled construction references optional, guarded their loot tables,
+- Made disabled construction references optional, guarded their loot pools,
   and aligned normal cobblestone with the existing configurable root policy.
 - Rock-salt lamps now keep the supporting post on straight and junction walls.
 - Bare rock can be replaced by azalea roots without becoming azalea tree soil.
@@ -74,8 +74,8 @@ Mineralogy 6.1.2.121011 for Minecraft 1.21.1
 - Reconciled Minecraft's native andesite, basalt, diorite, granite, and expanded
   tuff family with
   their retained Mineralogy world-compatibility blocks. Native blocks now
-  unlock and feed every non-conflicting matching Mineralogy recipe. The four
-  five vanilla polished-block recipes are replaced by block-plus-sand routes so
+  unlock and feed every non-conflicting matching Mineralogy recipe. The five
+  vanilla polished-block recipes are replaced by block-plus-sand routes so
   the 2x2 recipes remain available for Mineralogy bricks. The six shared
   andesite, diorite, granite, and tuff slab recipes plus all fifteen matching
   stonecutter routes now produce Mineralogy's more capable slabs, while the

@@ -72,11 +72,11 @@ new releases and does not reinterpret an old file's version.
 
 ## Vanilla stone compatibility campaign
 
-The following local candidates share the 6.1.4 additive terrain compatibility
-fix. This is a candidate matrix, not a claim that every release is published.
+The following release targets share the 6.1.4 terrain compatibility fixes.
+Each target is published separately; this matrix does not mean every file is live.
 NeoForge 26.3 retains its existing 6.1.3 compatibility correction.
 
-| Minecraft | Forge candidate | NeoForge candidate |
+| Minecraft | Forge version | NeoForge version |
 | --- | --- | --- |
 | 1.16.5 | 6.1.4.116051 | Not in scope |
 | 1.17.1 | 6.1.4.117011 | Not in scope |
@@ -93,8 +93,8 @@ NeoForge 26.3 retains its existing 6.1.3 compatibility correction.
 The revised campaign includes Forge 1.16.5–1.18.2 where each interface exists.
 Minecraft 1.17 retains its native goat-spawning rule. Sulfur cubes on 26.2 and
 26.3 consume only raw Mineralogy rocks, not polished or brick forms; vanilla's
-own consumption rules are unchanged. Every revised local candidate needs
-renewed manual acceptance. Native-texture synchronization remains separate.
+own consumption rules are unchanged. Native-texture synchronization remains a
+separate update.
 
 ## Major version
 
@@ -183,7 +183,7 @@ particular jar can load on the current game.
 
 Mineralogy 6 also requires OreSpawn `[4.0.6,5.0.0)`. OreSpawn uses the same
 target calculation, so the matching Minecraft 1.21.1 Forge release used for
-this candidate is `4.0.16.121011`. The dependency range deliberately describes the supported
+this release is `4.0.16.121011`. The dependency range deliberately describes the supported
 functional OreSpawn generation; Forge still prevents jars for another
 Minecraft target from loading together.
 

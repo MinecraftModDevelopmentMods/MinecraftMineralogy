@@ -71,11 +71,11 @@ new releases and does not reinterpret an old file's version.
 
 ## Vanilla stone compatibility campaign
 
-The following local candidates share the 6.1.4 terrain and tag compatibility
-fixes. This is a candidate matrix, not a claim that every release is published.
+The following targets share the 6.1.4 terrain and tag compatibility fixes.
+This release matrix does not claim that every target is already published.
 NeoForge 26.3 retains its existing 6.1.3 compatibility correction.
 
-| Minecraft | Forge candidate | NeoForge candidate |
+| Minecraft | Forge release | NeoForge release |
 | --- | --- | --- |
 | 1.16.5 | 6.1.4.116051 | Not in scope |
 | 1.17.1 | 6.1.4.117011 | Not in scope |
@@ -180,7 +180,7 @@ particular jar can load on the current game.
 
 Mineralogy 6 also requires OreSpawn `[4.0.6,5.0.0)`. OreSpawn uses the same
 target calculation, so the matching Minecraft 1.20.6 NeoForge release used for
-this candidate is `4.0.16.120062`. The dependency range deliberately describes the supported
+this release is `4.0.16.120062`. The dependency range deliberately describes the supported
 functional OreSpawn generation; NeoForge still prevents jars for another
 Minecraft target from loading together.
 

@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:conglomerate_smooth"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:conglomerate_smooth"

@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:dolomite_brick"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:dolomite_smooth_brick"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:dolomite_brick_block_polishing"

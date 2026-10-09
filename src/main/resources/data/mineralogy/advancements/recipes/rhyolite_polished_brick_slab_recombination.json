@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:rhyolite_smooth_brick"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:rhyolite_smooth_brick_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:rhyolite_polished_brick_slab_recombination"

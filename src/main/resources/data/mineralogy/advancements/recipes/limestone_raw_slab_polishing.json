@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:limestone_slab"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:limestone_smooth_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:limestone_raw_slab_polishing"

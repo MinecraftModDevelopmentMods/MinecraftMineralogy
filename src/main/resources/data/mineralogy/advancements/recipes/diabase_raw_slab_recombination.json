@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:diabase_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:diabase_raw_slab_recombination"

@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:limestone_relief_left"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:limestone_relief_right"
+    }
+  ],
   "type": "minecraft:crafting_shapeless",
   "category": "building",
   "ingredients": [

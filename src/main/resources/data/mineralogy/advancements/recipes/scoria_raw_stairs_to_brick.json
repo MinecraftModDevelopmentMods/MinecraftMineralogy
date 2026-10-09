@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:scoria_brick_stairs"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:scoria_stairs"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:scoria_raw_stairs_to_brick"

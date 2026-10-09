@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:diabase_relief_blank"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:diabase_relief_pickaxe"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:diabase_relief_pickaxe"

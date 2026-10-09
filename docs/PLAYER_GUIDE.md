@@ -1,5 +1,15 @@
 # Mineralogy Player Guide
 
+## What changes in 6.1.4
+
+Natural rocks work with sculk catalysts, moss, dripstone, azalea roots and
+forest rocks. Goats can spawn on them; only the supported hard raw rocks break
+horns. Crafted forms stay out of natural replacement, and these rules do not
+depend on cobblestone equivalence. Existing worlds gain the interaction fixes;
+natural cave decoration changes newly generated chunks. Construction switches
+also keep tags, recipes, recipe-book entries and drops safe when blocks are off.
+Sulfur cubes and the later bat substrate tag do not exist in Minecraft 1.20.6.
+
 ## Installing
 
 Mineralogy 6 needs Minecraft 1.20.6, NeoForge 20.6.139, and OreSpawn

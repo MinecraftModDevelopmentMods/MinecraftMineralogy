@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:scoria_brick"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:scoria_brick_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:scoria_brick_slab_recombination"

@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:shale_brick"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:shale_brick_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:shale_brick_slab_recombination"

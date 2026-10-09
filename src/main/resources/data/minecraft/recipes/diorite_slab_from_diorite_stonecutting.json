@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:diorite_slab"
+    }
+  ],
   "type": "minecraft:stonecutting",
   "ingredient": {
     "item": "minecraft:diorite"

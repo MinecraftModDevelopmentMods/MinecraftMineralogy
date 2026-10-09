@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:hornfels_brick"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:hornfels_brick_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:hornfels_brick_slab_recombination"

@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:amphibolite_relief_axe"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:amphibolite_relief_blank"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:amphibolite_relief_axe"

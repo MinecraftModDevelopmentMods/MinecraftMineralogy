@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:amphibolite_brick"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:amphibolite_smooth_brick"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:amphibolite_brick_block_polishing"

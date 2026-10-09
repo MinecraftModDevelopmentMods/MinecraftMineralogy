@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "mineralogy:siltstone_brick"
+    {
+      "id": "mineralogy:siltstone_brick",
+      "required": false
+    }
   ]
 }

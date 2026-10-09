@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:basaltic_glass_brick_slab"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:basaltic_glass_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:basaltic_glass_raw_slabs_to_brick"

@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:diorite_furnace"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:diorite_furnace"

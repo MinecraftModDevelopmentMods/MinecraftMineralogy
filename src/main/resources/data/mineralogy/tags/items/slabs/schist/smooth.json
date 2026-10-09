@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "mineralogy:schist_smooth_slab"
+    {
+      "id": "mineralogy:schist_smooth_slab",
+      "required": false
+    }
   ]
 }

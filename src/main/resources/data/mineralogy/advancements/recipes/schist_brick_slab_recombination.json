@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:schist_brick"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:schist_brick_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:schist_brick_slab_recombination"

@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:rock_salt_smooth"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:rock_salt_smooth_slab"
+    }
+  ],
   "type": "minecraft:crafting_shapeless",
   "category": "building",
   "ingredients": [

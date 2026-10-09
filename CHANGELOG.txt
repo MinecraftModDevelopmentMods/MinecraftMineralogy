@@ -1,3 +1,21 @@
+Mineralogy 6.1.4.120062 for Minecraft 1.20.6 NeoForge
+
+- Natural rocks now work with sculk catalysts, moss, dripstone, azalea roots
+  and forest rocks. Goats can spawn on them and lose horns against the hard
+  raw-rock whitelist; soft rocks and crafted forms remain excluded.
+- Fixed the two direct dripstone checks and the forest-rock substrate check
+  without broadening global base-stone or ore-host tags. Rock-salt lamps keep
+  wall posts upright like vanilla torches.
+- Added the appropriate raw-stone, slab, stair, wall, furnace-workstation,
+  ore, storage and dyed-colour classifications, preserving existing members.
+- Construction switches no longer leave required references to absent blocks
+  or items in tags, recipes, advancements and loot. Enabled recipes and drops
+  are unchanged, and cobblestone equivalence remains a separate setting.
+- Interaction fixes apply to existing worlds; natural cave decoration changes
+  newly generated chunks. Provider, configuration, registry, migration,
+  texture, translation and OreSpawn identities are unchanged. Sulfur cubes
+  and the later bat substrate tag do not exist on this target.
+
 Mineralogy 6.1.2.120062 for Minecraft 1.20.6 NeoForge
 
 - Added the first NeoForge Mineralogy baseline while retaining gameplay,

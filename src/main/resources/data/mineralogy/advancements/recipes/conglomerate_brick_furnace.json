@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:conglomerate_brick_furnace"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:conglomerate_brick_furnace"

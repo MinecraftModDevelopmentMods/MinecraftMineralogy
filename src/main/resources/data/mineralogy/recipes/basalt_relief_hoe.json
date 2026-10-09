@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:basalt_relief_blank"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:basalt_relief_hoe"
+    }
+  ],
   "type": "minecraft:crafting_shapeless",
   "category": "building",
   "ingredients": [

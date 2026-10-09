@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:quartzite_smooth_brick_stairs"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:quartzite_smooth_stairs"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:quartzite_polished_stairs_to_brick"

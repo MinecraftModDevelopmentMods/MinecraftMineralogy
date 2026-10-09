@@ -19,7 +19,7 @@ public class WorkflowContractTest {
         try (FileInputStream input = new FileInputStream("gradle.properties")) {
             properties.load(input);
         }
-        assertEquals("6.1.2.120062", properties.getProperty("mod_version"));
+        assertEquals("6.1.4.120062", properties.getProperty("mod_version"));
         assertEquals("1.20.6", properties.getProperty("minecraft_version"));
         assertEquals(properties.getProperty("mc_version"), properties.getProperty("minecraft_version"));
         assertEquals("neoforge", properties.getProperty("loader_name"));

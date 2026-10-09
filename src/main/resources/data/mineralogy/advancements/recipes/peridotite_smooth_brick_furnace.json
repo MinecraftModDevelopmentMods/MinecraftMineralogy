@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:peridotite_smooth_brick_furnace"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:peridotite_smooth_brick_furnace"

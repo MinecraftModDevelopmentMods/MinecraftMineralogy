@@ -1,5 +1,21 @@
 # Mineralogy Developer Guide
 
+## Vanilla terrain compatibility
+
+`mineralogy:terrain_rocks` is the natural-terrain interface, derived from the
+provider outputs and retained aliases. Crafted forms are excluded. Dedicated
+replacement, goat/horn, root and forest-rock tags preserve native and third-party
+members without broadening global stone or ore-host tags. Common `c:` tags
+classify raw stones, furnace workstations, ores, storage blocks and dyed drywall.
+
+This target uses plural data paths and three narrowly scoped, exact-count
+JavaScript redirects for proven direct dripstone and forest-rock checks. The
+legacy conversion coremod is separate and unchanged. Config-dependent members
+are optional objects inside `values`. Recipes and matching advancements use
+NeoForge's native `neoforge:item_exists` condition; loot guards use the existing
+construction flags and their registration prerequisites. Enabled payloads and
+public IDs are unchanged. Keep the full local tag index out of published jars.
+
 ## Responsibility Split
 
 | Mineralogy owns | OreSpawn owns |

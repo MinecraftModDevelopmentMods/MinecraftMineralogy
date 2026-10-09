@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:gneiss_relief_blank"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:gneiss_relief_cross"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:gneiss_relief_cross"

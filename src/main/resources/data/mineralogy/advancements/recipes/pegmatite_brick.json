@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:pegmatite_brick"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:pegmatite_brick"

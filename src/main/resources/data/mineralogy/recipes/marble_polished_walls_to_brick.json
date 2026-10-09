@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:marble_smooth_brick_wall"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:marble_smooth_wall"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "pattern": [

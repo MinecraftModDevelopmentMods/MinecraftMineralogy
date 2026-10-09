@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:slate_brick"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:slate_smooth_brick"
+    }
+  ],
   "type": "minecraft:crafting_shapeless",
   "category": "building",
   "ingredients": [

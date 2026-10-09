@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:novaculite_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:novaculite_raw_slab_recombination"

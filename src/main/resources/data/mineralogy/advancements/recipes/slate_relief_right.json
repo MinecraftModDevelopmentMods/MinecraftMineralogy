@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:slate_relief_left"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:slate_relief_right"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:slate_relief_right"

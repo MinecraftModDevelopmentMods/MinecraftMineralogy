@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:tuff_smooth_stairs"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:tuff_stairs"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:tuff_raw_stairs_polishing"

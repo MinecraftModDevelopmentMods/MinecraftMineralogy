@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:pegmatite_relief_blank"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:pegmatite_relief_vertical"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "pattern": [

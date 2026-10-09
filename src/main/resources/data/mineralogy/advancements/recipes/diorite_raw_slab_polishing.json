@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:diorite_slab"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:diorite_smooth_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:diorite_raw_slab_polishing"

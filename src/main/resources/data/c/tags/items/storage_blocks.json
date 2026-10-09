@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "#c:storage_blocks/chalk",
+    "#c:storage_blocks/gypsum",
+    "#c:storage_blocks/nitrate",
+    "#c:storage_blocks/phosphorous",
+    "#c:storage_blocks/rock_salt",
+    "#c:storage_blocks/sulfur"
+  ]
+}

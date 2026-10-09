@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:basalt_brick_stairs"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:basalt_stairs"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "pattern": [

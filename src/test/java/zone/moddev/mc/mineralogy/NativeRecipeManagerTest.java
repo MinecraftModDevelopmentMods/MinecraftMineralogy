@@ -88,7 +88,10 @@ public class NativeRecipeManagerTest {
                 .getAsJsonObject().get("item").getAsString());
         assertEquals(name, result, recipe.getAsJsonObject("result").get("id").getAsString());
         assertEquals(name, 1, resultCount(recipe));
-        assertFalse(name, recipe.has("neoforge:conditions"));
+        assertEquals(name, 1, recipe.getAsJsonArray("neoforge:conditions").size());
+        JsonObject guard = recipe.getAsJsonArray("neoforge:conditions").get(0).getAsJsonObject();
+        assertEquals(name, "neoforge:item_exists", guard.get("type").getAsString());
+        assertEquals(name, source.startsWith("mineralogy:") ? source : result, guard.get("item").getAsString());
     }
 
     private static String enabledMaterial(String name) {

@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "mineralogy:config",
+      "flag": "GENERATE_ROCKSTAIRS"
+    }
+  ],
   "type": "minecraft:block",
   "pools": [
     {

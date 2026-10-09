@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:hornfels_brick_stairs"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:hornfels_brick_stairs"

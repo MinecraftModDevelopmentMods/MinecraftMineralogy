@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:granite_relief_blank"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:granite_relief_sword"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:granite_relief_sword"

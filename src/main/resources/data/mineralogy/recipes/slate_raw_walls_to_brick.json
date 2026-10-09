@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:slate_brick_wall"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:slate_wall"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "pattern": [

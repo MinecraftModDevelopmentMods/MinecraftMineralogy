@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:quartzite_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:quartzite_raw_slab_recombination"

@@ -1,4 +1,18 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:gneiss_relief_blank"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:gneiss_relief_hammer"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:gneiss_smooth"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "pattern": [

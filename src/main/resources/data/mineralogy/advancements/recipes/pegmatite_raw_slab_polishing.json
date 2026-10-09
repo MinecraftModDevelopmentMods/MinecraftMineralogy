@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:pegmatite_slab"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:pegmatite_smooth_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:pegmatite_raw_slab_polishing"

@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:marble_furnace"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:marble_furnace"

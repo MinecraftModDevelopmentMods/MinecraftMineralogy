@@ -10,12 +10,24 @@ mineral ores and dusts, rock furnaces, drywall, rock-salt lighting, fertilizer,
 and crude oil. OreSpawn 4 is the sole terrain, strata, ore, and deposit engine;
 Mineralogy no longer installs a parallel world generator.
 
-This branch builds Mineralogy `6.1.2.120062` for NeoForge `20.6.139` and is built
+This branch builds Mineralogy `6.1.4.120062` for NeoForge `20.6.139` and is built
 and tested against OreSpawn `4.0.16.120062`. Its declared compatibility range is
 OreSpawn `[4.0.6,5.0.0)`. Install both mods on clients and servers.
 
 This is the NeoForge build. It is intentionally maintained separately from the
 Forge 1.20.6 branch; use the jar that matches the loader in your modpack.
+
+Mineralogy 6.1.4 lets sculk catalysts, moss, dripstone, azalea roots and forest
+rocks recognise natural Mineralogy terrain. Goats can spawn on it and break
+their horns against the supported hard raw rocks, while soft and crafted forms
+stay excluded. These rules do not depend on cobblestone equivalence. Existing
+worlds gain the interaction fixes; natural decoration changes new chunks.
+
+Slabs, stairs, walls, furnaces, ores, storage blocks and coloured drywall now
+join their appropriate vanilla and common tags. Disabling construction no
+longer leaves missing tag, recipe, advancement or loot references. Enabled
+recipes and drops are unchanged. Sulfur cubes and the later bat substrate tag
+are not available on Minecraft 1.20.6.
 
 ## Configuration and help
 

@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:granite_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:granite_slab_to_vanilla"

@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:rock_salt_brick"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:rock_salt_brick_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:rock_salt_brick_slab_recombination"

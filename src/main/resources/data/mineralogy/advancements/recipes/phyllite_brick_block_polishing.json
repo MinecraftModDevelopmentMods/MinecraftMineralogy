@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:phyllite_brick"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:phyllite_smooth_brick"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:phyllite_brick_block_polishing"

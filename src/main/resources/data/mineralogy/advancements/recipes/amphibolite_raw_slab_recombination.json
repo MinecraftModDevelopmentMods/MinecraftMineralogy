@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:amphibolite_slab"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:amphibolite_raw_slab_recombination"

@@ -1,4 +1,18 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:granite_relief_blank"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:granite_relief_hammer"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:granite_smooth"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "pattern": [

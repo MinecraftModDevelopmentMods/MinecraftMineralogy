@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:andesite_brick"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:andesite_smooth_brick"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:andesite_brick_block_polishing"

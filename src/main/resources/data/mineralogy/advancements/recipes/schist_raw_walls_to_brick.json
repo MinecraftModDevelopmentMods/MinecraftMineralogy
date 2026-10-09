@@ -1,4 +1,14 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:schist_brick_wall"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "mineralogy:schist_wall"
+    }
+  ],
   "rewards": {
     "recipes": [
       "mineralogy:schist_raw_walls_to_brick"

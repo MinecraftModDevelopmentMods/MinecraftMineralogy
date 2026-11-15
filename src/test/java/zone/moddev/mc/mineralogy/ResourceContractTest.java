@@ -155,15 +155,15 @@ public class ResourceContractTest {
     @Test
     public void oilAndBuildMetadataUseStableTargetIdentities() throws Exception {
         String properties = new String(Files.readAllBytes(new File("gradle.properties").toPath()), StandardCharsets.UTF_8);
-        assertTrue(properties.contains("mod_version=6.0.1.113021"));
-        assertTrue(properties.contains("orespawn_curse_file_id=8681710"));
+        assertTrue(properties.contains("mod_version=6.0.2.113021"));
+        assertTrue(properties.contains("orespawn_curse_file_id=9611746"));
         String build = new String(Files.readAllBytes(new File("build.gradle").toPath()), StandardCharsets.UTF_8);
         assertTrue(build.contains("runtime fg.deobf"));
         assertTrue(build.contains("orespawnRelease"));
         String metadata = new String(Files.readAllBytes(new File(ROOT, "META-INF/mods.toml").toPath()), StandardCharsets.UTF_8);
         assertTrue(metadata.contains("loaderVersion=\"[25,)\""));
         assertTrue(metadata.contains("versionRange=\"[25.0.223,26)\""));
-        assertTrue(metadata.contains("versionRange=\"[4.0.6,5.0.0)\""));
+        assertTrue(metadata.contains("versionRange=\"[4.1.7.113021,5.0.0)\""));
         assertTrue(metadata.contains("ordering=\"AFTER\""));
         assertTrue(new File(ROOT, "assets/mineralogy/textures/items/crude_oil_bucket.png").isFile());
         assertTrue(new File(ROOT, "assets/mineralogy/textures/blocks/crude_oil_still.png").isFile());

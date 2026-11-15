@@ -9,7 +9,7 @@
 | Forge tag identities and old-save compatibility | Ore and fluid-deposit placement |
 | Mineralogy's provider declaration and migration | Profiles, UI, retrogen, and templates |
 
-Mineralogy requires OreSpawn `[4.0.6,5.0.0)`. Reusable worldgen integrations
+Mineralogy requires OreSpawn `[4.1.7.113021,5.0.0)`. Reusable worldgen integrations
 belong in `zone.moddev.mc.orespawn.api` or an OreSpawn provider rather than
 Mineralogy internals.
 

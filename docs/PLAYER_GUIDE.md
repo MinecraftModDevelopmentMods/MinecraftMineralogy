@@ -3,7 +3,7 @@
 ## Installing
 
 Mineralogy 6 needs Minecraft 1.13.2, Forge 25.0.223, and OreSpawn
-4.0.6.113021.
+4.1.7.113021 or a later compatible 1.13.2 release.
 Install matching Mineralogy and OreSpawn jars on both clients and servers. Do
 not open a world containing Mineralogy blocks without Mineralogy installed.
 

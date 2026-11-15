@@ -25,7 +25,7 @@ Fills the world with real-world rocks.
 [[dependencies.mineralogy]]
     modId="orespawn"
     mandatory=true
-    versionRange="[4.0.6,5.0.0)"
+    versionRange="[4.1.7.113021,5.0.0)"
     ordering="AFTER"
     side="BOTH"
 

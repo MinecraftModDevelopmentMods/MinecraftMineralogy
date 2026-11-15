@@ -1,3 +1,8 @@
+Mineralogy 6.0.2.113021 for Minecraft 1.13.2
+
+- Use OreSpawn 4.1.7 for the latest world generation and saved-profile fixes.
+- Fix missing fluids and startup hangs with other fluid-adding mods during parallel loading.
+
 Mineralogy 6.0.1.113021 for Minecraft 1.13.2
 
 - Delegated terrain, strata, ore, and covered fluid-deposit generation to the

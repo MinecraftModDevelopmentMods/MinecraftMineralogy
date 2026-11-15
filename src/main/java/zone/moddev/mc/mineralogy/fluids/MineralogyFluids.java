@@ -39,12 +39,9 @@ public final class MineralogyFluids {
     private MineralogyFluids() {
     }
 
-    /**
-     * Forge 25 still uses Minecraft's vanilla fluid registry. Register the two
-     * fluid states during mod construction, before Forge fires block and item
-     * registry events.
-     */
-    public static void registerFluids() {
+    // Forge 25's vanilla fluid registries are not thread-safe. The sequential
+    // block event lets us bind the oil before creating its block and bucket.
+    private static void registerFluids() {
         if (CRUDE_OIL != null) {
             return;
         }
@@ -61,6 +58,7 @@ public final class MineralogyFluids {
 
     @SubscribeEvent
     public static void registerBlock(RegistryEvent.Register<Block> event) {
+        registerFluids();
         CRUDE_OIL_BLOCK = (BlockFlowingFluid) new CrudeOilBlock(CRUDE_OIL,
                 Block.Properties.create(Material.WATER).doesNotBlockMovement()
                         .hardnessAndResistance(100.0F).variableOpacity())

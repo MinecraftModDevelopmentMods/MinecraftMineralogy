@@ -9,14 +9,14 @@ exact Minecraft/loader target are both visible in one number.
 Major.Minor.Bug.Target
 ```
 
-The first three components are the **functional version**. Mineralogy `6.0.1`
-means major generation 6, minor release 0, and bug revision 1.
+The first three components are the **functional version**. Mineralogy `6.0.2`
+means major generation 6, minor release 0, and bug revision 2.
 
 The fourth component identifies the target build. The complete version for
 this Minecraft 1.13.2 Forge release is therefore:
 
 ```text
-6.0.1.113021
+6.0.2.113021
 ```
 
 This expanded numeric form is compatible with Maven version ordering, but it
@@ -25,7 +25,7 @@ components.
 
 The release tag is exactly the complete four-component version, with no
 redundant Minecraft-version prefix. For this branch the tag is therefore
-`6.0.1.113021`, not `1.13.2-6.0.1.113021`. The Target already makes tags unique
+`6.0.2.113021`, not `1.13.2-6.0.2.113021`. The Target already makes tags unique
 across Minecraft versions and loaders.
 
 ## Reading the target component
@@ -142,11 +142,11 @@ example, `[6.0.0,7.0.0)` accepts target-qualified Mineralogy 6 releases while
 excluding Mineralogy 7. Minecraft and loader metadata still decide whether a
 particular jar can load on the current game.
 
-Mineralogy 6 also requires OreSpawn `[4.0.6,5.0.0)`. OreSpawn uses the same
+Mineralogy 6 also requires OreSpawn `[4.1.7.113021,5.0.0)`. OreSpawn uses the same
 target calculation, so the matching Minecraft 1.13.2 Forge release is
-`4.0.6.113021`. The dependency range deliberately describes the supported
-functional OreSpawn generation; Forge still prevents jars for another
-Minecraft target from loading together.
+`4.1.7.113021`. This minimum includes the saved-profile, retrogen and
+generation-boundary fixes tested with this build. Forge also prevents jars
+for another Minecraft target from loading together.
 
 Pack maintainers should record the complete four-component versions in pack
 manifests and support reports. Saying only “Mineralogy 6” identifies the
@@ -157,7 +157,7 @@ feature generation, not the exact jar.
 The Gradle build reads the complete version from `mod_version`, verifies that
 it has four numeric components, and checks that its Target matches the declared
 Minecraft version and Forge loader. CI build numbers are not appended. For this
-branch, published metadata and artifacts therefore use `6.0.1.113021`.
+branch, published metadata and artifacts therefore use `6.0.2.113021`.
 
 Every release note should state:
 

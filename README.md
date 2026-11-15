@@ -10,8 +10,8 @@ mineral ores and dusts, rock furnaces, drywall, rock-salt lighting, fertilizer,
 and crude oil. OreSpawn 4 is the sole terrain, strata, ore, and deposit engine;
 Mineralogy no longer installs a parallel world generator.
 
-This branch builds Mineralogy `6.0.1.113021` for Forge `25.0.223` and requires
-OreSpawn `4.0.6` or another compatible 4.x release. Install both mods on clients
+This branch builds Mineralogy `6.0.2.113021` for Forge `25.0.223` and requires
+OreSpawn `4.1.7.113021` or a later compatible 1.13.2 release. Install both mods on clients
 and servers.
 
 ## Configuration and help

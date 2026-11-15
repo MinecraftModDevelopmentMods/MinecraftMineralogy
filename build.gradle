@@ -286,7 +286,7 @@ task verifyReleaseDependencies {
     group = 'verification'
     description = 'Resolves and verifies the exact released OreSpawn dependency.'
     doLast {
-        if (project.mod_version != '6.0.1.113021'
+        if (project.mod_version != '6.0.2.113021'
                 || project.minecraft_version != project.mc_version
                 || project.mc_version != '1.13.2'
                 || project.loader_name != 'forge'
@@ -297,9 +297,9 @@ task verifyReleaseDependencies {
                 || project.curseforge_project_id != '240974') {
             throw new GradleException('Unexpected generic release dispatcher metadata')
         }
-        if (project.orespawn_version != '4.0.6.113021' ||
+        if (project.orespawn_version != '4.1.7.113021' ||
                 project.orespawn_curse_project_id != '245586' ||
-                project.orespawn_curse_file_id != '8681710') {
+                project.orespawn_curse_file_id != '9611746') {
             throw new GradleException('Unexpected OreSpawn release coordinates')
         }
         File artifact = configurations.orespawnRelease.resolvedConfiguration.resolvedArtifacts
@@ -609,3 +609,10 @@ tasks.matching { it.name == 'eclipse' }.all {
 }
 
 check.dependsOn verifyReleaseDependencies
+
+task verifyFluidRegistration(type: Exec) {
+    group = 'verification'
+    description = 'Checks that oil registration runs before blocks, outside parallel construction.'
+    commandLine 'node', '--test', 'tools/test_fluid_registration.js'
+}
+check.dependsOn verifyFluidRegistration

@@ -2,7 +2,6 @@ package zone.moddev.mc.mineralogy;
 
 import zone.moddev.mc.mineralogy.compat.CobblestoneTagPolicy;
 import zone.moddev.mc.mineralogy.documentation.DocumentationExporter;
-import zone.moddev.mc.mineralogy.fluids.MineralogyFluids;
 import zone.moddev.mc.mineralogy.migration.LegacyOreConfigMigrator;
 import zone.moddev.mc.mineralogy.patching.LegacyWorldDataHook;
 import net.minecraftforge.common.MinecraftForge;
@@ -33,7 +32,6 @@ public class Mineralogy {
 
 	public Mineralogy() {
 		instance = this;
-		MineralogyFluids.registerFluids();
 		DistExecutor.runWhenOn(Dist.CLIENT,
 				() -> zone.moddev.mc.mineralogy.client.ClientOilRenderer::register);
 		LegacyWorldDataHook.register();

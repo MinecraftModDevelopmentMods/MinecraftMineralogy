@@ -10,12 +10,19 @@ mineral ores and dusts, rock furnaces, drywall, rock-salt lighting, fertilizer,
 and crude oil. OreSpawn 4 is the sole terrain, strata, ore, and deposit engine;
 Mineralogy no longer installs a parallel world generator.
 
-This branch builds Mineralogy `6.1.4.121012` for NeoForge `21.1.247` and is built
-and tested against OreSpawn `4.0.16.121012`. Its declared compatibility range is
-OreSpawn `[4.0.6,5.0.0)`. Install both mods on clients and servers.
+This branch builds Mineralogy `6.1.5.121012` for NeoForge `21.1.247` and is built
+and tested against OreSpawn `4.1.1.121012`. Its declared compatibility range is
+OreSpawn `[4.1.1,5.0.0)`. Install both mods on clients and servers.
 
 This is the NeoForge build. It is intentionally maintained separately from the
 Forge 1.21.1 branch; use the jar that matches the loader in your modpack.
+
+Mineralogy 6.1.5 makes rock salt and gypsum less widespread while retaining
+substantial dry-basin beds, gives sedimentary and volcanic provinces better
+representation, and tunes sulfur, phosphorus and nitrate. These defaults apply
+to new world profiles; saved settings and pack overrides stay authoritative and
+no retrogen is enabled. See [the geology balance notes](docs/GEOLOGY_BALANCE.md)
+for the measured results and existing-world guidance.
 
 Mineralogy 6.1.4 restores sculk catalyst conversion, moss growth and dripstone
 decoration on natural Mineralogy terrain. Eligibility is independent of

@@ -1,3 +1,10 @@
+Mineralogy 6.1.5.121012 for Minecraft 1.21.1 NeoForge
+
+- Make rock salt and gypsum less widespread, while keeping substantial beds in dry basins.
+- Give sedimentary and volcanic provinces better representation in the default geology.
+- Tune sulfur, phosphorus and nitrate depths, quantities and host-rock preferences.
+- Use the released OreSpawn 4.1.1. Existing saved geology and pack overrides stay authoritative; no retrogen is enabled.
+
 Mineralogy 6.1.4.121012 for Minecraft 1.21.1 NeoForge
 
 - Added matching 37-member terrain-rock block/item tags and additive vanilla

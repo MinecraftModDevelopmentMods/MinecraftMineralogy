@@ -11,7 +11,7 @@ The exact bytes from the installed build are exported as
 
 ## Current Contents
 
-- Provider schema 4, mod ID `mineralogy`, and provider revision 3.
+- Provider schema 4, mod ID `mineralogy`, and provider revision 4.
 - 32 enabled rock rules across the four geological families.
 - Sulfur, phosphorous, and nitrate ore rules.
 - Minecraft 1.21.1 heights `-64` through `319` and Overworld-only terrain defaults.
@@ -19,8 +19,9 @@ The exact bytes from the installed build are exported as
   aliases map the five matching historical Mineralogy rock IDs to their native
   outputs, while all historical Mineralogy blocks remain registered for old
   worlds. Native smooth basalt is also accepted by the matching smooth family.
-- Both `minecraft:stone` and `minecraft:deepslate` are terrain hosts. The three
-  ore rules use Minecraft's stone- and deepslate-ore-replaceable tags.
+- Both `minecraft:stone` and `minecraft:deepslate` are terrain hosts. Ore rules use
+  exact natural stone/deepslate fallback blocks and selective rock families,
+  not broad replacement tags that would bypass geological host preferences.
 - Sky/geome Stable Layers defaults for fresh worlds plus Cyano defaults used
   when OreSpawn migrates an established Mineralogy 3 world.
 - The covered `mineralogy:fluid_deposit/crude_oil` rule at Y `-48` through `48`,

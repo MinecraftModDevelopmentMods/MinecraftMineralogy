@@ -19,7 +19,7 @@ public class WorkflowContractTest {
         try (FileInputStream input = new FileInputStream("gradle.properties")) {
             properties.load(input);
         }
-        assertEquals("6.1.4.121012", properties.getProperty("mod_version"));
+        assertEquals("6.1.5.121012", properties.getProperty("mod_version"));
         assertEquals("1.21.1", properties.getProperty("minecraft_version"));
         assertEquals(properties.getProperty("mc_version"), properties.getProperty("minecraft_version"));
         assertEquals("neoforge", properties.getProperty("loader_name"));
@@ -29,9 +29,9 @@ public class WorkflowContractTest {
         assertEquals("21", properties.getProperty("gradle_java_version"));
         assertEquals("240974", properties.getProperty("curseforge_project_id"));
         assertEquals("zone.moddev.mc.mineralogy", properties.getProperty("mod_group"));
-        assertEquals("4.0.16.121012", properties.getProperty("orespawn_version"));
-        assertEquals("8807135", properties.getProperty("orespawn_curse_file_id"));
-        assertEquals("B0659E071633D9EC42A96D9759895DE2F5126C205A4BDBFEE0EB8E3F226D158B",
+        assertEquals("4.1.1.121012", properties.getProperty("orespawn_version"));
+        assertEquals("9400780", properties.getProperty("orespawn_curse_file_id"));
+        assertEquals("BF02244E25B5FBF89CCAD45F41B2624B850D4BBCB70CF66822249BA233A00976",
                 properties.getProperty("orespawn_sha256"));
     }
 

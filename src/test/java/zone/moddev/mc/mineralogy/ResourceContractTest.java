@@ -26,7 +26,7 @@ public class ResourceContractTest {
     public void providerUsesOreSpawnFourAndOwnsNoVanillaGeneration() throws Exception {
         JsonObject provider = json(new File(ROOT, "data/mineralogy/orespawn/provider.json"));
         assertEquals(4, provider.get("schema_version").getAsInt());
-        assertEquals(3, provider.get("provider_revision").getAsInt());
+        assertEquals(4, provider.get("provider_revision").getAsInt());
         assertEquals("mineralogy", provider.get("provider_modid").getAsString());
         assertEquals(32, provider.getAsJsonObject("rocks").size());
         assertEquals(3, provider.getAsJsonObject("ores").size());
@@ -49,8 +49,8 @@ public class ResourceContractTest {
                 .getAsJsonObject("mineralogy:rock/minecraft/tuff").get("block").getAsString());
         assertFalse(text.contains("metadata"));
         assertTrue(text.contains("minecraft:deepslate"));
-        assertTrue(text.contains("minecraft:stone_ore_replaceables"));
-        assertTrue(text.contains("minecraft:deepslate_ore_replaceables"));
+        assertFalse(text.contains("minecraft:stone_ore_replaceables"));
+        assertFalse(text.contains("minecraft:deepslate_ore_replaceables"));
         for (Map.Entry<String, JsonElement> entry : provider.getAsJsonObject("rocks").entrySet()) {
             JsonObject rock = entry.getValue().getAsJsonObject();
             assertEquals(entry.getKey(), -64, rock.get("min_y").getAsInt());
@@ -592,8 +592,8 @@ public class ResourceContractTest {
     @Test
     public void oilAndBuildMetadataUseStableTargetIdentities() throws Exception {
         String properties = new String(Files.readAllBytes(new File("gradle.properties").toPath()), StandardCharsets.UTF_8);
-        assertTrue(properties.contains("mod_version=6.1.4.121012"));
-        assertTrue(properties.contains("orespawn_curse_file_id=8807135"));
+        assertTrue(properties.contains("mod_version=6.1.5.121012"));
+        assertTrue(properties.contains("orespawn_curse_file_id=9400780"));
         String build = new String(Files.readAllBytes(new File("build.gradle").toPath()), StandardCharsets.UTF_8);
         assertTrue(build.contains("runtimeOnly(orespawnCoordinate)"));
         assertTrue(build.contains("https://maven.moddev.zone/releases"));
@@ -602,7 +602,7 @@ public class ResourceContractTest {
         String metadata = new String(Files.readAllBytes(new File(ROOT, "META-INF/neoforge.mods.toml").toPath()), StandardCharsets.UTF_8);
         assertTrue(metadata.contains("loaderVersion=\"${loader_version_range}\""));
         assertTrue(metadata.contains("versionRange=\"${neo_version_range}\""));
-        assertTrue(metadata.contains("versionRange=\"[4.0.6,5.0.0)\""));
+        assertTrue(metadata.contains("versionRange=\"[4.1.1,5.0.0)\""));
         assertTrue(metadata.contains("ordering=\"AFTER\""));
         assertTrue(new File(ROOT, "assets/mineralogy/textures/items/crude_oil_bucket.png").isFile());
         assertTrue(new File(ROOT, "assets/mineralogy/textures/blocks/crude_oil_still.png").isFile());

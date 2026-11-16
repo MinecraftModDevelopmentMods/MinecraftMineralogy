@@ -1,7 +1,7 @@
 {
   "schema_version": 4,
   "provider_modid": "mineralogy",
-  "provider_revision": 3,
+  "provider_revision": 4,
   "profile_defaults": {
     "geology_mode": "geome",
     "place_fluid_deposits": true,
@@ -49,6 +49,29 @@
           "minecraft:deepslate"
         ],
         "host_tags": []
+      }
+    },
+    "biomes": {
+      "minecraft:plains": {
+        "stable_craton": 2,
+        "sedimentary_basin": 3.65
+      },
+      "minecraft:sunflower_plains": {
+        "stable_craton": 2,
+        "sedimentary_basin": 3.65
+      },
+      "minecraft:birch_forest": {
+        "stable_craton": 2,
+        "volcanic_arc": 4.3
+      },
+      "minecraft:old_growth_birch_forest": {
+        "stable_craton": 2.3,
+        "volcanic_arc": 4.3
+      },
+      "minecraft:mushroom_fields": {
+        "coastal_shelf": 2,
+        "volcanic_arc": 3.05,
+        "stable_craton": 1
       }
     }
   },
@@ -367,10 +390,16 @@
       "family": "sedimentary",
       "depth_peak": 54,
       "depth_spread": 28,
-      "weight": 0.6,
+      "weight": 0.18,
       "geomes": {
-        "arid_basin": 4,
-        "coastal_shelf": 1.2
+        "stable_craton": 0.08,
+        "mountain_belt": 0.1,
+        "volcanic_arc": 0.05,
+        "sedimentary_basin": 0.25,
+        "coastal_shelf": 0.04,
+        "arid_basin": 2.1,
+        "wetland_basin": 0.03,
+        "glacial_highland": 0.08
       },
       "enabled": true,
       "min_y": -64,
@@ -397,10 +426,16 @@
       "family": "sedimentary",
       "depth_peak": 52,
       "depth_spread": 26,
-      "weight": 0.65,
+      "weight": 0.42,
       "geomes": {
-        "arid_basin": 3.5,
-        "coastal_shelf": 1
+        "stable_craton": 0.15,
+        "mountain_belt": 0.15,
+        "volcanic_arc": 0.1,
+        "sedimentary_basin": 0.4,
+        "coastal_shelf": 0.18,
+        "arid_basin": 3,
+        "wetland_basin": 0.08,
+        "glacial_highland": 0.12
       },
       "enabled": true,
       "min_y": -64,
@@ -577,20 +612,29 @@
       "dimensions": {
         "minecraft:overworld": {
           "enabled": true,
-          "min_y": 16,
+          "min_y": -32,
           "max_y": 64,
-          "frequency": 1,
-          "quantity": 16,
+          "frequency": 0.85,
+          "quantity": 12,
           "host_families": [
             "sedimentary",
-            "metamorphic",
-            "igneous_intrusive",
             "igneous_volcanic"
           ],
-          "host_tags": [
-            "minecraft:stone_ore_replaceables",
-            "minecraft:deepslate_ore_replaceables"
-          ]
+          "host_tags": [],
+          "host_blocks": [
+            "minecraft:stone",
+            "minecraft:deepslate"
+          ],
+          "geomes": {
+            "stable_craton": 0.15,
+            "mountain_belt": 0.3,
+            "volcanic_arc": 2.5,
+            "sedimentary_basin": 0.7,
+            "coastal_shelf": 0.65,
+            "arid_basin": 1.5,
+            "wetland_basin": 0.15,
+            "glacial_highland": 0.2
+          }
         }
       },
       "block": "mineralogy:sulfur_ore"
@@ -601,20 +645,29 @@
       "dimensions": {
         "minecraft:overworld": {
           "enabled": true,
-          "min_y": 16,
+          "min_y": -16,
           "max_y": 64,
           "frequency": 1,
-          "quantity": 16,
+          "quantity": 12,
           "host_families": [
             "sedimentary",
-            "metamorphic",
-            "igneous_intrusive",
-            "igneous_volcanic"
+            "igneous_intrusive"
           ],
-          "host_tags": [
-            "minecraft:stone_ore_replaceables",
-            "minecraft:deepslate_ore_replaceables"
-          ]
+          "host_tags": [],
+          "host_blocks": [
+            "minecraft:stone",
+            "minecraft:deepslate"
+          ],
+          "geomes": {
+            "stable_craton": 0.6,
+            "mountain_belt": 0.35,
+            "volcanic_arc": 0.5,
+            "sedimentary_basin": 1.25,
+            "coastal_shelf": 1.5,
+            "arid_basin": 0.7,
+            "wetland_basin": 0.85,
+            "glacial_highland": 0.45
+          }
         }
       },
       "block": "mineralogy:phosphorous_ore"
@@ -625,20 +678,28 @@
       "dimensions": {
         "minecraft:overworld": {
           "enabled": true,
-          "min_y": 16,
-          "max_y": 64,
-          "frequency": 1,
-          "quantity": 16,
+          "min_y": 40,
+          "max_y": 96,
+          "frequency": 1.5,
+          "quantity": 12,
           "host_families": [
-            "sedimentary",
-            "metamorphic",
-            "igneous_intrusive",
-            "igneous_volcanic"
+            "sedimentary"
           ],
-          "host_tags": [
-            "minecraft:stone_ore_replaceables",
-            "minecraft:deepslate_ore_replaceables"
-          ]
+          "host_tags": [],
+          "host_blocks": [
+            "minecraft:stone",
+            "minecraft:deepslate"
+          ],
+          "geomes": {
+            "stable_craton": 0.4,
+            "mountain_belt": 0.15,
+            "volcanic_arc": 0.2,
+            "sedimentary_basin": 0.7,
+            "coastal_shelf": 0.25,
+            "arid_basin": 2,
+            "wetland_basin": 0.02,
+            "glacial_highland": 0.05
+          }
         }
       },
       "block": "mineralogy:nitrate_ore"

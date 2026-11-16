@@ -462,7 +462,7 @@ tasks.register('verifyReleaseConfiguration') {
     group = 'verification'
     description = 'Verifies the exact Mineralogy 1.21.1 NeoForge release identity.'
     doLast {
-        if (project.mod_version != '6.1.4.121012'
+        if (project.mod_version != '6.1.5.121012'
                 || project.mod_group != expectedMavenGroup
                 || project.minecraft_version != '1.21.1'
                 || project.neo_version != '21.1.247') {
@@ -475,7 +475,7 @@ tasks.register('verifyReleaseDependencies') {
     group = 'verification'
     description = 'Resolves and verifies the exact released OreSpawn dependency.'
     doLast {
-        if (project.mod_version != '6.1.4.121012'
+        if (project.mod_version != '6.1.5.121012'
                 || project.minecraft_version != project.mc_version
                 || project.mc_version != '1.21.1'
                 || project.loader_name != 'neoforge'
@@ -486,9 +486,9 @@ tasks.register('verifyReleaseDependencies') {
                 || project.curseforge_project_id != '240974') {
             throw new GradleException('Unexpected generic release dispatcher metadata')
         }
-        if (project.orespawn_version != '4.0.16.121012' ||
+        if (project.orespawn_version != '4.1.1.121012' ||
                 project.orespawn_curse_project_id != '245586' ||
-                project.orespawn_curse_file_id != '8807135') {
+                project.orespawn_curse_file_id != '9400780') {
             throw new GradleException('Unexpected OreSpawn release coordinates')
         }
         File artifact = configurations.orespawnRelease.resolvedConfiguration.resolvedArtifacts
@@ -621,7 +621,7 @@ tasks.register('verifyReleaseArtifacts') {
                 }
             }
             def provider = new JsonSlurper().parse(zip.getInputStream(zip.getEntry('data/mineralogy/orespawn/provider.json')))
-            if (provider.schema_version != 4 || provider.provider_revision != 3 ||
+            if (provider.schema_version != 4 || provider.provider_revision != 4 ||
                     provider.rocks.size() != 32 || provider.ores.size() != 3 || provider.fluid_deposits.size() != 1) {
                 throw new GradleException('Packaged provider contract is invalid')
             }
@@ -642,8 +642,9 @@ tasks.register('verifyReleaseArtifacts') {
                     ] || provider.profile_defaults?.terrain_dimensions?.get('minecraft:overworld')?.host_blocks !=
                             ['minecraft:stone', 'minecraft:deepslate'] ||
                     !provider.ores.values().every { ore ->
-                        ore.dimensions?.get('minecraft:overworld')?.host_tags ==
-                                ['minecraft:stone_ore_replaceables', 'minecraft:deepslate_ore_replaceables']
+                        ore.dimensions?.get('minecraft:overworld')?.host_tags == [] &&
+                                ore.dimensions?.get('minecraft:overworld')?.host_blocks ==
+                                ['minecraft:stone', 'minecraft:deepslate']
                     }) {
                 throw new GradleException('Packaged provider does not use the Minecraft 1.21.1 native-rock and deepslate contract')
             }
